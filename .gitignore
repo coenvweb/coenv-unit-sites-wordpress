@@ -20,7 +20,7 @@ local-config.php
 wp-content/themes/foundation-base-theme/*
 
 # wordpress specific
-wp-config.php
+#wp-config.php
 wp-content/uploads/
 wp-content/blogs.dir/
 wp-content/upgrade/*
