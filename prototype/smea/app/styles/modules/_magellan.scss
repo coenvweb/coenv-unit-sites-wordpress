@@ -1,0 +1,8 @@
+.sub-nav {
+	dd {
+		@include rem('margin-left', .7);
+		a {
+			padding: 0;
+		}
+	}
+}

@@ -1,0 +1,65 @@
+<?php
+/**
+ * Plugin Name: College of the Environmment Admin Tweaks
+ * Description: Customizations to the WordPress admin UI for the UW College of the Environment.
+ * Version: 1.0
+ * Author: College of the Environment Dean's Office
+ * Author URI: http://coenv.uw.edu
+ */
+
+/**
+ *  Add support for anchor button to TinyMCE
+ */
+function coenv_admin_tinymce_plugins($plugins) {
+
+    $plugins['anchor'] =  plugins_url('coenv-admin/library/tinymce/anchor/plugin.min.js');
+    return $plugins;
+}
+add_filter('mce_external_plugins', 'coenv_admin_tinymce_plugins');
+
+/**
+*  Remove buttons from TinyMCE
+*/ 
+function coenv_admin_tinymce_buttons_remove( $buttons ) {  
+ 	
+ 	$remove = array('underline','alignjustify','forecolor');
+	return array_diff($buttons,$remove);
+
+}
+
+add_filter('mce_buttons_2', 'coenv_admin_tinymce_buttons_remove');
+
+/**
+*  Add buttons to TinyMCE
+*/ 
+function coenv_admin_tinymce_buttons_add($buttons) {
+
+    $buttons[] = 'anchor';
+    return $buttons;
+
+}
+
+add_filter("mce_buttons_2", "coenv_admin_tinymce_buttons_add");
+
+/**
+ * Define the block-level elements available to the TinyMCE WYSIWYG editor
+ */
+function coenv_admin_tinymce_styles( $arr ) {
+
+$arr['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4';
+return $arr;
+}
+
+add_filter('tiny_mce_before_init', 'coenv_admin_tinymce_styles');
+
+/**
+ * Add custom styles to TinyMCE
+ */
+function coenv_admin_mce_css( $mce_css ) {
+
+	$mce_css .= ', ' . plugins_url( 'coenv-admin.css', __FILE__ );
+
+	return $mce_css;
+}
+
+add_filter( 'mce_css', 'coenv_admin_mce_css' );

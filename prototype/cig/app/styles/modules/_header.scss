@@ -1,0 +1,108 @@
+.logo {
+	@include rem(padding, 1, 0, 1, 0);
+}
+.main-menu {
+}; //main-menu
+.tab-bar-section {
+	.title {
+		a {
+			color: #fff;
+		}
+	}
+}
+
+#skiptocontent {
+  height: 1px;
+  width: 1px;
+  position: absolute;
+  overflow: hidden;
+  top: -10px;
+}
+
+.top-bar-section ul li > a {
+	@include font-size(16);
+}
+
+//from coenv site
+
+#top-nav {
+	background: $bg-dk;
+	font-size: 0;
+	text-align: right;
+	
+	ul,
+	form {
+		display: inline-block;
+		@include rem('margin', 0, 0, 0, 0.3);
+		@include rem('padding', 0.25, 0, 0.3);
+		font-size: 0;
+		vertical-align: top;
+		
+		input {
+			margin-bottom: 0px;
+			border: 0;
+			border-radius: $radius;
+		}
+	}
+
+	li,
+	input,
+	button {
+		display: inline-block;
+		padding: 0;
+		@include font-size(10);
+		@include rem('line-height', 1.8);
+		@include rem('height', 1.8);
+	}
+
+	input[type="text"] {
+		@include font-size(12);
+		background: #666;
+				color: #fff;
+				@include placeholder {
+					color: #eee;
+				}
+	} // input[type="text"]
+
+	button[type="submit"] {
+		background: #666;
+
+		i {
+			@include font-size(16);
+			color: #eee;
+		}
+
+		&:hover i {
+			color: #fff;
+		}
+
+	} // button[type="submit"]
+
+	a,
+	input,
+	button {
+		@include rem('padding', 0, 0.5);
+	}
+
+	a {
+		display: block;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-weight: 600;
+		text-decoration: none;
+		color: #ddd;
+		border-radius: $radius;
+
+		&:hover {
+			background: #666;
+			color: #fff !important;
+		}
+
+	} // a
+
+	#menu-university {
+		float: left;
+
+	} // #menu-university
+
+} // #top-nav

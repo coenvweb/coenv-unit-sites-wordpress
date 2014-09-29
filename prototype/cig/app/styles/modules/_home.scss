@@ -1,0 +1,15 @@
+.big-image {
+	width: 100%;
+	height: auto;
+	background-image: url("http://placehold.it/1600x400/bbb&amp;text=");
+	background-size: cover;
+	-moz-background-size: cover;
+	background-position: center;
+		h1 {
+			@include rem('padding', 10,2,3,2);
+		}
+}
+
+.call-to-action {
+	min-width: 130px;
+}

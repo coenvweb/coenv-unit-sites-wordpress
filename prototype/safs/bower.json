@@ -1,0 +1,10 @@
+{
+  "name": "school-of-aquatic-and-fishery-sciences-prototype",
+  "version": "0.0.0",
+  "dependencies": {
+    
+    "jquery": "~2.0.3"
+    
+  },
+  "devDependencies": {}
+}
