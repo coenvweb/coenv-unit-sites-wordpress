@@ -1,10 +1,4 @@
-*~
-.DS_Store
-.svn
-.cvs
-*.bak
-*.swp
-Thumbs.db
+*~ .DS_Store .svn .cvs *.bak *.swp Thumbs.db
 
 # Editor generated files
 *.sublime-project
@@ -17,7 +11,9 @@ bower_components
 local-config.php
 
 # Theme repos
+wp-content/themes/coenv-unit-theme/*
 wp-content/themes/foundation-base-theme/*
+wp-content/themes/poe-theme*
 
 # wordpress specific
 #wp-config.php
