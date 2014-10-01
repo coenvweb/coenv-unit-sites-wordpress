@@ -11,7 +11,7 @@ bower_components
 local-config.php
 
 # Theme repos
-wp-content/themes/coenv-unit-theme/*
+wp-content/themes/coenv-base/*
 wp-content/themes/foundation-base-theme/*
 wp-content/themes/poe-theme*
 wp-content/themes/coenv-base/*
