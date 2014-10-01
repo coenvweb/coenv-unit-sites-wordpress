@@ -3,7 +3,7 @@
   Plugin Name: Custom Post Type Auto Menu
   Plugin URI: https://github.com/badfun/custom-post-type-auto-menu
   Description: Automatically adds new custom post type posts to the chosen menu and parent item as a sub-menu item.
-  Version: 1.1.7
+  Version: 1.1.8
   Author: Ken Dirschl, Bad Fun Productions
   Author URI: http://badfunproductions.com
   Author Email: ken@badfunproductions.com
@@ -70,7 +70,7 @@ if ( ! class_exists( 'Custom_Post_Type_Auto_Menu' ) ) {
 		 *
 		 * @var     string
 		 */
-		protected $version = '1.1.7';
+		protected $version = '1.1.8';
 
 		/**
 		 * Unique identifier for your plugin.
@@ -692,7 +692,7 @@ if ( ! class_exists( 'Custom_Post_Type_Auto_Menu' ) ) {
 
 			$output = array();
 
-			foreach ( $input as $key => $value ) {
+			foreach ( (array)$input as $key => $value ) {
 				// check to see if current option has value. If so, process it.
 				if ( isset( $input[$key] ) ) {
 					// strip all HTML and PHP tags and properly handle quoted strings
@@ -719,12 +719,12 @@ if ( ! class_exists( 'Custom_Post_Type_Auto_Menu' ) ) {
 			$menu_name_array   = $input['menu_name'];
 			$parent_name_array = $input['parent_name'];
 
-			$output = strip_tags( stripslashes( array() ) );
+			$output = array();
 
 			foreach ( $keys as $id => $key ) {
 				$output[$key] = array(
 					'cpt'         => $cpt_array[$id],
-					'menu_name'   => $menu_name_array[$id],
+					'menu_name'   => strip_tags( stripslashes( $menu_name_array[$id] ) ),
 					'parent_menu' => $parent_name_array[$id]
 				);
 			}
