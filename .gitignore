@@ -5,9 +5,8 @@
 *.sublime-workspace
 
 # Development files
-.sass-cache
+.sass-cache*
 node_modules
-bower_components
 local-config.php
 
 # Theme repos
