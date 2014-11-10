@@ -145,7 +145,7 @@ $wp_query = new WP_Query( $home_args );
 <hr />
 				
 <div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2694'); ?>
+	<?php the_widget('custom_post_widget', 'custom_post_id=2694&show_featured_image=true'); ?>
 </div>
         
 <hr />
