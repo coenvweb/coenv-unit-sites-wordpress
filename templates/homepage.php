@@ -80,22 +80,8 @@ echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
-?>
-            
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
-</div>
-	
-                <?php
+
+# News with featured news
 		
 $home_args = array(
 	'post_type'	=> 'post',
@@ -149,43 +135,25 @@ $wp_query = new WP_Query( $home_args );
 	?>
 <?php endif; ?>
 		<div class="large-4 columns right"><a class="button" href="/news-and-events">More News</a></div>
+
+<hr />
+				
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2692'); ?>
+</div>
+
+<hr />
+				
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2694'); ?>
+</div>
         
 <hr />
-<div class="large-4 columns small-news">
-<a class="button right" href="/news-and-events">More</a>
-	<a href="/news-and-events"><h4>News</h4></a>
-<?php
-$home_args = array(
-	'post_type'	=> 'post',
-	'post_status' => 'publish',
-	'posts_per_page' => 3,
-);
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-small clearfix">
-		<ul class="list-news-small">
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		echo '<li class="news-small"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
-	endwhile;	
-		echo '</ul></div>';
-	endif;
-?>
-</div>
 				
-<div class="large-4 columns events">
-	<a class="button right" href="/news-and-events/calendar">More</a>
-	<h4>Events</h4>
-	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
 </div>
-<div class="large-4 columns events">
-	<a class="button right" href="/alumni-and-community">More</a>
-	<h4>Get Connected</h4>
-	<?php the_widget('CoEnv_Widget_Social'); ?>
-</div>
+
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">

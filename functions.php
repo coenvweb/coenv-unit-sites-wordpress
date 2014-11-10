@@ -139,11 +139,11 @@ function coenv_base_get_ancestor($attr = 'ID') {
 
 // page/post ids to exclude from the main menu
 function coenv_base_menu_exclude() {
-	return array('20','44','14','27');
+	return array('65');
 }
 
-define( 'FACULTY_PAGE_PARENT_ID', '31' );
-define( 'BLOG_PAGE_PARENT_ID', '2674' );
+define( 'FACULTY_PAGE_PARENT_ID', '59' );
+define( 'BLOG_PAGE_PARENT_ID', '24' );
  
 add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', '99', 2  ); 
  
