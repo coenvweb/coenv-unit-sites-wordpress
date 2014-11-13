@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: College of the Environmment Admin Tweaks
- * Description: Customizations to the WordPress admin UI for the UW College of the Environment.
+ * Plugin Name: College of the Environmment Unit Site Framework
+ * Description: Features and customizations for UW College of the Environment Unit Sites
  * Version: 1.0
  * Author: College of the Environment Dean's Office
  * Author URI: http://coenv.uw.edu
