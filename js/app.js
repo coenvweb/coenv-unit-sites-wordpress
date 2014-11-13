@@ -297,53 +297,7 @@ var b={start_page_x:a.touches[0].pageX,start_page_y:a.touches[0].pageY,start_tim
         }
     }
 });;jQuery(function ($) {
-
 	'use strict';
-
 	$( ".single-faculty li.page-item-35" ).removeClass( "active" );
 	$( ".single-faculty li.page-item-31" ).addClass( "active" );
-
-	function getUrlVars()
-	{
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-	}
-
-
-	var queryval = getUrlVars()["author"];
-
-	$("select#select-category").filter(function() {
-    //may want to use $.trim in here
-    return $(this).val() == queryval; 
-	}).prop('selected', true);
-
-
-
-
-
-	$("select#select-category").on( 'change', function () {
-		//alert('This changed!');
-		//var url = $(this).parent('div').attr('data-url');
-		var cat = $(this).parent('div').attr('data-cat');
-		var catval = $(this).val();
-		window.location.href = '?' + cat + '=' + catval;
-	} );
-
-
-
-
-
-
-
-
-
-
-
-});;
+});
