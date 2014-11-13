@@ -45,8 +45,19 @@
         display: none;
     }
     
+    .widget_img {
+        @media #{$medium-up}  {
+            float: left;
+            width: auto;
+	    }
+        width: 100%;
+        margin-right: rem-calc(20);
+    }
     
-
+    .programs {
+        padding: rem-calc(20);
+    }
+    
     .home-news-section {
         .featured-thumbnail {
             max-height: rem-calc(350);

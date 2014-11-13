@@ -9,20 +9,26 @@
 		width: 100%;
 		padding-top: 40%;
 		max-height: rem-calc(350);
+        min-height: rem-calc(250);
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
 	}
 	
 	.feature-info-container {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
 		
 		.feature-info {
 			width: 100%;
 			padding: rem-calc(16);
-			min-height: rem-calc(170);
+            text-align: center;
+            padding-bottom: rem-calc(25);
 		}
 		
 		h2 {
+            font-size: rem-calc(32);
 			margin: 0;
 			color: $white;
 		}
