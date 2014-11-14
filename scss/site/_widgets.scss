@@ -47,15 +47,23 @@
     
     .widget_img {
         @media #{$medium-up}  {
-            float: left;
-            width: auto;
+            max-height: rem-calc(220);
+            overflow: hidden;
+            padding-right: rem-calc(20);
+            @include grid-column(
+                $columns:3
+            );
 	    }
-        width: 100%;
-        margin-right: rem-calc(20);
+        @include grid-column(
+           $columns:12,
+            $float:left
+        );
+        padding: rem-calc(0);
     }
     
     .programs {
-        padding: rem-calc(20);
+        padding: 0 rem-calc(15);
+        padding-bottom: rem-calc(15);
     }
     
     .home-news-section {
