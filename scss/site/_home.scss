@@ -23,8 +23,27 @@
         display: none;
     }
     
+    .widget_img {
+        @media #{$medium-up}  {
+            max-height: rem-calc(220);
+            overflow: hidden;
+            padding-right: rem-calc(20);
+            @include grid-column(
+                $columns:3
+            );
+	    }
+        @include grid-column(
+           $columns:12,
+            $float:left
+        );
+        padding: rem-calc(0);
+    }
     
-
+    .programs {
+        padding: 0 rem-calc(15);
+        padding-bottom: rem-calc(15);
+    }
+    
     .home-news-section {
         .featured-thumbnail {
             max-height: rem-calc(350);
@@ -36,4 +55,4 @@
         }
 
     }
-}
+} 
