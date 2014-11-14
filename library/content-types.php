@@ -53,6 +53,8 @@ function coenv_base_post_types_init() {
       'new_item' => __( 'New Publication'),
       ),
     'hierarchical' => true,
+    // drew - i think we need this for each tax connected to a content type
+    'taxonomies' => array('author','publication_theme'),
     'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
     'public' => true,
     'has_archive' => false,
