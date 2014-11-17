@@ -283,17 +283,7 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
                     $('.playpause').html('<i class="fi-pause"></i>');
                 }
 
-            $('.playpause').click(function() {
-                if (autoplay==null || autoplay===false) {
-                    $(this).html('<i class="fi-pause"></i>');
-                    $('.homepage-features').slickPlay();
-                    autoplay = true;
-                } else {
-                    $(this).html('<i class="fi-play"></i>');
-                    $('.homepage-features').slickPause();
-                    autoplay = false;
-                }
-            });
+            
         }
     }
 });;jQuery(function ($) {
