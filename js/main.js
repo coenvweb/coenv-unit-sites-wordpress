@@ -61,4 +61,32 @@ jQuery(function ($) {
             }
         }
     }
+
+
+
+//var queryval = getUrlVars()["author"];
+
+    //$("select#select-category").filter(function() {
+    //may want to use $.trim in here
+    //return $(this).val() == queryval; 
+    //}).prop('selected', true);
+
+
+
+
+
+    $("select.select-category").on( 'change', function () {
+        //alert('This changed!');
+        //var url = $(this).parent('div').attr('data-url');
+        var cat = $(this).parent('div').attr('data-url');
+        var catval = $(this).val();
+        window.location.href = cat + catval;
+    } );
+
+
+
+
+
+
+    
 });

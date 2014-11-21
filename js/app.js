@@ -299,6 +299,34 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
             }
         }
     }
+
+
+
+//var queryval = getUrlVars()["author"];
+
+    //$("select#select-category").filter(function() {
+    //may want to use $.trim in here
+    //return $(this).val() == queryval; 
+    //}).prop('selected', true);
+
+
+
+
+
+    $("select.select-category").on( 'change', function () {
+        //alert('This changed!');
+        //var url = $(this).parent('div').attr('data-url');
+        var cat = $(this).parent('div').attr('data-url');
+        var catval = $(this).val();
+        window.location.href = cat + catval;
+    } );
+
+
+
+
+
+
+    
 });;jQuery(function ($) {
 	'use strict';
 	$( ".single-faculty li.page-item-35" ).removeClass( "active" );

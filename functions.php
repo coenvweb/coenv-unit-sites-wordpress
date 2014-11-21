@@ -258,52 +258,47 @@ $cats_args  = array(
 	'taxonomy' => $tax
 );
 $cats = get_categories($cats_args);
-if ($cats) {
-	echo '<select name="select-category" id="select-category">';
-	echo '<option class="level-0" value="">All ' . $tax_str . '</option>';
-foreach($cats as $cat) { 
-	$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
-	echo '<option value="' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+	if ($cats) {
+		echo '<select name="select-category" class="select-category">';
+		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+		foreach($cats as $cat) { 
+			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+			echo $cat->slug;
+			echo $tax_value;
+			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+		}
+		echo '</select>';
+	}
 }
+
+/* 
+ * Date filters for WPQuery templates (blog, publications, faculty, etc.)
+ */
+function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
+	$counter = 0;
+	$ref_month = '';
+	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
+	echo '<select name="select-category" class="select-category">';
+	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
+	if( $monthly->have_posts() ) :
+		while( $monthly->have_posts() ) : $monthly->the_post();
+		    if( get_the_date('mY') != $ref_month ) {
+		    	$month_num = get_the_date('m');
+		    	$month_str = get_the_date('F');
+		    	$year_num = get_the_date('Y');
+		    	if ($year_num == $coenv_year && $month_num == $coenv_month) {
+		    	 $selected = ' selected="selected"';
+		    	} else {
+		    		$selected = '';
+		    	}
+		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+		       // echo "\n".get_the_date('F Y');
+		        $ref_month = get_the_date('mY');
+		        $counter = 0;
+		    }
+		endwhile; 
+	endif;
 	echo '</select>';
+	wp_reset_postdata();
+	wp_reset_query();
 }
-
-}
-
-add_filter( 'getarchives_where', 'getarchives_where_filter', 10, 2 );
-add_filter( 'generate_rewrite_rules', 'generate_events_rewrite_rules' );
-
-function getarchives_where_filter( $where, $args ) {
-
-    if ( isset($args['post_type']) ) {      
-        $where = "WHERE post_type = '$args[post_type]' AND post_status = 'publish'";
-    }
-
-    return $where;
-}
-
-function generate_events_rewrite_rules( $wp_rewrite ) {
-
-    $event_rules = array(
-        'events/([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/?$' => 'index.php?post_type=events&year=$matches[1]&monthnum=$matches[2]&day=$matches[3]',
-        'students/student_blog/([0-9]{4})/([0-9]{1,2})/?$' => 'index.php?pagename=student_blog&year=$matches[1]&monthnum=$matches[2]',
-        'events/([0-9]{4})/?$' => 'index.php?post_type=events&year=$matches[1]' 
-    );
-
-    $wp_rewrite->rules = $event_rules + $wp_rewrite->rules;
-}
-
-function get_archives_events_link( $link ) {
-
-$mylink = str_replace( get_site_url(), '', $link );
-$mylink = str_replace('blog','',$mylink);
-$mylink = str_replace('//','?year=',$mylink);
-$mylink = preg_replace('/[0-9]/','',$my_link);
-
-return $mylink;
-
-};
-
-
-
-

@@ -43,7 +43,7 @@ Template Name: Homepage
 				$feature_caption = $feature_caption->post_excerpt;
 			}
 			$rows = get_field('feature_add_links');
-				
+			
 echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 echo '</div>';

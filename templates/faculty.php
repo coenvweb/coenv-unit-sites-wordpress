@@ -2,10 +2,19 @@
 /*
 Template Name: Faculty Index
 */
+
+/*
+ * Query variables
+ */
+
+//Categories
+$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 ?>
 
 <?php get_header(); ?>
-<?php echo $fac_cat->slug; ?>
 <div class="row">
 	<div class="columns large-12 section-title">
 		<h1><a href="/faculty"><?php echo the_title(); ?></a></h1>
@@ -16,18 +25,17 @@ Template Name: Faculty Index
 
 	<div class="small-12 medium-8 columns" role="main">
         <div class="entry-content">
-	<?php if ( is_active_sidebar( 'before-content' ) ) : ?>
-	<?php do_action('foundationPress_before_content'); ?>
-	<ul class="widget-area before-content">
-	<?php dynamic_sidebar("before-content"); ?>
-	</ul>
-	<?php endif; ?>
-			<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
+        <div class="row filters">
+	<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+		<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
+	</div>
+			<div class="share columns large-6" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
 		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
 		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
-	<?php
-$fac_cat = get_term_by( 'slug', (string) $_GET['fac-cat'], 'research_areas' );
+	</div>
+
+<?php
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 $temp = $wp_query;
@@ -38,7 +46,7 @@ $wp_query->query;
 /**
 * Faculty loop
 */
-$teach_research_args = array(
+$query_args = array(
 	'post_type'	=> 'faculty',
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
@@ -55,18 +63,24 @@ $teach_research_args = array(
 		),
 	),
 );
-$wp_query = new WP_Query( $teach_research_args );
+
+// Category filter
+if($coenv_cat_1 && $coenv_cat_term_1) :
+	$query_args['taxonomy'] = $coenv_cat_1;
+	$query_args['term'] = $coenv_cat_term_1;
+endif;
+$wp_query = new WP_Query( $query_args );
 
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="faculty-list-teach clearfix">
 
-		<?php if ($fac_cat): ?>
+<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
-			<p>Faculty members working in <strong><?php echo $fac_cat->name; ?></strong></p>
-			<p><a class="button small" href="/faculty">Back to all faculty</a></p>
+			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="right"><a href="/research/publications/">all posts &raquo;</a></div>
 		</div>
-		<?php endif; ?>
+	<?php endif; ?>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
