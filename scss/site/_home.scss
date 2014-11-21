@@ -1,0 +1,39 @@
+// Homepage Widgets
+
+.home {
+    .widget_coenv_base_index_dates ul {
+        margin-left: 1rem;
+    }
+
+    .widget_links {
+        float: right;
+    }
+
+    .list-news-small {
+        list-style: none;
+    }
+
+    .widget_content {
+        ul {
+            list-style: none;	
+        }
+    }
+    
+    .widgettitle {
+        display: none;
+    }
+    
+    
+
+    .home-news-section {
+        .featured-thumbnail {
+            max-height: rem-calc(350);
+            margin-bottom: rem-calc(10);
+            overflow: hidden;
+        }
+        :not(:last-child) .small-news {
+                margin-bottom: rem-calc(30);	
+        }
+
+    }
+}

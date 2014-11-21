@@ -47,8 +47,8 @@
   <?php do_action('foundationPress_layout_start'); ?>
   
   <nav class="tab-bar show-for-small-only">
-    <section class="left-small">
-      <a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+    <section class="right-small">
+      <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
     </section>
     <section class="middle tab-bar-section">
       
@@ -57,26 +57,22 @@
     </section>
   </nav>
 
-  <aside class="left-off-canvas-menu">
-     <nav class="mobile-menu">
-                <section>
-                    <ul id="menu-main-menu" class="top-bar-menu left">
-                    <?php
-                      $exclude = implode(',',coenv_base_menu_exclude());
-                      add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-                      wp_list_pages( array(
-                          'depth' => 0,
-                          'walker' => new top_bar_new_walker(),
-                          'title_li' => false,
-                          'sort_column' => 'menu_order, post_title',
-                          'post_type'    => 'page',
-                          'exclude' => $exclude,
-                      ) );
-                      remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-                      ?>
-                    </ul>
-                </section>
-              </nav>
+  <aside class="right-off-canvas-menu">
+    <nav class="mobile-menu">
+            <?php
+            $exclude = implode(',',coenv_base_menu_exclude());
+            add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
+            wp_list_pages( array(
+                'depth' => 0,
+                'walker' => new top_bar_mobile_walker(),
+                'title_li' => false,
+                'sort_column' => 'menu_order, post_title',
+                'post_type'    => 'page',
+                'exclude' => $exclude,
+            ) );
+            remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
+            ?>
+    </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
 	<nav id="top-nav" class="show-for-medium-up">

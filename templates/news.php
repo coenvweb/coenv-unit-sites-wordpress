@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Blog
+Template Name: News
 */
 
 $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
@@ -31,11 +31,11 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php echo $url_current; ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('blog_category', $coenv_cat_term_1); // Category filter ?>
+			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class=" large-6 columns" data-url="<?php echo $url_current; ?>" data-cat="blog_category">
-				<?php coenv_base_date_filter('student_blog',$coenv_month,$coenv_year); // Date filter ?>
+			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
 		<hr>
@@ -45,11 +45,12 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		  */
 		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$query_args = array(
-			'post_type'	=> 'student_blog',
+			'post_type'	=> 'post',
 			'post_status' => 'publish',
 			'posts_per_page' => 20,
 			'orderby' => 'date',
 			'order' => 'DESC',
+			//'taxonomy' => 'category',
 			'paged' => $paged
 		);
 		// Category filter
@@ -67,9 +68,9 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		}
 		$wp_query = new WP_Query( $query_args );
 		?>
-		<?php if ($wp_query->have_posts()): ?>
-
-
+		<?php if ($wp_query->have_posts()): 
+		$wp_query->the_post();
+		?>
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
@@ -88,6 +89,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
+
 		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
 		?>
@@ -102,7 +104,8 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		echo '<p>' . get_the_date('M j, Y') .' / ';
 		$termlist = '';
 		foreach ($terms as $term) {
-		 $termlist .= '<a href="' . $url_current . '?tax=' . $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+		 $termlist .= '<a href="<?php echo $url_current; ?>?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+		get_the_terms( 'category' );
 		}
 		$termlist = rtrim($termlist,', ');
 		echo $termlist;
@@ -142,7 +145,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="<?php echo $url_current; ?>">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
