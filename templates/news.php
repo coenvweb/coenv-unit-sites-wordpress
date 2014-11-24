@@ -51,6 +51,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			'orderby' => 'date',
 			'order' => 'DESC',
 			//'taxonomy' => 'category',
+			//'term' => 'alumni',
 			'paged' => $paged
 		);
 		// Category filter
@@ -68,8 +69,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		}
 		$wp_query = new WP_Query( $query_args );
 		?>
-		<?php if ($wp_query->have_posts()): 
-		$wp_query->the_post();
+		<?php 
+		$posts = $wp_query->get_posts();
+		if ($wp_query->have_posts()): 
+		
 		?>
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
@@ -87,11 +90,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<div class="blog clearfix">
 		<?php
 		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
+		foreach ($posts as $post) {
 
 		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+		$terms = get_the_terms( $post->ID, 'category');
 		?>
 		<div class="blog-list-item">
 		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
@@ -99,16 +101,18 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
         <?php
+        setup_postdata($post);
+        //print_r($post);
 		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
 		echo '<div class="blog-meta">';
 		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
+		$termlist = array();
 		foreach ($terms as $term) {
-		 $termlist .= '<a href="<?php echo $url_current; ?>?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		get_the_terms( 'category' );
+		 $termlist[] = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>';
+		//get_the_terms( 'category' );
 		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
+		$termlist_str = implode(', ',$termlist);
+		echo $termlist_str;
 		 echo '</p>';
 		
 		echo '</div>';
@@ -134,7 +138,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		</div>
 		</div>
 	</div>
-	<?php endwhile; ?>
+	<?php } ?>
 	</div>
 	<div class="pager">
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
