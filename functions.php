@@ -270,17 +270,8 @@ foreach($cats as $cat) {
 
 }
 
-add_filter( 'getarchives_where', 'getarchives_where_filter', 10, 2 );
 add_filter( 'generate_rewrite_rules', 'generate_events_rewrite_rules' );
 
-function getarchives_where_filter( $where, $args ) {
-
-    if ( isset($args['post_type']) ) {      
-        $where = "WHERE post_type = '$args[post_type]' AND post_status = 'publish'";
-    }
-
-    return $where;
-}
 
 function generate_events_rewrite_rules( $wp_rewrite ) {
 
@@ -292,18 +283,6 @@ function generate_events_rewrite_rules( $wp_rewrite ) {
 
     $wp_rewrite->rules = $event_rules + $wp_rewrite->rules;
 }
-
-function get_archives_events_link( $link ) {
-
-$mylink = str_replace( get_site_url(), '', $link );
-$mylink = str_replace('blog','',$mylink);
-$mylink = str_replace('//','?year=',$mylink);
-$mylink = preg_replace('/[0-9]/','',$my_link);
-
-return $mylink;
-
-};
-
 
 
 

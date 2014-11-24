@@ -28,10 +28,6 @@ $wp_query->query;
 
 <?php get_header(); ?>
 <div class="row">
-	<?php coenv_base_section_title($post->ID); ?>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<?php //if ( is_active_sidebar( 'before-content' ) ) : ?>
