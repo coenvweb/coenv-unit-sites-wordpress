@@ -19,11 +19,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 <?php get_header(); ?>
 
 <div class="row">
-
-	<?php coenv_base_section_title($post->ID); ?>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
