@@ -153,15 +153,13 @@ $wp_query = new WP_Query( $home_args );
 
 <hr />
 				
+<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2692&show_featured_image=true'); ?>
+	<div class="widget-area home-content" role="complementary">
+		<?php dynamic_sidebar( 'home-content' ); ?>
+	</div><!-- .widget-area -->
 </div>
-
-<hr />
-				
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2694&show_featured_image=true'); ?>
-</div>
+<?php endif; ?>
         
 <hr />
 				

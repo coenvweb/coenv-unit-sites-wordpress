@@ -68,7 +68,7 @@ function coenv_base_sidebar_widgets() {
   ));
   register_sidebar(array(
       'id' => 'home-content',
-      'name' => __('Home / Main Content after Feature', 'foundationpress'),
+      'name' => __('Home / Main Content after Feature & News', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
       'before_widget' => $before_widget,
       'after_widget' => $after_widget,
