@@ -155,7 +155,6 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
 
 		// append modal
 		$('.post-' + this.articleID).prepend( this.$modal );
-        $('.entry-content').prepend( this.$modal );
         
 		// show modal
 		this.$modal.addClass('active');
@@ -300,19 +299,7 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
         }
     }
 
-
-
-//var queryval = getUrlVars()["author"];
-
-    //$("select#select-category").filter(function() {
-    //may want to use $.trim in here
-    //return $(this).val() == queryval; 
-    //}).prop('selected', true);
-
-
-
-
-
+    // Category filter for custom post type indicies
     $("select.select-category").on( 'change', function () {
         //alert('This changed!');
         //var url = $(this).parent('div').attr('data-url');
@@ -320,14 +307,45 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
+});
+
+
+
+jQuery(function ($) {
+    'use strict';
+
+    // handle blog header form
+    $('#blog-header').blogHeader();
+
+});
+
+$.fn.blogHeader = function () {
+    'use strict';
+
+    var $header = $(this),
+            $selectCategory = $header.find('.select-category select'),
+            $selectMonth = $header.find('.select-month select');
+
+    $selectCategory.on( 'change', function () {
+        var term_id = $(this).val(),
+                url = $(this).parent('div').attr('data-url');
+        window.location.href = url + term_id;
+    } );
+
+    $selectMonth.on( 'change', function () {
+        var url = $(this).val();
+        window.location.href = url;
+    } );
+};
 
 
 
 
 
 
-    
-});;jQuery(function ($) {
+
+
+;jQuery(function ($) {
 	'use strict';
 	$( ".single-faculty li.page-item-35" ).removeClass( "active" );
 	$( ".single-faculty li.page-item-31" ).addClass( "active" );

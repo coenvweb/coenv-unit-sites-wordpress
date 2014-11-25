@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<?php coenv_base_section_title($post->ID); ?>
+	<?php //coenv_base_section_title($post->ID); ?>
 	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
 	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
 	<?php //endif; ?>

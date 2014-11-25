@@ -126,7 +126,6 @@
 
 		// append modal
 		$('.post-' + this.articleID).prepend( this.$modal );
-        $('.entry-content').prepend( this.$modal );
         
 		// show modal
 		this.$modal.addClass('active');

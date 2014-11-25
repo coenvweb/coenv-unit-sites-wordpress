@@ -111,3 +111,9 @@
         right: rem-calc(15);
     }
 }
+
+.page-template-default {
+    .share-modal {
+        right: 0;
+    }
+}
