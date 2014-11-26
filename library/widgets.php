@@ -713,3 +713,17 @@ function register_coenv_widget_social() {
 }
 
 add_action( 'widgets_init', 'register_coenv_widget_social' );
+
+// unregister all default WP Widgets
+function unregister_default_wp_widgets() {
+    unregister_widget('WP_Widget_Pages');
+    unregister_widget('WP_Widget_Calendar');
+    unregister_widget('WP_Widget_Links');
+    unregister_widget('WP_Widget_Meta');
+    unregister_widget('WP_Widget_Recent_Posts');
+    unregister_widget('WP_Widget_Recent_Comments');
+    unregister_widget('WP_Widget_RSS');
+    unregister_widget('WP_Widget_Tag_Cloud');
+    unregister_widget('WP_Nav_Menu_Widget');
+}
+add_action('widgets_init', 'unregister_default_wp_widgets', 1);
