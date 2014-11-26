@@ -39,19 +39,9 @@
 
 
 // Sort into separate .scss files
-#sidebar .widget_custom_post_widget {
-padding-left: 2%;
-}
-
-
-#sidebar .widget_img {
-	float: left;
-	width: 35%;
-}
 #sidebar .widget_content {
 	float: left;
-	margin-left: 15px;
-	width: 60%;
+	margin-top: 15px;
 	p {
 		font-size: 1rem;
 	}
