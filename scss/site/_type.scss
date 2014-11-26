@@ -57,6 +57,12 @@ h6 {
 	@include rem('font-size', 1);
 }
 
+.intro {
+    font-size: rem-calc(16);
+    line-height: rem-calc(20);
+}
+
+
 /*
  * Other elements
  */
