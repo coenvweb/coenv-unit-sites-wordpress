@@ -40,7 +40,6 @@
 
 // Sort into separate .scss files
 #sidebar .widget_content {
-	float: left;
 	margin-top: 15px;
 	p {
 		font-size: 1rem;
@@ -52,7 +51,7 @@
 }
 #after-content .widget_content {
 	float: left;
-	margin-left: 0;
+	padding-left: rem-calc(10);
 	width: 80%;
 
 	p {
@@ -67,7 +66,7 @@
 	width: auto;
 	margin: 0;
 	&:first-child {
-		margin-right: 5px;
+        margin-left: rem-calc(10);
 	}
 }
 #after-content .widget_img {
