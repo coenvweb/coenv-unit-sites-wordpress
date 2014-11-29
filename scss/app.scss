@@ -17,6 +17,7 @@
 @import "site/structure"; // Your site structure
 @import "site/top-menu"; // top standard menu
 @import "site/main-menu"; // main standard menu
+@import "site/mobile-menu"; // main mobile menu
 @import "site/side-menu"; // side standard menu
 @import "site/forms"; // form fields
 @import "site/header"; // header styles
@@ -38,19 +39,8 @@
 
 
 // Sort into separate .scss files
-#sidebar .widget_custom_post_widget {
-padding-left: 2%;
-}
-
-
-#sidebar .widget_img {
-	float: left;
-	width: 35%;
-}
 #sidebar .widget_content {
-	float: left;
-	margin-left: 15px;
-	width: 60%;
+	margin-top: 15px;
 	p {
 		font-size: 1rem;
 	}
@@ -61,7 +51,7 @@ padding-left: 2%;
 }
 #after-content .widget_content {
 	float: left;
-	margin-left: 0;
+	padding-left: rem-calc(10);
 	width: 80%;
 
 	p {
@@ -76,7 +66,7 @@ padding-left: 2%;
 	width: auto;
 	margin: 0;
 	&:first-child {
-		margin-right: 5px;
+        margin-left: rem-calc(10);
 	}
 }
 #after-content .widget_img {

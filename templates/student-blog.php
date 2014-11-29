@@ -23,10 +23,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 <?php get_header(); ?>
 <div class="row">
-	<?php coenv_base_section_title($post->ID); ?>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
@@ -91,7 +87,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
 		?>
-		<div class="blog-list-item">
+		<div class="blog-list-item post-<?php the_ID() ?>">
 		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
 		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
 		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>

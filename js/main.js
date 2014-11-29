@@ -62,19 +62,7 @@ jQuery(function ($) {
         }
     }
 
-
-
-//var queryval = getUrlVars()["author"];
-
-    //$("select#select-category").filter(function() {
-    //may want to use $.trim in here
-    //return $(this).val() == queryval; 
-    //}).prop('selected', true);
-
-
-
-
-
+    // Category filter for custom post type indicies
     $("select.select-category").on( 'change', function () {
         //alert('This changed!');
         //var url = $(this).parent('div').attr('data-url');
@@ -82,11 +70,41 @@ jQuery(function ($) {
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
-
-
-
-
-
-
-    
 });
+
+
+
+jQuery(function ($) {
+    'use strict';
+
+    // handle blog header form
+    $('#blog-header').blogHeader();
+
+});
+
+$.fn.blogHeader = function () {
+    'use strict';
+
+    var $header = $(this),
+            $selectCategory = $header.find('.select-category select'),
+            $selectMonth = $header.find('.select-month select');
+
+    $selectCategory.on( 'change', function () {
+        var term_id = $(this).val(),
+                url = $(this).parent('div').attr('data-url');
+        window.location.href = url + term_id;
+    } );
+
+    $selectMonth.on( 'change', function () {
+        var url = $(this).val();
+        window.location.href = url;
+    } );
+};
+
+
+
+
+
+
+
+

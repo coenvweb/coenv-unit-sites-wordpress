@@ -112,23 +112,37 @@ $wp_query = new WP_Query( $home_args );
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		if ( $wp_query->current_post == 0 ) {
-		echo '<div class="large-8 columns featured-news">';
-			if ( has_post_thumbnail()) {
+            if ( has_post_thumbnail()) {
+                echo '<div class="large-8 columns featured-news">';
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . get_the_permalink() . '" class="img">';
 				the_post_thumbnail( 'large' );
 				echo '</a></div>';
+                echo '<a class="button right show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
+                echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
+                echo '<div class="post-meta">';
+                    echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                    $categories = get_the_category_list(', ');
+                        if ( $categories ) {
+                            echo ' / ' . $categories;
+                        }
+                echo '</div>';
+                echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 			}
-		echo '<a class="button right show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
-		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-		echo '<div class="post-meta">';
-			echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-			$categories = get_the_category_list(', ');
-				if ( $categories ) {
-					echo ' / ' . $categories;
-				}
-		echo '</div>';
-		echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+            else {
+                echo '<div class="large-4 columns small-news">';
+                echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                    $categories = get_the_category_list(', ');
+                        if ( $categories ) {
+                            echo ' / ' . $categories;
+                        }
+                echo '</div>';
+                echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
+                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+                echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
+            }
+		
 		}
 
 		else {
@@ -143,6 +157,7 @@ $wp_query = new WP_Query( $home_args );
 		echo '</div>';
 		echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+        echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
 		}
 	echo '</div>';
 	endwhile;

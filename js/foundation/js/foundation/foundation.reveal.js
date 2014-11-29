@@ -4,7 +4,7 @@
   Foundation.libs.reveal = {
     name : 'reveal',
 
-    version : '5.4.6',
+    version : '5.4.7',
 
     locked : false,
 
@@ -193,7 +193,8 @@
           $.extend(ajax_settings, {
             success: function (data, textStatus, jqXHR) {
               if ( $.isFunction(old_success) ) {
-                old_success(data, textStatus, jqXHR);
+                var result = old_success(data, textStatus, jqXHR);
+                if (typeof result == 'string') data = result;
               }
 
               modal.html(data);

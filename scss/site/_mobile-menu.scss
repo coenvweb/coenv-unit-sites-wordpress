@@ -1,3 +1,30 @@
-#menu-main-menu li.page_item.page-item-28.page_item_has_children.current_page_item.active.has-dropdown  a {
-	color: #fff;
+.mobile-menu {
+  .off-canvas-list {
+    border-bottom: solid 2px #3d3d3d;
+    .content {
+      padding: 0;
+      background: #363533 !important;
+    }
+    .children-0 {
+      padding-top: rem-calc(45);
+    }
+    .children-1 {
+      a {
+        padding-left: rem-calc(10);
+      }
+      li {
+        background: #0f0e0e !important;
+      }
+    }
+  }
+  .expander-link {
+    min-height: rem-calc(45);
+    padding: rem-calc(10)!important;
+    text-align: center;
+  }
+  .primary-link {
+    height: rem-calc(45);
+    padding-top: rem-calc(10);
+    background: #e3e3e3;
+  }
 }

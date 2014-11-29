@@ -81,13 +81,36 @@ function coenv_base_post_types_init() {
 	'menu_icon' => 'dashicons-exerpt-view',
     )
   );
+  register_post_type( 'datasets',
+    array(
+      'labels' => array(    
+      'name' => __( 'Datasets' ),
+      'singular_name' => __( 'Dataset' ),
+      'add_new_item' => __( 'Add Dataset'),
+      'edit_item' => __( 'Edit Dataset'),
+      'new_item' => __( 'New Dataset'),
+      ),
+    //'hierarchical' => true,
+    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+    'public' => true,
+    'has_archive' => false,
+    'show_ui' => true,
+    //'rewrite' => array('slug' => 'student_blog'),
+  'menu_icon' => 'dashicons-exerpt-view',
+    )
+  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
 add_action('init', 'hide_editor', 100);
 
+/*
+ * Hide body on content types that don't need one
+ */
 function hide_editor() {
   remove_post_type_support( 'content_block', 'editor' );
+  remove_post_type_support( 'datasets', 'editor' );
+
 } 
 
 

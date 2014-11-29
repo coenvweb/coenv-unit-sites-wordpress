@@ -4,7 +4,7 @@
   Foundation.libs.alert = {
     name : 'alert',
 
-    version : '5.4.6',
+    version : '5.4.7',
 
     settings : {
       callback: function (){}
@@ -24,7 +24,7 @@
 
         e.preventDefault();
         if (Modernizr.csstransitions) {
-          alertBox.addClass("alert-close");
+          alertBox.addClass('alert-close');
           alertBox.on('transitionend webkitTransitionEnd oTransitionEnd', function(e) {
             S(this).trigger('close').trigger('close.fndtn.alert').remove();
             settings.callback();
