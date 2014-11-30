@@ -12,12 +12,10 @@ $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
 $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
 $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
 $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-
+$coenv_inpress = urlencode(htmlentities($_GET['inpress']));
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 ?>
-
 <?php get_header(); ?>
-
 <div class="row">
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
@@ -36,10 +34,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<hr>
 		
 		<?php
+		echo $coenv_inpress;
 		/**
 		* Publications loop
 		*/
-
 		function alter_pub_order($order,$qry) {
 		  remove_filter('posts_orderby','alter_order',1,2);
 		  $order = explode(',',$order);
@@ -49,13 +47,21 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		add_filter('posts_orderby','alter_pub_order',1,2);
 
 		$query_args = array(
+			/*'meta_query' => array(
+				array(
+					'key'     => 'in_press',
+					'value'     => 'inpress',
+					'compare' => 'IN'
+				)
+			),*/
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
 			'posts_per_page' => 20,
-			'taxonomy' => $cat_raw,
-			'term' => $cat,
-			'orderby' => 'date',
-			'order' => 'ASC',
+			// This doesn't work
+			//'meta_key' => (int) 'publication_years',
+            //'orderby' => 'meta_value',
+            //'order' => 'DESC',
+            
 			'paged' => $paged
 		);
 
@@ -65,6 +71,24 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 
+		// In press filter
+		//if ($coenv_inpress) {
+
+
+		//	$query_args['meta_query'] = array(
+	//'relation' => 'OR', // Optional, defaults to "AND"
+	//array(
+	//	'key'     => 'in_press',
+	//	'value'   => '1',
+	//	'compare' => '='
+	//)
+//);
+
+
+
+
+
+		//}
 		$wp_query = new WP_Query( $query_args );
 		?>
 
@@ -106,6 +130,39 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
+
+		// Publication themes list
+		$publication_terms = wp_get_post_terms($post->ID, 'publication_theme');
+		if (!empty($publication_terms)) {
+			$publication_terms_arr = array();
+
+			foreach ($publication_terms as &$term) {
+				$publication_terms_arr[] = '<a href="?tax=publication_theme&term=' . $term->slug . '">' . $term->name . '</a>';
+			}
+			$publication_terms_str = implode(', ', $publication_terms_arr) . ' | ';
+			$publication_terms = "";
+		} else {
+			$publication_terms_str = '';
+		}
+
+		// Publication year list
+		$publication_years = wp_get_post_terms($post->ID, 'publication_year');
+
+		if (!empty($publication_years)) {
+			$publication_in_press = get_field('in_press');
+			if ($publication_in_press[0] !== '1') {
+				$publication_years_arr = array();
+				foreach ($publication_years as &$year) {
+					$publication_years_arr[] = '<a href="?tax=publication_year&term=' . $year->slug . '">' . $year->name . '</a>';
+				}
+				$publication_years_str = implode(', ', $publication_years_arr);
+			} else {
+				$publication_years_str = '<a href="?tax=publication_year&term=in-press">In press</a>';
+			}
+		} else {
+			$publication_years_str = '';	
+		}
+
 		$publication_link = get_the_permalink();
 		$publication_citation = get_field('publication_citation');
 		$rows = get_field('publication_link');
@@ -117,7 +174,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
         <?php
-		echo get_the_term_list( $post->ID, 'publication_theme', '', ', ', '' );
+		echo $publication_terms_str . $publication_years_str;
+
 		echo '</h5></div>';
 		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
 		echo '<div class="citation">' . $publication_citation . '</div>';
@@ -134,6 +192,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		echo '</div>';
 		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Abstract</a></div>';
 		echo '</div>';
+		$publication_terms_arr = "";
+		$publication_years_arr = "";
 		endwhile;
 		?>
 	</div>

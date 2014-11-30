@@ -113,6 +113,74 @@ function hide_editor() {
 
 } 
 
+define( 'FACULTY_PAGE_PARENT_ID', '31' );
+define( 'BLOG_PAGE_PARENT_ID', '2674' );
+define( 'DATASET_PAGE_PARENT_ID', '104' );
+ 
+ 
+/**
+ * save faculty parent
+ *
+ * @author  Joe Sexton <joe@webtipblog.com>
+ */
+function coenv_base_fac_parent( $data, $postarr ) {
+    global $post;
+ 
+ 
+    // verify if this is an auto save routine.
+    // If it is our form has not been submitted, so we dont want to do anything
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        return $data;
+ 
+    if ( $post->post_type == "faculty" ){
+        $data['post_parent'] = FACULTY_PAGE_PARENT_ID;
+    }
+ 
+    return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', FACULTY_PAGE_PARENT_ID, 2  ); 
+
+/**
+ * save blog parent
+ */
+function coenv_base_blog_parent( $data, $postarr ) {
+    global $post;
+ 
+ 
+    // verify if this is an auto save routine.
+    // If it is our form has not been submitted, so we dont want to do anything
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        return $data;
+ 
+    if ( $post->post_type == "student_blog" ){
+        $data['post_parent'] = BLOG_PAGE_PARENT_ID;
+    }
+ 
+    return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_blog_parent', BLOG_PAGE_PARENT_ID, 2  ); 
+
+/**
+ * save dataset parent
+ */
+function coenv_base_dataset_parent( $data, $postarr ) {
+    global $post;
+ 
+ 
+    // verify if this is an auto save routine.
+    // If it is our form has not been submitted, so we dont want to do anything
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        return $data;
+ 
+    if ( $post->post_type == "dataset" ){
+        $data['post_parent'] = DATASET_PAGE_PARENT_ID;
+    }
+ 
+    return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  ); 
+
+
 
 
 
