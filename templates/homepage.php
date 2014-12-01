@@ -80,22 +80,8 @@ echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
-?>
-            
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
-</div>
-	
-                <?php
+
+# News with featured news
 		
 $home_args = array(
 	'post_type'	=> 'post',
@@ -112,37 +98,23 @@ $wp_query = new WP_Query( $home_args );
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		if ( $wp_query->current_post == 0 ) {
-            if ( has_post_thumbnail()) {
-                echo '<div class="large-8 columns featured-news">';
+		echo '<div class="large-8 columns featured-news">';
+			if ( has_post_thumbnail()) {
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . get_the_permalink() . '" class="img">';
 				the_post_thumbnail( 'large' );
 				echo '</a></div>';
-                echo '<a class="button right show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
-                echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-                echo '<div class="post-meta">';
-                    echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                    $categories = get_the_category_list(', ');
-                        if ( $categories ) {
-                            echo ' / ' . $categories;
-                        }
-                echo '</div>';
-                echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 			}
-            else {
-                echo '<div class="large-4 columns small-news">';
-                echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                    $categories = get_the_category_list(', ');
-                        if ( $categories ) {
-                            echo ' / ' . $categories;
-                        }
-                echo '</div>';
-                echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
-            }
-		
+		echo '<a class="button right show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
+		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
+		echo '<div class="post-meta">';
+			echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+			$categories = get_the_category_list(', ');
+				if ( $categories ) {
+					echo ' / ' . $categories;
+				}
+		echo '</div>';
+		echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 		}
 
 		else {
@@ -157,50 +129,32 @@ $wp_query = new WP_Query( $home_args );
 		echo '</div>';
 		echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-        echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
 		}
 	echo '</div>';
 	endwhile;
 	?>
 <?php endif; ?>
 		<div class="large-4 columns right"><a class="button" href="/news-and-events">More News</a></div>
+
+<hr />
+				
+<div class="large-12 columns programs">
+	<h3>Learn more about the Climate Impacts Group</h3>
+	<?php the_widget('custom_post_widget', 'custom_post_id=2934&show_featured_image=true&show_title=true'); ?>
+</div>
+
+<hr />
+				
+<div class="large-12 columns programs">
+	<?php //the_widget('custom_post_widget', 'custom_post_id=2694&show_featured_image=true'); ?>
+</div>
         
 <hr />
-<div class="large-4 columns small-news">
-<a class="button right" href="/news-and-events">More</a>
-	<a href="/news-and-events"><h4>News</h4></a>
-<?php
-$home_args = array(
-	'post_type'	=> 'post',
-	'post_status' => 'publish',
-	'posts_per_page' => 3,
-);
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-small clearfix">
-		<ul class="list-news-small">
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		echo '<li class="news-small"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
-	endwhile;	
-		echo '</ul></div>';
-	endif;
-?>
-</div>
 				
-<div class="large-4 columns events">
-	<a class="button right" href="/news-and-events/calendar">More</a>
-	<h4>Events</h4>
-	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+<div class="large-12 columns programs">
+	<?php //the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
 </div>
-<div class="large-4 columns events">
-	<a class="button right" href="/alumni-and-community">More</a>
-	<h4>Get Connected</h4>
-	<?php the_widget('CoEnv_Widget_Social'); ?>
-</div>
+
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
