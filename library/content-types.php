@@ -6,6 +6,7 @@
  */
 
 function coenv_base_post_types_init() {
+  /*
   register_post_type( 'faculty',
     array(
       'labels' => array(    
@@ -25,6 +26,7 @@ function coenv_base_post_types_init() {
     )
 
   );
+  */
   register_post_type( 'features',
     array(
       'labels' => array(    
@@ -63,6 +65,7 @@ function coenv_base_post_types_init() {
 	'menu_icon' => 'dashicons-book',
     )
   );
+  /*
   register_post_type( 'student_blog',
     array(
       'labels' => array(    
@@ -81,6 +84,7 @@ function coenv_base_post_types_init() {
 	'menu_icon' => 'dashicons-exerpt-view',
     )
   );
+  */
   register_post_type( 'datasets',
     array(
       'labels' => array(    
@@ -113,8 +117,8 @@ function hide_editor() {
 
 } 
 
-define( 'FACULTY_PAGE_PARENT_ID', '31' );
-define( 'BLOG_PAGE_PARENT_ID', '2674' );
+//define( 'FACULTY_PAGE_PARENT_ID', '31' );
+//define( 'BLOG_PAGE_PARENT_ID', '2674' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
  
  
@@ -123,7 +127,7 @@ define( 'DATASET_PAGE_PARENT_ID', '104' );
  *
  * @author  Joe Sexton <joe@webtipblog.com>
  */
-function coenv_base_fac_parent( $data, $postarr ) {
+/*function coenv_base_fac_parent( $data, $postarr ) {
     global $post;
  
  
@@ -138,11 +142,12 @@ function coenv_base_fac_parent( $data, $postarr ) {
  
     return $data;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', FACULTY_PAGE_PARENT_ID, 2  ); 
+add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', FACULTY_PAGE_PARENT_ID, 2  ); */
 
 /**
  * save blog parent
  */
+/*
 function coenv_base_blog_parent( $data, $postarr ) {
     global $post;
  
@@ -159,7 +164,7 @@ function coenv_base_blog_parent( $data, $postarr ) {
     return $data;
 }
 add_action( 'wp_insert_post_data', 'coenv_base_blog_parent', BLOG_PAGE_PARENT_ID, 2  ); 
-
+*/
 /**
  * save dataset parent
  */
