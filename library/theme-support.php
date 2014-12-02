@@ -105,9 +105,9 @@ function coenv_base_section_title($id) {
     $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
 
     if (coenv_base_post_parent($id)):
-        $section_title = '<div class="columns large-12 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a> <span style="font-size: 50%; font-style: italic; line-height: 100%;">(section title + background img)</span></div>';
+        $section_title = '<div class="columns large-12 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
     elseif (!is_front_page()):
-        $section_title = '<div class="columns large-12 section-title"><h1><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a> <span style="font-size: 50%; font-style: italic; line-height: 100%;">(section title + background img)</span></h1></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a>></h1></div>';
     endif;
         echo $section_title;
     }

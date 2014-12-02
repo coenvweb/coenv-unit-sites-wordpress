@@ -240,8 +240,11 @@ class coenv_base_subnav extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-     
+          if ($GLOBALS['post']->post_parent) {
+            echo coenv_base_section_title($GLOBALS['post']->ID);
+          }
           echo $args['before_widget'];
+
           echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
           echo $args['after_widget'];
      }  
