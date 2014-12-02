@@ -199,3 +199,10 @@ div.news {
 
 
 }
+p span.intro {
+	font-size: 1.8rem;
+}
+// Move to plugin?
+html .mceContentBody {
+	padding: 2rem !important;
+}
