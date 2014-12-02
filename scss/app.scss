@@ -206,3 +206,9 @@ p span.intro {
 html .mceContentBody {
 	padding: 2rem !important;
 }
+.entry-content a {
+	text-decoration: underline;
+}
+.entry-content a.button {
+	text-decoration: none;
+}
