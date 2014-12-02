@@ -140,18 +140,75 @@ add_filter("mce_buttons_2", "coenv_admin_tinymce_buttons_add");
  */
 function coenv_admin_tinymce_styles( $arr ) {
 
-$arr['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4';
+$arr['block_formats'] = 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4;Theme Button=intro';
 return $arr;
 }
 
-add_filter('tiny_mce_before_init', 'coenv_admin_tinymce_styles');
+// add_filter('tiny_mce_before_init', 'coenv_admin_tinymce_styles');
 
 /**
  * Add custom styles to TinyMCE
  */
+
+add_filter( 'mce_buttons_2', 'fb_mce_editor_buttons' );
+function fb_mce_editor_buttons( $buttons ) {
+
+    array_unshift( $buttons, 'styleselect' );
+    $value = array_search( 'formatselect', $buttons );
+    if ( FALSE !== $value ) {
+        foreach ( $buttons as $key => $value ) {
+            if ( 'formatselect' === $value )
+                unset( $buttons[$key] );
+        }
+    }
+    return $buttons;
+}
+
+/**
+ * Add styles/classes to the "Styles" drop-down
+ */ 
+add_filter( 'tiny_mce_before_init', 'fb_mce_before_init' );
+
+function fb_mce_before_init( $settings ) {
+
+    $style_formats = array(
+        array(
+            'title' => 'Paragraph',
+            'block' => 'p',
+        ),
+        array(
+            'title' => 'Introduction',
+            'block' => 'span',
+            'classes' => 'intro'
+        ),
+        array(
+            'title' => 'Button',
+            'block' => 'span',
+            'classes' => 'button'
+        ),
+        array(
+            'title' => 'Heading 2',
+            'block' => 'h2',
+        ),
+        array(
+            'title' => 'Heading 3',
+            'block' => 'h3'
+        ),
+        array(
+            'title' => 'Heading 4',
+            'block' => 'h3'
+        )
+    );
+
+    $settings['style_formats'] = json_encode( $style_formats );
+
+    return $settings;
+
+}
+
 function coenv_admin_mce_css( $mce_css ) {
 
-	$mce_css .= ', ' . plugins_url( 'coenv-admin.css', __FILE__ );
+	$mce_css .= ', ' . plugins_url( 'coenv-tinymce.css', __FILE__ );
 
 	return $mce_css;
 }
