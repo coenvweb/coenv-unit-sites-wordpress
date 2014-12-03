@@ -161,7 +161,7 @@ endif;
 
 wp_reset_query();
 
-return '';//$nav_exclude;
+return $nav_exclude;
 }
 
 
