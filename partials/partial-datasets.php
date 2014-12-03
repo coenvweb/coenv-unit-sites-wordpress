@@ -37,27 +37,27 @@ $fields = get_fields();
 
 	</header>
 	<section class="article__content">
-
-		<div data-magellan-expedition="fixed">
-  			<dl class="sub-nav">
+		<!--
+		<div>
+  			<dl data-magellan-expedition="fixed" class="sub-nav">
   				<?php
 
-  				if( $fields )
+  				//if( $fields )
 {
-	foreach( $fields as $field_name => $value )
+	//foreach( $fields as $field_name => $value )
 	{
 		// get_field_object( $field_name, $post_id, $options )
 		// - $value has already been loaded for us, no point to load it again in the get_field_object function
-		$field = get_field_object($field_name, $post->id, array('load_value' => true));
+		//$field = get_field_object($field_name, $post->id, array('load_value' => true));
 		
-		echo '<dd data-magellan-arrival="' . $field_name  . '"><a href="#' . $field_name . '">' . $field['label'] . '</a></dd>';
+		//echo '<dd data-magellan-arrival="' . $field_name  . '"><a href="#' . $field_name . '">' . $field['label'] . '</a></dd>';
 		
 	}
 }
 ?>
 
   			</dl>
-		</div>
+		</div>-->
 
 
 
@@ -94,13 +94,14 @@ if( $fields )
 {
 	foreach( $fields as $field_name => $value )
 	{
+		
 		// get_field_object( $field_name, $post_id, $options )
 		// - $value has already been loaded for us, no point to load it again in the get_field_object function
 		$field = get_field_object($field_name, $post->id, array('load_value' => true));
-
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div>';
-			echo '<h3>' . $field['label'] . '</h3>';
+if( $field['value'] ) {
+		//echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
+		echo '<div data-magellan-destination="' . $field_name . '">';
+			echo '<h2>' . $field['label'] . '</h2>';
 
 			if ($field_name == 'dataset_link') {
 				$rows = get_field('dataset_link');
@@ -120,6 +121,7 @@ if( $fields )
 
 
 		echo '</div>';
+	}
 	}
 }
 
