@@ -149,7 +149,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 		echo '</h5></div>';
 		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
-		echo '<div>' . coenv_base_dataset_excerpt() . '</div>';
+		echo '<div>' . coenv_base_custom_field_excerpt('dataset_overview') . '</div>';
 		echo '<div>';
 		echo '<a class="button" href="' . get_the_permalink() .'">View Details</a>';
 		echo '</div>';
