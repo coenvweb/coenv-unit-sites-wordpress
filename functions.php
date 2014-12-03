@@ -139,16 +139,12 @@ function coenv_base_get_ancestor($attr = 'ID') {
 
 // page/post ids to exclude from the main menu
 function coenv_base_menu_exclude() {
-
-
-
-
 // args
 $args = array(
 	'numberposts' => -1,
 	'post_type' => 'page',
-	'meta_key'=>'nav_visibility',
-    'meta_value'=> 'include',
+	'meta_key'=>'menu_visibility',
+    'meta_value'=> 'not-visible',
     'meta_compare'=>'='
 );
 
@@ -165,7 +161,7 @@ endif;
 
 wp_reset_query();
 
-return $nav_exclude;
+return '';//$nav_exclude;
 }
 
 
@@ -275,3 +271,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	wp_reset_postdata();
 	wp_reset_query();
 }
+/*
+ * Use site stylesheet for WYSIWYG
+ */
+add_editor_style( 'css/app.css' );
