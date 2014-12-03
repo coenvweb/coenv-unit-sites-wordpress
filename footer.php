@@ -1,6 +1,5 @@
 </section>
 	<footer id="footer" role="contentinfo" class="site-footer">
-		<?php c2c_reveal_template(); ?>
 		<?php do_action('foundationPress_before_footer'); ?>
 		<div class="row">
 			<div class="medium-6 columns">				
