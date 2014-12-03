@@ -120,6 +120,7 @@ function hide_editor() {
 //define( 'FACULTY_PAGE_PARENT_ID', '31' );
 //define( 'BLOG_PAGE_PARENT_ID', '2674' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
+define( 'NEWS_PARENT_ID', '142' );
  
  
 /**
@@ -177,13 +178,30 @@ function coenv_base_dataset_parent( $data, $postarr ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
         return $data;
  
-    if ( $post->post_type == "dataset" ){
+    if ( $post->post_type == "datasets" ){
         $data['post_parent'] = DATASET_PAGE_PARENT_ID;
     }
  
     return $data;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  ); 
+add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  );
+
+function coenv_base_news_parent( $data, $postarr ) {
+    global $post;
+ 
+ 
+    // verify if this is an auto save routine.
+    // If it is our form has not been submitted, so we dont want to do anything
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        return $data;
+ 
+    if ( $post->post_type == "post" ){
+        $data['post_parent'] = NEWS_PARENT_ID;
+    }
+ 
+    return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_news_parent', '142', 2  ); 
 
 
 
