@@ -46,8 +46,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			'posts_per_page' => 20,
 			'orderby' => 'date',
 			'order' => 'DESC',
-			//'taxonomy' => 'category',
-			//'term' => 'alumni',
 			'paged' => $paged
 		);
 		// Category filter
@@ -65,10 +63,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		}
 		$wp_query = new WP_Query( $query_args );
 		?>
-		<?php 
-		$posts = $wp_query->get_posts();
-		if ($wp_query->have_posts()): 
-		
+		<?php if ($wp_query->have_posts()): 
 		?>
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
@@ -86,40 +81,48 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<div class="blog clearfix">
 		<?php
 		# The Loop
-		foreach ($posts as $post) {
-
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
 		$rows = get_field('blog_link');
-		$terms = get_the_terms( $post->ID, 'category');
+		$terms = wp_get_post_terms( get_the_ID(), 'category');
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }
 		?>
-		<div class="blog-list-item">
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
+		<div class="blog-list-item clearfix">
+		<!--
+		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
+		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
+		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
+    	-->
         <?php
-        setup_postdata($post);
-        //print_r($post);
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '<div class="blog-meta">';
+        echo '<div class="blog-meta clearfix">';
 		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = array();
+		$termlist = '';
 		foreach ($terms as $term) {
-		 $termlist[] = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>';
-		//get_the_terms( 'category' );
+		 $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
 		}
-		$termlist_str = implode(', ',$termlist);
-		echo $termlist_str;
+		$termlist = rtrim($termlist,', ');
+		echo $termlist;
 		 echo '</p>';
 		
 		echo '</div>';
+		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
+
 		echo '<div class="post">';
-		if (has_post_thumbnail()):
-		echo '<a class="left" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+		/*if (has_post_thumbnail()):
+		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
-		endif;
+		endif;*/
 		echo the_excerpt();
-		echo '<a class="button" href="' . get_the_permalink() . '">Read more</a>';
+		echo $post_link;
 		'</div>';
 		echo '<div class="blog-links right">';
 		if($rows) {
@@ -134,7 +137,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		</div>
 		</div>
 	</div>
-	<?php } ?>
+	<?php endwhile; ?>
 	</div>
 	<div class="pager">
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>

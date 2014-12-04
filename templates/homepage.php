@@ -97,36 +97,72 @@ $wp_query = new WP_Query( $home_args );
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }
 		if ( $wp_query->current_post == 0 ) {
             if ( has_post_thumbnail()) {
+
                 echo '<div class="large-8 columns featured-news">';
 				echo '<div class="featured-thumbnail">';
-				echo '<a href="' . get_the_permalink() . '" class="img">';
+				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
 				the_post_thumbnail( 'large' );
 				echo '</a></div>';
-                echo '<a class="button right show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
-                echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-                echo '<div class="post-meta">';
-                    echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                    $categories = get_the_category_list(', ');
-                        if ( $categories ) {
-                            echo ' / ' . $categories;
-                        }
-                echo '</div>';
-                echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+				echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                // Get categories
+                $terms = wp_get_post_terms(get_the_id(), 'category');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						if ($term->slug != 'uncategorized') {
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
+						}
+					}
+					$terms_str = ' / ' . implode(', ', $terms_arr);
+
+				} else {
+					$terms_str = '';
+				}
+				$terms = "";
+				echo $terms_str;
+	            echo '</div>';
+                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
+	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+	            echo $post_link;
 			}
             else {
                 echo '<div class="large-4 columns small-news">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                    $categories = get_the_category_list(', ');
-                        if ( $categories ) {
-                            echo ' / ' . $categories;
-                        }
+                // Get categories
+                $terms = wp_get_post_terms(get_the_id(), 'category');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						if ($term->slug != 'uncategorized') {
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
+						}
+					}
+					$terms_str = ' / ' . implode(', ', $terms_arr);
+
+				} else {
+					$terms_str = '';
+				}
+				echo $terms_str;
+				//var_dump($terms_arr);
+				$terms = "";
                 echo '</div>';
-                echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
+                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
                 echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
+                echo $post_link;
             }
 		
 		}
@@ -135,23 +171,33 @@ $wp_query = new WP_Query( $home_args );
 			
 		echo '<div class="large-4 columns small-news">';
 		echo '<div class="post-meta">';
-			echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-			$categories = get_the_category_list(', ');
-				if ( $categories ) {
-					echo ' / ' . $categories;
+		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+		// Get categories
+        $more_terms = wp_get_post_terms(get_the_id(), 'category');
+		if (!empty($more_terms)) {
+			$more_terms_arr = array();
+			
+			foreach ($more_terms as &$term) {
+				if ($term->slug != 'uncategorized') {
+					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
 				}
+			}
+			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+
+		} else {
+			$more_terms_str = '';
+		}
+		$more_terms = "";
+		echo $more_terms_str;
 		echo '</div>';
-		echo '<a href="' . get_the_permalink() . '"><h5>' . get_the_title() . '</h5></a>';
+		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-        echo '<a class="button left show-for-medium-up" href="' . get_the_permalink() . '">More</a>';
+       	echo $post_link;
 		}
 	echo '</div>';
 	endwhile;
 	?>
 <?php endif; ?>
-		<div class="large-4 columns right"><a class="button" href="/news-and-events">More News</a></div>
-
-<hr />
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">
@@ -160,9 +206,6 @@ $wp_query = new WP_Query( $home_args );
 	</div><!-- .widget-area -->
 </div>
 <?php endif; ?>
-        
-<hr />
-				
 <div class="large-12 columns programs">
 	<?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
 </div>

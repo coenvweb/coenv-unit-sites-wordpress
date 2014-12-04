@@ -139,62 +139,30 @@ function coenv_base_get_ancestor($attr = 'ID') {
 
 // page/post ids to exclude from the main menu
 function coenv_base_menu_exclude() {
-	return array('65');
-}
+// args
+$args = array(
+	'numberposts' => -1,
+	'post_type' => 'page',
+	'meta_key'=>'menu_visibility',
+    'meta_value'=> 'not-visible',
+    'meta_compare'=>'='
+);
 
-define( 'FACULTY_PAGE_PARENT_ID', '59' );
-define( 'BLOG_PAGE_PARENT_ID', '24' );
- 
-add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', '99', 2  ); 
- 
-/**
- * save faculty parent
- *
- * @author  Joe Sexton <joe@webtipblog.com>
- * @param   array $data
- * @param   array $postarr
- * @return  array
- */
-function coenv_base_fac_parent( $data, $postarr ) {
-    global $post;
- 
- 
-    // verify if this is an auto save routine.
-    // If it is our form has not been submitted, so we dont want to do anything
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        return $data;
- 
-    if ( $post->post_type == "faculty" ){
-        $data['post_parent'] = FACULTY_PAGE_PARENT_ID;
-    }
- 
-    return $data;
-}
+// get results
+$nav_exclude = array();
+$nav_query = new WP_Query( $args );
 
-/**
- * save blog parent
- *
- * @author  Joe Sexton <joe@webtipblog.com>
- * @param   array $data
- * @param   array $postarr
- * @return  array
- */
-function coenv_base_blog_parent( $data, $postarr ) {
-    global $post;
- 
- 
-    // verify if this is an auto save routine.
-    // If it is our form has not been submitted, so we dont want to do anything
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        return $data;
- 
-    if ( $post->post_type == "student_blog" ){
-        $data['post_parent'] = BLOG_PAGE_PARENT_ID;
-    }
- 
-    return $data;
+
+if( $nav_query->have_posts() ):
+	while ( $nav_query->have_posts() ) : $nav_query->the_post();
+		$nav_exclude[] = get_the_ID();
+	endwhile;
+endif;
+
+wp_reset_query();
+
+return $nav_exclude;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_blog_parent', '2674', 2  ); 
 
 
 /* 
@@ -302,3 +270,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	wp_reset_postdata();
 	wp_reset_query();
 }
+/*
+ * Use site stylesheet for WYSIWYG
+ */
+add_editor_style( 'css/app.css' );

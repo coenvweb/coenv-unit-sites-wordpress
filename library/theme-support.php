@@ -10,11 +10,11 @@ function FoundationPress_theme_support() {
     add_theme_support('post-thumbnails');
     // set_post_thumbnail_size(150, 150, false);
 
-		// Add media sizes
-		// thumbnail: 200x200 square crop
-		update_option( 'thumbnail_size_w', 200 );
-		update_option( 'thumbnail_size_h', 200 );
-		update_option( 'thumbnail_crop', 1 );
+        // Add media sizes
+        // thumbnail: 200x200 square crop
+        update_option( 'thumbnail_size_w', 200 );
+        update_option( 'thumbnail_size_h', 200 );
+        update_option( 'thumbnail_crop', 1 );
 
     // rss thingy
     add_theme_support('automatic-feed-links');
@@ -34,19 +34,19 @@ remove_action( 'wp_head','feed_links_extra', 3 );
 add_action( 'wp_head', 'reinsert_rss_feed', 1 );
 
 function reinsert_rss_feed() {
-	echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo('sitename') . ' &raquo; RSS Feed" href="' . get_bloginfo('rss2_url') . '" />';
+    echo '<link rel="alternate" type="application/rss+xml" title="' . get_bloginfo('sitename') . ' &raquo; RSS Feed" href="' . get_bloginfo('rss2_url') . '" />';
 }
 
 /**
  * Blank search searches for ' ' instead.
  **/
 if(!is_admin()){
-	add_action('init', 'search_query_fix');
-	function search_query_fix(){
-		if(isset($_GET['s']) && $_GET['s']==''){
-			$_GET['s']=' ';
-		}
-	}
+    add_action('init', 'search_query_fix');
+    function search_query_fix(){
+        if(isset($_GET['s']) && $_GET['s']==''){
+            $_GET['s']=' ';
+        }
+    }
 }
 
 /*
@@ -105,9 +105,9 @@ function coenv_base_section_title($id) {
     $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
 
     if (coenv_base_post_parent($id)):
-        $section_title = '<div class="columns large-12 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a> <span style="font-size: 50%; font-style: italic; line-height: 100%;">(section title + background img)</span></div>';
+        $section_title = '<div class="columns large-12 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
     elseif (!is_front_page()):
-        $section_title = '<div class="columns large-12 section-title"><h1><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a> <span style="font-size: 50%; font-style: italic; line-height: 100%;">(section title + background img)</span></h1></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a>></h1></div>';
     endif;
         echo $section_title;
     }

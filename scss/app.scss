@@ -195,7 +195,17 @@ div.news {
 	margin-bottom: 0;
 	padding: .5rem;
 	}
-
-
-
 }
+p span.intro {
+	font-size: 1.4rem;
+}
+// Move to plugin?
+html .mceContentBody {
+	padding: 2rem !important;
+}
+.widget-area.home-content h4 {
+font-size: 2rem;
+}
+	
+
+

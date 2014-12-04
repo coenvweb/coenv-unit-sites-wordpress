@@ -34,11 +34,7 @@
 	</header>
 
 	<section class="article__content">
-
 		<?php the_content() ?>
-		<?php if ( get_field('story_link_url') ): ?> 
-	 		<a href="<?php the_field('story_link_url'); ?>" class="button" target="_blank"><?php the_field('story_source_name'); ?> »</a> 
-		<?php endif; ?>
 	</section>
     <?php remove_filter( 'the_title', 'wptexturize' );
     remove_filter( 'the_excerpt', 'wptexturize' ); ?>
