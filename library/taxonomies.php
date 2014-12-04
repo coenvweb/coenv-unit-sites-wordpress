@@ -194,4 +194,3 @@ function fac_tax() {
 }
 
 add_action( 'init', 'fac_tax' );
-}

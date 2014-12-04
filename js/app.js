@@ -244,7 +244,7 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
 		$('.share').coenvshare();
 		
 		// lightbox
-		$('img').closest('a').nivoLightbox();
+		$('a').nivoLightbox();
 
 		// lightbox captions
         $('figure a img').each(function () {
