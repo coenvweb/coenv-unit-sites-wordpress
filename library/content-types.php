@@ -43,62 +43,6 @@ function coenv_base_post_types_init() {
   'menu_icon' => 'dashicons-slides',
     )
   );
-  register_post_type( 'publications',
-    array(
-      'labels' => array(    
-      'name' => __( 'Publications' ),
-      'singular_name' => __( 'Publication' ),
-      'add_new_item' => __( 'Add Publication'),
-      'edit_item' => __( 'Edit Publication'),
-      'new_item' => __( 'New Publication'),
-      ),
-    'hierarchical' => true,
-    // drew - i think we need this for each tax connected to a content type
-    'taxonomies' => array('author','publication_theme'),
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    'rewrite' => array('slug' => 'publications'),
-  'menu_icon' => 'dashicons-book',
-    )
-  );
-  register_post_type( 'student_blog',
-    array(
-      'labels' => array(    
-      'name' => __( 'Blog' ),
-      'singular_name' => __( 'Blog Post' ),
-      'add_new_item' => __( 'Add Blog Post'),
-      'edit_item' => __( 'Edit Blog Post'),
-      'new_item' => __( 'New Blog Post'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'student_blog'),
-  'menu_icon' => 'dashicons-exerpt-view',
-    )
-  );
-  register_post_type( 'datasets',
-    array(
-      'labels' => array(    
-      'name' => __( 'Datasets' ),
-      'singular_name' => __( 'Dataset' ),
-      'add_new_item' => __( 'Add Dataset'),
-      'edit_item' => __( 'Edit Dataset'),
-      'new_item' => __( 'New Dataset'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'student_blog'),
-  'menu_icon' => 'dashicons-exerpt-view',
-    )
-  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
@@ -113,10 +57,8 @@ function hide_editor() {
 
 } 
 
-define( 'FACULTY_PAGE_PARENT_ID', '31' );
-define( 'BLOG_PAGE_PARENT_ID', '2674' );
-define( 'DATASET_PAGE_PARENT_ID', '104' );
-define( 'NEWS_PARENT_ID', '142' );
+define( 'FACULTY_PAGE_PARENT_ID', '59' );
+define( 'NEWS_PARENT_ID', '24' );
  
  
 /**
@@ -144,43 +86,6 @@ add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', FACULTY_PAGE_PARENT_
 /**
  * save blog parent
  */
-function coenv_base_blog_parent( $data, $postarr ) {
-    global $post;
- 
- 
-    // verify if this is an auto save routine.
-    // If it is our form has not been submitted, so we dont want to do anything
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        return $data;
- 
-    if ( $post->post_type == "student_blog" ){
-        $data['post_parent'] = BLOG_PAGE_PARENT_ID;
-    }
- 
-    return $data;
-}
-add_action( 'wp_insert_post_data', 'coenv_base_blog_parent', BLOG_PAGE_PARENT_ID, 2  ); 
-
-/**
- * save dataset parent
- */
-function coenv_base_dataset_parent( $data, $postarr ) {
-    global $post;
- 
- 
-    // verify if this is an auto save routine.
-    // If it is our form has not been submitted, so we dont want to do anything
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        return $data;
- 
-    if ( $post->post_type == "datasets" ){
-        $data['post_parent'] = DATASET_PAGE_PARENT_ID;
-    }
- 
-    return $data;
-}
-add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  );
-
 function coenv_base_news_parent( $data, $postarr ) {
     global $post;
  
@@ -190,13 +95,13 @@ function coenv_base_news_parent( $data, $postarr ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
         return $data;
  
-    if ( $post->post_type == "post" ){
+    if ( $post->post_type == "news" ){
         $data['post_parent'] = NEWS_PARENT_ID;
     }
  
     return $data;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_news_parent', '142', 2  );
+add_action( 'wp_insert_post_data', 'coenv_base_news_parent', NEWS_PARENT_ID, 2  ); 
 
 /*
  * Teasers for custom fields
