@@ -200,6 +200,7 @@ $wp_query = new WP_Query( $home_args );
 <?php endif; ?>
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
+<hr />
 <div class="large-12 columns programs">
 	<div class="widget-area home-content" role="complementary">
 		<?php dynamic_sidebar( 'home-content' ); ?>
@@ -207,9 +208,9 @@ $wp_query = new WP_Query( $home_args );
 </div>
 <?php endif; ?>
 <div class="large-12 columns programs">
+    <hr />
 	<?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
 </div>
-
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
