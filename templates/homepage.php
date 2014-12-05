@@ -83,11 +83,22 @@ echo '</div>';
 
 # News with featured news
 		
-$home_args = array(
-	'post_type'	=> 'post',
-	'post_status' => 'publish',
-	'posts_per_page' => 3,
-);
+$sticky = get_option( 'sticky_posts' );
+if( $sticky ) {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => '2',
+        'post_status' => 'publish',
+    );
+}
+else {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => '3',
+        'post_status' => 'publish',
+    );
+}
+
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
