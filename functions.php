@@ -273,4 +273,4 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 /*
  * Use site stylesheet for WYSIWYG
  */
-add_editor_style( 'css/app.css' );
+//add_editor_style( 'css/app.css' );
