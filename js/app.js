@@ -96,17 +96,17 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
 			{
 				name: 'Twitter',
 				className: 'social-twitter',
-				url: 'http://twitter.com/home?status=' + this.articleTitle + ' ' + this.articleShortLink + ' from @UW_CoEnv" target="_blank'
+				url: 'http://twitter.com/home?status=' + this.articleTitle + ' ' + this.articleShortLink + ' from @SMEAatUW" target="_blank'
 			},
 			{
 				name: 'Facebook',
 				className: 'social-facebook',
-				url: 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + this.articleShortLink + '&p[images][0]=&p[title]=' + this.articleTitle + ' from UW College of the Environment" target="_blank'
+				url: 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + this.articleShortLink + '&p[images][0]=&p[title]=' + this.articleTitle + ' from UW School of Marine and Environmental Affairs" target="_blank'
 			},
 			{
 				name: 'Email',
 				className: 'mail',
-				url: 'mailto:?subject=' + this.articleTitle + '&body=Check%20out%20this%20article%20from%20the%20UW%20College%20of%20the%20Environment:%20' + this.articleShortLink
+				url: 'mailto:?subject=' + this.articleTitle + '&body=Check%20out%20this%20article%20from%20the%20UW%20School%20of%20Marine%20and%20Environmental%20Affairs:%20' + this.articleShortLink
 			}
 		];
 
