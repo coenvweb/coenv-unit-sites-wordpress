@@ -84,17 +84,20 @@ echo '</div>';
 # News with featured news
 		
 $sticky = get_option( 'sticky_posts' );
+$sticky_count = count($sticky);
+$posts_on_home = 3; //set posts_per_page here
+
 if( $sticky ) {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => '2',
+        'posts_per_page' => $posts_on_home - $sticky_count,
         'post_status' => 'publish',
     );
 }
 else {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => '3',
+        'posts_per_page' => $posts_on_home,
         'post_status' => 'publish',
     );
 }
