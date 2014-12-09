@@ -44,8 +44,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			'post_type'	=> 'post',
 			'post_status' => 'publish',
 			'posts_per_page' => 10,
-			'orderby' => 'date',
-			'order' => 'DESC',
+            'ignore_sticky_posts' => 1,
 			'paged' => $paged
 		);
 		// Category filter
