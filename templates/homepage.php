@@ -81,28 +81,16 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 
-# News with featured news
-		
-$sticky = get_option( 'sticky_posts' );
-$sticky_count = count($sticky);
-$posts_on_home = 3; //set posts_per_page here
+# Featured News
 
-if( $sticky ) {
-    $home_args = array(
-        'post_type' => 'post',
-        'posts_per_page' => $posts_on_home - $sticky_count,
-        'post_status' => 'publish',
-    );
-}
-else {
-    $home_args = array(
-        'post_type' => 'post',
-        'posts_per_page' => $posts_on_home,
-        'post_status' => 'publish',
-    );
-}
+$feat_args = array(
+    'post_type' => 'post',
+    'post_status' => 'publish',
+    'posts_per_page' => 1,
+    'category_name' => 'featured',
+);
 
-$wp_query = new WP_Query( $home_args );
+$wp_query = new WP_Query( $feat_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 	<hr />
@@ -111,6 +99,7 @@ $wp_query = new WP_Query( $home_args );
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
+        $featured[] = $post->ID;
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';
@@ -119,7 +108,6 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-		if ( $wp_query->current_post == 0 ) {
             if ( has_post_thumbnail()) {
 
                 echo '<div class="large-8 columns featured-news">';
@@ -178,11 +166,45 @@ $wp_query = new WP_Query( $home_args );
                 echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
                 echo $post_link;
             }
-		
-		}
+	echo '</div>';
+	endwhile;
+endif;
 
-		else {
-			
+# Other News
+
+if( $featured ) {
+    $home_args = array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'posts_per_page' => 2,
+        'post__not_in' => $featured
+    );
+}
+else {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 3,
+        'post_status' => 'publish',
+    );
+   echo '<hr />';
+   echo '<div class="home-news-section clearfix">';
+}
+
+$wp_query = new WP_Query( $home_args );
+?>
+	<?php if ($wp_query->have_posts()): ?>
+		<?php
+		# The Loop
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }	
 		echo '<div class="large-4 columns small-news">';
 		echo '<div class="post-meta">';
 		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
@@ -207,7 +229,6 @@ $wp_query = new WP_Query( $home_args );
 		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
        	echo $post_link;
-		}
 	echo '</div>';
 	endwhile;
 	?>
