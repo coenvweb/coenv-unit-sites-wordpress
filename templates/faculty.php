@@ -19,17 +19,40 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 	<div class="small-12 medium-8 columns" role="main">
         <div class="entry-content">
-        	<h1><a href="/faculty"><?php echo the_title(); ?></a></h1>
-        	<div class="row filters">
-				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
-				</div>
-				<div class="share columns large-6" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
+            <div class="share columns large-6 right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
 		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
 		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a></div>
-	</div>
+        	<h1><a href="/faculty"><?php echo the_title(); ?></a></h1>
 
 <?php
+
+$fac_cat = get_term_by( 'slug', (string) $_GET['term'], 'research_areas' );
+          $fac_cat = $fac_cat->slug;
+          
+          if ( ! empty( $instance['title'] ) ) {
+               echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+          }
+          if ( ! empty( $instance['textarea'] ) ) {
+               echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
+          }
+                    $cats_args  = array(
+                      'orderby' => 'name',
+                      'order' => 'ASC',
+                      'taxonomy' => 'research_areas'
+                      );
+                    $cats = get_categories($cats_args);
+                    if ($cats) {
+                         echo '<h3 class="cat-title">Our faculty work on:</h3>';
+                         echo '<ul class="small-block-grid-2 fac-cats">';
+                         if ($fac_cat):
+                              echo '<li><a class="button" href="/faculty-research/faculty">All Research Areas</a></li>';
+                         endif;
+                         foreach($cats as $cat) { 
+                              echo '<li><a class="button" href="/faculty-research/faculty/?tax=research_areas&term=' . $cat->slug . '">' . $cat->name . '</a></li>';
+                         }
+                         echo '</ul>';
+                    }
+
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 $temp = $wp_query;
@@ -72,14 +95,15 @@ $wp_query = new WP_Query( $query_args );
 <?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all posts &raquo;</a></div>
+			<div class="right"><a href="/research/faculty/">all posts &raquo;</a></div>
 		</div>
 	<?php endif; ?>
+        <ul class="small-block-grid-3">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'faculty_sm');
+		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'medium');
 		$faculty_link = get_the_permalink();
 		$faculty_phone_rows = get_field('phone_number');
 		$faculty_email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
@@ -90,14 +114,15 @@ $wp_query = new WP_Query( $query_args );
 		$first_faculty_title = $first_faculty_title_row['job_title'];
 		$faculty_img_src = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
 		if (!$faculty_img_src) {
-		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
+		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-full.jpg';
 		}
-		echo '<div class="faculty-list-item">';
+		echo '<li class="faculty-list-item">';
 		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '</div>';
+		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
+		echo '</li>';
 		endwhile;
 		?>
+        </ul>
 				<div class="pager">
 					<?php /* Display navigation to next/previous pages when applicable */ ?>
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>

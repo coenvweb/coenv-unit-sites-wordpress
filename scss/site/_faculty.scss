@@ -73,56 +73,12 @@ article.type-faculty {
 
 } // end article.type-faculty
 
-.faculty-list-teach h2:first-child {
-	margin-top: 0;
-}
-
-.faculty-list-teach .faculty-list-item {
-	float: left;
-	margin-bottom: rem-calc(18px);
-	margin-right: rem-calc(18px);
-	width: rem-calc(120px);
-	min-height: 12rem;
-	h3 {
-		font-size: 1rem;
+.faculty-list-item {
+    h4 {
 		line-height: 1.25rem;
 		margin-top: .5rem;
 	}
 
-}
-
-.faculty-list-research .faculty-list,
-.faculty-list-adjunct .faculty-list,
-.faculty-list-emeritus .faculty-list {
-	display:table;
-	width: 100%;
-}
-.faculty-list-research .faculty-list .faculty-list-item,
-.faculty-list-adjunct .faculty-list .faculty-list-item,
-.faculty-list-emeritus .faculty-list .faculty-list-item {
-	display:table-row;
-
-	.faculty-name h3 {
-		font-weight: normal;
-		font-size: 1rem;
-		@include sans;
-	}
-
-	&.even {
-		background-color: #ddd;
-	}
-}
-.faculty-list-research .faculty-list .faculty-list-item div,
-.faculty-list-adjunct .faculty-list .faculty-list-item div,
-.faculty-list-emeritus .faculty-list .faculty-list-item div {
-	display:table-cell;
-    width:25%;
-}
-.faculty-list-emeritus {
-	margin-bottom: rem-calc(153px);
-}
-.page-id-80 h2 {
-	@include font-size(24);	
 }
 
 #sidebar .widget {
@@ -148,7 +104,7 @@ ul.fac-terms {
 
 	li {
 		display: inline;
-		margin: 0 .5rem .5rem 0;
+		margin: 0;
 		padding: 0;
 
 	}
