@@ -97,7 +97,7 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 		</div>
 		<div class="article__categories">
 			<h2>Research areas</h2>
-			<?php coenv_base_fac_terms($post->ID); ?>
+			<?php coenv_base_fac_terms_lite($post->ID); ?>
 		</div>
 		<?php the_content() ?>
 		<?php if ($faculty_pubs): ?>

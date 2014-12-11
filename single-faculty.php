@@ -1,10 +1,10 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="columns large-12 section-title"><h1><a href="/faculty">Faculty</a></h1></div>
+	<div class="columns large-12 section-title"><h2><a href="/faculty">Faculty</a></h2></div>
 	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
 	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
 	<?php //endif; ?>
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-12 columns" role="main">
 	<?php do_action('foundationPress_before_content'); ?>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
 			<div class="entry-content">
@@ -32,6 +32,5 @@
 	<?php do_action('foundationPress_after_content'); ?>
 
 	</div>
-	<?php get_sidebar(); ?>
 </div>	
 <?php get_footer(); ?>
