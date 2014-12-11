@@ -57,8 +57,8 @@ function hide_editor() {
 
 } 
 
-define( 'FACULTY_PAGE_PARENT_ID', '59' );
-define( 'NEWS_PARENT_ID', '24' );
+define( 'FACULTY_PAGE_PARENT_ID', '2958' );
+define( 'NEWS_PARENT_ID', '2966' );
  
  
 /**
@@ -95,7 +95,7 @@ function coenv_base_news_parent( $data, $postarr ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
         return $data;
  
-    if ( $post->post_type == "news" ){
+    if ( $post->post_type == "post" ){
         $data['post_parent'] = NEWS_PARENT_ID;
     }
  
