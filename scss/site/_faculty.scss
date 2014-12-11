@@ -96,18 +96,38 @@ article.type-faculty {
 	margin: 0 0 .5rem 0;
 }
 
-ul.fac-cats,
-ul.fac-terms {
-
+ul.fac-cats {
 	padding: 0;
 	margin-left:0;
+    width: 100%;
 
 	li {
 		display: inline;
 		margin: 0;
-		padding: 0;
-
+        padding: 0;
+        
+        &:nth-of-type(2n+1){
+            padding-right: rem-calc(5);
+        }
 	}
+}
+
+.fac-terms {
+    li {
+		display: inline;
+		margin: 0;
+        padding: 0;
+    }
+}
+
+.cat-list {
+    .button {
+        width: 100%;
+        margin-bottom: rem-calc(10);
+    }
+    .cat-title {
+        margin-bottom: rem-calc(10);
+    }
 }
 
 .faculty-website a.button {
@@ -118,6 +138,7 @@ ul.fac-terms {
 #coenv_base_fac_cats-2 ul li {
 	margin-right: .5rem;
 }
+
 
 
 
