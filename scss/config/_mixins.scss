@@ -70,28 +70,3 @@ $base-font-size: 14 !default;
   &::-moz-placeholder { @content }
   &:-ms-input-placeholder { @content }
 }
-
-// columns
-@mixin col-1() {
-	width: 24.7169811%; // 262px at widest
-
-	@media print {
-		width: auto;
-	}
-}
-
-@mixin col-2 {
-	width: 49.8113208%; // 528px at widest
-
-	@media print {
-		width: auto;
-	}
-}
-
-@mixin col-3 {
-	width: 74.9056604%; // 794px at widest
-
-	@media print {
-		width: auto;
-	}
-}

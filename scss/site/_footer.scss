@@ -32,7 +32,7 @@
 			color: $text-white;
 			@include font-size(20);
 			@include line-height(20);
-			@include serif;
+            @include encode_cb;
 			color: $text-white;
 
 			a {

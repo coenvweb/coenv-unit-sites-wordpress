@@ -16,7 +16,7 @@
 			padding: 0;
 			margin: 0;
 			font-size: 1.25rem;
-			@include serif;
+			@include encode_cb;
 
 			a {
 				display: block;
@@ -47,5 +47,5 @@
 	}
 }
 .side-nav li.active a:first-child:not(.button) {
-	@include serif;
+	@include encode_cb;
 }

@@ -1,3 +1,43 @@
+.title-row {
+    max-width: none;
+    border-bottom: #d7dee5 1px solid;
+}
+
+.title-area {
+    margin: 0;
+    list-style: none;
+}
+
+.name {
+    h1 {
+        @include encode;
+        font-weight: 500!important;
+        font-size: rem-calc(24);
+        float: left;
+        margin: rem-calc(20) 0;
+        a {
+            color: #000000;
+        }
+    }
+    #logo {
+        margin-right: rem-calc(10);
+    }
+}
+
+.units {
+    float: right;
+    list-style: none;
+    margin: rem-calc(30) rem-calc(18);
+    
+    .slash {
+        margin: 0 rem-calc(12);
+    }
+    
+    .uw-name {
+        margin-right: rem-calc(16);
+    }
+}
+
 #logo {
 	span {
 		@extend .visuallyhidden;
@@ -25,11 +65,6 @@
     h2 {
         margin: rem-calc(10) 0;
     }
-}
-
-.title-area {
-	list-style: none;
-	margin-left: 0;
 }
 .breadcrumbs {
 	@include rem('margin-bottom',2);

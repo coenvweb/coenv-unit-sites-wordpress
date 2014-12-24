@@ -4,8 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
-	<div class="small-12 large-12 columns" role="main">
+<div class="feature-row row">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
@@ -47,9 +46,9 @@ Template Name: Homepage
 echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 echo '</div>';
-	echo '<div class="feature-info-container">';
-		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
+	echo '<div class="feature-info-container medium-6 small-12 columns right">';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+        echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
 				echo '<h2>' . get_the_title() . '</h2>';
 				echo '<p>' . $feature_excerpt . '</p>';
@@ -80,6 +79,8 @@ echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
+echo '</div>';
+echo '<div class="row news-row">';
 
 # Featured News
 
@@ -93,8 +94,8 @@ $feat_args = array(
 $wp_query = new WP_Query( $feat_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<hr />
 	<div class="home-news-section clearfix">
+    <div class="columns large-12"><a href="/about/news/" name="News & Events"><h2 class="news-title">News & Events</h2></a></div>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -109,12 +110,14 @@ $wp_query = new WP_Query( $feat_args );
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
             if ( has_post_thumbnail()) {
-
-                echo '<div class="large-8 columns featured-news">';
+                
+                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
+                echo '<div class="large-7 columns featured-news">';
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-				the_post_thumbnail( 'large' );
+				echo '<img src="' . $thumbnail['0'] . '" class="feature-img" />';
 				echo '</a></div>';
+                echo '<div class="post-content">';
 				echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
@@ -138,9 +141,11 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
 	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 	            echo $post_link;
+                
 			}
             else {
                 echo '<div class="large-4 columns small-news">';
+                echo '<div class="post-content">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
@@ -167,6 +172,7 @@ $wp_query = new WP_Query( $feat_args );
                 echo $post_link;
             }
 	echo '</div>';
+    echo '</div>';  
 	endwhile;
 endif;
 
@@ -205,7 +211,8 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }	
-		echo '<div class="large-4 columns small-news">';
+		echo '<div class="large-4 columns small-news right">';
+        echo '<div class="post-content">';
 		echo '<div class="post-meta">';
 		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
 		// Get categories
@@ -230,6 +237,7 @@ $wp_query = new WP_Query( $home_args );
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
        	echo $post_link;
 	echo '</div>';
+    echo '</div>';
 	endwhile;
 	?>
 <?php endif; ?>

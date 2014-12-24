@@ -9,16 +9,15 @@
 
 	@media print {
 		padding: 0;
-	}
+    }
 
 } // .article
 
 .article__header {
-
+    
 	.article__title {
 		margin-top: 0;
 		@include rem('padding-bottom', 1);
-		@include serif;
 		@include font-size(18);
 		@include line-height(30);
 		font-weight: 400;
@@ -85,50 +84,6 @@
     	margin-bottom: rem-calc(5px);
 
     }
-
-	h1 {
-		@include serif;
-		@include font-size(24);
-		@include line-height(30);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(36);
-			@include line-height(48);
-		}
-
-	} // h1
-
-	h2 {
-		@include serif;
-		@include font-size(18);
-		@include line-height(24);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(24);
-			@include line-height(30);
-		}
-
-	} // h2
-
-	h3 {
-		@include serif;
-		@include font-size(16);
-		@include line-height(24);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(18);
-			@include line-height(24);
-		}
-
-	} // h3
-
-	h4 {
-		@include font-size(14);
-		@include line-height(24);
-	}
 
 	hr {
 		height: 2px;

@@ -1,3 +1,50 @@
+// News
+
+.page-id-65 .container {
+    background-color: #f6f5f7;   
+}
+
+.news-row {
+    text-align: center;
+    
+    .news-title {
+        color: $accent-blue;
+        font-size: rem-calc(28);
+        margin-bottom: rem-calc(26);
+    }
+}
+
+.featured-news, .small-news {
+    text-align: left;
+    @include shadow;
+    padding: 0;
+    background-color: $white;
+    
+    a {
+        color: $accent-teal;
+    }
+    .button {
+        border-color: $accent-teal;
+    }
+    
+    h4, h5 {
+        @include encode_cb;
+        border-top: 3px $text solid;
+        padding-top: rem-calc(10);
+        margin-top: rem-calc(10);
+    }
+}
+
+.post-content {
+    padding: rem-calc(15);
+    
+    .post-meta {
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: rem-calc(12);
+    }
+}
+
 // Homepage Widgets
 
 .home {

@@ -111,31 +111,30 @@
     </div><!-- .row -->
   </nav><!-- #top-nav -->
   
-  <div class="row">
-    <div class="large-12 columns">
-    <ul class="title-area">
+  <div class="row title-row">
+    <div>
+    <ul class="title-area show-for-medium-up">
       <li class="name">
         <h1>
           <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+            <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="logo">
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>
-            <ul class="units">
-              <?php
-              if (get_option('unit_name_0')) : echo '<li><a href="' . get_option('unit_url_0') . '">' . get_option('unit_name_0') . '</a></li>'; endif;
-              if (get_option('unit_name_1')) : echo '<li>/<a href="' . get_option('unit_url_1') . '">' . get_option('unit_name_1') . '</a></li>'; endif;
-              if (get_option('unit_name_2')) : echo '<li>/<a href="' . get_option('unit_url_2') . '">' . get_option('unit_name_2') . '</a></li>'; endif;
-              ?>
-          </ul>
+            <div class="units show-for-large-up">
+                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left">
+                <a href="http://coenv.uw.edu" name="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="right"></a><br />
+                <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="right uw-name"></a>
+          </div> 
         </li>          
       </ul>
     </div>
   </div>
   
-        <div class="top-bar-container contain-to-grid show-for-medium-up">
+        <div class="top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
                 <section class="top-bar-section">
-                    <ul id="menu-main-menu" class="top-bar-menu left">
+                    <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
                       $exclude = implode(',',coenv_base_menu_exclude());
                       add_filter( 'page_css_class', 'add_parent_class', 10, 4 );

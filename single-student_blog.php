@@ -13,7 +13,7 @@ Template Name: Student Blog
 	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
 	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
 	<?php //endif; ?>
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-8 columns right" role="main">
 			<div class="news clearfix">
 				<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
 		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
