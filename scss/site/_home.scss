@@ -6,6 +6,7 @@
 
 .news-row {
     text-align: center;
+    padding-bottom: rem-calc(75);
     
     .news-title {
         color: $accent-blue;
@@ -35,73 +36,97 @@
     }
 }
 
+.featured-news {
+    .featured-thumbnail {
+        text-align: center;
+        
+        img {
+            width: 100%;
+        }
+    }
+    
+    .post-content {
+        padding: rem-calc(25) rem-calc(60);
+    }
+}
+
 .post-content {
-    padding: rem-calc(15);
+    padding: rem-calc(25) rem-calc(35);
+    
+    &.featured-news {
+        padding: rem-calc(25) rem-calc(45);
+    }
     
     .post-meta {
         text-transform: uppercase;
         font-weight: 600;
         font-size: rem-calc(12);
+        color: #959595;
     }
 }
 
 // Homepage Widgets
 
-.home {
-    .widget_coenv_base_index_dates ul {
-        margin-left: 1rem;
-    }
-
-    .widget_links {
-        float: right;
-    }
-
-    .list-news-small {
-        list-style: none;
-    }
-
-    .widget_content {
-        ul {
-            list-style: none;	
+.profiles {
+    padding: rem-calc(50) 0 rem-calc(50) 0;
+    background-image: url(../assets/img/RainAngle-2685.svg);
+    background-color: $accent-teal;
+    background-size: 1%;
+    
+    .profile-widget {
+        padding: 0;
+        
+        .columns {
+            @include grid-column(6);
+            padding: 0;
         }
     }
     
-    .widgettitle {
-        display: none;
-    }
-    
-    .widget_img {
-        @media #{$medium-up}  {
-            max-height: rem-calc(220);
+    .widget_custom_post_widget {
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        @include shadow;
+        background-color: $white;
+        border: 2px darken( $accent-teal, 7% ) solid;
+        
+        .widget_img {
+            width: 100%;
+            background-color: #9f9fa1;
+            max-height: rem-calc(300);
             overflow: hidden;
-            margin-right: rem-calc(20);
-            margin-bottom: rem-calc(5);
-            padding-left: 0!important;
-            @include grid-column(
-                $columns:3
-            );
-	    }
-        @include grid-column(
-           $columns:12,
-            $float:left
-        );
-        padding: rem-calc(0);
+            text-align: center;
+            
+            img {
+                display: block;
+                max-width: 100%;
+                max-height: rem-calc(410);
+                width: auto;
+                height: auto;
+                margin: 0 auto;
+            }
+        }
+        
+        .widget_content {
+            padding: rem-calc(25) rem-calc(50);
+        }
+    
     }
     
-    .programs {
-        padding: 0 rem-calc(15);
-        padding-bottom: rem-calc(15);
+    #custom_post_widget-3 {
+        margin-right: rem-calc(50);
     }
     
-    .home-news-section {
-        .featured-thumbnail {
-            max-height: rem-calc(350);
-            margin-bottom: rem-calc(10);
-            overflow: hidden;
-        }
-        :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
-        }
+    #custom_post_widget-4 {
+        margin-left: rem-calc(50);
+    }
+    
+}
 
-    }
-} 
+.get-started {
+    background-image:url(../assets/img/water.jpg);
+    background-size: cover;
+    text-align: center;
+    padding: rem-calc(50);
+    color: $white;
+}

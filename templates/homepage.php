@@ -239,20 +239,27 @@ $wp_query = new WP_Query( $home_args );
 	echo '</div>';
     echo '</div>';
 	endwhile;
+    echo '</div></div></section>';
 	?>
 <?php endif; ?>
-				
+        
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<hr />
-<div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
+<div class="profiles">
+    <div class="row">
+        <div class="large-12 columns profile-widget">
+            <div class="widget-area home-content" role="complementary">
+                <?php dynamic_sidebar( 'home-content' ); ?>
+            </div><!-- .widget-area -->
+        </div>
+    </div>
 </div>
 <?php endif; ?>
-<div class="large-12 columns programs">
-    <hr />
-	<?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
+<div class="get-started">
+    <div class="row">
+        <div class="large-12 columns">
+            <?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
+        </div>
+    </div>
 </div>
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
