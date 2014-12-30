@@ -68,10 +68,24 @@
 // Homepage Widgets
 
 .profiles {
-    padding: rem-calc(50) 0 rem-calc(50) 0;
+    padding: rem-calc(30) 0;
     background-image: url(../assets/img/RainAngle-2685.svg);
     background-color: $accent-teal;
-    background-size: 1%;
+    background-size: 10px;
+    
+    .student-title, .faculty-title {
+        text-align: center;
+        padding: 0 rem-calc(50) rem-calc(30) 0;
+        
+            h3 {
+                color: $white;
+            }
+    }
+    
+    .faculty-title {
+        padding-left: rem-calc(50);
+        padding-right: 0;
+    }
     
     .profile-widget {
         padding: 0;
@@ -79,6 +93,11 @@
         .columns {
             @include grid-column(6);
             padding: 0;
+        }
+        
+        .button {
+            color: $accent-teal;
+            border-color: $accent-teal;
         }
     }
     
@@ -108,17 +127,35 @@
         }
         
         .widget_content {
-            padding: rem-calc(25) rem-calc(50);
+            padding: rem-calc(15) rem-calc(50) 0 rem-calc(50);
+            
+            h4 {
+                border-top: 3px #333 solid;
+                padding-bottom: rem-calc(10);
+                margin-top: rem-calc(25);
+                
+                a {
+                    @include encode_cb;
+                    color: $text;
+                    font-size: 18px;
+                }
+                
+            }
+        }
+        
+        .widget_links {
+            padding: 0 0 rem-calc(10) rem-calc(35);
+            margin-bottom: 0;
         }
     
     }
     
     #custom_post_widget-3 {
-        margin-right: rem-calc(50);
+        margin-left: rem-calc(50);
     }
     
     #custom_post_widget-4 {
-        margin-left: rem-calc(50);
+        margin-right: rem-calc(50);
     }
     
 }

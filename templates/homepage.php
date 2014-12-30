@@ -246,10 +246,19 @@ $wp_query = new WP_Query( $home_args );
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="profiles">
     <div class="row">
+        <div class="large-6 columns student-title"><h3>Student Spotlight</h3>
         <div class="large-12 columns profile-widget">
-            <div class="widget-area home-content" role="complementary">
-                <?php dynamic_sidebar( 'home-content' ); ?>
+            <div class="widget-area student-spotlight" role="complementary">
+                <?php dynamic_sidebar( 'student-spotlight' ); ?>
             </div><!-- .widget-area -->
+        </div>
+        </div>
+        <div class="large-6 columns right faculty-title"><h3>Featured Faculty</h3>
+        <div class="large-12 columns profile-widget">
+            <div class="widget-area featured-faculty" role="complementary">
+                <?php dynamic_sidebar( 'featured-faculty' ); ?>
+            </div><!-- .widget-area -->
+        </div>
         </div>
     </div>
 </div>

@@ -67,8 +67,17 @@ function coenv_base_sidebar_widgets() {
       'after_title' => $after_title     
   ));
   register_sidebar(array(
-      'id' => 'home-content',
-      'name' => __('Home / Main Content after Feature & News', 'foundationpress'),
+      'id' => 'student-spotlight',
+      'name' => __('Home / Student Spotlight', 'foundationpress'),
+      'description' => __('Drag widgets to this container', 'foundationpress'),
+      'before_widget' => $before_widget,
+      'after_widget' => $after_widget,
+      'before_title' => $before_title,
+      'after_title' => $after_title     
+  ));
+  register_sidebar(array(
+      'id' => 'featured-faculty',
+      'name' => __('Home / Featured Faculty', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
       'before_widget' => $before_widget,
       'after_widget' => $after_widget,
