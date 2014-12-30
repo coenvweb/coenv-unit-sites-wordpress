@@ -243,7 +243,7 @@ $wp_query = new WP_Query( $home_args );
 	?>
 <?php endif; ?>
         
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
+<?php if ( is_active_sidebar( 'student-spotlight' ) ) : ?>
 <div class="profiles">
     <div class="row">
         <div class="large-6 columns student-title"><h3>Student Spotlight</h3>
