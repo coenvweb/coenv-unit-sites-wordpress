@@ -1,10 +1,41 @@
 .feature-row {
     max-width: none;
+    
+    .feature-content-mobile {
+        text-align: center;
+        background-color: $accent-blue;
+        padding: rem-calc(20);
+        margin-bottom: rem-calc(20);
+            
+        h2 {
+            font-size: rem-calc(24);
+			margin: 0;
+			color: $white;
+		}
+		
+		
+		.button {
+			margin: 0 rem-calc(5) 0 0;
+            color: $white;
+            border-color: $white;
+		}
+    }
+}
+
+.slick-slider {
+    margin-bottom: 0;
+    
+    @media #{$medium-up} {
+        margin-bottom: rem-calc(30)
+    }
 }
 
 .feature {
 	color: $white;
-    max-height: rem-calc(500);
+    @media #{$medium-up} {
+        height: auto;
+        max-height: rem-calc(500);
+    }
 	
 	ul li {
 		list-style-type: none;
@@ -25,10 +56,12 @@
         right: 0;
         text-align: center;
         padding: 0;
-        background-image: url(../assets/img/blue_wedge.svg);
-        background-repeat: no-repeat;
-        background-position: 0;
-        background-size: cover;
+        @media #{$medium-up} {
+            background-image: url(../assets/img/blue_wedge.svg);
+            background-repeat: no-repeat;
+            background-position: 0;
+            background-size: cover;
+        }
         
 		
 		.feature-info {
@@ -43,20 +76,33 @@
             text-align: right;
             
             @media #{$large-up}  {
-                top: 30%;
+                top: -20%;
             }
 		}
 		
         .feature-content {
             padding: 0 15% 0 0;
             
+            #logo {
+                display: none;
+            }
+            
             @media #{$large-up}  {
                 padding: 0 35% 0 0;
+                
+                #logo {
+                    display: block;
+                    margin: auto;
+                    padding-left: rem-calc(50);
+                }
             }
         }
         
 		h2 {
-            font-size: rem-calc(32);
+            @media #{$large-up} {
+                font-size: rem-calc(32);
+            }
+            font-size: rem-calc(24);
 			margin: 0;
 			color: $white;
 		}

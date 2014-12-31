@@ -18,8 +18,8 @@
 .featured-news, .small-news {
     text-align: left;
     @include shadow;
-    padding: 0;
     background-color: $white;
+    padding-bottom: rem-calc(40);
     
     a {
         color: $accent-teal;
@@ -50,6 +50,20 @@
     }
 }
 
+.small-news {
+    margin-right: rem-calc(20);
+    
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.featured-section {
+    .small-news {
+        margin-right: 0;
+    }
+}
+
 .post-content {
     padding: rem-calc(25) rem-calc(35);
     
@@ -68,38 +82,46 @@
 // Homepage Widgets
 
 .profiles {
-    padding: rem-calc(30) 0 rem-calc(70) 0;
+    padding-bottom: rem-calc(70);
     background-image: url(../assets/img/RainAngle-2685.svg);
     background-color: $accent-teal;
     background-size: 10px;
     
     .student-title, .faculty-title {
         text-align: center;
-        padding-left: rem-calc(50);
         
-            h3 {
-                color: $white;
-                padding-bottom: rem-calc(30);
-            }
+        h3 {
+            color: $white;
+            padding: rem-calc(30) 0;
+        }
+        
+        @media #{$large-up} {
+            padding-right: rem-calc(50);
+        }
     }
     
-    .faculty-title {
-        padding-left: rem-calc(50);
-        padding-right: 0;
+    @media #{$large-up} {
+        .faculty-title {
+            padding-left: rem-calc(50);
+            padding-right: rem-calc(15);
+        }
     }
     
     .profile-widget {
         padding: 0;
-        
-        .columns {
-            padding: 0;
-        }
         
         .button {
             color: $accent-teal;
             border-color: $accent-teal;
         }
     }
+
+    .widget-area {
+        .columns {
+            padding: 0;
+        }
+    }
+
     
     .widget_custom_post_widget {
         padding: 0;
@@ -108,7 +130,7 @@
         @include shadow;
         background-color: $white;
         border: 2px darken( $accent-teal, 7% ) solid;
-        
+                
         .widget_img {
             width: 100%;
             background-color: #9f9fa1;
@@ -163,16 +185,24 @@
 // Get Started Section
 
 .get-started {
-    background-image: url(../assets/img/water.jpg), url(../assets/img/white-slash.png);
-    background-size: cover, 100%;
+    background-image: url(../assets/img/water.jpg);
+    background-size: cover;
     text-align: center;
-    padding: rem-calc(100) 20%;
+    padding: 0 10% rem-calc(100) 10%;
     color: $white;
+    
+    @media #{$large-up} {
+        padding: 0 20% rem-calc(100) 20%;
+    }
     
     h4 {
         color: $white;
-        font-size: rem-calc(40);
+        font-size: rem-calc(24);
         margin-bottom: rem-calc(20);
+        margin-top: rem-calc(50);
+        @media #{$large-up} {
+            font-size: rem-calc(40);
+        }
     }
     
     .button {

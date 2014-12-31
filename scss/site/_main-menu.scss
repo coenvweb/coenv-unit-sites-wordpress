@@ -9,7 +9,10 @@
         display: inline-block;
         
         #menu-main-menu li a {
-            font-size: rem-calc(16);
+            @media #{$large-up} {
+                font-size: rem-calc(16);
+            }
+            font-size: rem-calc(12);
             color: $text;
             @include encode_cb;
             background-color: #ffffff!important;

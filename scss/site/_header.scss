@@ -8,6 +8,22 @@
     list-style: none;
 }
 
+.tab-bar {
+    margin-bottom: 0;
+    
+    h1 {
+        font-size: rem-calc(28);
+        @media #{$small-up} {
+            font-size: rem-calc(12);
+        }
+    }
+}
+
+.tab-bar-section.middle {
+    left: 0;
+    right: rem-calc(30);
+}
+
 .name {
     h1 {
         @include encode;

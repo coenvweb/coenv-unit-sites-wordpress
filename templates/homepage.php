@@ -49,7 +49,8 @@ echo '</div>';
 	echo '<div class="feature-info-container medium-6 small-12 columns right">';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
         echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-			echo '<div class="feature-content">';
+			echo '<div class="feature-content show-for-medium-up">';
+                echo '<img src="' . get_bloginfo('template_directory') . '/assets/img/smea-slash.png" id="logo">';
 				echo '<h2>' . get_the_title() . '</h2>';
 				echo '<p>' . $feature_excerpt . '</p>';
 				if($rows)
@@ -76,9 +77,30 @@ echo '</div>';
 	echo '</div><!-- .feature-info-container -->';
 
 echo '</div><!-- .feature -->';
+echo '</div>';
+echo '<div class="feature-content-mobile show-for-small">';
+echo '<h2>' . get_the_title() . '</h2>';
+echo '<p>' . $feature_excerpt . '</p>';
+if($rows)
+    {
+        foreach($rows as $row) {
+            if($row['feature_link_type'] == 'internal') {
+                $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
+                $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
+                $link_target = 'self';
+                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+            } elseif ($row['feature_link_type'] == 'external') {
+                $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
+                $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
+                $link_target ='blank';
+                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+            } 
+        }
+    }
+
+echo '</div><!-- .feature-content -->';
 endwhile;
 wp_reset_postdata();
-echo '</div>';
 echo '</div>';
 echo '<div class="row news-row">';
 
@@ -112,7 +134,9 @@ $wp_query = new WP_Query( $feat_args );
             if ( has_post_thumbnail()) {
                 
                 $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
-                echo '<div class="large-7 columns featured-news">';
+                echo '<div class="featured-section">';
+                echo '<div class="large-7 columns">';
+                echo '<div class="featured-news">';
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
 				echo '<img src="' . $thumbnail['0'] . '" class="feature-img" />';
@@ -141,10 +165,12 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
 	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 	            echo $post_link;
+                echo '</div>';
                 
 			}
             else {
-                echo '<div class="large-4 columns small-news">';
+                echo '<div class="large-4 columns">';
+                echo '<div class="small-news">';
                 echo '<div class="post-content">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
@@ -170,6 +196,7 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
                 echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
                 echo $post_link;
+                echo '</div>';
             }
 	echo '</div>';
     echo '</div>';  
@@ -211,7 +238,8 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }	
-		echo '<div class="large-4 columns small-news right">';
+		echo '<div class="large-4 columns right">';
+        echo '<div class="small-news">';
         echo '<div class="post-content">';
 		echo '<div class="post-meta">';
 		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
@@ -236,11 +264,16 @@ $wp_query = new WP_Query( $home_args );
 		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
        	echo $post_link;
-	echo '</div>';
-    echo '</div>';
-	endwhile;
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
+        endwhile;
     echo '</div></div></section>';
 	?>
+<?php endif; ?>
+
+<?php if ($featured) : ?>
+    </div>
 <?php endif; ?>
         
 <?php if ( is_active_sidebar( 'student-spotlight' ) ) : ?>
@@ -266,6 +299,7 @@ $wp_query = new WP_Query( $home_args );
 <div class="get-started">
     <div class="row">
         <div class="large-12 columns">
+            <img class="slash" alt="white slash" src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/white-slash.png">
             <?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
         </div>
     </div>
