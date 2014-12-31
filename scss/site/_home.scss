@@ -68,17 +68,18 @@
 // Homepage Widgets
 
 .profiles {
-    padding: rem-calc(30) 0;
+    padding: rem-calc(30) 0 rem-calc(70) 0;
     background-image: url(../assets/img/RainAngle-2685.svg);
     background-color: $accent-teal;
     background-size: 10px;
     
     .student-title, .faculty-title {
         text-align: center;
-        padding: 0 rem-calc(50) rem-calc(30) 0;
+        padding-left: rem-calc(50);
         
             h3 {
                 color: $white;
+                padding-bottom: rem-calc(30);
             }
     }
     
@@ -91,7 +92,6 @@
         padding: 0;
         
         .columns {
-            @include grid-column(6);
             padding: 0;
         }
         
@@ -160,10 +160,34 @@
     
 }
 
+// Get Started Section
+
 .get-started {
-    background-image:url(../assets/img/water.jpg);
-    background-size: cover;
+    background-image: url(../assets/img/water.jpg), url(../assets/img/white-slash.png);
+    background-size: cover, 100%;
     text-align: center;
-    padding: rem-calc(50);
+    padding: rem-calc(100) 20%;
     color: $white;
+    
+    h4 {
+        color: $white;
+        font-size: rem-calc(40);
+        margin-bottom: rem-calc(20);
+    }
+    
+    .button {
+        color: $white;
+        border-color: $white;
+        font-size: rem-calc(14);
+        height: rem-calc(45);
+        padding: rem-calc(12);
+        width: rem-calc(150);
+    }
+    .widget_links {
+        margin-bottom: 0;
+        
+        li:first-child {
+            margin-right: rem-calc(10);
+        }
+    }
 }
