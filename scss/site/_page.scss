@@ -1,0 +1,47 @@
+.page-row {
+    max-width: none;
+    background-size: cover;
+    background-position: 50%;
+    color: $white;
+    
+    a {
+        color: $white;
+        
+        i {
+            font-size: rem-calc(30);
+            margin: rem-calc(5);
+            padding-top: 20px;
+        }
+    }
+    
+    .teal-wedge {
+        background-image: url(../assets/img/teal-wedge.svg);
+        background-repeat: no-repeat;
+        background-position: rem-calc(-450);
+        background-size: cover;
+        min-height: rem-calc(200);
+    }
+    
+    .section-title {
+            
+        a {
+            position: absolute;
+            bottom: rem-calc(-180);
+            margin-left: rem-calc(30);
+        }
+    }
+    
+    .sharing {
+        margin-top: rem-calc(130);
+        margin-right: rem-calc(20);
+        text-transform: uppercase;
+        @include encode_cb;
+    }
+}
+
+.entry-content {
+    border-top: $accent-teal 7px solid;
+    @media #{$medium-up} {
+        margin-left: rem-calc(50);
+    }
+}

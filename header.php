@@ -36,8 +36,14 @@
 
   
     <?php wp_head(); ?>
+      
+    <?php 
+        $banner = coenv_banner();
+        $banner_class = $banner ? 'has-banner' : '';
+        $banner_class .= ' template-print';
+    ?>
   </head>
-  <body <?php body_class(); ?>>
+  <body <?php body_class($banner_class); ?>>
   
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
