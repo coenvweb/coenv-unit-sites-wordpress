@@ -1,11 +1,9 @@
-=== Custom Post Widget ===
-Contributors: vanderwijk
-Author URI: http://www.vanderwijk.com/
-Donate link: http://www.vanderwijk.com/wordpress/support/
+=== Savvii Custom Post Widget ===
+Contributors: savvii, vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 2.9.2
-Tested up to: 4.0
-Stable tag: 2.6
+Tested up to: 4.1
+Stable tag: 2.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +11,7 @@ This plugin enables you to edit and display Content Blocks in a sidebar widget o
 
 == Description ==
 
-The Custom Post Widget allows you to display the contents of a specific custom post in a widget.
+The [Savvii Custom Post Widget](https://www.savvii.eu/wordpress-custom-post-widget/) allows you to display the contents of a specific custom post in a widget on in the content area using a shortcode.
 
 Even though you could use the text widget that comes with the default WordPress install, this plugin has some major benefits:
 
@@ -37,9 +35,7 @@ To add content to a widget, drag it to the required position in the sidebar and 
 * Russian (ru_RU) by [Vitaliy Kaplya](http://www.dasayt.com/) 
 * Swedish (sv_SE) by [Andreas Larsson](http://krokedil.se)
 
-More translations are always welcome, please [contact me](http://www.vanderwijk.com/contact) to find out how you can help.
-
-You can find more information about this plugin and a screencast video which shows the plugin in action on the [plugin homepage](http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/).
+More translations are very welcome!
 
 == Screenshots ==
 
@@ -76,7 +72,7 @@ This plugin has built-in support for the featured image functionality on the edi
 
 = My social sharing plugin adds buttons to all the Custom Post Widget areas =
 
-If your social media sharing plugin adds buttons to the widget areas you could check the 'Do not apply content filters' checkbox. Note that when this is done, WordPress will also stop adding paragraph tags to your text, so use this setting with caution. It is much better to ask the developer of the social media sharing buttons plugin to correctly use the content filters (see http://pippinsplugins.com/playing-nice-with-the-content-filter/).
+If your social media sharing plugin adds buttons to the widget areas you could check the 'Do not apply content filters' checkbox. Note that when this is done, WordPress will also stop adding paragraph tags to your text, so use this setting with caution. It is much better to ask the developer of the social media sharing buttons plugin to correctly use the content filters (see http://pippinsplugins.com/playing-nice-with-the-content-filter/ for more information on this).
 
 = The title and featured image are not displayed when using the shortcode =
 
@@ -107,6 +103,12 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 2.7.2 =
+The post status is now used for displaying the content blocks in the widget areas, only published content blocks are now displayed. Thanks to tmbdesign.co.uk for suggesting this change.
+
+= 2.7 =
+Added dismissable support notification.
 
 = 2.6 =
 Added the possibility for using the content block slug in the shortcode.
