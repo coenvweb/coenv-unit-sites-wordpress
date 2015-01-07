@@ -28,6 +28,8 @@
             position: absolute;
             bottom: rem-calc(-180);
             margin-left: rem-calc(30);
+            font-size: rem-calc(36);
+            @include encode_cb;
         }
     }
     
@@ -41,6 +43,7 @@
 
 .entry-content {
     border-top: $accent-teal 7px solid;
+    padding-top: rem-calc(15);
     @media #{$medium-up} {
         margin-left: rem-calc(50);
     }
