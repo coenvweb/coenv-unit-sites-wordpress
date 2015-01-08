@@ -15,9 +15,12 @@
     }
 }
 
+.featured-news, .small-news, .all-news {
+    @include shadow;
+}
+
 .featured-news, .small-news {
     text-align: left;
-    @include shadow;
     background-color: $white;
     padding-bottom: rem-calc(40);
     
@@ -45,22 +48,37 @@
         }
     }
     
-    .post-content {
-        padding: rem-calc(25) rem-calc(60);
+    @media #{$large-up} {
+        .post-content {
+            padding: rem-calc(25) rem-calc(60);
+        }
     }
 }
 
 .small-news {
-    margin-right: rem-calc(20);
-    
-    &:last-child {
-        margin-right: 0;
-    }
+    @media #{$large-up} {
+        margin-right: rem-calc(20);
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }  
 }
 
 .featured-section {
     .small-news {
         margin-right: 0;
+    }
+}
+
+.all-news {
+    background: url(../assets/img/button-water.png) no-repeat;
+    background-size: cover;
+    text-align: center;
+
+    .button {
+        margin: rem-calc(40) 0;
+        font-size: rem-calc(16);
     }
 }
 
@@ -149,7 +167,10 @@
         }
         
         .widget_content {
-            padding: rem-calc(15) rem-calc(50) 0 rem-calc(50);
+            @media #{$large-up} {
+                padding: rem-calc(15) rem-calc(50) 0 rem-calc(50);
+            }
+            padding: rem-calc(15) rem-calc(25) 0 rem-calc(25);
             
             h4 {
                 border-top: 3px #333 solid;
@@ -206,10 +227,7 @@
     }
     
     .button {
-        color: $white;
-        border-color: $white;
         font-size: rem-calc(14);
-        height: rem-calc(45);
         padding: rem-calc(12);
         width: rem-calc(150);
     }

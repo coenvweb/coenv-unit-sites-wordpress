@@ -60,12 +60,12 @@ echo '</div>';
 								$link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
 								$link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
 								$link_target = 'self';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+								echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
 							} elseif ($row['feature_link_type'] == 'external') {
 								$link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
 								$link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
 								$link_target ='blank';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+								echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
 							} 
 						}
 					}
@@ -88,12 +88,12 @@ if($rows)
                 $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
                 $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
                 $link_target = 'self';
-                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+                echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
             } elseif ($row['feature_link_type'] == 'external') {
                 $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
                 $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
                 $link_target ='blank';
-                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+                echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
             } 
         }
     }
@@ -135,7 +135,7 @@ $wp_query = new WP_Query( $feat_args );
                 
                 $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
                 echo '<div class="featured-section">';
-                echo '<div class="large-7 columns">';
+                echo '<div class="medium-6 large-7 columns">';
                 echo '<div class="featured-news">';
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
@@ -169,7 +169,7 @@ $wp_query = new WP_Query( $feat_args );
                 
 			}
             else {
-                echo '<div class="large-4 columns">';
+                echo '<div class="large-4 medium-6 columns">';
                 echo '<div class="small-news">';
                 echo '<div class="post-content">';
                 echo '<div class="post-meta">';
@@ -227,6 +227,9 @@ $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 		<?php
+        if( $featured ) {
+            echo '<div class="large-4 medium-6 columns right">';
+        }
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
@@ -238,7 +241,9 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }	
-		echo '<div class="large-4 columns right">';
+        if (empty( $featured )) {
+            echo '<div class="large-4 medium-6 columns right">';
+        }
         echo '<div class="small-news">';
         echo '<div class="post-content">';
 		echo '<div class="post-meta">';
@@ -266,11 +271,17 @@ $wp_query = new WP_Query( $home_args );
        	echo $post_link;
         echo '</div>';
         echo '</div>';
-        echo '</div>';
+        if (empty( $featured )) {
+            echo '</div>';
+        }        
         endwhile;
+    if ( $featured ) {
+        echo '<a href=/about/news" name="All Posts"><div class="all-news"><span class="button white">See All Posts</span></div></a>';
+        echo '</div>';
+    }
     echo '</div></div></section>';
+    endif;
 	?>
-<?php endif; ?>
 
 <?php if ($featured) : ?>
     </div>
@@ -279,14 +290,14 @@ $wp_query = new WP_Query( $home_args );
 <?php if ( is_active_sidebar( 'student-spotlight' ) ) : ?>
 <div class="profiles">
     <div class="row">
-        <div class="large-6 columns student-title"><h3>Student Spotlight</h3>
+        <div class="medium-6 columns student-title"><h3>Student Spotlight</h3>
         <div class="large-12 columns profile-widget">
             <div class="widget-area student-spotlight" role="complementary">
                 <?php dynamic_sidebar( 'student-spotlight' ); ?>
             </div><!-- .widget-area -->
         </div>
         </div>
-        <div class="large-6 columns right faculty-title"><h3>Featured Faculty</h3>
+        <div class="medium-6 columns right faculty-title"><h3>Featured Faculty</h3>
         <div class="large-12 columns profile-widget">
             <div class="widget-area featured-faculty" role="complementary">
                 <?php dynamic_sidebar( 'featured-faculty' ); ?>

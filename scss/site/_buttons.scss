@@ -7,25 +7,20 @@
 	@include encode_cb; 
 	@include font-size(12);
     min-width: rem-calc(100);
-    height: rem-calc(35);
     background: none;
-    padding: rem-calc(8) 0 0 0;
+    padding: rem-calc(8);
     border: #333 2px solid;
     color: #333;
 	
 	&:hover {
-		background: rgba(0,0,0,0.6);
-		color: $accent !important;
+		background: rgba(0,0,0,0.01);
+		border-color: lighten( $accent-teal, 15% )!important;
+        color: lighten( $accent-teal, 15% )!important;
 	}
 	
-	.dark {
-		background: $bg-dk;
+	&.white {
 		color: $white;
-		
-		&:hover {
-			background: $white-button;
-			color: $text;
-		}
+        border-color: $white;
 	}
 
 } // .button
