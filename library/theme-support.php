@@ -19,9 +19,6 @@ function FoundationPress_theme_support() {
     // rss thingy
     add_theme_support('automatic-feed-links');
 
-    // Add post formarts support: http://codex.wordpress.org/Post_Formats
-    add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat'));
-
 }
 
 add_action('after_setup_theme', 'FoundationPress_theme_support'); 
