@@ -1,7 +1,8 @@
 </section>
 	<footer id="footer" role="contentinfo" class="site-footer">
 		<?php do_action('foundationPress_before_footer'); ?>
-		<div class="row">
+		<div class="footer-row">
+        <div class="row">
 			<div class="medium-6 columns">				
 				<header class="site-footer__header">
 					<h2><?php bloginfo('name') ?></h2>
@@ -15,15 +16,15 @@
 					<?php get_search_form() ?>
 					<div class="social-buttons">
 					<?php if (get_option('facebook')) { ?>
-						<a class="button" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
+						<a class="facebook button" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
 							<i class="fi-social-facebook"></i>
 						</a><?php } ?>
 					<?php if (get_option('twitter')) { ?>
-						<a class="button" href="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
+						<a class="twitter button" href="<?php echo get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
 								<i class="fi-social-twitter"></i>
 						</a><?php } ?>
 					<?php if (get_option('youtube')) { ?>
-						<a class="button" href="<?php echo get_option('youtube'); ?>" title="Join us on YouTube">
+						<a class="youtube button" href="<?php echo get_option('youtube'); ?>" title="Join us on YouTube">
 								<i class="fi-social-youtube"></i>
 						</a><?php } ?>
 					</div>
@@ -32,7 +33,7 @@
 			<div class="medium-6 columns right">
 				<nav class="footer-nav">
 					<header class="site-footer__header">
-						<h2 id="logo"><a href="http://coenv.washington.edu/" rel="home" title="UW College of the Environment">UW College of the Environment</a></h2>
+						<h2 id="logo"><a href="http://coenv.washington.edu/" rel="home" title="UW College of the Environment"><img alt="College of the Environment Logo" src="<?php bloginfo('template_directory'); ?>/assets/img/uw-footer.svg" width="350" ></a></h2>
 					</header>
 						<ul class="menu-footer-units">
 							<li><a target="_blank" href="http://fish.washington.edu/">Aquatic and Fishery Sciences</a></li>
@@ -51,28 +52,34 @@
 						</ul>
 					</nav>
 				</div>
+            </div>
+        </div>
 			
-				<div class="medium-12 columns">
-					<div class="uw-footer">
-						<p class="copyright">&copy; <?php echo date('Y') ?> <a href="http://www.washington.edu/">University of Washington</a> | 
-							<?php if (is_user_logged_in()) { ?>
-								<a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout">Log out</a>	
-							<?php } else { ?>
-								<a href="<?php echo wp_login_url(); ?>" title="Staff Login">Staff login</a>
-							<?php } ?>
-						</p>
-						<ul id="menu-footer-links" class="menu-footer-links">
-							<li><a target="_blank" href="http://www.washington.edu/admin/hr/jobs/">Jobs</a></li>
-							<li><a target="_blank" href="http://myuw.washington.edu/">My UW</a></li>
-							<li><a target="_blank" href="http://www.washington.edu/admin/rules/wac/rulesindex.html">Rules Docket</a></li>
-							<li><a target="_blank" href="http://www.washington.edu/online/privacy/">Privacy</a></li>
-							<li><a target="_blank" href="http://www.washington.edu/online/terms/">Terms</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
+        <div class="footer-footer">
+            <div class="row uw-footer">
+                <div class="medium-6 columns">
+                    <p class="copyright">&copy; <?php echo date('Y') ?> <a href="http://www.washington.edu/">University of Washington</a> | 
+                        <?php if (is_user_logged_in()) { ?>
+                            <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout">Log out</a>	
+                        <?php } else { ?>
+                            <a href="<?php echo wp_login_url(); ?>" title="Staff Login">Staff login</a>
+                        <?php } ?>
+                    </p>
+                </div>
+                <div class="medium-6 columns">
+                    <ul id="menu-footer-links" class="menu-footer-links">
+                        <li><a target="_blank" href="http://www.washington.edu/admin/hr/jobs/">Jobs</a></li>
+                        <li><a target="_blank" href="http://myuw.washington.edu/">My UW</a></li>
+                        <li><a target="_blank" href="http://www.washington.edu/admin/rules/wac/rulesindex.html">Rules Docket</a></li>
+                        <li><a target="_blank" href="http://www.washington.edu/online/privacy/">Privacy</a></li>
+                        <li><a target="_blank" href="http://www.washington.edu/online/terms/">Terms</a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </div>
 	</footer><!-- #footer -->
-</row>
+</div>
 
 	<?php dynamic_sidebar("footer-widgets"); ?>
 	<?php do_action('foundationPress_after_footer'); ?>

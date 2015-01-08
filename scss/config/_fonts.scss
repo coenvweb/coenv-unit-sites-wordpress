@@ -1,6 +1,34 @@
 /*	Fonts
 		======================================================================== */
 
+@font-face {
+	font-family: encode-sans-normal;  
+	src: url("../assets/fonts/EncodeSansNormal-400-Regular.ttf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
+	font-family: encode-sans-condensed;  
+	src: url("../assets/fonts/EncodeSansCondensed-800-ExtraBold.ttf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
+	font-family: open-sans;  
+	src: url("../assets/fonts/OpenSans-Regular.ttf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
+	font-family: uni-sans-light;  
+	src: url("../assets/fonts/Fontfabric - UniSansLight.otf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
 @mixin o_sans() {
   font: {
     family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -10,13 +38,13 @@
 
 @mixin encode() {
   font: {
-    family: "Encode Sans Normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 @mixin encode_cb() {
-    font-family: "Encode Sans Condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     font-weight: 800!important;
     text-transform: uppercase;
     letter-spacing: .5px;
@@ -25,16 +53,15 @@
 
 @mixin uni() {
   font: {
-    family: "Uni Sans", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 .intro {
-    color: $accent-teal;
     font-size: rem-calc(24)!important;
     margin: rem-calc(20) 0;
-    font-family: "Encode Sans Normal";
+    @include encode;
     font-weight: 400;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
@@ -109,3 +136,18 @@ h4 {
 /*	Base font size
 		======================================================================== */
 $base-font-size: 16;
+
+/*	Old Fonts
+		======================================================================== */
+
+@mixin sans() {
+  font: {
+    family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+}
+
+@mixin serif() {
+  font: {
+    family: Georgia, serif;
+  }
+}
