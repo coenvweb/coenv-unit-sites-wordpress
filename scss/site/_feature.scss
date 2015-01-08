@@ -1,25 +1,6 @@
 .feature-row {
     max-width: none;
-    
-    .feature-content-mobile {
-        text-align: center;
-        background-color: $accent-blue;
-        padding: rem-calc(20);
-        margin-bottom: rem-calc(20);
-            
-        h2 {
-            font-size: rem-calc(24);
-			margin: 0;
-			color: $white;
-		}
-		
-		
-		.button {
-			margin: 0 rem-calc(5) 0 0;
-            color: $white;
-            border-color: $white;
-		}
-    }
+    margin-bottom: rem-calc(15);
 }
 
 .slick-slider {
@@ -47,33 +28,59 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
+        min-height: rem-calc(350);
 	}
 	
 	.feature-info-container {
-        position: absolute;
-        height: 100%;
-        bottom: 0;
-        right: 0;
-        text-align: center;
-        padding: 0;
+        
+        @media #{$small-only} {
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            padding: rem-calc(20);
+            background-color: rgba(0, 9, 53, 0.75);;
+        }
+        
+        h2 {
+            font-size: rem-calc(24);
+			margin: 0;
+			color: $white;
+		}
+		
+		
+		.button {
+			margin: 0 rem-calc(5) 0 0;
+            color: $white;
+            border-color: $white;
+		}
+    
         @media #{$medium-up} {
+            position: absolute;
+            height: 100%;
+            bottom: 0;
+            right: 0;
+            text-align: center;
+            padding: 0;
             background-image: url(../assets/img/blue_wedge.svg);
             background-repeat: no-repeat;
             background-position: 0;
             background-size: cover;
+            background-color: none!important;
         }
         
 		
 		.feature-info {
-            position: relative;
-            float: right;
-            height: 100%;
-            width: 70%;
-            top: 10%;
-            margin: 0;
-            padding: 0;
-            vertical-align: middle;
-            text-align: right;
+            @media #{$medium-up} {
+                position: relative;
+                float: right;
+                height: 100%;
+                width: 70%;
+                top: 10%;
+                margin: 0;
+                padding: 0;
+                vertical-align: middle;
+                text-align: right;
+            }
             
             @media #{$large-up}  {
                 top: -20%;
@@ -81,7 +88,9 @@
 		}
 		
         .feature-content {
-            padding: 0 15% 0 0;
+            @media #{$medium-up} {
+                padding: 0 15% 0 0;
+            }
             
             #logo {
                 display: none;

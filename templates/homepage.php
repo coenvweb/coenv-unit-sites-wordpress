@@ -49,7 +49,7 @@ echo '</div>';
 	echo '<div class="feature-info-container medium-6 small-12 columns right">';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
         echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-			echo '<div class="feature-content show-for-medium-up">';
+			echo '<div class="feature-content">';
                 echo '<img src="' . get_bloginfo('template_directory') . '/assets/img/smea-slash.png" id="logo">';
 				echo '<h2>' . get_the_title() . '</h2>';
 				echo '<p>' . $feature_excerpt . '</p>';
@@ -78,27 +78,6 @@ echo '</div>';
 
 echo '</div><!-- .feature -->';
 echo '</div>';
-echo '<div class="feature-content-mobile show-for-small">';
-echo '<h2>' . get_the_title() . '</h2>';
-echo '<p>' . $feature_excerpt . '</p>';
-if($rows)
-    {
-        foreach($rows as $row) {
-            if($row['feature_link_type'] == 'internal') {
-                $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-                $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-                $link_target = 'self';
-                echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-            } elseif ($row['feature_link_type'] == 'external') {
-                $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-                $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-                $link_target ='blank';
-                echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-            } 
-        }
-    }
-
-echo '</div><!-- .feature-content -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
