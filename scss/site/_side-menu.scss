@@ -10,11 +10,9 @@
 
 		li {
             background-color: #f6f5f7;
-            background-image: url(../assets/img/menu-arrow.png);
             background-repeat: no-repeat;
             background-position: 95%;
 			border-bottom: 1px solid $white;
-			padding: rem-calc(5);
 			margin: 0;
 			font-size: 1.25rem;
 			@include encode_cb;
@@ -23,6 +21,7 @@
 				display: block;
 				line-height: 125%;
                 color: $text!important;
+                padding: rem-calc(10) rem-calc(15)!important;
 			}
 
 			ul {
@@ -34,9 +33,14 @@
 					font-size: 1.15rem;
 					padding-left: 2rem;
 				}
-
-
 			}
+            
+            svg {
+                width: rem-calc(30);
+                float: right;
+                margin-top: rem-calc(-5);
+                fill: #d6d6d6;
+            }
 		}
 }
 #sidebar {

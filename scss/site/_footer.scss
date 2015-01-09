@@ -16,6 +16,15 @@
 	ul, ol, dl {
 			font-size: rem-calc(12)!important;
 	}
+    
+    .smea-logo {
+        margin: 0 rem-calc(20) rem-calc(20) 0;
+        border: #666 3px solid;
+        
+        img {
+            width: rem-calc(115);
+        } 
+    }
 
 	.site-footer__header {
 		margin-bottom: rem-calc(16);
@@ -145,16 +154,32 @@
 		} // form
 
 		.social-buttons {
-			.button {
-				background: #666;
-				padding: rem-calc(3.5) rem-calc(9);
-
-				i {
+            
+            .button {
+                display: inline-block;
+                vertical-align: middle;
+                padding: rem-calc(3.5) rem-calc(9);
+                @include sans;
+                font-weight: 400;
+                background: #666;
+                text-decoration: none;
+                color: $text;
+                border-radius: $radius;
+                border: none;
+                min-width: 0!important;
+                
+                i {
 					@include font-size(16);
 					color: $text-very-lt;
 				}
 
-				&:hover i {
+                &:hover {
+                    background: rgba(0,0,0,0.6);
+                    color: #fff !important;
+                    border: none;
+                }
+                
+                &:hover i {
 					color: #fff;
 				}
 			}
@@ -181,6 +206,7 @@
     .footer-footer {
         background-color: #32302d;
         margin-top: rem-calc(15);
+        padding-bottom: rem-calc(150);
         
         .uw-footer {
             clear: both;

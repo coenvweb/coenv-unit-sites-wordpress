@@ -24,3 +24,19 @@
 	}
 
 } // .button
+
+.svg-link {
+    text-transform: uppercase;
+    @include encode_cb; 
+	@include font-size(12);
+    
+    &:hover {
+        color: lighten( $accent-teal, 15% )!important;
+	}
+    
+    svg {
+        width: rem-calc(30);
+        margin-bottom: rem-calc(-10);
+        margin-left: rem-calc(5);
+    }
+}

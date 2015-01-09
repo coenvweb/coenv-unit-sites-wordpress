@@ -60,6 +60,7 @@
 
 .intro {
     font-size: rem-calc(24)!important;
+    color: $accent-teal;
     margin: rem-calc(20) 0;
     @include encode;
     font-weight: 400;

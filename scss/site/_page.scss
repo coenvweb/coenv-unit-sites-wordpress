@@ -34,10 +34,26 @@
     }
     
     .sharing {
-        margin-top: rem-calc(130);
-        margin-right: rem-calc(20);
         text-transform: uppercase;
         @include encode_cb;
+        margin-right: rem-calc(20);
+        
+        @media #{$medium-up} {
+            margin-top: rem-calc(140);
+        }
+        
+        .share-text {
+            margin-right: rem-calc(5);
+        }
+        
+        a svg {
+            width: rem-calc(30);
+            fill: $white;
+            margin-bottom: rem-calc(-9);
+            &:hover {
+                fill: $accent-teal;
+            }
+        }
     }
 }
 

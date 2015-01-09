@@ -36,7 +36,9 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
             if (in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID)) {
                 $menu .= '<li class="active"><a href="' . get_permalink($child) . '" class="active">' . $child->post_title . '</a>';
             } else {
-                $menu .= '<li><a href="' . get_permalink($child) . '">' . $child->post_title . '</a>';
+                $menu .= '<li><a href="' . get_permalink($child) . '">' . $child->post_title . '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<path id="arrow-16-icon" d="M332.722,181.953v-54.964l129.229,129.012l-129.229,129.01v-54.964H50.049l147.899-148.094H332.722z"/>
+</svg></a>';
             }
             // If the page has children and is the viewed page or one of its ancestors, get its children
             if (get_children($child->ID) && (in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID))) {

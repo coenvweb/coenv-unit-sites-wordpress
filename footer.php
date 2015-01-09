@@ -3,7 +3,10 @@
 		<?php do_action('foundationPress_before_footer'); ?>
 		<div class="footer-row">
         <div class="row">
-			<div class="medium-6 columns">				
+			<div class="medium-6 columns">
+                <div class="smea-logo left">
+                    <img src="<?php bloginfo('template_directory'); ?>/assets/img/smea-logo.svg" alt="SMEA Logo">
+                </div>
 				<header class="site-footer__header">
 					<h2><?php bloginfo('name') ?></h2>
 				</header>
