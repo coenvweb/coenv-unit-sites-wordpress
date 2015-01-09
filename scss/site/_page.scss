@@ -30,6 +30,10 @@
             margin-left: rem-calc(30);
             font-size: rem-calc(36);
             @include encode_cb;
+            
+            &:hover {
+                color: $accent-teal;
+            }
         }
     }
     
@@ -62,5 +66,9 @@
     padding-top: rem-calc(15);
     @media #{$medium-up} {
         margin-left: rem-calc(50);
+    }
+    
+    a {
+        color: $accent-teal;
     }
 }

@@ -3,45 +3,69 @@
 	padding-right: 0 !important;
 }
 .side-nav {
-		border-top: 1px solid #dddddd;
-		margin: 0 0 2rem 0;
-		padding: 0;
-		line-height: 10px;
+    margin: 0 0 2rem 0;
+    padding: 0;
+    line-height: 10px;
 
-		li {
-            background-color: #f6f5f7;
-            background-repeat: no-repeat;
-            background-position: 95%;
-			border-bottom: 1px solid $white;
-			margin: 0;
-			font-size: 1.25rem;
-			@include encode_cb;
-
-			a {
-				display: block;
-				line-height: 125%;
-                color: $text!important;
-                padding: rem-calc(10) rem-calc(15)!important;
-			}
-
-			ul {
-				margin-bottom: 0;
-				
-
-				li {
-					border: 0;
-					font-size: 1.15rem;
-					padding-left: 2rem;
-				}
-			}
+    li {
+        background-color: #f6f5f7;
+        background-repeat: no-repeat;
+        background-position: 95%;
+        border-bottom: 1px solid $white;
+        margin: 0;
+        font-size: 1.25rem;
+        @include encode_cb;
+        
+        a.active {
+            background-color: $accent-teal-lt;
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
             
             svg {
                 width: rem-calc(30);
                 float: right;
                 margin-top: rem-calc(-5);
-                fill: #d6d6d6;
+                fill: $accent-teal;
             }
-		}
+        }
+        
+        a {
+            display: block;
+            line-height: 125%;
+            color: $text!important;
+            padding: rem-calc(10) rem-calc(15)!important;
+
+        }
+
+        ul {
+            margin-bottom: 0;
+
+
+            li {
+                border: 0;
+                &:first-of-type{
+                    a {
+                        border-top: none;
+                    }
+                }
+                a {
+                    font-size: 1.15rem;
+                    padding-left: 2rem!important;
+                    font-size: rem-calc(12);
+                    svg {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        svg {
+            width: rem-calc(30);
+            float: right;
+            margin-top: rem-calc(-5);
+            fill: #d6d6d6;
+        }
+    }
 }
 #sidebar {
 	.inline-list {

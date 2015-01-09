@@ -10,6 +10,7 @@ $accent-lt: lighten( $accent, 15% );
 $accent-blue: #1e325f;
 $accent-red: #b82828;
 $accent-teal: #3ab28d;
+$accent-teal-lt: lighten( $accent-teal, 45% );
 $accent-hover: $accent-lt;
 $dark-widget: #888;
 $white-button: #ddd;
