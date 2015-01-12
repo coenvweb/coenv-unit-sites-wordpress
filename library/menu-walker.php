@@ -16,6 +16,12 @@ class top_bar_walker extends Walker_Nav_Menu {
     function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
         $item_html = '';
         parent::start_el( $item_html, $object, $depth, $args ); 
+        $id = $item->ID;
+        $title = get_the_title($item->ID);
+        $link = get_the_permalink($item->ID);
+        if ( $depth === 1 ) {
+            $output .= '<ul class="off-canvas-list"><a class="primary-link columns small-9" href=' . $link . '><div class="accordion">' . $title . '</div></a><div class="accordion" data-accordion><div class="accordion-navigation"><a class="right columns small-3 expander-link" href="#accordion-' . $id . '"><i class="fi-plus"></i></a><div class="content" id=accordion-' . $id . '>';
+        }
         
         $output .= ( $depth == 0 ) ? '<li class="divider"></li>' : '';
         
