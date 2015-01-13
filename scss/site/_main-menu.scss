@@ -1,7 +1,7 @@
 .top-bar {
     background-color: $white;
     text-align: center;
-    border-bottom: #d7dee5 1px solid;
+    border-bottom: $bg-light 1px solid;
     min-height: rem-calc(60);
     padding-top: rem-calc(8);
     
@@ -52,7 +52,7 @@
                 a {
                     font-size: rem-calc(14);
                     &:hover{
-                        background-color: #f6f5f7;
+                        background-color: $bg-light;
                     }
                 }
             }

@@ -70,17 +70,24 @@
 
 blockquote {
     margin: 0!important;
-    padding: rem-calc(20) rem-calc(80)!important;
+    padding: rem-calc(20) rem-calc(10)!important;
     border-left: 0px!important;
-    border-top: 2px solid #f6f5f7;
-    border-bottom: 2px solid #f6f5f7;
+    border-top: 2px solid $bg-light;
+    border-bottom: 2px solid $bg-light;
+    background-color: #FCFCFC;
+    @media #{$large-up} {
+        background-image: url(../assets/img/quote_start.png),  url(../assets/img/quote_finish.png);
+        background-repeat: no-repeat;
+        background-position: 3% 10%, 97% 90%;
+        padding: rem-calc(40) rem-calc(90)!important;
+    }
     
     p {
         margin: 0!important;
         @include encode_cb;
         text-transform: none;
         color: #000000!important;
-        font-size: rem-calc(18);
+        font-size: rem-calc(16);
     }
 }
 
