@@ -41,6 +41,11 @@ if($rows) {
 /*
  * Print the widget
  */
+
+if ( $widget_img ) {
+    echo '<div class="solid-widget">';
+}
+
 echo $before_widget;
 
 if ( $show_featured_image ) {
@@ -63,3 +68,7 @@ if ( $link_position == null ) {
 	echo $buttons;
 }
 echo $after_widget;
+
+if ( $widget_img ) {
+    echo '</div>';
+}

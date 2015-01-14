@@ -58,19 +58,19 @@
             }
 
             .page_item_has_children {
-                &:after {
+                &:before {
                     display: block;
                     position: absolute;
                     top: 8px;
-                    right: 0;
+                    left: 0;
                     bottom: 8px;
                     width: 1px;
                     height: 30px;
                     background: #d7dee5;
                 }
 
-                &:not(:last-child) {
-                    &:after {
+                &:not(:first-child) {
+                    &:before {
                         content: "";
                     }
                 }

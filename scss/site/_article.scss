@@ -78,12 +78,6 @@
 .article__content {
     @extend .clearfix;
 
-    li {
-    	line-height: 1.6;
-    	margin-bottom: rem-calc(5px);
-
-    }
-
 	hr {
 		height: 2px;
 		border: none;
@@ -194,12 +188,11 @@
 		margin: 0;
 		padding: 0;
 		//width: auto !important;
-		color: #fff;
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		color: $white;
 		background-color: $text;
 		
 		.source {
-			background-color: $accent-teal;
+			background-color: lighten($text, 15%);
 			color: #fff;
 			text-align: right;
 			//font-style: italic;

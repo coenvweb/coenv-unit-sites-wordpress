@@ -14,22 +14,58 @@
 
 // Social Widget
 
-.widget-social {
+.widget {
     ul {
         list-style: none;	
     }
 }
 
+#sidebar {
+    .solid-widget {
+        .widget_custom_post_widget {
+            background: $accent-teal!important;
+            background-image: url(../assets/img/RainAngle-2685.svg)!important;
+        }
+    }
 
-.widget_custom_post_widget {
+    .widget_custom_post_widget {
+        border-top: 4px $accent-teal solid;
+        background: rgba(0,0,0,.7);
+        background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../assets/img/onc_texture.jpg);
+        background-size: 140%;
+        background-repeat: no-repeat;
+
+    }
+    .widget_content {
+        margin: rem-calc(30) rem-calc(30) 0 rem-calc(30);
+        color: $white;
+
+        h4 {
+            border-bottom: 1px $white solid;
+            padding-bottom: rem-calc(14);
+            margin-bottom: rem-calc(14);
+            a {
+                color: $white!important;
+            }
+        }
+        p {
+            font-size: rem-calc(16);
+            font-weight: 600;
+        }
+    }
 }
 
-#sidebar .widget_content {
-	margin-top: 15px;
-	p {
-		font-size: 1rem;
-	}
+.widget_links{
+    padding: 0 rem-calc(30) rem-calc(30) rem-calc(30);
+    margin-right: -2%;
+    margin-left: 0;
+
+    li {
+        display: inline;
+    }
 }
+
+
 #after-content .widget_custom_post_widget {
 	margin-bottom: 1.5rem;
 	padding-top: 1rem;
@@ -58,7 +94,7 @@
 	float: left;
 	width: 20%;
 }
-#sidebar .widget_links li a {
+#sidebar .widget_links li > a {
 	width: 48%;
 	margin: 0;
 	&:first-child {
@@ -69,9 +105,7 @@
 	float: right;
 	text-align: right;
 }
-.widget_custom_post_widget ul.widget_links li {
-	display: inline;
-}
+
 ul.widget-area li {
 	list-style: none;
 	margin: 0;

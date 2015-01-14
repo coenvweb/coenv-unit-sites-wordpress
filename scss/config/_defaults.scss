@@ -188,3 +188,18 @@ body {
 ul, ol {
     font-weight: 600;  
 }
+
+.article {    
+    li {
+        font-weight: 600;
+        line-height: 1.6;
+        margin-bottom: rem-calc(5px);
+    }
+
+    ul {
+        li {
+            list-style-image: url('../assets/img/teal-bullet.svg');
+            list-style-position: -2px;
+        }
+    }
+}
