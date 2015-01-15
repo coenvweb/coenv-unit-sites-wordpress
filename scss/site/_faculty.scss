@@ -1,23 +1,17 @@
+//for individual profiles
+
+.faculty-profile {
+    .entry-content {
+        margin-left: rem-calc(28);
+    }
+}
+
 article.type-faculty {
 
 	.faculty-info {
-		background-color: #f4f4f4;
-		border: 1px solid #ddd;
-		margin-bottom: rem-calc(20px);
-		margin-left: rem-calc(20px);
-		padding-bottom: rem-calc(10px);
-		width: rem-calc(240px);
-
-		p {
-			margin: 0;
-			padding: rem-calc(10px);
-		}
 
 		ul {
 			margin: 0;
-			padding-right: rem-calc(10px);
-			padding-bottom: rem-calc(10px);
-			padding-left: rem-calc(10px);
 
 			ul {
 				margin: 0;
@@ -138,13 +132,7 @@ ul.fac-cats {
 	margin-right: .5rem;
 }
 
-//for individual profiles
 
-.faculty-profile {
-    .entry-content {
-        margin-left: rem-calc(28);
-    }
-}
 
 
 
