@@ -5,7 +5,7 @@
         <div class="row">
 			<div class="medium-6 columns">
                 <div class="smea-logo left">
-                    <img src="<?php bloginfo('template_directory'); ?>/assets/img/smea-logo.svg" alt="SMEA Logo">
+                    <?php get_template_part('assets/img/icons/inline', 'smea-logo.svg'); ?>
                 </div>
 				<header class="site-footer__header">
 					<h2><?php bloginfo('name') ?></h2>

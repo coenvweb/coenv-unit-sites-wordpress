@@ -2,13 +2,18 @@
 
 .faculty-profile {
     .entry-content {
-        margin-left: rem-calc(28);
+        margin-left: rem-calc(16);
     }
 }
 
 article.type-faculty {
+    
+    .job-titles {
+        list-style: none;
+    }
 
 	.faculty-info {
+        padding-left: 0;
 
 		ul {
 			margin: 0;
@@ -22,12 +27,22 @@ article.type-faculty {
 				list-style: none;
 				margin-left: 0;
 				padding-left: 0;
+                
+                svg:first-child { //icons
+                    float: left;
+                    margin-right: rem-calc(15);
+                    fill: $text;
+                }
+                
+                svg.arrow { //arrow
+                    width: rem-calc(30);
+                    float: right;
+                    margin-top: rem-calc(-5);
+                    fill: #d6d6d6;
+                }
 
 				&.job-titles {
 					margin-bottom: 1rem;
-				}
-
-				&.cv a {
 				}
 			}
 
@@ -75,18 +90,8 @@ article.type-faculty {
 
 }
 
-#sidebar .widget {
-	line-height: 1.6;
-	margin-bottom: 1rem;
-}
-.article__categories {
-	margin-bottom: 1rem;
-}
 .article__categories h2 {
-	@include rem('font-size', 1);
-	line-height: 1;
-	padding: 0;
-	margin: 0 0 .5rem 0;
+	font-size: rem-calc(14);
 }
 
 ul.fac-cats {
@@ -106,10 +111,14 @@ ul.fac-cats {
 }
 
 .fac-terms {
+    margin-left: 0;
     li {
 		display: inline;
-		margin: 0;
+		margin: 0 rem-calc(5) 0 0;
         padding: 0;
+    }
+    .button {
+        border-color: $accent-teal;
     }
 }
 
@@ -123,11 +132,6 @@ ul.fac-cats {
     }
 }
 
-.faculty-website a.button {
-	@include rem('font-size', 1);
-	margin: 1rem 0 0 0;
-	width: 100%;
-}
 #coenv_base_fac_cats-2 ul li {
 	margin-right: .5rem;
 }

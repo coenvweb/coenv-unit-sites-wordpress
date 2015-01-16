@@ -39,7 +39,7 @@
         float: left;
         margin: rem-calc(20) 0;
         a {
-            color: #000000;
+            color: $text;
         }
     }
     #logo {
@@ -77,13 +77,93 @@
     }
 }
 
-.breadcrumbs {
-	@include rem('margin-bottom',2);
-}
-.breadcrumbs>* {
-	line-height: rem-calc(16);
-}
-
 .top-bar-container {
     margin-bottom: 0!important;
+}
+
+//header strip
+
+.page-row {
+    max-width: none;
+    background-size: cover;
+    background-position: 50%;
+    color: $white;
+    
+    a {
+        color: $white;
+        
+        i {
+            font-size: rem-calc(30);
+            margin: rem-calc(5);
+            padding-top: 20px;
+        }
+    }
+    
+    &.mini {
+        .teal-wedge {
+            min-height: rem-calc(130);
+            .section-title {
+                a {
+                    bottom: rem-calc(-110);
+                }
+            }
+
+            .sharing {
+                margin-top: rem-calc(10);
+                @media #{$medium-up} {
+                    margin-top: rem-calc(75);
+                }
+            }
+        }
+    }
+    
+    .teal-wedge {
+        background-image: url(../assets/img/teal-wedge.svg);
+        background-repeat: no-repeat;
+        background-position: rem-calc(-450);
+        background-size: cover;
+        min-height: rem-calc(200);
+    }
+    
+    .section-title {
+            
+        a {
+            position: absolute;
+            bottom: rem-calc(-180);
+            font-size: rem-calc(28);
+            margin-left: rem-calc(30);
+            @include encode_cb;
+            
+            @media #{$medium-up} {
+                font-size: rem-calc(36);
+            }
+            
+            &:hover {
+                color: $accent-teal;
+            }
+        }
+    }
+    
+    .sharing {
+        text-transform: uppercase;
+        @include encode_cb;
+        margin-right: rem-calc(20);
+        
+        @media #{$medium-up} {
+            margin-top: rem-calc(140);
+        }
+        
+        .share-text {
+            margin-right: rem-calc(5);
+        }
+        
+        a svg {
+            width: rem-calc(30);
+            fill: $white;
+            margin-bottom: rem-calc(-9);
+            &:hover {
+                fill: $accent-teal;
+            }
+        }
+    }
 }

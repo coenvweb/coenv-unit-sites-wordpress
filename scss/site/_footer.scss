@@ -21,8 +21,9 @@
         margin: 0 rem-calc(20) rem-calc(20) 0;
         border: #666 3px solid;
         
-        img {
+        svg {
             width: rem-calc(115);
+            margin-bottom: rem-calc(-5);
         } 
     }
 
@@ -38,8 +39,8 @@
 			z-index: 0;
 			margin: 0;
 			color: $white;
-			@include font-size(20);
-			@include line-height(20);
+			font-size: rem-calc(20);
+			line-height: rem-calc(20);
 			@include encode_cb;
 
 		} // h2
@@ -47,13 +48,14 @@
 	} // .site-footer__header
 
 	.unit-contact {
-		@include rem('margin-bottom', 3);
+		margin-bottom: rem-calc(28);
+        
 		p {
-			color: rgb(187, 187, 187);
+			color: $text-white;
 			margin-bottom: 0;
+            
 			a { 
-			color: rgb(187, 187, 187);
-
+                color: $text-white;
 			}
 		}
 
@@ -68,7 +70,7 @@
 		@media #{$medium-up} {
 			display: block;
 			float: right;
-			@include rem('padding-left', 3);
+			padding-left: rem-calc(28);
 		}
 
 		@media print {
@@ -112,6 +114,7 @@
 				display: inline-block;
 				text-decoration: none;
 				color: $text-white;
+                font-weight: 400;
 			}
 
 			a:hover {
@@ -239,7 +242,7 @@
 
                 @media #{$medium-up} {
                     display: inline-block;
-                    padding-left: rem-calc(30);
+                    padding-left: rem-calc(15);
                 }
 
                 @media print {
@@ -251,7 +254,7 @@
                     font-size: rem-calc(10)!important;
 
                     @media #{$medium-up} {
-                        @include rem('margin', 0, 0, 0, 1);
+                        margin-left: rem-calc(14)
                     }
 
                 } // li
