@@ -33,7 +33,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
-		<hr>
 		<?php
 		/**
 		  * Blog loop

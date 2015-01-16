@@ -9,35 +9,43 @@
 article.type-faculty {
     
     .article__header {
-        h1 {
-            display: inline-block;
-            padding-bottom: 0;
-            padding-right: rem-calc(14);
-            margin-right: rem-calc(14);
-            line-height: rem-calc(48);
-            
-            &.single-title {
-                border-right: #d7dee5 solid 1px;
+        .faculty-title {
+            border-bottom: 3px solid $text;
+            padding: rem-calc(14) 0;
+            margin-bottom: rem-calc(28);
+        
+            h1 {
+                display: inline-block;
+                padding-bottom: 0;
+                padding-right: rem-calc(14);
+                margin-right: rem-calc(14);
+                line-height: rem-calc(48);
+
+                &.single-title {
+                    border-right: $accent solid 2px;
+                }
+
+                &.multi-title {
+                    display: block;
+                }
             }
-            
-            &.multi-title {
-                display: block;
-            }
-        }
-    
-        .job-titles {
-            display: inline-block;
-            vertical-align: middle;
-            margin-top: rem-calc(8);
-            
-            ul {
-                margin-left: 0;
-                
-                li {
-                    list-style: none;
-                    list-style-image: none;
-                    display: inline-block;
-                    margin-right: rem-calc(10);
+
+            .job-titles {
+                display: inline-block;
+                vertical-align: middle;
+                margin-top: rem-calc(8);
+
+                ul {
+                    margin-left: 0;
+
+                    li {
+                        list-style: none;
+                        list-style-image: none;
+                        display: inline-block;
+                        margin-right: rem-calc(10);
+                        font-size: rem-calc(20);
+                        font-weight: 200;
+                    }
                 }
             }
         }
@@ -100,16 +108,22 @@ article.type-faculty {
 		@include rem('padding-top',1);
 	}
 
-	.faculty-pubs ul {
-	    margin-left: rem-calc(30px);
-		
-		li {
-			float: left;
-			line-height: 1.6;
-    		margin-bottom: rem-calc(10px);
-		}
+	.faculty-pubs {
+        padding-top: rem-calc(24);
+        margin-top: rem-calc(24);
+        border-top: 1px solid $border;
+        
+        ul {
+            margin-left: rem-calc(30);
 
-	} // end .faculty-pubs ul
+            li {
+                float: left;
+                line-height: 1.6;
+                margin-bottom: rem-calc(10);
+            }
+        }
+
+	} // end .faculty-pubs
 
 } // end article.type-faculty
 
@@ -121,8 +135,10 @@ article.type-faculty {
 
 }
 
-.article__categories h2 {
-	font-size: rem-calc(14);
+.article__categories {    
+    h2 {
+	   font-size: rem-calc(14);
+    }
 }
 
 ul.fac-cats {

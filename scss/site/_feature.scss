@@ -75,15 +75,10 @@
                 float: right;
                 height: 100%;
                 width: 70%;
-                top: 10%;
                 margin: 0;
                 padding: 0;
                 vertical-align: middle;
                 text-align: right;
-            }
-            
-            @media #{$large-up}  {
-                top: -20%;
             }
 		}
 		
@@ -92,17 +87,26 @@
                 padding: 0 15% 0 0;
             }
             
-            #logo {
+            svg {
                 display: none;
             }
             
             @media #{$large-up}  {
-                padding: 0 35% 0 0;
+                padding: 0 20% 0 0;
                 
-                #logo {
+                svg {
                     display: block;
                     margin: auto;
                     padding-left: rem-calc(50);
+                    width: 30%;
+                }
+            }
+
+            @media #{$xlarge-up}  {
+                padding: 0 35% 0 0;
+                
+                svg {
+                    width: 30%;
                 }
             }
         }

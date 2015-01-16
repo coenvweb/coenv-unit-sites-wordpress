@@ -50,7 +50,7 @@ echo '</div>';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
         echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
-                echo '<img src="' . get_bloginfo('template_directory') . '/assets/img/smea-slash.png" id="logo">';
+                get_template_part('assets/img/icons/inline', 'smea-white-slash.svg');
 				echo '<h2>' . get_the_title() . '</h2>';
 				echo '<p>' . $feature_excerpt . '</p>';
 				if($rows)
