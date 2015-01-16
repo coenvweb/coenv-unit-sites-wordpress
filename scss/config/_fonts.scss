@@ -91,55 +91,36 @@ blockquote {
     }
 }
 
+$h1-font-size: rem-calc(36);
 h1 {
     @include encode_cb;
-    font-size: rem-calc(26);
-    line-height: rem-calc(30);
     font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(36);
-        line-height: rem-calc(48);
-    }
 
 } // h1
 
+$h2-font-size: rem-calc(28);
 h2 {
     @include encode_cb;
-    font-size: rem-calc(24);
-    line-height: rem-calc(24);
     font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(32);
-        line-height: rem-calc(30);
-    }
 
 } // h2
 
+$h3-font-size: rem-calc(24);
 h3 {
     @include encode_cb;
-    font-size: rem-calc(20);
-    line-height: rem-calc(24);
     font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(28);
-        line-height: rem-calc(24);
-    }
 
 } // h3
 
+$h4-font-size: rem-calc(20);
 h4 {
     @include encode_cb;
-    font-size: rem-calc(18);
-    line-height: rem-calc(16);
-    
-    @media #{$medium-up} {
-        font-size: rem-calc(24);
-        line-height: rem-calc(24);
-    }
 }
+
+
+
+$h5-font-size: rem-calc(18);
+$h6-font-size: 1rem;
 
 /*	Base font size
 		======================================================================== */

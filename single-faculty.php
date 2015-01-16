@@ -86,7 +86,7 @@
                             <div class="columns large-8 right">
                             <header class="article__header">
                                 <div class="faculty-title">
-                                    <h1 class="article__title">
+                                    <h1 class="article__title<?php if (count(get_field('job_titles' )) > 1) {echo ' multi-title ';} else {echo ' single-title';}  ?>">
                                     <?php if ( is_page() || is_single()) : ?>
                                         <?php the_title() ?>
                                     <?php else : ?>
@@ -95,7 +95,7 @@
                                     </h1>
                                     <?php
                                     if( have_rows('job_titles') ) {
-                                        echo '<li class="job-titles">';
+                                        echo '<div class="job-titles">';
                                         echo '<ul>';
                                         while ( have_rows('job_titles') ) : the_row();
                                             echo '<li>';

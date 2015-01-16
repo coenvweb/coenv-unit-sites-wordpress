@@ -8,8 +8,39 @@
 
 article.type-faculty {
     
-    .job-titles {
-        list-style: none;
+    .article__header {
+        h1 {
+            display: inline-block;
+            padding-bottom: 0;
+            padding-right: rem-calc(14);
+            margin-right: rem-calc(14);
+            line-height: rem-calc(48);
+            
+            &.single-title {
+                border-right: #d7dee5 solid 1px;
+            }
+            
+            &.multi-title {
+                display: block;
+            }
+        }
+    
+        .job-titles {
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: rem-calc(8);
+            
+            ul {
+                margin-left: 0;
+                
+                li {
+                    list-style: none;
+                    list-style-image: none;
+                    display: inline-block;
+                    margin-right: rem-calc(10);
+                }
+            }
+        }
     }
 
 	.faculty-info {

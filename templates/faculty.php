@@ -10,8 +10,6 @@ Template Name: Faculty Index
 
 <div class="small-12 medium-8 columns right" role="main">
     <div class="entry-content">
-        <h1><a href="/faculty"><?php echo the_title(); ?></a></h1>
-<hr />
 <?php
 
 $fac_cat = get_term_by( 'slug', (string) $_GET['term'], 'research_areas' );
