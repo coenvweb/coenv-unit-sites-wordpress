@@ -218,17 +218,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="svg-link right" href="' . $post_link_url . '">More<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-
-<path id="arrow-62-icon" d="M256,90c91.742,0,166,74.245,166,166c0,91.741-74.244,166-166,166c-91.742,0-166-74.245-166-166
-
-	C90,164.259,164.246,90,256,90z M256,50C142.23,50,50,142.229,50,256s92.23,206,206,206c113.771,0,206-92.229,206-206
-
-	S369.771,50,256,50z M303.52,276.929v32.969l77.518-77.386l-77.518-77.385v32.97c0,0-136.162,27.71-163.502,146.774
-
-	C198.227,272.546,303.52,276.929,303.52,276.929z"/>
-
-</svg></a>';
+            $post_link = '<a class="svg-link right" href="' . $post_link_url . '">More';
         }	
         if (empty( $featured )) {
             echo '<div class="large-4 medium-6 columns right">';
@@ -258,7 +248,8 @@ $wp_query = new WP_Query( $home_args );
 		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
        	echo $post_link;
-        echo '</div>';
+        if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
+        echo '</a></div>';
         echo '</div>';
         if (empty( $featured )) {
             echo '</div>';
@@ -299,7 +290,7 @@ $wp_query = new WP_Query( $home_args );
 <div class="get-started">
     <div class="row">
         <div class="large-12 columns">
-            <img class="slash" alt="white slash" src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/white-slash.png">
+            <?php get_template_part('assets/img/icons/inline', 'white-slash.svg'); ?>
             <?php the_widget('custom_post_widget', 'custom_post_id=2690'); ?>
         </div>
     </div>

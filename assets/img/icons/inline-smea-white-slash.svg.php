@@ -155,7 +155,7 @@
 		<use xlink:href="#SVGID_3_1"  overflow="visible"/>
 	</clipPath>
 	
-		<line clip-path="url(#SVGID_4_1)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" x1="258.556" y1="-221.273" x2="5.507" y2="723.116"/>
+		<line clip-path="url(#SVGID_4_1)" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-miterlimit="10" x1="258.556" y1="-221.273" x2="5.507" y2="723.116"/>
 </g>
 <g>
 	<defs>
@@ -165,6 +165,6 @@
 		<use xlink:href="#SVGID_5_1"  overflow="visible"/>
 	</clipPath>
 	
-		<line clip-path="url(#SVGID_6_1)" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" x1="257.536" y1="-221.273" x2="4.487" y2="723.116"/>
+		<line clip-path="url(#SVGID_6_1)" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-miterlimit="10" x1="257.536" y1="-221.273" x2="4.487" y2="723.116"/>
 </g>
 </svg>
