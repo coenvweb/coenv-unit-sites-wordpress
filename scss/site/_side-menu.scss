@@ -9,15 +9,13 @@
 
     li {
         background-color: #f6f5f7;
-        background-repeat: no-repeat;
-        background-position: 95%;
         border-bottom: 1px solid $white;
         margin: 0;
-        font-size: 1.25rem;
+        font-size: rem-calc(16);
         background-image: url(../assets/img/grey-arrow.svg);
         background-repeat: no-repeat;
         background-position: right;
-        background-size: 30px;
+        background-size: rem-calc(30);
         @include encode_cb;
         
         a.active {
@@ -27,7 +25,7 @@
             background-image: url(../assets/img/teal-arrow.svg);
             background-repeat: no-repeat;
             background-position: right;
-            background-size: 30px;
+            background-size: rem-calc(30);
         }
         
         a {
@@ -51,8 +49,8 @@
                     }
                 }
                 a {
-                    font-size: 1.15rem;
-                    padding-left: 2rem!important;
+                    font-size: rem-calc(16);
+                    padding-left: rem-calc(28)!important;
                     font-size: rem-calc(12);
                     &.active {
                         background-image: none;

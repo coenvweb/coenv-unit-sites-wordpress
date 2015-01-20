@@ -38,7 +38,7 @@
             bottom: 0;
             text-align: center;
             padding: rem-calc(20);
-            background-color: rgba(0, 9, 53, 0.75);;
+            background-color: rgba(15, 32, 70, .8);
         }
         
         h2 {
@@ -84,7 +84,7 @@
 		
         .feature-content {
             @media #{$medium-up} {
-                padding: 0 15% 0 0;
+                padding: 10% 15% 0 0;
             }
             
             svg {
@@ -99,6 +99,7 @@
                     margin: auto;
                     padding-left: rem-calc(50);
                     width: 30%;
+                    max-width: 130px;
                 }
             }
 
