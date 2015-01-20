@@ -137,9 +137,18 @@
             @media #{$medium-up} {
                 font-size: rem-calc(36);
             }
+        
+            span {
+                font-size: rem-calc(14);
+                line-height: rem-calc(5);
+                display: none;
+            }
             
             &:hover {
                 color: $accent-teal;
+                span {
+                    display: block;
+                }
             }
         }
     }

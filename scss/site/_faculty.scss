@@ -70,14 +70,9 @@ article.type-faculty {
                 svg:first-child { //icons
                     float: left;
                     margin-right: rem-calc(15);
-                    fill: $text;
-                }
-                
-                svg.arrow { //arrow
-                    width: rem-calc(30);
-                    float: right;
                     margin-top: rem-calc(-5);
-                    fill: #d6d6d6;
+                    fill: $text;
+                    width: 30px;
                 }
 
 				&.job-titles {
@@ -112,6 +107,17 @@ article.type-faculty {
         padding-top: rem-calc(24);
         margin-top: rem-calc(24);
         border-top: 1px solid $border;
+        
+        h2 {
+            font-size: rem-calc(20);
+        }
+        h3 {
+            font-size: rem-calc(14);
+        }
+        
+        a {
+            color: $text;
+        }
         
         ul {
             margin-left: rem-calc(30);

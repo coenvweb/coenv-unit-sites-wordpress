@@ -34,13 +34,10 @@
                                 <div class="columns large-4 faculty-info left">
                                     <?php echo $faculty_img; ?>
                                     <?php echo '<ul class="side-nav faculty_contact_fields">';
-                                    $svg_arrow = '<svg class="arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
-<path id="arrow-16-icon" d="M332.722,181.953v-54.964l129.229,129.012l-129.229,129.01v-54.964H50.049l147.899-148.094H332.722z"/>
-</svg>';
                                     if ($faculty_email_address) {
                                         echo '<li class="email"><a href="mailto:' . $faculty_email_address . '" title="Email this faculty member">';
                                         get_template_part('assets/img/icons/inline', 'email-arrow.svg');
-                                        echo $faculty_email_address . $svg_arrow . '</a></li>';
+                                        echo $faculty_email_address . '</a></li>';
                                     }
                                     if( have_rows('phone_number')) {
                                         echo '<li class="phone-numbers">';
@@ -48,7 +45,7 @@
                                             $phone = get_sub_field('number');
                                             echo '<li><a href=tel:' . $phone . ' title="Call this faculty member">';
                                             get_template_part('assets/img/icons/inline', 'phone-arrow.svg');
-                                            echo $phone . $svg_arrow . '</a></li>';
+                                            echo $phone . '</a></li>';
                                         endwhile;
                                         echo '</li>';
                                     }
@@ -59,7 +56,7 @@
                                             $room_number = get_sub_field('room_number');
                                             echo '<li><a href="http://washington.edu/maps/?' . $building . '" target="_blank" title="Find this faculty member">';
                                             get_template_part('assets/img/icons/inline', 'home.svg');
-                                            echo $building . ' ' . $room_number . $svg_arrow . '</a></li>';
+                                            echo $building . ' ' . $room_number . '</a></li>';
                                         endwhile;
                                         echo '</li>';
                                     }
@@ -69,17 +66,17 @@
                                     if ($faculty_scival_url) {
                                         echo '<li class="faculty-scival"><a href="' . $faculty_scival_url . '" title="See SciVal profile">';
                                         get_template_part('assets/img/icons/inline', 'bar-chart.svg');
-                                        echo 'SciVal' . $svg_arrow . '</a></li>';
+                                        echo 'SciVal</a></li>';
                                     }
                                     if ($faculty_cv) {
                                         echo '<li class="cv"><a href="' . $faculty_cv . '" title="See CV">';
                                         get_template_part('assets/img/icons/inline', 'cv.svg');
-                                        echo 'Curriculum Vitae (CV)' . $svg_arrow . '</a></li>';
+                                        echo 'Curriculum Vitae (CV)</a></li>';
                                     }
                                     if ($faculty_website_url) {
                                         echo '<li class="faculty-website"><a href="' . $faculty_cv . '" target="_blank" title="Website for this faculty member">';
                                         get_template_part('assets/img/icons/inline', 'link.svg');
-                                        echo 'Website' . $svg_arrow . '</a></li>';
+                                        echo 'Website</a></li>';
                                     } ?>
                                     </ul>		
                                 </div>

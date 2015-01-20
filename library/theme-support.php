@@ -219,7 +219,7 @@ function coenv_base_section_title($id) {
     
     if ( is_singular( 'faculty' )) { //change faculty pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="faculty-and-research/faculty">Faculty</a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="faculty-and-research/faculty"><span>&larr; View All</span>Faculty</a></h2></div>';
     }
     
     if ( is_page_template('templates/faculty.php')) { //change faculty index' section titles
@@ -229,7 +229,7 @@ function coenv_base_section_title($id) {
     
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="about/news">News</a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="about/news"><span>&larr; View All</span>News</a></h2></div>';
     }
     
     if ( is_page_template('templates/news.php')) { //change news index' section titles
