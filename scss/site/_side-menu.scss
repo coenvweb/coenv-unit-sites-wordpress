@@ -14,19 +14,20 @@
         border-bottom: 1px solid $white;
         margin: 0;
         font-size: 1.25rem;
+        background-image: url(../assets/img/grey-arrow.svg);
+        background-repeat: no-repeat;
+        background-position: right;
+        background-size: 30px;
         @include encode_cb;
         
         a.active {
             background-color: $accent-teal-lt;
             border-top: 1px solid #dddddd;
             border-bottom: 1px solid #dddddd;
-            
-            svg {
-                width: rem-calc(30);
-                float: right;
-                margin-top: rem-calc(-5);
-                fill: $accent-teal;
-            }
+            background-image: url(../assets/img/teal-arrow.svg);
+            background-repeat: no-repeat;
+            background-position: right;
+            background-size: 30px;
         }
         
         a {
@@ -43,6 +44,7 @@
 
             li {
                 border: 0;
+                background-image: none;
                 &:first-of-type{
                     a {
                         border-top: none;
@@ -52,18 +54,11 @@
                     font-size: 1.15rem;
                     padding-left: 2rem!important;
                     font-size: rem-calc(12);
-                    svg {
-                        display: none;
+                    &.active {
+                        background-image: none;
                     }
                 }
             }
-        }
-
-        svg {
-            width: rem-calc(30);
-            float: right;
-            margin-top: rem-calc(-5);
-            fill: #d6d6d6;
         }
     }
 }

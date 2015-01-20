@@ -268,3 +268,18 @@ body.page div[role="main"] .share {
 	margin-bottom: 1rem;
 	width: 100%;
 }
+
+.entry-content {
+    border-top: $accent-teal 7px solid;
+    padding-top: rem-calc(15);
+    
+    a {
+        color: $accent-teal;
+    }
+}
+
+.entry-content, .after-content, .before-content {
+    @media #{$medium-up} {
+        margin-left: rem-calc(50);
+    }
+}
