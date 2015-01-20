@@ -32,7 +32,7 @@
         border-top: 4px $accent-teal solid;
         background: rgba(0,0,0,.7);
         background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../assets/img/onc_texture.jpg);
-        background-size: 140%;
+        background-size: cover;
         background-repeat: no-repeat;
 
     }

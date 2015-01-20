@@ -68,6 +68,9 @@
 		margin: 0;
 		margin-right: rem-calc(5);
 	}
+    .columns {
+        padding-left: 0;
+    }
 }
 .side-nav li.active a:first-child:not(.button) {
 	@include encode_cb;

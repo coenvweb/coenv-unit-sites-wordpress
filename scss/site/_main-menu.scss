@@ -13,7 +13,10 @@
                 @media #{$large-up} {
                     font-size: rem-calc(16);
                 }
-                font-size: rem-calc(12);
+                @media #{$medium-only} {
+                    background-image: none!important;
+                }
+                font-size: rem-calc(14);
                 color: $text;
                 @include encode_cb;
                 background-color: #ffffff;
@@ -29,13 +32,13 @@
                     color: $accent-teal;
                     background-image: url("../assets/img/teal-arrow.svg");
                     background-repeat: no-repeat;
-                    background-position: 96% 47%;
+                    background-position: 97% 47%;
                     background-size: rem-calc(30);
                     &:hover {
                         color: lighten( $accent-teal, 15% );
                         background-image: url("../assets/img/teal-arrow.svg");
                         background-repeat: no-repeat;
-                        background-position: 96% 47%;
+                        background-position: 97% 47%;
                         background-size: rem-calc(30);
                     }
                 }
@@ -74,25 +77,40 @@
                         content: "";
                     }
                 }
+                
+                &.page-item-55 > a {
+                    background-position-x: 99%;
+                    &:hover {
+                        color: lighten( $accent-teal, 15% );
+                        background-image: url("../assets/img/teal-arrow.svg");
+                        background-repeat: no-repeat;
+                        background-position: 99% 47%;
+                        background-size: rem-calc(30);
+                    }
+                        
+                }
 
                 &.current_page_item > a, & > a:hover{
                         color: $accent-teal;
                         background-image: url("../assets/img/teal-arrow.svg");
                         background-repeat: no-repeat;
-                        background-position: 96% 47%;
+                        background-position: 97% 47%;
                         background-size: rem-calc(30);
                 }
 
                 & > a {
                     background-image: url("../assets/img/grey-arrow.svg");
                     background-repeat: no-repeat;
-                    background-position: 96% 47%;
+                    background-position: 97% 47%;
                     background-size: rem-calc(30);
                 }
             }
     
             .has-dropdown > a{
                 padding-right: rem-calc(40)!important;
+                @media #{$medium-only} {
+                    padding-right: rem-calc(14)!important;
+                }
                 &:after {
                     content: none;
                 }
