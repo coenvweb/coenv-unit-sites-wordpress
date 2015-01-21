@@ -180,6 +180,12 @@ function coenv_banner() {
 	$banner = false;
 
 	$ancestor_id = coenv_get_ancestor('ID');
+    
+    if ( is_singular( 'post' )) { //change news pages' section titles
+        unset ($ancestor_id);
+        $ancestor_id = 7;
+    }
+    
 	if ( has_post_thumbnail( $ancestor_id ) ) {
 		$page_id = $ancestor_id;
 	}
@@ -200,6 +206,7 @@ function coenv_banner() {
 	);
 
 	return $banner;
+    return $ancestor_id;
 }
 
 /*

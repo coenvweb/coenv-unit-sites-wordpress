@@ -24,7 +24,7 @@
 
 		@media #{$medium-up} {
 			font-size: rem-calc(36);
-			line-height: rem-calc(64);
+			line-height: rem-calc(52);
 		}
 
 		a {
@@ -39,20 +39,6 @@
 	} // .article__title
 	
 	.article__meta {
-		.post-info {
-			text-transform:uppercase;
-			letter-spacing:.1em;
-			font-weight:600;
-			color:#888;
-			vertical-align: middle;
-			text-decoration:none;
-			@include font-size(11);
-			color: $text-lt;
-		}
-		
-		a:hover {
-		color: #8458BE!important;
-		}
 
 		.article__categories {
 			display: inline-block;

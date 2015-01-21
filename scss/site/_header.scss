@@ -120,7 +120,7 @@
     .teal-wedge {
         background-image: url(../assets/img/teal-wedge.svg);
         background-repeat: no-repeat;
-        background-position: rem-calc(-450);
+        background-position: rem-calc(-480);
         background-size: cover;
         min-height: rem-calc(200);
     }
@@ -131,7 +131,7 @@
             position: absolute;
             bottom: rem-calc(-180);
             font-size: rem-calc(28);
-            margin-left: rem-calc(30);
+            margin-left: rem-calc(15);
             @include encode_cb;
             
             @media #{$medium-up} {

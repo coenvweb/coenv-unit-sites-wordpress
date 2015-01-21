@@ -79,15 +79,11 @@
                 }
                 
                 &.page-item-55 > a {
+                    background-position-x: 99%;                        
+                }
+                
+                &.current_page_item.page-item-55 > a, &.page-item-55 > a:hover {
                     background-position-x: 99%;
-                    &:hover {
-                        color: lighten( $accent-teal, 15% );
-                        background-image: url("../assets/img/teal-arrow.svg");
-                        background-repeat: no-repeat;
-                        background-position: 99% 47%;
-                        background-size: rem-calc(30);
-                    }
-                        
                 }
 
                 &.current_page_item > a, & > a:hover{

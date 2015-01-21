@@ -1,0 +1,100 @@
+.page-template-templatesnews-php {
+    // selectors
+    
+    .filters {
+        margin-top: rem-calc(10);
+    }
+    
+    // posts
+    .blog-meta {
+        p {
+            padding-bottom: rem-calc(10);
+            margin-bottom: rem-calc(10);
+            margin-top: rem-calc(30);
+            border-bottom: 4px $text solid;
+            font-weight: 600;
+            font-size: rem-calc(12);
+        }
+    }
+    
+    h3 a {
+        color: $text; //news titles
+    }
+    
+    .blog .button {
+        border-color: $accent-teal;
+    }
+    
+    ul.pagination li {
+        margin-top: rem-calc(20);
+        margin-bottom: rem-calc(40);
+        a {
+            border-radius: 0;
+            color: $accent-teal;
+            font-weight: 600;
+            border: 2px $accent-teal solid;
+            font-size: rem-calc(12);
+        }
+        &.current a {
+            background: $accent-teal;
+            color: $white;
+        }
+    }
+    
+    .panel {
+        border: 2px $accent-teal solid;
+        background-color: transparent;
+        height: rem-calc(40);
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: rem-calc(14);
+        @include encode_cb;
+        color: $accent-teal;
+        padding: 0;
+        
+        div {
+            padding: rem-calc(8);
+            &.right {
+                border-left: 2px $accent-teal solid;
+                padding-left: rem-calc(10);
+                height: rem-calc(38);
+            }
+        }
+    }
+}
+
+// single post
+
+.single-post {
+    .article__meta {
+        margin: rem-calc(10) 0;
+    }
+}
+    
+
+// homepage, articles, & news feed
+
+.post-meta, .blog-meta, .article__meta { 
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: rem-calc(12);
+    color: #959595;
+}
+
+// filters
+
+select {
+    border: 2px $accent-teal solid;
+    background-color: transparent;
+    height: rem-calc(40);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: rem-calc(14);
+    @include encode_cb;
+    color: $accent-teal;
+        &:hover{
+            border-color: $accent-teal;
+            background-color: transparent;
+        }
+}
+
