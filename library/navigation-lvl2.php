@@ -33,10 +33,14 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
         $menu = "\n<ul class=\"side-nav\">\n";
         foreach ($children as $child) {
             // If the child is the viewed page or one of its ancestors, highlight it
-            if (in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID)) {
-                $menu .= '<li class="active"><a href="' . get_permalink($child) . '" class="active">' . $child->post_title . '</a>';
+            if ((in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID)) && (get_children($child->ID))) {
+                $menu .= '<li class="active has-children post-' . $child->ID . ' depth-' . coenv_get_depth($child->ID) . '"><a href="' . get_permalink($child) . '" class="active">' . $child->post_title . '</a>';
+            } elseif (in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID)) {
+                $menu .= '<li class="active post-' . $child->ID . ' depth-' . coenv_get_depth($child->ID) . '"><a href="' . get_permalink($child) . '" class="active">' . $child->post_title . '</a>';
+            } elseif (get_children($child->ID)) {
+                $menu .= '<li class="has-children post-' . $child->ID . ' depth-' . coenv_get_depth($child->ID) . '"><a href="' . get_permalink($child) . '">' . $child->post_title . '</a>';
             } else {
-                $menu .= '<li><a href="' . get_permalink($child) . '">' . $child->post_title . '</svg></a>';
+                $menu .= '<li class="post-' . $child->ID . ' depth-' . coenv_get_depth($child->ID) . '"><a href="' . get_permalink($child) . '">' . $child->post_title . '</a>';
             }
             // If the page has children and is the viewed page or one of its ancestors, get its children
             if (get_children($child->ID) && (in_array($child->ID, get_post_ancestors($current_page)) || ($child->ID == $current_page->ID))) {
@@ -47,4 +51,33 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
         $menu .= "</ul>\n";
     }
     return $menu;
+}
+
+function coenv_get_depth($id = '', $depth = '', $i = 0)
+{
+	global $wpdb;
+	global $post;
+
+	if($depth == '')
+	{
+		if(is_page())
+		{
+			if($id == '')
+			{
+				$id = $post->ID;
+			}
+			$depth = $wpdb->get_var("SELECT post_parent FROM $wpdb->posts WHERE ID = '".$id."'");
+			return coenv_get_depth($id, $depth, $i);
+		}
+	}
+	elseif($depth == "0")
+	{
+		return $i;
+	}
+	else
+	{
+		$depth = $wpdb->get_var("SELECT post_parent FROM $wpdb->posts WHERE ID = '".$depth."'");
+		$i++;
+		return coenv_get_depth($id, $depth, $i);
+	}
 }

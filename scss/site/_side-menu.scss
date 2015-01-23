@@ -6,26 +6,41 @@
     margin: 0 0 2rem 0;
     padding: 0;
     line-height: 10px;
+    
+    .depth-1 > a {
+        @include encode_cb;
+        font-weight: 800!important;
+    }
 
     li {
-        background-color: #f6f5f7;
+        background-color: $bg-light;
         border-bottom: 1px solid $white;
         margin: 0;
         font-size: rem-calc(16);
-        background-image: url(../assets/img/grey-arrow.svg);
-        background-repeat: no-repeat;
-        background-position: right;
-        background-size: rem-calc(30);
-        @include encode_cb;
         
-        a.active {
-            background-color: $accent-teal-lt;
-            border-top: 1px solid #dddddd;
-            border-bottom: 1px solid #dddddd;
-            background-image: url(../assets/img/teal-arrow.svg);
+        &.has-children {
+            background-image: url(../assets/img/grey-arrow.svg);
             background-repeat: no-repeat;
-            background-position: right;
+            background-position: right top 12px;
             background-size: rem-calc(30);
+            
+            &.post-2966, &.post-2966 > a.active { // not news page
+                background-image: none;
+            }
+            
+            > a.active {
+                background-image: url(../assets/img/teal-arrow.svg);
+                background-repeat: no-repeat;
+                background-position: right;
+                background-size: rem-calc(30);
+            }
+        }
+            
+        
+        > a.active {
+            background-color: $white-button;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
         }
         
         a {
@@ -40,20 +55,29 @@
             margin-bottom: 0;
 
 
-            li {
-                border: 0;
+            li { // sub sub pages
+                border-bottom: 1px solid $bg-lighter ;
                 background-image: none;
+                background-color: $text-very-lt;
                 &:first-of-type{
                     a {
                         border-top: none;
                     }
                 }
+                
+                &:last-of-type{
+                    border-bottom: none;
+                }
                 a {
                     font-size: rem-calc(16);
                     padding-left: rem-calc(28)!important;
                     font-size: rem-calc(12);
+                    @include encode;
+                    text-transform: none!important;
+                    
                     &.active {
                         background-image: none;
+                        background-color: #d0d0d0;
                     }
                 }
             }
@@ -71,7 +95,4 @@
     .columns {
         padding-left: 0;
     }
-}
-.side-nav li.active a:first-child:not(.button) {
-	@include encode_cb;
 }
