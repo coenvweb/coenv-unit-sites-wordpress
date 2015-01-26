@@ -51,6 +51,7 @@
         
             .dropdown {
                 @include shadow;
+    
                 a {
                     @include encode();
                     font-size: rem-calc(14);
@@ -93,19 +94,19 @@
                         color: $accent-teal;
                         background-image: url("../assets/img/teal-arrow.svg");
                         background-repeat: no-repeat;
-                        background-position: 97% 47%;
+                        background-position: 97% 38%;
                         background-size: rem-calc(30);
                 }
 
                 & > a {
                     background-image: url("../assets/img/grey-arrow.svg");
                     background-repeat: no-repeat;
-                    background-position: 97% 47%;
+                    background-position: 97% 38%;
                     background-size: rem-calc(30);
                 }
             }
     
-            .has-dropdown > a{
+            .has-dropdown > a {
                 padding-right: rem-calc(40)!important;
                 @media #{$medium-only} {
                     padding-right: rem-calc(14)!important;
@@ -113,6 +114,10 @@
                 &:after {
                     content: none;
                 }
+            }
+
+            & > .has-dropdown > a {
+                padding-bottom: rem-calc(7);
             }
         }
     }

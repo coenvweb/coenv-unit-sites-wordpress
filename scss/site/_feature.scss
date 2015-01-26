@@ -61,6 +61,7 @@
             right: 0;
             text-align: center;
             padding: 0;
+            width: 55%;
             background-image: url(../assets/img/blue_wedge.svg);
             background-repeat: no-repeat;
             background-position: 0;
@@ -74,7 +75,7 @@
                 position: relative;
                 float: right;
                 height: 100%;
-                width: 70%;
+                width: 75%;
                 margin: 0;
                 padding: 0;
                 vertical-align: middle;
@@ -84,7 +85,7 @@
 		
         .feature-content {
             @media #{$medium-up} {
-                padding: 10% 15% 0 0;
+                padding: 10% 10% 0 0;
             }
             
             svg {
@@ -98,7 +99,7 @@
                     display: block;
                     margin: auto;
                     padding-left: rem-calc(50);
-                    width: 30%;
+                    width: 27%;
                     max-width: 130px;
                 }
             }

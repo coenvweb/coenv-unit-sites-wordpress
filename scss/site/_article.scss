@@ -21,6 +21,7 @@
 		font-size: rem-calc(24);
 		line-height: rem-calc(30);
 		font-weight: 400;
+        color: $accent-teal;
 
 		@media #{$medium-up} {
 			font-size: rem-calc(36);

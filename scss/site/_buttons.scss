@@ -5,10 +5,10 @@
 	display: inline-block;
 	vertical-align: middle;
 	@include encode_cb; 
-	@include font-size(12);
+	@include font-size(16);
     min-width: rem-calc(100);
     background: none;
-    padding: rem-calc(8);
+    padding: rem-calc(8) rem-calc(16);
     border: #333 2px solid;
     color: #333;
 	

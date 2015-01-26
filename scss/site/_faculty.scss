@@ -10,9 +10,9 @@ article.type-faculty {
     
     .article__header {
         .faculty-title {
-            border-bottom: 3px solid $text;
+            border-bottom: 4px solid $border;
             padding: rem-calc(14) 0;
-            margin-bottom: rem-calc(28);
+            margin-bottom: rem-calc(24);
         
             h1 {
                 display: inline-block;
@@ -20,9 +20,10 @@ article.type-faculty {
                 padding-right: rem-calc(14);
                 margin-right: rem-calc(14);
                 line-height: rem-calc(48);
+                color: $text;
 
                 &.single-title {
-                    border-right: $accent solid 2px;
+                    border-right: $text solid 2px;
                 }
 
                 &.multi-title {
@@ -66,13 +67,14 @@ article.type-faculty {
 				list-style: none;
 				margin-left: 0;
 				padding-left: 0;
+                @include encode_cb;
                 
                 svg:first-child { //icons
                     float: left;
                     margin-right: rem-calc(15);
-                    margin-top: rem-calc(-5);
+                    margin-top: rem-calc(0);
                     fill: $text;
-                    width: 30px;
+                    width: 20px;
                 }
 
 				&.job-titles {
