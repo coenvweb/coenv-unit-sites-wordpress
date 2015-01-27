@@ -15,6 +15,7 @@ wp-content/themes/coenv-base/*
 wp-content/themes/foundation-base-theme/*
 wp-content/themes/poe-theme*
 wp-content/themes/coenv-base/*
+wp-content/themes/coenv-safs/*
 
 # wordpress specific
 #wp-config.php
