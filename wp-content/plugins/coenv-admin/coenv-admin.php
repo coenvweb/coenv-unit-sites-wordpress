@@ -7,57 +7,11 @@
  * Author URI: http://coenv.uw.edu
  */
 
-
-
-
-/* Custom variables and paths */
-function coenv_admin_plugin_activate() {
-  coenv_admin_plugin_rules();
-  flush_rewrite_rules();
- }
-
- function coenv_admin_plugin_deactivate() {
-  flush_rewrite_rules();
- }
-
- function coenv_admin_plugin_rules() {
-  add_rewrite_rule('students/student_blog/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/?$', 'index.php?pagename=students/student_blog/&coenv_cat_1=$matches[1]&coenv_cat_2=$matches[2]&coenv_cat_3=$matches[3]&paged=$matches[4]', 'top');
-//works
-
-  //add_rewrite_rule('students/student_blog/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/?$', 'index.php?pagename=students/student_blog/&coenv_cat_1=$matches[1]&coenv_cat_2=$matches[2]&paged=$matches[3]', 'top');
-
-  add_rewrite_rule('students/student_blog/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/?$', 'index.php?pagename=students/student_blog/&coenv_cat_1=$matches[1]&paged=$matches[2]', 'top');
-
-  //add_rewrite_rule('students/student_blog/([A-Za-z0-9\-\_]+)/([A-Za-z0-9\-\_]+)/?$', 'index.php?pagename=students/student_blog/&coenv_cat_1=$matches[1]&coenv_cat_2=$matches[2]', 'top');
-
-  //add_rewrite_rule('students/student_blog/([A-Za-z0-9\-\_]+)/?$', 'index.php?pagename=students/student_blog/&coenv_cat_1=$matches[1]', 'top');
- }
-/*
- function coenv_admin_plugin_query_vars($vars) {
-  $vars[] = 'coenv_cat_1';
-  $vars[] = 'coenv_cat_2';
-  $vars[] = 'coenv_cat_3';
-  return $vars;
- }
- */
-
- function add_query_vars() {
-    global $wp;
-    $wp->add_query_var('coenv_cat_1');
-    $wp->add_query_var('coenv_cat_2');
-    $wp->add_query_var('coenv_cat_3');
-    $wp->add_query_var('coenv_cat_4');
-}
-add_action('init', 'add_query_vars');
  
  //register activation function
  register_activation_hook(__FILE__, 'coenv_admin_plugin_activate');
  //register deactivation function
  register_deactivation_hook(__FILE__, 'coenv_admin_plugin_deactivate');
- //add rewrite rules in case another plugin flushes rules
- add_action('init', 'coenv_admin_plugin_rules');
- //add plugin query vars (product_id) to wordpress
- //add_filter('query_vars', 'coenv_admin_plugin_query_vars');
 
 
 
