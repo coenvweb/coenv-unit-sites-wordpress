@@ -246,6 +246,14 @@
 
 } // .article__content
 
+.nivo-lightbox-overlay {
+    background: rgba(0,0,0,0.8)!important;
+    
+    .nivo-lightbox-title { //lightbox captions
+        background: none!important;
+    }
+}
+
 
 .article__footer {
 

@@ -74,10 +74,12 @@
 	@include font-size(24);
     h1 {
         margin: 0;
+        line-height: 1.2;
     }
     
     h2 {
         margin: 0;
+        line-height: 1.2;
     }
 }
 
@@ -168,7 +170,7 @@
         margin-right: rem-calc(20);
         
         @media #{$medium-up} {
-            margin-top: rem-calc(150);
+            margin-top: rem-calc(135);
         }
         
         .share-text {
