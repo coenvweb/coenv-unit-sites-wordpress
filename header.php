@@ -169,14 +169,14 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-<div class="page-row <?php if (is_single()) {echo 'mini';} ?>"
-    <?php if ( $banner ) {
+    <?php if (($banner) && (!is_single())) {
+            echo '<div class="page-row"';
             echo 'style="background-image: url(' . $banner['url'] . '); min-height: 200px;">';
             echo '<div class="teal-wedge">';
         }
      ?>
-     <?php if (empty($banner)) {
-            echo 'style="background-color: #4b2e83;">';
+     <?php if ( (empty($banner)) || (is_single()) ) {
+            echo '<div class="page-row mini">';
             echo '<div class="teal-wedge">';
      }
      ?>

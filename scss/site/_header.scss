@@ -70,11 +70,14 @@
 
 .section-title {
 	padding: 0 1rem;
-	margin: 0;
+	margin: rem-calc(10) 0;
 	@include font-size(24);
+    h1 {
+        margin: 0;
+    }
     
     h2 {
-        margin: rem-calc(10) 0;
+        margin: 0;
     }
 }
 
@@ -101,7 +104,12 @@
     }
     
     &.mini {
+        background-color: $accent;
         .teal-wedge {
+            background-image: url(../assets/img/purple-wedge.svg);
+            background-repeat: no-repeat;
+            background-position: rem-calc(-510);
+            background-size: cover;
             min-height: rem-calc(130);
             .section-title {
                 a {
@@ -112,7 +120,7 @@
             .sharing {
                 margin-top: rem-calc(10);
                 @media #{$medium-up} {
-                    margin-top: rem-calc(75);
+                    margin-top: rem-calc(65);
                 }
             }
         }
@@ -121,7 +129,7 @@
     .teal-wedge {
         background-image: url(../assets/img/teal-wedge.svg);
         background-repeat: no-repeat;
-        background-position: rem-calc(-480);
+        background-position: rem-calc(-510);
         background-size: cover;
         min-height: rem-calc(200);
     }
