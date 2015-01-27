@@ -162,6 +162,7 @@ endif;
 wp_reset_query();
 
 return $nav_exclude;
+wp_reset_query();
 }
 
 

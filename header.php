@@ -69,20 +69,21 @@
             <?php
             
             add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            $exclude = implode(',',coenv_base_menu_exclude());
+            //$exclude = implode(',',coenv_base_menu_exclude());
             wp_list_pages( array(
                 'depth' => 0,
                 'walker' => new top_bar_mobile_walker(),
                 'title_li' => false,
                 'sort_column' => 'menu_order, post_title',
                 'post_type'    => 'page',
-                'exclude' => '$exclude',
+               // 'exclude' => '$exclude',
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             ?>
     </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
+
   <nav id="top-nav" class="show-for-medium-up">
     <div class="row">
       <div class="top-menu normal-top-menu">
@@ -154,6 +155,7 @@
                           'exclude' => $exclude,
                       ) );
                       remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
+                      wp_reset_query();
                       ?>
                     </ul>
                 </section>
