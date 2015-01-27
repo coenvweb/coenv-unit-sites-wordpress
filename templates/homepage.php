@@ -145,6 +145,8 @@ $wp_query = new WP_Query( $feat_args );
 	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 	            echo $post_link;
                 echo '</div>';
+            	echo '</div>';
+                echo '</div>';  
                 
 			}
             else {
@@ -176,9 +178,9 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
                 echo $post_link;
                 echo '</div>';
+            	echo '</div>';
+                echo '</div>';  
             }
-	echo '</div>';
-    echo '</div>';  
 	endwhile;
 endif;
 
@@ -198,7 +200,6 @@ else {
         'posts_per_page' => 3,
         'post_status' => 'publish',
     );
-   echo '<hr />';
    echo '<div class="home-news-section clearfix">';
 }
 
