@@ -75,19 +75,35 @@ blockquote {
     border-top: 2px solid $bg-light;
     border-bottom: 2px solid $bg-light;
     background-color: #FCFCFC;
+    background-image: url(../assets/img/quote_start.png);
+    background-size: 5%;
+    background-repeat: no-repeat;
+    background-position: 3% 3%;
     @media #{$large-up} {
         background-image: url(../assets/img/quote_start.png),  url(../assets/img/quote_finish.png);
         background-repeat: no-repeat;
+        background-size: auto;
         background-position: 3% 10%, 97% 90%;
         padding: rem-calc(40) rem-calc(90)!important;
     }
     
     p {
         margin: 0!important;
+        padding-left: rem-calc(20);
         @include encode_cb;
         text-transform: none;
         color: #000000!important;
         font-size: rem-calc(16);
+        &:after {
+            content: '"';
+        }
+        
+        @media #{$large-up} {
+            padding-left: 0;
+            &:after {
+                content: none;
+            }
+        }
     }
 }
 
