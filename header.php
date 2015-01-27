@@ -144,7 +144,6 @@
                     <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
                       $exclude = implode(',',coenv_base_menu_exclude());
-                    echo $exclude;
                       add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_list_pages( array(
                           'depth' => 0,
