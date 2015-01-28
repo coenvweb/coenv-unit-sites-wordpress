@@ -120,6 +120,13 @@ article.type-faculty {
         
         a {
             color: $text;
+            &:hover {
+                color: $accent-teal;
+            }
+            &:after {
+                content: " →";
+                color: $accent-teal;
+            }
         }
         
         ul {
@@ -166,7 +173,7 @@ ul.fac-cats {
 	}
 }
 
-.fac-terms {
+.fac-terms, .cat-list {
     margin-left: 0;
     li {
 		display: inline;
@@ -181,10 +188,10 @@ ul.fac-cats {
 .cat-list {
     .button {
         width: 100%;
-        margin-bottom: rem-calc(10);
-    }
-    .cat-title {
-        margin-bottom: rem-calc(10);
+        font-size: rem-calc(12);
+        padding-left: rem-calc(5);
+        padding-right: rem-calc(5);
+        margin-bottom: rem-calc(5);
     }
 }
 
