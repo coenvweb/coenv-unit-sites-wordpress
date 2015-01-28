@@ -32,15 +32,15 @@
 @mixin o_sans() {
   font: {
     family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
   }
+    -webkit-font-smoothing: antialiased;
 }
 
 @mixin encode() {
   font: {
     family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    -webkit-font-smoothing: antialiased;
   }
+    -webkit-font-smoothing: antialiased;
 }
 
 @mixin encode_cb() {
@@ -54,8 +54,8 @@
 @mixin uni() {
   font: {
     family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    -webkit-font-smoothing: antialiased;
   }
+    -webkit-font-smoothing: antialiased;
 }
 
 .intro {
@@ -69,7 +69,9 @@
 }
 
 blockquote {
-    margin: 0!important;
+    margin-left: 0!important;
+    margin-right: 0!important;
+    margin-bottom: rem-calc(14)!important;
     padding: rem-calc(20) rem-calc(10)!important;
     border-left: 0px!important;
     border-top: 2px solid $bg-light;

@@ -8,7 +8,7 @@ Template Name: Faculty Index
 <?php get_header(); ?>
 <div class="row">
 
-<div class="small-12 large-8 columns right" role="main">
+<div class="small-12 medium-8 columns right" role="main">
     <div class="entry-content">
 <?php
 
@@ -61,7 +61,7 @@ $wp_query = new WP_Query( $query_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="faculty-list-teach clearfix">
-        <ul class="small-block-grid-3">
+        <ul class="medium-block-grid-3 small-block-grid-2">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -74,7 +74,7 @@ $wp_query = new WP_Query( $query_args );
 		}
 		echo '<li class="faculty-list-item">';
 		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
-		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
+		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
 		echo '</li>';
 		endwhile;
 		?>

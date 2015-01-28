@@ -147,6 +147,7 @@
             
             @media #{$medium-up} {
                 font-size: rem-calc(36);
+                max-width: 28%;
             }
         
             span {
