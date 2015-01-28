@@ -74,7 +74,7 @@
                                         echo 'Curriculum Vitae (CV)</a></li>';
                                     }
                                     if ($faculty_website_url) {
-                                        echo '<li class="faculty-website"><a href="' . $faculty_cv . '" target="_blank" title="Website for this faculty member">';
+                                        echo '<li class="faculty-website"><a href="' . $faculty_website_url . '" target="_blank" title="Website for this faculty member">';
                                         get_template_part('assets/img/icons/inline', 'link.svg');
                                         echo 'Website</a></li>';
                                     } ?>
