@@ -3,7 +3,7 @@ Contributors: savvii, vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 2.9.2
 Tested up to: 4.1
-Stable tag: 2.7.2
+Stable tag: 2.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,9 +78,26 @@ If your social media sharing plugin adds buttons to the widget areas you could c
 
 Currently the shortcode function only outputs the post content of the content block, future support for displaying the title and/or the attached featured image is being considered.
 
+= I have a feature request =
+
+Please post your feature request on [the support forum](https://wordpress.org/support/plugin/custom-post-widget)
+These new features are on the to-do list:
+* Display the content block featured image when using the shortcode
+
 = How can I make advanced changes to the widget layout? =
 
 You can create your own widget template and upload this to your theme folder. See [this support topic](http://wordpress.org/support/topic/patch-custom-widget-frontends?replies=1) for more information about this feature.
+
+= Can I make the post type public?  = 
+
+You can make the post type public by adding the following code to your theme's functions.php file:
+`function filter_content_block_init() {
+	$content_block_public = true;
+	return $content_block_public;
+}
+add_filter('content_block_post_type','filter_content_block_init');`
+
+Alternatively you can use [this third-party plugin](http://demomentsomtres.com/english/wordpress-plugins/demomentsomtres-wpbakery-visual-composer-custom-post-widget/).
 
 = Post ID's confuse me, can I use the post slug for embedding a content block? =
 
@@ -103,6 +120,9 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 2.7.4 =
+The shortcode now includes the slug of the content block (which is still optional), see https://wordpress.org/support/topic/shortcodes-using-slug-name-rather-than-id for more information on this.
 
 = 2.7.2 =
 The post status is now used for displaying the content blocks in the widget areas, only published content blocks are now displayed. Thanks to tmbdesign.co.uk for suggesting this change.

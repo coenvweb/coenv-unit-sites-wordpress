@@ -4,7 +4,7 @@ Plugin Name: NS Cloner - Site Copier
 Plugin URI: http://neversettle.it
 Description: All new V3 of the amazing time saving Never Settle Cloner! NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out the add-ons for additional powerful features!
 Author: Never Settle
-Version: 3.0.4.4
+Version: 3.0.4.7
 Network: true
 Text Domain: ns-cloner
 Author URI: http://neversettle.it
@@ -61,6 +61,7 @@ require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/ns-wp-utils.php');
 require_once(NS_CLONER_V3_PLUGIN_DIR.'/ns-cloner-addon-base.php');
 require_once(NS_CLONER_V3_PLUGIN_DIR.'/ns-cloner-section-base.php');
 require_once(NS_CLONER_V3_PLUGIN_DIR.'/ns-sidebar/ns-sidebar.php');
+require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/plugin-compatibility.php');
 
 // load after plugins_loaded so that textdomain/translation works
 add_action( 'plugins_loaded', 'ns_cloner_instantiate' );
@@ -74,7 +75,7 @@ class ns_cloner {
 	/**
 	 * Class Globals
 	 */
-	var $version = '3.0.4.4';
+	var $version = '3.0.4.7';
 	var $menu_slug = 'ns-cloner';
 	var $capability = 'manage_network_options';
 	var $global_tables = array(
@@ -126,7 +127,7 @@ class ns_cloner {
 		// add hook for addons that need to set stuff before the core loads
 		do_action( 'ns_cloner_before_construct', $this );
 		// setup languages
-		load_plugin_textdomain( 'ns-cloner', false, NS_CLONER_V3_PLUGIN_DIR.'languages' ); 
+		load_plugin_textdomain( 'ns-cloner', false, dirname(plugin_basename(__FILE__)).'/languages' ); 
 		// add functionality handler for admin 		
 		add_action( 'admin_init', array( $this, 'admin_init' ) );		
 		// add css for admin		
@@ -401,14 +402,12 @@ class ns_cloner {
 			$this->source_upload_url_relative,
 			$this->source_subd,
 			$this->source_prefix."user_roles",
-			$this->source_title
 		);
 		$replace = array(
 			$this->target_upload_dir_relative,
 			$this->target_upload_url_relative,
 			$this->target_subd,
 			$this->target_prefix."user_roles",
-			$this->target_title
 		);
 		$search = apply_filters( 'ns_cloner_search_items', $search, $this);
 		$replace = apply_filters( 'ns_cloner_replace_items', $replace, $this);
@@ -499,9 +498,12 @@ class ns_cloner {
 						$row[$field] = apply_filters( 'ns_cloner_field_value', $value, $field, $row, $this );
 						$count_replacements_made += $row_count_replacements_made;
 					}
-					// actually copy row
-					$this->target_db->insert( $target_table, $row );
+					// add hooks for compatibility fixes and insert the values
+					$format = apply_filters( 'ns_cloner_insert_format', null, $target_table );
+					$row = apply_filters( 'ns_cloner_insert_values', $row, $target_table );
+					$this->target_db->insert( $target_table, $row, $format );
 					$this->handle_any_db_errors( $this->target_db, "INSERT INTO $target_table via wpdb --> ".print_r($row,true) );
+					do_action( 'ns_cloner_after_insert', $row, $target_table );
 				} // end rows loop
 				
 			} // end tables loop
