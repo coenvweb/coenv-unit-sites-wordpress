@@ -112,7 +112,7 @@
             background-image: url(../assets/img/purple-wedge.svg);
             background-repeat: no-repeat;
             background-position: rem-calc(-510) 0;
-            background-size: cover;
+            background-size: rem-calc(1400);
             min-height: rem-calc(130);
             .section-title {
                 a {
