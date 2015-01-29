@@ -1,7 +1,7 @@
 <!-- The icon can be used freely in both personal and commercial projects with no attribution required, but always appreciated. 
 You may NOT sub-license, resell, rent, redistribute or otherwise transfer the icon without express written permission from iconmonstr.com -->
 
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" width="512px" height="512px" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" width="512px" height="512px" class="svg-icon" xml:space="preserve">
 
 <path id="email-8-icon" d="M381.339,199.065c0,0-87.156-3.628-135.339,47.962c22.631-98.556,135.339-121.492,135.339-121.492v-30.29
 

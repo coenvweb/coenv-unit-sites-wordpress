@@ -5,6 +5,9 @@
 svg {
     fill: currentColor;
     height: 100%;
+    &.svg-icon {
+        height: 30px;
+    }
 }
 
 /*  Antialiased type
