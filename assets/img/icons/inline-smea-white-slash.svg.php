@@ -1,4 +1,4 @@
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 229.455 631" enable-background="new 0 0 229.455 631" xml:space="preserve">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 229.455 631" enable-background="new 0 0 229.455 631" width="230px" height="631px"xml:space="preserve">
 <g>
 	<defs>
 		<rect id="SVGID_1_1" x="9.977" y="215.619" width="209.5" height="199.762"/>

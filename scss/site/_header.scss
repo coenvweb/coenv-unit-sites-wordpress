@@ -111,9 +111,10 @@
         .teal-wedge {
             background-image: url(../assets/img/purple-wedge.svg);
             background-repeat: no-repeat;
-            background-position: rem-calc(-510) 0;
+            background-position: rem-calc(-400) 0;
             background-size: rem-calc(1400);
             min-height: rem-calc(130);
+            overflow: hidden;
             .section-title {
                 a {
                     bottom: rem-calc(-110);
@@ -132,7 +133,7 @@
     .teal-wedge {
         background-image: url(../assets/img/teal-wedge.svg);
         background-repeat: no-repeat;
-        background-position: rem-calc(-510) 0;
+        background-position: rem-calc(-400) 0;
         background-size: rem-calc(1400);
         min-height: rem-calc(200);
     }

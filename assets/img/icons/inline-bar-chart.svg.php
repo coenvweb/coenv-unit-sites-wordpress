@@ -1,7 +1,7 @@
 <!-- The icon can be used freely in both personal and commercial projects with no attribution required, but always appreciated. 
 You may NOT sub-license, resell, rent, redistribute or otherwise transfer the icon without express written permission from iconmonstr.com -->
 
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
 
 <path id="bar_chart_6_icon" d="M367.625,97.795l33.424,33.424l-17.061,16.654l-33.557-33.556L367.625,97.795z
 
