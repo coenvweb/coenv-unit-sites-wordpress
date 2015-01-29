@@ -94,6 +94,7 @@
     background-size: cover;
     background-position: 50%;
     color: $white;
+    overflow: hidden;
     
     a {
         color: $white;
@@ -131,8 +132,8 @@
     .teal-wedge {
         background-image: url(../assets/img/teal-wedge.svg);
         background-repeat: no-repeat;
-        background-position: rem-calc(-350);
-        background-size: cover;
+        background-position: rem-calc(-500);
+        background-size: rem-calc(1400);
         min-height: rem-calc(200);
     }
     
