@@ -13,18 +13,32 @@
 
                             <header class="article__header">
                                 <div class="article__meta">                                    
-                                    <?php if ( !is_page() ) : ?>
-                                    <div class="post-info">
-                                        <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
+                                <?php if ( !is_page() ) : ?>
+                                <div class="blog-meta clearfix">
+                                    <div class="small-6 columns left">
+                                        <p><time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
                                         <?php $categories = get_the_category_list(' ') ?>
                                         <?php if ( $categories ) : ?>
-                                        <div class="article__categories">
                                             | <?php echo $categories ?>
-                                        </div>
+                                        </p>
+                                        <?php endif ?> 
                                     </div>
-                                    <?php endif ?> 
+                                    <div class="small-6 columns sharer right">
+                                        <?php $title = rawurlencode(get_the_title());
+                                        $shortlink = rawurlencode(wp_get_shortlink());
+                                        $site_name = rawurlencode(get_bloginfo('name'));
+                                        $twitter = get_option('twitter');
+                                        ?>
+                                        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+                                        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                                        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+                                        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                                        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+                                        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+                                    </div>
                                 </div>
                                 <?php endif ?>
+                                </div>
                                 <?php if ($GLOBALS['post']->post_parent) : ?>
                                 <?php if ( is_page() || is_single()) : ?>
                                     <h1 class="article__title"><?php the_title() ?></h1>

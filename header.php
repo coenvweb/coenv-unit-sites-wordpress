@@ -54,13 +54,23 @@
   <?php do_action('foundationPress_layout_start'); ?>
   
   <nav class="tab-bar show-for-small-only">
-    <section class="right-small">
-      <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+    <section class="left-small mobile-logo">
+        <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><svg id="logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" height="73px" width="108px" xml:space="preserve">
+              <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
+                c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
+                c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
+                s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
+                c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
+                C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
+</svg></a>
     </section>
     <section class="middle tab-bar-section">
-      
-      <h1 class="title"><?php bloginfo( 'name' ); ?></h1>
-
+        <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+            <h1 class="title"><?php bloginfo( 'name' ); ?></h1>
+        </a>
+    </section>
+    <section class="right-small">
+      <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
     </section>
   </nav>
 
@@ -117,14 +127,26 @@
       </div><!-- .top-menu -->
     </div><!-- .row -->
   </nav><!-- #top-nav -->
-  
+<div class="white-header">
   <div class="row title-row">
-    <div>
-    <ul class="title-area show-for-medium-up">
+    <div class="columns large-12">
+    <ul class="title-area hide-for-small">
       <li class="name">
         <h1>
           <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+            <!--[if gte IE 9]><!-->
+            <svg id="logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve">
+              <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
+                c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
+                c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
+                s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
+                c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
+                C107.176,0.112,80.251,0.112,79.343,0.112z"/>
+            </svg>
+            <!--<![endif]-->
+            <!--[if lte IE 8]>
             <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="logo">
+            <!--<![endif]-->
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>
@@ -160,7 +182,6 @@
                 </section>
             </nav>
         </div>
-      
 
 <?php if (!is_front_page()) : ?>
 <section class="container" role="document">
@@ -182,23 +203,9 @@
      ?>
     <div class="section-row row">
         <?php echo coenv_base_section_title($post->ID); ?>
-        <?php 
-        $title = rawurlencode(get_the_title());
-        $shortlink = rawurlencode(wp_get_shortlink());
-        $site_name = rawurlencode(get_bloginfo('name'));
-        $twitter = get_option('twitter');
-        ?>
-        <div class="sharing right"><span class="share-text">Share</span> 
-            <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
-            <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
-            <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-            <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
-            <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
-            <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
-        </div>
     </div>
     </div>
 </div>
+</div>
 <?php endif; ?>
-  <?php do_action('foundationPress_after_header'); ?>
-  
+<?php do_action('foundationPress_after_header'); ?>

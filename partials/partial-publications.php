@@ -41,10 +41,6 @@ if (!empty($publication_years)) {
 			<div class="blog-meta"><h5>
 			<?php echo $publication_terms_str . $publication_years_str; ?>
 			</h5></div>
-			<div class="share clearfix right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-			data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-			data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-            </div>
         <?php endif ?>
         </div>
         <div class="faculty-title clearfix">

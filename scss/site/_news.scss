@@ -7,14 +7,9 @@
     
     // posts
     .blog-meta {
-        p {
-            padding-bottom: rem-calc(10);
-            margin-bottom: rem-calc(10);
-            margin-top: rem-calc(30);
-            border-bottom: 4px $text solid;
-            font-weight: 600;
-            font-size: rem-calc(12);
-        }
+        margin-bottom: rem-calc(15);
+        margin-top: rem-calc(30);
+        border-bottom: 4px $text solid;
     }
     
     h3 a {
@@ -66,9 +61,6 @@
 // single post
 
 .single-post {
-    .article__meta {
-        margin: rem-calc(10) 0;
-    }
 }
     
 
@@ -79,6 +71,26 @@
     font-weight: 600;
     font-size: rem-calc(12);
     color: #959595;
+}
+
+.sharer {
+    text-align: right;
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.blog-meta {
+    padding-bottom: rem-calc(5);
+    p {
+        font-weight: 600;
+        font-size: rem-calc(12);
+        margin: rem-calc(5) 0 0 0;
+    }
+    .columns {
+        padding: 0;
+    }
 }
 
 // filters

@@ -109,21 +109,38 @@
 
 	#menu-university {
 		float: left;
+        margin-left: rem-calc(14);
 
 	} // #menu-university
 
 	#menu-buttons {
+        
+        li.a {
+            background: #b82828;
+            color: #fff;
+        }
 
 		li.give a {
 			background: $accent-red;
 			color: #fff;
 
 			i {
-				position: relative;
-				@include rem('margin-right', 0.2);
+                position: relative;
+                top: .1em;
+                margin-right: 2.8px;
+                margin-right: .2rem;
 			}
 
 		} // li.give a
+        
+        #heart {
+            fill: #ffffff!important;
+            height: 10px;
+            width: 10px;
+            .path1 {
+                fill: #fff;
+            }
+        }
 
 		li.give a:hover {
 			background: darken( $accent-red, 10% );

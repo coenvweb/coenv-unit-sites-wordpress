@@ -101,71 +101,71 @@ function coenv_base_post_parent($id) {
  * - array
  */
 function coenv_get_ancestor($attr = 'ID') {
-	
-	$post = get_queried_object();
+    
+    $post = get_queried_object();
 
-	// test for search
-	if ( is_search() ) {
-		return false;
-	}
+    // test for search
+    if ( is_search() ) {
+        return false;
+    }
 
-	if ( ($post->post_type == 'post' || is_archive() || is_search()) && !is_post_type_archive( array( 'faculty' ) ) ) {
+    if ( ($post->post_type == 'post' || is_archive() || is_search()) && !is_post_type_archive( array( 'faculty' ) ) ) {
 
-		$page_for_posts = get_option( 'page_for_posts' );
+        $page_for_posts = get_option( 'page_for_posts' );
 
-		if ( $page_for_posts == 0 ) {
-			return false;
-		}
+        if ( $page_for_posts == 0 ) {
+            return false;
+        }
 
-		$ancestor = get_post( $page_for_posts );
-		return $ancestor->$attr;
-	}
+        $ancestor = get_post( $page_for_posts );
+        return $ancestor->$attr;
+    }
 
-	// test for pages
-	if ( $post->post_type == 'page' ) {
+    // test for pages
+    if ( $post->post_type == 'page' ) {
 
-		// test for top-level pages
-		if ( $post->post_parent == 0 ) {
-			return $post->$attr;
-		}
+        // test for top-level pages
+        if ( $post->post_parent == 0 ) {
+            return $post->$attr;
+        }
 
-		// must be a child page
-		$ancestors = get_post_ancestors( $post->ID );
-		$ancestor = get_post( array_pop( $ancestors ) );
-		return $ancestor->$attr;
-	}
+        // must be a child page
+        $ancestors = get_post_ancestors( $post->ID );
+        $ancestor = get_post( array_pop( $ancestors ) );
+        return $ancestor->$attr;
+    }
 
-	// test for custom post types
-	$custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
-	if ( !empty( $custom_post_types ) && array_key_exists( $post->post_type, $custom_post_types ) ) {
+    // test for custom post types
+    $custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
+    if ( !empty( $custom_post_types ) && array_key_exists( $post->post_type, $custom_post_types ) ) {
 
-		// is parent_page slug defined?
-		if ( isset( $custom_post_types[ $post->post_type ]->parent_page ) ) {
+        // is parent_page slug defined?
+        if ( isset( $custom_post_types[ $post->post_type ]->parent_page ) ) {
 
-			// parent_page slug is defined.
-			$parent = get_page_by_path( $custom_post_types[ $post->post_type ]->parent_page );
+            // parent_page slug is defined.
+            $parent = get_page_by_path( $custom_post_types[ $post->post_type ]->parent_page );
 
-		} else {
+        } else {
 
-			// parent_page slug is not defined
-			// find custom slug
-			$slug = $custom_post_types[ $post->post_type ]->rewrite[ 'slug' ];
+            // parent_page slug is not defined
+            // find custom slug
+            $slug = $custom_post_types[ $post->post_type ]->rewrite[ 'slug' ];
 
-			// if a page exists with the same slug, assume that's the parent page
-			$parent = get_page_by_path( $slug );
-		}
+            // if a page exists with the same slug, assume that's the parent page
+            $parent = get_page_by_path( $slug );
+        }
 
-		// get ancestors of $parent
-		$ancestors = get_post_ancestors( $parent->ID );
+        // get ancestors of $parent
+        $ancestors = get_post_ancestors( $parent->ID );
 
-		// if ancestors is empty, just return $parent;
-		if ( empty( $ancestors ) ) {
-			return $parent->$attr;
-		}
+        // if ancestors is empty, just return $parent;
+        if ( empty( $ancestors ) ) {
+            return $parent->$attr;
+        }
 
-		$ancestor = get_post( array_pop( $ancestors ) );
-		return $ancestor->$attr;
-	}
+        $ancestor = get_post( array_pop( $ancestors ) );
+        return $ancestor->$attr;
+    }
 }
 
 /**
@@ -174,38 +174,38 @@ function coenv_get_ancestor($attr = 'ID') {
  * From CoEnv website.
  */
 function coenv_banner() {
-	$obj = get_queried_object();
+    $obj = get_queried_object();
 
-	$page_id = false;
-	$banner = false;
+    $page_id = false;
+    $banner = false;
 
-	$ancestor_id = coenv_get_ancestor('ID');
+    $ancestor_id = coenv_get_ancestor('ID');
     
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
         $ancestor_id = 7;
     }
     
-	if ( has_post_thumbnail( $ancestor_id ) ) {
-		$page_id = $ancestor_id;
-	}
+    if ( has_post_thumbnail( $ancestor_id ) ) {
+        $page_id = $ancestor_id;
+    }
 
-	if ( $page_id == false ) {
-		return false;
-	}
+    if ( $page_id == false ) {
+        return false;
+    }
 
-	$thumb_id = get_post_thumbnail_id( $page_id );
-	$image_src = wp_get_attachment_image_src( $thumb_id, 'banner' );
-	$attachment_post_obj = get_post( $thumb_id );
+    $thumb_id = get_post_thumbnail_id( $page_id );
+    $image_src = wp_get_attachment_image_src( $thumb_id, 'banner' );
+    $attachment_post_obj = get_post( $thumb_id );
 
-	$banner = array(
-		'url' => $image_src[0],
-		'permalink' => get_permalink( $attachment_post_obj->ID ),
-		'title' => $attachment_post_obj->post_title,
-		'caption' => $attachment_post_obj->post_excerpt
-	);
+    $banner = array(
+        'url' => $image_src[0],
+        'permalink' => get_permalink( $attachment_post_obj->ID ),
+        'title' => $attachment_post_obj->post_title,
+        'caption' => $attachment_post_obj->post_excerpt
+    );
 
-	return $banner;
+    return $banner;
     return $ancestor_id;
 }
 
@@ -219,9 +219,9 @@ function coenv_base_section_title($id) {
     $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
 
     if (coenv_base_post_parent($id)):
-        $section_title = '<div class="columns large-12 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
+        $section_title = '<div class="columns large-8 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
     elseif (!is_front_page()):
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
+        $section_title = '<div class="columns large-8 section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     endif;
     
     if ( is_singular( 'faculty' )) { //change faculty pages' section titles

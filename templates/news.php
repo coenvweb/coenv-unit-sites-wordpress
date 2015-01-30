@@ -97,18 +97,36 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
     	-->
+        
+        <div class="blog-meta clearfix">
+            <div class="small-6 columns left">
+                <?php 
+                echo '<p>' . get_the_date('M j, Y') .' / ';
+                $termlist = '';
+                foreach ($terms as $term) {
+                    $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                }
+                $termlist = rtrim($termlist,', ');
+                echo $termlist;
+                ?>
+                </p>
+            </div>
+            <div class="small-6 columns sharer right">
+                <?php $title = rawurlencode(get_the_title());
+                $shortlink = rawurlencode(wp_get_shortlink());
+                $site_name = rawurlencode(get_bloginfo('name'));
+                $twitter = get_option('twitter');
+                ?>
+                <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+                <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+            </div>
+		</div>
+            
         <?php
-        echo '<div class="blog-meta clearfix">';
-		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-		 $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
-		 echo '</p>';
-		
-		echo '</div>';
 		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
 		echo '<div class="post">';
