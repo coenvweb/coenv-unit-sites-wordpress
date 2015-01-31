@@ -1,31 +1,78 @@
-.title-row {
-    max-width: none;
-    border-bottom: #d7dee5 1px solid;
+// mobile header
+
+.tab-bar {
+    margin-bottom: 0;
+    text-align: center;
     background: $white;
+    border-bottom: 1px solid $border;
+    
+    .tab-bar-section {
+        padding-left: rem-calc(30);
+        margin: auto;
+    }
+
+    
+    h1 {
+        color: $text!important;
+        margin-top: rem-calc(15);
+        font-size: rem-calc(28)!important;
+        text-align: left;
+        @media #{$small-up} {
+            font-size: rem-calc(14)!important;
+            line-height: rem-calc(18);
+        }
+    }
+    .right-small, .left-small {
+        border: none;
+    }
+
+    .mobile-logo {
+        color: $accent;
+        font-size: rem-calc(20);
+        
+        #logo {
+            width: rem-calc(55);
+            fill: $accent;
+            margin-top: rem-calc(-10);
+            margin-left: rem-calc(10);
+        }
+    }
+    
+    .menu-icon span::after {
+        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+    }
+
+}
+<<<<<<< HEAD
+
+// desktop header
+
+.title-row {
+    background: $white;
+}
+
+.top-bar-container {
+    border-top: #d7dee5 1px solid;
+=======
+.section-title {
+	padding: 0 1rem;
+	margin: 0;
+	@include font-size(24);
+
+	h1 {
+		@include rem('line-height', 3); // 48
+		@include font-size(32);
+		margin: 0;
+		padding: 0;
+	}
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 }
 
 .title-area {
     margin: 0;
     list-style: none;
 }
-    #top-nav #menu-buttons li a {
-background: #b82828;
-color: #fff;
-}
-#top-nav #menu-buttons li.give a i {
-position: relative;
-top: .1em;
-margin-right: 2.8px;
-margin-right: .2rem;
-}
-#heart{
-    fill: #ffffff!important;
-    height: 10px;
-    width: 10px;
-    .path1 {
-        fill: #fff;
-    }
-}
+
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
@@ -45,10 +92,7 @@ margin-right: .2rem;
         }
     }
 }
-#heart {
-    width: 10px;
-    height: 10px;
-}
+
 .name {
     h1 {
         @include encode;
@@ -58,24 +102,28 @@ margin-right: .2rem;
             font-size: rem-calc(23)!important;
         }
         float: left;
-        margin: rem-calc(20) 0;
+        margin: rem-calc(18) 0;
         a {
             color: $text;
         }
     }
     #logo {
         fill: $accent;
-        width: rem-calc(108px);
-        height: rem-calc(73px);
+        width: rem-calc(108);
+        height: rem-calc(73);
         margin-right: rem-calc(10);
         vertical-align: middle;
+        
+        span {
+            @extend .visuallyhidden;
+        }
     }
 }
 
 .units {
     float: right;
     list-style: none;
-    margin: rem-calc(30) rem-calc(18);
+    margin: rem-calc(30) 0 0 rem-calc(18);
     
     .slash {
         margin: 0 rem-calc(12);
@@ -86,132 +134,26 @@ margin-right: .2rem;
     }
 }
 
-#logo {
-	span {
-		@extend .visuallyhidden;
-	}
+.section-title {
+    padding: 0 1rem;
+    margin: 0;     
+    a {
+        font-size: rem-calc(28);
+        @include encode_cb;
+
+        @media #{$medium-up} {
+            font-size: rem-calc(36);
+            max-width: 28%;
+        }
+    }
+    }
+.title-area {
+	list-style: none;
+	margin-left: 0;
 }
-
-.top-bar-container {
-    margin-bottom: 0!important;
-
-
+.breadcrumbs {
+	@include rem('margin-bottom',2);
 }
-<<<<<<< HEAD
 .breadcrumbs>* {
 	line-height: rem-calc(16);
-}
-
-// mobile header
-.tab-bar {
-    background: $white;
-    border-bottom: 1px solid $border;
-    
-    h1 {
-        color: $text!important;
-    }
-    
-    .right-small {
-        border-left: none;
-    }
-    
-    .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
-=======
-
-//header strip
-
-.page-row {
-    max-width: none;
-    
-    a {
-        
-        i {
-            font-size: rem-calc(30);
-            margin: rem-calc(5);
-            padding-top: 20px;
-        }
-    }
-    
-    &.mini {
-        //background-color: $accent;
-        .teal-wedge {
-
-            .sharing {
-                margin-top: rem-calc(10);
-                @media #{$medium-up} {
-                }
-            }
-        }
-    }
-    
-    .teal-wedge {
-        background-image: url(../assets/img/teal-wedge.svg);
-        background-repeat: no-repeat;
-        background-position: rem-calc(-510);
-        background-size: cover;
-        min-height: rem-calc(200);
-    }
-    .section-row {
-        margin-top: 0;
-        margin-bottom: rem-calc(20);
-    }
-    
-    .section-title {
-        padding: 0;
-        margin: rem-calc(10) 0;
-        @include font-size(24);
-        h1 {
-            margin: 0;
-            line-height: 1.2;
-        }
-        
-        h2 {
-            margin: 0;
-            line-height: 1.2;
-        }
-            
-        a {
-            font-size: rem-calc(28);
-            margin-left: rem-calc(15);
-            @include encode_cb;
-            
-            @media #{$medium-up} {
-                font-size: rem-calc(36);
-            }
-        
-            span {
-                font-size: rem-calc(14);
-                line-height: rem-calc(5);
-                display: none;
-            }
-            
-            &:hover {
-                color: $accent;
-                span {
-                    display: block;
-                }
-            }
-        }
-    }
-    
-    .sharing {
-        text-transform: uppercase;
-        @include encode_cb;
-        margin: rem-calc(10) 0;
-        
-        .share-text {
-            margin-right: rem-calc(5);
-        }
-        
-        a svg {
-            width: rem-calc(30);
-            fill: #000;
-            margin-bottom: rem-calc(-9);
-            &:hover {
-                fill: $accent;
-            }
-        }
->>>>>>> smea-base
-    }
 }

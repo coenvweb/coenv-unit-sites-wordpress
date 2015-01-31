@@ -85,6 +85,7 @@ $fields = get_fields();
 */
 
 if( $fields )
+<<<<<<< HEAD
 {
 	foreach( $fields as $field_name => $value )
 	{
@@ -99,9 +100,17 @@ if( $field['value'] ) {
 
 			if ($field_name == 'dataset_link') {
 				$rows = get_field('dataset_link');
+=======
+$field = get_field_object('dataset_link', $post->id, array('load_value' => true));
+if( $field['value'] ) {
+		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
+		echo '<div data-magellan-destination="' . $field_name . '" id="dataset-links" style="float: right; width: 20rem; margin: 0 2rem; padding: 1rem; background-color: #f3f3f3;">';
+			echo '<h3 style="margin-bottom: 1rem;">' . $field['label'] . '</h3>';
+			$rows = get_field('dataset_link');
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 				if($rows) {
 					foreach($rows as $row) {
-						echo '<a class="button" href="' . $row['dataset_link_url'] . '" target="_blank">' . $row['dataset_link_title'] . '</a>';
+						echo '<a class="button" href="' . $row['dataset_link_url'] . '" target="_blank" style="margin-right: 1rem;">' . $row['dataset_link_title'] . '</a>';
 					}
 				}
 		echo '</div>';
@@ -186,7 +195,12 @@ if( $field['value'] ) {
 			echo '<h2>' . $field['label'] . '</h2>';
 			echo $field['value'];
 		echo '</div>';
+<<<<<<< HEAD
+	}
+	}
+=======
 }
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 }
 
 ?>

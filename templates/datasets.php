@@ -90,7 +90,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 		<?php if ($coenv_cat_1 == 'dataset_region'): ?>
 		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> datasets from the region <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="left"><?php echo $wp_query->found_posts; ?> dataset<?php if((int)$wp_query->found_posts > 1): echo 's'; endif; ?> from the region <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
 			<div class="right"><a href="/data/cig-datasets/">all datasets &raquo;</a></div>
 		</div>
 		<?php endif; ?>

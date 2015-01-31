@@ -51,7 +51,7 @@ echo '</div>';
 		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 		echo '<div class="feature-info" style="background-color: rgb(51, 51, 51);">';
 			echo '<div class="feature-content" style="text-align: center;">';
-				echo '<h2>' . get_the_title() . '</h2>';
+				//echo '<h2>' . get_the_title() . '</h2>';
 				echo '<h2>' . $feature_excerpt . '</h2>';
 				if($rows)
 					{
@@ -80,10 +80,8 @@ echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
-?>
 <<<<<<< HEAD
-
-
+?>
 <?php 
 # Widget area for content blocks
 if ( is_active_sidebar( 'home-columns' ) ) : 
@@ -94,28 +92,46 @@ if ( is_active_sidebar( 'home-columns' ) ) :
 
 <?php endif; ?>
 
-
-
-
-=======
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
+				
+<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
+<div class="large-12 columns programs">
+	<div class="widget-area home-content" role="complementary">
+		<?php dynamic_sidebar( 'home-content' ); ?>
+	</div><!-- .widget-area -->
+</div>
 <?php endif; ?>
->>>>>>> 47861004a9a4b44eda03a31daf1fb39c9f2f446d
+
+<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+	<?php do_action('foundationPress_after_content'); ?>
+	<ul class="widget-area after-content">
+	<?php dynamic_sidebar("after-content"); ?>
+	</ul>
+<?php endif; ?>
 <?php
+=======
+
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 # News with featured news
 		
-$home_args = array(
-	'post_type'	=> 'post',
-	'post_status' => 'publish',
-	'posts_per_page' => 3,
-);
+$sticky = get_option( 'sticky_posts' );
+$sticky_count = count($sticky);
+$posts_on_home = 3; //set posts_per_page here
+
+if( $sticky ) {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => $posts_on_home - $sticky_count,
+        'post_status' => 'publish',
+    );
+}
+else {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => $posts_on_home,
+        'post_status' => 'publish',
+    );
+}
+
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
@@ -230,6 +246,8 @@ $wp_query = new WP_Query( $home_args );
 	endwhile;
 	?>
 <?php endif; ?>
+<<<<<<< HEAD
+=======
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">
@@ -245,9 +263,11 @@ $wp_query = new WP_Query( $home_args );
 	<?php dynamic_sidebar("after-content"); ?>
 	</ul>
 <?php endif; ?>
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+</div>
 </div>
 <?php get_footer(); ?>

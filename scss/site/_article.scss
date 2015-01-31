@@ -137,8 +137,15 @@
 	}
 
 	blockquote {
-		@include rem('margin', 1, 2);
-
+		@include rem('margin', 1);
+		@include rem('padding', 1, 2);
+		background-color: #ebebea;
+		border-top: solid 6px #cccccd;
+		border-left: 0;
+		p {
+			color: #4b2e84;
+			font-weight: bold;
+		}
 	} // blockquote
 
 	// tables

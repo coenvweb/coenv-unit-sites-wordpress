@@ -79,14 +79,14 @@
             <?php
             
             add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            //$exclude = implode(',',coenv_base_menu_exclude());
+            $exclude = implode(',',coenv_base_menu_exclude());
             wp_list_pages( array(
                 'depth' => 0,
                 'walker' => new top_bar_mobile_walker(),
                 'title_li' => false,
                 'sort_column' => 'menu_order, post_title',
                 'post_type'    => 'page',
-               // 'exclude' => '$exclude',
+                'exclude' => '$exclude',
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             ?>

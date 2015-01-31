@@ -41,12 +41,17 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		  * Blog loop
 		  */
 		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-		$query_args = array(
+        $query_args = array(
 			'post_type'	=> 'post',
 			'post_status' => 'publish',
+<<<<<<< HEAD
+			'posts_per_page' => 10,
+            'ignore_sticky_posts' => 1,
+=======
 			'posts_per_page' => 20,
 			'orderby' => 'date',
 			'order' => 'DESC',
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 			'paged' => $paged
 		);
 		// Category filter
@@ -102,6 +107,39 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
     	-->
+<<<<<<< HEAD
+        
+        <div class="news-meta small-12 columns">
+        <div class="blog-meta clearfix small-6 columns left">
+		<?php 
+        echo '<p>' . get_the_date('M j, Y') .' / ';
+		$termlist = '';
+		foreach ($terms as $term) {
+            $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+		}
+		$termlist = rtrim($termlist,', ');
+		echo $termlist;
+        ?>
+        </p>
+		</div>
+
+        <div class="blog-meta clearfix sharer small-6 columns right">
+        <?php $title = rawurlencode(get_the_title());
+        $shortlink = rawurlencode(wp_get_shortlink());
+        $site_name = rawurlencode(get_bloginfo('name'));
+        $twitter = get_option('twitter');
+        ?>
+        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+		</div>
+		</div>
+            
+        <?php
+=======
         <?php
         echo '<div class="blog-meta clearfix">';
 		echo '<p>' . get_the_date('M j, Y') .' / ';
@@ -114,6 +152,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		 echo '</p>';
 		
 		echo '</div>';
+>>>>>>> 41551f407735a3e4442efb0884188338747eeab8
 		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
 		echo '<div class="post">';
