@@ -3,6 +3,8 @@
 	padding-right: 0 !important;
 }
 .side-nav {
+
+		border-top: 1px solid #dddddd;
 		margin: 0 0 2rem 0;
 		padding: 0;
 		line-height: 10px;
@@ -15,15 +17,35 @@
 			padding: 0;
 			margin: 0;
 			font-size: 1.25rem;
-			@include serif;
+			@include encode_cb;
 
 			a {
 				display: block;
 				line-height: 125%;
+				&.active {
+				@include encode_cb;
+				}
+			}
+
+			ul {
+				margin-bottom: 0;
+				
+
+				li {
+					border: 0;
+					font-size: 1.15rem;
+					padding-left: 2rem;
+
+				}
+
+
 			}
 		}
 }
 #sidebar {
+	.section-title {
+		@include encode_cb;
+	}
 	.inline-list {
 		margin-left: 0;
 	}

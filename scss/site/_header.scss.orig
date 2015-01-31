@@ -1,0 +1,217 @@
+.title-row {
+    max-width: none;
+    border-bottom: #d7dee5 1px solid;
+    background: $white;
+}
+
+.title-area {
+    margin: 0;
+    list-style: none;
+}
+    #top-nav #menu-buttons li a {
+background: #b82828;
+color: #fff;
+}
+#top-nav #menu-buttons li.give a i {
+position: relative;
+top: .1em;
+margin-right: 2.8px;
+margin-right: .2rem;
+}
+#heart{
+    fill: #ffffff!important;
+    height: 10px;
+    width: 10px;
+    .path1 {
+        fill: #fff;
+    }
+}
+.tab-bar {
+    margin-bottom: 0;
+    text-align: center;
+    
+    .tab-bar-section {
+        left: 0;
+        right: 0;
+        margin: 0 15%;
+    }
+    
+    h1 {
+        font-size: rem-calc(28)!important;
+        @media #{$small-up} {
+            font-size: rem-calc(14)!important;
+            max-width: rem-calc(250);
+            line-height: rem-calc(18);
+        }
+    }
+}
+#heart {
+    width: 10px;
+    height: 10px;
+}
+.name {
+    h1 {
+        @include encode;
+        font-weight: 500!important;
+        font-size: rem-calc(18)!important;
+        @media #{$large-up} {
+            font-size: rem-calc(23)!important;
+        }
+        float: left;
+        margin: rem-calc(20) 0;
+        a {
+            color: $text;
+        }
+    }
+    #logo {
+        fill: $accent;
+        width: rem-calc(108px);
+        height: rem-calc(73px);
+        margin-right: rem-calc(10);
+        vertical-align: middle;
+    }
+}
+
+.units {
+    float: right;
+    list-style: none;
+    margin: rem-calc(30) rem-calc(18);
+    
+    .slash {
+        margin: 0 rem-calc(12);
+    }
+    
+    .uw-name {
+        margin-right: rem-calc(16);
+    }
+}
+
+#logo {
+	span {
+		@extend .visuallyhidden;
+	}
+}
+
+.top-bar-container {
+    margin-bottom: 0!important;
+
+
+}
+<<<<<<< HEAD
+.breadcrumbs>* {
+	line-height: rem-calc(16);
+}
+
+// mobile header
+.tab-bar {
+    background: $white;
+    border-bottom: 1px solid $border;
+    
+    h1 {
+        color: $text!important;
+    }
+    
+    .right-small {
+        border-left: none;
+    }
+    
+    .menu-icon span::after {
+        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+=======
+
+//header strip
+
+.page-row {
+    max-width: none;
+    
+    a {
+        
+        i {
+            font-size: rem-calc(30);
+            margin: rem-calc(5);
+            padding-top: 20px;
+        }
+    }
+    
+    &.mini {
+        //background-color: $accent;
+        .teal-wedge {
+
+            .sharing {
+                margin-top: rem-calc(10);
+                @media #{$medium-up} {
+                }
+            }
+        }
+    }
+    
+    .teal-wedge {
+        background-image: url(../assets/img/teal-wedge.svg);
+        background-repeat: no-repeat;
+        background-position: rem-calc(-510);
+        background-size: cover;
+        min-height: rem-calc(200);
+    }
+    .section-row {
+        margin-top: 0;
+        margin-bottom: rem-calc(20);
+    }
+    
+    .section-title {
+        padding: 0;
+        margin: rem-calc(10) 0;
+        @include font-size(24);
+        h1 {
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            margin: 0;
+            line-height: 1.2;
+        }
+            
+        a {
+            font-size: rem-calc(28);
+            margin-left: rem-calc(15);
+            @include encode_cb;
+            
+            @media #{$medium-up} {
+                font-size: rem-calc(36);
+            }
+        
+            span {
+                font-size: rem-calc(14);
+                line-height: rem-calc(5);
+                display: none;
+            }
+            
+            &:hover {
+                color: $accent;
+                span {
+                    display: block;
+                }
+            }
+        }
+    }
+    
+    .sharing {
+        text-transform: uppercase;
+        @include encode_cb;
+        margin: rem-calc(10) 0;
+        
+        .share-text {
+            margin-right: rem-calc(5);
+        }
+        
+        a svg {
+            width: rem-calc(30);
+            fill: #000;
+            margin-bottom: rem-calc(-9);
+            &:hover {
+                fill: $accent;
+            }
+        }
+>>>>>>> smea-base
+    }
+}

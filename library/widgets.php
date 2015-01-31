@@ -240,11 +240,14 @@ class coenv_base_subnav extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-     
+          if ($GLOBALS['post']->post_parent) {
+            echo coenv_base_section_title($GLOBALS['post']->ID);
+          }
           echo $args['before_widget'];
+
           echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
           echo $args['after_widget'];
-     }  
+     } 
      /**
       * Back-end widget form.
       *
@@ -281,61 +284,61 @@ add_action( 'widgets_init', 'register_coenv_base_subnav' );
 register_widget( 'CoEnv_Widget_Events' );
 class CoEnv_Widget_Events extends WP_Widget {
 
-	public function __construct() {
-		$args = array(
-			'classname' => 'widget widget-events',
-			'description' => __( 'Display a short list of Trumba calendar events.', 'coenv' )
-		);
+  public function __construct() {
+    $args = array(
+      'classname' => 'widget widget-events',
+      'description' => __( 'Display a short list of Trumba calendar events.', 'coenv' )
+    );
  
-		parent::__construct(
-			'trumba_events', // base ID
-			'Trumba Events', // name
-			$args
-		);
-	}
+    parent::__construct(
+      'trumba_events', // base ID
+      'Trumba Events', // name
+      $args
+    );
+  }
 
-	public function widget( $args, $instance ) {
-		extract( $args );
+  public function widget( $args, $instance ) {
+    extract( $args );
 
-		$title = apply_filters( 'widget_title', $instance['title'] );
-		$feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
-		$events_url = apply_filters( 'events_url', $instance['events_url'] );
-		$posts_per_page = (int) $instance['posts_per_page'];
+    $title = apply_filters( 'widget_title', $instance['title'] );
+    $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
+    $events_url = apply_filters( 'events_url', $instance['events_url'] );
+    $posts_per_page = (int) $instance['posts_per_page'];
 
-		if ( !isset( $feed_url ) || empty( $feed_url ) ) {
-			return;
-		}
+    if ( !isset( $feed_url ) || empty( $feed_url ) ) {
+      return;
+    }
 
-		// get cached XML from WP transient API
-		$events_xml = get_transient( 'trumba_events_xml' );
-		if ( $events_xml === false || $events_xml === '' ) {
-			$events_xml = file_get_contents( $feed_url );
-			set_transient( 'trumba_events_xml', $events_xml, 1 * MINUTE_IN_SECONDS );
-		}
-		
-		$xml = new SimpleXmlElement($events_xml);
-		
-		$events = array();
+    // get cached XML from WP transient API
+    $events_xml = get_transient( 'trumba_events_xml' );
+    if ( $events_xml === false || $events_xml === '' ) {
+      $events_xml = file_get_contents( $feed_url );
+      set_transient( 'trumba_events_xml', $events_xml, 1 * MINUTE_IN_SECONDS );
+    }
+    
+    $xml = new SimpleXmlElement($events_xml);
+    
+    $events = array();
 
-		foreach ($xml->channel->item as $item) {     
-			$events[] = array(
-				'title' => $item->title,
-				'date'	=> $item->category,
-				'url'	=> $item->link
-			);
-		}
+    foreach ($xml->channel->item as $item) {     
+      $events[] = array(
+        'title' => $item->title,
+        'date'  => $item->category,
+        'url' => $item->link
+      );
+    }
 
-		if ( empty( $events ) ) {
-			return;
-		}
+    if ( empty( $events ) ) {
+      return;
+    }
 
-		$events = array_slice( $events, 0, $posts_per_page );
+    $events = array_slice( $events, 0, $posts_per_page );
 
-		?>
-			<?php echo $before_widget; ?>
+    ?>
+      <?php echo $before_widget; ?>
             <?php if ( $events_url != '' ) : ?>
                                    
-						<a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
+            <a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
             <?php endif ?>
         
         
@@ -343,80 +346,80 @@ class CoEnv_Widget_Events extends WP_Widget {
                     echo $before_title;
                 }
         ?>
-					<h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
+          <h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
             <?php
                 if (!is_front_page()) {
                     echo $after_title;
                 }
         ?>
 
-			<ul class="event-list">
+      <ul class="event-list">
 
-			<?php if ( count( $events ) ) : ?>
+      <?php if ( count( $events ) ) : ?>
 
-				<?php foreach ( $events as $key => $event ) : ?>
+        <?php foreach ( $events as $key => $event ) : ?>
 
 
-						<li>
-							<a href="<?php echo $event['url'] ?>">
-							<p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
-							<p class="title"><?php echo $event['title'] ?></p>
-							</a>
-						</li>
+            <li>
+              <a href="<?php echo $event['url'] ?>">
+              <p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
+              <p class="title"><?php echo $event['title'] ?></p>
+              </a>
+            </li>
 
-			
+      
 
-				<?php endforeach ?>
+        <?php endforeach ?>
 
-			<?php else : ?>
+      <?php else : ?>
 
-				<li><p>No events found.</p></li>
+        <li><p>No events found.</p></li>
 
-			<?php endif ?>
-				
-			</ul>
+      <?php endif ?>
+        
+      </ul>
 
-			<?php echo $after_widget ?>
-		
-		<?php
-	}
+      <?php echo $after_widget ?>
+    
+    <?php
+  }
 
-	public function form( $instance ) {
+  public function form( $instance ) {
 
-		$title = isset( $instance['title'] ) ? $instance['title'] : __( 'Events', 'coenv' );
-		$feed_url = $instance['feed_url'];
-		$events_url = $instance['events_url'];
-		$posts_per_page = isset( $instance['posts_per_page'] ) ? (int) $instance['posts_per_page'] : 5;
+    $title = isset( $instance['title'] ) ? $instance['title'] : __( 'Events', 'coenv' );
+    $feed_url = $instance['feed_url'];
+    $events_url = $instance['events_url'];
+    $posts_per_page = isset( $instance['posts_per_page'] ) ? (int) $instance['posts_per_page'] : 5;
  
-		?>
-			<p>
-				<label for="<?php echo $this->get_field_name( 'title' ) ?>"><?php _e( 'Title:' ) ?></label>
-				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $title ) ?>" />
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_name( 'feed_url' ) ?>"><?php _e( 'Feed URL:' ) ?></label>
-				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'feed_url' ) ?>" name="<?php echo $this->get_field_name( 'feed_url' ) ?>" value="<?php echo esc_attr( $feed_url ) ?>" />
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_name( 'events_url' ) ?>"><?php _e( 'More link (URL):' ) ?></label>
-				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'events_url' ) ?>" name="<?php echo $this->get_field_name( 'events_url' ) ?>" value="<?php echo esc_attr( $events_url ) ?>" />
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_name( 'posts_per_page' ) ?>">Number of events to show: </label>
-				<input name="<?php echo $this->get_field_name( 'posts_per_page' ) ?>" type="text" size="3" value="<?php echo $posts_per_page ?>" />
-			</p>
-		<?php
-	}
+    ?>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'title' ) ?>"><?php _e( 'Title:' ) ?></label>
+        <input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $title ) ?>" />
+      </p>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'feed_url' ) ?>"><?php _e( 'Feed URL:' ) ?></label>
+        <input type="text" class="widefat" id="<?php echo $this->get_field_id( 'feed_url' ) ?>" name="<?php echo $this->get_field_name( 'feed_url' ) ?>" value="<?php echo esc_attr( $feed_url ) ?>" />
+      </p>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'events_url' ) ?>"><?php _e( 'More link (URL):' ) ?></label>
+        <input type="text" class="widefat" id="<?php echo $this->get_field_id( 'events_url' ) ?>" name="<?php echo $this->get_field_name( 'events_url' ) ?>" value="<?php echo esc_attr( $events_url ) ?>" />
+      </p>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'posts_per_page' ) ?>">Number of events to show: </label>
+        <input name="<?php echo $this->get_field_name( 'posts_per_page' ) ?>" type="text" size="3" value="<?php echo $posts_per_page ?>" />
+      </p>
+    <?php
+  }
 
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['feed_url'] = strip_tags( $new_instance['feed_url'] );
-		$instance['posts_per_page'] = strip_tags( $new_instance['posts_per_page'] );
-		$instance['events_url'] = strip_tags( $new_instance['events_url'] );
-		 
-		return $instance;
-	}
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = strip_tags( $new_instance['title'] );
+    $instance['feed_url'] = strip_tags( $new_instance['feed_url'] );
+    $instance['posts_per_page'] = strip_tags( $new_instance['posts_per_page'] );
+    $instance['events_url'] = strip_tags( $new_instance['events_url'] );
+     
+    return $instance;
+  }
 
 }
 
@@ -657,66 +660,66 @@ add_action( 'widgets_init', 'register_coenv_base_index_dates' );
 class CoEnv_Widget_Social extends WP_Widget {
  
   function __construct() {
-		$args = array(
-			'classname' => 'widget-social',
-			'description' => __( 'Display social media links from the General Settings', 'coenv' )
-		);
+    $args = array(
+      'classname' => 'widget-social',
+      'description' => __( 'Display social media links from the General Settings', 'coenv' )
+    );
  
-		parent::__construct(
-			'social_links', // base ID
-			'Social Media Links', // name
-			$args
-		);
-	}
+    parent::__construct(
+      'social_links', // base ID
+      'Social Media Links', // name
+      $args
+    );
+  }
  
-	public function form( $instance ) {
+  public function form( $instance ) {
  
-		if ( isset( $instance['title'] ) ) {
-			$title = $instance['title'];
-		} else {
-			$title = __( 'Get Connected', 'coenv' );
-		}
+    if ( isset( $instance['title'] ) ) {
+      $title = $instance['title'];
+    } else {
+      $title = __( 'Get Connected', 'coenv' );
+    }
  
-		?>
-			<p>
-				<label for="<?php echo $this->get_field_name( 'title' ) ?>"><?php _e( 'Title:' ) ?></label>
-				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $title ) ?>" />
-			</p>
-		<?php
-	}
+    ?>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'title' ) ?>"><?php _e( 'Title:' ) ?></label>
+        <input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $title ) ?>" />
+      </p>
+    <?php
+  }
  
-	public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		 
-		return $instance;
-	}
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = strip_tags( $new_instance['title'] );
+     
+    return $instance;
+  }
  
-	public function widget( $args, $instance ) {
-		extract( $args );
-		$title = apply_filters( 'widget_title', $instance['title'] );
+  public function widget( $args, $instance ) {
+    extract( $args );
+    $title = apply_filters( 'widget_title', $instance['title'] );
  
-		echo $before_widget;
-		
+    echo $before_widget;
+    
         if (!is_front_page()) {
             echo $before_title . '<span>' . $title . '</span>' . $after_title;
         }
         ?>
         
-		<ul>
-				<?php if (get_option('facebook')) { ?><li><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><i class="fi-social-facebook"> </i> Facebook</a></li><?php } ?>
-				<?php if (get_option('twitter')) { ?><li><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><i class="fi-social-twitter"> </i> Twitter</a></li><?php } ?>
-				<?php if (get_option('youtube')) { ?><li><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><i class="fi-social-youtube"> </i> YouTube</a></li><?php } ?>
+    <ul>
+        <?php if (get_option('facebook')) { ?><li><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><i class="fi-social-facebook"> </i> Facebook</a></li><?php } ?>
+        <?php if (get_option('twitter')) { ?><li><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><i class="fi-social-twitter"> </i> Twitter</a></li><?php } ?>
+        <?php if (get_option('youtube')) { ?><li><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><i class="fi-social-youtube"> </i> YouTube</a></li><?php } ?>
                 <?php if (get_option('linkedin')) { ?><li><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><i class="fi-social-linkedin"> </i> LinkedIn</a></li><?php } ?>
                 <?php if (get_option('blog')) { ?><li><a href="<?php echo get_option('blog'); ?>" title="<?php bloginfo('name'); ?>'s Blog" target="_blank" rel="nofollow"><i class="fi-results"> </i> Blog</a></li><?php } ?>
                 <?php if (get_option('email_newsletter')) { ?><li><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><i class="fi-at-sign"> </i> Newsletter</a></li><?php } ?>
-				<li><a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><i class="fi-rss"> </i> Feeds</a></li>
-				<?php if (get_option('uw_social')) { ?><li><a href="<?php echo get_option('uw_social'); ?>" title="<?php bloginfo('name'); ?> on UW Social" target="_blank" rel="nofollow"><i class="icon-icon-uw"> </i> UW Social</a></li><?php } ?>
-			</ul>
+        <li><a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><i class="fi-rss"> </i> Feeds</a></li>
+        <?php if (get_option('uw_social')) { ?><li><a href="<?php echo get_option('uw_social'); ?>" title="<?php bloginfo('name'); ?> on UW Social" target="_blank" rel="nofollow"><i class="icon-icon-uw"> </i> UW Social</a></li><?php } ?>
+      </ul>
  
-		<?php
-		echo $after_widget;
-	}
+    <?php
+    echo $after_widget;
+  }
 }
 
 function register_coenv_widget_social() {
@@ -724,3 +727,116 @@ function register_coenv_widget_social() {
 }
 
 add_action( 'widgets_init', 'register_coenv_widget_social' );
+
+// unregister all default WP Widgets
+function unregister_default_wp_widgets() {
+    unregister_widget('WP_Widget_Pages');
+    unregister_widget('WP_Widget_Calendar');
+    unregister_widget('WP_Widget_Links');
+    unregister_widget('WP_Widget_Meta');
+    unregister_widget('WP_Widget_Recent_Posts');
+    unregister_widget('WP_Widget_Recent_Comments');
+    unregister_widget('WP_Widget_RSS');
+    unregister_widget('WP_Widget_Tag_Cloud');
+    unregister_widget('WP_Nav_Menu_Widget');
+}
+add_action('widgets_init', 'unregister_default_wp_widgets', 1);
+
+
+
+
+
+
+  /**
+    * Stats and info widget
+    */
+
+class coenv_base_stats extends WP_Widget {
+
+     
+     function __construct() {
+          parent::__construct(
+               'coenv_base_stats', // Base ID
+               __('Stats & Info', 'text_domain'), // Name
+               array( 'description' => __( 'Statistics and information for the CIG homepage', 'text_domain' ), ) // Args
+          );
+     }
+     
+
+     /**
+      * Front-end display of widget.
+      *
+      * @see WP_Widget::widget()
+      *
+      * @param array $args     Widget arguments.
+      * @param array $instance Saved values from database.
+      */
+     public function widget( $args, $instance ) {
+     
+          echo $args['before_widget'];
+          
+          if ( ! empty( $instance['title'] ) ) {
+               echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+          }
+          echo '<div class="large-12">';
+          echo '<div class="row">';
+          echo '<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">56<br />Projects in 2014</div>';
+          echo '<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">163<br />Partners in the Field</div>';
+          echo '<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">1,295<br />Papers Published</div>';
+          echo '</div>';
+          echo '<div class="row" style="text-align: center;">';
+          echo '<div class="large-12"><a class="button">Learn More About Our Partners</a></div>';
+          echo '</div>';
+          echo '</div>';
+
+          echo $args['after_widget'];
+     }
+
+     /**
+      * Back-end widget form.
+      *
+      * @see WP_Widget::form()
+      *
+      * @param array $instance Previously saved values from database.
+      */
+     public function form( $instance ) {
+      //var_dump($instance);
+
+          if ( isset( $instance[ 'title' ] ) ) {
+               $title = $instance[ 'title' ];
+          }
+          else {
+               $title = __( 'Stats & Info', 'text_domain' );
+          }
+          ?>
+          <p>
+          <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+          <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+          </p>
+         
+          <?php 
+     }
+
+     /**
+      * Sanitize widget form values as they are saved.
+      *
+      * @see WP_Widget::update()
+      *
+      * @param array $new_instance Values just sent to be saved.
+      * @param array $old_instance Previously saved values from database.
+      *
+      * @return array Updated safe values to be saved.
+      */
+     public function update( $new_instance, $old_instance ) {
+          $instance = array();
+          $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+
+
+          return $instance;
+     }
+
+} 
+function register_coenv_base_stats() {
+    register_widget( 'coenv_base_stats' );
+}
+add_action( 'widgets_init', 'register_coenv_base_stats' );

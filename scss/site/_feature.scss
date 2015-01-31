@@ -17,9 +17,10 @@
 	.feature-info-container {
 		
 		.feature-info {
-			width: 100%;
-			padding: rem-calc(16);
+			background-color: $accent;
 			min-height: rem-calc(170);
+			padding: rem-calc(16);
+			width: 100%;
 		}
 		
 		h2 {

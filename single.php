@@ -1,9 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<?php coenv_base_section_title($post->ID); ?>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
+	<h1>News and Events</h1>
 	<div class="small-12 medium-8 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
@@ -16,6 +13,7 @@
 						<?php get_template_part( 'partials/partial', 'article' ) ?>
 
 					<?php endwhile ?>
+					<?php if ( get_field('story_link_url') ) : echo '<p><a class="button" href="' . get_field('story_link_url') . '" target="_blank">' . get_field('story_source_name') . '</a></p>'; endif; ?>
 
 			<?php endif ?>
 			</div>
@@ -31,7 +29,7 @@
 			<?php do_action('foundationPress_post_before_comments'); ?>
 			<?php comments_template(); ?>
 			<?php do_action('foundationPress_post_after_comments'); ?>
-		</article>	
+		</article>
 	<?php do_action('foundationPress_after_content'); ?>
 
 	</div>

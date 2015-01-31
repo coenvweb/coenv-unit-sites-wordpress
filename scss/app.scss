@@ -1,9 +1,9 @@
 /* Global config */
 @import "config/colors"; // Your custom color scheme
-@import "config/fonts"; // Your custom fonts
 @import "config/mixins"; // Your custom mixins
 @import "config/settings"; // Default foundation settings file. Uncomment each setting you need to change
 @import "config/defaults"; // Default styles file. Global styles.
+@import "config/fonts"; // Your custom fonts
 
 /* Foundation 5 */
 @import "foundation"; // Foundation 5 by Zurb
@@ -17,13 +17,14 @@
 @import "site/structure"; // Your site structure
 @import "site/top-menu"; // top standard menu
 @import "site/main-menu"; // main standard menu
+@import "site/mobile-menu"; // main mobile menu
 @import "site/side-menu"; // side standard menu
 @import "site/forms"; // form fields
 @import "site/header"; // header styles
+@import "site/home"; // widget styles
 @import "site/buttons"; // button styles
 @import "site/footer"; // footer styles
 @import "site/article"; // article styles
-@import "site/type"; // type styles
 @import "site/share"; // share button styles
 @import "site/feature"; // feature styles
 @import "site/news"; // news styles
@@ -37,19 +38,8 @@
 
 
 // Sort into separate .scss files
-#sidebar .widget_custom_post_widget {
-padding-left: 2%;
-}
-
-
-#sidebar .widget_img {
-	float: left;
-	width: 35%;
-}
 #sidebar .widget_content {
-	float: left;
-	margin-left: 15px;
-	width: 60%;
+	margin-top: 15px;
 	p {
 		font-size: 1rem;
 	}
@@ -60,7 +50,7 @@ padding-left: 2%;
 }
 #after-content .widget_content {
 	float: left;
-	margin-left: 0;
+	padding-left: rem-calc(10);
 	width: 80%;
 
 	p {
@@ -75,7 +65,7 @@ padding-left: 2%;
 	width: auto;
 	margin: 0;
 	&:first-child {
-		margin-right: 5px;
+        margin-left: rem-calc(10);
 	}
 }
 #after-content .widget_img {
@@ -204,7 +194,37 @@ div.news {
 	margin-bottom: 0;
 	padding: .5rem;
 	}
+}
+p span.intro {
+	font-size: 1.4rem;
+}
+// Move to plugin?
+html .mceContentBody {
+	padding: 2rem !important;
+}
 
+#dataset-links {
+	background-color: #f3f3f3;
+	float: right;
+	margin: 0 2rem;
+	padding: 1rem;
+	width: 20rem;
 
+	a.button {
+		margin-right: 1rem;
+		color: #000;
+		text-decoration: none;
+	}
+	h2 {
+		font-size: 1.25rem;
+		margin-top: 0;
+	}
 
 }
+body.single-datasets .entry-content a {
+	color: #4b2e83;
+	text-decoration: underline;
+}
+	
+
+
