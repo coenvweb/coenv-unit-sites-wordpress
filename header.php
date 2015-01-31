@@ -192,7 +192,7 @@
 ?>
     <?php if (($banner) && (!is_single())) {
             echo '<div class="page-row"';
-            echo 'style="background-image: url(' . $banner['url'] . '); height: 200px;">';
+            echo 'style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="teal-wedge">';
         }
      ?>

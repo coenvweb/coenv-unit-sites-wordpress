@@ -110,6 +110,10 @@
     background-position: 50%;
     color: $white;
     overflow: hidden;
+    min-height: rem-calc(100);
+    @media #{$medium-up} {
+        min-height: rem-calc(200);
+    }
     
     a {
         color: $white;
@@ -148,27 +152,35 @@
     .teal-wedge {
         background-image: url(../assets/img/teal-wedge.svg);
         background-repeat: no-repeat;
-        background-position: rem-calc(-400) 0;
+        background-position: rem-calc(-500) 0;
         background-size: rem-calc(1400);
-        min-height: rem-calc(200);
+        height: 100px;
+        position: relative;
+        @media #{$medium-up} {
+            height: 200px;
+        }
+        .inlinesvg & {
+            background-size: cover!important;
+            @media #{$small-only} {
+                background-position: rem-calc(-200) 0;
+            }
+        }
     }
     .section-row {
-        position: relative;
-        bottom: 20px;
+        height: 100%;
     }
     .section-title {
-            
-        a {
-            position: absolute;
-            bottom: rem-calc(-180);
-            font-size: rem-calc(28);
+        position: absolute;
+        bottom: rem-calc(-14);
+        @media #{$medium-up} {
             margin-left: rem-calc(15);
+            font-size: rem-calc(36);
+            max-width: 28%;
+        }
+
+        a {
+            font-size: rem-calc(28);
             @include encode_cb;
-            
-            @media #{$medium-up} {
-                font-size: rem-calc(36);
-                max-width: 28%;
-            }
         
             span {
                 font-size: rem-calc(14);
