@@ -73,7 +73,7 @@ $wp_query = new WP_Query( $query_args );
 		  $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-full.jpg';
 		}
 		echo '<li class="faculty-list-item">';
-		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
+		echo '<a href="' . $faculty_link . '"><div class="faculty-image"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div></a>';
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
 		echo '</li>';
 		endwhile;

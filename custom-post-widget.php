@@ -22,17 +22,30 @@ $rows = get_field('add_links', $content_post -> ID);
 
 if($rows) {
     $buttons = '<ul class="widget_links">';
+    $first = true;
     foreach($rows as $row) {
         if($row['link_type'] == 'internal') {
             $link_title =  $row['link_to_a_page_on_this_site'][0]['link_title_internal'];
             $link_url = get_permalink($row['link_to_a_page_on_this_site'][0]['select_page'][0]);
             $link_target = 'self';	
             $buttons .= '<li><a class="button white" title="' . $link_title . '" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
+            if ( $first ) {
+                $first_link_title = $link_title;
+                $first_link_url = $link_url;
+                $first_link_target = $link_target;
+                $first = false;
+            }
         } elseif ($row['link_type'] == 'external') {
             $link_title = $row['link_to_an_external_site'][0]['link_title'];
             $link_url = $row['link_to_an_external_site'][0]['link_url'];
             $link_target ='blank';
             $buttons .= '<li><a class="button white"  title="' . $link_title . '" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
+            if ( $first ) {
+                $first_link_title = $link_title;
+                $first_link_url = $link_url;
+                $first_link_target = $link_target;
+                $first = false;
+            }
         } 
     }
     $buttons .= '</ul>';

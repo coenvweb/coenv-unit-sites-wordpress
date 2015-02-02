@@ -182,6 +182,7 @@
                 </section>
             </nav>
         </div>
+    </div>
 
 <?php if (!is_front_page()) : ?>
 <section class="container" role="document">
@@ -203,6 +204,7 @@
      ?>
     <div class="section-row row">
         <?php echo coenv_base_section_title($post->ID); ?>
+    </div>
     </div>
     </div>
 </div>
