@@ -3,7 +3,7 @@
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
-    background: $white;
+    background: $accent;
     border-bottom: 1px solid $border;
     
     .tab-bar-section {
@@ -13,7 +13,7 @@
 
     
     h1 {
-        color: $text!important;
+        color: $white;
         margin-top: rem-calc(15);
         font-size: rem-calc(28)!important;
         text-align: left;
@@ -31,15 +31,15 @@
         font-size: rem-calc(20);
         
         #logo {
-            width: rem-calc(55);
-            fill: $accent;
-            margin-top: rem-calc(-10);
+            height: 50px;
+            width: 74px;
             margin-left: rem-calc(10);
+            fill: $white;
         }
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+        box-shadow: 0 0px 0 1px $white,0 7px 0 1px $white,0 14px 0 1px $white;
     }
 
 }
@@ -47,18 +47,24 @@
 // desktop header
 
 .title-row {
-    background: $white;
+    background: $accent;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+    @media #{$medium-up} {
+        //height: rem-calc(115);
+    }
+    .columns {
+    max-height: 108px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    }
 }
-
-.top-bar-container {
-    border-top: #d7dee5 1px solid;
-}
-
 .title-area {
     margin: 0;
     list-style: none;
 }
-
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
@@ -68,7 +74,6 @@
         right: 0;
         margin: 0 15%;
     }
-    
     h1 {
         font-size: rem-calc(28)!important;
         @media #{$small-up} {
@@ -78,25 +83,26 @@
         }
     }
 }
-
 .name {
     h1 {
         @include encode;
+        height: 93px;
         font-weight: 500!important;
         font-size: rem-calc(18)!important;
         @media #{$large-up} {
             font-size: rem-calc(23)!important;
         }
         float: left;
-        margin: rem-calc(18) 0;
+        margin: 22px 0 0 0;
+        //margin: rem-calc(18) 0;
         a {
-            color: $text;
+            color: $white;
         }
     }
     #logo {
-        fill: $accent;
-        width: rem-calc(108);
-        height: rem-calc(73);
+        fill: #fff;
+        width: rem-calc(140);
+        height: rem-calc(94);
         margin-right: rem-calc(10);
         vertical-align: middle;
         
@@ -107,17 +113,25 @@
 }
 
 .units {
-    float: right;
+    float: left;
     list-style: none;
-    margin: rem-calc(30) 0 0 rem-calc(18);
+    margin: rem-calc(36) 0 0 rem-calc(8);
     
     .slash {
-        margin: 0 rem-calc(12);
+        margin: 0 rem-calc(20);
+    }
+    .college-name {
+        margin-top: 16px;
     }
     
     .uw-name {
+        margin-top: 8px;
         margin-right: rem-calc(16);
     }
+}
+.unit-logo {
+    float: right;
+    margin-top: 8px;
 }
 
 .section-title {
