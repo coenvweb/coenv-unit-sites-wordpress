@@ -44,9 +44,22 @@
 .featured-news {
     .featured-thumbnail {
         text-align: center;
+        white-space: nowrap;
+        position: relative;
+        min-height: rem-calc(200);
+        overflow: hidden;
         
+        @media #{$large-up} {
+            min-height: rem-calc(300);
+        }
+            
         img {
-            width: 100%;
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            margin:auto;
         }
     }
     
