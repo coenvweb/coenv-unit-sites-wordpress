@@ -150,11 +150,10 @@
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>
-            <div class="units show-for-large-up">
+            <div class="units show-for-medium-up">
                 <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left">
                 <a href="http://coenv.uw.edu" name="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="right college-name"></a><br />
                 <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="right uw-name"></a>
-
           </div>
           <div class="unit-logo">
           <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-cig-header.png" class="right"/></a>

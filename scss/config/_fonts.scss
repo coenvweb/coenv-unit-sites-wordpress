@@ -23,6 +23,13 @@
 }
 
 @font-face {
+    font-family: open-sans-bold;  
+    src: url("../assets/fonts/OpenSans-Bold.ttf") format('truetype');  
+    font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
 	font-family: uni-sans-light;  
 	src: url("../assets/fonts/Fontfabric - UniSansLight.otf") format('truetype');  
 	font-weight: normal;
@@ -32,6 +39,12 @@
 @mixin o_sans() {
   font: {
     family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+@mixin o_sans_bold() {
+  font: {
+    family: "open-sans-bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
