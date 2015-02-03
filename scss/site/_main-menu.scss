@@ -65,7 +65,7 @@
                 }
             }
 
-            .page_item_has_children {
+            & > .page_item_has_children {
                 &:before {
                     display: block;
                     position: absolute;
