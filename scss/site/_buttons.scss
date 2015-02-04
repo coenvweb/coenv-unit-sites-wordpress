@@ -21,6 +21,10 @@
 	&.white {
 		color: $white;
         border-color: $white;
+        &:hover {
+            color: $accent-teal!important;
+            border-color: $accent-teal!important;
+        }
 	}
 
 } // .button

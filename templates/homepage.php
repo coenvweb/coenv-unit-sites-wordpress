@@ -247,7 +247,7 @@ $wp_query = new WP_Query( $home_args );
 		echo $more_terms_str;
 		echo '</div>';
 		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+		echo '<p>' . the_advanced_excerpt('length=15&finish=sentence') . '</p>';
        	echo $post_link;
         if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
         echo '</a></div>';

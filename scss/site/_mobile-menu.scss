@@ -1,4 +1,37 @@
 .mobile-menu {
+    .search-form { //search
+        width: 100%;
+        background-color: $bk-menu;
+        .field-wrap {
+            width: 100%;
+        }
+        input[type="text"], button[type="submit"] {
+            margin: 0;
+        }
+        button {
+            height: rem-calc(44);
+            width: 25%!important;
+            background-color: transparent!important;
+            i {
+                color: $white;
+                font-size: rem-calc(20)!important;
+            }
+        }
+        #s {
+            color: $white;
+            background-color: transparent;
+            height: rem-calc(43);
+            width: 75%;
+            @include placeholder {
+                color: $white;
+                @include encode_cb;
+                font-size: rem-calc(12);
+                padding: 0 0 0 rem-calc(3);
+                margin: 0;
+            }
+        }
+    }
+    
     svg {
         height: 32px;
         width: 32px;
@@ -59,13 +92,13 @@
         }
         svg {
           margin-top: rem-calc(-5);
-          width: rem-calc(24);
+          width: rem-calc(20);
           fill: $white;
         }
     }
     .accordion {
         .accordion-navigation { 
-            &.active > a {
+            & > a {
                 svg {
                     -webkit-transform: rotate(90deg);
                     -moz-transform: rotate(90deg);

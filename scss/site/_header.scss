@@ -91,7 +91,7 @@
 .units {
     float: right;
     list-style: none;
-    margin: rem-calc(30) 0 0 rem-calc(18);
+    margin: rem-calc(30) 0 0 0;
     
     .slash {
         margin: 0 rem-calc(12);
@@ -127,25 +127,15 @@
     
     &.mini {
         background-color: $accent;
+        height: rem-calc(100)!important;
+        min-height: 0;
         .teal-wedge {
             background-image: url(../assets/img/purple-wedge.svg);
             background-repeat: no-repeat;
             background-position: rem-calc(-400) 0;
             background-size: rem-calc(1400);
-            min-height: rem-calc(130);
+            height: rem-calc(100);
             overflow: hidden;
-            .section-title {
-                a {
-                    bottom: rem-calc(-110);
-                }
-            }
-
-            .sharing {
-                margin-top: rem-calc(10);
-                @media #{$medium-up} {
-                    margin-top: rem-calc(65);
-                }
-            }
         }
     }
     

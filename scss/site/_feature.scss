@@ -28,7 +28,7 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
-        min-height: rem-calc(350);
+        min-height: rem-calc(220);
 	}
 	
 	.feature-info-container {
@@ -37,14 +37,18 @@
             position: absolute;
             bottom: 0;
             text-align: center;
-            padding: rem-calc(20);
+            padding: rem-calc(10);
             background-color: rgba(15, 32, 70, .8);
+            font-size: rem-calc(14);
         }
         
         h2 {
             font-size: rem-calc(24);
 			margin: 0;
 			color: $white;
+            @media #{$small-only} {
+                font-size: rem-calc(14)!important;
+            }
 		}
 		
 		
@@ -52,6 +56,14 @@
 			margin: 0 rem-calc(5) 0 0;
             color: $white;
             border-color: $white;
+            @media #{$small-only} {
+                font-size: rem-calc(12)!important;
+                padding: rem-calc(5) rem-calc(10);
+            }
+            @media #{$medium-only} {
+                font-size: rem-calc(12)!important;
+                padding: rem-calc(10) rem-calc(15);
+            }
 		}
     
         @media #{$medium-up} {

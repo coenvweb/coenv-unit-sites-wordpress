@@ -42,6 +42,17 @@
 }
 
 .featured-news {
+    
+    &:hover {
+        img {
+            -webkit-transform:scale(1.05);
+            -moz-transform:scale(1.05);
+            -ms-transform:scale(1.05);
+            -o-transform:scale(1.05);
+             transform:scale(1.05);
+        }
+    }
+    
     .featured-thumbnail {
         text-align: center;
         white-space: nowrap;
@@ -54,6 +65,12 @@
         }
             
         img {
+            -webkit-transition: all .2s ease; 
+            -moz-transition: all .2s ease;
+            -o-transition: all .2s ease; 
+            -ms-transition: all .2s ease;
+            transition: all .2s ease;
+            max-width: 100%;
             position:absolute;
             top:0;
             left:0;
@@ -78,6 +95,9 @@
             margin-right: 0;
         }
     }  
+    p {
+        margin-bottom: 0;
+    }
 }
 
 .featured-section {
@@ -100,9 +120,6 @@
 .post-content {
     padding: rem-calc(25) rem-calc(35);
     
-    &.featured-news {
-        padding: rem-calc(25) rem-calc(45);
-    }
 }
 
 // Homepage Widgets
@@ -139,6 +156,28 @@
         .button {
             color: $accent-teal;
             border-color: $accent-teal;
+        }
+        
+        &:hover {
+            img {
+                -webkit-transform:scale(1.05);
+                -moz-transform:scale(1.05);
+                -ms-transform:scale(1.05);
+                -o-transform:scale(1.05);
+                 transform:scale(1.05);
+            }
+        }
+        
+        .widget_img{
+            overflow: hidden;
+            img {
+                -webkit-transition: all .2s ease; 
+                -moz-transition: all .2s ease;
+                -o-transition: all .2s ease; 
+                -ms-transition: all .2s ease;
+                transition: all .2s ease;
+                max-width: 100%;
+            }
         }
     }
 
@@ -233,6 +272,13 @@
         @media #{$large-up} {
             font-size: rem-calc(40);
         }
+        &:hover {
+            color: $white!important;
+        }
+    }
+
+    p {
+        color: $white;
     }
 
     svg {
@@ -245,9 +291,12 @@
     .widget_links {
         margin-bottom: 0;
         margin-right: 0;
-        
-        li:first-child {
-            margin-right: rem-calc(10);
+    
+        li {
+            display: inline;
+            &:first-child {
+                margin-right: rem-calc(10);
+            }
         }
         
     }

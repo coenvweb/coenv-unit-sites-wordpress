@@ -25,6 +25,13 @@
         .widget_custom_post_widget {
             background: $accent-teal!important;
             background-image: url(../assets/img/RainAngle-2685.svg)!important;
+            .text-link {
+                color: $white;
+            }
+            .button:hover {
+                color: $white-button!important;
+                border-color: $white-button!important;
+            }
         }
     }
 
@@ -55,15 +62,17 @@
     }
 }
 
-
+.widget_custom_post_widget {
+    .text-link {
+        color: $text;
+    }
+}
 
 .widget_links{
-    padding: 0 rem-calc(30) rem-calc(30) rem-calc(30);
-    margin-right: -2%;
+    padding: 0 rem-calc(30) rem-calc(20) rem-calc(30);
     margin-left: 0;
-
     li {
-        display: inline;
+        margin-bottom: rem-calc(10);
     }
 }
 
@@ -81,6 +90,10 @@
         background-position: center top, center;
         background-size: 4%, cover;
         text-align: center;
+        
+        .text-link {
+            color: $white;
+        }
         
         h4 {
             border-bottom: none;
@@ -125,11 +138,7 @@
 }
 
 #sidebar .widget_links li > a {
-	width: 48%;
 	margin: 0;
-	&:first-child {
-		margin-right: 2%;
-	}
 }
 #sidebar .widget_links ul {
 	float: right;

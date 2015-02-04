@@ -76,17 +76,11 @@ blockquote {
     border-left: 0px!important;
     border-top: 2px solid $bg-light;
     border-bottom: 2px solid $bg-light;
-    background-color: #FCFCFC;
-    background-image: url(../assets/img/quote_start.png);
-    background-size: 5%;
-    background-repeat: no-repeat;
-    background-position: 3% 3%;
+    background-color: $bg-lighter;
     @media #{$large-up} {
-        background-image: url(../assets/img/quote_start.png),  url(../assets/img/quote_finish.png);
-        background-repeat: no-repeat;
-        background-size: auto;
-        background-position: 3% 10%, 97% 90%;
-        padding: rem-calc(40) rem-calc(90)!important;
+        padding: rem-calc(20) rem-calc(30)!important;
+        float: right;
+        max-width: 50%;
     }
     
     p {
@@ -94,6 +88,7 @@ blockquote {
         padding-left: rem-calc(20);
         @include encode_cb;
         text-transform: none;
+        font-weight: 400;
         color: #000000!important;
         font-size: rem-calc(16);
         &:after {
@@ -139,6 +134,14 @@ h4 {
 
 $h5-font-size: rem-calc(18);
 $h6-font-size: 1rem;
+
+a, h3, h4, h5  {
+    h3, h4, h5, a {
+        &:hover {
+            color: $accent-teal!important; //hover state for titles
+        }
+    }
+}
 
 /*	Base font size
 		======================================================================== */

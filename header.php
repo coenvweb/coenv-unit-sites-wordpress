@@ -77,6 +77,9 @@
   <aside class="right-off-canvas-menu">
     <nav class="mobile-menu">
             <?php
+            echo '<ul class="off-canvas-list"><li>';
+            get_search_form();
+            echo '</li></ul>';
             
             add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             //$exclude = implode(',',coenv_base_menu_exclude());
@@ -191,13 +194,13 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single())) {
+    <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_page_template( 'templates/faculty.php' ) )) {
             echo '<div class="page-row"';
             echo 'style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="teal-wedge">';
         }
      ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
+     <?php if ( (empty($banner)) || (is_single()) || (is_page_template( 'templates/news.php' ) ) || (is_page_template( 'templates/faculty.php' ) ) ) {
             echo '<div class="page-row mini">';
             echo '<div class="teal-wedge">';
      }
