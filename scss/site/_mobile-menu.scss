@@ -55,13 +55,15 @@
         }
         .children-0 {
             padding-top: rem-calc(45);
+            font-weight: 400!important;
+            font-size: rem-calc(12);
+            @include encode_cb;
         }
         .children-1 {
             a {
-                padding-left: rem-calc(14);
+                padding-left: rem-calc(20);
                 font-size: rem-calc(12);
-                font-weight: 800;
-                text-transform: uppercase;
+                text-transform: none;
             }
             li {
                 background: #0f0e0e !important;

@@ -60,7 +60,7 @@
 
 .intro {
     font-size: rem-calc(24)!important;
-    color: $accent-teal;
+    color: $accent-teal-dk;
     margin: rem-calc(20) 0;
     @include encode;
     font-weight: 400;
@@ -138,7 +138,7 @@ $h6-font-size: 1rem;
 a, h3, h4, h5  {
     h3, h4, h5, a {
         &:hover {
-            color: $accent-teal!important; //hover state for titles
+            color: $accent-teal-dk!important; //hover state for titles
         }
     }
 }

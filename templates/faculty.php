@@ -24,7 +24,7 @@ $cats = get_categories($cats_args);
 if ($cats) {
      echo '<div class="cat-list">';
      echo '<h3 class="cat-title">What we work on:</h3>';
-     echo '<ul class="small-block-grid-2 fac-cats">';
+     echo '<ul class="medium-block-grid-2 fac-cats">';
      foreach($cats as $cat) { 
           echo '<li><a class="button" href="/faculty-research/research-areas/' . $cat->slug . '/">' . $cat->name . '</a></li>';
      }

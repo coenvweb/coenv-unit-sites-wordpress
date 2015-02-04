@@ -27,10 +27,10 @@
     padding-bottom: rem-calc(40);
     
     a {
-        color: $accent-teal;
+        color: $accent-teal-dk;
     }
     .button {
-        border-color: $accent-teal;
+        border-color: $accent-teal-dk;
     }
     
     h4, h5 {
@@ -154,8 +154,8 @@
         padding: 0;
         
         .button {
-            color: $accent-teal;
-            border-color: $accent-teal;
+            color: $accent-teal-dk;
+            border-color: $accent-teal-dk;
         }
         
         &:hover {

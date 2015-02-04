@@ -1,8 +1,47 @@
 .page-template-templatesnews-php {
     // selectors
     
+    .entry-content{
+        padding-top: 0;
+    }
+    
     .filters {
-        margin-top: rem-calc(10);
+        margin: 0;
+        background-color: $bg-lighter;
+        
+        .large-6 {
+            padding: rem-calc(30) rem-calc(40) rem-calc(10) rem-calc(40);
+        }
+        
+    }
+    
+    .panel {
+        border: 2px $white solid;
+        border-bottom: none;
+        border-right: none;
+        border-left: none;
+        background-color: $bg-lighter;
+        height: rem-calc(40);
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: rem-calc(14);
+        @include encode_cb;
+        color: $accent-teal;
+        padding: 0;
+        
+        .left {
+            padding: rem-calc(7) rem-calc(40); 
+        }
+        .right {
+            .button {
+                height: rem-calc(26);
+                padding: rem-calc(3);
+                margin: rem-calc(6) rem-calc(40);
+                color: $accent-teal-dk;
+                border-color: $accent-teal-dk;
+                font-size: rem-calc(12);
+            }
+        }
     }
     
     // posts
@@ -33,27 +72,6 @@
         &.current a {
             background: $accent-teal;
             color: $white;
-        }
-    }
-    
-    .panel {
-        border: 2px $accent-teal solid;
-        background-color: transparent;
-        height: rem-calc(40);
-        text-transform: uppercase;
-        font-weight: 600;
-        font-size: rem-calc(14);
-        @include encode_cb;
-        color: $accent-teal;
-        padding: 0;
-        
-        div {
-            padding: rem-calc(8);
-            &.right {
-                border-left: 2px $accent-teal solid;
-                padding-left: rem-calc(10);
-                height: rem-calc(38);
-            }
         }
     }
 }
@@ -96,17 +114,16 @@
 // filters
 
 select {
-    border: 2px $accent-teal solid;
-    background-color: transparent;
+    border: 2px #C1C1C1 solid;
+    background-color: $border;
     height: rem-calc(40);
-    text-transform: uppercase;
+    text-transform: none!important;
     font-weight: 600;
     font-size: rem-calc(14);
     @include encode_cb;
-    color: $accent-teal;
+    color: $black;
         &:hover{
-            border-color: $accent-teal;
-            background-color: transparent;
+            border-color: #CCC;
         }
 }
 

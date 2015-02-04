@@ -14,8 +14,8 @@
 	
 	&:hover {
 		background: rgba(0,0,0,0.01);
-		border-color: lighten( $accent-teal, 15% )!important;
-        color: lighten( $accent-teal, 15% )!important;
+		border-color: $accent-teal!important;
+        color: $accent-teal!important;
 	}
 	
 	&.white {
@@ -35,7 +35,7 @@
 	@include font-size(12);
     
     &:hover {
-        color: lighten( $accent-teal, 15% )!important;
+        color: $accent-teal!important;
 	}
     
     svg {
