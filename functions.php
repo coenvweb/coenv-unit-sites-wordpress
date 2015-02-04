@@ -142,6 +142,7 @@ function coenv_base_menu_exclude() {
 // args
 $args = array(
 	'numberposts' => -1,
+	'posts_per_page'=> -1,
 	'post_type' => 'page',
 	'meta_key'=>'menu_visibility',
     'meta_value'=> 'not-visible',
