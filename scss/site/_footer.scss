@@ -24,6 +24,10 @@
         svg {
             width: rem-calc(115);
             margin-bottom: rem-calc(-5);
+            @media #{$small-only} {
+                width: rem-calc(60);
+            }
+
         } 
     }
 
@@ -42,6 +46,9 @@
 			font-size: rem-calc(20);
 			line-height: rem-calc(20);
 			@include encode_cb;
+            @media #{$small-only} {
+                font-size: rem-calc(14);
+            }
 
 		} // h2
 

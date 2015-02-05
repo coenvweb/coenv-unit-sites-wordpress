@@ -56,14 +56,6 @@
 			margin: 0 rem-calc(5) 0 0;
             color: $white;
             border-color: $white;
-            @media #{$small-only} {
-                font-size: rem-calc(12)!important;
-                padding: rem-calc(5) rem-calc(10);
-            }
-            @media #{$medium-only} {
-                font-size: rem-calc(12)!important;
-                padding: rem-calc(10) rem-calc(15);
-            }
 		}
     
         @media #{$medium-up} {

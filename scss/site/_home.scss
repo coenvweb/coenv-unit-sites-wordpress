@@ -12,8 +12,11 @@
     
     .news-title {
         color: $accent-blue;
-        font-size: rem-calc(28);
         margin-bottom: rem-calc(26);
+        @media #{$small-only} {
+            margin-bottom: rem-calc(10);
+        }
+
     }
 }
 
@@ -103,7 +106,6 @@
 
     .button {
         margin: rem-calc(40) 0;
-        font-size: rem-calc(16);
     }
 }
 
@@ -120,12 +122,19 @@
     background-color: $accent-teal;
     background-size: 10px;
     
+    @media #{$small-only} {
+        padding-bottom: rem-calc(30);
+    }
+    
     .student-title, .faculty-title {
         text-align: center;
         
         h3 {
             color: $white;
             padding: rem-calc(30) 0;
+            @media #{$small-only} {
+                padding: rem-calc(10) 0;
+            }
         }
         
         @media #{$large-up} {
@@ -146,6 +155,11 @@
         .button {
             color: $accent-teal-dk;
             border-color: $accent-teal-dk;
+            
+            &:hover {
+                color: $accent-teal!important;
+                border-color: $accent-teal!important;
+            }
         }
         
         .widget_img{
@@ -244,6 +258,9 @@
         @media #{$large-up} {
             font-size: rem-calc(40);
         }
+        @media #{$small-only} {
+            margin-top: rem-calc(5);
+        }
         &:hover {
             color: $white!important;
         }
@@ -255,6 +272,9 @@
 
     svg {
         width: rem-calc(40);
+        @media #{$small-only} {
+            width: rem-calc(24);
+        }
     }
     
     .button {

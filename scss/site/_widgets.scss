@@ -23,20 +23,16 @@
 #sidebar, #after-content {
     .solid-widget {
         .widget_custom_post_widget {
-            background: $accent-teal!important;
+            background: $accent-teal-dk!important;
             background-image: url(../assets/img/RainAngle-2685.svg)!important;
             .text-link {
                 color: $white;
-            }
-            .button:hover {
-                color: $white-button!important;
-                border-color: $white-button!important;
             }
         }
     }
 
     .widget_custom_post_widget {
-        border-top: 4px $accent-teal solid;
+        border-top: 4px $accent-teal-dk solid;
         background: rgba(0,0,0,.7);
         background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(../assets/img/onc_texture.jpg);
         background-size: cover;

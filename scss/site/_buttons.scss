@@ -11,6 +11,16 @@
     padding: rem-calc(8) rem-calc(16);
     border: #333 2px solid;
     color: #333;
+    margin-bottom: rem-calc(7);
+    
+    @media #{$small-only} {
+        font-size: rem-calc(12)!important;
+        padding: rem-calc(10) rem-calc(15);
+    }
+    @media #{$medium-only} {
+        font-size: rem-calc(12)!important;
+        padding: rem-calc(10) rem-calc(20);
+    }
 	
 	&:hover {
 		background: rgba(0,0,0,0.01);
@@ -22,8 +32,8 @@
 		color: $white;
         border-color: $white;
         &:hover {
-            color: $accent-teal!important;
-            border-color: $accent-teal!important;
+            color: $white-button!important;
+            border-color: $white-button!important;
         }
 	}
 
