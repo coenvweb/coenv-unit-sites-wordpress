@@ -9,6 +9,13 @@
 }
 
 @font-face {
+    font-family: encode-sans-black;  
+    src: url("../assets/fonts/EncodeSansNormal-900-Black.ttf") format('truetype');  
+    font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
 	font-family: encode-sans-condensed;  
 	src: url("../assets/fonts/EncodeSansCondensed-800-ExtraBold.ttf") format('truetype');  
 	font-weight: normal;
@@ -52,6 +59,13 @@
 @mixin encode() {
   font: {
     family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@mixin encode_black() {
+  font: {
+    family: "encode-sans-black", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
   }
 }

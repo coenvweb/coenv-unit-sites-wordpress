@@ -21,6 +21,7 @@
             font-size: rem-calc(14)!important;
             line-height: rem-calc(18);
         }
+
     }
     .right-small, .left-small {
         border: none;
@@ -45,20 +46,22 @@
 }
 
 // desktop header
-
+.banner-container {
+    width: 100%;
+    background-color: $accent;
+}
 .title-row {
+    overflow: hidden;
     background: $accent;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    height: 110px;
     @media #{$medium-up} {
         //height: rem-calc(115);
     }
     .columns {
-    max-height: 108px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+        padding-bottom: rem-calc(10);
+        padding-top: rem-calc(10);
     }
 }
 .title-area {
@@ -81,30 +84,38 @@
             max-width: rem-calc(250);
             line-height: rem-calc(18);
         }
+
     }
 }
-.name {
-    h1 {
-        @include encode;
-        height: 93px;
-        font-weight: 500!important;
+h1 {
+        @include encode_black;
+        font-weight: normal;
         font-size: rem-calc(18)!important;
+            margin-right: rem-calc(26);
         @media #{$large-up} {
             font-size: rem-calc(23)!important;
         }
         float: left;
-        margin: 22px 0 0 0;
-        //margin: rem-calc(18) 0;
+        letter-spacing: rem-calc(3);
         a {
             color: $white;
+            &:hover {
+                color: $white;
+            }
         }
+         
     }
-    #logo {
+.name {
+
+    
+    .logo {
         fill: #fff;
-        width: rem-calc(140);
-        height: rem-calc(94);
-        margin-right: rem-calc(10);
-        vertical-align: middle;
+        width: rem-calc(130);
+        height: rem-calc(88);
+        margin-right: 0;
+        margin-left: 0;
+        bottom: 0;
+        position: relative;
         
         span {
             @extend .visuallyhidden;
@@ -113,24 +124,33 @@
 }
 
 .units {
+    background-image: url("/wp-content/themes/coenv-cig/assets/img/slash.png");
+    background-position: left center;
+    background-repeat: no-repeat;
     float: left;
+    height: 64px;
     list-style: none;
-    margin: rem-calc(36) 0 0 rem-calc(8);
+
+    margin-top: rem-calc(12);
+    padding-left: rem-calc(26);
+    padding-top: rem-calc(15);
+    padding-bottom: rem-calc(20);
     
     .slash {
         margin: 0 rem-calc(20);
+        vertical-align: middle;
     }
-    .college-name {
-        margin-top: 16px;
-    }
-    
+    .college-name,
     .uw-name {
-        margin-top: 8px;
-        margin-right: rem-calc(16);
+        float: left;
+        margin-top: 6px;
+        margin-left: rem-calc(17);
     }
 }
 .unit-logo {
+    width: 58px;
     float: right;
+    text-align: left;
     margin-top: 8px;
 }
 
@@ -156,4 +176,29 @@
 }
 .breadcrumbs>* {
 	line-height: rem-calc(16);
+}
+
+
+
+
+
+
+
+
+
+
+
+.cig-logo {
+
+}
+
+#unit-college-uw {
+margin-left:auto;
+margin-right:auto;
+height: 88px;
+width: 665px;
+display: block!important;
+    h1 {
+        margin-top: rem-calc(30);
+    }
 }
