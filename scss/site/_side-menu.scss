@@ -18,6 +18,13 @@
         margin: 0;
         font-size: rem-calc(16);
         
+        &:hover {
+            background-color: $text-md!important;
+            a {
+                color: $white!important;
+            }
+        }
+        
         &.has-children {
             background-image: url(../assets/img/grey-arrow.svg);
             background-repeat: no-repeat;
@@ -45,7 +52,7 @@
             background-color: $bk-menu;
             color: $white!important;
             &:hover {
-                background-color: darken($bk-menu, 15%);
+                background-color: darken($bk-menu, 25%);
                 color: $white;
             }
         }
@@ -63,7 +70,7 @@
 
 
             li { // sub sub pages
-                border-bottom: 1px solid $bg-lighter ;
+                border-bottom: 1px solid $border-med;
                 background-image: none;
                 background-color: $border-lt;
                 &:first-of-type{
@@ -77,10 +84,11 @@
                 }
                 a {
                     color: $white!important;
+                    line-height: 85%;
                     font-size: rem-calc(16);
                     font-weight: 400!important;
                     padding-left: rem-calc(28)!important;
-                    font-size: rem-calc(12);
+                    font-size: rem-calc(14);
                     @include encode_cb;
                     text-transform: none!important;
                     

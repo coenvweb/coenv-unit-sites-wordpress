@@ -51,6 +51,7 @@
                     background-color: $bk-menu;
                     border-bottom: 1px solid $border-lt;
                     min-width: rem-calc(200);
+                    line-height: rem-calc(35);
                     &:hover{
                         background-color: $bg-dk;
                     }
