@@ -85,21 +85,15 @@ blockquote {
     
     p {
         margin: 0!important;
-        padding-left: rem-calc(20);
+        padding: 0 rem-calc(20);
         @include encode_cb;
         text-transform: none;
         font-weight: 400;
         color: #000000!important;
         font-size: rem-calc(16);
-        &:after {
-            content: '"';
-        }
-        
+
         @media #{$large-up} {
             padding-left: 0;
-            &:after {
-                content: none;
-            }
         }
     }
 }

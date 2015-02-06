@@ -28,6 +28,12 @@
             .text-link {
                 color: $white;
             }
+            a {
+                color: $white;
+                &:hover {
+                    color: $white;
+                }
+            }
         }
     }
 

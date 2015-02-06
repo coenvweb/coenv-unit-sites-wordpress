@@ -89,7 +89,7 @@
                 'title_li' => false,
                 'sort_column' => 'menu_order, post_title',
                 'post_type'    => 'page',
-                'exclude' => '$exclude',
+                'exclude' => $exclude,
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             ?>
@@ -168,7 +168,6 @@
                 <section class="top-bar-section">
                     <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
-                      $exclude = implode(',',coenv_base_menu_exclude());
                       add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_list_pages( array(
                           'depth' => 0,
@@ -194,13 +193,13 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_page_template( 'templates/faculty.php' ) )) {
+    <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             echo '<div class="page-row"';
             echo 'style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="teal-wedge">';
         }
      ?>
-     <?php if ( (empty($banner)) || (is_single()) || (is_page_template( 'templates/news.php' ) ) || (is_page_template( 'templates/faculty.php' ) ) ) {
+     <?php if ( (empty($banner)) || (is_single()) || (is_page_template( 'templates/news.php' ) ) ) {
             echo '<div class="page-row mini">';
             echo '<div class="teal-wedge">';
      }

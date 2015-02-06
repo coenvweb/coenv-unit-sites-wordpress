@@ -28,7 +28,7 @@ function foundationPress_mobile_off_canvas() {
         'link_after' => '',                             // after each link text
         'depth' => 2,                                   // limit the depth of the nav
         'fallback_cb' => false,                         // fallback function (see below)
-        'walker' => new top_bar_walker()
+        'walker' => new top_bar_mobile_walker()
     ));
 }
 
