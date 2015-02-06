@@ -193,7 +193,7 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single())) {
+    <!-- <?php if (($banner) && (!is_single())) {
             echo '<div class="page-row">';
             echo '<div>';
         }
@@ -205,7 +205,7 @@
      ?>
     <div class="section-row row">
         <?php echo coenv_base_section_title($post->ID); ?>
-    </div>
+    </div>-->
 
 </div>
 <?php endif; ?>
