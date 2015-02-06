@@ -29,8 +29,9 @@
 			z-index: 0;
 			margin: 0;
 			color: $white;
-			@include font-size(20);
-			@include line-height(20);
+			font-size: rem-calc(24)!important;
+			letter-spacing: 0.25em;
+			@include line-height(28);
 			@include encode_cb;
 
 		} // h2
@@ -238,6 +239,9 @@
 
         } // .uw-footer
 
+    }
+    .footer-logo {
+    margin-right: rem-calc(14);
     }
 
 } // .site-footer
