@@ -109,6 +109,7 @@
 	} // h1
 
 	h2 {
+
 		@include encode_black;
 		@include font-size(18);
 		@include line-height(24);
@@ -117,11 +118,12 @@
 		background-position: bottom left;
 		color: $accent;
 		font-weight: 400;
+		text-transform: uppercase;
 
 		@media #{$medium-up} {
 			
 		@include font-size(27);
-		@include line-height(24);
+		@include line-height(32);
 		letter-spacing: rem-calc(2);
 		margin-bottom: rem-calc(24);
 		padding-bottom: rem-calc(24);
@@ -136,11 +138,12 @@
 		@include line-height(20);
 		color: $accent;
 		font-weight: 400;
+		text-transform: uppercase;
 
 		@media #{$medium-up} {
 			
 		@include font-size(22);
-		@include line-height(26);
+		@include line-height(28);
 		letter-spacing: rem-calc(2);
 		margin-bottom: rem-calc(24);
 		font-weight: 400;
@@ -154,6 +157,7 @@
 		@include line-height(20);
 		color: $accent;
 		font-weight: 400;
+		text-transform: uppercase;
 
 		@media #{$medium-up} {
 			

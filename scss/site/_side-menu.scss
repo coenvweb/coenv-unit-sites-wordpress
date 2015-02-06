@@ -60,6 +60,13 @@
 	margin-top: rem-calc(57);
 	.section-title {
 		@include encode_cb;
+		a {
+
+		font-size: rem-calc(22);
+
+
+
+		}
 	}
 	.inline-list {
 		margin-left: 0;
