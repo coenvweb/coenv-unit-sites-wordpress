@@ -7,6 +7,11 @@
 	position: relative;
 	margin-bottom: rem-calc(36);
 
+
+	a {
+		text-decoration: underline;
+	}
+
 	@media print {
 		padding: 0;
 	}
@@ -51,7 +56,7 @@
 			@include font-size(11);
 			color: $text-lt;
 		}
-		
+
 		a:hover {
 		color: #8458BE!important;
 		}
@@ -79,6 +84,10 @@
 
 .article__content {
     @extend .clearfix;
+    padding-right: rem-calc(50);
+    @media #{$large-up} {
+    	padding-right: rem-calc(100);
+    }
 
     li {
     	line-height: 1.6;
@@ -100,34 +109,60 @@
 	} // h1
 
 	h2 {
-		@include serif;
+		@include encode_black;
 		@include font-size(18);
 		@include line-height(24);
+		background-image: url("/wp-content/themes/coenv-cig/assets/img/purple-rule.png");
+		background-repeat: no-repeat;
+		background-position: bottom left;
+		color: $accent;
 		font-weight: 400;
 
 		@media #{$medium-up} {
-			@include font-size(24);
-			@include line-height(30);
+			
+		@include font-size(27);
+		@include line-height(24);
+		letter-spacing: rem-calc(2);
+		margin-bottom: rem-calc(24);
+		padding-bottom: rem-calc(24);
+		font-weight: 400;
 		}
 
 	} // h2
 
 	h3 {
-		@include serif;
+		@include encode_black;
 		@include font-size(16);
-		@include line-height(24);
+		@include line-height(20);
+		color: $accent;
 		font-weight: 400;
 
 		@media #{$medium-up} {
-			@include font-size(18);
-			@include line-height(24);
+			
+		@include font-size(22);
+		@include line-height(26);
+		letter-spacing: rem-calc(2);
+		margin-bottom: rem-calc(24);
+		font-weight: 400;
 		}
 
 	} // h3
 
-	h4 {
+	h4,h5 {
+		@include encode_black;
 		@include font-size(14);
-		@include line-height(24);
+		@include line-height(20);
+		color: $accent;
+		font-weight: 400;
+
+		@media #{$medium-up} {
+			
+		@include font-size(18);
+		@include line-height(22);
+		letter-spacing: rem-calc(2);
+		margin-bottom: rem-calc(24);
+		font-weight: 400;
+		}
 	}
 
 	hr {
@@ -137,14 +172,22 @@
 	}
 
 	blockquote {
-		@include rem('margin', 1);
+		@include encode_black;
 		@include rem('padding', 1, 2);
-		background-color: #ebebea;
-		border-top: solid 6px #cccccd;
-		border-left: 0;
+		background-image: url("/wp-content/themes/coenv-cig/assets/img/blockquote-top.png");
+		background-repeat: no-repeat;
+		background-position: top left;
+		background-color: #ebebeb;
+		border: none;
+
+		margin: rem-calc(22) 0 rem-calc(28) 0;
+		padding: rem-calc(20) rem-calc(80)!important;
 		p {
-			color: #4b2e84;
+			color: $accent;
+			font-size: rem-calc(13);
 			font-weight: bold;
+			letter-spacing: .1rem;
+			line-height: rem-calc(22);
 		}
 	} // blockquote
 
@@ -315,7 +358,7 @@
 
 } // .article__footer
 div[role="main"] {
-	margin-top: 2rem;
+	margin-top: rem-calc(57);
 }
 
 body.page div[role="main"] .share {

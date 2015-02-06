@@ -3,27 +3,34 @@
 	padding-right: 0 !important;
 }
 .side-nav {
-
+		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top.png");
+		background-position: center top;
+		background-repeat: no-repeat;
 		border-top: 1px solid #dddddd;
 		margin: 0 0 2rem 0;
-		padding: 0;
+		padding: rem-calc(5) 0 0 0;
 		line-height: 10px;
+		width: rem-calc(270);
 
 		li {
-			background-color: #f4f4f4;
-			border-left: 1px solid #dddddd;
-			border-right: 1px solid #dddddd;
-			border-bottom: 1px solid #dddddd;
+			background-color: #f2f2f2;
+			border-bottom: 1px solid #ccc;
 			padding: 0;
 			margin: 0;
-			font-size: 1.25rem;
-			@include encode_cb;
+			text-transform: uppercase;
+			font-size: 1rem;
+			font-weight: bold;
+			@include o_sans_bold;
 
 			a {
+				
 				display: block;
-				line-height: 125%;
-				&.active {
-				@include encode_cb;
+				line-height: 152%;
+				&:not(.button) {
+					color: #000;
+				}
+				&:hover {
+					color: $accent;
 				}
 			}
 
@@ -43,6 +50,7 @@
 		}
 }
 #sidebar {
+	margin-top: rem-calc(57);
 	.section-title {
 		@include encode_cb;
 	}

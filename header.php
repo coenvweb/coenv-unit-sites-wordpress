@@ -201,8 +201,8 @@
         }
      ?>
      <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini">';
-            echo '<div>';
+            echo '<div class="page-row mini section-wrapper">';
+            echo '<div class="section-title-wrapper">';
      }
      ?>
     <div class="section-row row">

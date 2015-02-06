@@ -37,6 +37,13 @@
 }
 
 @font-face {
+    font-family: open-sans-light;  
+    src: url("../assets/fonts/OpenSans-Light.ttf") format('truetype');  
+    font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
 	font-family: uni-sans-light;  
 	src: url("../assets/fonts/Fontfabric - UniSansLight.otf") format('truetype');  
 	font-weight: normal;
@@ -52,6 +59,12 @@
 @mixin o_sans_bold() {
   font: {
     family: "open-sans-bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+@mixin o_sans_light() {
+  font: {
+    family: "open-sans-light", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
@@ -88,26 +101,10 @@
 .intro {
     font-size: rem-calc(24)!important;
     margin: rem-calc(20) 0;
-    @include encode;
+    @include o_sans_light;
     font-weight: 400;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
-}
-
-blockquote {
-    margin: 0!important;
-    padding: rem-calc(20) rem-calc(80)!important;
-    border-left: 0px!important;
-    border-top: 2px solid #f6f5f7;
-    border-bottom: 2px solid #f6f5f7;
-    
-    p {
-        margin: 0!important;
-        @include encode_cb;
-        text-transform: none;
-        color: #000000!important;
-        font-size: rem-calc(18);
-    }
 }
 
 h1 {
