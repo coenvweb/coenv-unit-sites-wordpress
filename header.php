@@ -206,7 +206,7 @@
      }
      ?>
     <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
+        <div class="columns large-8 section-title"><a href="/<?php echo $coenv_post_section->post_name;?>"><?php echo the_title(); ?></a></div>
     </div>
     </div>
 </div>
