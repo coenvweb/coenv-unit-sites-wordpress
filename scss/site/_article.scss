@@ -23,7 +23,6 @@
 	.article__title {
 		margin-top: 0;
 		@include rem('padding-bottom', 1);
-		@include serif;
 		@include font-size(18);
 		@include line-height(30);
 		font-weight: 400;
@@ -81,10 +80,11 @@
 	} // .article__meta
 
 } // .article__header
-
+.medium-12 .article__content {
+	padding-right: rem-calc(50);
+}
 .article__content {
     @extend .clearfix;
-    padding-right: rem-calc(50);
     @media #{$large-up} {
     	padding-right: rem-calc(100);
     }
@@ -117,17 +117,17 @@
 		background-repeat: no-repeat;
 		background-position: bottom left;
 		color: $accent;
-		font-weight: 400;
+		font-weight: bold;
 		text-transform: uppercase;
 
-		@media #{$medium-up} {
+		@media #{$small-up} {
 			
 		@include font-size(27);
 		@include line-height(32);
 		letter-spacing: rem-calc(2);
 		margin-bottom: rem-calc(24);
 		padding-bottom: rem-calc(24);
-		font-weight: 400;
+		font-weight: bold;
 		}
 
 	} // h2
@@ -137,16 +137,16 @@
 		@include font-size(16);
 		@include line-height(20);
 		color: $accent;
-		font-weight: 400;
+		font-weight: bold;
 		text-transform: uppercase;
 
-		@media #{$medium-up} {
+		@media #{$small-up} {
 			
 		@include font-size(22);
 		@include line-height(28);
 		letter-spacing: rem-calc(2);
 		margin-bottom: rem-calc(24);
-		font-weight: 400;
+		font-weight: bold;
 		}
 
 	} // h3
@@ -159,13 +159,13 @@
 		font-weight: 400;
 		text-transform: uppercase;
 
-		@media #{$medium-up} {
+		@media #{$small-up} {
 			
 		@include font-size(18);
 		@include line-height(22);
 		letter-spacing: rem-calc(2);
 		margin-bottom: rem-calc(24);
-		font-weight: 400;
+		font-weight: bold;
 		}
 	}
 

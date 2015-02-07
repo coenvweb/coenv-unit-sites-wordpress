@@ -15,11 +15,14 @@
     h1 {
         color: $white;
         margin-top: rem-calc(15);
-        font-size: rem-calc(28)!important;
+        font-size: rem-calc(40)!important;
         text-align: left;
-        @media #{$small-up} {
-            font-size: rem-calc(14)!important;
+        @media #{$small} {
+            font-size: rem-calc(20)!important;
             line-height: rem-calc(18);
+        }
+        a {
+            color: $white;
         }
 
     }
@@ -32,8 +35,8 @@
         font-size: rem-calc(20);
         
         #logo {
-            height: 50px;
-            width: 74px;
+            height: 45px;   
+            width: 66px;
             margin-left: rem-calc(10);
             fill: $white;
         }
@@ -93,7 +96,6 @@
         @include encode_black;
         font-weight: normal;
         font-size: rem-calc(18)!important;
-            margin-right: rem-calc(26);
         @media #{$large-up} {
             font-size: rem-calc(23)!important;
         }
@@ -156,7 +158,37 @@
     text-align: left;
     margin-top: 8px;
 }
+.section-wrapper {
+      background-image: url("/wp-content/themes/coenv-cig/assets/img/header-forest.jpg");
+      background-position: center center;
+      background-color: #666;
+      height: 193px;
+      padding-top: 103px;
+      border-bottom: solid 4px #b6a47c;
+      @media #{$small-only} {
+            height: 60px;
+            padding-top:0;
+        }
 
+
+
+        .section-title {
+            @include rem('margin', 1.5, 0, 1.5); // 24
+            @include rem('line-height', 3); // 48
+            @include rem('font-size', 2); // 36
+    
+            a {
+                color: $white;
+                display: block;
+
+                text-decoration: none;
+
+              }
+
+
+        }
+
+     }
 .section-title {
     padding: 0 1rem;
     margin: 0;     

@@ -98,35 +98,6 @@ figcaption {
 	 * ------------------------------------
 	 */
 
-	 .section-wrapper {
-	  background-image: url("/wp-content/themes/coenv-cig/assets/img/header-forest.jpg");
-	  background-position: center center;
-	  background-color: #666;
-	  height: 193px;
-	  padding-top: 103px!important;
-	  border-bottom: solid 4px #b6a47c;
-		.section-title {
-			@include rem('margin', 1.5, 0, 1.5); // 24
-			@include rem('line-height', 3); // 48
-			@include rem('font-size', 2); // 36
-	
-			a {
-				color: $white;
-			 	display: block;
-
-			  	text-decoration: none;
-
-			  }
-
-
-		}
-
-	 }
-
-	
-	article {
-
-	}
 
 	/**
 	 * 4.3 Widgets

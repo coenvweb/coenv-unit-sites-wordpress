@@ -10,7 +10,7 @@
  * Serves up sidebar widgets for individual top level pages
  */
 ?>
-<aside id="sidebar" class="small-12 medium-3 columns">
+<aside id="sidebar" class="small-12 medium-4 large-3 columns">
 <?php dynamic_sidebar('sidebar-widgets'); ?>
 <?php
 $ancestor_id = coenv_base_get_ancestor('ID');
