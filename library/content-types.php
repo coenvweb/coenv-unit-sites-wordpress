@@ -43,62 +43,6 @@ function coenv_base_post_types_init() {
   'menu_icon' => 'dashicons-slides',
     )
   );
-  register_post_type( 'publications',
-    array(
-      'labels' => array(    
-      'name' => __( 'Publications' ),
-      'singular_name' => __( 'Publication' ),
-      'add_new_item' => __( 'Add Publication'),
-      'edit_item' => __( 'Edit Publication'),
-      'new_item' => __( 'New Publication'),
-      ),
-    'hierarchical' => true,
-    // drew - i think we need this for each tax connected to a content type
-    'taxonomies' => array('author','publication_theme'),
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    'rewrite' => array('slug' => 'publications'),
-  'menu_icon' => 'dashicons-book',
-    )
-  );
-  register_post_type( 'student_blog',
-    array(
-      'labels' => array(    
-      'name' => __( 'Blog' ),
-      'singular_name' => __( 'Blog Post' ),
-      'add_new_item' => __( 'Add Blog Post'),
-      'edit_item' => __( 'Edit Blog Post'),
-      'new_item' => __( 'New Blog Post'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'student_blog'),
-  'menu_icon' => 'dashicons-exerpt-view',
-    )
-  );
-  register_post_type( 'datasets',
-    array(
-      'labels' => array(    
-      'name' => __( 'Datasets' ),
-      'singular_name' => __( 'Dataset' ),
-      'add_new_item' => __( 'Add Dataset'),
-      'edit_item' => __( 'Edit Dataset'),
-      'new_item' => __( 'New Dataset'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'student_blog'),
-  'menu_icon' => 'dashicons-exerpt-view',
-    )
-  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
