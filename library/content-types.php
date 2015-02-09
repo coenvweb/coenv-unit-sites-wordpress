@@ -35,7 +35,7 @@ function coenv_base_post_types_init() {
       'new_item' => __( 'New Homepage Feature'),
       ),
     'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions', 'page-attributes' ),
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,

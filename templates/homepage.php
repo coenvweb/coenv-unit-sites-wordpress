@@ -18,8 +18,8 @@ Template Name: Homepage
 			'post_type'	=> 'features',
 			'post_status' => 'publish',
 			'posts_per_page' => 4,
-            'order_by' => 'menu_order',
-            'order' => 'asc',
+            'orderby' => 'menu_order',
+        'order' => 'ASC',
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
