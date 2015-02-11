@@ -183,19 +183,18 @@
         border: 2px darken( $accent-teal-dk, 7% ) solid;
                 
         .widget_img {
+            position: relative;
             width: 100%;
-            background-color: #9f9fa1;
-            max-height: rem-calc(300);
+            height: rem-calc(300);
             overflow: hidden;
             text-align: center;
             
             img {
-                display: block;
-                max-width: 100%;
-                max-height: rem-calc(410);
-                width: auto;
-                height: auto;
-                margin: 0 auto;
+                position: absolute;
+                top:-100%; left:0; right: 0; bottom:-100%;
+                margin: auto;
+                width: 100%;
+                min-height: rem-calc(300);
             }
         }
         
