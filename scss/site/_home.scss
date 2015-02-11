@@ -119,7 +119,7 @@
 .profiles {
     padding-bottom: rem-calc(70);
     background-image: url(../assets/img/RainAngle-2685.svg);
-    background-color: $accent-teal;
+    background-color: $accent-teal-dk;
     background-size: 10px;
     
     @media #{$small-only} {
@@ -180,7 +180,7 @@
         text-align: left;
         @include shadow;
         background-color: $white;
-        border: 2px darken( $accent-teal, 7% ) solid;
+        border: 2px darken( $accent-teal-dk, 7% ) solid;
                 
         .widget_img {
             width: 100%;
