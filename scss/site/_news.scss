@@ -56,29 +56,35 @@
     }
     
     .blog .button {
-        border-color: $accent-teal;
-    }
-    
-    ul.pagination li {
-        margin-top: rem-calc(20);
-        margin-bottom: rem-calc(40);
-        a {
-            border-radius: 0;
-            color: $accent-teal;
-            font-weight: 600;
-            border: 2px $accent-teal solid;
-            font-size: rem-calc(12);
-        }
-        &.current a {
-            background: $accent-teal;
-            color: $white;
-        }
+        border-color: $accent-teal-dk;
     }
 }
+    
+// pagination
 
-// single post
-
-.single-post {
+ul.pagination li {
+    margin-top: rem-calc(20);
+    margin-bottom: rem-calc(40);
+    a {
+        border-radius: 0;
+        color: $accent-teal-dk;
+        font-weight: 600;
+        border: 2px $accent-teal-dk solid;
+        font-size: rem-calc(12);
+        &:hover {
+            color: $accent-teal;
+            border: 2px $accent-teal solid;
+            background-color: transparent;
+        }
+    }
+    &.current a {
+        background: $accent-teal-dk;
+        color: $white;
+        &:hover {
+            background-color: $accent-teal-dk;
+            border: 2px $accent-teal-dk solid;
+        }
+    }
 }
     
 

@@ -161,15 +161,20 @@
     .section-title {
         position: absolute;
         bottom: rem-calc(-14);
-        @media #{$medium-up} {
-            margin-left: rem-calc(15);
-            font-size: rem-calc(36);
-            max-width: 28%;
+        
+        h2 {
+            margin-bottom: 0;
+            line-height: 3rem;
         }
 
         a {
             font-size: rem-calc(28);
             @include encode_cb;
+            @media #{$medium-up} {
+                margin-left: rem-calc(15);
+                font-size: rem-calc(36);
+                max-width: 28%;
+            }
         
             span {
                 font-size: rem-calc(14);

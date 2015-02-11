@@ -165,34 +165,15 @@
 
 		.social-buttons {
             
-            .button {
-                display: inline-block;
-                vertical-align: middle;
-                padding: rem-calc(3.5) rem-calc(9);
-                @include sans;
-                font-weight: 400;
-                background: #666;
-                text-decoration: none;
-                color: $text;
-                border-radius: $radius;
-                border: none;
-                min-width: 0!important;
-                
-                i {
-					@include font-size(16);
-					color: $text-very-lt;
-				}
-
+            i {
+                font-size: rem-calc(32);
+                color: $text-white;
+                padding-right: rem-calc(10);
                 &:hover {
-                    background: rgba(0,0,0,0.6);
-                    color: #fff !important;
-                    border: none;
+                    color: $white;
                 }
-                
-                &:hover i {
-					color: #fff;
-				}
-			}
+            }
+
 		}
 
 		.top-links {

@@ -7,6 +7,7 @@
         }
         input[type="text"], button[type="submit"] {
             margin: 0;
+            box-shadow: none;
         }
         button {
             height: rem-calc(44);

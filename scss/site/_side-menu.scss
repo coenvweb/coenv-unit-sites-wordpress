@@ -72,10 +72,10 @@
             li { // sub sub pages
                 border-bottom: 1px solid $border-med;
                 background-image: none;
-                background-color: $border-lt;
+                background-color: $bk-menu;
                 &:first-of-type{
                     a {
-                        border-top: none;
+                        border-top: 1px solid $border-med;
                     }
                 }
                 
@@ -85,10 +85,8 @@
                 a {
                     color: $white!important;
                     line-height: 85%;
-                    font-size: rem-calc(16);
                     font-weight: 400!important;
                     padding-left: rem-calc(28)!important;
-                    font-size: rem-calc(14);
                     @include encode_cb;
                     text-transform: none!important;
                     

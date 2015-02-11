@@ -30,8 +30,15 @@
             }
             a {
                 color: $white;
+                text-decoration: underline;
                 &:hover {
-                    color: $white;
+                    color: $white-button;
+                }
+                &:first-child {
+                    text-decoration: none;
+                    &:hover {
+                        color: $white;
+                    }
                 }
             }
         }
