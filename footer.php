@@ -84,7 +84,6 @@
 <?php dynamic_sidebar("footer-widgets"); ?>
 <?php do_action('foundationPress_after_footer'); ?>
 </footer>
-</div>
 <a class="exit-off-canvas"></a>
 <?php do_action('foundationPress_layout_end'); ?>
 <?php wp_footer(); ?>
