@@ -9,7 +9,7 @@ function coenv_base_sidebar_widgets() {
   $before_widget  = '<div class="small-12 columns widget-side"><article id="%1$s" class=" widget %2$s">';
   $before_title   = '<h4>';
   $after_title  = '</h4>';
-  $after_widget = '</div></article> <!-- end #%1$s -->';
+  $after_widget = '</article></div> <!-- end #%1$s -->';
 
   register_sidebar(array(
       'id' => 'sidebar-widgets',

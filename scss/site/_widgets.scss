@@ -32,15 +32,14 @@
                     color: $white;
                 }
             }
+            h4 a {
+                text-decoration: none;
+            }
             a {
                 color: $white;
                 text-decoration: underline;
                 &:hover {
                     color: $white-button;
-                }
-                &:first-child {
-                    text-decoration: none;
-                    
                 }
             }
         }

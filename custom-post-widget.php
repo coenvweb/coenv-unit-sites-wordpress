@@ -75,7 +75,7 @@ if ( $show_custom_post_title ) {
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
 	echo $after_title;
 }
-echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" class="text-link" target="_' . $first_link_target . '">' . $widget_copy . '</a>';
+echo $widget_copy;
 echo '</div>';
 if ( $link_position == null ) {
 	echo $buttons;
