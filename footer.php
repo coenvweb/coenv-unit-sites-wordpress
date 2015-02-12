@@ -79,16 +79,13 @@
             </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 <?php dynamic_sidebar("footer-widgets"); ?>
 <?php do_action('foundationPress_after_footer'); ?>
 </footer>
 </div>
 <a class="exit-off-canvas"></a>
-</div>
-</div>
 <?php do_action('foundationPress_layout_end'); ?>
 <?php wp_footer(); ?>
 <?php do_action('foundationPress_before_closing_body'); ?>
