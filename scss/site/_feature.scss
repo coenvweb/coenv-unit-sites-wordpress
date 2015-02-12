@@ -13,6 +13,8 @@
 
 .feature {
 	color: $white;
+    text-transform: uppercase;
+    font-weight: 800;
     @media #{$medium-up} {
         height: auto;
         max-height: rem-calc(500);

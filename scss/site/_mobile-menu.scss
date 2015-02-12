@@ -59,6 +59,8 @@
             font-weight: 400!important;
             font-size: rem-calc(12);
             @include encode_cb;
+            text-transform: uppercase;
+            font-weight: 800;
         }
         .children-1 {
             a {

@@ -46,6 +46,8 @@
 			font-size: rem-calc(20);
 			line-height: rem-calc(20);
 			@include encode_cb;
+            text-transform: uppercase;
+            font-weight: 800;
             @media #{$small-only} {
                 font-size: rem-calc(14);
             }

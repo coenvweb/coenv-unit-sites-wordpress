@@ -12,7 +12,8 @@
 	font-family: encode-sans-condensed;  
 	src: url("../assets/fonts/EncodeSansCondensed-800-ExtraBold.ttf") format('truetype');  
 	font-weight: normal;
-    font-style: normal;  
+    font-style: normal;
+    letter-spacing: .5px;
 }
 
 @font-face {
@@ -45,8 +46,6 @@
 
 @mixin encode_cb() {
     font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    font-weight: 800!important;
-    text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -87,7 +86,7 @@ blockquote {
         padding: 0 rem-calc(20);
         @include encode_cb;
         text-transform: none;
-        font-weight: 400;
+        font-weight: 400!important;
         color: #000000!important;
         font-size: rem-calc(16);
     }
@@ -96,7 +95,7 @@ blockquote {
 $h1-font-size: rem-calc(36);
 h1 {
     @include encode_cb;
-    font-weight: 400;
+    font-weight: 800!important;
     @media #{$small-only} {
         font-size: rem-calc(20)!important;
     }

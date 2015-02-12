@@ -13,6 +13,8 @@
     .news-title {
         color: $accent-blue;
         margin-bottom: rem-calc(26);
+        text-transform: uppercase;
+        font-weight: 800;
         @media #{$small-only} {
             margin-bottom: rem-calc(10);
         }
@@ -38,6 +40,8 @@
     
     h4, h5 {
         @include encode_cb;
+        text-transform: uppercase;
+        font-weight: 800;
         border-top: 3px $text solid;
         padding-top: rem-calc(10);
         margin-top: rem-calc(10);
@@ -132,6 +136,8 @@
         h3 {
             color: $white;
             padding: rem-calc(30) 0;
+            text-transform: uppercase;
+            font-weight: 800;
             @media #{$small-only} {
                 padding: rem-calc(10) 0;
             }
@@ -185,16 +191,18 @@
         .widget_img {
             position: relative;
             width: 100%;
-            height: rem-calc(300);
             overflow: hidden;
             text-align: center;
+            min-height: rem-calc(300);
             
             img {
-                position: absolute;
-                top:-100%; left:0; right: 0; bottom:-100%;
-                margin: auto;
-                width: 100%;
-                min-height: rem-calc(300);
+                  max-width: 100%;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  margin: auto;
             }
         }
         

@@ -4,7 +4,9 @@
 .button {
 	display: inline-block;
 	vertical-align: middle;
-	@include encode_cb; 
+	@include encode_cb;
+    font-weight: 800;
+    text-transform: uppercase;
 	@include font-size(16);
     min-width: rem-calc(100);
     background: none;

@@ -12,11 +12,13 @@
 	}
 }
 
-// Social Widget
-
 .widget {
     ul {
         list-style: none;	
+    }
+    h4 {
+        text-transform: uppercase;
+        font-weight: 800;
     }
 }
 
@@ -33,6 +35,9 @@
                 }
             }
             h4 a {
+                text-decoration: none;
+            }
+            .button {
                 text-decoration: none;
             }
             a {

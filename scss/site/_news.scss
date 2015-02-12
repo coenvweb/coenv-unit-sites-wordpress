@@ -117,6 +117,12 @@ ul.pagination li {
     }
 }
 
+.post-content, .blog {
+    h3, h4, h5 {
+        text-transform: uppercase;
+        font-weight: 800;
+    }
+}
 // filters
 
 select {

@@ -19,6 +19,8 @@
                 font-size: rem-calc(14);
                 color: $text;
                 @include encode_cb;
+                text-transform: uppercase;
+                font-weight: 800;
                 background-color: #ffffff;
                 text-align: left;
 

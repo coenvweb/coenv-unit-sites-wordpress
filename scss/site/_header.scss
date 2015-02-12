@@ -19,6 +19,9 @@
         margin: rem-calc(5) auto;
         font-size: rem-calc(12)!important;
         line-height: rem-calc(18);
+        @include encode;
+        font-weight: 500!important;
+        text-transform: uppercase;
     }
 
     .right-small, .left-small {
@@ -63,6 +66,7 @@
     h1 {
         @include encode;
         font-weight: 500!important;
+        text-transform: uppercase;
         font-size: rem-calc(18)!important;
         margin-top: rem-calc(18);
         margin-bottom: 0;
@@ -170,6 +174,8 @@
         a {
             font-size: rem-calc(28);
             @include encode_cb;
+            text-transform: uppercase;
+            font-weight: 800!important;
             @media #{$medium-up} {
                 margin-left: rem-calc(15);
                 font-size: rem-calc(36);

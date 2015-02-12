@@ -20,10 +20,11 @@
 		padding-bottom: rem-calc(14);
 		font-size: rem-calc(24);
 		line-height: rem-calc(30);
-		font-weight: 400;
+        text-transform: uppercase;
+        font-weight: 800;
 
 		@media #{$medium-up} {
-			font-size: rem-calc(40);
+			font-size: rem-calc(36);
 			line-height: rem-calc(52);
 		}
 

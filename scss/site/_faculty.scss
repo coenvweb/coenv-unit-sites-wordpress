@@ -69,6 +69,8 @@ article.type-faculty {
 				margin-left: 0;
 				padding-left: 0;
                 @include encode_cb;
+                text-transform: uppercase;
+                font-weight: 800;
                 
                 svg:first-child { //icons
                     float: left;
@@ -162,6 +164,8 @@ article.type-faculty {
 .article__categories {    
     h2 {
 	   font-size: rem-calc(14);
+        text-transform: uppercase;
+        font-weight: 800;
     }
 }
 
@@ -211,6 +215,8 @@ ul.fac-cats {
     }
     h3 {
         font-size: rem-calc(14);
+        text-transform: uppercase;
+        font-weight: 800;
     }
 }
 
@@ -258,6 +264,8 @@ ul.fac-cats {
                 line-height: 1.2;
                 background-color: $accent-teal-dk;;
                 min-height: rem-calc(60);
+                text-transform: uppercase;
+                font-weight: 800;
                 &:hover {
                     color: $white!important;
                 }
