@@ -38,12 +38,7 @@
 
 
 // Sort into separate .scss files
-#sidebar .widget_content {
-	margin-top: 15px;
-	p {
-		font-size: 1rem;
-	}
-}
+
 #after-content .widget_custom_post_widget {
 	margin-bottom: 1.5rem;
 	padding-top: 1rem;
@@ -72,20 +67,7 @@
 	float: left;
 	width: 20%;
 }
-#sidebar .widget_links li a {
-	width: 48%;
-	margin: 0;
-	&:first-child {
-		margin-right: 2%;
-	}
-}
-#sidebar .widget_links ul {
-	float: right;
-	text-align: right;
-}
-.widget_custom_post_widget ul.widget_links li {
-	display: inline;
-}
+
 ul.widget-area li {
 	list-style: none;
 	margin: 0;
@@ -158,9 +140,6 @@ ul.blog-terms {
 		float: left;
 	}
 }
-aside#sidebar {
-	padding-right: 0;
-}
 .blog-cats .button,
 .fac-cats .button {
 	margin-bottom: .75rem;
@@ -169,12 +148,7 @@ aside#sidebar {
 	border: 0;
 	padding: .5rem 1rem;
 }
-#sidebar article.widget ul {
-	margin-top: rem-calc(15);
-}
-#sidebar article.widget_coenv_base_subnav.widget ul {
-	margin-top: 0;
-}
+
 div.news {
 	margin-bottom: 4rem;
 }

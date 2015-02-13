@@ -1,8 +1,29 @@
-.widget_coenv_base_subnav div {
-	padding-left: 0 !important;
-	padding-right: 0 !important;
+// General sidebar
+aside#sidebar {
+	margin-top: rem-calc(57);
+	padding-right: 1rem !important;
+
+	.section-title {
+		@include encode_cb;
+		a {
+
+		font-size: rem-calc(22);
+
+		}
+	}
 }
-.side-nav {
+aside#sidebar div.columns {
+
+	// Hide for mobile	
+	.widget_coenv_base_subnav,
+	&.section-title {
+		@media #{$small-only} {
+			display:none;
+		}
+	}
+
+	// Second-level navigation
+	.widget_coenv_base_subnav ul {
 		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top.png");
 		background-position: center top;
 		background-repeat: no-repeat;
@@ -11,7 +32,6 @@
 		padding: rem-calc(5) 0 0 0;
 		line-height: 10px;
 		width: 100%;
-
 		li {
 			background-color: #f2f2f2;
 			border-bottom: 1px solid #ccc;
@@ -20,7 +40,6 @@
 			text-transform: uppercase;
 			font-size: 1rem;
 			@include o_sans_bold;
-
 			a {
 				@include o_sans_bold;
 				display: block;
@@ -32,10 +51,8 @@
 					color: $accent;
 				}
 			}
-
 			ul {
 				margin-bottom: 0;
-
 				li {
 					border: 0;
 
@@ -43,38 +60,84 @@
 					padding-left: 2rem !important;
 					}
 				}
-
 				&.side-nav {
 					padding-top: 0;
 					background-image: none;
-					}
+				}
 			}
 		}
-}
-aside#sidebar {
-	padding-right: 1rem !important;
-
-	@media #{$small-only} {
-		display:none;
 	}
 
-
-	margin-top: rem-calc(57);
-	.section-title {
-		@include encode_cb;
-		a {
-
-		font-size: rem-calc(22);
-
+	// Content blocks
+	.widget_custom_post_widget {
+		.widget_content {
+			padding: rem-calc(24) rem-calc(20) rem-calc(5) rem-calc(20);
+			h4 {
+				@include encode_cb;
+				font-size: rem-calc(22);
+				letter-spacing: .1rem;
+			}
+			p {
+				margin-bottom: 0;
+			}
+		}
+		.widget_links {
+				margin-left: 0;
+	margin-top: rem-calc(15);
+			li {
+				display: inline;
+				a {
+					letter-spacing: rem-calc(1);
+					margin: 0;
+					padding: rem-calc(10);
+				}
+				&:first-child {
+					margin-right: rem-calc(5);
+				}
+				.button {
+					@include encode_black;
+					text-transform: uppercase;
+				}
+			}
 		}
 	}
-	.inline-list {
-		margin-left: 0;
+	&:nth-child(even) {
+		.widget_custom_post_widget {
+			background-color: #e8e3d3;
+			.widget_content {
+				background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
+				background-repeat: no-repeat;
+				background-position: top left;
+				h4 a {
+					color: $accent;
+				}
+			}
+			.widget_links {
+				padding: 0 rem-calc(20) 0 rem-calc(20);
+				.button {
+					background-color: $accent;
+					color: $white;
+					text-align: left;
+				}
+			}
+			
+		}
 	}
-	.inline-list>li {
-		margin: 0;
-		margin-right: rem-calc(5);
+	&:nth-child(odd) {
+		.widget_custom_post_widget .widget_content {
+			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-tile.png");
+			background-repeat: no-repeat;
+			background-position: top left;
+			h4 a {
+				color: #85754e;
+			}
+		}
+		.widget_custom_post_widget .widget_links {
+			padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
+			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
+			background-repeat: no-repeat;
+			background-position: bottom center;
+		}
+		
 	}
 }
-
-
