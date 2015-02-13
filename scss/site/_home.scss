@@ -193,7 +193,11 @@
             width: 100%;
             overflow: hidden;
             text-align: center;
-            min-height: rem-calc(300);
+            min-height: rem-calc(170);
+            @media #{$medium-up} {
+                padding-right: rem-calc(300);
+            }
+            
             
             img {
                   max-width: 100%;
