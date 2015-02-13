@@ -20,10 +20,14 @@ RewriteCond %{HTTP_HOST} ^dev.fish.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://dev.fish.uw.edu/$1 [R,L]
 
-RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} ^dev.smea.uw\.dev [NC]
 RewriteCond %{SERVER_PORT} 80 
-RewriteRule ^(.*)$ https://dev.smea.uw.edu/$1 [R,L]
-RewriteRule ^/faculty ^/faculty-research/faculty [R=301,NC,L]
+RewriteRule /faculty-research/ /faculty-research/faculty [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+#RewriteRule ^(.*)$ https://dev.smea.uw.edu/$1 [R,L] breaks below redirect(s)
+RewriteRule /faculty-and-research/ /faculty-and-research/faculty [R=301,NC,L]
 
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
