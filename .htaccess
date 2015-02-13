@@ -2,6 +2,12 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# custom redirect
+
+RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^/faculty ^/faculty-and-research/faculty [R=301,NC,L]
+
 # SSL on each domain
 
 RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -23,11 +29,6 @@ RewriteRule ^(.*)$ https://dev.fish.uw.edu/$1 [R,L]
 RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://dev.smea.uw.edu/$1 [R,L]
-RewriteRule ^/faculty ^/faculty-and-research/faculty [R=301,NC,L]
-
-RewriteCond %{HTTPS} ^dev.smea.uw\.edu [NC]
-RewriteCond %{SERVER_PORT} 80 
-RewriteRule ^/faculty ^/faculty-and-research/faculty [R=301,NC,L]
 
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
