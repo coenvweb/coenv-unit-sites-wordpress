@@ -192,7 +192,7 @@ if( $featured ) {
         'post_type' => 'post',
         'post_status' => 'publish',
         'posts_per_page' => 2,
-        'post__not_in' => $featured
+        'post__not_in' => $featured,
         'cat' => -19,
     );
 }
