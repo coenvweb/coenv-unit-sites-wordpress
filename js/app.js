@@ -307,9 +307,8 @@ var i=function(){var a=function(){r=b,s=!1,c===!0&&(o=p.create_timer(),o.start()
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
+    
 });
-
-
 
 jQuery(function ($) {
     'use strict';

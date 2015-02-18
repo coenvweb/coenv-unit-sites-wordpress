@@ -209,6 +209,18 @@ function coenv_banner() {
     return $ancestor_id;
 }
 
+/* 
+ * Return category links to news posts.
+ */
+function coenv_news_cats_lite($id) {
+	$news_cats = wp_get_categories( $id );
+	if ($news_cats) {
+		foreach ($news_cats as $category) {
+            echo '<a href="/faculty-research/research-areas/' . $term->slug . '/">' . $term->name . '</a>';
+        }
+	}
+}
+
 /*
  * Section title
  */

@@ -96,7 +96,7 @@ $wp_query = new WP_Query( $feat_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="home-news-section clearfix">
-    <div class="columns large-12"><a href="/about/news/" name="News & Events"><h2 class="news-title">News & Events</h2></a></div>
+    <div class="columns large-12"><a href="/about/news/" name="News & Events" class="news-title-link"><h2 class="news-title">News & Events</h2></a></div>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :

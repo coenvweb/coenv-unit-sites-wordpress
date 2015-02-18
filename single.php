@@ -17,9 +17,14 @@
                                 <div class="blog-meta clearfix">
                                     <div class="small-6 columns left">
                                         <p><time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
-                                        <?php $categories = get_the_category_list(' ') ?>
-                                        <?php if ( $categories ) : ?>
-                                            | <?php echo $categories ?>
+                                        <?php $terms = wp_get_post_terms( get_the_ID(), 'category'); ?>
+                                        <?php if ( $terms ) : ?>
+                                            | <?php 
+                                                foreach ($terms as $term) {
+                                                    $termlist .= '<a href="' . get_permalink( '2966' ) . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                                                };
+                                            $termlist = rtrim($termlist,', ');
+                                            echo $termlist; ?>
                                         </p>
                                         <?php endif ?> 
                                     </div>

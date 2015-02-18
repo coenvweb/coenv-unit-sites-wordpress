@@ -194,20 +194,25 @@
             width: 100%;
             overflow: hidden;
             text-align: center;
-            min-height: rem-calc(170);
+            min-height: rem-calc(300);
             @media #{$medium-up} {
                 min-height: rem-calc(300);
             }
             
             
             img {
-                  max-width: 100%;
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  right: 0;
-                  bottom: 0;
-                  margin: auto;
+                max-width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+                .object-fit & {
+                      object-fit: cover;
+                      overflow: hidden;
+                      height: 300px;
+                }
             }
         }
         

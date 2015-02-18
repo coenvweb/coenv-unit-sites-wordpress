@@ -70,9 +70,8 @@ jQuery(function ($) {
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
+    
 });
-
-
 
 jQuery(function ($) {
     'use strict';
