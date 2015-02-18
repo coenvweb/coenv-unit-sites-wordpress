@@ -90,6 +90,7 @@ $feat_args = array(
     'post_status' => 'publish',
     'posts_per_page' => 1,
     'category_name' => 'featured',
+    'cat' => -19,
 );
 
 $wp_query = new WP_Query( $feat_args );
@@ -199,6 +200,7 @@ else {
         'post_type' => 'post',
         'posts_per_page' => 3,
         'post_status' => 'publish',
+        'cat' => -19,
     );
    echo '<div class="home-news-section clearfix">';
 }

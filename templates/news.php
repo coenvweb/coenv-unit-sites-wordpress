@@ -43,7 +43,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			'post_status' => 'publish',
 			'posts_per_page' => 10,
 			'paged' => $paged,
-            'cat' => -19,
 		);
 		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
