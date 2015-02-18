@@ -163,7 +163,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
+  	<div class="panel">
+			<div class="left">We're sorry. This filter did not match any posts.</div>
+			<div class="right"><a class="button" href="<?php echo $url_current; ?>">all posts</a></div>
+		</div>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
