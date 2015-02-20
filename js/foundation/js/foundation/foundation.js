@@ -98,7 +98,6 @@
     var self = this,
         should_bind_events = !S(this).data(this.attr_name(true));
 
-
     if (S(this.scope).is('[' + this.attr_name() +']')) {
       S(this.scope).data(this.attr_name(true) + '-init', $.extend({}, this.settings, (options || method), this.data_options(S(this.scope))));
 
@@ -158,23 +157,23 @@
 
   window.matchMedia = window.matchMedia || (function( doc ) {
 
-    "use strict";
+    'use strict';
 
     var bool,
         docElem = doc.documentElement,
         refNode = docElem.firstElementChild || docElem.firstChild,
         // fakeBody required for <FF4 when executed in <head>
-        fakeBody = doc.createElement( "body" ),
-        div = doc.createElement( "div" );
+        fakeBody = doc.createElement( 'body' ),
+        div = doc.createElement( 'div' );
 
-    div.id = "mq-test-1";
-    div.style.cssText = "position:absolute;top:-100em";
-    fakeBody.style.background = "none";
+    div.id = 'mq-test-1';
+    div.style.cssText = 'position:absolute;top:-100em';
+    fakeBody.style.background = 'none';
     fakeBody.appendChild(div);
 
     return function (q) {
 
-      div.innerHTML = "&shy;<style media=\"" + q + "\"> #mq-test-1 { width: 42px; }</style>";
+      div.innerHTML = '&shy;<style media="' + q + '"> #mq-test-1 { width: 42px; }</style>';
 
       docElem.insertBefore( fakeBody, refNode );
       bool = div.offsetWidth === 42;
@@ -213,10 +212,10 @@
       jqueryFxAvailable = 'undefined' !== typeof jQuery.fx;
 
   for (; lastTime < vendors.length && !requestAnimationFrame; lastTime++) {
-    requestAnimationFrame = window[ vendors[lastTime] + "RequestAnimationFrame" ];
+    requestAnimationFrame = window[ vendors[lastTime] + 'RequestAnimationFrame' ];
     cancelAnimationFrame = cancelAnimationFrame ||
-      window[ vendors[lastTime] + "CancelAnimationFrame" ] ||
-      window[ vendors[lastTime] + "CancelRequestAnimationFrame" ];
+      window[ vendors[lastTime] + 'CancelAnimationFrame' ] ||
+      window[ vendors[lastTime] + 'CancelRequestAnimationFrame' ];
   }
 
   function raf() {
@@ -337,15 +336,15 @@
 
         if (args && args.hasOwnProperty(lib)) {
             if (typeof this.libs[lib].settings !== 'undefined') {
-                $.extend(true, this.libs[lib].settings, args[lib]);
+              $.extend(true, this.libs[lib].settings, args[lib]);
             }
             else if (typeof this.libs[lib].defaults !== 'undefined') {
-                $.extend(true, this.libs[lib].defaults, args[lib]);
+              $.extend(true, this.libs[lib].defaults, args[lib]);
             }
           return this.libs[lib].init.apply(this.libs[lib], [this.scope, args[lib]]);
         }
 
-        args = args instanceof Array ? args : new Array(args);    // PATCH: added this line
+        args = args instanceof Array ? args : new Array(args);
         return this.libs[lib].init.apply(this.libs[lib], args);
       }
 
@@ -504,7 +503,7 @@
         ii = opts_arr.length;
 
         function isNumber (o) {
-          return ! isNaN (o-0) && o !== null && o !== "" && o !== false && o !== true;
+          return ! isNaN (o-0) && o !== null && o !== '' && o !== false && o !== true;
         }
 
         function trim (str) {
