@@ -3,13 +3,12 @@
 Template Name: News
 */
 
-$url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
-
 /*
  * Query variables
  */
 
 // Dates
+date_default_timezone_set('America/Los_Angeles');
 $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
 $coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,0,(int)$coenv_year));
@@ -29,7 +28,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			<div class=" large-6 columns" data-url="/about/news/" data-cat="blog_category">
 				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class=" large-6 columns" data-url="/about/news/>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="/about/news/" data-cat="blog_category">
 				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
@@ -64,13 +63,13 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a class="button" href="<?php echo $url_current; ?>">all posts</a></div>
+			<div class="right"><a class="button" href="/about/news/">all posts</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a href="/about/news/">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 
@@ -91,12 +90,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         }
 		?>
 		<div class="blog-list-item clearfix">
-		<!--
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
-		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
-    	-->
         
         <div class="blog-meta clearfix">
             <div class="small-6 columns left">
@@ -104,7 +97,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
                 echo '<p>' . get_the_date('M j, Y') .' / ';
                 $termlist = '';
                 foreach ($terms as $term) {
-                    $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                    $termlist .= '<a href="/about/news/' . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
                 }
                 $termlist = rtrim($termlist,', ');
                 echo $termlist;
@@ -164,7 +157,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
   	<?php else: ?>
   	<div class="panel">
 			<div class="left">We're sorry. This filter did not match any posts.</div>
-			<div class="right"><a class="button" href="<?php echo $url_current; ?>">all posts</a></div>
+			<div class="right"><a class="button" href="/about/news/">all posts</a></div>
 		</div>
 	<?php endif; ?>
 	  </div>		

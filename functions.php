@@ -261,8 +261,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 		    	} else {
 		    		$selected = '';
 		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
-		       // echo "\n".get_the_date('F Y');
+		    	echo '<option value="?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
 		        $ref_month = get_the_date('mY');
 		        $counter = 0;
 		    }
