@@ -10,6 +10,7 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
  */
 
 // Dates
+date_default_timezone_set('America/Los_Angeles');
 $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
 $coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,0,(int)$coenv_year));
@@ -29,7 +30,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			<div class=" large-6 columns" data-url="/about/news/" data-cat="blog_category">
 				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class=" large-6 columns" data-url="/about/news/>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="/about/news/" data-cat="blog_category">
 				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
