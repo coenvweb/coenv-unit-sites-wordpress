@@ -11,7 +11,7 @@ Template Name: News
 date_default_timezone_set('America/Los_Angeles');
 $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
-$coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,0,(int)$coenv_year));
+$coenv_date = date('F Y',mktime('1','30','1',(int)$coenv_month,'1',(int)$coenv_year));
 
 //Categories
 $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
