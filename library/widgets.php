@@ -217,65 +217,7 @@ add_action( 'widgets_init', 'register_coenv_base_fac_cats' );
  * Sub-navigation
  */
 
-class coenv_base_subnav extends WP_Widget {
 
-     /**
-      * Register widget with WordPress.
-      */
-     function __construct() {
-          parent::__construct(
-               'coenv_base_subnav', // Base ID
-               __('Sub-navigation (COENV)', 'text_domain'), // Name
-               array( 'description' => __( 'Sub-navigation for each section, usually placed in the sidebar.', 'text_domain' ), ) // Args
-          );
-     }
-     
-
-     /**
-      * Front-end display of widget.
-      *
-      * @see WP_Widget::widget()
-      *
-      * @param array $args     Widget arguments.
-      * @param array $instance Saved values from database.
-      */
-     public function widget( $args, $instance ) {
-          if ($GLOBALS['post']->post_parent) {
-            echo coenv_base_section_title($GLOBALS['post']->ID);
-          }
-          echo $args['before_widget'];
-
-          echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
-          echo $args['after_widget'];
-     } 
-     /**
-      * Back-end widget form.
-      *
-      * @see WP_Widget::form()
-      *
-      * @param array $instance Previously saved values from database.
-      */
-     public function form( $instance ) {
-      //var_dump($instance);
-
-      if ( isset( $instance[ 'title' ] ) ) {
-           $title = $instance[ 'title' ];
-      }
-      ?>
-      <p>
-      <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-      <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-      </p>
-     
-      <?php 
-     } 
-
-} 
-
-function register_coenv_base_subnav() {
-    register_widget( 'coenv_base_subnav' );
-}
-add_action( 'widgets_init', 'register_coenv_base_subnav' );
 
 
 /**

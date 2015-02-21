@@ -11,11 +11,9 @@ aside#sidebar {
 
 		}
 	}
-}
-aside#sidebar div.columns {
 
 	// Hide for mobile	
-	.widget_coenv_base_subnav,
+	.coenv_base_subnav,
 	&.section-title {
 		@media #{$small-only} {
 			display:none;
@@ -23,12 +21,12 @@ aside#sidebar div.columns {
 	}
 
 	// Second-level navigation
-	.widget_coenv_base_subnav ul {
+	.coenv_base_subnav ul {
 		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top.png");
 		background-position: center top;
 		background-repeat: no-repeat;
 		border-top: 1px solid #dddddd;
-		margin: 0  1rem 2rem 0;
+		margin: 0  1rem rem-calc(30) 0;
 		padding: rem-calc(5) 0 0 0;
 		line-height: 10px;
 		width: 100%;
@@ -67,7 +65,20 @@ aside#sidebar div.columns {
 			}
 		}
 	}
+	.widget {
+		margin-bottom: rem-calc(30);
+	}
 
+
+
+
+
+
+}
+
+aside#sidebar div.columns {
+
+	
 	// Content blocks
 	.widget_custom_post_widget {
 		.widget_content {
@@ -82,17 +93,21 @@ aside#sidebar div.columns {
 			}
 		}
 		.widget_links {
-				margin-left: 0;
-	margin-top: rem-calc(15);
+			margin-bottom: 0;
+			margin-left: 0;
+			margin-top: rem-calc(15);
 			li {
 				display: inline;
+				width: 100%;
 				a {
+					
+
+					
 					letter-spacing: rem-calc(1);
-					margin: 0;
+					margin: 0 0 rem-calc(6) 0;
 					padding: rem-calc(10);
-				}
-				&:first-child {
-					margin-right: rem-calc(5);
+					text-align: left;
+					width: 100%;
 				}
 				.button {
 					@include encode_black;
@@ -101,7 +116,7 @@ aside#sidebar div.columns {
 			}
 		}
 	}
-	&:nth-child(even) {
+	&:nth-child(odd) {
 		.widget_custom_post_widget {
 			background-color: #e8e3d3;
 			.widget_content {
@@ -113,7 +128,7 @@ aside#sidebar div.columns {
 				}
 			}
 			.widget_links {
-				padding: 0 rem-calc(20) 0 rem-calc(20);
+				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
 				.button {
 					background-color: $accent;
 					color: $white;
@@ -123,7 +138,7 @@ aside#sidebar div.columns {
 			
 		}
 	}
-	&:nth-child(odd) {
+	&:nth-child(even) {
 		.widget_custom_post_widget .widget_content {
 			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-tile.png");
 			background-repeat: no-repeat;
@@ -133,7 +148,10 @@ aside#sidebar div.columns {
 			}
 		}
 		.widget_custom_post_widget .widget_links {
-			padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
+			padding-top: 0;
+			padding-right: rem-calc(20);
+			padding-bottom: rem-calc(25);
+			padding-left: rem-calc(20);
 			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
 			background-repeat: no-repeat;
 			background-position: bottom center;
