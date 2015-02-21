@@ -31,7 +31,7 @@
                         $faculty_img = get_the_post_thumbnail($page->ID, 'med');
                         ?>
                         <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
-                                <div class="columns large-4 faculty-info left">
+                                <div class="columns medium-4 faculty-info left">
                                     <?php echo $faculty_img; ?>
                                     <?php echo '<ul class="side-nav faculty_contact_fields">';
                                     if ($faculty_email_address) {
@@ -80,7 +80,7 @@
                                     } ?>
                                     </ul>		
                                 </div>
-                            <div class="columns large-8 right">
+                            <div class="columns medium-8 right">
                             <header class="article__header">
                                 <div class="faculty-title">
                                     <h1 class="article__title<?php if (count(get_field('job_titles' )) > 1) {echo ' multi-title ';} else {echo ' single-title';}  ?>">

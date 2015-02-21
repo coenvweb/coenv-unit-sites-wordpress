@@ -82,8 +82,9 @@
 
 		th,
 		td {
-			@include rem('padding', 0.25, 0.25, 0.25, 0.5);
+			@include rem('padding', 0.5, 0.5, 0.5, 0.5);
 			text-align: left;
+            vertical-align: top;
 		}
 
 		th {

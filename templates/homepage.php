@@ -193,7 +193,7 @@ if( $featured ) {
         'post_status' => 'publish',
         'posts_per_page' => 2,
         'post__not_in' => $featured,
-        'cat' => -19,
+        'cat' => -19, //hide q+a posts
     );
 }
 else {

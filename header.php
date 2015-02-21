@@ -186,7 +186,7 @@
         </div>
     </div>
 
-<?php if (!is_front_page()) : ?>
+<?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
 <?php 
         $banner = coenv_banner();
