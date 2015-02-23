@@ -1,0 +1,29 @@
+.entry-content {
+    margin-left: rem-calc(14);
+    form {
+            width: 85%;
+            .field-wrap {
+                width: 100%;
+                input[type="text"] {
+                    width: 85%;
+                    height: rem-calc(36);
+                    font-siZe: rem-calc(16);
+                    border-radius: 0;
+                    border: solid 3px $text-lt;
+                    background: none;
+                }
+                button {
+                    height: rem-calc(36);
+                    font-siZe: rem-calc(16);
+                    border-radius: 0;
+                    background: none;
+                    color: $text-lt;
+                    border: solid 3px $text-lt;
+                    margin-left: rem-calc(-3);
+                    i {
+                        font-size: rem-calc(22);
+                    }
+                }
+            }
+        }
+}

@@ -29,69 +29,18 @@
 @import "site/news"; // news styles
 @import "site/widgets"; // widget styles
 @import "site/page"; // widget styles
+@import "site/search"; // search styles
+@import "site/404"; // 404 styles
 
 
 /* College Customizations */
 @import "site/faculty";
 
+/* Print styles */
+@import "config/print"; // Your custom print styles
+
 
 // Move to plugin?
 html .mceContentBody {
 	padding: 2rem !important;
-}
-
-/* print styles */
-@media print {
-    @for $i from 1 through $total-columns {
-        .small-#{$i} {
-            width: grid-calc($i, $total-columns);
-        }
-    }
-    
-    .top-bar-menu {
-        display: inline-flex!important;
-    }
-    
-    .title-row {
-        zoom: 85%;
-    }
-    
-    .widget_img {
-        max-width: 300px;
-    }
-    
-    div, p, a, .button {
-        margin: 0;
-    }
-    
-    .feature-image, .site-footer, .share, .tab-bar{
-        display: none;
-    }
-    
-    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats{
-        a[href]:after {
-            content: none;
-        }
-    }
-    
-    //special for SMEA
-    
-    #desktop-logo {
-        max-width: 70px;
-    }
-    
-    .feature-content .button, .all-news{
-        display: none
-    }
-    
-    .home-news-section .columns.large-12 {
-        height: 50px;
-    }
-    
-    a.news-title-link {
-        a[href]:after {
-            content: none;
-        }
-    }
-            
 }

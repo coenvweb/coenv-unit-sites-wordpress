@@ -12,14 +12,17 @@
 </div>
 
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-8 columns results" role="main">
+        <div class="search-filter">
 	
 		<?php do_action('foundationPress_before_content'); ?>
 	
 		<h3><?php _e('Results for', 'FoundationPress'); ?> "<?php echo get_search_query(); ?>"</h3>
+        
+        <?php get_search_form(); ?>
+        </div>
 	
 	<?php if ( have_posts() ) : ?>
-        <?php get_search_form(); ?>
 	
 		<?php while ( have_posts() ) : the_post(); ?>
 			<?php get_template_part( 'content', get_post_format() ); ?>
