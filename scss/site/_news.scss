@@ -133,7 +133,6 @@ select {
     text-transform: none!important;
     font-weight: 600;
     font-size: rem-calc(14);
-    @include encode_cb;
     color: $black;
         &:hover{
             border-color: #CCC;
