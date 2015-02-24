@@ -24,30 +24,34 @@ article.type-faculty {
                 color: $text;
 
                 &.single-title {
-                    border-right: $text solid 2px;
-                }
-
-                &.multi-title {
-                    display: block;
+                    @media #{$medium-up} {
+                        border-right: $text solid 2px;
+                        &:first-child {
+                            display: inline-block!important;
+                        }
+                    }
+                    &:first-child {
+                        display: block;
+                    }
                 }
             }
 
             .job-titles {
-                display: inline-block;
-                vertical-align: middle;
-                margin-top: rem-calc(8);
-
-                ul {
-                    margin-left: 0;
-
-                    li {
-                        list-style: none;
-                        list-style-image: none;
-                        display: inline-block;
-                        margin-right: rem-calc(10);
-                        font-size: rem-calc(20);
-                        font-weight: 200;
-                    }
+                margin-left: 0;
+                margin-right: rem-calc(10);
+                margin-bottom: rem-calc(3);
+                font-size: rem-calc(16);
+                font-weight: 200;
+                &:first-of-type {
+                    margin-top: rem-calc(8);
+                    display: inline-block;
+                    vertical-align: middle;
+                    font-size: rem-calc(20);
+                    margin-bottom: rem-calc(24);
+                }
+                
+                &:last-of-type {
+                    margin-bottom: rem-calc(24);
                 }
             }
         }

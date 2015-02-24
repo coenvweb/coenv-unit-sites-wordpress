@@ -19,7 +19,6 @@
                          */
                         $faculty_fields = get_fields();
                         $faculty_email_address = str_replace('u.washington.edu','uw.edu',$faculty_fields["email_address"]);
-                        $faculty_email_address = eae_encode_emails($faculty_email_address);
                         $faculty_website_url = $faculty_fields["website_url"];
                         $faculty_scival_url  = $faculty_fields["scival_url"];
                         $faculty_twitter_url = $faculty_fields["twitter_url"];
@@ -36,7 +35,7 @@
                                     <?php echo $faculty_img; ?>
                                     <?php echo '<ul class="side-nav faculty_contact_fields">';
                                     if ($faculty_email_address) {
-                                        echo '<li class="email"><a href="mailto:' . $faculty_email_address . '" title="Email this faculty member">';
+                                        echo '<li class="email"><a href="mailto:' . eae_encode_emails($faculty_email_address) . '" title="Email this faculty member">';
                                         get_template_part('assets/img/icons/inline', 'email-arrow.svg');
                                         echo $faculty_email_address . '</a></li>';
                                     }
@@ -84,7 +83,7 @@
                             <div class="columns medium-8 right">
                             <header class="article__header">
                                 <div class="faculty-title">
-                                    <h1 class="article__title<?php if (count(get_field('job_titles' )) > 1) {echo ' multi-title ';} else {echo ' single-title';}  ?>">
+                                    <h1 class="article__title single-title">
                                     <?php if ( is_page() || is_single()) : ?>
                                         <?php the_title() ?>
                                     <?php else : ?>
@@ -93,14 +92,12 @@
                                     </h1>
                                     <?php
                                     if( have_rows('job_titles') ) {
-                                        echo '<div class="job-titles">';
-                                        echo '<ul>';
                                         while ( have_rows('job_titles') ) : the_row();
-                                            echo '<li>';
+                                            if( $c == 1 ) $class .= ' first';
+                                            echo '<p class="job-titles">';
                                             the_sub_field('job_title');
-                                            echo '</li>';
+                                            echo '</p>';
                                         endwhile;
-                                        echo '</ul>';
                                     }
                                     ?>
                                 </div>
