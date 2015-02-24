@@ -166,9 +166,12 @@
         position: absolute;
         bottom: rem-calc(-14);
         
-        h2 {
+        h1, h2 {
             margin-bottom: 0;
             line-height: 3rem;
+        }
+        h1 {
+            margin-bottom: rem-calc(3)!important;
         }
 
         a {

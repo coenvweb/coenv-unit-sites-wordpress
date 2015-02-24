@@ -1,9 +1,9 @@
 .page-template-templatesnews-php {
     // selectors
     
-    .entry-content{
-        padding-top: 0;
-        margin-bottom: rem-calc(36);
+    .section-title h1 {
+        line-height: rem-calc(42);
+        margin-bottom: 0;
     }
     
     .filters {

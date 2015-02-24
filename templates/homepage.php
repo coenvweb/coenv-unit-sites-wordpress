@@ -131,7 +131,7 @@ $wp_query = new WP_Query( $feat_args );
 					
 					foreach ($terms as &$term) {
 						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 					$terms_str = ' / ' . implode(', ', $terms_arr);
@@ -163,7 +163,7 @@ $wp_query = new WP_Query( $feat_args );
 					
 					foreach ($terms as &$term) {
 						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 					$terms_str = ' / ' . implode(', ', $terms_arr);
