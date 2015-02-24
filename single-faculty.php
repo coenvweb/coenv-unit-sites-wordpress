@@ -18,7 +18,8 @@
                          * Faculty fields
                          */
                         $faculty_fields = get_fields();
-                        $faculty_email_address = eae_encode_emails(str_replace('u.washington.edu','uw.edu',$faculty_fields["email_address"]));
+                        $faculty_email_address = str_replace('u.washington.edu','uw.edu',$faculty_fields["email_address"]);
+                        $faculty_email_address = eae_encode_emails($faculty_email_address);
                         $faculty_website_url = $faculty_fields["website_url"];
                         $faculty_scival_url  = $faculty_fields["scival_url"];
                         $faculty_twitter_url = $faculty_fields["twitter_url"];
