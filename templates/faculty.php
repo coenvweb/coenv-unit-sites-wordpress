@@ -26,7 +26,7 @@ if ($cats) {
      echo '<h3 class="cat-title">What we work on:</h3>';
      echo '<ul class="medium-block-grid-2 fac-cats">';
      foreach($cats as $cat) { 
-          echo '<li><a class="button" href="/faculty-research/research-areas/' . $cat->slug . '/">' . $cat->name . '</a></li>';
+          echo '<li><a class="button" href="/faculty-and-research/research-areas/' . $cat->slug . '/">' . $cat->name . '</a></li>';
      }
      echo '</ul>';
      echo '</div>';

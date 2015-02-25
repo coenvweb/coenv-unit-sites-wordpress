@@ -6,6 +6,10 @@
         }
     }
     
+    .profiles {
+        page-break-inside: avoid;
+    }
+    
     .top-bar-menu {
         display: inline-flex!important;
     }
@@ -22,13 +26,13 @@
         margin: 0;
     }
     
-    .feature-image, .site-footer, .share, .tab-bar{
-        display: none;
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters {
+        display: none!important;
     }
     
-    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats{
+    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats {
         a[href]:after {
-            content: none;
+            content: none!important;
         }
     }
     
@@ -46,6 +50,33 @@
         height: 50px;
     }
     
+    .profiles .medium-6 {
+        @include grid-column(6);
+        .widget_img {
+            max-width: none;
+        }
+    }
+    
+    .post-content {
+        a[href]:not(:first-of-type):after {
+            content: none;
+        }
+    }
+        
+    
+    .get-started {
+        svg {
+            display: none;
+        }
+        h4 {
+            margin-top: rem-calc(14);
+        }
+    }
+    
+    .news-row, .profiles, .widget_links  {
+        padding-bottom: 0;
+    }
+    
     .teal-wedge {
         height: 65px!important;
     }
@@ -54,9 +85,24 @@
         min-height: 0!important;
     }
     
-    a.news-title-link {
+    a.news-title-link, .blog-list-item .post, .profile-widget .widget_links {
         a[href]:after {
             content: none;
+        }
+    }
+    .faculty {
+        .side-nav {
+            display: block;
+            svg {
+                display: none;
+            }
+        }
+    
+        .medium-4 {
+            @include grid-column(4);
+        }
+        .medium-8 {
+            @include grid-column(8);
         }
     }
     
