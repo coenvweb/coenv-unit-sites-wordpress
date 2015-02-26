@@ -61,7 +61,7 @@
     <?php
 		$post = get_queried_object();
 	if ( has_post_thumbnail( $post->ID ) ) {
-		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'large' );
+		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
 		$post_title = get_the_title().' | ' . get_bloginfo( 'name' );
 		$post_description = $advancedExcerpt;
 		$post_link = get_permalink();
