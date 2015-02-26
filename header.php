@@ -60,16 +60,15 @@
     ?>
     <?php
 		$post = get_queried_object();
-	if ( has_post_thumbnail( $post->ID ) ) {
-		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
-		$post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+        $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
 		$post_description = $advancedExcerpt;
 		$post_link = get_permalink();
+	if ( has_post_thumbnail( $post->ID ) ) {
+		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
 		$post_image = $thumb_src[0];
+	} elseif ( $banner ) {
+		$post_image = $banner['url'];
 	} else {
-		$post_title = get_the_title().' | ' . get_bloginfo( 'name' );
-		$post_description = $advancedExcerpt;
-		$post_link = get_the_permalink();
 		$post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
 	}
 	
@@ -226,11 +225,6 @@
 
 <?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
-<?php 
-        $banner = coenv_banner();
-        $banner_class = $banner ? 'has-banner' : '';
-        $banner_class .= ' template-print';
-?>
     <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             echo '<div class="page-row"';
             echo 'style="background-image: url(' . $banner['url'] . ');">';
