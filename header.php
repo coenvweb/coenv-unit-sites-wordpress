@@ -28,7 +28,7 @@
     if (have_posts()) : while(have_posts()) the_post();
         if (is_singular('faculty')) {
             $advancedExcerpt = strip_tags(get_field('biography'));
-        } elseif (is_post_type_archive( 'faculty' )) {		
+        } elseif (is_page_template( 'faculty' )) {		
             $advancedExcerpt = 'Our world-class faculty are at the center of our work at The UW' . bloginfo('name');
         } elseif (is_singular()&&is_front_page()==false ) {
             $advancedExcerpt = strip_tags(get_the_excerpt());
@@ -61,7 +61,7 @@
     <?php
 		$post = get_queried_object();
 	if ( has_post_thumbnail( $post->ID ) ) {
-		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'medium' );
+		$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'large' );
 		$post_title = get_the_title().' | ' . get_bloginfo( 'name' );
 		$post_description = $advancedExcerpt;
 		$post_link = get_permalink();
