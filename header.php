@@ -79,6 +79,9 @@
   <aside class="right-off-canvas-menu">
     <nav class="mobile-menu">
             <?php
+            echo '<ul class="off-canvas-list"><li>';
+            get_search_form();
+            echo '</li></ul>';
             
             add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             $exclude = implode(',',coenv_base_menu_exclude());
@@ -148,16 +151,18 @@
           <!--<![endif]-->
         </a>
       </div>
-      <div class="columns large-8 medium-10 show-for-medium-up">
+      <div class="columns large-9 medium-10 show-for-medium-up">
         <div id="unit-college-uw" class="centered">
           <h1 class="left"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo('name') ?></a></h1>
-          <div class="units show-for-large-up right">
-            <a href="http://coenv.uw.edu" name="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="college-name"></a><br />
-            <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="uw-name"></a>
+          <div class="units show-for-large-up left">
+            <ul>
+              <li><a href="http://coenv.uw.edu" name="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="college-name" width="215" height="12"></a></li>
+              <li><a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="uw-name"></a></li>
+            </ul>
           </div>
         </div>
       </div>
-      <div class="columns large-2 show-for-large-up">
+      <div class="columns large-1 show-for-large-up unit-logo">
         <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-cig-header.png" class="right"/></a>
       </div>
    </div>

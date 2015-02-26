@@ -83,7 +83,7 @@ aside#sidebar div.columns {
 	.widget_custom_post_widget {
 		.widget_content {
 			padding: rem-calc(24) rem-calc(20) rem-calc(5) rem-calc(20);
-			h4 {
+			h2 {
 				@include encode_cb;
 				font-size: rem-calc(22);
 				letter-spacing: .1rem;
@@ -123,7 +123,7 @@ aside#sidebar div.columns {
 				background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
 				background-repeat: no-repeat;
 				background-position: top left;
-				h4 a {
+				h2 a {
 					color: $accent;
 				}
 			}
@@ -143,7 +143,7 @@ aside#sidebar div.columns {
 			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-tile.png");
 			background-repeat: no-repeat;
 			background-position: top left;
-			h4 a {
+			h2 a {
 				color: #85754e;
 			}
 		}

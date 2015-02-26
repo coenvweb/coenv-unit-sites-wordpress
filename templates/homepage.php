@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
+<div class="row main">
 	<div class="small-12 large-12 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
@@ -81,31 +81,9 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
-<?php endif; ?>
 
 				
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
-</div>
-<?php endif; ?>
 
-<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-<?php endif; ?>
 <?php
 # News with featured news
 		
@@ -131,12 +109,8 @@ else {
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<hr />
 	<div class="home-news-section clearfix">
-		<div>
-			<h2 class="columns large-9 left" style="margin-top: 0; padding-top: 0;">News and Events</h2>
-			<a class="button columns large-3 right" href="/news-and-events">More News</a>
-		</div>
+		<h2>News &amp; Events</h2>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
