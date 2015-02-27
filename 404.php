@@ -12,7 +12,7 @@
 </div>
 
 <div class="row">
-	<div class="small-12 medium-8 columns 404" role="main">
+	<div class="small-12 medium-8 columns 404" role="main" id="main-col">
 	
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
         <div class="entry-content">

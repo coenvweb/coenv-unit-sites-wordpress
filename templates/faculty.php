@@ -8,7 +8,7 @@ Template Name: Faculty Index
 <?php get_header(); ?>
 <div class="row">
 
-<div class="small-12 medium-8 columns right" role="main">
+<div class="small-12 medium-8 columns right" role="main" id="main-col">
     <div class="entry-content">
 <?php
 

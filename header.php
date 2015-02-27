@@ -19,7 +19,7 @@
     } elseif ( is_single() ) {
       wp_title('');
     } else {
-      echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
+      echo bloginfo( 'name' );
     } ?></title>
 
     <meta name="title" content="<?php bloginfo('name'); ?>">
@@ -191,9 +191,9 @@
           </a>
           </h1>
             <div class="units show-for-large-up">
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left" alt="slash">
-                <a href="http://coenv.uw.edu" alt="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="right"></a><br />
-                <a href="http://uw.edu" alt="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="right uw-name"></a>
+                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left" alt="">
+                <a href="http://coenv.uw.edu" name="College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" alt="College of the Environment" class="right"></a><br />
+                <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" alt="University of Washington" class="right uw-name"></a>
           </div> 
         </li>          
       </ul>

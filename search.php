@@ -12,7 +12,7 @@
 </div>
 
 <div class="row">
-	<div class="small-12 medium-8 columns results" role="main">
+	<div class="small-12 medium-8 columns results" role="main" id="main-col">
         <div class="search-filter">
 	
 		<?php do_action('foundationPress_before_content'); ?>

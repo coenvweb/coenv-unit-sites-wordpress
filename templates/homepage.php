@@ -110,8 +110,7 @@ $wp_query = new WP_Query( $feat_args );
         } else {
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
-        }
-            if ( has_post_thumbnail()) {
+        } if ( has_post_thumbnail()) {
                 
                 $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
                 echo '<div class="featured-section">';
@@ -147,7 +146,13 @@ $wp_query = new WP_Query( $feat_args );
 	            echo $post_link;
                 echo '</div>';
             	echo '</div>';
-                echo '</div>';  
+                ?>
+                    <!--Social Media Box-->
+
+    <div class="social-news">
+    <div class="post-content"><a href="https://dev.smea.uw.edu/2014/11/10/new-publication-on-marine-spatial-planning-by-smeas-fluharty/"><h4>For more updates, follow us on Social Media:</h4></a>
+<p></p><a class="button left" href="https://dev.smea.uw.edu/2014/11/10/new-publication-on-marine-spatial-planning-by-smeas-fluharty/">Read more</a></div></div></div>
+        <?php
                 
 			}
             else {
@@ -183,10 +188,12 @@ $wp_query = new WP_Query( $feat_args );
                 echo '</div>';  
             }
 	endwhile;
-endif;
+endif; ?>
 
+
+
+<?php
 # Other News
-
 if( $featured ) {
     $home_args = array(
         'post_type' => 'post',

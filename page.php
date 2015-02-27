@@ -4,7 +4,7 @@
 	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
 	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
 	<?php //endif; ?>
-	<div class="small-12 medium-8 columns right main" role="main">
+	<div class="small-12 medium-8 columns right main" role="main" id="main-col">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
