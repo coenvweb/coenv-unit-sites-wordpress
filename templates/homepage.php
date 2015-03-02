@@ -81,7 +81,7 @@ echo '</div>';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
-echo '<div class="row news-row">';
+echo '<div class="row news-row" id="main-col">';
 
 # Featured News
 
@@ -149,9 +149,20 @@ $wp_query = new WP_Query( $feat_args );
                 ?>
                     <!--Social Media Box-->
 
-    <div class="social-news">
-    <div class="post-content"><a href="https://dev.smea.uw.edu/2014/11/10/new-publication-on-marine-spatial-planning-by-smeas-fluharty/"><h4>For more updates, follow us on Social Media:</h4></a>
-<p></p><a class="button left" href="https://dev.smea.uw.edu/2014/11/10/new-publication-on-marine-spatial-planning-by-smeas-fluharty/">Read more</a></div></div></div>
+    <div class="social-news show-for-medium-up">
+    <div class="post-content">
+        <div class="social-statement left"><h5>Keep up-to-date with us</h5></div>
+        <div class="social-buttons right">
+            <a href="http://twitter.com/<?php echo get_option('twitter') ?>" target="_blank" title="Follow us on Twitter">
+            <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+            <a href="<?php echo get_option('facebook'); ?>" target="_blank" title="Like us on Facebook">
+            <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+            <a href="<?php bloginfo('rss2_url'); ?>" title="Subscribe to our RSS Feed" target="_blank">
+            <?php get_template_part('assets/img/icons/inline', 'rss-circle.svg'); ?></a>
+        </div>
+    </div>
+    </div>
+    </div>
         <?php
                 
 			}
@@ -260,12 +271,28 @@ $wp_query = new WP_Query( $home_args );
 		echo '<p>' . the_advanced_excerpt('length=15&finish=sentence') . '</p>';
        	echo $post_link;
         if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
-        echo '</a></div>';
-        echo '</div>';
+        echo '</a></div></div>'; 
+        endwhile;
+        ?>
+        <!--Small Social Media Box-->
+
+        <div class="social-news visible-for-small-only">
+        <div class="post-content">
+            <div class="social-statement center"><h3>Keep up-to-date with us</h3></div>
+            <div class="social-buttons center">
+                <a href="http://twitter.com/<?php echo get_option('twitter') ?>" target="_blank" title="Follow us on Twitter">
+                <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                <a href="<?php echo get_option('facebook'); ?>" target="_blank" title="Like us on Facebook">
+                <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                <a href="<?php bloginfo('rss2_url'); ?>" title="Subscribe to our RSS Feed" target="_blank">
+                <?php get_template_part('assets/img/icons/inline', 'rss-circle.svg'); ?></a>
+            </div>
+        </div>
+        </div>
+        <?php
         if (empty( $featured )) {
             echo '</div>';
-        }        
-        endwhile;
+        }       
     if ( $featured ) {
         echo '<a href=/about/news" name="All Posts"><div class="all-news"><span class="button white">See All Posts</span></div></a>';
         echo '</div>';
