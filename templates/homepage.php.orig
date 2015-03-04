@@ -18,10 +18,16 @@ Template Name: Homepage
 			'post_type'	=> 'features',
 			'post_status' => 'publish',
 			'posts_per_page' => 4,
+<<<<<<< HEAD
+            'orderby' => 'menu_order',
+        'order' => 'ASC',
+=======
+			'orderby' => 'menu_order',
+>>>>>>> master
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
-		<div class="playpause right"></div>
+		<div class="playpause"></div>
 			<div class="homepage-features">
 			<?php
 			# The Loop
@@ -46,13 +52,13 @@ Template Name: Homepage
 			
 echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
-echo '</div>';
-	echo '<div class="feature-info-container">';
+
+		echo '<div class="feature-info-container">';
 		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-		echo '<div class="feature-info" style="background-color: rgb(51, 51, 51);">';
-			echo '<div class="feature-content" style="text-align: center;">';
+		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+			echo '<div class="feature-content">';
 				echo '<h2>' . get_the_title() . '</h2>';
-				echo '<h2>' . $feature_excerpt . '</h2>';
+				echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
 				if($rows)
 					{
 						foreach($rows as $row) {
@@ -75,42 +81,48 @@ echo '</div>';
 		echo '</div><!-- .feature-info -->';
 
 	echo '</div><!-- .feature-info-container -->';
+	echo '</div>';
+
 
 echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
-<<<<<<< HEAD
 
-
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
+</div>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
+</div>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
+</div>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
+</div>
+				
+<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
+<div class="large-12 columns programs">
+	<div class="widget-area home-content" role="complementary">
+		<?php dynamic_sidebar( 'home-content' ); ?>
+	</div><!-- .widget-area -->
+</div>
 <?php endif; ?>
 
-
-
-
-=======
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
+<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+	<?php do_action('foundationPress_after_content'); ?>
+	<ul class="widget-area after-content">
+	<?php dynamic_sidebar("after-content"); ?>
+	</ul>
 <?php endif; ?>
->>>>>>> 47861004a9a4b44eda03a31daf1fb39c9f2f446d
+        
+<hr />
+<div class="large-4 columns small-news">
+<a class="button right" href="/news-and-events">More</a>
+	<a href="/news-and-events"><h4>News</h4></a>
 <?php
-# News with featured news
-		
 $home_args = array(
 	'post_type'	=> 'post',
 	'post_status' => 'publish',
@@ -119,16 +131,36 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<hr />
-	<div class="home-news-section clearfix">
-		<div>
-			<h2 class="columns large-9 left" style="margin-top: 0; padding-top: 0;">News and Events</h2>
-			<a class="button columns large-3 right" href="/news-and-events">More News</a>
-		</div>
+	<div class="home-news-small clearfix">
+		<ul class="list-news-small">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
+<<<<<<< HEAD
+		echo '<li class="news-small"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+	endwhile;	
+		echo '</ul></div>';
+	endif;
+?>
+</div>
+				
+<div class="large-4 columns events">
+	<a class="button right" href="/news-and-events/calendar">More</a>
+	<h4>Events</h4>
+	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+</div>
+<div class="large-4 columns events">
+	<a class="button right" href="/alumni-and-community">More</a>
+	<h4>Get Connected</h4>
+	<?php the_widget('CoEnv_Widget_Social'); ?>
+</div>
+<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+	<?php do_action('foundationPress_after_content'); ?>
+	<ul class="widget-area after-content">
+	<?php dynamic_sidebar("after-content"); ?>
+	</ul>
+=======
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';
@@ -154,7 +186,7 @@ $wp_query = new WP_Query( $home_args );
 					
 					foreach ($terms as &$term) {
 						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 					$terms_str = ' / ' . implode(', ', $terms_arr);
@@ -180,7 +212,7 @@ $wp_query = new WP_Query( $home_args );
 					
 					foreach ($terms as &$term) {
 						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 					$terms_str = ' / ' . implode(', ', $terms_arr);
@@ -211,7 +243,7 @@ $wp_query = new WP_Query( $home_args );
 			
 			foreach ($more_terms as &$term) {
 				if ($term->slug != 'uncategorized') {
-					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&term=' . $term->slug . '">' . $term->name . '</a>';
+					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 				}
 			}
 			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
@@ -229,25 +261,12 @@ $wp_query = new WP_Query( $home_args );
 	echo '</div>';
 	endwhile;
 	?>
-<?php endif; ?>
-				
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
-</div>
-<?php endif; ?>
-
-<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
+>>>>>>> master
 <?php endif; ?>
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+</div>
 </div>
 <?php get_footer(); ?>

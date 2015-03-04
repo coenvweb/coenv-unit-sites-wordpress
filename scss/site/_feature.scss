@@ -22,7 +22,7 @@
 			padding: rem-calc(16);
 			position: absolute;
 			right: 0;
-			bottom: 0;
+			bottom: rem-calc(10);
 			width: 50%;
 
 			@media #{$small-only} {
