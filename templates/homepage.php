@@ -117,12 +117,13 @@ echo '</div>';
 <?php endif; ?>
         
 <hr />
-<div class="large-4 columns small-news">
-	<?php the_widget('custom_post_widget', 'custom_post_id=26848'); ?>
+<div class="large-4 columns spotlight">
+    <h4>Student Spotlight</h4>
+	<?php the_widget('custom_post_widget', 'custom_post_id=26848', 'show_featured_image=true'); ?>
 </div>
 <div class="large-4 columns small-news">
 <a class="button right" href="/news-and-events">More</a>
-	<a href="/news-and-events"><h4>News</h4></a>
+	<a href="/news-and-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
 	'post_type'	=> 'post',
@@ -149,11 +150,6 @@ $wp_query = new WP_Query( $home_args );
 	<a class="button right" href="/news-and-events/calendar">More</a>
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
-</div>
-<div class="large-12 columns events">
-	<a class="button right" href="/alumni-and-community">More</a>
-	<h4>Get Connected</h4>
-	<?php the_widget('CoEnv_Widget_Social'); ?>
 </div>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
