@@ -4,7 +4,7 @@
   Foundation.libs.clearing = {
     name : 'clearing',
 
-    version: '5.5.0',
+    version: '5.4.7',
 
     settings : {
       templates : {
@@ -16,7 +16,7 @@
 
       // comma delimited list of selectors that, on click, will close clearing,
       // add 'div.clearing-blackout, div.visible-img' to close on background click
-      close_selectors : '.clearing-close, div.clearing-blackout',
+      close_selectors : '.clearing-close, div.clearing-blackout', 
 
       // Default to the entire li element.
       open_selectors : '',
@@ -160,7 +160,7 @@
       if ($el.parent().hasClass('carousel')) {
         return;
       }
-
+      
       $el.after('<div id="foundationClearingHolder"></div>');
 
       var grid = $el.detach(),
@@ -171,7 +171,7 @@
       } else {
         grid_outerHTML = grid[0].outerHTML;
       }
-
+      
       var holder = this.S('#foundationClearingHolder'),
           settings = $el.data(this.attr_name(true) + '-init'),
           data = {
@@ -272,7 +272,7 @@
           .removeClass('clearing-blackout');
         container.removeClass('clearing-container');
         visible_image.hide();
-        visible_image.trigger('closed.fndtn.clearing');
+        visible_image.trigger('closed.fndtn.clearing');        
       }
 
       // Event to re-enable scrolling on touch devices
@@ -352,18 +352,34 @@
     },
 
     center_and_label : function (target, label) {
-      if (!this.rtl && label.length > 0) {
-        label.css({
-          marginLeft : -(label.outerWidth() / 2),
-          marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10
+      if (!this.rtl) {
+        target.css({
+          marginLeft : -(target.outerWidth() / 2),
+          marginTop : -(target.outerHeight() / 2)
         });
+
+        if (label.length > 0) {
+          label.css({
+            marginLeft : -(label.outerWidth() / 2),
+            marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10
+          });
+        }
       } else {
-        label.css({
-          marginRight : -(label.outerWidth() / 2),
-          marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10,
+        target.css({
+          marginRight : -(target.outerWidth() / 2),
+          marginTop : -(target.outerHeight() / 2),
           left: 'auto',
           right: '50%'
         });
+
+        if (label.length > 0) {
+          label.css({
+            marginRight : -(label.outerWidth() / 2),
+            marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10,
+            left: 'auto',
+            right: '50%'
+          });
+        }
       }
       return this;
     },
@@ -376,7 +392,7 @@
       if ($image[0].nodeName === 'A') {
         href = $image.attr('href');
       } else {
-        href = $image.closest('a').attr('href');
+        href = $image.parent().attr('href');
       }
 
       this.preload($image);
@@ -420,7 +436,7 @@
           .hide();
       }
       return this;
-    },
+    }, 
 
     // directional methods
 

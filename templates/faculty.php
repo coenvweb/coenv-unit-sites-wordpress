@@ -19,7 +19,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 	<div class="small-12 medium-8 columns" role="main">
         <div class="entry-content">
-        	<h1><a href="/faculty"><?php echo the_title(); ?></a></h1>
         	<div class="row filters">
 				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>

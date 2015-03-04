@@ -30,7 +30,7 @@
         color: $accent;
         font-size: rem-calc(20);
         
-        #logo {
+        #mobile-logo {
             width: rem-calc(55);
             fill: $accent;
             margin-top: rem-calc(-10);
@@ -52,6 +52,7 @@
 
 .top-bar-container {
     border-top: #d7dee5 1px solid;
+    margin-bottom: 0;
 }
 
 .title-area {
@@ -75,7 +76,7 @@
             color: $text;
         }
     }
-    #logo {
+    #desktop-logo {
         fill: $accent;
         width: rem-calc(108);
         height: rem-calc(73);

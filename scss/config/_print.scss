@@ -1,0 +1,39 @@
+/* print styles */
+@media print {
+    @for $i from 1 through $total-columns {
+        .small-#{$i} {
+            width: grid-calc($i, $total-columns);
+        }
+    }
+    
+    .profiles {
+        page-break-inside: avoid;
+    }
+    
+    .top-bar-menu {
+        display: inline-flex!important;
+    }
+    
+    .title-row {
+        zoom: 85%;
+    }
+    
+    .widget_img {
+        max-width: 300px;
+    }
+    
+    div, p, a, .button {
+        margin: 0;
+    }
+    
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters {
+        display: none!important;
+    }
+    
+    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats {
+        a[href]:after {
+            content: none!important;
+        }
+    }
+               
+}

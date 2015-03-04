@@ -35,71 +35,13 @@
 @import "site/faculty";
 @import "site/lists";
 
+/* Print styles */
+@import "config/print";
 
 
 // Sort into separate .scss files
-#sidebar .widget_content {
-	margin-top: 15px;
-	p {
-		font-size: 1rem;
-	}
-}
-#after-content .widget_custom_post_widget {
-	margin-bottom: 1.5rem;
-	padding-top: 1rem;
-}
-#after-content .widget_content {
-	float: left;
-	padding-left: rem-calc(10);
-	width: 80%;
 
-	p {
-	margin-bottom: 0;
-	}
-}
-#after-content .widget_links {
-	float: left;
-	width: 80%;
-}
-#after-content .widget_links li a {
-	width: auto;
-	margin: 0;
-	&:first-child {
-        margin-left: rem-calc(10);
-	}
-}
-#after-content .widget_img {
-	float: left;
-	width: 20%;
-}
-#sidebar .widget_links li a {
-	width: 48%;
-	margin: 0;
-	&:first-child {
-		margin-right: 2%;
-	}
-}
-#sidebar .widget_links ul {
-	float: right;
-	text-align: right;
-}
-.widget_custom_post_widget ul.widget_links li {
-	display: inline;
-}
-ul.widget-area li {
-	list-style: none;
-	margin: 0;
-	padding: 0;	
-}
-ul.widget-area.before-content h2.widgettitle {
-	font-size: 1.25rem;
-	margin-bottom: .5rem;
-	margin-top: 0;
-	padding-bottom: 0;
-}
-ul.widget-area.before-content .button {
-	margin-bottom: .5rem;
-}
+
 body.page-template-templatesfaculty-php .pager {
 	width: 100%;
 	float: left;
@@ -225,6 +167,3 @@ body.single-datasets .entry-content a {
 	color: #4b2e83;
 	text-decoration: underline;
 }
-	
-
-
