@@ -1,8 +1,7 @@
 /*	Module: button
 ======================================================================== */
 
-.button,
-span.button a {
+.button {
 	background: $white-button;
 	color: $text;
 	display: inline-block;
@@ -33,3 +32,39 @@ span.button a {
 	}
 
 } // .button
+
+span.button {
+	padding: 0;
+	margin: 0;
+	a {
+	background: $white-button;
+	color: $text;
+	display: inline-block;
+	@include encode_black;
+	@include font-size(12);
+	font-weight: 400;
+	letter-spacing: rem-calc(1);
+	margin: 0 0 rem-calc(6) 0;
+	padding: rem-calc(10);
+	text-align: left;
+	text-decoration: none;
+	text-transform: uppercase;
+	vertical-align: middle;
+
+	&:hover {
+		background: rgba(0,0,0,0.6);
+		color: #fff !important;
+	}
+
+	.dark {
+		background: $bg-dk;
+		color: $white;
+
+		&:hover {
+			background: $white-button;
+			color: $text;
+		}
+	}
+
+}
+}
