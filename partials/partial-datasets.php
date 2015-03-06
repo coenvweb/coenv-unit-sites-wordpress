@@ -7,6 +7,8 @@
 $fields = get_fields();
 
 
+
+
 ?>
 <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 
@@ -104,89 +106,19 @@ if( $field['value'] ) {
 						echo '<a class="button" href="' . $row['dataset_link_url'] . '" target="_blank">' . $row['dataset_link_title'] . '</a>';
 					}
 				}
-		echo '</div>';
-}
-{
-	$field = get_field_object('dataset_overview', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
+			} else {
+				echo $value;			
+			}
 
-$field = get_field_object('dataset_applications', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('dataset_about', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('dataset_data', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('dataset_funding', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('dataset_citation', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('dataset_updates', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
 
-$field = get_field_object('contact', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
 		echo '</div>';
-}
-
-$field = get_field_object('dataset_reports', $post->id, array('load_value' => true));
-if( $field['value'] ) {
-		echo '<a name="' . $field_name  . '" id="' . $field_name . '"></a>';
-		echo '<div data-magellan-destination="' . $field_name . '">';
-			echo '<h2>' . $field['label'] . '</h2>';
-			echo $field['value'];
-		echo '</div>';
-}
+	}
+	}
 }
 
 ?>
