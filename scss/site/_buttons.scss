@@ -1,29 +1,31 @@
 /*	Module: button
-		======================================================================== */
+======================================================================== */
 
-.button {
+.button,
+span.button a {
+	background: $white-button;
+	color: $text;
 	display: inline-block;
-	vertical-align: middle;
-	@include rem('padding', 0.25, 1);
-	@include sans;
+	@include encode_black;
 	@include font-size(12);
 	font-weight: 400;
-	background: $white-button;
+	letter-spacing: rem-calc(1);
+	margin: 0 0 rem-calc(6) 0;
+	padding: rem-calc(10);
+	text-align: left;
 	text-decoration: none;
-	color: $text;
-	//@include border-radius( $radius );
-	border-radius: $radius;
-	//min-height: rem-calc(28);
-	
+	text-transform: uppercase;
+	vertical-align: middle;
+
 	&:hover {
 		background: rgba(0,0,0,0.6);
 		color: #fff !important;
 	}
-	
+
 	.dark {
 		background: $bg-dk;
 		color: $white;
-		
+
 		&:hover {
 			background: $white-button;
 			color: $text;
