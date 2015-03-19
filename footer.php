@@ -10,8 +10,18 @@
                 <h2><?php bloginfo('name') ?></h2>
             </div>
             <div class="unit-contact">
+                <?php
+                if (get_option('public_email_address')) {
+                    $public_email_address = get_option('public_email_address');
+                    if(function_exists('eae_encode_emails')) {
+                        $public_email_address = eae_encode_emails($public_email_address);
+                    }
+                } else {
+                    $public_email_address = '';
+                }
+                ?>
                 <?php if (get_option('mail_address')) { ?><p><a href="http://maps.google.com/?q=<?php echo urlencode(get_option('mail_address')); ?>" title="Google Maps link"><?php echo get_option('mail_address'); ?></a></p><?php } ?>
-                <?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo get_option('public_email_address'); ?>" title="Send us an Email"><?php echo get_option('public_email_address'); } ?></a>
+                <?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo $public_email_address; ?>" title="Send us an Email"><?php echo $public_email_address; } ?></a>
                 <?php if (get_option('phone')) { ?> | <?php echo get_option('phone'); ?></p><?php } ?>
             </div>
             <div class="footer__info">
