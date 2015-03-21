@@ -17,7 +17,11 @@
                                 <div class="blog-meta clearfix">
                                     <div class="small-6 columns left">
                                         <p><time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
-                                        <?php $terms = wp_get_post_terms( get_the_ID(), 'category'); ?>
+                                        <?php 
+                                        $terms = wp_get_post_terms( get_the_ID(), 'category');
+                                        // Filter display of administrative post categories
+                                        $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
+                                        ?>
                                         <?php if ( $terms ) : ?>
                                             | <?php 
                                                 foreach ($terms as $term) {

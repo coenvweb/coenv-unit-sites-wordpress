@@ -80,6 +80,8 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
+		// Filter display of administrative post categories
+		$terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';

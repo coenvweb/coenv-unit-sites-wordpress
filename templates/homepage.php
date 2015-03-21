@@ -125,13 +125,16 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
                 $terms = wp_get_post_terms(get_the_id(), 'category');
+                // Filter display of administrative post categories
+                $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
 				if (!empty($terms)) {
 					$terms_arr = array();
 					
 					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
+						// exclude administrative terms
+						//if ($term->slug != 'uncategorized' || $term->slug != 'featured') {
 							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
+						//}
 					}
 					$terms_str = ' / ' . implode(', ', $terms_arr);
 
@@ -174,6 +177,8 @@ $wp_query = new WP_Query( $feat_args );
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
                 $terms = wp_get_post_terms(get_the_id(), 'category');
+                // Filter display of administrative post categories
+                $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
 				if (!empty($terms)) {
 					$terms_arr = array();
 					
