@@ -1,7 +1,4 @@
 <?php
-// Various clean up functions
-//require_once('library/cleanup.php');
-
 // Required for Foundation to work properly
 require_once('library/breadcrumbs.php');
 
@@ -271,7 +268,16 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	wp_reset_postdata();
 	wp_reset_query();
 }
-/*
- * Use site stylesheet for WYSIWYG
+
+/* 
+ * Serve images over SSL, if enabled)
  */
-//add_editor_style( 'css/app.css' );
+function coenv_url_ssl($url)
+{
+  if( function_exists('is_ssl') && is_ssl() )
+  {
+    return str_replace('http://', 'https://', $url);
+  }
+  return $url;
+}
+add_filter('wp_get_attachment_url', 'coenv_url_ssl');
