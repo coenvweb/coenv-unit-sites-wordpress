@@ -30,9 +30,8 @@
 		<?php
 		$teaser_limited = get_the_excerpt();
 		$teaser_limited = strip_tags($teaser_limited);
-		$teaser_limited = trim($teaser_limited);
-		$teaser_limited = rtrim ($teaser_limited,'. ');
-		echo $teaser_limited;
+		$teaser_limited = trim($teaser_limited, '!,?.&nbsp;');
+		echo $teaser_limited . '...';
 		?>
 		</p>
 		<?php endwhile; ?>
