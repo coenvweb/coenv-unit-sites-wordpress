@@ -64,6 +64,11 @@ RewriteRule ^(.*) "/wp-content/cache/supercache/%{SERVER_NAME}/$1/index.html" [L
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# Site redirects
+
+RewriteCond %{HTTP_HOST} smea.washington.edu [NC]
+RewriteRule ^(.*)$ http://smea.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -82,8 +87,8 @@ RewriteEngine On
 # RewriteCond %{SERVER_PORT} 80 
 # RewriteRule ^(.*)$ https://dev.fish.uw.edu/$1 [R,L]
 
-RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
-RewriteRule faculty-and-research/$ faculty-and-research/faculty [R=301,NC,L]
+# RewriteCond %{HTTP_HOST} ^dev.smea.uw\.edu [NC]
+# RewriteRule faculty-and-research/$ faculty-and-research/faculty [R=301,NC,L]
 # RewriteCond %{SERVER_PORT} 80
 # RewriteRule ^(.*)$ https://dev.smea.uw.edu/$1 [R,L]
 
@@ -102,3 +107,9 @@ RewriteRule . index.php [L]
 </IfModule>
 
 # END WordPress
+
+
+
+
+
+
