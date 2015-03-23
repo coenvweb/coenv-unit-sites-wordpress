@@ -25,7 +25,16 @@
 	<?php if ( have_posts() ) : ?>
 	
 		<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'content', get_post_format() ); ?>
+		<h2><a href="<?php echo the_permalink(); ?>"><?php echo the_title(); ?></a></h2>
+		<p>
+		<?php
+		$teaser_limited = get_the_excerpt();
+		$teaser_limited = strip_tags($teaser_limited);
+		$teaser_limited = trim($teaser_limited);
+		$teaser_limited = rtrim ($teaser_limited,'. ');
+		echo $teaser_limited;
+		?>
+		</p>
 		<?php endwhile; ?>
 		
 		<?php else : ?>
