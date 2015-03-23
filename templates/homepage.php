@@ -154,7 +154,7 @@ $wp_query = new WP_Query( $feat_args );
 
     <div class="social-news show-for-medium-up">
     <div class="post-content">
-        <div class="social-statement left"><h5>Keep up-to-date with us</h5></div>
+        <div class="social-statement left"><h5>Get Connected</h5></div>
         <div class="social-buttons right">
             <a href="http://twitter.com/<?php echo get_option('twitter') ?>" target="_blank" title="Follow us on Twitter">
             <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
