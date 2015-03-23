@@ -211,7 +211,11 @@
      }
      ?>
     <div class="section-row row">
-        <div class="columns large-8 section-title"><a href="/<?php echo $coenv_post_section->post_name;?>"><?php echo the_title(); ?></a></div>
+        <div class="columns large-8 section-title">
+
+          <a href="/<?php echo $coenv_post_section->post_name;?>"><?php echo the_title(); ?></a>
+
+        </div>
     </div>
     </div>
 </div>
