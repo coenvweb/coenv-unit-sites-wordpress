@@ -97,6 +97,29 @@
     }
 }
 
+.featured-section {
+    .small-news {
+        margin-right: 0;
+    }
+}
+
+.all-news {
+    background: url(../assets/img/button-water.png) no-repeat;
+    background-size: cover;
+    text-align: center;
+
+    .button {
+        margin: rem-calc(40) 0;
+    }
+}
+
+.post-content {
+    padding: rem-calc(25) rem-calc(35);
+    
+}
+
+// Social Statement
+
 .social-news {
     @media #{$medium-up} {
         margin-top: rem-calc(32);
@@ -127,28 +150,10 @@
             height: 45px;
             width: 45px;
         }
+        a:hover {
+            color: $accent-teal!important;
+        }
     }
-}
-
-.featured-section {
-    .small-news {
-        margin-right: 0;
-    }
-}
-
-.all-news {
-    background: url(../assets/img/button-water.png) no-repeat;
-    background-size: cover;
-    text-align: center;
-
-    .button {
-        margin: rem-calc(40) 0;
-    }
-}
-
-.post-content {
-    padding: rem-calc(25) rem-calc(35);
-    
 }
 
 // Homepage Widgets
