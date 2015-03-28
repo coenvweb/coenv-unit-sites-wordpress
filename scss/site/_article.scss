@@ -293,10 +293,9 @@
 	.wp-caption {
 		margin: 0;
 		padding: 0;
-		//width: auto !important;
-		color: #fff;
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-		background-color: $bg-dk;
+		color: #000;
+		background-color: #f2f2f2;
+		border: 1px solid #cccccc;
 		
 		.source {
 			background-color: rgba(0,0,0,.5);
@@ -326,7 +325,7 @@
 			@include rem('padding', .25, 1);
 			@include font-size(12);
 			@include rem('line-height', 1.25);
-			color: $text-very-lt;
+			color: #000;
 			text-align: left;
 
 
@@ -334,11 +333,42 @@
 				color: #fff;
 				text-decoration: underline;
 			}
+
 		}
 
 		img {
+			background-color: #fff;
 			margin: 0;
 			padding: 0;
+		}
+		&.size-medium {
+			width: 350px;
+		}
+		&.size-med-sidecap {
+			float: left;
+			margin: rem-calc(20) 0;
+			padding-bottom: rem-calc(12);
+			width: 100%;
+			img {
+				float: left;
+				border-right: 1px solid #cccccc;
+				border-bottom: 1px solid #cccccc;
+				margin-right: rem-calc(28);
+				width: 350px;
+			}
+			.wp-caption-text {
+				
+				@include rem('padding', 1, 2);
+				margin: 0;
+				width: 100%;
+				
+				p {
+					@include font-size(14);
+					@include line-height(28);
+					margin-bottom: 0;
+					width: 100%;
+				}
+			}
 		}
 
 	} // .wp-caption

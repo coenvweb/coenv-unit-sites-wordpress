@@ -79,8 +79,12 @@ add_filter("attachment_fields_to_save", "add_image_attachment_fields_to_save", n
  * @param  string $content Shortcode content
  * @return string          Shortcode output
  */
-function jk_img_caption_shortcode_filter($val, $attr, $content = null)
-{
+function jk_img_caption_shortcode_filter($val, $attr, $content = null) {
+
+
+
+
+
 	extract(shortcode_atts(array(
 		'id'      => '',
 		'align'   => 'aligncenter',
@@ -97,6 +101,31 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null)
 		$attach_id = str_replace('attachment_', '', $id);
 		$photo_source = get_post_meta( $attach_id, '_credit_text', true );
 		$photo_source_url = get_post_meta( $attach_id, '_credit_link', true );
+
+		// Extract the thumbnail size and add to classes
+		extract( shortcode_atts( array(
+		'id' => '', 'align' => 'alignnone', 'width' => '', 'caption' => ''
+		), $attr) );
+
+		if ( 1 > (int) $width || empty($caption) ) return $content;
+
+		if ( $id ) $id = 'id="' . esc_attr($id) . '" ';
+
+		// set the initial class output
+		$class = 'wp-caption';
+		// use a preg match to catch the img class attribute
+		preg_match('/<img.*class[ \t]*=[ \t]*["\']([^"\']*)["\'][^>]+>/', $content, $matches);
+		$class_attr = isset($matches[1]) && $matches[1] ? $matches[1] : false;
+		// if the class attribute is not empty get an array of all classes
+		if ( $class_attr ) {
+			foreach ( explode(' ', $class_attr) as $aclass ) {
+				if ( strpos($aclass, 'size-') === 0 ) $class .= ' ' . $aclass;
+			}
+		}
+
+		$class .= ' ' . esc_attr($align);
+
+
 	
 		if ( $photo_source ) {
 		if (!empty($photo_source_url)) {
@@ -106,11 +135,35 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null)
 			$photo_source_div = "<div class=\"source\">$photo_source</div>";
 		} else
 			$photo_source_div= " ";
-	
+		
 
 
-	return '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="wp-caption ' . esc_attr($align) . '" itemscope itemtype="http://schema.org/ImageObject" style="width: ' . (0 + (int) $width) . 'px">' . do_shortcode( $content ) . $photo_source_div . '<figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description">' . $caption . '</figcaption></figure>';
+	return '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="' . $class . '" itemscope itemtype="http://schema.org/ImageObject">' . do_shortcode( $content ) . $photo_source_div . '<figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description"><p>' . $caption . '</p></figcaption></figure>';
 	
 }
 add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
+
+// add custom image sizes
+if ( function_exists( 'add_image_size' ) ) {
+	add_image_size( 'med-sidecap', 350 ); //(cropped)
+	}
+add_filter('image_size_names_choose', 'my_image_sizes');
+function my_image_sizes($sizes) {
+	$addsizes = array(
+		"med-sidecap" => __( "Medium (right caption)")
+	);
+	$newsizes = array_merge($sizes, $addsizes);
+	return $newsizes;
+}
+
+
+
+
+
+
+
+
+
+
+
 ?>
