@@ -54,16 +54,53 @@
     background-color: $accent;
 }
 .title-row {
+height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 1200px;
     
 }
-.title-area {
-    margin: 0;
-    list-style: none;
+.name {
+    float: left;
+    height: 109px;
+    margin-left: 15px;
+    width: 115px;
+    #logo {
+        fill: #fff;
+        width: 130px;
+        height: 88px;
+        margin: 0 0 -1px 0;
+        padding: 0;
+        bottom: 0;
+        span {
+            @extend .visuallyhidden;
+        }
+    }
+}
+
+
+.logotype {
+    float: left;
+    width: 988px;
+    text-align: center;
+
+    #unit-college-uw {
+        margin-left: 10%;
+        overflow: hidden;
+        height: 109px;
+        @media #{$medium-only} {
+            margin-left: 50px;
+        }
+    }
+
 }
 .unit-logo {
+    float: right;
     height: 109px;
-    position: relative;
-
+    margin-right: 10px;
+    width: 42px;
     img {
         max-width: 52px;
         max-height: 88px;
@@ -73,31 +110,6 @@
         -ms-transform: translateY(-50%);
         transform: translateY(-50%);
     }
-}
-
-.name {
-    height: 109px;
-    position: relative;
-    
-    #logo {
-        fill: #fff;
-        width: 130px;
-        height: 88px;
-        margin: 0 0 -1px 0;
-        padding: 0;
-        bottom: 0;
-        position: absolute;
-        
-        span {
-            @extend .visuallyhidden;
-        }
-    }
-}
-
-
-.unit-logo {
-    float: right;
-    text-align: left;
 }
 .section-wrapper {
       background-image: url("/wp-content/themes/coenv-cig/assets/img/header-forest.jpg");
@@ -168,14 +180,7 @@
 
 }
 
-#unit-college-uw {
-margin-left:auto;
-margin-right:auto;
-padding-left: 20px;
-height: 109px;
-display: block!important;
-overflow: hidden;
-}
+
 
 #unit-college-uw ul {
     height: 35px;
@@ -197,7 +202,7 @@ overflow: hidden;
         font-size: rem-calc(28);
         padding: 0;
         margin: 0;
-        @media #{$large-up} {
+        @media #{$medium-up} {
             font-size: rem-calc(28)!important;
         }
         float: left;
@@ -220,9 +225,6 @@ overflow: hidden;
     width: 300px;
     padding: 0;
     margin: 0 0 0 rem-calc(40);
-    position: relative;
-  top: 50%;
-  transform: translateY(-50%);
   li {
     display: inline-block;
     height: 14px;
