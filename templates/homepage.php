@@ -299,7 +299,7 @@ $wp_query = new WP_Query( $home_args );
             echo '</div>';
         }       
     if ( $featured ) {
-        echo '<a href=/about/news" name="All Posts"><div class="all-news"><span class="button white">See All Posts</span></div></a>';
+        echo '<a href="/about/news/" name="All Posts"><div class="all-news"><span class="button white">See All Posts</span></div></a>';
         echo '</div>';
     }
     echo '</div></div></section>';
