@@ -86,20 +86,6 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
-<?php if (!$statement[0] == 'yes') : ?>
-<div class="large-12 columns mission">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
-</div>
-<?php endif; ?>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
-</div>
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
-</div>
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">
@@ -115,11 +101,10 @@ echo '</div>';
 	<?php dynamic_sidebar("after-content"); ?>
 	</ul>
 <?php endif; ?>
-        
-<hr />
+    
 <div class="large-4 columns spotlight">
     <h4>Student Spotlight</h4>
-	<?php the_widget('custom_post_widget', 'custom_post_id=26848', 'show_featured_image=true'); ?>
+	<?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
 </div>
 <div class="large-4 columns small-news">
 <a class="button right" href="/news-and-events">More</a>
@@ -151,6 +136,25 @@ $wp_query = new WP_Query( $home_args );
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
 </div>
+      
+        <hr />
+
+<?php if (!$statement[0] == 'yes') : ?>
+<div class="large-12 columns mission">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
+</div>
+<?php endif; ?>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
+</div>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
+</div>
+<div class="large-12 columns programs">
+	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
+</div>
+        
+
 <?php do_action('foundationPress_after_content'); ?>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
