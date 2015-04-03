@@ -210,11 +210,12 @@ endif; ?>
 
 <?php
 # Other News
+$sticky = count(get_option('sticky_posts')); 
 if(!empty($featured)) {
     $home_args = array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        'posts_per_page' => 1,
+        'posts_per_page' => (2 - $sticky),
         'post__not_in' => $featured,
         'cat' => -19, //hide q+a posts
     );
@@ -222,7 +223,7 @@ if(!empty($featured)) {
 else {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => 2,
+        'posts_per_page' => (3 - $sticky),
         'post_status' => 'publish',
         'cat' => -19,
     );
