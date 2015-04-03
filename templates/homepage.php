@@ -16,7 +16,7 @@ Template Name: Homepage
 		$feature_args = array(
 			'post_type'	=> 'features',
 			'post_status' => 'publish',
-			'posts_per_page' => 4,
+			'posts_per_page' => 1,
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
@@ -210,11 +210,11 @@ endif; ?>
 
 <?php
 # Other News
-if( $featured ) {
+if(!empty($featured)) {
     $home_args = array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        'posts_per_page' => 2,
+        'posts_per_page' => 1,
         'post__not_in' => $featured,
         'cat' => -19, //hide q+a posts
     );
@@ -222,7 +222,7 @@ if( $featured ) {
 else {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => 3,
+        'posts_per_page' => 2,
         'post_status' => 'publish',
         'cat' => -19,
     );
