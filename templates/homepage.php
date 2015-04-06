@@ -84,15 +84,6 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
-<?php endif; ?>
 
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
@@ -102,44 +93,33 @@ if ( is_active_sidebar( 'home-columns' ) ) :
 	</div><!-- .widget-area -->
 </div>
 <?php endif; ?>
-
-<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-<?php endif; ?>
+                
+        </div>
+        <div class="row">
+        <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
+        </div>
+        <div class="row">
 <?php
-# News with featured news
+# Research / Faculty Spotlight
 		
 $sticky = get_option( 'sticky_posts' );
 $sticky_count = count($sticky);
 $posts_on_home = 3; //set posts_per_page here
 
-if( $sticky ) {
-    $home_args = array(
-        'post_type' => 'post',
-        'posts_per_page' => $posts_on_home - $sticky_count,
-        'post_status' => 'publish',
-    );
-}
-else {
-    $home_args = array(
-        'post_type' => 'post',
-        'posts_per_page' => $posts_on_home,
-        'post_status' => 'publish',
-    );
-}
+$home_args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $posts_on_home - $sticky_count,
+    'post_status' => 'publish',
+    'cat' => 135,
+);
 
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<hr />
 	<div class="home-news-section clearfix">
-		<div>
-			<h2 class="columns large-9 left" style="margin-top: 0; padding-top: 0;">News and Events</h2>
-			<a class="button columns large-3 right" href="/news-and-events">More News</a>
-		</div>
+		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
+			<h2>Research / Faculty Spotlight</h2>
+			<a class="button" href="/news-and-events">More News</a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -155,8 +135,8 @@ $wp_query = new WP_Query( $home_args );
 		if ( $wp_query->current_post == 0 ) {
             if ( has_post_thumbnail()) {
 
-                echo '<div class="large-8 columns featured-news">';
-				echo '<div class="featured-thumbnail">';
+                echo '<div class="large-12 columns featured-news">';
+				echo '<div class="featured-thumbnail right large-4 medium-12 columns">';
 				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
 				the_post_thumbnail( 'large' );
 				echo '</a></div>';
@@ -185,7 +165,7 @@ $wp_query = new WP_Query( $home_args );
 	            echo $post_link;
 			}
             else {
-                echo '<div class="large-4 columns small-news">';
+                echo '<div class="large-12 columns small-news">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
@@ -216,7 +196,7 @@ $wp_query = new WP_Query( $home_args );
 
 		else {
 			
-		echo '<div class="large-4 columns small-news">';
+		echo '<div class="large-12 columns small-news">';
 		echo '<div class="post-meta">';
 		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
 		// Get categories
@@ -238,13 +218,158 @@ $wp_query = new WP_Query( $home_args );
 		echo $more_terms_str;
 		echo '</div>';
 		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-       	echo $post_link;
 		}
 	echo '</div>';
 	endwhile;
 	?>
+</div>
 <?php endif; ?>
+        
+        
+<?php
+# Student/Alumni Spotlight
+		
+$sticky = get_option( 'sticky_posts' );
+$sticky_count = count($sticky);
+$posts_on_home = 3; //set posts_per_page here
+
+$home_args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $posts_on_home - $sticky_count,
+    'post_status' => 'publish',
+    'cat' => 134,
+);
+
+$wp_query = new WP_Query( $home_args );
+?>
+	<?php if ($wp_query->have_posts()): ?>
+	<div class="home-news-section clearfix">
+		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
+			<h2>Student/Alumni Spotlight</h2>
+			<a class="button" href="/news-and-events">More News</a>
+		<?php
+		# The Loop
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }
+		if ( $wp_query->current_post == 0 ) {
+            if ( has_post_thumbnail()) {
+
+                echo '<div class="large-12 columns featured-news">';
+				echo '<div class="featured-thumbnail right large-4 medium-12 columns">';
+				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+				the_post_thumbnail( 'large' );
+				echo '</a></div>';
+				echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                // Get categories
+                $terms = wp_get_post_terms(get_the_id(), 'category');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						if ($term->slug != 'uncategorized') {
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+						}
+					}
+					$terms_str = ' / ' . implode(', ', $terms_arr);
+
+				} else {
+					$terms_str = '';
+				}
+				$terms = "";
+				echo $terms_str;
+	            echo '</div>';
+                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
+	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+	            echo $post_link;
+			}
+            else {
+                echo '<div class="large-12 columns small-news">';
+                echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                // Get categories
+                $terms = wp_get_post_terms(get_the_id(), 'category');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						if ($term->slug != 'uncategorized') {
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+						}
+					}
+					$terms_str = ' / ' . implode(', ', $terms_arr);
+
+				} else {
+					$terms_str = '';
+				}
+				echo $terms_str;
+				//var_dump($terms_arr);
+				$terms = "";
+                echo '</div>';
+                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+                echo $post_link;
+            }
+		
+		}
+
+		else {
+			
+		echo '<div class="large-12 columns small-news">';
+		echo '<div class="post-meta">';
+		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+		// Get categories
+        $more_terms = wp_get_post_terms(get_the_id(), 'category');
+		if (!empty($more_terms)) {
+			$more_terms_arr = array();
+			
+			foreach ($more_terms as &$term) {
+				if ($term->slug != 'uncategorized') {
+					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+				}
+			}
+			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+
+		} else {
+			$more_terms_str = '';
+		}
+		$more_terms = "";
+		echo $more_terms_str;
+		echo '</div>';
+		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+		}
+	echo '</div>';
+	endwhile;
+	?>
+</div>
+<?php endif; ?>
+        <?php 
+# 3 Column Widget area for content blocks
+if ( is_active_sidebar( 'home-columns' ) ) : 
+?>
+
+<?php dynamic_sidebar( 'home-columns' ); ?>
+
+
+<?php endif; ?>
+
+        </div>
+        
+<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+	<?php do_action('foundationPress_after_content'); ?>
+	<ul class="widget-area after-content">
+	<?php dynamic_sidebar("after-content"); ?>
+	</ul>
+<?php endif; ?>
+        
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
