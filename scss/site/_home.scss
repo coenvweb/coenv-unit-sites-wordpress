@@ -36,4 +36,35 @@
         }
 
     }
+    
+    .connect, .news {
+        margin-left: rem-calc(0);
+        margin-right: rem-calc(0);
+        .small-news {
+            padding-left: rem-calc(0);
+            padding-right: rem-calc(0);
+        }
+        h2 {
+            font-size: rem-calc(26);
+        }
+    }
+    
+    .three-columns {
+        margin-top: rem-calc(30);
+    }
+    
+    #custom_post_widget-18 {
+        img {
+            width: 33%;
+            float: right;
+        }
+    }
+    
+    #custom_post_widget-19 {
+        img {
+            width: 43%;
+            float: right;
+        }
+    }
+    
 }

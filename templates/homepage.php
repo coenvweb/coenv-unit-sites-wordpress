@@ -4,8 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
-	<div class="small-12 large-12 columns" role="main">
+<div class="row" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
@@ -22,6 +21,8 @@ Template Name: Homepage
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
+<div class="row">
+<div class="small-12 large-12 columns">
 		<div class="playpause"></div>
 			<div class="homepage-features">
 			<?php
@@ -83,22 +84,26 @@ echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
 echo '</div>';
+echo '</div>';
 ?>
 
-				
+
+
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
+<div class="row">
+    <div class="large-12 columns programs">
+        <div class="widget-area home-content" role="complementary">
+            <?php dynamic_sidebar( 'home-content' ); ?>
+        </div><!-- .widget-area -->
+    </div>
 </div>
 <?php endif; ?>
-                
-        </div>
-        <div class="row">
+    
+<div class="row connect">
+    <div class="columns large-12">
         <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
-        </div>
-        <div class="row">
+    </div>
+</div>
 <?php
 # Research / Faculty Spotlight
 		
@@ -116,7 +121,7 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-section clearfix">
+    <div class="row news">
 		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
 			<h2>Research / Faculty Spotlight</h2>
 			<a class="button" href="/news-and-events">More News</a>
@@ -243,7 +248,6 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-section clearfix">
 		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
 			<h2>Student/Alumni Spotlight</h2>
 			<a class="button" href="/news-and-events">More News</a>
@@ -350,18 +354,20 @@ $wp_query = new WP_Query( $home_args );
 	endwhile;
 	?>
 </div>
+</div>
 <?php endif; ?>
-        <?php 
+
+        
+<?php 
 # 3 Column Widget area for content blocks
 if ( is_active_sidebar( 'home-columns' ) ) : 
 ?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
-<?php endif; ?>
-
+    <div class="row three-columns">
+        <div class="columns large-12">
+            <?php dynamic_sidebar( 'home-columns' ); ?>
         </div>
+    </div>
+<?php endif; ?>
         
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
@@ -372,6 +378,7 @@ if ( is_active_sidebar( 'home-columns' ) ) :
         
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
+</div>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
 </div>

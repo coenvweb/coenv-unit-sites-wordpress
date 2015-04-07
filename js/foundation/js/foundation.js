@@ -22,9 +22,13 @@
 
   header_helpers([
     'foundation-mq-small',
+    'foundation-mq-small-only',
     'foundation-mq-medium',
+    'foundation-mq-medium-only',
     'foundation-mq-large',
+    'foundation-mq-large-only',
     'foundation-mq-xlarge',
+    'foundation-mq-xlarge-only',
     'foundation-mq-xxlarge',
     'foundation-data-attribute-namespace']);
 
@@ -197,7 +201,7 @@
    * Licensed under the MIT license.
    */
 
-  (function($) {
+  (function(jQuery) {
 
   // requestAnimationFrame polyfill adapted from Erik Möller
   // fixes from Paul Irish and Tino Zijdel
@@ -263,7 +267,7 @@
 
   }
 
-  }( jQuery ));
+  }( $ ));
 
 
   function removeQuotes (string) {
@@ -277,14 +281,18 @@
   window.Foundation = {
     name : 'Foundation',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     media_queries : {
-      small : S('.foundation-mq-small').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
-      medium : S('.foundation-mq-medium').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
-      large : S('.foundation-mq-large').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
-      xlarge: S('.foundation-mq-xlarge').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
-      xxlarge: S('.foundation-mq-xxlarge').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, '')
+      'small'       : S('.foundation-mq-small').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'small-only'  : S('.foundation-mq-small-only').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'medium'      : S('.foundation-mq-medium').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'medium-only' : S('.foundation-mq-medium-only').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'large'       : S('.foundation-mq-large').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'large-only'  : S('.foundation-mq-large-only').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'xlarge'      : S('.foundation-mq-xlarge').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'xlarge-only' : S('.foundation-mq-xlarge-only').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, ''),
+      'xxlarge'     : S('.foundation-mq-xxlarge').css('font-family').replace(/^[\/\\'"]+|(;\s?})+|[\/\\'"]+$/g, '')
     },
 
     stylesheet : $('<style></style>').appendTo('head')[0].sheet,
@@ -608,6 +616,64 @@
         this.prefix = this.prefix || [(this.name || 'F'), (+new Date).toString(36)].join('-');
 
         return this.prefix + (this.fidx++).toString(36);
+      },
+
+      // Description:
+      //    Helper for window.matchMedia
+      //
+      // Arguments:
+      //    mq (String): Media query
+      //
+      // Returns:
+      //    (Boolean): Whether the media query passes or not
+      match : function (mq) {
+        return window.matchMedia(mq).matches;
+      },
+
+      // Description:
+      //    Helpers for checking Foundation default media queries with JS
+      //
+      // Returns:
+      //    (Boolean): Whether the media query passes or not
+
+      is_small_up : function () {
+        return this.match(Foundation.media_queries.small);
+      },
+
+      is_medium_up : function () {
+        return this.match(Foundation.media_queries.medium);
+      },
+
+      is_large_up : function () {
+        return this.match(Foundation.media_queries.large);
+      },
+
+      is_xlarge_up : function () {
+        return this.match(Foundation.media_queries.xlarge);
+      },
+
+      is_xxlarge_up : function () {
+        return this.match(Foundation.media_queries.xxlarge);
+      },
+
+      is_small_only : function () {
+        return !this.is_medium_up() && !this.is_large_up() && !this.is_xlarge_up() && !this.is_xxlarge_up();
+      },
+
+      is_medium_only : function () {
+        return this.is_medium_up() && !this.is_large_up() && !this.is_xlarge_up() && !this.is_xxlarge_up();
+      },
+
+      is_large_only : function () {
+        return this.is_medium_up() && this.is_large_up() && !this.is_xlarge_up() && !this.is_xxlarge_up();
+      },
+
+      is_xlarge_only : function () {
+        return this.is_medium_up() && this.is_large_up() && this.is_xlarge_up() && !this.is_xxlarge_up();
+      },
+
+      is_xxlarge_only : function () {
+        return this.is_medium_up() && this.is_large_up() && this.is_xlarge_up() && this.is_xxlarge_up();
       }
     }
   };
@@ -629,7 +695,7 @@
   Foundation.libs.abide = {
     name : 'abide',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       live_validate : true,
@@ -653,7 +719,7 @@
 
         url: /^(https?|ftp|file|ssh):\/\/(((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/,
         // abc.de
-        domain: /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$/,
+        domain: /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,8}$/,
 
         datetime: /^([0-2][0-9]{3})\-([0-1][0-9])\-([0-3][0-9])T([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])(Z|([\-\+]([0-1][0-9])\:00))$/,
         // YYYY-MM-DD
@@ -867,7 +933,7 @@
 
     valid_checkbox : function(el, required) {
       var el = this.S(el),
-          valid = (el.is(':checked') || !required);
+          valid = (el.is(':checked') || !required || el.get(0).getAttribute('disabled'));
 
       if (valid) {
         el.removeAttr(this.invalid_attr).parent().removeClass(this.settings.error_class);
@@ -882,12 +948,24 @@
       var name = el.getAttribute('name'),
           group = this.S(el).closest('[data-' + this.attr_name(true) + ']').find("[name='"+name+"']"),
           count = group.length,
-          valid = false;
+          valid = false,
+          disabled = false;
 
       // Has to count up to make sure the focus gets applied to the top error
-      for (var i=0; i < count; i++) {
-        if (group[i].checked) valid = true;
-      }
+        for (var i=0; i < count; i++) {
+            if( group[i].getAttribute('disabled') ){
+                disabled=true;
+                valid=true;
+            } else {
+                if (group[i].checked){
+                    valid = true;
+                } else {
+                    if( disabled ){
+                        valid = false;
+                    }
+                }
+            }
+        }
 
       // Has to count up to make sure the focus gets applied to the top error
       for (var i=0; i < count; i++) {
@@ -948,7 +1026,7 @@
   Foundation.libs.accordion = {
     name : 'accordion',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       content_class: 'content',
@@ -973,13 +1051,13 @@
             settings = accordion.data(self.attr_name(true) + '-init') || self.settings,
             target = S('#' + this.href.split('#')[1]),
             aunts = $('> .accordion-navigation', accordion),
-            siblings = aunts.children('.content'),
+            siblings = aunts.children('.'+settings.content_class),
             active_content = siblings.filter('.' + settings.active_class);
 
         e.preventDefault();
 
         if (accordion.attr(self.attr_name())) {
-          siblings = siblings.add('[' + groupSelector + '] .accordion-navigation > .content');
+          siblings = siblings.add('[' + groupSelector + '] dd > '+'.'+settings.content_class);
           aunts = aunts.add('[' + groupSelector + '] .accordion-navigation');
         }
 
@@ -1016,7 +1094,7 @@
   Foundation.libs.alert = {
     name : 'alert',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       callback: function (){}
@@ -1060,7 +1138,7 @@
   Foundation.libs.clearing = {
     name : 'clearing',
 
-    version: '5.4.7',
+    version: '5.5.0',
 
     settings : {
       templates : {
@@ -1072,7 +1150,7 @@
 
       // comma delimited list of selectors that, on click, will close clearing,
       // add 'div.clearing-blackout, div.visible-img' to close on background click
-      close_selectors : '.clearing-close, div.clearing-blackout', 
+      close_selectors : '.clearing-close, div.clearing-blackout',
 
       // Default to the entire li element.
       open_selectors : '',
@@ -1216,7 +1294,7 @@
       if ($el.parent().hasClass('carousel')) {
         return;
       }
-      
+
       $el.after('<div id="foundationClearingHolder"></div>');
 
       var grid = $el.detach(),
@@ -1227,7 +1305,7 @@
       } else {
         grid_outerHTML = grid[0].outerHTML;
       }
-      
+
       var holder = this.S('#foundationClearingHolder'),
           settings = $el.data(this.attr_name(true) + '-init'),
           data = {
@@ -1328,7 +1406,7 @@
           .removeClass('clearing-blackout');
         container.removeClass('clearing-container');
         visible_image.hide();
-        visible_image.trigger('closed.fndtn.clearing');        
+        visible_image.trigger('closed.fndtn.clearing');
       }
 
       // Event to re-enable scrolling on touch devices
@@ -1408,34 +1486,18 @@
     },
 
     center_and_label : function (target, label) {
-      if (!this.rtl) {
-        target.css({
-          marginLeft : -(target.outerWidth() / 2),
-          marginTop : -(target.outerHeight() / 2)
+      if (!this.rtl && label.length > 0) {
+        label.css({
+          marginLeft : -(label.outerWidth() / 2),
+          marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10
         });
-
-        if (label.length > 0) {
-          label.css({
-            marginLeft : -(label.outerWidth() / 2),
-            marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10
-          });
-        }
       } else {
-        target.css({
-          marginRight : -(target.outerWidth() / 2),
-          marginTop : -(target.outerHeight() / 2),
+        label.css({
+          marginRight : -(label.outerWidth() / 2),
+          marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10,
           left: 'auto',
           right: '50%'
         });
-
-        if (label.length > 0) {
-          label.css({
-            marginRight : -(label.outerWidth() / 2),
-            marginTop : -(target.outerHeight() / 2)-label.outerHeight()-10,
-            left: 'auto',
-            right: '50%'
-          });
-        }
       }
       return this;
     },
@@ -1448,7 +1510,7 @@
       if ($image[0].nodeName === 'A') {
         href = $image.attr('href');
       } else {
-        href = $image.parent().attr('href');
+        href = $image.closest('a').attr('href');
       }
 
       this.preload($image);
@@ -1492,7 +1554,7 @@
           .hide();
       }
       return this;
-    }, 
+    },
 
     // directional methods
 
@@ -1619,7 +1681,7 @@
   Foundation.libs.dropdown = {
     name : 'dropdown',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       active_class: 'open',
@@ -1627,6 +1689,7 @@
       mega_class: 'mega',
       align: 'bottom',
       is_hover: false,
+      hover_timeout: 150,
       opened: function(){},
       closed: function(){}
     },
@@ -1679,19 +1742,35 @@
         })
         .on('mouseleave.fndtn.dropdown', '[' + this.attr_name() + '], [' + this.attr_name() + '-content]', function (e) {
           var $this = S(this);
-          self.timeout = setTimeout(function () {
-            if ($this.data(self.data_attr())) {
-              var settings = $this.data(self.data_attr(true) + '-init') || self.settings;
-              if (settings.is_hover) self.close.call(self, S('#' + $this.data(self.data_attr())));
-            } else {
+          var settings;
+
+          if ($this.data(self.data_attr())) {
+              settings = $this.data(self.data_attr(true) + '-init') || self.settings;
+          } 
+          else {
               var target   = S('[' + self.attr_name() + '="' + S(this).attr('id') + '"]'),
                   settings = target.data(self.attr_name(true) + '-init') || self.settings;
+          }
+
+          self.timeout = setTimeout(function () {
+            if ($this.data(self.data_attr())) {
+              if (settings.is_hover) self.close.call(self, S('#' + $this.data(self.data_attr())));
+            } else {
               if (settings.is_hover) self.close.call(self, $this);
             }
-          }.bind(this), 150);
+          }.bind(this), settings.hover_timeout);
         })
         .on('click.fndtn.dropdown', function (e) {
           var parent = S(e.target).closest('[' + self.attr_name() + '-content]');
+          var links  = parent.find('a');
+
+          if (links.length > 0 && parent.attr('aria-autoclose') !== "false") {
+              self.close.call(self, S('[' + self.attr_name() + '-content]'));
+          }
+
+          if (e.target !== document && !$.contains(document.documentElement, e.target)) {
+            return;
+          }
 
           if (S(e.target).closest('[' + self.attr_name() + ']').length > 0) {
             return;
@@ -2046,7 +2125,7 @@
   Foundation.libs.equalizer = {
     name : 'equalizer',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       use_tallest: true,
@@ -2120,7 +2199,7 @@
   Foundation.libs.interchange = {
     name : 'interchange',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     cache : {},
 
@@ -2131,15 +2210,19 @@
       load_attr : 'interchange',
 
       named_queries : {
-        'default' : 'only screen',
-        small : Foundation.media_queries.small,
-        medium : Foundation.media_queries.medium,
-        large : Foundation.media_queries.large,
-        xlarge : Foundation.media_queries.xlarge,
-        xxlarge: Foundation.media_queries.xxlarge,
-        landscape : 'only screen and (orientation: landscape)',
-        portrait : 'only screen and (orientation: portrait)',
-        retina : 'only screen and (-webkit-min-device-pixel-ratio: 2),' +
+        'default'     : 'only screen',
+        'small'       : Foundation.media_queries['small'],
+        'small-only'  : Foundation.media_queries['small-only'],
+        'medium'      : Foundation.media_queries['medium'],
+        'medium-only' : Foundation.media_queries['medium-only'],
+        'large'       : Foundation.media_queries['large'],
+        'large-only'  : Foundation.media_queries['large-only'],
+        'xlarge'      : Foundation.media_queries['xlarge'],
+        'xlarge-only' : Foundation.media_queries['xlarge-only'],
+        'xxlarge'     : Foundation.media_queries['xxlarge'],
+        'landscape'   : 'only screen and (orientation: landscape)',
+        'portrait'    : 'only screen and (orientation: portrait)',
+        'retina'      : 'only screen and (-webkit-min-device-pixel-ratio: 2),' +
           'only screen and (min--moz-device-pixel-ratio: 2),' +
           'only screen and (-o-min-device-pixel-ratio: 2/1),' +
           'only screen and (min-device-pixel-ratio: 2),' +
@@ -2388,7 +2471,7 @@
 
       if (i > 0) {
         while (i--) {
-          var split = raw_arr[i].split(/\((.*?)(\))$/);
+          var split = raw_arr[i].split(/\(([^\)]*?)(\))$/);
 
           if (split.length > 1) {
             var params = this.parse_scenario(split);
@@ -2467,7 +2550,7 @@
   Foundation.libs.joyride = {
     name : 'joyride',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     defaults : {
       expose                   : false,     // turn on or off the expose feature
@@ -3390,7 +3473,7 @@
   Foundation.libs['magellan-expedition'] = {
     name : 'magellan-expedition',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       active_class: 'active',
@@ -3398,7 +3481,9 @@
       destination_threshold: 20, // pixels from the top of destination for it to be considered active
       throttle_delay: 30, // calculation throttling to increase framerate
       fixed_top: 0, // top distance in pixels assigend to the fixed element on scroll
-      offset_by_height: true // whether to offset the destination by the expedition height. Usually you want this to be true, unless your expedition is on the side.
+      offset_by_height: true,  // whether to offset the destination by the expedition height. Usually you want this to be true, unless your expedition is on the side.
+      duration: 700, // animation duration time 
+      easing: 'swing' // animation easing
     },
 
     init : function (scope, method, options) {
@@ -3437,7 +3522,7 @@
 
           $('html, body').stop().animate({
             'scrollTop': scroll_top
-          }, 700, 'swing', function () {
+          }, settings.duration, settings.easing, function () {
             if(history.pushState) {
               history.pushState(null, null, '#'+hash);
             }
@@ -3587,7 +3672,7 @@
   Foundation.libs.offcanvas = {
     name : 'offcanvas',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       open_method: 'move',
@@ -3858,8 +3943,8 @@
           slides_container.trigger('after-slide-change.fndtn.orbit',[{slide_number: idx, total_slides: slides.length}]);
           settings.after_slide_change(idx, slides.length);
         };
-        if (slides_container.height() != next.height() && settings.variable_height) {
-          slides_container.animate({'height': next.height()}, 250, 'linear', unlock);
+        if (slides_container.outerHeight() != next.outerHeight() && settings.variable_height) {
+          slides_container.animate({'height': next.outerHeight()}, 250, 'linear', unlock);
         } else {
           unlock();
         }
@@ -3872,8 +3957,8 @@
         if (dir === 'prev') {animate.prev(current, next, callback);}
       };
 
-      if (next.height() > slides_container.height() && settings.variable_height) {
-        slides_container.animate({'height': next.height()}, 250, 'linear', start_animation);
+      if (next.outerHeight() > slides_container.outerHeight() && settings.variable_height) {
+        slides_container.animate({'height': next.outerHeight()}, 250, 'linear', start_animation);
       } else {
         start_animation();
       }
@@ -3922,10 +4007,10 @@
 
     self.compute_dimensions = function() {
       var current = $(self.slides().get(idx));
-      var h = current.height();
+      var h = current.outerHeight();
       if (!settings.variable_height) {
         self.slides().each(function(){
-          if ($(this).height() > h) { h = $(this).height(); }
+          if ($(this).outerHeight() > h) { h = $(this).outerHeight(); }
         });
       }
       slides_container.height(h);
@@ -4138,7 +4223,7 @@
   Foundation.libs.orbit = {
     name: 'orbit',
 
-    version: '5.4.7',
+    version: '5.5.0',
 
     settings: {
       animation: 'slide',
@@ -4213,7 +4298,7 @@
   Foundation.libs.reveal = {
     name : 'reveal',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     locked : false,
 
@@ -4257,7 +4342,7 @@
         .off('.reveal')
         .on('click.fndtn.reveal', '[' + this.add_namespace('data-reveal-id') + ']:not([disabled])', function (e) {
           e.preventDefault();
-        
+
           if (!self.locked) {
             var element = S(this),
                 ajax = element.data(self.data_attr('reveal-ajax'));
@@ -4276,9 +4361,7 @@
 
       S(document)
         .on('click.fndtn.reveal', this.close_targets(), function (e) {
-
           e.preventDefault();
-
           if (!self.locked) {
             var settings = S('[' + self.attr_name() + '].open').data(self.attr_name(true) + '-init') || self.settings,
                 bg_clicked = S(e.target)[0] === S('.' + settings.bg_class)[0];
@@ -4378,7 +4461,8 @@
         }
 
         this.key_up_on(modal);    // PATCH #3: turning on key up capture only when a reveal window is open
-        modal.trigger('open').trigger('open.fndtn.reveal');
+
+        modal.on('open.fndtn.reveal').trigger('open.fndtn.reveal');
 
         if (open_modal.length < 1) {
           this.toggle_bg(modal, true);
@@ -4659,7 +4743,7 @@
   Foundation.libs.slider = {
     name : 'slider',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings: {
       start: 0,
@@ -4927,7 +5011,7 @@
   Foundation.libs.tab = {
     name : 'tab',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       active_class: 'active',
@@ -4952,6 +5036,10 @@
       S('[' + this.attr_name() + '] > .active > a', this.scope).each(function () {
         self.default_tab_hashes.push(this.hash);
       });
+
+      // store the initial href, which is used to allow correct behaviour of the
+      // browser back button when deep linking is turned on.
+      self.entry_location = window.location.href;
     },
 
     events : function () {
@@ -5027,7 +5115,8 @@
      },
 
     toggle_active_tab: function (tab, location_hash) {
-      var S = this.S,
+      var self = this,
+          S = self.S,
           tabs = tab.closest('[' + this.attr_name() + ']'),
           tab_link = tab.find('a'),
           anchor = tab.children('a').first(),
@@ -5080,6 +5169,16 @@
             $('#' + $(document.activeElement).attr('href').substring(1))
               .attr('aria-hidden', null);
 
+          },
+          go_to_hash = function(hash) {
+            // This function allows correct behaviour of the browser's back button when deep linking is enabled. Without it
+            // the user would get continually redirected to the default hash.
+            var is_entry_location = window.location.href === self.entry_location,
+                default_hash = settings.scroll_to_content ? self.default_tab_hashes[0] : 'fndtn-' + self.default_tab_hashes[0].replace('#', '')
+
+            if (!(is_entry_location && hash === default_hash)) {
+              window.location.hash = hash;
+            }
           };
 
       // allow usage of data-tab-content attribute instead of href
@@ -5091,8 +5190,10 @@
       if (settings.deep_linking) {
 
         if (settings.scroll_to_content) {
+
           // retain current hash to scroll to content
-          window.location.hash = location_hash || target_hash;
+          go_to_hash(location_hash || target_hash);
+
           if (location_hash == undefined || location_hash == target_hash) {
             tab.parent()[0].scrollIntoView();
           } else {
@@ -5101,9 +5202,9 @@
         } else {
           // prefix the hashes so that the browser doesn't scroll down
           if (location_hash != undefined) {
-            window.location.hash = 'fndtn-' + location_hash.replace('#', '');
+            go_to_hash('fndtn-' + location_hash.replace('#', ''));
           } else {
-            window.location.hash = 'fndtn-' + target_hash.replace('#', '');
+            go_to_hash('fndtn-' + target_hash.replace('#', ''));
           }
         }
       }
@@ -5145,7 +5246,7 @@
   Foundation.libs.tooltip = {
     name : 'tooltip',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       additional_inheritable_classes : [],
@@ -5446,7 +5547,7 @@
   Foundation.libs.topbar = {
     name : 'topbar',
 
-    version: '5.4.7',
+    version: '5.5.0',
 
     settings : {
       index : 0,
