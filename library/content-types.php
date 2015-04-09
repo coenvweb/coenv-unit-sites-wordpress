@@ -20,7 +20,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    //'rewrite' => array('slug' => 'faculty'),
+    'rewrite' => array('slug' => 'faculty', 'with_front' => false),
     'menu_icon' => 'dashicons-id',
     )
 
@@ -39,7 +39,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    'rewrite' => array('slug' => 'features'),
+    'rewrite' => array('slug' => 'features', 'with_front' => false),
   'menu_icon' => 'dashicons-slides',
     )
   );
