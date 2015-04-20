@@ -57,9 +57,16 @@
         </div>
     </div>
 
-    <div class="footer-footer">
-        <div class="row uw-footer">
-            <div class="medium-6 columns">
+<div class="footer-footer">
+<div class="uw-footer">
+    <div class="layout-container row">
+
+        <div class="be-boundless">
+            <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?></a><br />
+            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?></a>
+        </div>
+
+        <div class="medium-6 columns">
                 <p class="copyright">&copy; <?php echo date('Y') ?> <a href="http://www.washington.edu/">University of Washington</a> | 
                     <?php if (is_user_logged_in()) { ?>
                         <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout">Log out</a>	
@@ -68,7 +75,7 @@
                     <?php } ?>
                 </p>
             </div>
-            <div class="medium-6 columns">
+            <div class="medium-6 columns uw-footer-links">
                 <ul id="menu-footer-links" class="menu-footer-links">
                     <li><a target="_blank" href="http://www.washington.edu/admin/hr/jobs/">Jobs</a></li>
                     <li><a target="_blank" href="http://myuw.washington.edu/">My UW</a></li>
@@ -79,12 +86,13 @@
             </div>
         </div>
     </div>
+</div>
 
 <?php dynamic_sidebar("footer-widgets"); ?>
 <?php do_action('foundationPress_after_footer'); ?>
 </footer>
-<a class="exit-off-canvas"></a>
-</div>
+
+    <a class="exit-off-canvas"></a>
 </div>
 
 <?php do_action('foundationPress_layout_end'); ?>
