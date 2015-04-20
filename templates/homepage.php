@@ -109,7 +109,7 @@ echo '</div>';
 		
 $sticky = get_option( 'sticky_posts' );
 $sticky_count = count($sticky);
-$posts_on_home = 3; //set posts_per_page here
+$posts_on_home = 1; //set posts_per_page here
 
 $home_args = array(
     'post_type' => 'post',
@@ -122,9 +122,10 @@ $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
     <div class="row news">
-		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
-			<h2>Research / Faculty Spotlight</h2>
-			<a class="button" href="/news-and-events">More News</a>
+		<div class="large-6 columns" style="margin-top: 0; padding-top: 0;">
+            <div class="large-12 featured-news">
+            <a class="button right" name="More research stories" href="/news-and-events">More research stories</a>            
+            <h2>Research Spotlight</h2>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -137,18 +138,7 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-		if ( $wp_query->current_post == 0 ) {
-            if ( has_post_thumbnail()) {
-
-                echo '<div class="large-12 columns featured-news">';
-				echo '<div class="featured-thumbnail right large-4 medium-12 columns">';
-				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-				the_post_thumbnail( 'large' );
-				echo '</a></div>';
-				echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
+        $terms = wp_get_post_terms(get_the_id(), 'category');
 				if (!empty($terms)) {
 					$terms_arr = array();
 					
@@ -157,77 +147,25 @@ $wp_query = new WP_Query( $home_args );
 							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
+					$terms_str = implode(', ', $terms_arr);
 				} else {
 					$terms_str = '';
 				}
 				$terms = "";
 				echo $terms_str;
-	            echo '</div>';
-                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
-	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
-	            echo $post_link;
-			}
-            else {
-                echo '<div class="large-12 columns small-news">';
-                echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
-				} else {
-					$terms_str = '';
-				}
-				echo $terms_str;
-				//var_dump($terms_arr);
-				$terms = "";
-                echo '</div>';
-                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo $post_link;
-            }
-		
-		}
-
-		else {
-			
-		echo '<div class="large-12 columns small-news">';
-		echo '<div class="post-meta">';
-		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-		// Get categories
-        $more_terms = wp_get_post_terms(get_the_id(), 'category');
-		if (!empty($more_terms)) {
-			$more_terms_arr = array();
-			
-			foreach ($more_terms as &$term) {
-				if ($term->slug != 'uncategorized') {
-					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-				}
-			}
-			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
-
-		} else {
-			$more_terms_str = '';
-		}
-		$more_terms = "";
-		echo $more_terms_str;
-		echo '</div>';
-		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-		}
-	echo '</div>';
+        if ( has_post_thumbnail()) {
+            echo '<div class="featured-thumbnail large-12">';
+            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+            the_post_thumbnail( 'large-sq' );
+            echo '</a></div>';
+        }
+        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
+        echo $post_link;
 	endwhile;
 	?>
-</div>
+    </div>
+        </div>
 <?php endif; ?>
         
         
@@ -236,7 +174,7 @@ $wp_query = new WP_Query( $home_args );
 		
 $sticky = get_option( 'sticky_posts' );
 $sticky_count = count($sticky);
-$posts_on_home = 3; //set posts_per_page here
+$posts_on_home = 1; //set posts_per_page here
 
 $home_args = array(
     'post_type' => 'post',
@@ -248,9 +186,10 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-		<div class="columns large-6" style="margin-top: 0; padding-top: 0;">
-			<h2>Student/Alumni Spotlight</h2>
-			<a class="button" href="/news-and-events">More News</a>
+		<div class="large-6 columns" style="margin-top: 0; padding-top: 0;">
+            <div class="large-12 featured-news">
+            <a class="button right" name="More student & alumni stories" href="/news-and-events">More student & alumni stories</a>            
+            <h2>Research Spotlight</h2>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -263,18 +202,7 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-		if ( $wp_query->current_post == 0 ) {
-            if ( has_post_thumbnail()) {
-
-                echo '<div class="large-12 columns featured-news">';
-				echo '<div class="featured-thumbnail right large-4 medium-12 columns">';
-				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-				the_post_thumbnail( 'large' );
-				echo '</a></div>';
-				echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
+        $terms = wp_get_post_terms(get_the_id(), 'category');
 				if (!empty($terms)) {
 					$terms_arr = array();
 					
@@ -283,77 +211,25 @@ $wp_query = new WP_Query( $home_args );
 							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
+					$terms_str = implode(', ', $terms_arr);
 				} else {
 					$terms_str = '';
 				}
 				$terms = "";
 				echo $terms_str;
-	            echo '</div>';
-                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
-	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
-	            echo $post_link;
-			}
-            else {
-                echo '<div class="large-12 columns small-news">';
-                echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
-				} else {
-					$terms_str = '';
-				}
-				echo $terms_str;
-				//var_dump($terms_arr);
-				$terms = "";
-                echo '</div>';
-                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo $post_link;
-            }
-		
-		}
-
-		else {
-			
-		echo '<div class="large-12 columns small-news">';
-		echo '<div class="post-meta">';
-		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-		// Get categories
-        $more_terms = wp_get_post_terms(get_the_id(), 'category');
-		if (!empty($more_terms)) {
-			$more_terms_arr = array();
-			
-			foreach ($more_terms as &$term) {
-				if ($term->slug != 'uncategorized') {
-					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-				}
-			}
-			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
-
-		} else {
-			$more_terms_str = '';
-		}
-		$more_terms = "";
-		echo $more_terms_str;
-		echo '</div>';
-		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-		}
-	echo '</div>';
+        if ( has_post_thumbnail()) {
+            echo '<div class="featured-thumbnail large-12">';
+            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+            the_post_thumbnail( 'large-sq' );
+            echo '</a></div>';
+        }
+        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
+        echo $post_link;
 	endwhile;
 	?>
-</div>
+    </div>
+    </div>
 </div>
 <?php endif; ?>
 
