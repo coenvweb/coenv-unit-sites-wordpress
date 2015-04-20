@@ -179,22 +179,45 @@
 	} // .footer__info
 
     .footer-footer {
-        background-color: #32302d;
         margin-top: rem-calc(15);
         
         .uw-footer {
+            background-image: url("../assets/img/black-white-suz.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
             clear: both;
             @extend .clearfix;
-            padding-top: rem-calc(10);
-            background: none;
+            padding: rem-calc(22) 0 rem-calc(14) 0;
             color: $text-white;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
 
-            a {
-                color: $text-white;
+           a {
+                color: #bbb;
                 text-decoration: none;
+                &:hover {
+                  color: #fff !important;
+                }
+            }
+
+            .be-boundless {
+                text-align: center;
+                height: 150px;
+                padding: rem-calc(32) 0;
+
+                img:first-of-type {
+                    @include rem('padding-bottom', 1.3);
+                }
+
+                svg:hover #be-boundless-svg {
+                    fill: $white;
+                }
+
+                .be-boundless-svg-whole {
+                    width: 200px;
+                }
             }
 
             .copyright {
@@ -206,6 +229,12 @@
                 }
 
             } // .copyright
+        
+            .uw-footer-links {
+                @media #{$medium-up} {
+                    text-align: right;
+                }
+            }
 
             .menu-footer-links {
                 margin: 0;
