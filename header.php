@@ -38,7 +38,7 @@
     echo $advancedExcerpt ?>">
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
+    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css?<?php echo time(); ?>" type='text/css' media='all' />
 
           <link rel="apple-touch-icon" sizes="57x57" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-60x60.png">
