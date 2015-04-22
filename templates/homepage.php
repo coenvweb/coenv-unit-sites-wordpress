@@ -100,10 +100,75 @@ echo '</div>';
 <?php endif; ?>
     
 <div class="row connect">
-    <div class="columns large-12">
+    <div class="columns large-12 social-links">
         <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
     </div>
 </div>
+                
+                <?php
+# Student/Alumni Spotlight
+		
+$sticky = get_option( 'sticky_posts' );
+$sticky_count = count($sticky);
+$posts_on_home = 1; //set posts_per_page here
+
+$home_args = array(
+    'post_type' => 'post',
+    'posts_per_page' => $posts_on_home - $sticky_count,
+    'post_status' => 'publish',
+    'cat' => 134,
+);
+
+$wp_query = new WP_Query( $home_args );
+?>
+	<?php if ($wp_query->have_posts()): ?>
+    <div class="row news">
+		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
+            <div class="large-12 featured-news">
+            <a name="More student & alumni stories" href="/news-and-events">
+            <h2>Student & Alumni Spotlight</h2></a>
+		<?php
+		# The Loop
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }
+        $terms = wp_get_post_terms(get_the_id(), 'category');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						if ($term->slug != 'uncategorized') {
+							$terms_arr[] = '<a class="spot-cat" href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+						}
+					}
+					$terms_str = implode(', ', $terms_arr);
+				} else {
+					$terms_str = '';
+				}
+				$terms = "";
+				echo $terms_str;
+        if ( has_post_thumbnail()) {
+            echo '<div class="featured-thumbnail large-12">';
+            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+            the_post_thumbnail( 'large-sq' );
+            echo '</a></div>';
+        }
+        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
+        echo $post_link;
+	endwhile;
+	?>
+    </div>
+</div>
+<?php endif; ?>
+                
 <?php
 # Research / Faculty Spotlight
 		
@@ -121,11 +186,10 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-    <div class="row news">
-		<div class="large-6 columns" style="margin-top: 0; padding-top: 0;">
+		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12 featured-news">
-            <a class="button right" name="More research stories" href="/news-and-events">More research stories</a>            
-            <h2>Research Spotlight</h2>
+            <a name="More research stories" href="/news-and-events">
+            <h2>Research Spotlight</h2></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -144,7 +208,7 @@ $wp_query = new WP_Query( $home_args );
 					
 					foreach ($terms as &$term) {
 						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a class="spot-cat" href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 					$terms_str = implode(', ', $terms_arr);
@@ -164,74 +228,13 @@ $wp_query = new WP_Query( $home_args );
         echo $post_link;
 	endwhile;
 	?>
-    </div>
-        </div>
-<?php endif; ?>
-        
-        
-<?php
-# Student/Alumni Spotlight
-		
-$sticky = get_option( 'sticky_posts' );
-$sticky_count = count($sticky);
-$posts_on_home = 1; //set posts_per_page here
-
-$home_args = array(
-    'post_type' => 'post',
-    'posts_per_page' => $posts_on_home - $sticky_count,
-    'post_status' => 'publish',
-    'cat' => 134,
-);
-
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
-		<div class="large-6 columns" style="margin-top: 0; padding-top: 0;">
-            <div class="large-12 featured-news">
-            <a class="button right" name="More student & alumni stories" href="/news-and-events">More student & alumni stories</a>            
-            <h2>Research Spotlight</h2>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
-        }
-        $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = implode(', ', $terms_arr);
-				} else {
-					$terms_str = '';
-				}
-				$terms = "";
-				echo $terms_str;
-        if ( has_post_thumbnail()) {
-            echo '<div class="featured-thumbnail large-12">';
-            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-            the_post_thumbnail( 'large-sq' );
-            echo '</a></div>';
-        }
-        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
-        echo $post_link;
-	endwhile;
-	?>
-    </div>
     </div>
 </div>
+</div>
 <?php endif; ?>
+        
+        
+
 
         
 <?php 
