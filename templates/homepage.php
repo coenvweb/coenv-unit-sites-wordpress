@@ -116,7 +116,7 @@ $home_args = array(
     'post_type' => 'post',
     'posts_per_page' => $posts_on_home - $sticky_count,
     'post_status' => 'publish',
-    'cat' => 134,
+    'cat' => 136,
 );
 
 $wp_query = new WP_Query( $home_args );
@@ -180,7 +180,7 @@ $home_args = array(
     'post_type' => 'post',
     'posts_per_page' => $posts_on_home - $sticky_count,
     'post_status' => 'publish',
-    'cat' => 135,
+    'cat' => 137,
 );
 
 $wp_query = new WP_Query( $home_args );
