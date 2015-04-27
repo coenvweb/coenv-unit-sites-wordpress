@@ -12,8 +12,7 @@
 
 /* Foundation 5 */
 @import "foundation"; // Foundation 5 by Zurb
-$fi-path: "../bower_components/foundation-icon-fonts";
-@import "../bower_components/foundation-icon-fonts/foundation-icons";
+@import "../assets/foundation-icons/foundation-icons.css";
 
 /* Site structure */
 @import "site/structure"; // Your site structure
