@@ -19,11 +19,11 @@
   },
   "private": true,
   "homepage": "https://github.com/zurb/bower-foundation",
-  "_release": "56890adf39",
+  "_release": "3a24f9234f",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "56890adf398792c40451c21cae2dc3a73365e387"
+    "commit": "3a24f9234f6fbfe06e11b295de622bc2ce485611"
   },
   "_source": "git://github.com/zurb/bower-foundation.git",
   "_target": "master",
