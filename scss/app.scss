@@ -7,6 +7,8 @@
 
 /* Foundation 5 */
 @import "foundation"; // Foundation 5 by Zurb
+$fi-path: "../bower_components/foundation-icon-fonts";
+@import "../bower_components/foundation-icon-fonts/foundation-icons";
 
 /* Plugins */
 @import "plugins/nivo-lightbox"; // Nivo Lightbox

@@ -12,7 +12,6 @@ Thumbs.db
 # Development files
 .sass-cache*
 node_modules
-bower_components*
 local-config.php
 
 # large/disallowed file types
