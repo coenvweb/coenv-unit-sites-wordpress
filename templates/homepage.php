@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row" role="main">
+<div role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
