@@ -10,7 +10,7 @@ function ns_wp_create_site( $site_name, $site_title, $logfile ) {
 	$site_meta = apply_filters( 'ns_wp_create_site_meta', array("public"=>1) );
 	// use wp's built in wpmu_validate_blog_signup validation for all new site vars
 	// also, use a test on  a known valid name/title to filter out any validation errors added by other plugins via the wpmu_validate_blog_signup filter
-	$baseline_validation = wpmu_validate_blog_signup( 'nsclonervalidationtest', 'NS Cloner Validation Test' );
+	$baseline_validation = wpmu_validate_blog_signup( '1000000', 'NS Cloner Test' );
 	$site_data = wpmu_validate_blog_signup( $site_name, $site_title, $user );
 	$site_errors = array_diff( $baseline_validation['errors']->get_error_messages(), $site_data['errors']->get_error_messages() );
 	if( !empty( $site_errors ) && false ){
@@ -23,7 +23,7 @@ function ns_wp_create_site( $site_name, $site_title, $logfile ) {
 		return $site_id;
 	}
 	else {
-		ns_log_write( "Error creating site with domain '$tmp_site_domain' and path '$tmp_site_path' - ".$site_id->get_error_message(), $logfile );
+		ns_log_write( "Error creating site with domain '$site_name' and path '$site_title' - ".$site_id->get_error_message(), $logfile );
 		return false;
 	}
 } 
@@ -32,6 +32,7 @@ function ns_wp_create_site( $site_name, $site_title, $logfile ) {
  * Create / Add users
  */
 function ns_wp_add_user( $target_id, $useremail, $username, $userpass = '', $userrole = 'administrator', $logfile = false ) {
+	global $ns_cloner;
 	ns_log_write( "ENTER ns_wp_add_user - target_id:$target_id, useremail:$useremail, username:$username, userrole:$userrole", $logfile );
 	$useremail = stripslashes($useremail);
 	$username = stripslashes($username);
@@ -57,7 +58,7 @@ function ns_wp_add_user( $target_id, $useremail, $username, $userpass = '', $use
 		if( $user_id != false ){
 			ns_log_write( "Created new user '$username' with email '$useremail'", $logfile );
 			// send notification to new users if the option is set
-			if( isset($_POST['do_user_notify']) ){
+			if( isset($ns_cloner->request['do_user_notify']) ){
 				wpmu_welcome_notification($target_id, $user_id, $userpass, 'New Site with ID: ' . $target_id);
 				ns_log_write( "Sent welcome email to new user '$username' with email '$useremail'", $logfile );
 			}
