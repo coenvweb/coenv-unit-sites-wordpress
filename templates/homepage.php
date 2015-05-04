@@ -98,12 +98,8 @@ echo '</div>';
     </div>
 </div>
 <?php endif; ?>
-    
-<div class="row connect">
-    <div class="columns large-12 social-links">
-        <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
-    </div>
-</div>
+                
+                <hr />
                 
                 <?php
 # Student/Alumni Spotlight
@@ -126,7 +122,7 @@ $wp_query = new WP_Query( $home_args );
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12 featured-news">
             <a name="More student & alumni stories" href="/news-and-events">
-            <h2>Student & Alumni Spotlight</h2></a>
+            <h2>Community</h2></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -139,21 +135,6 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-        $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a class="spot-cat" href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = implode(', ', $terms_arr);
-				} else {
-					$terms_str = '';
-				}
-				$terms = "";
-				echo $terms_str;
         if ( has_post_thumbnail()) {
             echo '<div class="featured-thumbnail large-12">';
             echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
@@ -189,7 +170,7 @@ $wp_query = new WP_Query( $home_args );
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12 featured-news">
             <a name="More research stories" href="/news-and-events">
-            <h2>Research Spotlight</h2></a>
+            <h2>Faculty</h2></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -202,21 +183,6 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-        $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a class="spot-cat" href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = implode(', ', $terms_arr);
-				} else {
-					$terms_str = '';
-				}
-				$terms = "";
-				echo $terms_str;
         if ( has_post_thumbnail()) {
             echo '<div class="featured-thumbnail large-12">';
             echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
@@ -233,9 +199,11 @@ $wp_query = new WP_Query( $home_args );
 </div>
 <?php endif; ?>
         
-        
-
-
+<div class="row connect">
+    <div class="columns large-12 social-links">
+        <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
+    </div>
+</div>
         
 <?php 
 # 3 Column Widget area for content blocks
