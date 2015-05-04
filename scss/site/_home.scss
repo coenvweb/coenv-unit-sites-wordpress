@@ -253,6 +253,9 @@
                       overflow: hidden;
                       height: 300px;
                 }
+                @media #{$small-only} {
+                    left: -30%;
+                }
             }
         }
         
