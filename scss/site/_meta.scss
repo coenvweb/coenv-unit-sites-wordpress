@@ -1,0 +1,32 @@
+
+/*	Module: Terms
+		
+		======================================================================== */
+
+.terms {
+	border-right: solid 2px #000;
+	float: left;
+	font-size: rem-calc(12);
+	margin-right: 5px;
+	padding-right: 6px;
+	position: relative;
+
+	li {
+            display: inline;
+        }
+
+}
+.terms:before {
+	 content:"";
+    display:block;
+    z-index:-1;
+    position:absolute;
+    height:40px;
+    width:100%;
+    border-width:0px 5px;
+    border-style:solid;
+    border-color:black;
+    top:50%;
+    margin-top:-20px;
+    left:-5px;
+}

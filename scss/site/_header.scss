@@ -50,30 +50,42 @@
 // desktop header
 
 .banner-container {
-    width: 100%;
     background-color: $accent;
+    width: 100%;
 }
 .title-row {
-height: 300px;
+  height: 109px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 0;
   margin-bottom: 0;
-  width: 1200px;
+  max-width: 1200px;
     
 }
 .name {
-    float: left;
     height: 109px;
-    margin-left: 15px;
-    width: 115px;
+    padding-left: 15px;
+    position: relative;
+
+
+    a {
+
+    display: block;
+    height: 109px;
+    width: 130px;
+
+
+    }
+
+
     #logo {
         fill: #fff;
         width: 130px;
         height: 88px;
-        margin: 0 0 -1px 0;
         padding: 0;
+        position: absolute;
         bottom: 0;
+            margin-bottom: -1px;
         span {
             @extend .visuallyhidden;
         }
@@ -82,25 +94,21 @@ height: 300px;
 
 
 .logotype {
-    float: left;
-    width: 988px;
     text-align: center;
 
     #unit-college-uw {
-        margin-left: 10%;
+        margin-left: 1%;
         overflow: hidden;
         height: 109px;
-        @media #{$medium-only} {
+        @media #{$medium-up} {
             margin-left: 50px;
         }
     }
 
 }
 .unit-logo {
-    float: right;
     height: 109px;
-    margin-right: 10px;
-    width: 42px;
+    padding-right: 10px;
     img {
         max-width: 52px;
         max-height: 88px;
@@ -183,15 +191,14 @@ height: 300px;
 
 
 #unit-college-uw ul {
-    height: 35px;
     width: 220px;
     margin: 0;
-    padding: 0 0 0 rem-calc(60);
+    padding: 0 0 0 rem-calc(50);
     position: relative;
-    top: 52%;
-    -webkit-transform: translateY(-52%);
-    -ms-transform: translateY(-52%);
-    transform: translateY(-52%);
+    top: 53%;
+    -webkit-transform: translateY(-53%);
+    -ms-transform: translateY(-53%);
+    transform: translateY(-53%);
 }
 
 
@@ -217,36 +224,40 @@ height: 300px;
     }
 
     .units {
-    background-image: url("/wp-content/themes/coenv-cig/assets/img/slash.png");
-    background-position: left center;
-    background-repeat: no-repeat;
-    float: left;
-    height: 109px;
-    width: 300px;
-    padding: 0;
-    margin: 0 0 0 rem-calc(40);
-  li {
-    display: inline-block;
-    height: 14px;
-    padding: 0 0 4px 0;
-    margin: 0 0 0 0;
-    list-style: none;
-  }
-  img {
-    max-width: 215px;
-    max-height: 14px;
-  }
-
-    a {
-        padding-bottom: 5px;
-    }
-    .slash {
-        margin: 0;
-    }
-    .college-name,
-    .uw-name {
+        background-image: url("/wp-content/themes/coenv-cig/assets/img/slash.png");
+        background-position: left center;
+        background-repeat: no-repeat;
         float: left;
-    }
+        height: 109px;
+        width: 300px;
+        padding: 0;
+        margin: 0 0 0 rem-calc(30);
+        li {
+            display: block;
+            height: 12px;
+            width: 215px;
+            padding: 0 0 0 0 !important;
+            margin: 0 0 8px 0   !important;
+            list-style: none;
+        }
+        img.uw-name {
+            width: 215px;
+            height: 14px;
+        }
+        img.college-name {
+            width: 215px;
+            height: 12px;
+        }
+        a {
+            padding-bottom: 0;
+        }
+        .slash {
+            margin: 0;
+        }
+        .college-name,
+            .uw-name {
+                float: left;
+            }
 }
 
 

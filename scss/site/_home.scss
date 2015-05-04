@@ -1,6 +1,172 @@
 // Homepage Widgets
 
 .home {
+    
+        h2 {
+        @include encode_black;
+        @include font-size(27);
+        @include line-height(32);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        font-weight: bold;
+        letter-spacing: .2rem;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        text-transform: uppercase;
+        }
+
+        h3 {
+        @include encode_black;
+        @include font-size(16);
+        line-height: 1.4;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        font-weight: bold;
+        letter-spacing: .1rem;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        text-transform: uppercase;
+        }
+
+    .full-feature {
+        background-position: center;
+        background-repeat: repeat-x;
+        background-size: cover;
+        float: left;
+        padding: 50px 20px;
+        width: 100%;
+        text-align: center;
+        
+        p,
+        h3 {
+            margin: 0;
+        }
+
+
+        div.homepage-feature {
+            margin: 0 auto;
+            padding: 47px 0;
+        }
+
+        .boundless-1 {
+           
+            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-together.png');
+            @include encode-thin;
+            letter-spacing: 2;
+            margin: 0 auto;
+            color: $white;
+            text-transform: uppercase;
+            width: 341px;
+            font-size: rem-calc(27);
+            letter-spacing: .1rem;
+            overflow: hidden;
+            padding: 3px 0;
+            height: 50px;
+        }
+        h3 {
+            color: #fff;
+            font-size: rem-calc(53);
+            width: 90%;
+            letter-spacing: .2rem;
+            line-height: 1.25;
+            margin: 30px auto 49px;
+            text-shadow: 1px 1px 100px #000;
+
+
+        }
+        .more {
+            background-color: $accent;
+            color: #fff;
+            @include encode_black;
+            text-transform: uppercase;
+            font-size: rem-calc(15);
+            letter-spacing: .15rem;
+            padding: 12px 17px;
+            border-radius: 2px;
+            box-shadow: 0 2px #fff;
+        }
+    }
+    .full-news {
+        background-color: $white;
+        background-image: url('/wp-content/themes/coenv-cig/assets/img/home-section-top-tile.png');
+        background-position: top center;
+        background-repeat: repeat-x;
+        border-top: solid 6px #b6a47c;
+        float: left;
+        padding: 29px 0;
+        width: 100%;
+        .featured-news {
+            margin-right: 87px;
+        }
+        
+        h2 {
+            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+            color: $accent;
+            margin-bottom: 40px;
+        }
+        h3 {
+            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+            color: $accent;
+            font-size: rem-calc(16);
+            margin-bottom: 20px;
+            text-transform: none;
+
+        }
+        .small-news {
+        background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+            h3 {
+                background: none;
+                margin: 0;
+                padding: 0;
+
+            }
+        }
+
+    }
+    .full-stats {
+        background-color: #333;
+        background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-homepage-stats.png');
+        background-position: top center;
+        background-repeat: repeat-x;
+        background-size: 100%;
+        border-top: solid 6px #b6a47c;
+        float: left;
+        height: 439px;
+        overflow: hidden;
+        padding: 28px 0;
+        width: 100%;
+
+        h2 {
+            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
+            color: $white;
+        }
+
+    }
+    .full-learn-more {
+        background-color: $white;
+        background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-homepage-learn-more.png');
+        background-position: top center;
+        background-repeat: repeat-x;
+        border-top: solid 6px #b6a47c;
+        float: left;
+        height: 342px;
+        overflow: hidden;
+        padding: 28px 0;
+        width: 100%;
+
+        h2 {
+            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+            color: $accent;
+        }
+
+
+
+    }
+    
     .widget_coenv_base_index_dates ul {
         margin-left: 1rem;
     }
@@ -23,17 +189,47 @@
         display: none;
     }
     
-    
+    .news-row {
+        background-color: $white;
+        border-top: solid 6px #b6a47c;
+    }
 
     .home-news-section {
+        margin: 0 auto;
+
+
+        
+
+
+
+        div:nth-child(2) {
+            //padding-left: 30px;
+
+        }
+
         .featured-thumbnail {
             max-height: rem-calc(350);
-            margin-bottom: rem-calc(10);
+            margin-bottom: rem-calc(17);
             overflow: hidden;
         }
         :not(:last-child) .small-news {
                 margin-bottom: rem-calc(30);	
         }
+        .columns {
+            padding-left: 0;
+            padding-right: 0;
+        }
 
     }
+    .home-news-section .columns.small-news {
+        padding-left: 80px;
+    }
+    .post-meta {
+        @include encode_black;
+        font-size: rem-calc(12);
+        line-height: 1;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+    
 }

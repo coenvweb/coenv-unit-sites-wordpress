@@ -4,86 +4,95 @@
     border-bottom: #d7dee5 1px solid;
     min-height: rem-calc(60);
     .top-bar-section {
-        display: inline-block;
-        #menu-main-menu {
-            li {
-                background-color: transparent;
-                a {
-                    @include o_sans_bold();
-                    @media #{$large-up} {
-                        font-size: rem-calc(14);
-                    }
-                    @media #{$medium-only} {
-                        background-image: none!important;
-                    }
-                    background-color: transparent;
-                    background-image: url("/wp-content/themes/coenv-cig/assets/img/nav-divider.png");  
-                    background-position: right center;
-                    background-repeat: no-repeat;
-                    color: $accent;
-                    font-size: rem-calc(14);
-                    line-height: 60px;
-                    padding-left: rem-calc(20);
-                    text-align: left;
-                    text-transform: uppercase;
-                    &:hover, &:focus {
-                        color: #85754f;
-                    }
-                }
-                &:last-child a {
-                    background-image: none;
-                }
+        display: inline-block;  
+    }
+}
+
+#menu-main-menu .dropdown {
+    @include shadow;
+    background-color: $white;
+    border-top: solid 4px #b6a47c;
+    margin-top: -10px;
+
+    li {
+        a {
+            @include o_sans_bold();
+            background-color: $white;
+            background-image: none; 
+            background-repeat: no-repeat;
+            background-position: right top;
+            border-bottom: none;
+            font-weight: normal !important;
+            line-height: 180%;
+            padding-bottom: rem-calc(4)!important;
+            padding-left: rem-calc(18)!important;
+            padding-right: rem-calc(36)!important;
+            padding-top: 0;
+            text-transform: none !important;
+            &:hover{
+                background-color: #4b2e83;
+                color: #fff;
             }
-            li.current_page_parent {
-                & > a {
-                    color: #85754f;
-                    &:hover {
-                        color: #85754f;
-                    }
-                }
-                & .current_page_item > a {
-                    background-color: $bg-light;
-                    border-top: 1px solid #dddddd;
-                    border-bottom: 1px solid #dddddd;
-                }
-            }
-            .page_item_has_children {  
-                &.current_page_item > a, & > a:hover{
-                    color: #85754f;
-                }
-            }
-            .has-dropdown > a {
-                @media #{$medium-only} {
-                    padding-right: rem-calc(24)!important;
-                }
-                padding-right: rem-calc(24)!important;
-                &:after {
-                    content: none;
-                }   
-            }
-            .dropdown {
-                @include shadow;
-                border-bottom: #d7dee5 1px solid;
-                border-left: #d7dee5 1px solid;
-                border-right: #d7dee5 1px solid;
-                li a {
-                    @include o_sans_bold();
-                    background-color: #f6f5f7;
-                    background-image: none; 
-                    background-repeat: no-repeat;
-                    background-position: right top;
-                    border-bottom: none;
-                    line-height: 180%;
-                    padding-bottom: rem-calc(4)!important;
-                    padding-left: rem-calc(18)!important;
-                    padding-right: rem-calc(36)!important;
-                    padding-top: 0;
-                    text-transform: uppercase;
-                    &:hover{
-                        background-color: $bg-lighter;
-                    }
-                }
-            }  
+        }
+        &:nth-child(3n) a {
+            padding-top: rem-calc(4);
+
         }
     }
+}
+#menu-main-menu li {
+    background-color: transparent;
+    a {
+        @include o_sans_bold();
+        @media #{$large-up} {
+            font-size: rem-calc(14);
+        }
+        @media #{$medium-only} {
+            background-image: none!important;
+        }
+        background-color: transparent;
+        background-image: url("/wp-content/themes/coenv-cig/assets/img/nav-divider.png");  
+        background-position: right center;
+        background-repeat: no-repeat;
+        color: $accent;
+        font-size: rem-calc(14);
+        line-height: 60px;
+        padding-left: rem-calc(20);
+        text-align: left;
+        text-transform: uppercase;
+        &:hover, &:focus {
+            color: #85754f;
+        }
+    }
+    &:last-child a {
+        background-image: none;
+    }
+}
+   
+#menu-main-menu li.current_page_parent {
+    & > a {
+        color: #85754f;
+        &:hover {
+            color: #85754f;
+        }
+    }
+    & .current_page_item > a {
+        background-color: $bg-light;
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+    }
+}
+#menu-main-menu .page_item_has_children {  
+    &.current_page_item > a, & > a:hover{
+        color: #85754f;
+    }
+}
+#menu-main-menu .has-dropdown > a {
+    @media #{$medium-only} {
+        padding-right: rem-calc(24)!important;
+    }
+    padding-right: rem-calc(24)!important;
+    &:after {
+        content: none;
+    }   
 }

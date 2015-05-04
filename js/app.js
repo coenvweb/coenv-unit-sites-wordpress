@@ -265,38 +265,6 @@ e.data("index",e.data("index")+1),g.addClass("moved"),c.rtl?(f.css({right:-(100*
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
         
-        if ($('body').hasClass('home')) {
-
-            // slick slider
-            $('.homepage-features').slick({
-                autoplay: true,
-                autoplaySpeed: 3000,
-                dots: true,
-                pauseOnDotsHover: true
-            });
-            
-            var numItems = $('.feature').length;
-            if (numItems > 2) {
-                var autoplay = $('.homepage-features').slickGetOption('autoplay');
-                if (autoplay == null || autoplay === false) {
-                    $('.playpause').html('<i class="fi-play"></i>');
-                } else {
-                    $('.playpause').html('<i class="fi-pause"></i>');
-                }
-
-                $('.playpause').click(function () {
-                    if (autoplay == null || autoplay === false) {
-                        $(this).html('<i class="fi-pause"></i>');
-                        $('.homepage-features').slickPlay();
-                        autoplay = true;
-                    } else {
-                        $(this).html('<i class="fi-play"></i>');
-                        $('.homepage-features').slickPause();
-                        autoplay = false;
-                    }
-                });
-            }
-        }
     }
 
     // Category filter for custom post type indicies
