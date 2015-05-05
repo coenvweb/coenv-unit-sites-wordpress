@@ -75,7 +75,7 @@ Template Name: Homepage
 				}
 				?>
 
-	        	<div class="medium-6 large-7 columns">
+	        	<div class=" large-7  medium-6 small-12 columns">
 	                <div class="featured-news">
 	                	<?php if ( has_post_thumbnail() ) {
 						$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'medium' );
@@ -90,8 +90,8 @@ Template Name: Homepage
 	               				<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
 							</div>
 							<h3><a href="<?php echo $post_link_url; ?>" <?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
-		            		<?php echo the_advanced_excerpt('length=60&finish=sentence'); ?>
-		            		<div class="news-link"><?php echo $post_link; ?></div>
+		            		<span class="show-for-medium-up"><?php echo the_advanced_excerpt('length=60&finish=sentence'); ?></span>
+		            		<div class="news-link show-for-medium-up"><?php echo $post_link; ?></div>
 
 		            	</div>
 		            	
