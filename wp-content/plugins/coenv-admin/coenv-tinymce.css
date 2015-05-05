@@ -8,7 +8,7 @@ thead {
 	font-weight: bold;
 }
 .intro {
-    font-size: 16px;
+    font-size: 25px;
     line-height: 20px;
 }
 .button {
@@ -24,4 +24,8 @@ thead {
     text-decoration: none;
     color: #333333;
     border-radius: 2px;
+}
+blockquote {
+    background-color: #ccc !important;
+    padding: 10px;
 }

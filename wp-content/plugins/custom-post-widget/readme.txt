@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 2.9.2
-Tested up to: 4.1.1
-Stable tag: 2.7.5
+Tested up to: 4.2
+Stable tag: 2.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,9 +27,11 @@ To add content to a widget, drag it to the required position in the sidebar and 
 
 **Includes the following translations:**
 
-* German (de_DE) by [Caspar H&uuml;binger](http://glueckpress.com/)
-* French (fr_FR) by [Alexandre Simard](http://brocheafoin.biz/)
+* Czech (cs_CZ) by [Martin Kucera](http://jsemweb.cz/) 
 * Dutch (nl_NL) by [Johan van der Wijk](http://vanderwijk.nl)
+* French (fr_FR) by [Alexandre Simard](http://brocheafoin.biz/)
+* German (de_DE) by [Caspar H&uuml;binger](http://glueckpress.com/)
+* Italian (it_IT) by [Ercicion](http://ercicion.altervista.org/blog/)
 * Polish (pl_PL) by [Kuba Skublicki](https://www.linkedin.com/in/kubecki)
 * Portuguese (pt_BR) by [Ronaldo Chevalier](http://www.hostmeta.com.br/)
 * Russian (ru_RU) by [Vitaliy Kaplya](http://www.dasayt.com/) 
@@ -86,6 +88,7 @@ These new features are on the to-do list:
 * Display the content block featured image when using the shortcode
 * Optionally show the post title when using the shortcode
 * Front-end editing of the content blocks
+* Display shortcode on content block edit screen and/or overview page similar to Contact Form 7
 
 = How can I make advanced changes to the widget layout? =
 
@@ -127,6 +130,12 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 2.7.7 =
+Added Czech translation.
+
+= 2.7.6 =
+Added Italian translation.
 
 = 2.7.5 =
 Updated branding and language files.
