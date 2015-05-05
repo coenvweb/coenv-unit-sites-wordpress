@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="full-feature" style="background-image: url('http://dev.cig.uw.dev/wp-content/uploads/sites/2/2014/11/cig-home-dev.jpg')">
+<div class="full-feature" style="background-image: url('/wp-content/uploads/sites/2/2014/11/cig-home-dev.jpg')">
 	<div class="row">
 		<div class="large-12 homepage-features columns">
 			<div class="boundless-1">
