@@ -4,7 +4,7 @@
   Foundation.libs.dropdown = {
     name : 'dropdown',
 
-    version : '5.4.7',
+    version : '5.5.0',
 
     settings : {
       active_class: 'open',
@@ -12,6 +12,7 @@
       mega_class: 'mega',
       align: 'bottom',
       is_hover: false,
+      hover_timeout: 150,
       opened: function(){},
       closed: function(){}
     },
@@ -64,19 +65,31 @@
         })
         .on('mouseleave.fndtn.dropdown', '[' + this.attr_name() + '], [' + this.attr_name() + '-content]', function (e) {
           var $this = S(this);
-          self.timeout = setTimeout(function () {
-            if ($this.data(self.data_attr())) {
-              var settings = $this.data(self.data_attr(true) + '-init') || self.settings;
-              if (settings.is_hover) self.close.call(self, S('#' + $this.data(self.data_attr())));
-            } else {
+          var settings;
+
+          if ($this.data(self.data_attr())) {
+              settings = $this.data(self.data_attr(true) + '-init') || self.settings;
+          } 
+          else {
               var target   = S('[' + self.attr_name() + '="' + S(this).attr('id') + '"]'),
                   settings = target.data(self.attr_name(true) + '-init') || self.settings;
+          }
+
+          self.timeout = setTimeout(function () {
+            if ($this.data(self.data_attr())) {
+              if (settings.is_hover) self.close.call(self, S('#' + $this.data(self.data_attr())));
+            } else {
               if (settings.is_hover) self.close.call(self, $this);
             }
-          }.bind(this), 150);
+          }.bind(this), settings.hover_timeout);
         })
         .on('click.fndtn.dropdown', function (e) {
           var parent = S(e.target).closest('[' + self.attr_name() + '-content]');
+          var links  = parent.find('a');
+
+          if (links.length > 0 && parent.attr('aria-autoclose') !== "false") {
+              self.close.call(self, S('[' + self.attr_name() + '-content]'));
+          }
 
           if (S(e.target).closest('[' + self.attr_name() + ']').length > 0) {
             return;
