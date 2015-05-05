@@ -262,7 +262,7 @@ Template Name: Homepage
 
 
 
-		</div> <!-- large-12 home-news-section columns -->
+		<?php if ( !empty( $featured ) ): ?></div><?php endif; ?>
 	</div>
 </div>
 
