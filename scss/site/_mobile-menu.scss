@@ -115,3 +115,24 @@
         }
     }
 }
+.move-left {
+    .menu-icon {
+        span:after {
+            content: none;
+        }
+        
+        i {
+            &:before {
+                @extend .fi-arrow-left:before;
+                content: "\f10a";
+                position: relative;
+                right: rem-calc(30);
+                font-size: rem-calc(28);
+                color: $text;
+                font-family: "foundation-icons";
+                font-style: normal;
+
+            }
+        }
+    }
+}

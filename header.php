@@ -82,7 +82,7 @@
         </a>
     </div>
     <div class="right-small">
-      <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+      <a class="right-off-canvas-toggle menu-icon" ><span><i></i></span></a>
     </div>
   </nav>
 
