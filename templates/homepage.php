@@ -16,7 +16,8 @@ Template Name: Homepage
 <div class="full-news">
 	<div class="row">
 		<div class="large-12 home-news-section columns">
-			<h2>News &amp; Events</h2>
+			<div class="home-news-header">
+				<h2 class="left'">News &amp; Events</h2>
 
 
 			<?php
@@ -29,6 +30,12 @@ Template Name: Homepage
 			);
 			$wp_query = new WP_Query( $featured_news_args );
 
+			if ( !$wp_query->have_posts() ) {
+			?>
+			<div class="more-news right"><a class="button" href="">See All News</a></div>
+			<?php } ?>
+			</div>
+			<?php
 			# The Loop
 			while ( $wp_query->have_posts() ) { // start featured news loop
 				$wp_query->the_post();
@@ -164,7 +171,7 @@ Template Name: Homepage
 			</div>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
-		<div class="more-news"><a class="button" href="">See All News</a></div>
+		<?php if ( !empty( $featured ) ): ?><div class="more-news"><a class="button" href="">See All News</a></div><?php endif; ?>
 
 
 

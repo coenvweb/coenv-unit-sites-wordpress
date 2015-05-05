@@ -113,8 +113,16 @@
         float: left;
         padding: 26px 0;
         width: 100%;
+
+        .home-news-header {
+            float: left;
+            width: 100%;
+        }
         .featured-news {
             margin-right: 87px;
+        }
+        .more-news {
+            margin-top: 9px;
         }
         
         
@@ -122,6 +130,7 @@
             background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
             color: $accent;
             margin-bottom: 40px;
+            float: left;
         }
         h3 {
             background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
@@ -129,9 +138,9 @@
             font-size: rem-calc(16);
             margin-bottom: 20px;
             text-transform: none;
-
-
-
+        }
+        .large-4 .small-news {
+        min-height: 320px;
         }
         .small-news {
             background-color: #fff;
@@ -141,6 +150,7 @@
             float: left;
             margin-bottom: 25px;
             padding-bottom: 25px;
+            padding-right: 20px;
                 h3 {
                     background: none;
                     margin: 0;
