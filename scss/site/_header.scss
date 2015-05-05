@@ -7,15 +7,16 @@
     border-bottom: 1px solid $border;
     
     .tab-bar-section {
-        padding-left: rem-calc(30);
-        margin: auto;
+        margin: 0 0 0 23px;
+        text-align: center;
     }
 
     
     h1 {
         color: $white;
-        font-size: rem-calc(20)!important;
-        text-align: left;
+        font-size: rem-calc(18)!important;
+        margin-left: 10px;
+        text-align: center;
         @media #{$small} {
             font-size: rem-calc(20)!important;
             line-height: rem-calc(18);
@@ -32,11 +33,14 @@
     .mobile-logo {
         color: $accent;
         font-size: rem-calc(20);
+        margin-left: 10px;
+        height: 45px;   
+        width: 66px;
         
         #logo {
             height: 45px;   
             width: 66px;
-            margin-left: rem-calc(10);
+            
             fill: $white;
         }
     }
@@ -54,12 +58,15 @@
     width: 100%;
 }
 .title-row {
-  height: 109px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 0;
   margin-bottom: 0;
   max-width: 1200px;
+
+  @media #{$medium-up} {
+    height: 109px;
+  }
     
 }
 .name {

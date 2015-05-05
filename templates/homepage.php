@@ -7,7 +7,9 @@ Template Name: Homepage
 <div class="full-feature" style="background-image: url('http://dev.cig.uw.dev/wp-content/uploads/sites/2/2014/11/cig-home-dev.jpg')">
 	<div class="row">
 		<div class="large-12 homepage-features columns">
-			<p class="boundless-1">Together We Will</p>
+			<div class="boundless-1">
+				<p>Together We Will</p>
+			</div>
 			<h3>Increase resilience to climate variability and change</h3>
 			<p><a class="more" href="/about-cig/">Learn More</a></p>
 		</div>

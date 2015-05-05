@@ -1,4 +1,37 @@
 .mobile-menu {
+    .search-form { //search
+        width: 100%;
+        background-color: $bk-menu;
+        .field-wrap {
+            width: 100%;
+        }
+        input[type="text"], button[type="submit"] {
+            margin: 0;
+        }
+        button {
+            height: rem-calc(44);
+            width: 25%!important;
+            background-color: transparent!important;
+            i {
+                color: $white;
+                font-size: rem-calc(20)!important;
+            }
+        }
+        #s {
+            color: $white;
+            background-color: transparent;
+            height: rem-calc(43);
+            width: 75%;
+            @include placeholder {
+                color: $white;
+                @include encode_cb;
+                font-size: rem-calc(12);
+                padding: 0 0 0 rem-calc(3);
+                margin: 0;
+            }
+        }
+    }
+    
     svg {
         height: 32px;
         width: 32px;
@@ -13,16 +46,24 @@
     }
     .off-canvas-list {
         border-bottom: solid 2px $text;
+        a {
+            color: $white;
+        }
         .content {
             padding: 0;
-            background: #363533 !important;
+            background: #333333 !important;
         }
         .children-0 {
             padding-top: rem-calc(45);
+            font-weight: 400!important;
+            font-size: rem-calc(12);
+            @include encode_cb;
         }
         .children-1 {
             a {
-                padding-left: rem-calc(10);
+                padding-left: rem-calc(20);
+                font-size: rem-calc(12);
+                text-transform: none;
             }
             li {
                 background: #0f0e0e !important;
@@ -32,8 +73,13 @@
     .primary-link {
         height: rem-calc(45);
         padding-top: rem-calc(10);
+        padding-left: rem-calc(10)!important;
         background: $border-dk-accent;
-        color: $white;
+        text-transform: uppercase;
+        font-weight: 800;
+        font-size: rem-calc(12);
+        @include encode_cb;
+        z-index: 10;
         &:hover {
             background: #242424;
         }
@@ -45,18 +91,19 @@
         width: 26%;
         margin-left: rem-calc(-10);
         background: $border-dk-accent!important;
+        z-index: 11;
         &:hover {
             background: #242424!important;
         }
         svg {
           margin-top: rem-calc(-5);
-          width: rem-calc(24);
+          width: rem-calc(20);
           fill: $white;
         }
     }
     .accordion {
         .accordion-navigation { 
-            &.active > a {
+            & > a {
                 svg {
                     -webkit-transform: rotate(90deg);
                     -moz-transform: rotate(90deg);

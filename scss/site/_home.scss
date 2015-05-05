@@ -67,19 +67,43 @@
         }
 
         .boundless-1 {
-           
-            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-together.png');
+            background-color: #4B2E83;
             @include encode-thin;
             letter-spacing: 2;
             margin: 0 auto;
-            color: $white;
-            text-transform: uppercase;
-            width: 341px;
-            font-size: rem-calc(27);
-            letter-spacing: .1rem;
-            overflow: hidden;
-            padding: 3px 0;
-            height: 50px;
+            padding: 3px 20px;
+            width: 340px;
+            transform: skewX(-20deg);  /* e.g. skewX(25deg) */
+
+                @media #{$small-only} {
+                width: 260px;
+
+                }
+
+
+                p {
+
+                @include encode-thin;
+                letter-spacing: 2;
+                color: $white;
+                text-transform: uppercase;
+                font-size: rem-calc(27);
+                letter-spacing: .1rem;
+                transform: skewX(20deg);  /* e.g. skewX(25deg) */
+
+                    @media #{$small-only} {
+
+                        font-size: rem-calc(18);
+
+
+                }
+
+            }
+
+
+
+
+
         }
         h3 {
             color: #fff;
@@ -87,8 +111,18 @@
             width: 94%;
             letter-spacing: .2rem;
             line-height: 1.25;
-            margin: 22px auto 23px;
+            margin: 22px auto 23px auto;
             text-shadow: 1px 1px 100px #000;
+
+            @media #{$small-only} {
+
+                        font-size: rem-calc(30);
+                        margin-bottom: 12px;
+                    
+                        text-shadow: 1px 1px 50px #000;
+
+
+                }
 
 
         }
@@ -99,9 +133,15 @@
             text-transform: uppercase;
             font-size: rem-calc(15);
             letter-spacing: .15rem;
-            padding: 12px 17px;
+            padding: 12px 12px;
             border-radius: 2px;
             box-shadow: 0 2px #fff;
+
+            @media #{$small-only} {
+                font-size: rem-calc(12);
+            }
+
+
         }
     }
     .full-news {

@@ -19,8 +19,24 @@
     } elseif ( is_single() ) {
       wp_title('');
     } else {
-      echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
+      echo bloginfo( 'name' );
     } ?></title>
+
+    <meta name="title" content="<?php bloginfo('name'); ?>">
+    <meta name="description" content="<?php
+    wp_reset_query();   
+    if (have_posts()) : while(have_posts()) the_post();
+        if (is_singular('faculty')) {
+            $advancedExcerpt = strip_tags(get_field('biography'));
+        } elseif (is_page_template( 'faculty.php' )) {    
+            $advancedExcerpt = 'Our world-class faculty are at the center of our work at The UW' . bloginfo('name');
+        } elseif (is_singular()&&is_front_page()==false ) {
+            $advancedExcerpt = strip_tags(get_the_excerpt());
+        } else {
+            $advancedExcerpt = get_option('meta_description');
+        }
+        endif;
+    echo $advancedExcerpt ?>">
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
@@ -42,8 +58,41 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
     ?>
+    <?php
+    $post = get_queried_object();
+        $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+    $post_description = $advancedExcerpt;
+    $post_link = get_permalink();
+  if ( has_post_thumbnail( $post->ID ) ) {
+    $thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+    $post_image = $thumb_src[0];
+  } elseif ( $banner ) {
+    $post_image = $banner['url'];
+  } else {
+    $post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
+  }
+  
+  ?>
+  <meta property="og:title" content="<?php echo $post_title ?>" />
+  <meta property="og:description" content="<?php echo $post_description ?>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="<?php echo $post_link ?>" />
+  <meta property="og:image" content="<?php echo $post_image ?>" />
+  <meta property="og:site_name" content="<?php bloginfo('name') ?>" />
+
+  <script>
+  /*
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-21836351-1', 'auto');
+    ga('send', 'pageview');
+  */
+  </script>
   </head>
-  <body <?php body_class(); ?>>
+  <body <?php body_class($banner_class); ?>>
   
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
