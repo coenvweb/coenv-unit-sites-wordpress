@@ -5,21 +5,22 @@
     text-align: center;
     background: $accent;
     border-bottom: 1px solid $border;
+    height: 44px;
     
     .tab-bar-section {
-        margin: 0 0 0 23px;
+        margin: 0;
         text-align: center;
     }
 
     
     h1 {
         color: $white;
-        font-size: rem-calc(18)!important;
+        font-size: rem-calc(12);
         margin-left: 10px;
         text-align: center;
-        @media #{$small} {
-            font-size: rem-calc(20)!important;
-            line-height: rem-calc(18);
+        @media #{$small-only} {
+            font-size: rem-calc(14) !important;
+            line-height: rem-calc(44);
         }
         a {
             color: $white;
@@ -34,12 +35,13 @@
         color: $accent;
         font-size: rem-calc(20);
         margin-left: 10px;
-        height: 45px;   
-        width: 66px;
+        height: 38px;   
+        width: 56px;
+        padding-top: 6px;
         
         #logo {
-            height: 45px;   
-            width: 66px;
+            height: 38px;   
+            width: 56px;
             
             fill: $white;
         }
