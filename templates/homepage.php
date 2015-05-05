@@ -112,7 +112,7 @@ Template Name: Homepage
 			if ( $wp_query->have_posts() ) {
 			?>
 
-			<?php if ( !empty ( $featured ) ): ?><div class="medium-6 large-5 columns"><?php endif; ?>
+			<?php if ( !empty ( $featured ) ): ?><div class="medium-6 large-5 columns small-w-featured"><?php endif; ?>
 
 			<?php
 			# The Loop
@@ -164,6 +164,13 @@ Template Name: Homepage
 			</div>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
+		<div class="more-news"><a class="button" href="">See All News</a></div>
+
+
+
+
+
+
 
 		</div>
 		<?php if ( !empty( $featured ) ): ?></div><?php endif; ?>
@@ -262,19 +269,26 @@ Template Name: Homepage
 <div class="full-stats">
 	<div class="row">
 		<div class="small-12 columns">
-			<article id="coenv_base_stats-2" class="row widget widget_coenv_base_stats">
 				<h2>Stats &amp; Info</h2>
 				<div class="large-12">
-					<div class="row">
-						<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">56<br>Projects in 2014</div>
-						<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">163<br>Partners in the Field</div>
-						<div class="large-4 columns" style="text-align: center; text-transform:uppercase; font-size: 2rem;">1,295<br>Papers Published</div>
+					<div class="row stats">
+						<div class="large-4 medium-4 small-12 columns">
+							<div class="stat-value">56</div>
+							<div class="stat-label">Projects in 2014</div>
+						</div>
+						<div class="large-4 medium-4 small-12 columns">
+							<div class="stat-value">163</div>
+							<div class="stat-label">Partners in the Field</div>
+						</div>
+						<div class="large-4 medium-4 small-12 columns">
+							<div class="stat-value">1,295</div>
+							<div class="stat-label">Papers Published</div>	
+						</div>
 					</div>
 					<div class="row" style="text-align: center;">
 						<div class="large-12"><a class="button">Learn More About Our Partners</a></div>
 					</div>
 				</div>
-			</article>
 		</div>
 	</div>
 </div>
@@ -283,7 +297,7 @@ Template Name: Homepage
 		<div class="small-12 columns">
 			<h2>Learn More About the Climate Impacts Group</h2>
 			<p>Aenean eu lacus fringilla nibh fringilla consectetur vitae a enim. Integer scelerisque at lectus ut semper. Aenean aliquam tortor in erat euismod hendrerit. Aliquam eu massa volutpat, fringilla odio sed, vulputate velit. Curabitur posuere tincidunt vehicula. Nulla non commodo ante, nec semper mi. Donec elit eros, euismod id sollicitudin nec, sollicitudin non orci. Donec in diam viverra, hendrerit felis vel, elementum sapien. Phasellus vitae tortor aliquet, placerat mauris sit amet, fermentum mauris. Fusce eu nisi eget ipsum auctor tempus.</p>
-			<ul>
+			<ul class="links">
 				<li><a class="button" href="#">Learn More</a></li>
 				<li><a class="button" href="#">Contact Us</a></li>
 			</ul>

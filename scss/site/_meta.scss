@@ -5,11 +5,16 @@
 
 .terms {
 	border-right: solid 2px #000;
-	float: left;
+    color: #595959;
+    float: left;
 	font-size: rem-calc(12);
 	margin-right: 5px;
 	padding-right: 6px;
 	position: relative;
+
+    a {
+        color: #595959;
+    }
 
 	li {
             display: inline;
