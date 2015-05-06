@@ -132,25 +132,32 @@
       background-image: url("/wp-content/themes/coenv-cig/assets/img/header-forest.jpg");
       background-position: center center;
       background-color: #666;
-      height: 193px;
-      padding-top: 103px;
+      background-size: cover;
       border-bottom: solid 4px #b6a47c;
       @media #{$small-only} {
             height: 60px;
             padding-top:0;
         }
 
-
+        .section-title-wrapper {
+            height: 163px;
+        }
 
         .section-title {
-            @include rem('margin', 1.5, 0, 1.5); // 24
             @include rem('line-height', 3); // 48
-            @include rem('font-size', 2); // 36
+            height: 163px;
+            position: relative;
+            h2 {
+            position: absolute;
+            bottom: 0;
+            }
     
             a {
+                @include encode_cb;
                 color: $white;
                 display: block;
-
+                font-size: rem-calc(50);
+                letter-spacing: .12rem;
                 text-decoration: none;
 
               }
@@ -159,19 +166,6 @@
         }
 
      }
-.section-title {
-    padding: 0 1rem;
-    margin: 0;     
-    a {
-        font-size: rem-calc(28);
-        text-decoration: none;
-        @include encode_cb;
-
-        @media #{$medium-up} {
-            font-size: rem-calc(36);
-        }
-    }
-    }
 .title-area {
 	list-style: none;
 	margin-left: 0;
