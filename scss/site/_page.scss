@@ -1,0 +1,17 @@
+
+/*	Module: page
+		
+======================================================================== */
+
+.full-page {
+	background-image: url('/wp-content/themes/coenv-cig/assets/img/hash-gray-lvl2.png');
+	background-position: top center;
+    background-repeat: repeat-x;
+
+    article.type-page {
+    	background-image: url('/wp-content/themes/coenv-cig/assets/img/rule-purple.svg');
+		background-position: top left;
+    	background-repeat: no-repeat;
+    	padding-top: 32px;
+    }
+}
