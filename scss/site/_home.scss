@@ -44,6 +44,11 @@
         ul.links {
             margin: 0;
             padding: 0;
+
+            @media #{$small-only} {
+                text-align: center;
+            }
+
             li { 
                 display:inline;
                 list-style: none;
@@ -119,14 +124,14 @@
             letter-spacing: .2rem;
             line-height: 1.25;
             margin: 22px auto 23px auto;
-            text-shadow: 1px 1px 100px #000;
+            text-shadow: 1px 1px 50px #000;
 
             @media #{$small-only} {
 
                         font-size: rem-calc(28);
                         margin-bottom: 12px;
 
-                        text-shadow: 1px 1px 50px #000;
+                        text-shadow: 1px 1px 5px #000;
 
 
                 }
@@ -173,6 +178,12 @@
         }
         .more-news {
             margin-top: 9px;
+
+            @media#{$small-only} {
+                text-align: center;
+            }
+
+
         }
         
         
@@ -191,6 +202,10 @@
         }
         .large-4 .small-news {
         min-height: 320px;
+
+            @media #{$small-only} {
+                min-height: 0;
+            }
         }
         .small-news {
             background-color: #fff;
@@ -228,6 +243,10 @@
         overflow: hidden;
         padding: 32px 0;
         width: 100%;
+
+         @media #{$small-only} {
+                height: auto;
+            }
 
         h2 {
             background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
@@ -280,6 +299,10 @@
         }
         p {
             font-size: rem-calc(22);
+
+            @media #{$small-only} {
+                @include font-size(16);
+            }
         }
 
 

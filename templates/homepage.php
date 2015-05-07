@@ -31,11 +31,7 @@ Template Name: Homepage
 			    'category_name' => 'featured'
 			);
 			$wp_query = new WP_Query( $featured_news_args );
-
-			if ( !$wp_query->have_posts() ) {
 			?>
-			<div class="more-news right"><a class="button" href="">See All News</a></div>
-			<?php } ?>
 			</div>
 			<?php
 			# The Loop
@@ -166,14 +162,14 @@ Template Name: Homepage
 					</div>
 					<h3><a href="<?php echo $post_link_url; ?>"><?php echo get_the_title(); ?></a></h3>
 					<?php if ( !$featured ) { ?>
-						<p><?php echo the_advanced_excerpt( 'length=15&finish=sentence' ); ?></p>
-		    			<?php echo $post_link; ?>
+						<div class="show-for-medium-up"><?php echo the_advanced_excerpt( 'length=15&finish=sentence' ); ?></div>
+		    			<div class="show-for-medium-up"><?php echo $post_link; ?></div>
 		    		<?php } ?>
 		    	</div>
 			</div>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
-		<?php if ( !empty( $featured ) ): ?><div class="more-news"><a class="button" href="">See All News</a></div><?php endif; ?>
+		<div class="more-news column"><a class="button" href="">See All News</a></div>
 
 
 

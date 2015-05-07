@@ -274,7 +274,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 }
 /* 
  * Serve images over SSL, if enabled
- */
+ 
 function coenv_url_ssl($url)
 {
   if( function_exists('is_ssl') && is_ssl() )

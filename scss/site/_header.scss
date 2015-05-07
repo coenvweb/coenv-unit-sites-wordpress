@@ -147,9 +147,14 @@
             @include rem('line-height', 3); // 48
             height: 163px;
             position: relative;
+            @media #{$small-only} {
+                height: 60px;
+            }
             h2 {
-            position: absolute;
-            bottom: 0;
+                position: absolute;
+                bottom: 0;
+
+               
             }
     
             a {
@@ -159,6 +164,10 @@
                 font-size: rem-calc(50);
                 letter-spacing: .12rem;
                 text-decoration: none;
+
+                 @media #{$small-only} {
+                font-size: rem-calc(30);
+                }
 
               }
 
