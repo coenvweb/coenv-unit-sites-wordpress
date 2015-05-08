@@ -103,14 +103,16 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         </div>
     	-->
     	<?php
-    			if (has_post_thumbnail()):
-    			$has_thumb = ' has-thumb';
-    			echo '<div class="right' . $has_thumb . '">';
-				echo '<a href="' . get_the_permalink() . '">';
-				the_post_thumbnail( 'medium' );
-				echo '</a>';
-				echo '</div>';
-				endif;
+    			if (has_post_thumbnail()) {
+	    			$has_thumb = ' has-thumb';
+	    			echo '<div class="right' . $has_thumb . '">';
+					echo '<a href="' . get_the_permalink() . '">';
+					the_post_thumbnail( 'medium' );
+					echo '</a>';
+					echo '</div>';
+				} else {
+					$has_thumb = "";
+				}
 				?>
     	<div class="post-content left <?php echo $has_thumb; ?>">
 			<div class="post-meta">
@@ -150,6 +152,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		</div>
 		</div>
 	</div>
+	<?php $has_thumb = ""; ?>
 	<?php endwhile; ?>
 	</div>
 	<div class="pager">
