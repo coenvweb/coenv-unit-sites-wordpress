@@ -16,7 +16,7 @@ $widget_img_attr = array(
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
 );
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'large');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 

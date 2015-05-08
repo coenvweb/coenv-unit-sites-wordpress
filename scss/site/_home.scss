@@ -6,7 +6,7 @@
     }
 
     .widget_links {
-        float: right;
+        list-style: none;
     }
 
     .list-news-small {
@@ -35,5 +35,24 @@
                 margin-bottom: rem-calc(30);	
         }
 
+    }
+}
+
+// Student Spotlight
+
+.spotlight {
+    .widget_img {
+        @include grid-column(4);
+        padding-left: 0;
+        padding-bottom: rem-calc(15);
+    }
+}
+
+// Programs
+
+.programs {
+    text-align: center;
+    .widget_links {
+        
     }
 }

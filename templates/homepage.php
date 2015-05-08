@@ -53,7 +53,7 @@ echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 echo '</div>';
 	echo '<div class="feature-info-container">';
-		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
+		echo '<p class="feature-image-caption left">' . $feature_caption . '</p>';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
 			echo '<div class="feature-content">';
 				echo '<h2>' . get_the_title() . '</h2>';
@@ -102,12 +102,7 @@ echo '</div>';
 	</ul>
 <?php endif; ?>
     
-<div class="large-4 columns spotlight">
-    <h4>Student Spotlight</h4>
-	<?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
-</div>
-<div class="large-4 columns small-news">
-<a class="button right" href="/news-and-events">More</a>
+<div class="large-7 columns small-news">
 	<a href="/news-and-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
@@ -127,16 +122,23 @@ $wp_query = new WP_Query( $home_args );
 		echo '<li class="news-small"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
 	endwhile;	
 		echo '</ul></div>';
+        echo '<a class="button" href="/news-and-events">More</a>';
 	endif;
 ?>
 </div>
 				
-<div class="large-4 columns events">
-	<a class="button right" href="/news-and-events/calendar">More</a>
+<div class="large-5 columns events">
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+    <a class="button" href="/news-and-events/calendar">More</a>
 </div>
       
+        <hr />
+        
+<div class="large-12 columns spotlight">
+    <h4>Student Spotlight</h4>
+	<?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
+</div>
         <hr />
 
 <?php if (!$statement[0] == 'yes') : ?>
@@ -144,13 +146,18 @@ $wp_query = new WP_Query( $home_args );
 	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
 </div>
 <?php endif; ?>
+<div class="large-12 columns social-bar">
+	<?php the_widget('custom_post_widget', 'custom_post_id=27022'); ?>
+</div>
+                <hr />
 <div class="large-12 columns programs">
 	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
 </div>
-<div class="large-12 columns programs">
+        <hr />
+<div class="large-6 columns programs">
 	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
 </div>
-<div class="large-12 columns programs">
+<div class="large-6 columns programs">
 	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
 </div>
         
