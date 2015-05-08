@@ -102,7 +102,17 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
     	-->
-    	<div class="post-content">
+    	<?php
+    			if (has_post_thumbnail()):
+    			$has_thumb = ' has-thumb';
+    			echo '<div class="right' . $has_thumb . '">';
+				echo '<a href="' . get_the_permalink() . '">';
+				the_post_thumbnail( 'medium' );
+				echo '</a>';
+				echo '</div>';
+				endif;
+				?>
+    	<div class="post-content left <?php echo $has_thumb; ?>">
 			<div class="post-meta">
 				<div class="terms">
 					<?php
@@ -121,11 +131,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			<h3><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
 			<div class="post">
 			<?php 
-				if (has_post_thumbnail()):
-				echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
-				the_post_thumbnail( 'medium' );
-				echo '</a>';
-				endif;
+
 				echo the_excerpt();
 				echo $post_link;
 			?>
