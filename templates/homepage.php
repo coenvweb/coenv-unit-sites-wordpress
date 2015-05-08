@@ -60,7 +60,7 @@ Template Name: Homepage
 					
 					foreach ($terms as &$term) {
 						if ( $term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 				}
@@ -169,7 +169,7 @@ Template Name: Homepage
 			</div>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
-		<div class="more-news column"><a class="button" href="">See All News</a></div>
+		<div class="more-news column"><a class="button" href="/news-and-events/">See All News</a></div>
 
 
 

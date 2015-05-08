@@ -23,6 +23,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 ?>
 
 <?php get_header(); ?>
+<div class="full-page">
 <div class="row">
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
@@ -44,7 +45,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$query_args = array(
 			'post_type'	=> 'post',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,
+			'posts_per_page' => 2,
 			'orderby' => 'date',
 			'order' => 'DESC',
 			'paged' => $paged
@@ -96,6 +97,36 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         }
 		?>
 		<div class="blog-list-item clearfix">
+			<div class="post-meta clearfix">
+			<div class="left">
+			<div class="terms">
+				<?php
+				$termlist = '';
+				foreach ($terms as $term) {
+					if ( $term->slug != 'uncategorized') {
+	 					$termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+	 				}
+				}
+				$termlist = rtrim($termlist,', ');
+				echo $termlist;
+				?>
+			</div>
+			<time class="article__time" datetime="2014-10-30 06:56:38"><?php echo get_the_date('M j, Y'); ?></time>
+		</div>
+				<div class="sharer right">
+                <?php $title = rawurlencode(get_the_title());
+                $shortlink = rawurlencode(wp_get_shortlink());
+                $site_name = rawurlencode(get_bloginfo('name'));
+                $twitter = get_option('twitter');
+                ?>
+                <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+                <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+            </div>
+		</div>
 		<!--
 		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
 		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
@@ -114,22 +145,9 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 					$has_thumb = "";
 				}
 				?>
+
     	<div class="post-content left <?php echo $has_thumb; ?>">
-			<div class="post-meta">
-				<div class="terms">
-					<?php
-					$termlist = '';
-					foreach ($terms as $term) {
-						if ( $term->slug != 'uncategorized') {
-		 					$termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		 				}
-					}
-					$termlist = rtrim($termlist,', ');
-					echo $termlist;
-					?>
-				</div>
-				<time class="article__time" datetime="2014-10-30 06:56:38"><?php echo get_the_date('M j, Y'); ?>
-			</div>
+			
 			<h3><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
 			<div class="post">
 			<?php 
@@ -178,5 +196,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	</div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
+</div>
 </div>
 <?php get_footer(); ?>

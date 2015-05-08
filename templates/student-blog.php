@@ -22,6 +22,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 ?>
 
 <?php get_header(); ?>
+<div class="full-page">
 <div class="row">
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
@@ -152,5 +153,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	</div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
+</div>
 </div>
 <?php get_footer(); ?>
