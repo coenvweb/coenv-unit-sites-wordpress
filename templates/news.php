@@ -102,39 +102,45 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
     	-->
-        <?php
-        echo '<div class="blog-meta clearfix">';
-		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-		 $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
-		 echo '</p>';
-		
-		echo '</div>';
-		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
-
-		echo '<div class="post">';
-		/*if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
-		the_post_thumbnail( 'medium' );
-		echo '</a>';
-		endif;*/
-		echo the_excerpt();
-		echo $post_link;
-		'</div>';
-		echo '<div class="blog-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['blog_link_type'] == 'upload') {
-					echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-				} elseif ($row['blog_link_type'] == 'link') {
-					echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-				} 
-			}
-		} ?>
+    	<div class="post-content">
+			<div class="post-meta">
+				<div class="terms">
+					<?php
+					$termlist = '';
+					foreach ($terms as $term) {
+						if ( $term->slug != 'uncategorized') {
+		 					$termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+		 				}
+					}
+					$termlist = rtrim($termlist,', ');
+					echo $termlist;
+					?>
+				</div>
+				<time class="article__time" datetime="2014-10-30 06:56:38"><?php echo get_the_date('M j, Y'); ?>
+			</div>
+			<h3><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
+			<div class="post">
+			<?php 
+				if (has_post_thumbnail()):
+				echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+				the_post_thumbnail( 'medium' );
+				echo '</a>';
+				endif;
+				echo the_excerpt();
+				echo $post_link;
+			?>
+			</div>
+			<div class="blog-links right">
+			<?php
+			if($rows) {
+				foreach($rows as $row) {
+					if($row['blog_link_type'] == 'upload') {
+						echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
+					} elseif ($row['blog_link_type'] == 'link') {
+						echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
+					} 
+				}
+			} ?>
 		</div>
 		</div>
 	</div>

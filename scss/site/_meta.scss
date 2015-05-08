@@ -2,6 +2,14 @@
 /*	Module: Terms
 		
 		======================================================================== */
+ .post-meta {
+        @include encode_black;
+        font-size: rem-calc(12);
+        line-height: 1;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+    }
+
 
 .terms {
 	border-right: solid 2px #000;
@@ -20,18 +28,4 @@
             display: inline;
         }
 
-}
-.terms:before {
-	 content:"";
-    display:block;
-    z-index:-1;
-    position:absolute;
-    height:40px;
-    width:100%;
-    border-width:0px 5px;
-    border-style:solid;
-    border-color:black;
-    top:50%;
-    margin-top:-20px;
-    left:-5px;
 }

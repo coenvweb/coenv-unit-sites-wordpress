@@ -367,12 +367,6 @@
     .home-news-section .columns.small-news {
         padding-left: 80px;
     }
-    .post-meta {
-        @include encode_black;
-        font-size: rem-calc(12);
-        line-height: 1;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    }
+   
     
 }
