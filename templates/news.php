@@ -127,16 +127,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
                 <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
             </div>
 		</div>
-		<!--
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
-		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
-    	-->
     	<?php
     			if (has_post_thumbnail()) {
 	    			$has_thumb = ' has-thumb';
-	    			echo '<div class="right' . $has_thumb . '">';
+	    			echo '<div class="right show-for-medium-up' . $has_thumb . '">';
 					echo '<a href="' . get_the_permalink() . '">';
 					the_post_thumbnail( 'medium' );
 					echo '</a>';
