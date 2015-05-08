@@ -109,53 +109,7 @@ body.page-template-templatesfaculty-php .pager {
 
 
 
-ul.blog-terms {
-	float: left;
-}
-.blog-meta {
-	display: block;
-	p {
-		float: left;
-	}
 
-}
-.blog-list-item  {
-	display: block;
-	float: left;
-
-	.post {
-		float: left;
-	}
-}
-.blog-cats .button,
-.fac-cats .button {
-	margin-bottom: .75rem;
-}
-.panel {
-	border: 0;
-	padding: .5rem 1rem;
-}
-
-div.news {
-	margin-bottom: 4rem;
-}
-.panel {
-	float:left;
-	width: 100%;
-	p:first-child {
-		float:left;
-		width: 75%;
-	}
-	p:nth-child(2) {
-		float: right;
-		width: 25%;
-		text-align: right;
-	}
-	.button {
-	margin-bottom: 0;
-	padding: .5rem;
-	}
-}
 
 // Move to plugin?
 html .mceContentBody {
