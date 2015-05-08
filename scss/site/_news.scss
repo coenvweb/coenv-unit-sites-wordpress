@@ -24,13 +24,14 @@
 	}
 
 }
-
-.left.has-thumb {
-	width: 60%;
-}
-.right.has-thumb {
-	width: 30%;
-	margin-left: 10%;
+@media #{$medium-up} {
+	.left.has-thumb {
+		width: 60%;
+	}
+	.right.has-thumb {
+		width: 30%;
+		margin-left: 10%;
+	}
 }
 
 ul.blog-terms {

@@ -1,6 +1,6 @@
 <?php get_header(); ?>
+<div class="full-page">
 <div class="row">
-	<h1>News and Events</h1>
 	<div class="small-12 medium-8 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
@@ -34,5 +34,6 @@
 
 	</div>
 	<?php get_sidebar(); ?>
-</div>	
+</div>
+</div>
 <?php get_footer(); ?>
