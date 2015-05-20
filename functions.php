@@ -59,7 +59,7 @@ require_once('library/publications.php');
 
 add_image_size( 'med_sq', '240', '240', true );
 add_image_size( 'sm_sq', '120', '120', true );
-
+add_image_size( 'home_news', '510', '320', true );
 
 /**
  * Gets the top-level ancestor for pages, posts and custom post types

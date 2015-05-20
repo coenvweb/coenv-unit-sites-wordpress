@@ -250,12 +250,12 @@
         $banner_class .= ' template-print';
 ?>
     <?php if (($banner) && (!is_single())) {
-            echo '<div class="page-row">';
-            echo '<div>';
+            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
+            echo '<div class="section-title-wrapper">';
         }
      ?>
      <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini section-wrapper">';
+            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="section-title-wrapper">';
      }
      ?>
