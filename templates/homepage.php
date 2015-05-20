@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="full-feature" style="background-image: url('/wp-content/themes/coenv-cig/assets/img/cig-home-dev.jpg')">
+<div class="full-feature" style="background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-fall.jpg')">
 	<div class="row">
 		<div class="large-12 homepage-features columns">
 			<div class="boundless-1">
@@ -71,10 +71,10 @@ Template Name: Homepage
 				}
 				?>
 
-	        	<div class=" large-7  medium-6 small-12 columns">
+	        	<div class="medium-6 small-12 columns">
 	                <div class="featured-news">
 	                	<?php if ( has_post_thumbnail() ) {
-						$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'medium' );
+						$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'home_news' );
 						?>
 						<div class="featured-thumbnail"><a href="<?php echo $post_link_url; ?>" class="img" <?php echo $post_link_target; ?>>
 						<img src="<?php echo $thumbnail['0']; ?>" class="feature-img" /></a></div>
@@ -117,7 +117,7 @@ Template Name: Homepage
 			if ( $wp_query->have_posts() ) {
 			?>
 
-			<?php if ( !empty ( $featured ) ): ?><div class="medium-6 large-5 columns small-w-featured"><?php endif; ?>
+			<?php if ( !empty ( $featured ) ): ?><div class="medium-6 columns small-w-featured"><?php endif; ?>
 
 			<?php
 			# The Loop
