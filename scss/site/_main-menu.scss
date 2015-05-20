@@ -9,6 +9,11 @@
         display: inline-block;
         
         #menu-main-menu { 
+            .social-menu {
+                i {
+                    font-size: rem-calc(24);
+                }
+            }
             li a {
                 @media #{$large-up} {
                     font-size: rem-calc(16);
@@ -97,15 +102,9 @@
                 .has-dropdown > a {
                 }
                 &:after {
-                        content: none;
-                    }
-
-
-
-                
+                    content: none;
+                }
             }
-
-            
         }
     }
 }

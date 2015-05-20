@@ -25,9 +25,9 @@
                     <a class="twitter button" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
                             <i class="fi-social-twitter"></i>
                     </a><?php } ?>
-                <?php if (get_option('youtube')) { ?>
-                    <a class="youtube button" href="<?php echo get_option('youtube'); ?>" title="Join us on YouTube">
-                            <i class="fi-social-youtube"></i>
+                <?php if (get_option('linkedin')) { ?>
+                    <a class="linkedin button" href="<?php echo get_option('linkedin'); ?>" title="Join us on LinkedIn">
+                            <i class="fi-social-linkedin"></i>
                     </a><?php } ?>
                 </div>
             </div>

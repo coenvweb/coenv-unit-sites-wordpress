@@ -193,6 +193,18 @@
                       remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_reset_query();
                       ?>
+                     <?php if (get_option('facebook')) { ?>
+                    <li class="page_item"><a class="facebook social-menu" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
+                        <i class="fi-social-facebook"></i>
+                    </a></li><?php } ?>
+                <?php if (get_option('twitter')) { ?>
+                    <li class="page_item"><a class="twitter social-menu" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
+                            <i class="fi-social-twitter"></i>
+                    </a></li><?php } ?>
+                <?php if (get_option('linkedin')) { ?>
+                    <li class="page_item"><a class="linkedin social-menu" href="<?php echo get_option('linkedin'); ?>" title="Join us on LinkedIn">
+                            <i class="fi-social-linkedin"></i>
+                    </a></li><?php } ?>
                     </ul>
                 </div>
             </nav>

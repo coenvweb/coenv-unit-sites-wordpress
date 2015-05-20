@@ -101,6 +101,14 @@ echo '</div>';
                 
                 <hr />
                 
+<div class="row news-title">
+<div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
+    <div class="large-12">
+        <a name="More News & Stories" href="/news-stories">
+        <h2>News & Stories</h2></a>
+    </div>
+</div>
+                
                 <?php
 # Student/Alumni Spotlight
 		
@@ -120,9 +128,10 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
     <div class="row news">
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
-            <div class="large-12 featured-news">
-            <a name="More student & alumni stories" href="/news-and-events">
-            <h2>Community</h2></a>
+            <div class="large-12">
+                <a name="More student & alumni stories" class="button right" href="/news-stories">More Student Stories</a>
+            <a name="More student & alumni stories" href="/news-stories">
+            <h3>Student Stories</h3></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -169,8 +178,9 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12 featured-news">
-            <a name="More research stories" href="/news-and-events">
-            <h2>Faculty</h2></a>
+                <a name="More research news" class="button right" href="/news-stories">More Research News</a>
+            <a name="More research news" href="/news-stories">
+            <h3>Research News</h3></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -198,12 +208,8 @@ $wp_query = new WP_Query( $home_args );
 </div>
 </div>
 <?php endif; ?>
-        
-<div class="row connect">
-    <div class="columns large-12 social-links">
-        <?php the_widget('custom_post_widget', 'custom_post_id=3107'); ?>
-    </div>
-</div>
+    
+    <hr />
         
 <?php 
 # 3 Column Widget area for content blocks
