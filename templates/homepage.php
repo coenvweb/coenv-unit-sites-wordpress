@@ -129,9 +129,9 @@ $wp_query = new WP_Query( $home_args );
     <div class="row news">
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12">
-                <a name="More student & alumni stories" class="button right" href="/news-stories">More Student Stories</a>
-            <a name="More student & alumni stories" href="/news-stories">
-            <h3>Student Stories</h3></a>
+                <a name="More student & alumni stories" class="button right" href="/news-stories">More Student Spotlights</a>
+            <a name="More student & alumni spotlights" href="/news-stories">
+            <h3>Student Spotlight</h3></a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
