@@ -127,47 +127,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
-h1 {
-    @include encode_cb;
-    font-size: rem-calc(26)!important;
-    line-height: rem-calc(30);
-    font-weight: 400;
 
-    @media #{$medium-up} {
-        font-size: rem-calc(36);
-        line-height: 1.2;
-    }
-
-} // h1
-
-h2 {
-    
-
-} // h2
-
-h3 {
-    @include encode_cb;
-    font-size: rem-calc(20);
-    line-height: 1.2;
-    font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(28);
-        line-height: 1.2;
-    }
-
-} // h3
-
-h4 {
-    @include encode_cb;
-    font-size: rem-calc(18);
-    line-height: 1.2;
-    
-    @media #{$medium-up} {
-        font-size: rem-calc(24);
-        line-height: 1.2;
-    }
-}
 
 /*	Base font size
 		======================================================================== */

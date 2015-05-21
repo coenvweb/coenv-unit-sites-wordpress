@@ -18,32 +18,7 @@
 
 } // .article
 
-.article__header {
-
-	.article__title {
-		margin-top: 0;
-		@include rem('padding-bottom', 1);
-		@include font-size(18);
-		@include line-height(30);
-		font-weight: 400;
-		border-bottom: 2px solid $border;
-
-		@media #{$medium-up} {
-			@include font-size(36);
-			@include line-height(48);
-		}
-
-		a {
-			text-decoration: none;
-			color: $text;
-		}
-
-		br {
-			display: none;
-		}
-
-	} // .article__title
-	
+.article__header {	
 	.article__meta {
 		.post-info {
 			text-transform:uppercase;
@@ -95,78 +70,8 @@
 
     }
 
-	h1 {
-		@include serif;
-		@include font-size(24);
-		@include line-height(30);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(36);
-			@include line-height(48);
-		}
-
-	} // h1
-
-	h2 {
-
-		@include encode_black;
-		@include font-size(18);
-		@include line-height(24);
-		background-image: url("/wp-content/themes/coenv-cig/assets/img/purple-rule.png");
-		background-repeat: no-repeat;
-		background-position: bottom left;
-		color: $accent;
-		font-weight: bold;
-		text-transform: uppercase;
-
-		@media #{$small-up} {
-			
-		@include font-size(27);
-		@include line-height(32);
-		letter-spacing: rem-calc(2);
-		margin-bottom: rem-calc(24);
-		padding-bottom: rem-calc(24);
-		font-weight: bold;
-		}
-
-	} // h2
-
-	h3 {
-		@include encode_black;
-		@include font-size(16);
-		@include line-height(20);
-		color: $accent;
-		font-weight: bold;
-		text-transform: uppercase;
-
-		@media #{$small-up} {
-			
-		@include font-size(22);
-		@include line-height(28);
-		letter-spacing: rem-calc(2);
-		font-weight: bold;
-		}
-
-	} // h3
-
-	h4,h5 {
-		@include encode_black;
-		@include font-size(14);
-		@include line-height(20);
-		color: $accent;
-		font-weight: 400;
-		text-transform: uppercase;
-
-		@media #{$small-up} {
-			
-		@include font-size(18);
-		@include line-height(22);
-		letter-spacing: rem-calc(2);
-		margin-bottom: rem-calc(24);
-		font-weight: bold;
-		}
-	}
+	
+	
 
 	hr {
 		height: 2px;
