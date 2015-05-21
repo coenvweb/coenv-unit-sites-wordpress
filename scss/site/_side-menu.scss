@@ -30,6 +30,7 @@ aside#sidebar {
 		padding: rem-calc(5) 0 0 0;
 		line-height: 10px;
 		width: 100%;
+
 		li {
 			background-color: #f2f2f2;
 			border-bottom: 1px solid #ccc;
@@ -38,13 +39,14 @@ aside#sidebar {
 			text-transform: uppercase;
 			font-size: 1rem;
 			@include o_sans_bold;
-			&.active {
-				background-color: #fff;
 
-				a {
-					color: #85754f !important;
-				}
+
+
+			ul li {
+				background-color: #f9f9f9;
+				font-size: 90%;
 			}
+			
 			a {
 				@include o_sans_bold;
 				display: block;
@@ -53,6 +55,7 @@ aside#sidebar {
 					color: #000;
 
 					}
+
 					
 				&:hover {
 					color: #85754f;
@@ -64,6 +67,9 @@ aside#sidebar {
 
 			li.active a:not(.button) {
 				color: #85754f;
+			}
+			li.active ul li a:not(.button) {
+				color: #000;
 			}
 			ul {
 				margin-bottom: 0;
