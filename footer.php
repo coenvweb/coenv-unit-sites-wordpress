@@ -8,6 +8,7 @@
             </div>
             <div class="site-footer__header">
                 <h2><?php bloginfo('name') ?></h2>
+                <?php if (get_option('unit_name_1')) { ?><h2><?php echo get_option('unit_name_1'); } ?></h2>
             </div>
             <div class="unit-contact">
                 <?php if (get_option('mail_address')) { ?><p><a href="http://maps.google.com/?q=<?php echo urlencode(get_option('mail_address')); ?>" title="Google Maps link"><?php echo get_option('mail_address'); ?></a></p><?php } ?>

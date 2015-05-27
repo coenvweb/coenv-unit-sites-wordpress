@@ -3,25 +3,16 @@
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
-    background: $white;
+    background: $accent;
+    border-top: 1px solid $border;
     border-bottom: 1px solid $border;
+    height: 44px;
     
     .tab-bar-section {
-        padding-left: rem-calc(30);
-        margin: auto;
+        margin: 0;
+        text-align: center;
     }
 
-    
-    h1 {
-        color: $text!important;
-        margin-top: rem-calc(15);
-        font-size: rem-calc(28)!important;
-        text-align: left;
-        @media #{$small-up} {
-            font-size: rem-calc(12)!important;
-            line-height: rem-calc(14);
-        }
-    }
     .right-small, .left-small {
         border: none;
     }
@@ -29,78 +20,108 @@
     .mobile-logo {
         color: $accent;
         font-size: rem-calc(20);
+        margin-left: 10px;
+        height: 38px;   
+        width: 56px;
+        padding-top: 6px;
         
-        #mobile-logo {
-            width: rem-calc(55);
-            fill: $accent;
-            margin-top: rem-calc(-10);
-            margin-left: rem-calc(10);
+        #logo {
+            height: 38px;   
+            width: 56px;
+            fill: $white;
         }
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+        box-shadow: 0 0px 0 1px $white,0 7px 0 1px $white,0 14px 0 1px $white;
     }
 
 }
 
 // desktop header
 
-.title-row {
-    background: $white;
-}
-
-.top-bar-container {
-    border-top: #d7dee5 1px solid;
-    margin-bottom: 0;
-}
-
-.title-area {
-    margin: 0;
-    list-style: none;
-}
-
-
-
-.name {
-    h1 {
-        @include encode;
-        font-weight: 500!important;
-        font-size: rem-calc(18)!important;
-        @media #{$large-up} {
-            font-size: rem-calc(23)!important;
+.banner-container {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    @extend .shadow;
+    
+    .purple-wedges {
+        position: absolute;
+        height: 106px;
+        @extend .uw-skew;
+        min-width: 180px;
+        max-width: 210px;
+        
+        .purple-wedge-lt {
+            position: absolute;
+            right: 15px;
+            background-color: $accent;
+            height: 109px;
+            width: 1000%;
         }
-        float: left;
-        margin: rem-calc(18) 0;
-        a {
-            color: $text;
+        
+        .purple-wedge-dk {
+            position: absolute;
+            right: 0;
+            background-color: $accent-dk;
+            height: 109px;
+            width: 1000%;
         }
     }
-    #desktop-logo {
-        fill: $accent;
-        width: rem-calc(108);
-        height: rem-calc(73);
-        margin-right: rem-calc(10);
-        vertical-align: middle;
-        
+}
+
+.title-row {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 1200px;
+
+  @media #{$medium-up} {
+    height: 109px;
+  }
+    
+}
+
+.name {
+    height: 109px;
+    padding-left: 15px;
+    position: relative;
+
+    a {
+        display: block;
+        height: 109px;
+        width: 130px;
+    }
+
+    #logo {
+        fill: #fff;
+        width: 130px;
+        height: 88px;
+        padding: 0;
+        position: absolute;
+        bottom: 0;
+            margin-bottom: -1px;
         span {
             @extend .visuallyhidden;
         }
     }
 }
 
-.units {
-    float: right;
-    list-style: none;
-    margin: rem-calc(30) 0 0 rem-calc(18);
-    
-    .slash {
-        margin: 0 rem-calc(12);
+
+.logotype {
+    text-align: center;
+
+    #unit-college-uw {
+        margin-left: 1%;
+        overflow: hidden;
+        height: 109px;
+        @media #{$medium-up} {
+            margin-left: 50px;
+        }
     }
-    
-    .uw-name {
-        margin-right: rem-calc(16);
-    }
+
 }
 
 .section-title {
@@ -115,14 +136,79 @@
             max-width: 28%;
         }
     }
-    }
+}
+
 .title-area {
 	list-style: none;
 	margin-left: 0;
 }
-.breadcrumbs {
-	@include rem('margin-bottom',2);
+
+
+#unit-college-uw {
+    ul {
+        width: 220px;
+        margin: 0;
+        padding: 0 0 0 rem-calc(50);
+        position: relative;
+        top: 53%;
+        -webkit-transform: translateY(-53%);
+        -ms-transform: translateY(-53%);
+        transform: translateY(-53%);
+    }
+    h1 {
+        @include encode-cb();
+        line-height: 109px;
+        font-weight: normal;
+        font-size: 2rem;
+        padding: 0;
+        text-transform: uppercase;
+        margin: 0;
+        float: left;
+        letter-spacing: 0.21429rem;
+        color: $black;
+        a {
+            color: $black;
+        }
+    }
 }
-.breadcrumbs>* {
-	line-height: rem-calc(16);
+
+
+.units {
+    background-image: url("/wp-content/themes/coenv-poe/assets/img/slash.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 109px;
+    width: 300px;
+    padding: 0;
+    margin: 0 0 0 rem-calc(30);
+    li {
+        display: block;
+        height: 12px;
+        width: 215px;
+        padding: 0 0 0 0 !important;
+        margin: 0 0 8px 0   !important;
+        list-style: none;
+    }
+    img.uw-name {
+        width: 215px;
+        height: 14px;
+    }
+    img.college-name {
+        width: 215px;
+        height: 12px;
+    }
+    a {
+        padding-bottom: 0;
+    }
+    .slash {
+        margin: 0;
+    }
+    .college-name,
+        .uw-name {
+            float: left;
+        }
 }
+
+
+

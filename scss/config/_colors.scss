@@ -8,6 +8,7 @@ $W: #333;
 $accent: #5f3e8d;
 $accent-purple: $accent;
 $accent-lt: lighten( $accent, 15% );
+$accent-dk: darken( $accent, 15% );
 $accent-blue: #1e325f;
 $accent-red: #b82828;
 $accent-red-hover: #8e1f1f;
@@ -29,22 +30,5 @@ $border-dk-accent: #3d3d3d;
 
 $bg-dk: #363533;
 $bk-menu: #6a6a6a;
-$bg-light: #f6f5f7;
+$bg-light: #f4f4f4;
 $bg-lighter: #fcfcfc;
-
-/*  Global shadow
-    ======================================================================== */
-
-@mixin shadow {
-  //@include box-shadow( rgba(0,0,0,0.1) 0 0 5px );
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-.shadow {
-  //@include box-shadow( rgba(0,0,0,0.1) 0 0 5px );
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-/* Rounded Corners
- * -------------------------------------------------------------------------- */
-$radius: 2px;

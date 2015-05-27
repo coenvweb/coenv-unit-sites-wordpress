@@ -4,8 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
-	<div class="small-12 large-12 columns" role="main">
+<div class="hero-row row">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
@@ -17,9 +16,7 @@ Template Name: Homepage
 		$feature_args = array(
 			'post_type'	=> 'features',
 			'post_status' => 'publish',
-			'posts_per_page' => 4,
-            'orderby' => 'menu_order',
-        'order' => 'ASC',
+			'posts_per_page' => 1,
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
@@ -44,20 +41,19 @@ Template Name: Homepage
 				$feature_caption = get_post(get_post_thumbnail_id());
 				$feature_caption = $feature_caption->post_excerpt;
 			}
-            if (get_field('statement')) {
-                $statement = get_field('statement');
-            }
 			$rows = get_field('feature_add_links');
 			
 echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 echo '</div>';
-	echo '<div class="feature-info-container">';
-		echo '<p class="feature-image-caption left">' . $feature_caption . '</p>';
+    echo '<div class="feature-info-container light"></div>';
+	echo '<div class="feature-info-container medium-6 small-12 columns">';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+        echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
-				echo '<h2>' . get_the_title() . '</h2>';
-				echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
+                get_template_part('assets/img/icons/inline', 'smea-white-slash.svg');
+				echo '<div class="hero-white"><h2>' . get_the_title() . '</h2></div>';
+				echo '<p>' . $feature_excerpt . '</p>';
 				if($rows)
 					{
 						foreach($rows as $row) {
@@ -65,12 +61,12 @@ echo '</div>';
 								$link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
 								$link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
 								$link_target = 'self';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+								echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
 							} elseif ($row['feature_link_type'] == 'external') {
 								$link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
 								$link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
 								$link_target ='blank';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+								echo '<a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
 							} 
 						}
 					}
@@ -86,6 +82,9 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
+    </div>
+    <div class="row">
+    <div class="small-12 large-12 columns" >
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">

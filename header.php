@@ -19,8 +19,24 @@
     } elseif ( is_single() ) {
       wp_title('');
     } else {
-      echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
+      echo bloginfo( 'name' );
     } ?></title>
+
+    <meta name="title" content="<?php bloginfo('name'); ?>">
+    <meta name="description" content="<?php
+    wp_reset_query();   
+    if (have_posts()) : while(have_posts()) the_post();
+        if (is_singular('faculty')) {
+            $advancedExcerpt = strip_tags(get_field('biography'));
+        } elseif (is_page_template( 'faculty.php' )) {    
+            $advancedExcerpt = 'Our world-class faculty are at the center of our work at The UW' . bloginfo('name');
+        } elseif (is_singular()&&is_front_page()==false ) {
+            $advancedExcerpt = strip_tags(get_the_excerpt());
+        } else {
+            $advancedExcerpt = get_option('meta_description');
+        }
+        endif;
+    echo $advancedExcerpt ?>">
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
@@ -42,8 +58,41 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
     ?>
+    <?php
+    $post = get_queried_object();
+        $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+    $post_description = $advancedExcerpt;
+    $post_link = get_permalink();
+  if ( has_post_thumbnail( $post->ID ) ) {
+    $thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+    $post_image = $thumb_src[0];
+  } elseif ( $banner ) {
+    $post_image = $banner['url'];
+  } else {
+    $post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
+  }
+  
+  ?>
+  <meta property="og:title" content="<?php echo $post_title ?>" />
+  <meta property="og:description" content="<?php echo $post_description ?>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="<?php echo $post_link ?>" />
+  <meta property="og:image" content="<?php echo $post_image ?>" />
+  <meta property="og:site_name" content="<?php bloginfo('name') ?>" />
+
+  <script>
+  /*
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-21836351-1', 'auto');
+    ga('send', 'pageview');
+  */
+  </script>
   </head>
-  <body <?php body_class(); ?>>
+  <body <?php body_class($banner_class); ?>>
   
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
@@ -54,24 +103,25 @@
   <?php do_action('foundationPress_layout_start'); ?>
   
   <nav class="tab-bar show-for-small-only">
-    <div class="left-small mobile-logo">
-        <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><svg id="mobile-logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve">
+    <section class="left-small mobile-logo">
+        <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+          <svg id="logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" height="73px" width="108px" xml:space="preserve">
               <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
                 c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
                 c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
                 s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
                 c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
-</svg></a>
-    </div>
-    <div class="middle tab-bar-section">
-        <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-            <h1 class="title"><?php bloginfo( 'name' ); ?></h1>
+          </svg>
         </a>
-    </div>
-    <div class="right-small">
+    </section>
+    <section class="middle tab-bar-section">
+
+            <h1 class="title"><a href=""><?php bloginfo( 'name' ); ?></a></h1>
+    </section>
+    <section class="right-small">
       <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
-    </div>
+    </section>
   </nav>
 
   <aside class="right-off-canvas-menu">
@@ -130,42 +180,49 @@
       </div><!-- .top-menu -->
     </div><!-- .row -->
   </nav><!-- #top-nav -->
-  
-  <div class="row title-row">
-    <div class="columns large-12">
-    <ul class="title-area hide-for-small">
-      <li class="name">
-        <h1>
-          <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-            <!--[if gte IE 9 | !IE]><!-->
-                <svg id="desktop-logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve">
-                  <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
-                    c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
-                    c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
-                    s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
-                    c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
-                    C107.176,0.112,80.251,0.112,79.343,0.112z"/>
-                </svg>
-            <!-- <![endif]-->
-            <!--[if lte IE 8]>
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="desktop-logo">
-            <![endif]-->
-            <span><?php bloginfo('name') ?></span> 
-          </a>
-          </h1>
-            <div class="units show-for-large-up">
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left" alt="slash">
-                <a href="http://coenv.uw.edu" title="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="right" alt="UW College of the Environment"></a><br />
-                <a href="http://uw.edu" title="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="right uw-name" alt="University of Washington"></a>
-          </div> 
-        </li>          
-      </ul>
-    </div>
-  </div>
+  <div class="banner-container"> 
+  <div class="title-row">
+      <div class="purple-wedges show-for-medium-up left medium-2">
+          <div class="purple-wedge-dk"></div>
+          <div class="purple-wedge-lt"></div>
+      </div>
+      <div class="name large-2 show-for-medium-up left">
+        <a class="logo" href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+          <!--[if gte IE 9]><!-->
+          <svg id="logo" width="130" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" xml:space="preserve">
+            <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
+            c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
+            c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
+            s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
+            c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
+            C107.176,0.112,80.251,0.112,79.343,0.112z"/>
+          </svg>
+          <!--<![endif]-->
+          <!--[if lte IE 8]>
+          <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="logo">
+          <!--<![endif]-->
+        </a>
+      </div>
+      <div class="logotype large-9 show-for-medium-up left">
+
+        <div id="unit-college-uw" class="centered">
+          <h1 class="left"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo('name') ?></a></h1>
+          <div class="units show-for-large-up">
+            <ul>
+              <li><a href="http://coenv.uw.edu" name="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="college-name" width="215" height="12"></a></li>
+              <li><a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="uw-name"></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+   </div>
+ </div>
+
+
   
         <div class="top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
-                <div class="top-bar-section">
+                <section class="top-bar-section">
                     <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
                       $exclude = implode(',',coenv_base_menu_exclude());
@@ -182,31 +239,31 @@
                       wp_reset_query();
                       ?>
                     </ul>
-                </div>
+                </section>
             </nav>
         </div>
 
 <?php if (!is_front_page()) : ?>
-<div class="container" role="document">
+<section class="container" role="document">
 <?php 
         $banner = coenv_banner();
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <!-- <?php if (($banner) && (!is_single())) {
-            echo '<div class="page-row">';
-            echo '<div>';
+    <?php if (($banner) && (!is_single())) {
+            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
+            echo '<div class="section-title-wrapper">';
         }
      ?>
      <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini">';
-            echo '<div>';
+            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
+            echo '<div class="section-title-wrapper">';
      }
      ?>
     <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
-    </div>-->
-
+        <div class="columns large-8 section-title"><?php echo coenv_base_section_title($post->ID); ?></div>
+    </div>
+    </div>
 </div>
 <?php endif; ?>
 <?php do_action('foundationPress_after_header'); ?>

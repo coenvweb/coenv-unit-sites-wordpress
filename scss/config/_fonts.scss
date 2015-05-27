@@ -23,6 +23,13 @@
 }
 
 @font-face {
+	font-family: open-sans-bold;  
+	src: url("../assets/fonts/OpenSans-800.ttf") format('truetype');  
+	font-weight: 800;
+    font-style: normal;  
+}
+
+@font-face {
 	font-family: uni-sans-light;  
 	src: url("../assets/fonts/Fontfabric - UniSansLight.otf") format('truetype');  
 	font-weight: normal;

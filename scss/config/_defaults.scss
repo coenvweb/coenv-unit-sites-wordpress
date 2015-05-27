@@ -178,3 +178,35 @@ body {
         page-break-after: avoid;
     }
 }
+
+/*  Global shadow
+    ======================================================================== */
+
+@mixin shadow {
+  //@include box-shadow( rgba(0,0,0,0.1) 0 0 5px );
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);
+}
+
+.shadow {
+  //@include box-shadow( rgba(0,0,0,0.1) 0 0 5px );
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);
+}
+
+/*  UW Skew
+    ======================================================================== */
+
+.uw-skew {
+    -ms-transform: skewX(-15deg);
+    -webkit-transform: skewX(-15deg);
+    transform: skewX(-15deg);
+}
+
+.uw-unskew {
+    -ms-transform: skewX(15deg);
+    -webkit-transform: skewX(15deg);
+    transform: skewX(15deg);
+}
+
+/* Rounded Corners
+ * -------------------------------------------------------------------------- */
+$radius: 2px;
