@@ -51,7 +51,6 @@ echo '</div>';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
         echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
-                get_template_part('assets/img/icons/inline', 'smea-white-slash.svg');
 				echo '<div class="hero-white"><h2>' . get_the_title() . '</h2></div>';
 				echo '<p>' . $feature_excerpt . '</p>';
 				if($rows)
@@ -83,6 +82,7 @@ wp_reset_postdata();
 echo '</div>';
 ?>
     </div>
+    <div class="news-events-row">
     <div class="row">
     <div class="small-12 large-12 columns" >
 				
@@ -101,8 +101,10 @@ echo '</div>';
 	</ul>
 <?php endif; ?>
     
-<div class="large-7 columns small-news">
-	<a href="/news-and-events"><h4>What's New</h4></a>
+<div class="large-7 columns">
+    <div class="small-news">
+        <a class="button right" href="/news-and-events"><div class="button-background light"></div><div class="button-background "><p>Learn More »</p></div></a>
+        <a href="/news-and-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
 	'post_type'	=> 'post',
@@ -118,33 +120,53 @@ $wp_query = new WP_Query( $home_args );
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		echo '<li class="news-small"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+		echo '<li class="news-small">';
+        echo '<div class="post-meta">';
+        echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+        // Get categories
+        $terms = wp_get_post_terms(get_the_id(), 'category');
+        if (!empty($terms)) {
+            $terms_arr = array();
+
+            foreach ($terms as &$term) {
+                if ($term->slug != 'uncategorized') {
+                    $terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                }
+            }
+            $terms_str = ' | ' . implode(', ', $terms_arr);
+
+        } else {
+            $terms_str = '';
+        }
+        $terms = "";
+        echo $terms_str;
+        echo '</div>';
+        echo '<a href="' . get_the_permalink() . '"><p>' . get_the_title() . '</p></a></li>';
 	endwhile;	
 		echo '</ul></div>';
-        echo '<a class="button" href="/news-and-events">More</a>';
 	endif;
 ?>
 </div>
+</div>
 				
-<div class="large-5 columns events">
+<div class="large-5 columns">
+    <div class="events">
+    <a class="button right" href="/news-and-events/calendar"><div class="button-background light"></div><div class="button-background"><p>Learn More »</p></div></a>
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
-    <a class="button" href="/news-and-events/calendar">More</a>
+    </div>
 </div>
-      
-        <hr />
+</div>
+</div>
+</div>
+            
+<div class="row spotlight">
+    <div class="spotlight-content">
+        <?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
+    </div>
+</div>
         
-<div class="large-12 columns spotlight">
-    <h4>Student Spotlight</h4>
-	<?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
-</div>
-        <hr />
-
-<?php if (!$statement[0] == 'yes') : ?>
-<div class="large-12 columns mission">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2742'); ?>
-</div>
-<?php endif; ?>
+<div class="row">
 <div class="large-12 columns social-bar">
 	<?php the_widget('custom_post_widget', 'custom_post_id=27022'); ?>
 </div>

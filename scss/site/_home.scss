@@ -23,28 +23,175 @@
         display: none;
     }
     
+// News and Events
+
+
+.news-events-row {
+    padding-top: rem-calc(45);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+    max-width: none;
+    position: relative;
+    z-index: 6;
     
+    .columns {
+        max-width: $row-width;
+    }
+}
 
-    .home-news-section {
-        .featured-thumbnail {
-            max-height: rem-calc(350);
-            margin-bottom: rem-calc(10);
-            overflow: hidden;
-        }
-        :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
+.small-news, .events {
+    @extend .shadow;
+    @include uni();
+    padding: 0;
+    margin-bottom: rem-calc(50);
+    overflow: hidden;
+    h4 {
+        @include uni();
+        padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(25);
+        font-size: rem-calc(36);
+        font-weight: 200!important;
+    }
+    h2 {
+        display: none;
+    }
+    ul {
+        margin: 0;
+            li {
+                padding: rem-calc(20);
+                background-color: $bg-lighter;
+                margin: rem-calc(2);
+                p {
+                    color: $text;
+                    font-size: rem-calc(22);
+                    margin-bottom: 0;
+                }
         }
 
+        .date {
+            @include o_sans();
+            font-size: rem-calc(14);
+            i {
+                color: $accent-green;
+                font-size: rem-calc(24);
+                padding-right: rem-calc(5);
+                margin-bottom: rem-calc(-3);
+            }
+        }
+    }
+
+    .post-meta {
+        @include o_sans();
+        a {
+            color: $text;
+        }
+    }
+
+
+    .button {
+        color: $text;
+        border: none;
+        @extend .uw-skew;
+        padding: 0;
+        .button-background {
+            height: rem-calc(80);
+            padding: rem-calc(30) rem-calc(35) 0 rem-calc(25);
+            margin-right: rem-calc(-20);
+        }
+        p {
+            @extend .uw-unskew;
+        }
+    }
+}
+
+.small-news {
+     .button-background {
+        background-color: $accent-green;
+         &.light {
+             position: absolute;
+             padding: rem-calc(10);
+             background-color: $accent-green-lt;
+             margin-left: rem-calc(-20);
+         }
+    }
+}
+
+.events {
+     .button-background {
+        background-color: $accent-teal;
+         &.light {
+             position: absolute;
+             padding: rem-calc(10);
+             background-color: $accent-teal-lt;
+             margin-left: rem-calc(-20);
+         }
+    }
+}
+
+.widget-events {
+    h4 {
+        display: none;
     }
 }
 
 // Student Spotlight
 
+.spotlight, .widget_content, .widget_img {
+    overflow: hidden;
+    position: relative;
+}
+
 .spotlight {
+    max-width: none;
+    background: $accent;
+    .widget_content {
+        @include grid-column(8);
+        padding: rem-calc(45) rem-calc(45) rem-calc(10) rem-calc(45);
+        z-index: 2;
+        position: relative;
+        background: $accent;
+        
+        h3 {
+            font-family: "open-sans"!important;
+            color: $white!important;
+            font-size: rem-calc(14);
+            font-weight: 400!important;
+        }
+        
+        strong {
+            @include uni();
+            font-size: rem-calc(32);
+        }
+        
+        p {
+            color: $white;
+        }
+    }
+    
+    .widget_links {
+        .button {
+            margin-left: rem-calc(45);
+        }
+        
+    }
     .widget_img {
         @include grid-column(4);
-        padding-left: 0;
-        padding-bottom: rem-calc(15);
+        padding: 0;
+        @extend .left;
+        z-index: 1;
+        
+        &:before {
+            content: "";
+            display: block;
+            right: 0;
+            position: absolute;
+            top: 10%;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid $accent;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            z-index: 3;
+        }
     }
 }
 
@@ -55,4 +202,6 @@
     .widget_links {
         
     }
+}
+    
 }

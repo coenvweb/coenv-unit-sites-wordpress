@@ -1,14 +1,10 @@
 .hero-row {
     max-width: none;
-    margin-bottom: rem-calc(15);
 }
 
 .slick-slider {
     margin-bottom: 0;
-    
-    @media #{$medium-up} {
-        margin-bottom: rem-calc(30)
-    }
+    box-shadow: 0 2px 3px rgba(0,0,0,0.4);
 }
 
 .feature {
@@ -34,7 +30,7 @@
 	
 	.feature-info-container {
         
-        @include uni();
+        @include uni_italic();
         
         &.light {
             left: -100px;
@@ -58,6 +54,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0b0713', e
 
         @media #{$medium-up} {
             position: absolute;
+            font-size: rem-calc(36);
             height: 100%;
             bottom: 0;
             left: -70px;
@@ -108,27 +105,31 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
             .hero-white {
                 width: 120%;
                 margin: rem-calc(14) rem-calc(14) rem-calc(14) rem-calc(-50);
-                padding: rem-calc(5) rem-calc(20) rem-calc(0) rem-calc(50);
+                padding: rem-calc(0) rem-calc(50) rem-calc(0) rem-calc(50);
                 background: $white;
                 @extend .uw-skew;
             }
         
             h2 {
-                @include uni();
-                font-weight: 200;
+                @include uni_italic();
+                font-weight: 200!important;
+                line-height: 1.1;
+                padding-top: rem-calc(7);
                 overflow: auto;
                 text-transform: uppercase;
-                font-size: rem-calc(42);
+                font-size: rem-calc(45);
                 color: $text;
+                width: 100%;
                 @extend .uw-unskew;
             }
 
             .button {
-                margin: 0 rem-calc(5) 0 0;
+               font-size: rem-calc(14);
             }
 
             p {
                 margin-bottom: rem-calc(10);
+                font-size: rem-calc(36);
             }
         }
 	}

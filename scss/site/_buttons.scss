@@ -4,15 +4,15 @@
 .button {
 	display: inline-block;
 	vertical-align: middle;
-	@include rem('padding', 0.25, 1);
-	@include sans;
-	@include font-size(12);
-	font-weight: 400;
-	background: $white-button;
+	padding: rem-calc(5) rem-calc(14);
+	@include font-size(14);
+	font-weight: 600;
+	background: transparent;
+    border: 2px solid $white;
+    @include o_sans_bold;
+    text-transform: uppercase;
 	text-decoration: none;
-	color: $text;
 	//@include border-radius( $radius );
-	border-radius: $radius;
 	//min-height: rem-calc(28);
 	
 	&:hover {

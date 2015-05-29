@@ -27,8 +27,7 @@
                     }
                     font-size: rem-calc(14);
                     color: $text;
-                    font-family: "open-sans-bold";
-                    font-weight: 600;
+                    @include o_sans_bold();
                     background-color: $bg-light;
                     text-align: left;
                     z-index: 2;

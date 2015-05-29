@@ -26,7 +26,7 @@
 	font-family: open-sans-bold;  
 	src: url("../assets/fonts/OpenSans-800.ttf") format('truetype');  
 	font-weight: 800;
-    font-style: normal;  
+    font-style: normal;
 }
 
 @font-face {
@@ -36,33 +36,45 @@
     font-style: normal;  
 }
 
+@font-face {
+	font-family: uni-sans-light-italic;  
+	src: url("../assets/fonts/Fontfabric - UniSansLightItalic.otf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
 @mixin o_sans() {
-  font: {
-    family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-  }
+}
+
+@mixin o_sans_bold() {
+    font-family: "open-sans-bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
 }
 
 @mixin encode() {
-  font: {
-    family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
-  }
 }
 
 @mixin encode_cb() {
+    letter-spacing: .5px;
+    -webkit-font-smoothing: antialiased;
     font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     font-weight: 800!important;
     //text-transform: uppercase;
-    letter-spacing: .5px;
-    -webkit-font-smoothing: antialiased;
 }
 
 @mixin uni() {
-  font: {
-    family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
-  }
+}
+
+@mixin uni_italic() {
+    font-family: "uni-sans-light-italic", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
 }
 
 .intro {
