@@ -4,8 +4,8 @@ Author URI: http://philbuchanan.com/
 Donate Link: http://philbuchanan.com/
 Tags: accordion, accordions, shortcodes, responsive accordions, accordions plugin, jquery accordions, accordions short-code, accordions plugin wordpress, accordions plugin jquery
 Requires at least: 3.3
-Tested up to: 4.1
-Stable tag: 2.1.1
+Tested up to: 4.2
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Shortcodes for creating responsive accordion drop-downs.
 
 Accordion Shortcodes is a simple plugin that adds a few shortcodes for adding accordion drop-downs to your pages.
 
-The accordions should blend seemlessly with your theme. However, you may want to be able to edit your themes main stylesheet in order to [add some custom styling (CSS)](http://wordpress.org/plugins/accordion-shortcodes/other_notes/#Other-Notes).
+The accordions should blend seamlessly with your theme. However, you may want to be able to edit your themes main stylesheet in order to [add some custom styling (CSS)](http://wordpress.org/plugins/accordion-shortcodes/other_notes/#Other-Notes).
 
 = Features =
 
@@ -26,6 +26,7 @@ The accordions should blend seemlessly with your theme. However, you may want to
 * No default CSS added
 * Only adds JavaScript on pages that use the shortcodes
 * Support for item IDs and direct links
+* Accessible (for users requiring tabbed keyboard navigation control)
 
 = Optional Features =
 
@@ -170,13 +171,17 @@ For example, you could set the `openfirst` option for all accordions across the 
         return $atts;
     }
 
+= Compatibility Mode =
+
+If you have a theme that already includes the shortcodes `[accordion]` or `[accordion-item]` you can enable compatibility mode.
+
+To enable compatibility mode add `define('AS_COMPATIBILITY', true);` to your config.php file. This will add a prefix of 'as-' to the two accordion shortcodes.
+
+With compatibility mode enabled, make sure your shortcodes start with `as-` like this: `[as-accordion]...[/as-accordion]` and `[as-accordion-item]...[/as-accordion-item]`.
+
 = Issues/Suggestions =
 
 For bug reports or feature requests or if you'd like to contribute to the plugin you can check everything out on [Github](https://github.com/philbuchanan/Accordion-Shortcodes/).
-
-= Additional Thanks =
-
-Thank you to [dgrevink](https://github.com/dgrevink) for his support in developing the item IDs and direct linking feature.
 
 == Screenshots ==
 
@@ -185,6 +190,19 @@ Thank you to [dgrevink](https://github.com/dgrevink) for his support in developi
 3. The Accordion Item shortcode insertion dialog box
 
 == Changelog ==
+= 2.2.3 =
+FIXED: A bug where the content editor would break in custom post types.
+
+= 2.2.1 =
+FIXED: A bug where setting both scroll and openfirst would scroll the window without user interaction.
+
+= 2.2 =
+* NEW: Accessible for users requiring tabbed keyboard navigation control (this took way too long)
+* NEW: A classname of 'read' is now added to accordion item titles as they are opened. This allows you to style all read accordion items.
+* NEW: Compatibility mode adds a prefix to the shortcodes for themes that already include accordion shortcodes with matching names.
+* FIXED: Animation queue not clearing.
+* Now compatible up to WordPress 4.2
+
 = 2.1.1 =
 * FIXED: An issue where openfirst would not work if title tag was set to div
 * FIXED: An issue where title tag setting was not respected when using multiple accordions on one page
@@ -207,6 +225,15 @@ Thank you to [dgrevink](https://github.com/dgrevink) for his support in developi
 * FIXED: A few incredibly small bugs/annoyances
 
 == Upgrade Notice ==
+= 2.2.3 =
+Fixes a bug where the content editor would break in custom post types.
+
+= 2.2.1 =
+Fixes a bug introduced in v2.2 when using the scroll and openfirst setting together.
+
+= 2.2 =
+Drastically improved accessibility. New 'read' class added to opened accordion items. Compatibility mode added for themes with the same accordion shortcode names. WordPress 4.2 compatibility.
+
 = 2.1.1 =
 Fixes a few minor issues accidentally introduced in the 2.1 update.
 
