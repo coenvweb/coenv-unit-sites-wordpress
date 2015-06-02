@@ -166,20 +166,33 @@ $wp_query = new WP_Query( $home_args );
     </div>
 </div>
         
-<div class="row">
-<div class="large-12 columns social-bar">
-	<?php the_widget('custom_post_widget', 'custom_post_id=27022'); ?>
+<div class="row social-row">
+    <div class="large-12 columns social-bar">
+        <h3>Connect with us »</h3>
+        <ul class="social-buttons">
+        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"> </i></li></a><?php } ?>
+        <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"> </i></li></a><?php } ?>
+        <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"> </i></li></a><?php } ?>
+        <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"> </i></li></a><?php } ?>
+        <?php if (get_option('email_newsletter')) { ?><li><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><i class="fi-at-sign"> </i></a></li><?php } ?>
+        <a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"> </i></a></li>
+        <?php if (get_option('uw_social')) { ?><a href="<?php echo get_option('uw_social'); ?>" title="<?php bloginfo('name'); ?> on UW Social" target="_blank" rel="nofollow"><li><i class="icon-icon-uw"> </i></li></a><?php } ?>
+      </ul>
+    </div>
 </div>
-                <hr />
-<div class="large-12 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2745'); ?>
+        
+<div class="row major-program">
+    <div class="large-12 columns major">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2745&show_featured_image=true'); ?>
+    </div>
 </div>
-        <hr />
-<div class="large-6 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
-</div>
-<div class="large-6 columns programs">
-	<?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
+        
+<div class="row minor-programs">
+    <div class="large-6 columns programs">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
+    </div>
+    <div class="large-6 columns programs">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
 </div>
         
 
