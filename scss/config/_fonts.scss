@@ -78,9 +78,10 @@
 }
 
 .intro {
-    font-size: rem-calc(24)!important;
+    font-size: rem-calc(36)!important;
+    line-height: normal;
     margin: rem-calc(20) 0;
-    @include encode;
+    @include uni;
     font-weight: 400;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;

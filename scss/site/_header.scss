@@ -210,7 +210,7 @@
         }
 }
 
-//header strip
+// header strip
 
 .page-row {
     position: relative;
@@ -218,10 +218,9 @@
     background-size: cover;
     background-position: 50%;
     color: $white;
+    background-color: $accent;
     overflow: hidden;
-    @media #{$medium-up} {
-        height: 30vh;
-    }
+    height: 20vw;
     
     a {
         color: $white;
@@ -234,8 +233,17 @@
     }
     
     &.mini {
-        height: rem-calc(100)!important;
-        min-height: 0;
+        height: 10vw!important;
+        min-height: rem-calc(100);
+        .header-title-container, .header-white {
+            bottom: 6vw;
+            @media #{$medium-up} {
+                bottom: 2vw;
+            }
+        }
+        .black-wedge {
+            margin-left: -14vw;
+        }
     }
     
     .black-wedge {
@@ -243,56 +251,69 @@
         bottom: 0;
         width: 40vw;
         @extend .uw-skew;
-        margin-left: -5vw;
+        margin-left: -10vw;
         height: 100%;
         background: rgba(0,0,0,0.45);
 
         &.light {
              position: absolute;
-             margin-left: -7vw;
-             background: rgba(0,0,0,0.65);
+             margin-left: -12.5vw;
+             background: rgba(0,0,0,0.45);
          }
     }
-    .section-row {
-        height: 100%;
+    
+    .header-white, .page-title {
+        @extend .uw-skew;
+        height: rem-calc(30);
+        background: $white;
+        @media #{$medium-up} {
+            height: rem-calc(34);
+        }
+        @media #{$large-up} {
+            height: 4.2vw;
+        }
     }
-    .section-title {
+    .header-white {
+        position: absolute;
+        bottom: 3vw;
+        left: rem-calc(-20);
+        width: 29vw;
+    }
+
+    .header-title-container {
         position: absolute;
         width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 0;
-        margin-bottom: 0;
-        max-width: 1200px;
-        bottom: rem-calc(20);
+        bottom: 3vw;
+    }
+
+    .page-title {
+        float: left;
+        padding-right: rem-calc(30);
         
-        h1, h2 {
-            margin-bottom: 0;
-            line-height: 3rem;
-        }
-        h1 {
-            margin-bottom: rem-calc(3)!important;
+        h1, h2,{
+            @extend .uw-unskew;
+            font-size: rem-calc(22);
+            margin-left: rem-calc(15);
+            margin-top: rem-calc(-5);
+            @media #{$medium-up} {
+                font-size: rem-calc(22);
+            }
+            @media #{$large-up} {
+                margin-top: rem-calc(7);
+                font-size: 2.8vw;
+            }
         }
 
-        a {
-            font-size: rem-calc(28);
-            @include encode_cb;
+        span {
+            color: $text;
+            @include uni_italic();
             text-transform: uppercase;
-            font-weight: 800!important;
+            font-size: rem-calc(22);
+            @media #{$large-up} {
+                font-size: 2.8vw;
+            }
             @media #{$medium-up} {
-                margin-left: rem-calc(15);
-                font-size: rem-calc(36);
-                max-width: 28%;
-            }
-        
-            span {
-                font-size: rem-calc(14);
-                line-height: rem-calc(5);
-                display: none;
-            }
-            
-            &:hover {
-                color: $white-button;
+                margin-left: rem-calc(20);
             }
         }
     }

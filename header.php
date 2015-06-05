@@ -247,16 +247,17 @@
 <div class="container" role="document">
     <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             echo '<div class="page-row"';
-            echo 'style="background-image: url(' . $banner['url'] . ');">';
-            echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
       } else {
             echo '<div class="page-row mini"';
-            echo 'style="background-image: url(' . $banner['url'] . ');">';
-            echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
       };
+    echo 'style="background-image: url(' . $banner['url'] . ');">';
+    echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
      ?>
-    <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
+    <div class="header-white"></div>
+    <div class="header-title-container">
+        <div class="section-row row">
+            <div class="page-title"><h1><span><?php the_title() ?></span></h1></div>
+        </div>
     </div>
 </div>
 <?php endif; ?>

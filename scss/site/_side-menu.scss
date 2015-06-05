@@ -1,64 +1,82 @@
 // General sidebar
 aside#sidebar {
-	margin-top: rem-calc(57);
+	margin-top: rem-calc(35);
 	padding-right: 1rem !important;
 
 	.section-title {
-		@include encode_cb;
+        padding: rem-calc(7) rem-calc(15);
+        overflow: hidden;
+        position: relative;
+        
+        h2 {
+            font-size: rem-calc(10);
+            margin: 0;
+            max-width: 66%;
+        }
+        
 		a {
-
-		font-size: rem-calc(22);
-
+            @include uni();
+            text-transform: uppercase;
+            font-size: rem-calc(12);
+            color: $text;
 		}
-	}
-
-	// Hide for mobile	
-	.coenv_base_subnav,
-	&.section-title {
-		@media #{$small-only} {
-			display:none;
-		}
+        
+        &:after, &:before {
+            content: "";
+            position: absolute;
+            right: rem-calc(-10);
+            top: 0;
+            width: 30%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.65);
+            @extend .uw-skew;
+        }
+        
+        &:before {
+            width: 33%;
+        }
 	}
 
 	// Second-level navigation
-	.coenv_base_subnav ul {
-		border-top: 1px solid #dddddd;
-		margin: 0  1rem rem-calc(30) 0;
-		padding: 0;
-		line-height: 10px;
-		width: 100%;
-		li {
-			background-color: #f2f2f2;
-			border-bottom: 1px solid #ccc;
-			padding: 0;
-			margin: 0;
-			text-transform: uppercase;
-			font-size: 1rem;
-			a {
-				display: block;
-				line-height: 152%;
-				&:not(.button) {
-					color: #000;
-				}
-				&:hover {
-					color: $accent;
-				}
-			}
-			ul {
-				margin-bottom: 0;
-				li {
-					border: 0;
+	.coenv_base_subnav {
+        @extend .shadow;
+        ul {
+            margin: 0  1rem rem-calc(30) 0;
+            padding: 0;
+            line-height: 10px;
+            width: 100%;
+            li {
+                background-color: $bg-lighter;
+                margin: rem-calc(2);
+                a {
+                    @include uni();
+                    font-size: rem-calc(18);
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    display: block;
+                    line-height: 152%;
+                    color: $text;
+                    
+                    &:hover {
+                        color: $text-md;
+                    }
+                }
+                ul {
+                    margin-bottom: 0;
+                    li {
+                        border: 0;
 
-					a {
-					padding-left: 2rem !important;
-					}
-				}
-				&.side-nav {
-					padding-top: 0;
-					background-image: none;
-				}
-			}
-		}
+                        a {
+                        padding-left: 2rem !important;
+                        }
+                    }
+                    &.side-nav {
+                        padding-top: 0;
+                        background-image: none;
+                    }
+                }
+            }
+        }
 	}
 	.widget {
 		margin-bottom: rem-calc(30);
