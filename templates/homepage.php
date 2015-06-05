@@ -82,7 +82,7 @@ wp_reset_postdata();
 echo '</div>';
 ?>
     </div>
-    <div class="news-events-row">
+    <div class="news-events-row row">
     <div class="row">
     <div class="small-12 large-12 columns" >
 				
@@ -114,7 +114,7 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-small clearfix">
+	<div class="home-news-small">
 		<ul class="list-news-small">
 		<?php
 		# The Loop
@@ -187,11 +187,11 @@ $wp_query = new WP_Query( $home_args );
     </div>
 </div>
         
-<div class="row minor-programs">
-    <div class="large-6 columns programs">
+<div class="row minor-programs" data-equalizer data-equalizer-mq="large-up">
+    <div class="large-6 columns programs" data-equalizer-watch>
         <?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
     </div>
-    <div class="large-6 columns programs">
+    <div class="large-6 columns programs" data-equalizer-watch>
         <?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
 </div>
         

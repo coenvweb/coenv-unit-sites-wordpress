@@ -243,26 +243,20 @@
             </nav>
         </div>
 
-<?php if (!is_front_page()) : ?>
-<section class="container" role="document">
-<?php 
-        $banner = coenv_banner();
-        $banner_class = $banner ? 'has-banner' : '';
-        $banner_class .= ' template-print';
-?>
-    <?php if (($banner) && (!is_single())) {
-            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
-            echo '<div class="section-title-wrapper">';
-        }
-     ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
-            echo '<div class="section-title-wrapper">';
-     }
+<?php if (!is_front_page() && !is_search() && !is_404()) : ?>
+<div class="container" role="document">
+    <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+            echo '<div class="page-row"';
+            echo 'style="background-image: url(' . $banner['url'] . ');">';
+            echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
+      } else {
+            echo '<div class="page-row mini"';
+            echo 'style="background-image: url(' . $banner['url'] . ');">';
+            echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
+      };
      ?>
     <div class="section-row row">
-        <div class="columns large-8 section-title"><?php echo coenv_base_section_title($post->ID); ?></div>
-    </div>
+        <?php echo coenv_base_section_title($post->ID); ?>
     </div>
 </div>
 <?php endif; ?>

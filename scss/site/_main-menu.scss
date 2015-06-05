@@ -25,7 +25,7 @@
                     @media #{$medium-only} {
                         background-image: none!important;
                     }
-                    font-size: rem-calc(14);
+                    font-size: 1.7vw;
                     color: $text;
                     @include o_sans_bold();
                     background-color: $bg-light;
@@ -103,7 +103,8 @@
                 .has-dropdown > a {
                     padding-right: rem-calc(15)!important;
                     @media #{$medium-only} {
-                        padding-right: rem-calc(15)!important;
+                        padding-right: rem-calc(7)!important;
+                        padding-left: rem-calc(7)!important;
                     }
                     .has-dropdown > a {
                     }

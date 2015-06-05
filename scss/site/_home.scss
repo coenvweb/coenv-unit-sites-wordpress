@@ -32,9 +32,9 @@
     max-width: none;
     position: relative;
     z-index: 6;
-    
-    .columns {
-        max-width: $row-width;
+    .row {
+        max-width: 98%;
+        margin: auto;
     }
 }
 
@@ -49,6 +49,9 @@
         padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(25);
         font-size: rem-calc(36);
         font-weight: 200!important;
+        @media #{$small-only} {
+            font-size: rem-calc(24);
+        }
     }
     h2 {
         display: none;
@@ -63,6 +66,9 @@
                     color: $text;
                     font-size: rem-calc(22);
                     margin-bottom: 0;
+                    @media #{$small-only} {
+                        font-size: rem-calc(18);
+                    }
                 }
         }
 
@@ -95,9 +101,16 @@
             height: rem-calc(80);
             padding: rem-calc(30) rem-calc(35) 0 rem-calc(25);
             margin-right: rem-calc(-20);
+            @media #{$small-only} {
+                height: rem-calc(67);
+                padding: rem-calc(26) rem-calc(30) 0 rem-calc(15);
+            }
         }
         p {
             @extend .uw-unskew;
+            @media #{$small-only} {
+                font-size: rem-calc(10);
+            }
         }
     }
 }
@@ -146,59 +159,140 @@
     
     .widget_content {
         @extend .row;
-        @include grid-column(8);
-        padding: rem-calc(45) rem-calc(45) rem-calc(10) rem-calc(45);
+        max-width: 50%;
+        padding: rem-calc(25) rem-calc(25) 0 rem-calc(25);
         z-index: 2;
         position: relative;
         background: $accent;
+        
+        @media #{$xlarge-up} {
+            max-width: 66%;
+            padding: rem-calc(45) rem-calc(45) rem-calc(10) rem-calc(45);
+        }
+        
+        @media #{$large-only} {
+            max-width: 66%;
+            padding: rem-calc(20) rem-calc(20) rem-calc(10) rem-calc(20);
+        }
+        
+        @media #{$small-only} {
+            max-width: 100%;
+            padding: rem-calc(25) rem-calc(25) rem-calc(10) rem-calc(25);
+        }
         
         h3 {
             font-family: "open-sans"!important;
             color: $white!important;
             font-size: rem-calc(14);
             font-weight: 400!important;
+            
+            &:before {
+                content: "\f1a6";
+                font-family: "foundation-icons";
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                -webkit-font-smoothing: antialiased;
+                display: inline-block;
+                text-decoration: inherit;
+                margin-right: rem-calc(5);
+                margin-top: 1px;
+                border: 2px white solid;
+                padding: 0 1px;
+            }
         }
         
         strong {
             @include uni();
-            font-size: rem-calc(32);
+            font-size: 2.1vw;
+            @media #{$small-only} {
+                font-size: rem-calc(20);
+            }
         }
         
         p {
             color: $white;
+            margin-bottom: rem-calc(10);
+            font-size: 1.5vw;
+            @media #{$small-only} {
+                font-size: rem-calc(12);
+            }
+            @media #{$large-only} {
+                font-size: rem-calc(14);
+                margin-bottom: 0!important;
+            }
+            @media #{$large-up} {
+                font-size: rem-calc(14);
+                margin-bottom: rem-calc(14);
+            }
         }
     }
     
     .widget_links {
+        margin-bottom: 0;
         li {
             &:first-of-type {
                 margin-left: 0;
             }
         }
         .button {
-            margin-left: rem-calc(45)!important;
+            margin-left: rem-calc(25)!important;
+            @media #{$medium-only} {
+                margin-bottom: 0;
+            }
+            @media #{$xlarge-up} {
+                margin-left: rem-calc(45)!important;
+            }
         }
         
     }
     .widget_img {
         @include grid-column(4);
+        max-width: rem-calc(750);
         padding: 0;
         @extend .left;
         z-index: 1;
         
-        &:before {
-            content: "";
-            display: block;
-            right: 0;
-            position: absolute;
-            top: 10%;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid $accent;
-            border-top: 20px solid transparent;
-            border-bottom: 20px solid transparent;
-            z-index: 3;
+        @media #{$small-only} {
+            @include grid-column(12);
+            padding: 0;
+            &:before {
+                content: "";
+                display: block;
+                left: 5%;
+                position: absolute;
+                bottom: 0;
+                width: 0;
+                height: 0;
+                border-left: 20px solid transparent;
+                border-right: 20px solid transparent;
+                border-top: 20px solid transparent;
+                border-bottom: 20px solid $accent;
+                z-index: 3;
+            }
+        }
+
+        @media #{$medium-only} {
+            width: 50%;
+        }
+
+        @media #{$medium-up} {
+            &:before {
+                content: "";
+                display: block;
+                right: 0;
+                position: absolute;
+                top: 10%;
+                width: 0;
+                height: 0;
+                border-left: 20px solid transparent;
+                border-right: 20px solid $accent;
+                border-top: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+                z-index: 3;
+            }
         }
     }
 }
@@ -210,6 +304,8 @@
     padding: rem-calc(30) rem-calc(45) rem-calc(10) rem-calc(45);
     text-align: center;
     @extend .shadow;
+    z-index: 5;
+    position: relative;
     
     h3, p, ul, li {
         display: inline-block;
@@ -241,26 +337,38 @@
 // Programs
 .major-program {
     max-width: none;
-    height: rem-calc(450);
-    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(25%,rgba(0,0,0,0.1)), color-stop(85%,rgba(0,0,0,0.85)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
+    height: 45vh;
+    position: relative;
+    background: $text;
+    
+    
+    @media #{$medium-up} {
+        background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(25%,rgba(0,0,0,0.1)), color-stop(85%,rgba(0,0,0,0.85)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
+    }
 
     .major {
         margin: 0;
         padding: 0;
         
         .widget_img {
-            z-index: -1;
             position: absolute;
             left: 0;
             right: 0;
-            max-height: rem-calc(450);
+            width: 100%;
             overflow: hidden;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            @media #{$medium-up} {
+                z-index: -1;
+                min-height: rem-calc(200);
+            }
         
             a {
                 z-index: -3;
@@ -295,11 +403,15 @@
                 line-height: 1.1;
                 padding: rem-calc(7) 30% rem-calc(0) 30%;
                 overflow: auto;
-                font-size: rem-calc(45);
+                font-size: rem-calc(24);
                 color: $text;
                 width: 150%;
                 margin-left: -25%;
                 @extend .uw-unskew;
+                
+                @media #{$medium-up} {
+                    font-size: 4vh;
+                }
             }
             
             p {
@@ -345,15 +457,20 @@
 }
     
 .minor-programs {
-    background: $bg-light;
     max-width: none;
+    position: relative;
+    z-index: 1;
 }
     
 .programs {
     text-align: center;
-    
-    &:first-of-type {
-        border-right: 4px solid $white;
+    padding: 0;
+    background: $bg-light;
+    &:nth-child(1) {
+        border-right: rem-calc(4) solid $white;
+    }
+    &:nth-child(2) {
+        margin-left: rem-calc(4) solid $white;
     }
     
     .widget {
