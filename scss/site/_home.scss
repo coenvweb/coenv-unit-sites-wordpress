@@ -305,7 +305,11 @@
         @include uni_italic();
         font-weight: 400!important;
         text-transform: lowercase;
-        font-size: rem-calc(36);
+        font-size: rem-calc(30);
+        @media #{$medium-up} {
+            font-size: 3vw;
+        }
+        
     }
     
     .social-buttons {
@@ -327,7 +331,7 @@
 // Programs
 .major-program {
     max-width: none;
-    height: 45vh;
+    height: 30vw;
     position: relative;
     background: $text;
     
@@ -372,19 +376,23 @@
         }
         
         .widget_content, .widget_links {
-            position: relative;
+            position: absolute;
+            bottom: 0;
             @extend .row;
             text-align: center;
+            margin: auto;
         }
         
         .widget {
+            height: 30vw;
             padding-left: rem-calc(20);
         }
         
         .widget_content {
-            padding-top: 200px;
             @extend .uw-skew;
             width: 90%;
+            position: absolute;
+            bottom: 3vw;
             
             h3 {
                 @include uni_italic();
@@ -400,7 +408,7 @@
                 @extend .uw-unskew;
                 
                 @media #{$medium-up} {
-                    font-size: 4vh;
+                    font-size: 3vw;
                 }
             }
             
@@ -409,7 +417,7 @@
                 @include o_sans_bold();
                 font-size: rem-calc(18);
                 @extend .uw-unskew;
-                padding: rem-calc(7) 10% rem-calc(0) 10%;
+                padding: rem-calc(7) 5% rem-calc(0) 5%;
             }
             
         }
