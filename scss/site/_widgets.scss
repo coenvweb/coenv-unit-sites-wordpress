@@ -1,15 +1,108 @@
 // Events Widget
 
-.event-list {
-	list-style: none;
+#sidebar .widget-events {
+    overflow: hidden;
+    @media #{$medium-only} {
+        font-size: rem-calc(26)!important;
+        padding-top: rem-calc(10);
+    }
+    
+    h4:nth-of-type(1) {
+        display: none;
+    }
+    
+    h4:nth-of-type(2) {
+        padding: rem-calc(18);
+        margin: 0;
+        a {
+            color: $black;
+            @media #{$medium-only} {
+                font-size: rem-calc(26)!important;
+            }
+        }
+    }
+    
+    ul {
+        margin: 0!important;
+        
+        @media #{$medium-only} {
+            font-size: rem-calc(26)!important;
+        }
+
+        li {
+            padding: rem-calc(10) rem-calc(20);
+            background-color: $bg-lighter;
+            margin: rem-calc(2);
+            p {
+                color: $text;
+                font-size: rem-calc(22);
+                margin-bottom: 0;
+                @media #{$small-only} {
+                    font-size: rem-calc(18);
+                }
+            }
+        }
+    }
 	
 	.date {
-		margin-bottom: 0;
-	}
+        @include o_sans;
+        font-size: rem-calc(12);
+        color: $text;
+        i {
+            color: $accent-green;
+            font-size: rem-calc(24);
+            padding-right: rem-calc(5);
+            margin-bottom: rem-calc(-3);
+        }
+    }
 	
 	.title {
-		margin-bottom: rem-calc(10);
+        @include uni();
+        font-size: rem-calc(16);
+        font-weight: 600!important;
+        color: $text;
+        @media #{$small-only} {
+            font-size: rem-calc(14);
+        }
 	}
+    
+    .button {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        right: 0;
+        color: $text;
+        border: none;
+        height: rem-calc(80);
+        width: rem-calc(140);
+        padding: rem-calc(35) rem-calc(20) rem-calc(30) rem-calc(40);
+        margin: 0;
+        @media #{$medium-only} {
+            height: rem-calc(60);
+            width: rem-calc(75);
+            padding: rem-calc(23) rem-calc(10) rem-calc(20) rem-calc(20);
+        }
+        &:before {
+            content: '';
+            @extend .uw-skew;
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            right: -1rem;
+            height: rem-calc(80);
+            width: rem-calc(140);
+            padding: rem-calc(30) rem-calc(35) 0 rem-calc(25);
+            background-color: $accent-teal;
+            border-left: 20px solid $accent-teal-lt;
+            @media #{$medium-only} {
+                right: -5rem;
+                border-left: 10px solid $accent-teal-lt;
+            }
+        }
+        &:hover {
+            background-color: transparent;
+        }
+    }
 }
 
 // Social Widget
@@ -23,17 +116,41 @@
 
 // Sidebar Widgets
 aside#sidebar div.columns {
-
+    .widget {
+        @extend .shadow;
+        h4 {
+            a {
+                @include uni();
+                font-size: rem-calc(32);
+                font-weight: 400!important;
+                letter-spacing: .1rem;
+                padding-bottom: .5rem;
+            }
+        }
+        ul {
+            list-style: none;
+        }
+    }
+    
 	
 	// Content blocks
 	.widget_custom_post_widget {
+        background-color: #f2f2f2;
+        border: $accent-green solid 4px;
 		.widget_content {
-			padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
-			h4 {
-				@include encode_cb;
-				font-size: rem-calc(22);
-				letter-spacing: .1rem;
-			}
+            border-top: $accent-green solid 4px;
+			padding: rem-calc(20) rem-calc(20) rem-calc(5) rem-calc(20);
+            h4 {
+                @include uni();
+                font-size: rem-calc(32);
+                padding: 0 rem-calc(22);
+                font-weight: 400!important;
+                letter-spacing: .1rem;
+                padding-bottom: .5rem;
+                a {
+                    color: $text;
+                }
+            }   
 			p {
 				margin-bottom: 0;
 			}
@@ -41,63 +158,37 @@ aside#sidebar div.columns {
 		.widget_links {
 			margin-bottom: 0;
 			margin-left: 0;
-			margin-top: rem-calc(15);
+			margin-top: rem-calc(20);
+            padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
 			li {
 				display: inline;
 				width: 100%;
-				a {
-					
+                &:nth-of-type(1) .button  {
+					margin-right: .5rem;
+                    background-color: transparent;
+                    color: $text;
+                    border: $text 2px solid;
+                    text-align: left;
+                    &:hover {
+                        color: $text-md!important;
+                    }
 
-					
+				}
+                &:nth-of-type(2) .button {
+                    background-color: $accent-green;
+                    border: $accent-green-lt solid 2px;
+                    color: $text;
+                }
+				a {
 					letter-spacing: rem-calc(1);
-					margin: 0 0 rem-calc(6) 0;
 					padding: rem-calc(10);
 					text-align: left;
-					width: 100%;
-				}
-				.button {
-					text-transform: uppercase;
-				}
+                    margin: 0;
+                }
 			}
 		}
 	}
-	&:nth-child(odd) {
-		.widget_custom_post_widget {
-			background-color: #f2f2f2;
-			.widget_content {
-				h4 a {
-					color:  #333;
-				}
-			}
-			.widget_links {
-				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
-				.button {
-					background-color: #333;
-					color: $white;
-					text-align: left;
-				}
-			}
-			
-		}
-	}
-	&:nth-child(even) {
-		.widget_custom_post_widget {
-			background-color: #f2f2f2;
-		}
-		.widget_custom_post_widget .widget_content {
-
-		}
-		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			padding-left: rem-calc(20);
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
-			background-repeat: no-repeat;
-			background-position: bottom center;
-		}
-		
-	}
+    
 }
 
 // After Content Widgets

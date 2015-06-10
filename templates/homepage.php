@@ -103,7 +103,7 @@ echo '</div>';
     
 <div class="large-7 columns">
     <div class="small-news">
-        <a class="button right" href="/news-and-events"><div class="button-background light"></div><div class="button-background "><p>Learn More »</p></div></a>
+        <a class="button right" href="/news-and-events"><div class="button-background "><p>Learn More »</p></div></a>
         <a href="/news-and-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
@@ -151,7 +151,7 @@ $wp_query = new WP_Query( $home_args );
 				
 <div class="large-5 columns">
     <div class="events">
-    <a class="button right" href="/news-and-events/calendar"><div class="button-background light"></div><div class="button-background"><p>Learn More »</p></div></a>
+    <a class="button right" href="/news-and-events/calendar"><div class="button-background"><p>Learn More »</p></div></a>
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
     </div>

@@ -10,6 +10,7 @@ aside#sidebar {
         
         h2 {
             font-size: rem-calc(10);
+            padding: 0 rem-calc(10);
             margin: 0;
             max-width: 66%;
         }
@@ -18,7 +19,7 @@ aside#sidebar {
             @include uni();
             text-transform: uppercase;
             font-size: rem-calc(12);
-            color: $text;
+            color: $text-md;
 		}
         
         &:after, &:before {
@@ -40,14 +41,35 @@ aside#sidebar {
 	// Second-level navigation
 	.coenv_base_subnav {
         @extend .shadow;
+        
+        & > ul > li {
+            
+            &.active { 
+                & > a:first-of-type {
+                    color: $text;
+                
+                }
+
+                & > a:before {
+                    content: '»';
+                    margin-left: rem-calc(-10);
+                    padding-right: rem-calc(3);
+                }
+
+            }
+            
+        }
+        
         ul {
             margin: 0  1rem rem-calc(30) 0;
             padding: 0;
             line-height: 10px;
             width: 100%;
+            
             li {
                 background-color: $bg-lighter;
                 margin: rem-calc(2);
+                
                 a {
                     @include uni();
                     font-size: rem-calc(18);
@@ -55,9 +77,14 @@ aside#sidebar {
                     letter-spacing: 1px;
                     display: block;
                     line-height: 152%;
-                    color: $text;
+                    color: $text-md;
                     
                     &:hover {
+                        color: $text-lt;
+                    }
+                    
+                    &:not(.button) {
+                        padding: .5rem 1.5rem;
                         color: $text-md;
                     }
                 }
@@ -67,7 +94,8 @@ aside#sidebar {
                         border: 0;
 
                         a {
-                        padding-left: 2rem !important;
+                            font-size: rem-calc(16)!important;
+                            padding-left: 2rem !important;
                         }
                     }
                     &.side-nav {

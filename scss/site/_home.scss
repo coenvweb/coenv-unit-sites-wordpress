@@ -118,24 +118,14 @@
 .small-news {
      .button-background {
         background-color: $accent-green;
-         &.light {
-             position: absolute;
-             padding: rem-calc(10);
-             background-color: $accent-green-lt;
-             margin-left: rem-calc(-20);
-         }
+        border-left: 20px solid $accent-green-lt;
     }
 }
 
 .events {
      .button-background {
         background-color: $accent-teal;
-         &.light {
-             position: absolute;
-             padding: rem-calc(10);
-             background-color: $accent-teal-lt;
-             margin-left: rem-calc(-20);
-         }
+        border-left: 20px solid $accent-teal-lt;
     }
 }
 
