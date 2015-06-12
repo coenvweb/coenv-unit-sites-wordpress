@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="full-feature" style="background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-fall.jpg')">
+<div class="full-feature">
 	<div class="row">
 		<div class="large-12 homepage-features columns">
 			<div class="boundless-1">

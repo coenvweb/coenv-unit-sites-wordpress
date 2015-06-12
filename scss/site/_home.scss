@@ -58,7 +58,8 @@
         }
 
     .full-feature {
-        background-color: #B6A47C;
+        background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-spring.jpg');
+        background-color: #999;
         background-position: center;
         background-repeat: repeat-x;
         background-size: cover;
@@ -67,6 +68,17 @@
         padding: 48px 20px 68px 20px;
         width: 100%;
         text-align: center;
+
+        &.season-fall {
+            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-fall.jpg');
+
+        }
+        &.season-winter {
+            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-winter.jpg');
+        }
+        &.season-spring {
+            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-spring.jpg');
+        }
         
         p,
         h3 {
@@ -86,7 +98,7 @@
             margin: 0 auto;
             padding: 3px 20px;
             width: 340px;
-            transform: skewX(-20deg);  /* e.g. skewX(25deg) */
+            @extend .uw-skew;
 
                 @media #{$small-only} {
                 width: 260px;
@@ -102,7 +114,9 @@
                 text-transform: uppercase;
                 font-size: rem-calc(27);
                 letter-spacing: .1rem;
-                transform: skewX(20deg);  /* e.g. skewX(25deg) */
+                 @extend .uw-un-skew;
+
+
 
                     @media #{$small-only} {
 

@@ -279,13 +279,7 @@ e.breakpoint()&&(e.rtl?(g.css({right:"0%"}),a(">.name",g).css({right:"100%"})):(
 
 
 
-jQuery(function ($) {
-    'use strict';
 
-    // handle blog header form
-    $('#blog-header').blogHeader();
-
-});
 
 $.fn.blogHeader = function () {
     'use strict';
@@ -305,6 +299,43 @@ $.fn.blogHeader = function () {
         window.location.href = url;
     } );
 };
+
+// Get season for homepage hero image
+
+var heroSeason = function() {
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var heroClass = '';
+
+    if (month >= 9) {
+        heroClass = 'season-fall';
+
+    } else if (month >= 12) {
+        heroClass = 'season-winter';
+
+    } else if (month >= 4) {
+        heroClass = 'season-spring';
+
+    } else {
+        heroClass = 'season-spring';
+    }
+
+    return heroClass;
+
+};
+
+jQuery(function ($) {
+    'use strict';
+
+    // handle blog header form
+    $('#blog-header').blogHeader();
+
+    // Choose seasonal hero image
+    $("div.full-feature").addClass(heroSeason());
+
+});
+
+
 
 
 
