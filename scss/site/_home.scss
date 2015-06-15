@@ -34,13 +34,7 @@
         padding-bottom: 30px;
         text-transform: uppercase;
         }
-        a.button {
-            background-color: $accent;
-            border-radius: 6px;
-            box-shadow: 0 2px #d9d9d9;
-            color: $white;
-            letter-spacing: .12rem;
-        }
+        
         ul.links {
             margin: 0;
             padding: 0;
@@ -268,15 +262,7 @@
             color: $white;
             margin-bottom: 23px;
         }
-        a.button {
-
-            background-color: #85754f;
-            border-radius: 6px;
-            box-shadow: 0 2px #fff;
-            color: $white;
-            letter-spacing: .12rem;
-            padding: 15px;
-        }
+        
         .stats {
             @include encode_black;
             letter-spacing: .13rem;

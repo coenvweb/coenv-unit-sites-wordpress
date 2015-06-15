@@ -125,16 +125,9 @@ aside#sidebar div.columns {
 					
 
 					
-					letter-spacing: rem-calc(1);
-					margin: 0 0 rem-calc(6) 0;
-					padding: rem-calc(10);
-					text-align: left;
-					width: 100%;
+
 				}
-				.button {
-					@include encode_black;
-					text-transform: uppercase;
-				}
+				
 			}
 		}
 	}
@@ -154,7 +147,6 @@ aside#sidebar div.columns {
 				.button {
 					background-color: $accent;
 					color: $white;
-					text-align: left;
 				}
 			}
 			

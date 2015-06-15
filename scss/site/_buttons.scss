@@ -1,16 +1,14 @@
-/*	Module: button
-======================================================================== */
-
 .button {
 	background: $white-button;
+	border-radius: 4px;
 	color: $text;
 	display: inline-block;
 	@include encode_black;
 	@include font-size(12);
 	font-weight: 400;
 	letter-spacing: rem-calc(1);
-	margin: 0 0 rem-calc(6) 0;
-	padding: rem-calc(10);
+	margin-right: rem-calc(5);
+	padding: rem-calc(8) rem-calc(10);
 	text-align: left;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -33,3 +31,21 @@
 
 } // .button
 
+
+.home {
+
+a.button {
+            background-color: $accent;
+            box-shadow: 0 2px #d9d9d9;
+            color: $white;
+        }
+        }
+
+div[role="main"] .button {
+
+background-color: $accent;
+color: $white;
+
+
+
+}
