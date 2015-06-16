@@ -46,7 +46,7 @@
     overflow: hidden;
     h4 {
         @include uni();
-        padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(25);
+        padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(20);
         font-size: rem-calc(36);
         font-weight: 200!important;
         @media #{$small-only} {
@@ -214,7 +214,7 @@
                 margin-bottom: 0!important;
             }
             @media #{$large-up} {
-                font-size: rem-calc(14);
+                font-size: 1vw;
                 margin-bottom: rem-calc(14);
             }
         }
@@ -229,12 +229,14 @@
         }
         .button {
             margin-left: rem-calc(25)!important;
+            margin: 1rem;
             
             @media #{$medium-only} {
+                margin-top: 0;
                 margin-bottom: 0;
             }
             @media #{$xlarge-up} {
-                margin-left: rem-calc(45)!important;
+                margin-left: rem-calc(50)!important;
             }
         }
         
@@ -332,6 +334,7 @@
 // Programs
 .major-program {
     max-width: none;
+    overflow: hidden;
     position: relative;
     background: $text;
     height: rem-calc(310);
@@ -367,6 +370,10 @@
                 width: 100%;
             }
         
+            @media #{$medium-only} {
+                transform: scale(1.5) translateX(-30%);
+            }
+        
             a {
                 z-index: -3;
                 position: relative;
@@ -390,7 +397,10 @@
         .widget {
             height: rem-calc(310);
             @media #{$medium-up} {
-                height: 310;
+                height: rem-calc(300);
+            }
+            @media #{$large-up} {
+                height: rem-calc(310);
             }
         }
         
@@ -398,11 +408,11 @@
             position: absolute;
             
             @media #{$medium-up} {
-                bottom: 6vw;
+                bottom: 13vw;
             }
 
             @media #{$large-up} {
-                bottom: 1vw;
+                bottom: 2vw;
             }
 
             @media #{$xlarge-up} {
@@ -437,20 +447,28 @@
             
             p:not(:first-child) {
                 color: $white;
-                margin-top: rem-calc(18);
+                margin: rem-calc(18) 0 0 0;
                 @include o_sans_bold();
-                 @media #{$medium-up} {
-                     font-size: rem-calc(18);
-                 }
+                @media #{$medium-up} {
+                    font-size: 1.5vw;
+                    margin: rem-calc(18) 15vw 0 15vw;
+                }
+                @media #{$small-only} {
+                    font-size: rem-calc(12);
+                }
+                @media #{$large-up} {
+                    font-size: 1vw;
+                    margin-bottom: rem-calc(14);
+                }
             }
             
         }
         
         .widget_links {
-            bottom: 0;
+            bottom: 4vw;
             
             @media #{$large-up} {
-                bottom: rem-calc(-30);
+                bottom: -2vw;
             }
 
             @media #{$xlarge-up} {
@@ -491,6 +509,14 @@
     text-align: center;
     padding: 0;
     background: $bg-light;
+    &:first-of-type .button {
+        background-color: $accent-green;
+        border-color: $accent-green-dk!important;
+        color: $text;
+        &:hover {
+            background-color: $accent-green-dk;
+        }
+    }
     &:nth-child(1) {
         border-right: rem-calc(4) solid $white;
     }
@@ -499,7 +525,7 @@
     }
     
     .widget {
-        padding: rem-calc(45);
+        padding: rem-calc(45) 10%;
     }
     h4 {
         @include uni();

@@ -53,6 +53,15 @@
 
 // desktop header
 
+#top-nav {
+    .row {
+        @media #{$large-up} {
+            max-width: none;
+            padding: 0 1.5vw;
+        }
+    }
+}
+
 .banner-container {
     width: 100%;
     position: relative;
@@ -65,6 +74,9 @@
         @extend .uw-skew;
         min-width: 180px;
         max-width: 210px;
+        @media #{$large-up} {
+            left: 3vw;
+        }
         
         .purple-wedge-lt {
             position: absolute;
@@ -89,9 +101,14 @@
   margin-right: auto;
   margin-top: 0;
   margin-bottom: 0;
+  max-width: 1200px;
 
   @media #{$medium-up} {
     height: 109px;
+  }
+
+  @media #{$large-up} {
+    max-width: none;
   }
     
 }
@@ -100,6 +117,12 @@
     height: 109px;
     padding-left: 15px;
     position: relative;
+    width: 15%;
+    min-width: 200px;
+    @media #{$large-up} {
+        left: 2vw;
+        min-width: 250px;
+    }
 
     a {
         display: block;
@@ -126,12 +149,8 @@
     text-align: center;
 
     #unit-college-uw {
-        margin-left: 1%;
         overflow: hidden;
         height: 109px;
-        @media #{$medium-up} {
-            margin-left: 50px;
-        }
     }
 
 }

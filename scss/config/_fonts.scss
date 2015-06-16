@@ -78,13 +78,17 @@
 }
 
 .intro {
-    font-size: rem-calc(36)!important;
+    font-size: rem-calc(20)!important;
     line-height: normal;
     margin: rem-calc(20) 0;
     @include uni;
     font-weight: 400;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
+    
+    @media #{$large-up} {
+        font-size: rem-calc(36)!important;
+    }
 }
 
 blockquote {

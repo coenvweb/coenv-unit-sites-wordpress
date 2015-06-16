@@ -182,11 +182,11 @@
   </nav><!-- #top-nav -->
   <div class="banner-container"> 
   <div class="title-row">
-      <div class="purple-wedges show-for-medium-up left medium-2">
+      <div class="purple-wedges show-for-medium-up left">
           <div class="purple-wedge-dk"></div>
           <div class="purple-wedge-lt"></div>
       </div>
-      <div class="name large-2 show-for-medium-up left">
+      <div class="name show-for-medium-up left">
         <a class="logo" href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
           <!--[if gte IE 9]><!-->
           <svg id="logo" width="130" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" xml:space="preserve">
@@ -203,7 +203,7 @@
           <!--<![endif]-->
         </a>
       </div>
-      <div class="logotype large-9 show-for-medium-up left">
+      <div class="logotype show-for-medium-up left">
 
         <div id="unit-college-uw" class="centered">
           <h1 class="left"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo('name') ?></a></h1>

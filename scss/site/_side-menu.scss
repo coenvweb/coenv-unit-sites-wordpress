@@ -55,6 +55,16 @@ aside#sidebar {
                     margin-left: rem-calc(-10);
                     padding-right: rem-calc(3);
                 }
+            
+                & > ul > li.active > a {
+                    color: $text;
+                    
+                    &:before {
+                        content: '»';
+                        margin-left: rem-calc(-10);
+                        padding-right: rem-calc(3);
+                    }
+                }
 
             }
             
