@@ -194,24 +194,28 @@
 	}
 
 	// captions
-	.wp-caption {
+	figcaption {
 		margin: 0;
 		padding: 0;
+	}
+	.wp-caption {
+		border-bottom: solid 2px #ccc;
+		border-top: solid 2px #ccc;
 		color: #000;
-		background-color: #f2f2f2;
-		border: 1px solid #cccccc;
+		float: left;
+		margin-bottom: 27px;
+		margin-top: 0;
+		padding: 20px 0;
 		
 		.source {
 			background-color: rgba(0,0,0,.5);
 			color: #fff;
 			text-align: right;
-			//font-style: italic;
 			text-transform: uppercase;
 			letter-spacing: .1em;
 			width: 100%;
 			position: relative;
 			@include font-size(8);
-			//@include rem('margin-top', -1.8);
 			@include rem('padding', .25, 1);
 			
 			a {
@@ -225,12 +229,10 @@
 		}
 
 		.wp-caption-text {
-			@include rem('margin', 0.25, 1, 0.5, 1);
-			@include rem('padding', .25, 1);
-			@include font-size(12);
-			@include rem('line-height', 1.25);
-			color: #000;
-			text-align: left;
+
+			p {
+				margin: 0;
+			}
 
 
 			a {
@@ -243,37 +245,36 @@
 		img {
 			background-color: #fff;
 			margin: 0;
-			padding: 0;
+			padding: 0  20px 0 0;
 		}
 		&.size-medium {
-			width: 350px;
-		}
-		&.size-med-sidecap {
-			float: left;
-			margin: rem-calc(20) 0;
-			padding-bottom: rem-calc(12);
 			width: 100%;
-			img {
+
+			.figure-img {
 				float: left;
-				border-right: 1px solid #cccccc;
-				border-bottom: 1px solid #cccccc;
-				margin-right: rem-calc(28);
 				width: 350px;
 			}
-			.wp-caption-text {
-				
-				@include rem('padding', 1, 2);
-				margin: 0;
-				width: 100%;
-				
-				p {
-					@include font-size(14);
-					@include line-height(28);
-					margin-bottom: 0;
-					width: 100%;
-				}
-			}
+
+
+
+
+
 		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
 
 	} // .wp-caption
 
@@ -307,3 +308,24 @@ body.page div[role="main"] .share {
 	margin-bottom: 1rem;
 	width: 100%;
 }
+
+
+.nivo-lightbox-theme-default .nivo-lightbox-title {
+  @include o_sans;
+  background: transparent;
+  color: #ffffff;
+  line-height: 1.4;
+  padding: 7px 15px;
+  border-radius: 0;
+}
+.nivo-lightbox-theme-default.nivo-lightbox-overlay {
+background-color: rgba(0, 0, 0, .9);
+
+}
+
+
+
+
+
+
+

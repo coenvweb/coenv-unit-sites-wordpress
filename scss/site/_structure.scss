@@ -191,13 +191,13 @@ h1.article__title {
 		color: #4b2e83;
 		font-weight: 400;
 		letter-spacing: 0.14286rem;
-		margin-bottom: rem-calc(20);
+		margin-bottom: rem-calc(40);
 		text-transform: uppercase;
 
 		@media #{$medium-up} {
 			@include font-size(40);
-			@include line-height(40);
-			padding-bottom: 30px;
+			@include line-height(48);
+			padding-bottom: 27px;
 		}
 
 		a {
@@ -242,8 +242,8 @@ div[role="main"] {
 
 	@media #{$small-up} {
 
-	@include font-size(30);
-	@include line-height(36);
+	@include font-size(26);
+	@include line-height(31);
 	margin-bottom: rem-calc(24);
 	padding-bottom: rem-calc(20);
 	}

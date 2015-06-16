@@ -127,18 +127,22 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null) {
 
 
 	
-		if ( $photo_source ) {
-		if (!empty($photo_source_url)) {
-			$photo_source_div = "<div class=\"source\"><a href=\"$photo_source_url\" target=\"blank\">$photo_source</a></div>";
-		}
-		else 
-			$photo_source_div = "<div class=\"source\">$photo_source</div>";
-		} else
-			$photo_source_div= " ";
+		
 		
 
 
-	return '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="' . $class . '" itemscope itemtype="http://schema.org/ImageObject">' . do_shortcode( $content ) . $photo_source_div . '<figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description"><p>' . $caption . '</p></figcaption></figure>';
+	$figure_out = '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="' . $class . '" itemscope itemtype="http://schema.org/ImageObject"><div class="figure-img">' . do_shortcode( $content ) . $photo_source_div . '</div><figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description">';
+	
+	$figure_out .= '<p>' . $caption . '</p>';
+	if ( $photo_source ) {
+		if (!empty($photo_source_url)) {
+			$figure_out .= '<p><em>Image courtesy of <a href="' . $photo_source_url . '" target="blank">' . $photo_source . '</a></em></p>';
+		} else { 
+			$figure_out .= '<p><em>Image courtesy of ' . $photo_source . '</em></p>';
+		}
+	}
+	$figure_out .= '</figcaption></figure>';
+	return $figure_out;
 	
 }
 add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
