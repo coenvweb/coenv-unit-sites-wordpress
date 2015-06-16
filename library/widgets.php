@@ -450,8 +450,11 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['blog-cat'], 'blog_categories' );
-          $blog_cat = $blog_cat->slug;
+        $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+        $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+        $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+        $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+
      
           echo $args['before_widget'];
           
@@ -461,19 +464,11 @@ class coenv_base_blog_cats extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'blog_category'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                         echo '<ul class="blog-cats inline-list">';
-                         foreach($cats as $cat) { 
-                              echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $cat->slug . '">' . $cat->name . '</a></li>';
-                         }
-                         echo '</ul>';
-                    }
+         ?>
+         <div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+				<?php coenv_base_cat_filter($coenv_cat_1,$coenv_cat_term_1); // Category filter ?>
+			</div>
+        <?php
           echo $args['after_widget'];
      }
 
@@ -577,15 +572,7 @@ class coenv_base_index_dates extends WP_Widget {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
 
-          echo '<ul>';
-          echo '<li><a href="#">November 2014</a></li>';
-          echo '<li><a href="#">October 2014</a></li>';
-          echo '<li><a href="#">September 2014</a></li>';
-          echo '<li><a href="#">August 2014</a></li>';
-          echo '<li><a href="#">July 2014</a></li>';
-          echo '<li><a href="#">June 2014</a></li>';
-          echo '<li><a href="#">May 2014</a></li>';
-          echo '</ul>';
+          coenv_base_date_filter('post',$coenv_month,$coenv_year);
 
           echo $args['after_widget'];
      }

@@ -7,8 +7,9 @@
 	padding: rem-calc(5) rem-calc(14);
 	@include font-size(14);
 	font-weight: 600;
-	background: transparent;
-    border: 2px solid $white;
+	background: $text-very-lt;
+    border: 2px solid $border-lt;
+    color: black;
     @include o_sans_bold;
     text-transform: uppercase;
 	text-decoration: none;
@@ -20,7 +21,7 @@
 		color: #fff !important;
 	}
 	
-	.dark {
+	&.dark {
 		background: $bg-dk;
 		color: $white;
 		
@@ -29,5 +30,17 @@
 			color: $text;
 		}
 	}
+    
+    &.white {
+		background: transparent;
+        border: 2px solid $white;
+        color: $white;
+		
+		&:hover {
+			background: $white-button;
+			color: $text;
+		}
+	}
+
 
 } // .button

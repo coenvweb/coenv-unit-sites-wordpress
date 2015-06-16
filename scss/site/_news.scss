@@ -1,0 +1,23 @@
+.page-template-news {
+    a {
+        color: $text;
+    }
+
+    .blog {
+        .columns {
+            padding: 0;
+        }
+    }
+
+    .blog-list-item {
+        padding-top: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: solid $border 2px;
+
+        &:first-of-type {
+            padding-top: 0rem;
+        }
+    }
+    
+    
+}

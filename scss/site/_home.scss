@@ -229,6 +229,7 @@
         }
         .button {
             margin-left: rem-calc(25)!important;
+            
             @media #{$medium-only} {
                 margin-bottom: 0;
             }
@@ -331,12 +332,14 @@
 // Programs
 .major-program {
     max-width: none;
-    height: 30vw;
     position: relative;
     background: $text;
+    height: rem-calc(310);
     
+    @media #{$large-up} {
+        height: 30vw;
+    }
     
-    @media #{$medium-up} {
         background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(25%,rgba(0,0,0,0.1)), color-stop(85%,rgba(0,0,0,0.85)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
         background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
@@ -344,7 +347,6 @@
         background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* IE10+ */
         background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
-    }
 
     .major {
         margin: 0;
@@ -354,14 +356,15 @@
             position: absolute;
             left: 0;
             right: 0;
-            width: 100%;
+            width: 200%;
             overflow: hidden;
             left: 50%;
             transform: translateX(-50%);
+            z-index: -1;
             
             @media #{$medium-up} {
-                z-index: -1;
                 min-height: rem-calc(200);
+                width: 100%;
             }
         
             a {
@@ -377,59 +380,82 @@
         
         .widget_content, .widget_links {
             position: absolute;
-            bottom: 0;
             @extend .row;
+            max-width: none;
             text-align: center;
             margin: auto;
+            padding: rem-calc(20);
         }
         
         .widget {
-            height: 30vw;
-            padding-left: rem-calc(20);
+            height: rem-calc(310);
+            @media #{$medium-up} {
+                height: 310;
+            }
         }
         
         .widget_content {
-            @extend .uw-skew;
-            width: 90%;
             position: absolute;
-            bottom: 3vw;
             
-            h3 {
-                @include uni_italic();
+            @media #{$medium-up} {
+                bottom: 6vw;
+            }
+
+            @media #{$large-up} {
+                bottom: 1vw;
+            }
+
+            @media #{$xlarge-up} {
+                bottom: -6vw;
+            }
+
+            blockquote  {
                 background: $white;
-                font-weight: 200!important;
                 line-height: 1.1;
-                padding: rem-calc(7) 30% rem-calc(0) 30%;
-                overflow: auto;
-                font-size: rem-calc(24);
+                padding: 0!important;
+                margin: auto!important;
+                border: none;
                 color: $text;
-                width: 150%;
-                margin-left: -25%;
-                @extend .uw-unskew;
+                width: 80%;
+                @extend .uw-skew;
                 
-                @media #{$medium-up} {
-                    font-size: 3vw;
+                
+                p {
+                    @include uni_italic();
+                    @extend .uw-unskew;
+                    font-size: rem-calc(24);
+                
+                    strong {
+                        font-weight: 200!important;
+                    }
+                    
+                    @media #{$medium-up} {
+                        font-size: 3vw;
+                    }
                 }
             }
             
-            p {
+            p:not(:first-child) {
                 color: $white;
+                margin-top: rem-calc(18);
                 @include o_sans_bold();
-                font-size: rem-calc(18);
-                @extend .uw-unskew;
-                padding: rem-calc(7) 5% rem-calc(0) 5%;
+                 @media #{$medium-up} {
+                     font-size: rem-calc(18);
+                 }
             }
             
         }
         
         .widget_links {
+            bottom: 0;
             
-            li {
-                &:first-of-type {
-                    margin-left: rem-calc(-70);
-                }
+            @media #{$large-up} {
+                bottom: rem-calc(-30);
             }
-            
+
+            @media #{$xlarge-up} {
+                bottom: -10vw;
+            }
         }
     }
 }
@@ -449,6 +475,7 @@
                 }
             }
             a {
+                margin: rem-calc(20);
                 min-width: rem-calc(120);
             }
         }

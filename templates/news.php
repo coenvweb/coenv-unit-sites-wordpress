@@ -19,22 +19,13 @@ $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
 $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
 $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
 $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+
 ?>
 
 <?php get_header(); ?>
 <div class="row">
 	<div class="small-12 medium-8 columns right" role="main">
 		<div class="entry-content">
-		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
-			</div>
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
-		 	</div>
-		</div>
-		<hr>
 		<?php
 		/**
 		  * Blog loop
@@ -104,7 +95,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         <div class="news-meta small-12 columns">
         <div class="blog-meta clearfix small-6 columns left">
 		<?php 
-        echo '<p>' . get_the_date('M j, Y') .' / ';
+        echo '<p>' . get_the_date('M j, Y') .' | ';
 		$termlist = '';
 		foreach ($terms as $term) {
             $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
@@ -113,20 +104,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		echo $termlist;
         ?>
         </p>
-		</div>
-
-        <div class="blog-meta clearfix sharer small-6 columns right">
-        <?php $title = rawurlencode(get_the_title());
-        $shortlink = rawurlencode(wp_get_shortlink());
-        $site_name = rawurlencode(get_bloginfo('name'));
-        $twitter = get_option('twitter');
-        ?>
-        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
-        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
-        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
-        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
 		</div>
 		</div>
             
@@ -139,7 +116,22 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
 		endif;*/
-		echo the_excerpt();
+		echo the_excerpt(); ?>
+        <div class="blog-meta clearfix sharer medium-6 columns right">
+        <?php $title = rawurlencode(get_the_title());
+        $shortlink = rawurlencode(wp_get_shortlink());
+        $site_name = rawurlencode(get_bloginfo('name'));
+        $twitter = get_option('twitter');
+        ?>
+            <p class="show-for-medium-up">share this post »</p>
+        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+		</div>
+        <?php
 		echo $post_link;
 		'</div>';
 		echo '<div class="blog-links right">';

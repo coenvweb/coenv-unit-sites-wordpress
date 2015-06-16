@@ -3,7 +3,7 @@
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
-    background: $accent;
+    background: $white;
     border-top: 1px solid $border;
     border-bottom: 1px solid $border;
     height: 44px;
@@ -18,7 +18,7 @@
     }
 
     .mobile-logo {
-        color: $accent;
+        color: $white;
         font-size: rem-calc(20);
         margin-left: 10px;
         height: 38px;   
@@ -28,12 +28,25 @@
         #logo {
             height: 38px;   
             width: 56px;
-            fill: $white;
+            fill: $accent;
         }
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px $white,0 7px 0 1px $white,0 14px 0 1px $white;
+        box-shadow: 0 0px 0 1px $text,0 7px 0 1px $text,0 14px 0 1px $text;
+    }
+    
+    h1 {
+        @include encode-cb();
+        font-weight: normal;
+        font-size: 4.2vw!important;
+        padding: 0 0 0 5%;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: $black;
+        a {
+            color: $black;
+        }
     }
 
 }
@@ -76,7 +89,6 @@
   margin-right: auto;
   margin-top: 0;
   margin-bottom: 0;
-  max-width: 1200px;
 
   @media #{$medium-up} {
     height: 109px;
@@ -294,7 +306,7 @@
             @extend .uw-unskew;
             font-size: rem-calc(22);
             margin-left: rem-calc(15);
-            margin-top: rem-calc(-5);
+            margin-top: rem-calc(-3);
             @media #{$medium-up} {
                 font-size: rem-calc(22);
             }

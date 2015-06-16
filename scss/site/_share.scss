@@ -1,14 +1,25 @@
-.blog {
-    .columns {
-        padding: 0;
-    }
-}
-
 .sharer {
     text-align: right;
+    min-width: rem-calc(300);
+    @media #{$small-only} {
+        text-align: left;
+        margin-bottom: rem-calc(20);
+    }
+
     svg {
         width: 30px;
         height: 30px;
-        fill: $accent;
+        fill: $accent-green;
+        margin-bottom: rem-calc(-11);
+    }
+    p {
+        margin-right: rem-calc(10);
+        @include uni_italic();
+        font-weight: 600;
+        font-size: rem-calc(14);
+        letter-spacing: .1rem;
+        @media #{$medium-up} {
+            display: inline!important;
+        }
     }
 }

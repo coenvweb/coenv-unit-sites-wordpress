@@ -212,8 +212,6 @@ function foo_register_alt_version_features($features) {
     return $features;
 }
 
-add_filter('bu_alt_versions_feature_support', 'foo_register_alt_version_features');
-
 /* 
  * Category filters for WPQuery templates (blog, publications, faculty, etc.)
  */
@@ -229,15 +227,15 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-		echo '<select name="select-category" class="select-category">';
-		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+		echo '<ul name="select-category" class="select-category">';
+		echo '<li class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
 		foreach($cats as $cat) { 
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;
 			echo $tax_value;
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+			echo '<li class="news-cat"><a href="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</a></li>';
 		}
-		echo '</select>';
+		echo '</ul>';
 	}
 }
 
@@ -261,7 +259,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 		    	} else {
 		    		$selected = '';
 		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+		    	echo '<option value="/news-events/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
 		       // echo "\n".get_the_date('F Y');
 		        $ref_month = get_the_date('mY');
 		        $counter = 0;
