@@ -42,34 +42,7 @@
 
 // Sort into separate .scss files
 
-#after-content .widget_custom_post_widget {
-	margin-bottom: 1.5rem;
-	padding-top: 1rem;
-}
-#after-content .widget_content {
-	float: left;
-	padding-left: rem-calc(10);
-	width: 80%;
 
-	p {
-	margin-bottom: 0;
-	}
-}
-#after-content .widget_links {
-	float: left;
-	width: 80%;
-}
-#after-content .widget_links li a {
-	width: auto;
-	margin: 0;
-	&:first-child {
-        margin-left: rem-calc(10);
-	}
-}
-#after-content .widget_img {
-	float: left;
-	width: 20%;
-}
 
 ul.widget-area li {
 	list-style: none;
