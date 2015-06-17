@@ -249,7 +249,7 @@ div[role="main"] {
 
 	} // h2
 
-	h3 {
+	h3,h4,h5 {
 	@include o_sans_bold;
 	@include font-size(16);
 	color: #222222;
@@ -264,18 +264,6 @@ div[role="main"] {
 
 	} // h3
 
-	h4,h5 {
-	@include font-size(16);
-	color: $accent;
-	font-weight: 400;
-	text-transform: uppercase;
-
-	@media #{$small-up} {
-
-	@include font-size(20);
-	margin-bottom: rem-calc(24);
-	}
-	}
 }
 
 
