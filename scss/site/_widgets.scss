@@ -1,5 +1,23 @@
 // Events Widget
 
+.widget-events {
+    .date {
+        @include o_sans();
+        font-size: rem-calc(12)!important;
+        padding-bottom: .5rem;
+    }
+    i {
+        color: $accent-green;
+        font-size: 2rem;
+        padding-right: rem-calc(5);
+        margin: -.7rem 0 -1rem 0;
+        float: left;
+    }
+    li {
+        list-style: none!important;
+    }
+}
+
 #sidebar .widget-events {
     overflow: hidden;
     @media #{$medium-only} {
@@ -30,6 +48,7 @@
         }
 
         li {
+            list-style: none;
             padding: rem-calc(10) rem-calc(20);
             background-color: $bg-lighter;
             margin: rem-calc(2);
@@ -41,18 +60,6 @@
                     font-size: rem-calc(18);
                 }
             }
-        }
-    }
-	
-	.date {
-        @include o_sans;
-        font-size: rem-calc(12);
-        color: $text;
-        i {
-            color: $accent-green;
-            font-size: rem-calc(24);
-            padding-right: rem-calc(5);
-            margin-bottom: rem-calc(-3);
         }
     }
 	

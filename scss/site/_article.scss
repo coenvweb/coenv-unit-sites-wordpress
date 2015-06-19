@@ -301,6 +301,34 @@
 		width: auto;
 	} // .coenv-thumb
 
+    // accordion
+    .accordion-title {
+       background: $border;
+        padding: rem-calc(10);
+        
+        &:hover {
+            color: $accent;
+            cursor: pointer;
+            cursor: hand;
+        }
+        &:after {
+            content: "\f199";
+            float: right;
+            font-family: "foundation-icons";
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            text-decoration: inherit;
+        }
+        &.open:after {
+            content: "\f176";
+        }
+    }
+
 } // .article__content
 
 

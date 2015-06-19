@@ -361,8 +361,11 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li>
+            <?  $date = substr($event['date'], 0, -6);
+                $date = strtotime($date);
+                $date = date('l, M d, Y ', $date); ?>
               <a href="<?php echo $event['url'] ?>">
-              <p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
+              <i class="fi-calendar"></i><p class="date"><?php echo $date ?></p>
               <p class="title"><?php echo $event['title'] ?></p>
               </a>
             </li>

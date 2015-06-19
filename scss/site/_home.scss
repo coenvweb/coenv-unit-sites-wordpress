@@ -48,7 +48,8 @@
         @include uni();
         padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(20);
         font-size: rem-calc(36);
-        font-weight: 200!important;
+        font-weight: 600!important;
+        color: $text-grey;
         @media #{$small-only} {
             font-size: rem-calc(24);
         }
@@ -63,24 +64,14 @@
                 background-color: $bg-lighter;
                 margin: rem-calc(2);
                 p {
-                    color: $text;
-                    font-size: rem-calc(22);
+                    color: $text-grey;
+                    font-size: rem-calc(20);
+                    font-weight: 600!important;
                     margin-bottom: 0;
                     @media #{$small-only} {
                         font-size: rem-calc(18);
                     }
                 }
-        }
-
-        .date {
-            @include o_sans();
-            font-size: rem-calc(14);
-            i {
-                color: $accent-green;
-                font-size: rem-calc(24);
-                padding-right: rem-calc(5);
-                margin-bottom: rem-calc(-3);
-            }
         }
     }
 
@@ -231,10 +222,15 @@
             margin-left: rem-calc(25)!important;
             margin: 1rem;
             
+            &:hover {
+                background-color: $accent-dk;
+            }
+            
             @media #{$medium-only} {
                 margin-top: 0;
                 margin-bottom: 0;
             }
+            
             @media #{$xlarge-up} {
                 margin-left: rem-calc(50)!important;
             }
@@ -325,6 +321,10 @@
             width: rem-calc(50);
             margin: rem-calc(10);
             font-size: rem-calc(26);
+            @media #{$medium-up} {
+                font-size: 2vw;
+                width: 4vw;
+            }
         }
     }
     
