@@ -256,7 +256,12 @@
     <div class="header-white"></div>
     <div class="header-title-container">
         <div class="section-row row">
-            <div class="page-title"><h1><span><?php the_title() ?></span></h1></div>
+            <div class="page-title"><h1><span>
+                <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+            echo the_title();
+      } else {
+            echo '<a href="/about/news-events/" name="News & Events">News & Events</a>';
+      };?></span></h1></div>
         </div>
     </div>
 </div>

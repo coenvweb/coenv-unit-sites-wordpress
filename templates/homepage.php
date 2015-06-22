@@ -83,27 +83,10 @@ echo '</div>';
 ?>
     </div>
     <div class="news-events-row row">
-    <div class="row">
-    <div class="small-12 large-12 columns" >
-				
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
-</div>
-<?php endif; ?>
-
-<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-<?php endif; ?>
-    
+<div class="row">
 <div class="large-7 columns">
     <div class="small-news">
-        <a class="button right" href="/news-and-events"><div class="button-background "><p>Learn More »</p></div></a>
+        <a class="button right" href="/about/news-events"><div class="button-background "><p>Learn More »</p></div></a>
         <a href="/news-and-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
@@ -130,7 +113,7 @@ $wp_query = new WP_Query( $home_args );
 
             foreach ($terms as &$term) {
                 if ($term->slug != 'uncategorized') {
-                    $terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                    $terms_arr[] = '<a href="/about/news-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
                 }
             }
             $terms_str = ' | ' . implode(', ', $terms_arr);
@@ -151,11 +134,10 @@ $wp_query = new WP_Query( $home_args );
 				
 <div class="large-5 columns">
     <div class="events">
-    <a class="button right" href="/news-and-events/calendar"><div class="button-background"><p>Learn More »</p></div></a>
+    <a class="button right" href="/about/news-events/events"><div class="button-background"><p>Learn More »</p></div></a>
 	<h4>Events</h4>
 	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
     </div>
-</div>
 </div>
 </div>
 </div>

@@ -10,7 +10,7 @@
         color: $accent-green;
         font-size: 2rem;
         padding-right: rem-calc(5);
-        margin: -.7rem 0 -1rem 0;
+        margin: -1rem 0 -1rem 0;
         float: left;
     }
     li {
@@ -67,7 +67,7 @@
         @include uni();
         font-size: rem-calc(16);
         font-weight: 600!important;
-        color: $text;
+        color: $text-grey;
         @media #{$small-only} {
             font-size: rem-calc(14);
         }

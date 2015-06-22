@@ -2,6 +2,7 @@
     a {
         color: $text;
     }
+    
 
     .blog {
         .columns {
@@ -19,5 +20,107 @@
         }
     }
     
+    .widget_coenv_base_blog_cats, .widget_coenv_base_index_dates {
+        overflow: hidden;
+        position: relative;
+        h4 {
+            @include uni();
+            font-size: rem-calc(13);
+            color: white;
+            background-color: black;
+            text-transform: uppercase;
+            font-weight: 600;
+            z-index: 2;
+            padding: 0.4rem 1.5rem;
+            
+            &:after {
+                content: "";
+                position: absolute;
+                right: rem-calc(-10);
+                top: 0;
+                width: 33%;
+                height: rem-calc(32);
+                background-color: $text-grey;
+                @extend .uw-skew;
+                border-left: rgba(0,0,0,0.35) solid 8px;
+            }
+            
+            &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                width: 110%;
+                left: -10%;
+                height: rem-calc(32);
+                background-color: $text;
+                z-index: -1;
+            }
+        }
+        
+        select {
+            margin: 0.5rem 1rem;
+            max-width: 91%
+        }
+        
+        ul {
+            margin: 0.5rem 1.5rem 0.5rem 3.5rem;
+        }
+        
+        li {
+            padding: .35rem 0 .35rem 0;
+            margin: 0;
+            width: 100%;
+            @include uni();
+            font-size: rem-calc(16);
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+        .cats {
+            &:before {
+                height: 1rem;
+                width: 1rem;
+                content: '';
+                position: absolute;
+                left: 1.5rem;
+                margin-top: 4px;
+                border: $accent-green solid 3px;
+            }
+            &:hover, &.checked {
+                &:before {
+                    height: 1rem;
+                    width: 1rem;
+                    content: '';
+                    position: absolute;
+                    left: 1.5rem;
+                    margin-top: 4px;
+                    border: $accent-green solid 3px;
+                    background-color: $accent-green-lt;
+                }
+            }
+            
+        }
+    }
     
+    .widget_coenv_base_index_dates {
+        padding-bottom: .5rem;
+    }
+}
+
+.panel {
+    overflow: hidden;
+    position: relative;
+    height: rem-calc(32);
+    padding: .3rem 1rem;
+    margin: .5rem -1rem 2rem -1rem;
+    background-color: $white;
+    @extend .shadow;
+    @include uni();
+    font-size: rem-calc(16);
+    font-weight: 600;
+    letter-spacing: .5px;
+    border: none;
+    
+    a {
+        z-index: 2;
+    }
 }

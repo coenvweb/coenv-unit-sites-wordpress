@@ -72,11 +72,19 @@
                         font-size: rem-calc(18);
                     }
                 }
+            .date {
+                font-size: 1rem!important;
+            }
+            i {
+                margin: -0.6rem 0 -1rem 0;
+            }
+        
         }
     }
 
     .post-meta {
         @include o_sans();
+        padding-bottom: .5rem;
         a {
             color: $text;
         }
@@ -300,6 +308,10 @@
         display: inline-block;
     }
     
+    h3, i {
+        color: $text-grey;
+    }
+    
     h3 {
         @include uni_italic();
         font-weight: 400!important;
@@ -312,18 +324,18 @@
     }
     
     .social-buttons {
-        color: $text;
-        a {
-            color: $text;
-        }
         li {
-            border: $text solid 4px;
+            border: $text-grey solid 4px;
             width: rem-calc(50);
             margin: rem-calc(10);
             font-size: rem-calc(26);
             @media #{$medium-up} {
                 font-size: 2vw;
                 width: 4vw;
+            }
+            &:hover {
+                color: $text;
+                border-color: $text;
             }
         }
     }

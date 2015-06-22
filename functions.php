@@ -188,11 +188,11 @@ function coenv_base_acf_toolbar( $toolbars ) {
  * Return blog taxonomy terms.
  */
 function coenv_base_blog_terms($id) {
-	$blog_terms = wp_get_post_terms( $id, 'student_blog' );
+	$blog_terms = wp_get_post_terms( $id, 'news' );
 	if ($blog_terms) {
 		echo '<ul class="blog-terms inline-list">';
 		foreach ($blog_terms as $term) {
-			echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $term->slug . '">' . $term->name . '</a></li>';
+			echo '<li><a class="button" href="/about/news-events/?category=' . $term->slug . '">' . $term->name . '</a></li>';
 		}
 		echo '</ul>';
 	}
@@ -211,7 +211,6 @@ function foo_register_alt_version_features($features) {
     );
     return $features;
 }
-
 /* 
  * Category filters for WPQuery templates (blog, publications, faculty, etc.)
  */
@@ -227,18 +226,17 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-		echo '<ul name="select-category" class="select-category">';
-		echo '<li class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+		echo '<select name="select-category" class="select-category">';
+		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
 		foreach($cats as $cat) { 
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;
 			echo $tax_value;
-			echo '<li class="news-cat"><a href="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</a></li>';
+			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
 		}
-		echo '</ul>';
+		echo '</select>';
 	}
 }
-
 /* 
  * Date filters for WPQuery templates (blog, publications, faculty, etc.)
  */

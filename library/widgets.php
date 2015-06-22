@@ -453,11 +453,8 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-        $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-        $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-        $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-        $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-
+          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
+          $blog_cat = $blog_cat->slug;
      
           echo $args['before_widget'];
           
@@ -467,11 +464,31 @@ class coenv_base_blog_cats extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-         ?>
-         <div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter($coenv_cat_1,$coenv_cat_term_1); // Category filter ?>
-			</div>
-        <?php
+                    $cats_args  = array(
+                      'orderby' => 'name',
+                      'order' => 'ASC',
+                      'taxonomy' => 'category'
+                      );
+                    $cats = get_categories($cats_args);
+                    if ($cats) {
+                         echo '<ul class="blog-cats inline-list">';
+                         if ($blog_cat) {
+                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
+                         }
+                         foreach($cats as $cat) { 
+                             $slug = $cat->slug;
+                             if ($slug == $blog_cat) {
+                                 $check = 'checked';
+                             } else {
+                                 $check = 'unchecked';
+                             }
+                             
+                             echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                             echo $cat->name;
+                             echo '</a></li>';
+                         }
+                         echo '</ul>';
+                    }
           echo $args['after_widget'];
      }
 
@@ -531,6 +548,7 @@ class coenv_base_blog_cats extends WP_Widget {
      }
 
 } 
+
 
 
 function register_coenv_base_blog_cats() {
