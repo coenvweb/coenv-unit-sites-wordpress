@@ -12,7 +12,7 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
 // Dates
 $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
-$coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,0,(int)$coenv_year));
+$coenv_date = date('F Y',mktime(0,0,0,(int)($coenv_month + 1),0,(int)$coenv_year));
 
 //Categories
 $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));

@@ -49,7 +49,6 @@ echo '</div>';
     echo '<div class="feature-info-container light"></div>';
 	echo '<div class="feature-info-container medium-6 small-12 columns">';
 		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
-        echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
 				echo '<div class="hero-white"><h2>' . get_the_title() . '</h2></div>';
 				echo '<p>' . $feature_excerpt . '</p>';

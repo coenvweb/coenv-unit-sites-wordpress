@@ -70,6 +70,7 @@
 @mixin uni() {
     font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
 }
 
 @mixin uni_italic() {
@@ -146,14 +147,18 @@ h3 {
 
 } // h3
 
-h4 {
-    @include o_sans_bold;
-    font-size: rem-calc(18);
-    line-height: rem-calc(16);
-    
-    @media #{$medium-up} {
-        font-size: rem-calc(24);
-        line-height: rem-calc(24);
+.article__content {
+
+    h4 {
+        @include uni;
+        font-weight: 600;
+        font-size: rem-calc(14);
+        line-height: rem-calc(12);
+
+        @media #{$medium-up} {
+            font-size: rem-calc(20);
+            line-height: rem-calc(20);
+        }
     }
 }
 

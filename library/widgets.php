@@ -583,6 +583,8 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
+         $coenv_year = (string) $_GET['coenv-year'];
+         $coenv_month = (string) $_GET['coenv-month'];
      
           echo $args['before_widget'];
           

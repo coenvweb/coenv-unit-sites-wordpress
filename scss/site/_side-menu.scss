@@ -18,18 +18,19 @@ aside#sidebar {
 		a {
             @include uni();
             text-transform: uppercase;
-            font-size: rem-calc(12);
+            font-size: rem-calc(13);
             color: $text-md;
 		}
         
-        &:after, &:before {
+        &:before {
             content: "";
             position: absolute;
             right: rem-calc(-10);
             top: 0;
             width: 30%;
             height: 100%;
-            background-color: rgba(0,0,0,0.65);
+            background-color: black;
+            border-left: 8px solid rgba(255,255,255,0.35);
             @extend .uw-skew;
         }
         

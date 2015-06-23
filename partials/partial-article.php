@@ -9,14 +9,19 @@
         <div class="article__meta">
             <?php if ( !is_page() ) : ?>
 			<div class="post-info">
-				<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
-				<?php $categories = get_the_category_list(' ') ?>
-				<?php if ( $categories ) : ?>
-				<div class="article__categories">
-					| <?php echo $categories ?>
-				</div>
+				<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time>
+                <div class="article__categories">
+				<?php
+                $terms = wp_get_post_terms( get_the_ID(), 'category');
+                $termlist = '| ';
+                foreach ($terms as $term) {
+                    $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                }
+                $termlist = rtrim($termlist,', ');
+                echo $termlist;
+                ?>
+                </div>
 			</div>
- 			<?php endif ?> 
         </div>
 		<?php endif ?>
 		<?php if ($GLOBALS['post']->post_parent) : ?>

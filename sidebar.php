@@ -14,8 +14,13 @@
 <?php
 if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav">';
-        echo coenv_base_section_title($GLOBALS['post']->ID);
-		echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
+        if ((!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+            $ancestor_post = $GLOBALS['post']->ID;
+        } else {
+            $ancestor_post = 24459;
+        }
+        echo coenv_base_section_title($ancestor_post);
+		echo coenv_base_hierarchical_submenu($ancestor_post);
 	echo '</div>';
 }
 ?>

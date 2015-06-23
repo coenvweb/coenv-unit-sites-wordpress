@@ -39,46 +39,16 @@
 		}
 
 	} // .article__title
-	
-	.article__meta {
-		.post-info {
-			text-transform:uppercase;
-			letter-spacing:.1em;
-			font-weight:600;
-			color:#888;
-			vertical-align: middle;
-			text-decoration:none;
-			@include font-size(11);
-			color: $text-lt;
-		}
-		
-		a:hover {
-		color: #8458BE!important;
-		}
-
-		.article__categories {
-			display: inline-block;
-
-			ul {
-				display: inline-block;
-				margin: 0;
-				padding: 0;
-				list-style: none;
-			}
-
-			li {
-				display: inline-block;
-
-			} //li
-
-		} // .article__categories
-
-	} // .article__meta
 
 } // .article__header
 
 .article__content {
     @extend .clearfix;
+    
+    h2 {
+        border-bottom: 2px solid $border;
+        margin-bottom: rem-calc(15px);
+    }
 
     li {
     	line-height: 1.6;
@@ -86,60 +56,11 @@
 
     }
 
-	h1 {
-		@include serif;
-		@include font-size(24);
-		@include line-height(30);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(36);
-			@include line-height(48);
-		}
-
-	} // h1
-
-	h2 {
-		@include serif;
-		@include font-size(18);
-		@include line-height(24);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(24);
-			@include line-height(30);
-		}
-
-	} // h2
-
-	h3 {
-		@include serif;
-		@include font-size(16);
-		@include line-height(24);
-		font-weight: 400;
-
-		@media #{$medium-up} {
-			@include font-size(18);
-			@include line-height(24);
-		}
-
-	} // h3
-
-	h4 {
-		@include font-size(14);
-		@include line-height(24);
-	}
-
 	hr {
 		height: 2px;
 		border: none;
 		background: $border;
 	}
-
-	blockquote {
-		@include rem('margin', 1, 2);
-
-	} // blockquote
 
 	// tables
 	table {
@@ -240,9 +161,9 @@
 		margin: 0;
 		padding: 0;
 		//width: auto !important;
-		color: #fff;
+		color: $text;
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-		background-color: $bg-dk;
+		background-color: $bg-lighter;
 		
 		.source {
 			background-color: rgba(0,0,0,.5);
@@ -258,21 +179,21 @@
 			@include rem('padding', .25, 1);
 			
 			a {
-				color: white;
+				color: $white;
 				text-decoration: none;
 			}
 			
 			a:hover {
-				color: #8458BE!important;
+				color: $accent-green!important;
 			}
 		}
 
 		.wp-caption-text {
-			@include rem('margin', 0.25, 1, 0.5, 1);
-			@include rem('padding', .25, 1);
-			@include font-size(12);
-			@include rem('line-height', 1.25);
-			color: $text-very-lt;
+			@include rem('margin', 0, 1, 0.5, 1);
+			@include rem('padding', .5, 1);
+			@include font-size(14);
+			@include rem('line-height', 1.5);
+			color: $text;
 			text-align: left;
 
 
@@ -326,6 +247,42 @@
         }
         &.open:after {
             content: "\f176";
+        }
+    }
+
+    // Blockquotes
+    blockquote {
+        position: relative;
+        margin-left: rem-calc(20)!important;
+        margin-right: rem-calc(10)!important;
+        margin-bottom: rem-calc(14)!important;
+        padding: rem-calc(20) rem-calc(10)!important;
+        border: none!important;
+        background-color: $bg-lighter;
+        @extend .shadow;
+        @media #{$large-up} {
+            padding: rem-calc(20) rem-calc(30)!important;
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 4px;
+            background-color: $accent-green;
+            height: 100%;
+        }
+
+        p {
+            margin: 0!important;
+            padding: 0 rem-calc(20);
+            @include uni_italic;
+            text-transform: none;
+            font-weight: 400!important;
+            color: #000000!important;
+            font-size: rem-calc(24);
         }
     }
 
