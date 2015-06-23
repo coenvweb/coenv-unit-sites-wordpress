@@ -150,7 +150,7 @@ function fb_mce_before_init( $settings ) {
         ),
         array(
             'title' => 'Heading 4',
-            'block' => 'h3'
+            'block' => 'h4'
         )
     );
 
