@@ -7,15 +7,6 @@
  * Author URI: http://coenv.uw.edu
  */
 
- 
- //register activation function
- register_activation_hook(__FILE__, 'coenv_admin_plugin_activate');
- //register deactivation function
- register_deactivation_hook(__FILE__, 'coenv_admin_plugin_deactivate');
-
-
-
-
 function getarchives_where_filter( $where, $args ) {
 
     if ( isset($args['post_type']) ) {      
@@ -168,3 +159,50 @@ function coenv_admin_mce_css( $mce_css ) {
 }
 
 add_filter( 'mce_css', 'coenv_admin_mce_css' );
+
+
+
+/**
+ * Add float clearing buttons to TinyMCE
+ * 
+ */
+
+function tinymce_clear_addbuttons() {
+   // Don't bother doing this stuff if the current user lacks permissions
+   if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') )
+     return;
+ 
+   // Add only in Rich Editor mode
+   if ( get_user_option('rich_editing') == 'true') {
+     add_filter("mce_external_plugins", "add_tinymce_clear_plugin");
+     add_filter('mce_buttons', 'register_tinymce_clear_buttons');
+   }
+}
+ 
+function register_tinymce_clear_buttons($buttons) {
+   array_push($buttons, "separator", "clearleft","clearright","clearboth");
+   return $buttons;
+}
+ 
+// Load the TinyMCE plugin : editor_plugin.js (wp2.5)
+function add_tinymce_clear_plugin($plugin_array) {
+  $plugin_name = preg_replace('/\.php/','',basename(__FILE__));
+  $plugin_array['clear'] = WP_PLUGIN_URL .'/'.$plugin_name.'/mce/clear/editor_plugin.js';
+   return $plugin_array;
+}
+ 
+add_action('init', 'tinymce_clear_addbuttons');
+
+function tinymce_clear_buttons_before_init( $init ) {
+    // do not remove empty divs
+    $init['extended_valid_elements'] .= ',div[clear|style|class]';
+    return $init;
+}
+
+add_filter('tiny_mce_before_init', 'tinymce_clear_buttons_before_init');
+
+
+
+
+
+
