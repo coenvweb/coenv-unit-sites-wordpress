@@ -36,12 +36,18 @@
         height: 32px;
         width: 32px;
     }
-    .item-27 { // hide homepage expander
+    .item-24433 { // hide homepage expander
         .small-3 {
             display: none;
         }
         .small-9 {
             @include grid-column(12);
+        }
+    }
+    
+    .item-24454, .item-24521 {
+        .small-9 {
+            padding-top: .3rem;
         }
     }
     .off-canvas-list {

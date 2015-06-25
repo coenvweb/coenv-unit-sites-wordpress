@@ -1,7 +1,10 @@
 .top-bar-container {
-    z-index: 1;
+    z-index: 2;
     position: relative;
     margin-bottom: 0;
+    @media #{$xlarge-up} {
+        top: -60px;
+    }
     
     .top-bar {
         background-color: $bg-light;
@@ -13,12 +16,24 @@
         border-bottom: 1px solid $border;
         box-shadow: 0 7px 7px -7px rgba(0,0,0,0.2);
         margin: 0 -10px;
+        
+        @media #{$xlarge-up} {
+            border: none;
+            background: none;
+        }
 
         .top-bar-section {
             display: inline-block;
+            @media #{$xlarge-up} {
+                float: right;
+                margin-right: 30px;
+            }
 
             #menu-main-menu { 
                 li a {
+                    @media #{$xlarge-up} {
+                        background-color: $white;
+                    }
                     @media #{$large-up} {
                         font-size: rem-calc(16);
                     }

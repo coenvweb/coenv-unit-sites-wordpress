@@ -153,27 +153,35 @@
 // pagination
 
 ul.pagination li {
+    float: left!important;
     margin-top: rem-calc(20);
     margin-bottom: rem-calc(40);
+    color: $text-grey;
+    font-weight: 800;
+    border-right: 1px $border solid;
+    padding-right: rem-calc(10);
+    
+    &:last-of-type {
+        border-right: none;
+    }
+    
     a {
         @include o_sans_bold;
         border-radius: 0;
-        color: $text;
-        font-weight: 800;
-        border: 4px $accent-green solid;
         font-size: rem-calc(12);
+        padding-right: 0;
+        padding-left: rem-calc(5);
+        
         &:hover {
             color: $text;
-            border: 4px $accent-green-lt solid;
             background: transparent;
         }
     }
     &.current a {
-        background: $accent-green;
-        border: 4px $accent-green-lt solid;
         color: $text;
+        background-color: transparent;
         &:hover {
-            background-color: $accent-green;
+            background-color: transparent;
         }
     }
 }

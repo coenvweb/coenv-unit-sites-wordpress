@@ -185,20 +185,34 @@
         -webkit-transform: translateY(-53%);
         -ms-transform: translateY(-53%);
         transform: translateY(-53%);
+        @media #{$xlarge-up} {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            -webkit-transform: none;
+            -ms-transform: none;
+            transform: none;
+            display: inline;
+        }
     }
     h1 {
         @include encode-cb();
-        line-height: 109px;
+        position: relative;
+        top: 35px;
         font-weight: normal;
         font-size: 2rem;
         padding: 0;
         text-transform: uppercase;
         margin: 0;
         float: left;
-        letter-spacing: 0.21429rem;
+        letter-spacing: 0.1rem;
         color: $black;
         a {
             color: $black;
+        }
+        
+        @media #{$xlarge-up} {
+            top: 32px;
         }
     }
 }
@@ -228,6 +242,9 @@
     img.college-name {
         width: 215px;
         height: 12px;
+        @media #{$xlarge-up} {
+            margin-right: rem-calc(25);
+        }
     }
     a {
         padding-bottom: 0;
@@ -235,10 +252,26 @@
     .slash {
         margin: 0;
     }
-    .college-name,
-        .uw-name {
+    .college-name, .uw-name {
             float: left;
         }
+    @media #{$xlarge-up} {
+        height: auto;
+        width: auto;
+        margin: 0;
+        clear: left;
+        position: relative;
+        top: 40px;
+        background-position: center;
+        
+        li {
+            display: inline;
+            height: auto;
+            width: auto;
+            padding: 0;
+            margin: 0;
+        }
+    }
 }
 
 // header strip
@@ -317,6 +350,18 @@
         bottom: 3vw;
     }
 
+    .page-title-row {
+        @media #{$xlarge-up} {
+            max-width: 1400px;
+            padding-left: 100px;
+        }
+        @media #{$xxlarge-up} {
+            max-width: none;
+            position: relative;
+            left: 18%;
+        }
+    }
+
     .page-title {
         float: left;
         padding-right: rem-calc(30);
@@ -325,13 +370,16 @@
             @extend .uw-unskew;
             font-size: rem-calc(22);
             margin-left: rem-calc(15);
-            margin-top: rem-calc(-3);
+            margin-top: rem-calc(-1);
             @media #{$medium-up} {
                 font-size: rem-calc(22);
             }
             @media #{$large-up} {
-                margin-top: rem-calc(7);
+                margin-top: rem-calc(2);
                 font-size: 2.8vw;
+            }
+            @media #{$xlarge-up} {
+                margin-top: rem-calc(7);
             }
         }
 
@@ -352,5 +400,11 @@
             }
         }
     }
+}
+
+.small-page-title {
+    font-weight: 800!important;
+    font-size: rem-calc(32)!important;
+    @include uni_italic;
 }
 

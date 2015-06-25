@@ -2,7 +2,6 @@
 /*	Module: article
 		
 		======================================================================== */
-
 .article {
 	position: relative;
 	margin-bottom: rem-calc(36);
@@ -12,6 +11,15 @@
 	}
 
 } // .article
+
+@media #{$medium-up} {
+    .container {
+            background: url(/wp-content/themes/coenv-poe/assets/img/GraySub_Background_page_texture.svg);
+            background-size: 165%;
+            background-position: center bottom 500px;
+            background-repeat: no-repeat;
+    } 
+}
 
 .article__header {
 
@@ -45,11 +53,6 @@
 .article__content {
     @extend .clearfix;
     
-    h2 {
-        border-bottom: 2px solid $border;
-        margin-bottom: rem-calc(15px);
-    }
-
     li {
     	line-height: 1.6;
     	margin-bottom: rem-calc(5px);

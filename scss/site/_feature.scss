@@ -7,6 +7,10 @@
     box-shadow: 0 2px 3px rgba(0,0,0,0.4);
 }
 
+.slick-list {
+    width: 100%;
+}
+
 .feature {
 	color: $white;
     max-height: rem-calc(550);

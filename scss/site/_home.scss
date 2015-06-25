@@ -32,6 +32,10 @@
     max-width: none;
     position: relative;
     z-index: 6;
+    background: url(/wp-content/themes/coenv-poe/assets/img/GrayMain_Background_texture.svg);
+    background-size: 165%;
+    background-position: 30% 60%;
+    background-color: $bg-light;
     .row {
         max-width: 98%;
         margin: auto;
@@ -44,6 +48,7 @@
     padding: 0;
     margin-bottom: rem-calc(50);
     overflow: hidden;
+    background-color: $white;
     h4 {
         @include uni();
         padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(20);
@@ -141,10 +146,16 @@
     position: relative;
 }
 
+.spotlight-purple {
+    background-color: $accent;
+}
+
 .spotlight {
     max-width: none;
-    background: $accent;
     box-shadow: 0 2px 3px rgba(0,0,0,0.4);
+    background: url(/wp-content/themes/coenv-poe/assets/img/Purple_Background_Texture.svg);
+    background-size: 1000px;
+    background-position: 300% 40%;
     
     .widget_content {
         @extend .row;
@@ -152,7 +163,6 @@
         padding: rem-calc(25) rem-calc(25) 0 rem-calc(25);
         z-index: 2;
         position: relative;
-        background: $accent;
         
         @media #{$xlarge-up} {
             max-width: 66%;
@@ -521,6 +531,10 @@
     text-align: center;
     padding: 0;
     background: $bg-light;
+    background: url(/wp-content/themes/coenv-poe/assets/img/GraySub_Background_texture.svg);
+    background-size: 165%;
+    background-position: 30% 60%;
+    
     &:first-of-type .button {
         background-color: $accent-green;
         border-color: $accent-green-dk!important;
@@ -529,11 +543,21 @@
             background-color: $accent-green-dk;
         }
     }
-    &:nth-child(1) {
-        border-right: rem-calc(4) solid $white;
+    @media #{$large-up} {
+        &:nth-child(1) {
+            border-right: rem-calc(4) solid $white;
+        }
+        &:nth-child(2) {
+            margin-top: 0!important;
+        }
+    }
+    @media #{$small-up} {
+        &:nth-child(2) {
+            margin-top: rem-calc(4);
+        }
     }
     &:nth-child(2) {
-        margin-left: rem-calc(4) solid $white;
+        background-position: 50% 70%;
     }
     
     .widget {
@@ -541,6 +565,9 @@
     }
     h4 {
         @include uni();
+        @media #{$medium-up} {
+            font-size: 2vw;
+        }
     }
     .widget_links {
         .button {

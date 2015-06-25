@@ -140,11 +140,12 @@ $wp_query = new WP_Query( $home_args );
 </div>
 </div>
 </div>
-            
+<div class="spotlight-purple">
 <div class="row spotlight">
     <div class="spotlight-content">
         <?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
     </div>
+</div>
 </div>
         
 <div class="row social-row">
