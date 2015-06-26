@@ -406,5 +406,8 @@
     font-weight: 800!important;
     font-size: rem-calc(32)!important;
     @include uni_italic;
+    padding-bottom: .5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid $border;
 }
 

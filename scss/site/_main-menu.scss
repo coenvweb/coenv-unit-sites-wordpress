@@ -4,6 +4,7 @@
     margin-bottom: 0;
     @media #{$xlarge-up} {
         top: -60px;
+        height: 0;
     }
     
     .top-bar {
@@ -20,19 +21,26 @@
         @media #{$xlarge-up} {
             border: none;
             background: none;
+            text-align: right;
+            position: absolute;
+            right: 0;
         }
 
         .top-bar-section {
             display: inline-block;
             @media #{$xlarge-up} {
-                float: right;
                 margin-right: 30px;
+            }
+
+            ul li {
+                background: transparent;
             }
 
             #menu-main-menu { 
                 li a {
                     @media #{$xlarge-up} {
-                        background-color: $white;
+                        background-color: transparent;
+                        font-size: .8vw!important;
                     }
                     @media #{$large-up} {
                         font-size: rem-calc(16);
@@ -43,20 +51,20 @@
                     font-size: 1.7vw;
                     color: $text;
                     @include o_sans_bold();
-                    background-color: $bg-light;
+                    background-color: transparent;
                     text-align: left;
                     z-index: 2;
 
                     &:hover, &:focus {
-                        color: $accent;
+                        color: $accent-green-acc;
                     }
 
                 }
                 li.current_page_parent {
                     & > a {
-                        color: $accent;
+                        color: $accent-green-acc;
                         &:hover {
-                            color: $accent;
+                            color: $accent-green-acc;
                         }
                     }
                     & .current_page_item > a {
@@ -67,7 +75,7 @@
                 }
 
                 .dropdown {
-                    @include shadow;
+                    border-top: 7px solid $accent-green;
 
                     a {
                         @include encode();
@@ -109,7 +117,7 @@
                     }
 
                     &.current_page_item > a, & > a:hover{
-                            color: $accent;
+                            color: $accent-green-acc;
                     }
 
 

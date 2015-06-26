@@ -1,8 +1,13 @@
 .page-template-news {
-    a {
+    h3 a {
         color: $text;
     }
     
+    .article__time {
+        padding-bottom: 1rem;
+        display: inline-block;
+        font-weight: 600;
+    }
 
     .blog {
         .columns {
@@ -186,12 +191,17 @@ ul.pagination li {
     }
 }
 
-.article__meta {
+.article__meta, .post-meta, .blog-meta {
+    
+    .article__time {
+        font-weight: 600!important;
+        margin-right: rem-calc(5);
+    }
 
     .article__categories {
         display: inline-block;
         a {
-            color: darken($accent-green, 5%);
+            color: $accent-green-acc;
             &:hover {
                 color: $accent-green;
             }

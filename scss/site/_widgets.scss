@@ -5,6 +5,7 @@
         @include o_sans();
         font-size: rem-calc(12)!important;
         padding-bottom: .5rem;
+        color: $text!important;
     }
     i {
         color: $accent-green;
@@ -210,7 +211,7 @@ aside#sidebar div.columns {
     height: rem-calc(310);
     
     @media #{$large-up} {
-        height: 30vw;
+        height: 20vw;
     }
     
         background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
@@ -270,12 +271,16 @@ aside#sidebar div.columns {
                 height: rem-calc(300);
             }
             @media #{$large-up} {
-                height: rem-calc(310);
+                height: 18vw;
+            }
+            @media #{$xlarge-up} {
+                height: 9vw;
             }
         }
         
         .widget_content {
             position: absolute;
+            margin: 0!important;
             
             @media #{$medium-up} {
                 bottom: 13vw;
@@ -346,8 +351,8 @@ aside#sidebar div.columns {
             }
         }
         .widget_links {
-            margin-left: 0;
             width: 100%!important;
+            margin: 0!important;
 
             li {
                 display: inline-block;
@@ -361,7 +366,6 @@ aside#sidebar div.columns {
                     }
                 }
                 a {
-                    margin: rem-calc(20);
                     min-width: rem-calc(120);
                 }
             }

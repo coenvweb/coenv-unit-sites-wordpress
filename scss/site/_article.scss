@@ -16,7 +16,7 @@
     .container {
             background: url(/wp-content/themes/coenv-poe/assets/img/GraySub_Background_page_texture.svg);
             background-size: 165%;
-            background-position: center bottom 500px;
+            background-position: center bottom;
             background-repeat: no-repeat;
     } 
 }
@@ -296,7 +296,10 @@
 
 } // .article__footer
 div[role="main"] {
-	margin-top: 2rem;
+    @media #{$medium-up} {
+	   margin-top: 2rem;
+    }
+    margin-top: .5rem;
 }
 
 body.page div[role="main"] .share {

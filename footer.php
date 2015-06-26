@@ -94,7 +94,6 @@
 </footer>
 
     <a class="exit-off-canvas"></a>
-</div>
 
 <?php do_action('foundationPress_layout_end'); ?>
 <?php wp_footer(); ?>

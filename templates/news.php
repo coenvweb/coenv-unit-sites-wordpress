@@ -95,16 +95,22 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         
         <div class="news-meta small-12 columns">
         <div class="blog-meta clearfix small-6 columns left">
-		<?php 
-        echo '<p>' . get_the_date('M j, Y') .' | ';
-		$termlist = '';
-		foreach ($terms as $term) {
-            $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
-        ?>
-        </p>
+            <?php
+        echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+        echo '<div class="article__categories">';
+        if (!empty($terms)) {
+            $termlist = '';
+            foreach ($terms as &$term) {
+                $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+            }
+            $termlist = rtrim($termlist,', ');
+            if (strpos($termlist,'uncategorized') == false)  {
+            echo '  | ' . $termlist;
+            }
+        }
+            ?>
+            </p>
+        </div>
 		</div>
 		</div>
             
@@ -167,6 +173,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	</div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
+</div>
 </div>
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 <div class="row after-widget">

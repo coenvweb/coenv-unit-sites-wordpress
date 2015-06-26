@@ -128,10 +128,7 @@ article.type-faculty {
 #sidebar .widget {
 	line-height: 1.6;
 	margin-bottom: 1rem;
-}
-.article__categories {
-	margin-bottom: 1rem;
-}
+} 
 .article__categories h2 {
 	@include rem('font-size', 1);
 	line-height: 1;

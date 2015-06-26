@@ -108,20 +108,15 @@ $wp_query = new WP_Query( $home_args );
         // Get categories
         $terms = wp_get_post_terms(get_the_id(), 'category');
         if (!empty($terms)) {
-            $terms_arr = array();
-
+            $termlist = '';
             foreach ($terms as &$term) {
-                if ($term->slug != 'uncategorized') {
-                    $terms_arr[] = '<a href="/about/news-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-                }
+                $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
             }
-            $terms_str = ' | ' . implode(', ', $terms_arr);
-
-        } else {
-            $terms_str = '';
+            $termlist = rtrim($termlist,', ');
+            if (strpos($termlist,'uncategorized') == false)  {
+            echo '  | ' . $termlist;
+            }
         }
-        $terms = "";
-        echo $terms_str;
         echo '</div>';
         echo '<a href="' . get_the_permalink() . '"><p>' . get_the_title() . '</p></a></li>';
 	endwhile;	

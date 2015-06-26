@@ -90,9 +90,6 @@
     .post-meta {
         @include o_sans();
         padding-bottom: .5rem;
-        a {
-            color: $text;
-        }
     }
 
 
@@ -566,6 +563,9 @@
     h4 {
         @include uni();
         @media #{$medium-up} {
+            font-size: 3vw;
+        }
+        @media #{$large-up} {
             font-size: 2vw;
         }
     }
