@@ -123,6 +123,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 position: relative;
                 top: 50%;
                 transform: translateY(-50%)  skewX(15deg)!important;
+                -ms-transform: translateY(-50%)  skewX(15deg)!important;
+                -webkit-transform: translateY(-50%)  skewX(15deg)!important;
                 padding: 0 2%;
                 text-align: left;
             }

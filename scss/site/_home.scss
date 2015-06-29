@@ -382,6 +382,8 @@
             overflow: hidden;
             left: 50%;
             transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
             z-index: -1;
             
             @media #{$medium-up} {
@@ -391,6 +393,8 @@
         
             @media #{$medium-only} {
                 transform: scale(1.5) translateX(-30%);
+                -ms-transform: scale(1.5) translateX(-30%);
+                -webkit-transform: scale(1.5) translateX(-30%);
             }
         
             a {
