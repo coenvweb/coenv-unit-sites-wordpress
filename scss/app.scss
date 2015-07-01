@@ -43,3 +43,9 @@
 html .mceContentBody {
 	padding: 2rem !important;
 }
+
+@media screen and (max-width: 600px) {
+    #wpadminbar {
+		position: fixed !important;
+	}
+}
