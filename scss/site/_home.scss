@@ -502,6 +502,9 @@
 
 .widget_links {
         margin-left: 0;
+        @media #{$small-only} {
+            padding: .5rem!important;
+        }
 
         li {
             display: inline-block;
@@ -517,6 +520,10 @@
             a {
                 margin: rem-calc(20);
                 min-width: rem-calc(120);
+                @media #{$small-only} {
+                    margin: 1px;
+                    min-width: 0;
+                }
             }
         }
 }

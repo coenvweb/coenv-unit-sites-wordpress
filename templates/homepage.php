@@ -86,7 +86,7 @@ echo '</div>';
 <div class="large-7 columns">
     <div class="small-news">
         <a class="button right" href="/about/news-events"><div class="button-background "><p>Learn More »</p></div></a>
-        <a href="/news-and-events"><h4>What's New</h4></a>
+        <a href="/about/news-events"><h4>What's New</h4></a>
 <?php
 $home_args = array(
 	'post_type'	=> 'post',

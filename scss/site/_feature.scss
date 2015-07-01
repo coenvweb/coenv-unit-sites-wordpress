@@ -156,6 +156,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 color: $text;
                 width: 100%;
                 @extend .uw-unskew;
+                overflow: visible;
                 
                 @media #{$small-only} {
                     font-size: 5vw;
