@@ -262,7 +262,7 @@ aside#sidebar div.columns {
         
         .widget_content, .widget_links {
             position: absolute;
-            @extend .row;
+            /* @extend .row;  breaks ie9*/
             max-width: none;
             text-align: center;
             margin: auto;
@@ -283,6 +283,22 @@ aside#sidebar div.columns {
         }
         
         .widget_content {
+            p:not(:first-child) {
+                color: $white;
+                margin: rem-calc(18) 0 0 0;
+                @include o_sans_bold();
+                @media #{$medium-up} {
+                    font-size: 1.5vw;
+                    margin: rem-calc(18) 15vw 0 15vw;
+                }
+                @media #{$small-only} {
+                    font-size: rem-calc(12);
+                }
+                @media #{$large-up} {
+                    font-size: 1vw;
+                    margin-bottom: rem-calc(14);
+                }
+            }
             position: absolute;
             margin: 0!important;
             
@@ -324,26 +340,11 @@ aside#sidebar div.columns {
                 }
             }
             
-            p:not(:first-child) {
-                color: $white;
-                margin: rem-calc(18) 0 0 0;
-                @include o_sans_bold();
-                @media #{$medium-up} {
-                    font-size: 1.5vw;
-                    margin: rem-calc(18) 15vw 0 15vw;
-                }
-                @media #{$small-only} {
-                    font-size: rem-calc(12);
-                }
-                @media #{$large-up} {
-                    font-size: 1vw;
-                    margin-bottom: rem-calc(14);
-                }
-            }
-            
         }
         
         .widget_links {
+            width: 100%!important;
+            margin: 0!important;
             bottom: 4vw;
             
             @media #{$large-up} {
@@ -353,10 +354,6 @@ aside#sidebar div.columns {
             @media #{$xlarge-up} {
                 bottom: -10vw;
             }
-        }
-        .widget_links {
-            width: 100%!important;
-            margin: 0!important;
 
             li {
                 display: inline-block;

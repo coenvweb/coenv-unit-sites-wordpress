@@ -39,7 +39,12 @@
     echo $advancedExcerpt ?>">
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
+      
+      <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
+          <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
+      
+    <!--[if !IE]><!-- --><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" /><!-- --><![endif]-->
+      
     <link rel="icon" href="<?php echo get_stylesheet_directory_uri() ; ?>/assets/img/icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo get_stylesheet_directory_uri() ; ?>/assets/img/icons/apple-touch-icon-144x144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo get_stylesheet_directory_uri() ; ?>/assets/img/icons/apple-touch-icon-114x114-precomposed.png">
@@ -188,7 +193,6 @@
       </div>
       <div class="name show-for-medium-up left">
         <a class="logo" href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-          <!--[if gte IE 9]><!-->
           <svg id="logo" width="130" height="100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" xml:space="preserve">
             <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
             c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21

@@ -11,17 +11,17 @@
 /* Plugins */
 @import "plugins/nivo-lightbox"; // Nivo Lightbox
 @import "plugins/nivo-default"; // Nivo Lightbox
-@import "plugins/slick"; // Slick Slider
+//@import "plugins/slick"; // Slick Slider
 
 /* Site structure */
-@import "site/structure"; // Your site structure
+//@import "site/structure"; // Your site structure
 @import "site/top-menu"; // top standard menu
 @import "site/main-menu"; // main standard menu
 @import "site/mobile-menu"; // main mobile menu
 @import "site/side-menu"; // side standard menu
 @import "site/forms"; // form fields
 @import "site/header"; // header styles
-@import "site/home"; // widget styles
+@import "site/home"; // home styles
 @import "site/buttons"; // button styles
 @import "site/footer"; // footer styles
 @import "site/article"; // article styles
@@ -32,8 +32,8 @@
 
 
 /* College Customizations */
-@import "site/faculty";
-@import "site/lists";
+//@import "site/faculty";
+//@import "site/lists";
 
 /* Print styles */
 @import "config/print";

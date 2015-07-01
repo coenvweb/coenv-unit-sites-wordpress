@@ -410,8 +410,7 @@
         
         .widget_content, .widget_links {
             position: absolute;
-            @extend .row;
-            max-width: none;
+            width: 100%;
             text-align: center;
             margin: auto;
             padding: rem-calc(20);
