@@ -22,7 +22,6 @@
 			</footer>
 		</article>
 	<?php endwhile;?>
-	<a href="#" class="back-to-top">Back to Top</a>
 	<?php do_action('foundationPress_before_content'); ?>
 
 	</div>
