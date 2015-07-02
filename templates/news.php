@@ -24,7 +24,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns right" role="main">
+	<div class="small-12 medium-8 columns right" role="main" id="main-col">
         <h1 class="small-page-title show-for-small-only"><?php the_title(); ?></h1>
 		<div class="entry-content">
 		<?php
