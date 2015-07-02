@@ -342,12 +342,12 @@ class CoEnv_Widget_Events extends WP_Widget {
             <?php endif ?>
         
         
-            <?php if (!is_front_page()) {
+            <?php if ( $title ) {
                 echo $before_title;
                 echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
                 echo $after_title;
                 };
-        ?>
+            ?>
 
       <ul class="event-list">
 
