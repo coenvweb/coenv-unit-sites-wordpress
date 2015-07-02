@@ -108,7 +108,7 @@
   <?php do_action('foundationPress_layout_start'); ?>
   
   <nav class="tab-bar show-for-small-only">
-    <section class="left-small mobile-logo">
+    <div class="left-small mobile-logo">
         <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
           <svg id="logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve">
               <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
@@ -119,14 +119,14 @@
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
           </svg>
         </a>
-    </section>
-    <section class="middle tab-bar-section">
+    </div>
+    <div class="middle tab-bar-section">
 
             <h1 class="title"><a href=""><?php bloginfo( 'name' ); ?></a></h1>
-    </section>
-    <section class="right-small">
+    </div>
+    <div class="right-small">
       <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
-    </section>
+    </div>
   </nav>
 
   <aside class="right-off-canvas-menu">
@@ -214,7 +214,7 @@
           <div class="units show-for-large-up">
             <ul>
               <li><a href="http://coenv.uw.edu" title="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="college-name" alt="College of the Environment" width="215" height="12"></a></li>
-              <li><a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" alt="University of Washington" class="uw-name"></a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" alt="University of Washington" class="uw-name"></a></li>
             </ul>
           </div>
         </div>
@@ -226,7 +226,7 @@
   
         <div class="top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
-                <section class="top-bar-section">
+                <div class="top-bar-section">
                     <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
                       $exclude = implode(',',coenv_base_menu_exclude());
@@ -243,7 +243,7 @@
                       wp_reset_query();
                       ?>
                     </ul>
-                </section>
+                </div>
             </nav>
         </div>
 
@@ -264,7 +264,7 @@
                 <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             echo the_title();
       } else {
-            echo '<a href="/about/news-events/" name="News & Events">News & Events</a>';
+            echo '<a href="/about/news-events/" title="News & Events">News & Events</a>';
       };?></span></h1></div>
         </div>
     </div>
