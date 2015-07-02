@@ -79,7 +79,7 @@ class top_bar_mobile_walker extends Walker_Page {
                     <div class="accordion-navigation">
                         <a class="right columns small-3 expander-link" href="#accordion-' . $id . '">
                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px" height="32px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve" alt="arrow">
-<polygon points="142.332,104.886 197.48,50 402.5,256 197.48,462 142.332,407.113 292.727,256 "/>
+<polygon points="142.332,104.886 197.48,50 402.5,256 197.48,462 142.332,407.113 292.727,256 "/><span class="visuallyhidden">Expand</span>
                             </svg>
                         </a>
                     <div class="content" id=accordion-' . $id . '>';
