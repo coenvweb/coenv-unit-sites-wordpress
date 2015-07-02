@@ -43,7 +43,7 @@
       <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
       
-    <!--[if !IE]><!-- --><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" /><!-- --><![endif]-->
+    <!--[if !IE]><!--><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" /><!--<![endif]-->
       
     <link rel="icon" href="<?php echo get_stylesheet_directory_uri() ; ?>/assets/img/icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo get_stylesheet_directory_uri() ; ?>/assets/img/icons/apple-touch-icon-144x144-precomposed.png">
