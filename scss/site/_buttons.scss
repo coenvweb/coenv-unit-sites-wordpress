@@ -31,6 +31,13 @@
 			color: $text;
 		}
 	}
+    
+    .widget & {
+            &:hover {
+            background: rgba(0,0,0,0.6);
+            color: #fff !important;
+        }
+    }
 
 
 } // .button
