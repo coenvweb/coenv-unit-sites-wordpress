@@ -250,7 +250,7 @@
       } else {
             echo '<div class="page-row mini"';
       };
-    echo 'style="background-image: url(' . $banner['url'] . ');">';
+    echo ' style="background-image: url(' . $banner['url'] . ');">';
     echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
      ?>
     <div class="header-white show-for-medium-up"></div>

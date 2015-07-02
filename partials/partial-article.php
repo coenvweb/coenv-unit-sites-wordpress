@@ -3,7 +3,6 @@
  * An individual article
  */
 ?>
-<article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 
 	<header class="article__header">
         <div class="article__meta">
@@ -22,8 +21,8 @@
                 ?>
                 </div>
 			</div>
+            <?php endif ?>
         </div>
-		<?php endif ?>
 		<?php if ($GLOBALS['post']->post_parent) : ?>
         <?php if ( is_single()) : ?>
             <h1 class="article__title"><?php the_title() ?></h1>
@@ -32,10 +31,8 @@
 
 	</header>
 
-	<section class="article__content">
+	<div class="article__content">
 		<?php the_content() ?>
-	</section>
+	</div>
     <?php remove_filter( 'the_title', 'wptexturize' );
     remove_filter( 'the_excerpt', 'wptexturize' ); ?>
-
-</article><!-- .article -->

@@ -3,9 +3,6 @@
     <div class="footer-row">
     <div class="row">
         <div class="medium-6 columns">
-            <div class="smea-logo left">
-                <?php get_template_part('assets/img/icons/inline', 'smea-logo.svg'); ?>
-            </div>
             <div class="site-footer__header">
                 <h2><?php bloginfo('name') ?></h2>
                 <?php if (get_option('unit_name_1')) { ?><h2><?php echo get_option('unit_name_1'); } ?></h2>
@@ -36,7 +33,7 @@
         <div class="medium-6 columns right">
             <nav class="footer-nav">
                 <div class="site-footer__header">
-                    <h2 id="logo"><a href="http://coenv.washington.edu/" rel="home" title="UW College of the Environment"><img alt="College of the Environment Logo" src="<?php bloginfo('template_directory'); ?>/assets/img/uw-footer.svg" width="350" ></a></h2>
+                    <h2 id="college-logo"><a href="http://coenv.washington.edu/" rel="home" title="UW College of the Environment"><img alt="College of the Environment Logo" src="<?php bloginfo('template_directory'); ?>/assets/img/uw-footer.svg" width="350" ></a></h2>
                 </div>
                     <ul class="menu-footer-units">
                         <li><a target="_blank" href="http://fish.washington.edu/">Aquatic and Fishery Sciences</a></li>

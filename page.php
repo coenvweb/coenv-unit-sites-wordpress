@@ -34,5 +34,7 @@
         <?php dynamic_sidebar( 'after-content' ); ?>
     </div><!-- #after-content -->
 </div>
+</div>
+</div>
 <?php endif; ?>
 <?php get_footer(); ?>
