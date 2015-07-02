@@ -165,10 +165,9 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your crtieria did not match any posts. <a href="/about/news-events">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
-	  </div>		
-	<a href="#" class="back-to-top">Back to Top</a>
+	  </div>
 	<?php do_action('foundationPress_after_content'); ?>
 	</div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>

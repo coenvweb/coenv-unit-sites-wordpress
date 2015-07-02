@@ -1,0 +1,62 @@
+.search-results, .search-no-results {
+    
+    .results {
+        margin-left: rem-calc(14);
+        min-height: rem-calc(450);
+        
+        h3 {
+            margin-top: rem-calc(14);
+        }
+        
+        h2 a {
+            color: $text;
+            &:hover {
+                color: $accent-green-acc;
+            }
+            
+            &:after {
+                content: ' »';
+                color: $accent-green-acc;
+            }
+        }
+    
+        form {
+            width: 100%;
+            .field-wrap {
+                width: 100%;
+                input[type="text"] {
+                    width: 85%;
+                    height: rem-calc(42);
+                    font-siZe: rem-calc(24);
+                    border-radius: 0;
+                    border: solid 3px $text-lt;
+                    background: none;
+                }
+                button {
+                    height: rem-calc(42);
+                    font-siZe: rem-calc(24);
+                    border-radius: 0;
+                    background: none;
+                    color: $text-lt;
+                    border: solid 3px $text-lt;
+                    margin-left: rem-calc(-3);
+                    i {
+                        font-size: rem-calc(22);
+                    }
+                }
+            }
+        }
+    }
+    .search-filter {
+        background: $bg-lighter;
+        border-top: 4px solid $border-dk;
+        border-bottom: 4px solid $border-dk;
+        padding: rem-calc(10) rem-calc(14);
+        margin-left: rem-calc(-14);
+        margin-right: rem-calc(-14);
+        margin-bottom: rem-calc(14);
+        .button {
+            width: 100%;
+        }
+    }
+}

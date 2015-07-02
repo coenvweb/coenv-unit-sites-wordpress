@@ -483,9 +483,12 @@ class coenv_base_blog_cats extends WP_Widget {
                                  $check = 'unchecked';
                              }
                              
-                             echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
-                             echo $cat->name;
-                             echo '</a></li>';
+                             if ($slug !== 'uncategorized') {
+                             
+                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                                 echo $cat->name;
+                                 echo '</a></li>';
+                             }
                          }
                          echo '</ul>';
                     }

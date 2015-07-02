@@ -88,6 +88,7 @@
         width: rem-calc(140);
         padding: rem-calc(25) rem-calc(25);
         margin: 0;
+        z-index: 2;
         @media #{$medium-only} {
             height: rem-calc(60);
             width: rem-calc(75);
