@@ -343,12 +343,10 @@ class CoEnv_Widget_Events extends WP_Widget {
         
         
             <?php if (!is_front_page()) {
-                    echo $before_title;
-        ?>
-          <h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
-            <?php
-                    echo $after_title;
-                }
+                echo $before_title;
+                echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
+                echo $after_title;
+                };
         ?>
 
       <ul class="event-list">
