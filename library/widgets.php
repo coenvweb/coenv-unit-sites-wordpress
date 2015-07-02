@@ -344,11 +344,9 @@ class CoEnv_Widget_Events extends WP_Widget {
         
             <?php if (!is_front_page()) {
                     echo $before_title;
-                }
         ?>
           <h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
             <?php
-                if (!is_front_page()) {
                     echo $after_title;
                 }
         ?>
