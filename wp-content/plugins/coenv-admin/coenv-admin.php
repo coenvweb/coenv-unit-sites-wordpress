@@ -231,7 +231,15 @@ function tinymce_clear_buttons_before_init( $init ) {
 
 add_filter('tiny_mce_before_init', 'tinymce_clear_buttons_before_init');
 
+/**
+ * Add an ACF options capability
+ * 
+ */
 
+if( function_exists('acf_set_options_page_capability') )
+{
+    acf_set_options_page_capability( 'manage_options' );
+}
 
 
 
