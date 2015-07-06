@@ -150,7 +150,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 @include uni_italic();
                 font-weight: 200!important;
                 line-height: 1.1;
-                padding-top: rem-calc(7);
+                padding-top: .3rem;
+                padding-bottom: .3rem;
                 overflow: auto;
                 text-transform: uppercase;
                 font-size: 3.3vw;
@@ -161,6 +162,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 
                 @media #{$small-only} {
                     font-size: 5vw;
+                }
+
+                @media #{$large-up} {
+                    padding-bottom: 0;
                 }
             }
 

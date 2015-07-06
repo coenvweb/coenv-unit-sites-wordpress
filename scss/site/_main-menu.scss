@@ -126,8 +126,8 @@
                 .has-dropdown > a {
                     padding-right: rem-calc(15)!important;
                     @media #{$medium-only} {
-                        padding-right: rem-calc(7)!important;
-                        padding-left: rem-calc(7)!important;
+                        padding-right: 1rem!important;
+                        padding-left: 1rem!important;
                     }
                     .has-dropdown > a {
                     }

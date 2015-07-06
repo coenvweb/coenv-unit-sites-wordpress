@@ -229,7 +229,8 @@
     // accordion
     .accordion-title {
        background: $border;
-        padding: rem-calc(10);
+        padding: 1rem 2rem 1rem 1rem;
+        position: relative;
         
         &:hover {
             cursor: pointer;
@@ -250,7 +251,10 @@
             -webkit-font-smoothing: antialiased;
             display: inline-block;
             text-decoration: inherit;
-            padding: .25rem .75rem;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
         }
         &.open:after {
             content: "\f176";
