@@ -328,10 +328,6 @@ class CoEnv_Widget_Events extends WP_Widget {
       );
     }
 
-    if ( empty( $events ) ) {
-      return;
-    }
-
     $events = array_slice( $events, 0, $posts_per_page );
 
     ?>
@@ -372,7 +368,8 @@ class CoEnv_Widget_Events extends WP_Widget {
 
       <?php else : ?>
 
-        <li><p>No events found.</p></li>
+        <li><p class="title">No upcoming events.</p>
+            <p class="small">Additional events can be found on the <a href="http://environment.washington.edu/alumni-and-community/calendar-events/" title="College of the Environment Calendar">College of the Environment Events Calendar</a>.</p></li>
 
       <?php endif ?>
         

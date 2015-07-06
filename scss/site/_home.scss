@@ -128,6 +128,11 @@
         background-color: $accent-teal;
         border-left: 20px solid $accent-teal-lt;
     }
+    .small {
+        @include o_sans();
+        font-size: 1rem;
+        font-weight: 400;
+    }
 }
 
 .widget-events {
@@ -341,8 +346,10 @@
                 width: 4vw;
             }
             &:hover {
-                color: $text;
                 border-color: $text;
+                i {
+                    color: $text;
+                }
             }
         }
     }
