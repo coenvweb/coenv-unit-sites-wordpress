@@ -328,10 +328,6 @@ class CoEnv_Widget_Events extends WP_Widget {
       );
     }
 
-    if ( empty( $events ) ) {
-      return;
-    }
-
     $events = array_slice( $events, 0, $posts_per_page );
 
     ?>
@@ -342,16 +338,12 @@ class CoEnv_Widget_Events extends WP_Widget {
             <?php endif ?>
         
         
-            <?php if (!is_front_page()) {
-                    echo $before_title;
-                }
-        ?>
-          <h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
-            <?php
-                if (!is_front_page()) {
-                    echo $after_title;
-                }
-        ?>
+            <?php if ( $title ) {
+                echo $before_title;
+                echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
+                echo $after_title;
+                };
+            ?>
 
       <ul class="event-list">
 
@@ -361,8 +353,11 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li>
+            <?  $date = substr($event['date'], 0, -6);
+                $date = strtotime($date);
+                $date = date('l, M d, Y ', $date); ?>
               <a href="<?php echo $event['url'] ?>">
-              <p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
+              <i class="fi-calendar"></i><p class="date"><?php echo $date ?></p>
               <p class="title"><?php echo $event['title'] ?></p>
               </a>
             </li>
@@ -373,7 +368,8 @@ class CoEnv_Widget_Events extends WP_Widget {
 
       <?php else : ?>
 
-        <li><p>No events found.</p></li>
+        <li><p class="title">No upcoming events.</p>
+            <p class="small">Additional events can be found on the <a href="http://environment.washington.edu/alumni-and-community/calendar-events/" title="College of the Environment Calendar">College of the Environment Events Calendar</a>.</p></li>
 
       <?php endif ?>
         
