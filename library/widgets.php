@@ -719,14 +719,12 @@ class CoEnv_Widget_Social extends WP_Widget {
         ?>
         
     <ul>
-        <?php if (get_option('facebook')) { ?><li><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><i class="fi-social-facebook"> </i> Facebook</a></li><?php } ?>
-        <?php if (get_option('twitter')) { ?><li><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><i class="fi-social-twitter"> </i> Twitter</a></li><?php } ?>
-        <?php if (get_option('youtube')) { ?><li><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><i class="fi-social-youtube"> </i> YouTube</a></li><?php } ?>
-                <?php if (get_option('linkedin')) { ?><li><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><i class="fi-social-linkedin"> </i> LinkedIn</a></li><?php } ?>
-                <?php if (get_option('blog')) { ?><li><a href="<?php echo get_option('blog'); ?>" title="<?php bloginfo('name'); ?>'s Blog" target="_blank" rel="nofollow"><i class="fi-results"> </i> Blog</a></li><?php } ?>
-                <?php if (get_option('email_newsletter')) { ?><li><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><i class="fi-at-sign"> </i> Newsletter</a></li><?php } ?>
-        <li><a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><i class="fi-rss"> </i> Feeds</a></li>
-        <?php if (get_option('uw_social')) { ?><li><a href="<?php echo get_option('uw_social'); ?>" title="<?php bloginfo('name'); ?> on UW Social" target="_blank" rel="nofollow"><i class="icon-icon-uw"> </i> UW Social</a></li><?php } ?>
+        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"><span class="visuallyhidden">Facebook</span></i></li></a><?php } ?>
+        <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span class="visuallyhidden">Twitter</span></i></li></a><?php } ?>
+        <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span class="visuallyhidden">YouTube</span></i></li></a><?php } ?>
+        <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span class="visuallyhidden">LinkedIn</span></i></li></a><?php } ?>
+        <?php if (get_option('email_newsletter')) { ?><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><li><i class="fi-at-sign"><span class="visuallyhidden">Email Newsletter</span></i></li></a><?php } ?>
+        <a href="<?php echo get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"><span class="visuallyhidden">RSS</span></i></li></a>
       </ul>
  
     <?php
