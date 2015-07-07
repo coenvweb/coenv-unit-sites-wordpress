@@ -420,7 +420,7 @@ class CoEnv_Widget_Events extends WP_Widget {
 }
 
 /*
- * Blog categories
+ * Blog or news categories
  */
 
 class coenv_base_blog_cats extends WP_Widget {
@@ -446,7 +446,7 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['blog-cat'], 'blog_categories' );
+          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
           $blog_cat = $blog_cat->slug;
      
           echo $args['before_widget'];
@@ -460,13 +460,28 @@ class coenv_base_blog_cats extends WP_Widget {
                     $cats_args  = array(
                       'orderby' => 'name',
                       'order' => 'ASC',
-                      'taxonomy' => 'blog_category'
+                      'taxonomy' => 'category'
                       );
                     $cats = get_categories($cats_args);
                     if ($cats) {
                          echo '<ul class="blog-cats inline-list">';
+                         if ($blog_cat) {
+                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
+                         }
                          foreach($cats as $cat) { 
-                              echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $cat->slug . '">' . $cat->name . '</a></li>';
+                             $slug = $cat->slug;
+                             if ($slug == $blog_cat) {
+                                 $check = 'checked';
+                             } else {
+                                 $check = 'unchecked';
+                             }
+                             
+                             if ($slug !== 'uncategorized') {
+                             
+                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                                 echo $cat->name;
+                                 echo '</a></li>';
+                             }
                          }
                          echo '</ul>';
                     }
@@ -487,7 +502,7 @@ class coenv_base_blog_cats extends WP_Widget {
                $title = $instance[ 'title' ];
           }
           else {
-               $title = __( 'Categories', 'text_domain' );
+               $title = __( 'Blog or News Categories (list)', 'text_domain' );
           }
           if ( isset( $instance[ 'textarea' ] ) ) {
                $textarea = $instance[ 'textarea' ];
@@ -529,6 +544,7 @@ class coenv_base_blog_cats extends WP_Widget {
      }
 
 } 
+
 
 
 function register_coenv_base_blog_cats() {
