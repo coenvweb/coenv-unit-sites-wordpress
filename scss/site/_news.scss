@@ -37,7 +37,7 @@
             font-weight: 600;
             z-index: 2;
             padding: 0.5rem 1.5rem;
-            margin-top: 1px;
+            margin-top: 0;
             
             &:after {
                 content: "";
@@ -45,7 +45,7 @@
                 right: rem-calc(-10);
                 top: 0;
                 width: 33%;
-                height: rem-calc(33);
+                height: 2.25rem;
                 background-color: $text-grey;
                 @extend .uw-skew;
                 border-left: rgba(0,0,0,0.35) solid 8px;
@@ -57,7 +57,7 @@
                 top: 0;
                 width: 110%;
                 left: -10%;
-                height: rem-calc(33);
+                height: 2.25rem;
                 background-color: $text;
                 z-index: -1;
             }
