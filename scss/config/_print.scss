@@ -6,8 +6,35 @@
         }
     }
     
-    .profiles {
+    .banner-container {
+        height: 7rem;
+    }
+    
+    .hero-row {
+        height: 7rem;
+        position: relative;
+        margin-top: 15rem;
+    }
+    
+    .small-news, .events {
         page-break-inside: avoid;
+    }
+    
+    .major-program, .after-content {
+        .widget_img {
+            display: none;
+        }
+    }
+    
+    .page-row {
+        height: 100px;
+    }
+    
+    #sidebar {
+        .widget_img {
+            float: left;
+            margin-right: 20px;
+        }
     }
     
     .top-bar-menu {
@@ -26,11 +53,11 @@
         margin: 0;
     }
     
-    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters {
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title {
         display: none!important;
     }
     
-    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats {
+    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats, .article__categories, .post {
         a[href]:after {
             content: none!important;
         }
