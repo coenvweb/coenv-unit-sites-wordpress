@@ -15,6 +15,17 @@ module.exports = function(grunt) {
         }        
       }
     },
+      
+    bless: {
+        css: {
+            options: {
+                // Task-specific options go here.
+            },
+            files: {
+               'css/appie.css': 'css/app.css'
+            }
+        }
+    },
 
     copy: {
       scripts: {
@@ -100,8 +111,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-bless');  
 
   grunt.registerTask('build', ['sass']);
-  grunt.registerTask('default', ['copy', 'uglify', 'concat', 'sass', 'watch']);
+  grunt.registerTask('default', ['copy', 'uglify', 'concat', 'sass', 'bless', 'watch']);
 
 }
