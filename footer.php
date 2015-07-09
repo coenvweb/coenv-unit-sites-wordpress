@@ -46,7 +46,7 @@
                         <li><a target="_blank" href="http://www.ocean.washington.edu/">Oceanography</a></li>
                         <li><a target="_blank" href="http://depts.washington.edu/poeweb/">Program on the Environment</a></li>
                         <li><a target="_blank" href="http://cses.washington.edu/cig/">Climate Impacts Group</a></li>
-                        <li><a target="_blank" href="http://depts.washington.edu/fhl/">Friday Harbor Labs</a></li>
+                        <li><a target="_blank" href="http://depts.washington.edu/fhl/">Friday Harbor Laboratories</a></li>
                         <li><a target="_blank" href="http://jisao.washington.edu/">Joint Institute for the Study of the Atmosphere and Ocean</a></li>
                         <li><a target="_blank" href="http://depts.washington.edu/uwbg/">UW Botanic Gardens</a></li>
                         <li><a target="_blank" href="http://www.waspacegrant.org/">Washington NASA Space Grant</a></li>
