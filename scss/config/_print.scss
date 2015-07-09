@@ -6,9 +6,7 @@
         }
     }
     
-    .banner-container {
-        height: 7rem;
-    }
+    
     
     .hero-row {
         height: 7rem;
@@ -16,9 +14,7 @@
         margin-top: 15rem;
     }
     
-    .small-news, .events {
-        page-break-inside: avoid;
-    }
+    
     
     .major-program, .after-content {
         .widget_img {
@@ -53,7 +49,7 @@
         margin: 0;
     }
     
-    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title {
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title, .name, .purple-wedges, .top-bar-menu {
         display: none!important;
     }
     
