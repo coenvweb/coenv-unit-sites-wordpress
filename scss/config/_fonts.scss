@@ -16,55 +16,111 @@
 }
 
 @font-face {
-	font-family: open-sans;  
-	src: url("../assets/fonts/OpenSans-Regular.ttf") format('truetype');  
-	font-weight: normal;
-    font-style: normal;  
+	font-family: open-sans-bold;  
+	src: url("../assets/fonts/OpenSans-800.ttf") format('truetype');  
+	font-weight: 800;
+    font-style: normal;
 }
 
 @font-face {
-	font-family: uni-sans-light;  
-	src: url("../assets/fonts/Fontfabric - UniSansLight.otf") format('truetype');  
-	font-weight: normal;
-    font-style: normal;  
+    font-family: 'uni-sans-light';
+    src: url('../assets/fonts/fontfabric_-_unisanslight-webfont.eot');
+    src: url('../assets/fonts/fontfabric_-_unisanslight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/fontfabric_-_unisanslight-webfont.woff2') format('woff2'),
+         url('../assets/fonts/fontfabric_-_unisanslight-webfont.woff') format('woff'),
+         url('../assets/fonts/fontfabric_-_unisanslight-webfont.ttf') format('truetype'),
+         url('../assets/fonts/fontfabric_-_unisanslight-webfont.svg#uni_sanslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'open-sans';
+    src: url('../assets/fonts/opensans-regular-webfont.eot');
+    src: url('../assets/fonts/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/opensans-regular-webfont.woff2') format('woff2'),
+         url('../assets/fonts/opensans-regular-webfont.woff') format('woff'),
+         url('../assets/fonts/opensans-regular-webfont.ttf') format('truetype'),
+         url('../assets/fonts/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'open-sans-bold';
+    src: url('../assets/fonts/opensans-600-webfont.eot');
+    src: url('../assets/fonts/opensans-600-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/opensans-600-webfont.woff2') format('woff2'),
+         url('../assets/fonts/opensans-600-webfont.woff') format('woff'),
+         url('../assets/fonts/opensans-600-webfont.ttf') format('truetype'),
+         url('../assets/fonts/opensans-600-webfont.svg#open_sanssemibold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'uni-sans-light-italic';
+    src: url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.eot');
+    src: url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.woff2') format('woff2'),
+         url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.woff') format('woff'),
+         url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.ttf') format('truetype'),
+         url('../assets/fonts/fontfabric_-_unisanslightitalic-webfont.svg#uni_sanslight_italic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 @mixin o_sans() {
-  font: {
-    family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-  }
+}
+
+@mixin o_sans_bold() {
+    font-family: "open-sans-bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
 }
 
 @mixin encode() {
-  font: {
-    family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
-  }
 }
 
 @mixin encode_cb() {
-    font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    font-weight: 800!important;
-    // text-transform: uppercase;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
+    font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-weight: 800!important;
+    //text-transform: uppercase;
 }
 
 @mixin uni() {
-  font: {
-    family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
-  }
+    letter-spacing: .5px;
+}
+
+@mixin uni_italic() {
+    font-family: "uni-sans-light-italic", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
 }
 
 .intro {
-    font-size: rem-calc(24)!important;
+    font-size: rem-calc(20)!important;
+    line-height: normal;
     margin: rem-calc(20) 0;
-    @include encode;
+    @include uni;
     font-weight: 400;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
+    
+    @media #{$large-up} {
+        font-size: rem-calc(36)!important;
+    }
 }
 
 blockquote {
@@ -84,7 +140,7 @@ blockquote {
 }
 
 h1 {
-    @include encode_cb;
+    @include uni;
     font-size: rem-calc(26)!important;
     line-height: rem-calc(30);
     font-weight: 400;
@@ -97,7 +153,7 @@ h1 {
 } // h1
 
 h2 {
-    @include encode_cb;
+    @include uni;
     font-size: rem-calc(24);
     line-height: rem-calc(24);
     font-weight: 400;
@@ -110,7 +166,7 @@ h2 {
 } // h2
 
 h3 {
-    @include encode_cb;
+    @include uni;
     font-size: rem-calc(20);
     line-height: rem-calc(24);
     font-weight: 400;
@@ -122,14 +178,18 @@ h3 {
 
 } // h3
 
-h4 {
-    @include encode_cb;
-    font-size: rem-calc(18);
-    line-height: rem-calc(16);
-    
-    @media #{$medium-up} {
-        font-size: rem-calc(24);
-        line-height: rem-calc(24);
+.article__content {
+
+    h4 {
+        @include uni;
+        font-weight: 600;
+        font-size: rem-calc(14);
+        line-height: rem-calc(12);
+
+        @media #{$medium-up} {
+            font-size: rem-calc(20);
+            line-height: rem-calc(20);
+        }
     }
 }
 

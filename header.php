@@ -180,8 +180,8 @@
   </div>
   
         <div class="top-bar-container show-for-medium-up">
-            <nav class="top-bar" data-topbar="">
-                <div class="top-bar-section">
+            <nav class="top-bar row" data-topbar="">
+                <div class="top-bar-section left">
                     <ul id="menu-main-menu" class="top-bar-menu">
                     <?php
                       $exclude = implode(',',coenv_base_menu_exclude());
@@ -197,6 +197,7 @@
                       remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_reset_query();
                       ?>
+                        <div class="social"><li class="page_item">Follow Us ></li>
                      <?php if (get_option('facebook')) { ?>
                     <li class="page_item"><a class="facebook social-menu" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
                         <i class="fi-social-facebook"></i>
@@ -209,6 +210,7 @@
                     <li class="page_item"><a class="linkedin social-menu" href="<?php echo get_option('linkedin'); ?>" title="Join us on LinkedIn">
                             <i class="fi-social-linkedin"></i>
                     </a></li><?php } ?>
+                    </div>
                     </ul>
                 </div>
             </nav>

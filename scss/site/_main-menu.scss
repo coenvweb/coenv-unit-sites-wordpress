@@ -1,29 +1,58 @@
+.top-bar-container {
+    border-bottom: #d7dee5 1px solid;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.3)
+}
+
 .top-bar {
     background-color: $white;
-    text-align: center;
-    border-bottom: #d7dee5 1px solid;
+    text-align: left;
     min-height: rem-calc(60);
     padding-top: rem-calc(8);
     
     .top-bar-section {
         display: inline-block;
+        width: 100%;
         
         #menu-main-menu { 
+            .social {
+                float: right;
+                .page_item {
+                    background: transparent;
+                    a {
+                        padding: 0 .5rem;
+                    }
+                    &:first-of-type {
+                        margin-top: .9rem;
+                        @include uni;
+                        text-transform: lowercase;
+                        font-style: italic;
+                        font-weight: 600;
+                        margin-right: .5rem;
+                        font-size: rem-calc(12);
+                    }
+                    
+                    &:last-of-type {
+                        margin-right: 1rem;
+                    }
+                }
+            }
             .social-menu {
                 i {
-                    font-size: rem-calc(24);
+                    font-size: rem-calc(18);
                 }
             }
             li a {
                 @media #{$large-up} {
-                    font-size: rem-calc(16);
+                    font-size: rem-calc(14);
                 }
                 @media #{$medium-only} {
                     background-image: none!important;
                 }
-                font-size: rem-calc(14);
+                font-size: rem-calc(12);
                 color: $text;
-                @include encode_cb;
+                @include uni;
+                font-weight: 600;
+                text-transform: uppercase;
                 background-color: #ffffff;
                 text-align: left;
 
@@ -50,7 +79,6 @@
                 @include shadow;
     
                 a {
-                    @include encode();
                     font-size: rem-calc(14);
                     text-transform: none;
                     background-color: #f6f5f7;
@@ -62,33 +90,18 @@
             }
 
             & > .page_item_has_children {
-                &:before {
+                &:after {
                     display: block;
                     position: absolute;
-                    top: 8px;
-                    left: 0;
+                    top: 15px;
+                    right: 3px;
                     bottom: 8px;
-                    width: 1px;
-                    height: 30px;
-                    background: #d7dee5;
-                }
-
-                &:not(:first-child) {
-                    &:before {
-                        content: "";
-                    }
-                }
-                
-                &.page-item-55 > a {
-                    background-position-x: 99%;                        
-                }
-                
-                &.current_page_item.page-item-55 > a, &.page-item-55 > a:hover {
-                    background-position-x: 99%;
+                    font-size: 10px;
+                    content: "\2228";
                 }
 
                 &.current_page_item > a, & > a:hover{
-                        color: $accent;
+                    border-bottom: 3px solid $border;
                 }
 
                 
