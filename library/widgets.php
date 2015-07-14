@@ -719,7 +719,7 @@ class CoEnv_Widget_Social extends WP_Widget {
                 <?php if (get_option('linkedin')) { ?><li><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><i class="fi-social-linkedin"> </i> LinkedIn</a></li><?php } ?>
                 <?php if (get_option('blog')) { ?><li><a href="<?php echo get_option('blog'); ?>" title="<?php bloginfo('name'); ?>'s Blog" target="_blank" rel="nofollow"><i class="fi-results"> </i> Blog</a></li><?php } ?>
                 <?php if (get_option('email_newsletter')) { ?><li><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><i class="fi-at-sign"> </i> Newsletter</a></li><?php } ?>
-        <li><a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><i class="fi-rss"> </i> Feeds</a></li>
+        <li><a href="<?php echo (get_option('feeds')) ? get_option('feeds') : get_bloginfo('url').'/feed'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><i class="fi-rss"> </i> Feeds</a></li>
         <?php if (get_option('uw_social')) { ?><li><a href="<?php echo get_option('uw_social'); ?>" title="<?php bloginfo('name'); ?> on UW Social" target="_blank" rel="nofollow"><i class="icon-icon-uw"> </i> UW Social</a></li><?php } ?>
       </ul>
  

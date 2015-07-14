@@ -152,7 +152,7 @@ $wp_query = new WP_Query( $home_args );
         <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span class="visuallyhidden">YouTube</span></i></li></a><?php } ?>
         <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span class="visuallyhidden">LinkedIn</span></i></li></a><?php } ?>
         <?php if (get_option('email_newsletter')) { ?><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><li><i class="fi-at-sign"><span class="visuallyhidden">Email Newsletter</span></i></li></a><?php } ?>
-        <a href="<?php echo get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"><span class="visuallyhidden">RSS</span></i></li></a>
+        <a href="<?php echo get_bloginfo('url').'/feed'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"><span class="visuallyhidden">RSS</span></i></li></a>
       </ul>
     </div>
 </div>

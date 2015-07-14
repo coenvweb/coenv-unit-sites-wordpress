@@ -33,7 +33,7 @@
         min-height: rem-calc(220);
         
         @media #{$small-only} {
-            min-height: rem-calc(300);
+            height: 70vw;
         }
 	}
 	
@@ -111,9 +111,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 vertical-align: middle;
                 text-align: right;
             }
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+            @media #{$small-only} {
+                position: relative;
+                top: -33%;
+                width: 100%;
+            }
 		}
 		
         .feature-content {
@@ -141,8 +143,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 @extend .uw-skew;
                 
                 @media #{$small-only} {
-                    width: 60vw;
-                    margin: rem-calc(14) rem-calc(14) rem-calc(14) 20%;
+                    width: 75vw;
+                    margin: 5% 0 0 12%;
                 }
             }
         
@@ -161,7 +163,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 overflow: visible;
                 
                 @media #{$small-only} {
-                    font-size: 5vw;
+                    font-size: 6vw;
                 }
 
                 @media #{$large-up} {
@@ -170,7 +172,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
             }
 
             .button {
-               font-size: rem-calc(14);
+               font-size: 1rem;
+                @media #{$small-only} {
+                    font-size: .75rem;
+                }
             }
 
             p {
@@ -178,6 +183,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 font-size: rem-calc(22);
                 @media #{$large-up} {
                     font-size: 1.8vw;
+                }
+                @media #{$small-only} {
+                    font-size: 4.5vw;
                 }
             }
         }

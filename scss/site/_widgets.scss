@@ -332,8 +332,10 @@ aside#sidebar div.columns {
                 margin: auto!important;
                 border: none;
                 color: $text;
-                width: 80%;
                 @extend .uw-skew;
+                display: inline-block;
+                padding: 0 2rem!important;
+                max-width: 80%;
                 
                 
                 p {
@@ -347,6 +349,9 @@ aside#sidebar div.columns {
                     
                     @media #{$medium-up} {
                         font-size: 3vw;
+                    }
+                    @media #{$small-only} {
+                        line-height: 2.5rem;
                     }
                 }
             }

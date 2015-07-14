@@ -211,6 +211,9 @@
             @media #{$small-only} {
                 font-size: rem-calc(20);
             }
+            a {
+                color: $white;
+            }
         }
         
         p {
@@ -462,12 +465,13 @@
             blockquote  {
                 background: $white;
                 line-height: 1.1;
-                padding: 0!important;
                 margin: auto!important;
                 border: none;
                 color: $text;
-                width: 80%;
                 @extend .uw-skew;
+                display: inline-block;
+                padding: 0 2rem!important;
+                max-width: 80%;
                 
                 
                 p {
@@ -482,6 +486,10 @@
                     
                     @media #{$medium-up} {
                         font-size: 3vw;
+                    }
+                
+                    @media #{$small-only} {
+                        line-height: 2.5rem;
                     }
                 }
             }
@@ -597,6 +605,9 @@
         }
         @media #{$large-up} {
             font-size: 2vw;
+        }
+        @media #{$small-only} {
+            font-size: 2rem;
         }
     }
     .widget_links {

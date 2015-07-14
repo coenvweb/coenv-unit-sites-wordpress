@@ -3,6 +3,11 @@
 
 .footer-row {
     max-width: none;
+    .columns {
+        @media #{$small-only} {
+            text-align: center;
+        }
+    }
 }
 
 .site-footer {
@@ -39,7 +44,7 @@
 			margin: 0;
 			color: $white;
 			@include font-size(20);
-			@include line-height(20);
+			@include line-height(3s0);
 			@include encode_cb;
 
 		} // h2
