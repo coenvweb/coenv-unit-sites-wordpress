@@ -160,7 +160,7 @@ h2 {
 
     @media #{$medium-up} {
         font-size: rem-calc(32);
-        line-height: rem-calc(30);
+        line-height: rem-calc(30);    
     }
 
 } // h2
@@ -179,6 +179,12 @@ h3 {
 } // h3
 
 .article__content {
+    
+    h2 {
+        margin-top: 0.7rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
 
     h4 {
         @include uni;
