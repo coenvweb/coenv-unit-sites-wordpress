@@ -179,12 +179,12 @@
     ul {
         width: 220px;
         margin: 0;
-        padding: 0 0 0 rem-calc(50);
+        padding: 0 0 0 rem-calc(30);
         position: relative;
-        top: 53%;
-        -webkit-transform: translateY(-53%);
-        -ms-transform: translateY(-53%);
-        transform: translateY(-53%);
+        top: 50%;
+        -webkit-transform: translateY(-60%);
+        -ms-transform: translateY(-60%);
+        transform: translateY(-60%);
         @media #{$xlarge-up} {
             position: relative;
             margin: 0;
@@ -219,14 +219,17 @@
 
 
 .units {
-    background-image: url("/wp-content/themes/coenv-poe/assets/img/slash.png");
-    background-position: left center;
-    background-repeat: no-repeat;
     float: left;
+    padding: 0;
     height: 109px;
     width: 300px;
-    padding: 0;
     margin: 0 0 0 rem-calc(30);
+    position: relative;
+    @media #{$xlarge-up} {
+        width: auto;
+        height: auto;
+    }
+    
     li {
         display: block;
         height: 12px;
@@ -234,16 +237,38 @@
         padding: 0 0 0 0 !important;
         margin: 0 0 8px 0   !important;
         list-style: none;
+        &:first-of-type:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 1px;
+            top: 0;
+            left: 0;
+            height: 36px;
+            background-color: $text;
+            @extend .uw-skew;
+            @media #{$xlarge-up} {
+                left: 50.3%;
+                height: 16px;
+                top: -9px;
+            }
+        }
     }
-    img.uw-name {
+    .uw-name {
         width: 215px;
-        height: 14px;
+        height: 15px;
+        @media #{$xlarge-up} {
+            width: auto;
+            height: auto;
+        }
     }
-    img.college-name {
+    .college-name {
         width: 215px;
         height: 12px;
+        margin-top: 2px;
         @media #{$xlarge-up} {
             margin-right: rem-calc(25);
+            margin-top: -14px;
         }
     }
     a {
@@ -265,7 +290,7 @@
         background-position: center;
         
         li {
-            display: inline;
+            display: inline-block;
             height: auto;
             width: auto;
             padding: 0;

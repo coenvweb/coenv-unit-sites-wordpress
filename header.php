@@ -211,8 +211,10 @@
           <h1 class="left"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo('name') ?></a></h1>
           <div class="units show-for-large-up">
             <ul>
-              <li><a href="http://coenv.uw.edu" title="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="college-name" alt="College of the Environment" width="215" height="12"></a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" alt="University of Washington" class="uw-name"></a></li>
+              <li><a href="http://coenv.uw.edu" title="UW College of the Environment">
+  <?php include("assets/img/college-of-the-environment.svg"); ?>
+                  </a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
             </ul>
           </div>
         </div>

@@ -54,7 +54,6 @@
         padding: rem-calc(18) rem-calc(15) rem-calc(6) rem-calc(20);
         font-size: rem-calc(36);
         font-weight: 600!important;
-        color: $text-grey;
         @media #{$small-only} {
             font-size: rem-calc(24);
         }
@@ -80,8 +79,11 @@
             .date {
                 font-size: 1rem!important;
             }
+            .title {
+                margin-top: -.5rem;
+            }
             i {
-                margin: -0.6rem 0 -1rem 0;
+                margin: -0.8rem 0 -1rem 0;
             }
         
         }
@@ -89,7 +91,6 @@
 
     .post-meta {
         @include o_sans();
-        padding-bottom: .5rem;
     }
 
 
@@ -149,7 +150,7 @@
 }
 
 .spotlight-purple {
-    background-color: $accent;
+    background-color: #2c1150;
 }
 
 .spotlight {
@@ -208,6 +209,10 @@
         strong {
             @include uni();
             font-size: 2.1vw;
+            line-height: 3vw;
+            @media #{$large-up} {
+                line-height: 2.8vw;
+            }
             @media #{$small-only} {
                 font-size: rem-calc(20);
             }
@@ -218,7 +223,8 @@
         
         p {
             color: $white;
-            margin-bottom: rem-calc(10);
+            margin-bottom: .8vw;
+            margin-top: 1vw;
             font-size: 1.5vw;
             @media #{$small-only} {
                 font-size: rem-calc(12);
@@ -300,7 +306,7 @@
                 width: 0;
                 height: 0;
                 border-left: 20px solid transparent;
-                border-right: 20px solid $accent;
+                border-right: 20px solid #2c1150;
                 border-top: 20px solid transparent;
                 border-bottom: 20px solid transparent;
                 z-index: 3;
@@ -327,31 +333,46 @@
         color: $text-grey;
     }
     
-    h3 {
+    h3 {        
         @include uni_italic();
         font-weight: 400!important;
         text-transform: lowercase;
         font-size: rem-calc(30);
-        @media #{$medium-up} {
+        
+        @media #{$large-up} {
             font-size: 3vw;
+            position: relative;
+            top: -1.7vw;
         }
         
     }
     
     .social-buttons {
         li {
-            border: $text-grey solid 4px;
+            border: #363636 solid 4px;
             width: rem-calc(50);
+            height: rem-calc(50);
             margin: rem-calc(10);
-            font-size: rem-calc(26);
-            @media #{$medium-up} {
-                font-size: 2vw;
+            font-size: rem-calc(28);
+            text-align: center;
+            position: relative;
+            i, svg {
+                color: #363636;
+            }
+            @media #{$large-up} {
+                font-size: 3vw;
                 width: 4vw;
+                height: 4vw;
+                i, svg {
+                    position: absolute;
+                    top: -.6vw;
+                    left: .6vw;
+                }
             }
             &:hover {
-                border-color: $text;
-                i {
-                    color: $text;
+                border-color: black;
+                i, svg {
+                    color: black;
                 }
             }
         }
@@ -438,24 +459,22 @@
         }
         
         .widget {
-            height: rem-calc(310);
-            @media #{$medium-up} {
-                height: rem-calc(300);
+            height: 20vw;
+             @media #{$small-only} {
+                height: 22.8571428571rem;
             }
-            @media #{$large-up} {
-                height: rem-calc(310);
-            }
+
         }
         
         .widget_content {
             position: absolute;
             
             @media #{$medium-up} {
-                bottom: 13vw;
+                bottom: -7vw;
             }
 
             @media #{$large-up} {
-                bottom: 2vw;
+                bottom: -4vw;
             }
 
             @media #{$xlarge-up} {
@@ -516,8 +535,12 @@
         .widget_links {
             bottom: 3vw;
             
+            @media #{$medium-only} {
+                top: 24vw;
+            }
+            
             @media #{$large-up} {
-                bottom: -2vw;
+                bottom: -9vw;
             }
 
             @media #{$xlarge-up} {
@@ -567,7 +590,7 @@
     padding: 0;
     background: $bg-light;
     background: url(/wp-content/themes/coenv-poe/assets/img/GraySub_Background_texture.svg);
-    background-size: 165%;
+    background-size: 250%;
     background-position: 30% 60%;
     
     &:first-of-type .button {

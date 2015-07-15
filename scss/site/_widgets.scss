@@ -209,8 +209,11 @@ aside#sidebar div.columns {
     overflow: hidden;
     position: relative;
     background: $text;
-    height: rem-calc(310);
+    height: rem-calc(250);
     
+    @media #{$medium-only} {
+        height: rem-calc(320);
+    }
     @media #{$large-up} {
         height: 20vw;
     }
@@ -224,16 +227,17 @@ aside#sidebar div.columns {
         background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
     }
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(25%,rgba(0,0,0,0.1)), color-stop(85%,rgba(0,0,0,0.85)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
     
-        background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.85) 85%, rgba(0,0,0,0.85) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(25%,rgba(0,0,0,0.1)), color-stop(85%,rgba(0,0,0,0.85)), color-stop(100%,rgba(0,0,0,0.85))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* IE10+ */
-        background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.1) 25%,rgba(0,0,0,0.85) 85%,rgba(0,0,0,0.85) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#d9000000',GradientType=0 ); /* IE6-9 */
+        
 
-    .columns {
+    .solid-widget {
         margin: 0;
         padding: 0;
         
@@ -273,62 +277,38 @@ aside#sidebar div.columns {
         
         .widget_content, .widget_links {
             position: absolute;
-            /* @extend .row;  breaks ie9*/
-            max-width: none;
+            width: 100%;
             text-align: center;
             margin: auto;
             padding: rem-calc(20);
         }
         
         .widget {
-            height: rem-calc(310);
-            @media #{$medium-up} {
-                height: rem-calc(300);
+            height: 20vw;
+             @media #{$small-only} {
+                height: 22.8571428571rem;
             }
-            @media #{$large-up} {
-                height: 18vw;
-            }
-            @media #{$xlarge-up} {
-                height: 9vw;
-            }
+
         }
         
         .widget_content {
-            p:not(:first-child) {
-                color: $white;
-                margin: rem-calc(18) 0 0 0;
-                @include o_sans_bold();
-                @media #{$medium-up} {
-                    font-size: 1.5vw;
-                    margin: rem-calc(18) 15vw 0 15vw;
-                }
-                @media #{$small-only} {
-                    font-size: rem-calc(12);
-                }
-                @media #{$large-up} {
-                    font-size: 1vw;
-                    margin-bottom: rem-calc(14);
-                }
-            }
             position: absolute;
-            margin: 0!important;
             
             @media #{$medium-up} {
-                bottom: 13vw;
+                bottom: -7vw;
             }
 
             @media #{$large-up} {
-                bottom: 2vw;
+                bottom: 6vw;
             }
 
             @media #{$xlarge-up} {
-                bottom: -6vw;
+                bottom: 4vw;
             }
 
-            blockquote {
+            blockquote  {
                 background: $white;
                 line-height: 1.1;
-                padding: 0!important;
                 margin: auto!important;
                 border: none;
                 color: $text;
@@ -345,48 +325,81 @@ aside#sidebar div.columns {
                 
                     strong {
                         font-weight: 200!important;
+                        padding: 0 .25rem 0 .25rem;
                     }
                     
                     @media #{$medium-up} {
                         font-size: 3vw;
                     }
+                
                     @media #{$small-only} {
                         line-height: 2.5rem;
                     }
                 }
             }
             
+            p:not(:first-child) {
+                color: $white;
+                margin: rem-calc(18) 0 0 0;
+                @include o_sans_bold();
+                @media #{$medium-up} {
+                    font-size: 1.5vw;
+                    margin: rem-calc(18) 15vw 0 15vw;
+                }
+                @media #{$small-only} {
+                    font-size: rem-calc(12);
+                }
+                @media #{$large-up} {
+                    font-size: 1vw;
+                    margin-bottom: rem-calc(14);
+                }
+            }
+            
         }
         
         .widget_links {
-            width: 100%!important;
-            margin: 0!important;
-            bottom: 4vw;
+            bottom: 20vw;
+            
+            @media #{$medium-only} {
+                top: 24vw;
+            }
             
             @media #{$large-up} {
-                bottom: -2vw;
+                bottom: 1vw;
             }
 
             @media #{$xlarge-up} {
-                bottom: -10vw;
+                bottom: 0;
             }
+        }
+.widget_links {
+        margin-left: 0;
+        @media #{$small-only} {
+            padding: .5rem!important;
+        }
 
-            li {
-                display: inline-block;
-                min-width: rem-calc(150);
-                &:nth-child(2) .button{
-                    background-color: $accent-green;
-                    border-color: $accent-green-dk;
-                    color: $text;
-                    &:hover {
-                        background-color: $accent-green-dk;
-                    }
+        li {
+            display: inline-block;
+            min-width: rem-calc(150);
+            &:nth-child(2) .button{
+                background-color: $accent-green;
+                border-color: $accent-green-dk;
+                color: $text;
+                &:hover {
+                    background-color: $accent-green-dk;
                 }
-                a {
-                    min-width: rem-calc(120);
+            }
+            a {
+                margin: rem-calc(20);
+                min-width: rem-calc(120);
+                @media #{$small-only} {
+                    margin: 2px;
+                    margin-top: 5px;
+                    min-width: 0;
                 }
             }
         }
+}
     }
 }
 
