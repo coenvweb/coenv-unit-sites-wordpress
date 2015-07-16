@@ -147,7 +147,7 @@ $wp_query = new WP_Query( $home_args );
     <div class="large-12 columns social-bar">
         <h3>Connect with us »</h3>
         <ul class="social-buttons">
-        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"><span class="visuallyhidden">Facebook</span></i></li></a><?php } ?>
+        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><?php include($_SERVER['DOCUMENT_ROOT'].'/wp-content/themes/coenv-poe/assets/img/F_icon.svg'); ?><span class="visuallyhidden">Facebook</span></li></a><?php } ?>
         <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span class="visuallyhidden">Twitter</span></i></li></a><?php } ?>
         <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span class="visuallyhidden">YouTube</span></i></li></a><?php } ?>
         <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span class="visuallyhidden">LinkedIn</span></i></li></a><?php } ?>

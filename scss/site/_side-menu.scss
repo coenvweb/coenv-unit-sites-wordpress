@@ -19,7 +19,7 @@ aside#sidebar {
             @include uni();
             text-transform: uppercase;
             font-size: rem-calc(13);
-            color: $text-md;
+            color: black;
 		}
         
         &:before {
@@ -53,17 +53,42 @@ aside#sidebar {
 
                 & > a:before {
                     content: '»';
-                    margin-left: rem-calc(-10);
+                    margin-left: rem-calc(-12);
                     padding-right: rem-calc(3);
                 }
             
-                & > ul > li.active > a {
-                    color: $text;
+                & > ul > li.active {
+                    & > a {
+                        color: $text;
+
+                        &:before {
+                            content: '»';
+                            margin-left: rem-calc(-12);
+                            padding-right: rem-calc(3);
+                        }
+                    }
                     
-                    &:before {
-                        content: '»';
-                        margin-left: rem-calc(-10);
-                        padding-right: rem-calc(3);
+                    & > ul > li.active {
+                        & > a {
+                            color: $text;
+
+                            &:before {
+                                content: '»';
+                                margin-left: rem-calc(-12);
+                                padding-right: rem-calc(3);
+                            }
+                        }
+                        & > ul > li.active {
+                            & > a {
+                                color: $text;
+
+                                &:before {
+                                    content: '»';
+                                    margin-left: rem-calc(-12);
+                                    padding-right: rem-calc(3);
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -72,10 +97,9 @@ aside#sidebar {
         }
         
         ul {
-            margin: 0  1rem rem-calc(30) 0;
+            margin: 0  0 rem-calc(30) 0;
             padding: 0;
             line-height: 10px;
-            width: 100%;
             
             li {
                 background-color: $bg-lighter;
@@ -101,6 +125,7 @@ aside#sidebar {
                 }
                 ul {
                     margin-bottom: 0;
+                    margin-left: .5rem;
                     li {
                         border: 0;
 

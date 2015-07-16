@@ -6,6 +6,10 @@
         top: -60px;
         height: 0;
     }
+
+    .sub-menu > li > .sub-menu > li > .sub-menu {
+        display: none!important;
+    }
     
     .top-bar {
         background-color: $bg-light;
