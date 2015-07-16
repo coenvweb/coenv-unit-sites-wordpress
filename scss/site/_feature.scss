@@ -164,9 +164,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 
                 @media #{$small-only} {
                     font-size: 6vw;
+                    padding-bottom: .1rem;
                 }
 
                 @media #{$large-up} {
+                    padding-top: .1rem;
                     padding-bottom: 0;
                 }
             }

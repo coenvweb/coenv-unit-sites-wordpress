@@ -26,10 +26,10 @@
 		<h2><a href="<?php echo the_permalink(); ?>"><?php echo the_title(); ?></a></h2>
 		<p>
 		<?php
-		$teaser_limited = get_the_excerpt();
+		$teaser_limited = the_advanced_excerpt('length=50&length_type=sentence');
 		$teaser_limited = strip_tags($teaser_limited);
 		$teaser_limited = trim($teaser_limited, '!,?.&nbsp;');
-		echo $teaser_limited . '...';
+		echo $teaser_limited;
 		?>
 		</p>
 		<?php endwhile; ?>
