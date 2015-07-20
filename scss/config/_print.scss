@@ -11,10 +11,32 @@
     .hero-row {
         height: 7rem;
         position: relative;
-        margin-top: 15rem;
     }
     
+    .feature .feature-info-container .feature-content .hero-white {
+        margin: 0;
+        width: 100%;
+        text-align: left;
+        h2 {
+            font-size: 3rem;
+        }
+    }
+    .home .spotlight .widget_content {
+        padding: 0;
+        
+        p, a {
+        font-size: 1rem;
+        line-height: 1.9rem;
+        }
+    }
+    .spotlight {
+        color: $text!important;
+    }
     
+    .home .programs .widget {
+        padding: 1rem;
+    }
+
     
     .major-program, .after-content {
         .widget_img {
