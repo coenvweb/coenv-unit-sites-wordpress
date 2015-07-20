@@ -178,3 +178,18 @@ body {
         page-break-after: avoid;
     }
 }
+
+/*  UW Skew
+    ======================================================================== */
+
+.uw-skew {
+    -ms-transform: skewX(-15deg);
+    -webkit-transform: skewX(-15deg);
+    transform: skewX(-15deg);
+}
+
+.uw-unskew {
+    -ms-transform: skewX(15deg);
+    -webkit-transform: skewX(15deg);
+    transform: skewX(15deg);
+}

@@ -170,9 +170,11 @@
           </a>
           </h1>
             <div class="units show-for-large-up">
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left" alt="slash">
-                <a href="http://coenv.uw.edu" title="UW College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" class="right" alt="UW College of the Environment"></a><br />
-                <a href="http://uw.edu" title="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" class="right uw-name" alt="University of Washington"></a>
+                <ul>
+              <li><a href="http://coenv.uw.edu" title="UW College of the Environment">
+  <?php include("assets/img/college-of-the-environment.svg"); ?>
+                  </a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
           </div> 
         </li>          
       </ul>
