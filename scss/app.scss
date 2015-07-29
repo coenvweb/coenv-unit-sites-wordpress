@@ -14,7 +14,6 @@
 //@import "plugins/slick"; // Slick Slider
 
 /* Site structure */
-//@import "site/structure"; // Your site structure
 @import "site/top-menu"; // top standard menu
 @import "site/main-menu"; // main standard menu
 @import "site/mobile-menu"; // main mobile menu
@@ -30,11 +29,7 @@
 @import "site/news"; // news styles
 @import "site/widgets"; // widget styles
 @import "site/search"; // search styles
-
-
-/* College Customizations */
-//@import "site/faculty";
-//@import "site/lists";
+@import "site/lists";
 
 /* Print styles */
 @import "config/print";

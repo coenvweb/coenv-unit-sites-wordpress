@@ -20,11 +20,14 @@
 	</div>
 	<?php get_sidebar(); ?>
 </div>
+</div>
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 <div class="row after-widget">
     <div id="after-content" class="after-content widget-area" role="complementary">
         <?php dynamic_sidebar( 'after-content' ); ?>
     </div><!-- #after-content -->
+</div>
+</div>
 </div>
 <?php endif; ?>
 <?php get_footer(); ?>
