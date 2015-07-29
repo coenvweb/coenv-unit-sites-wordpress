@@ -171,10 +171,11 @@
           </h1>
             <div class="units show-for-large-up">
                 <ul>
-              <li><a href="http://coenv.uw.edu" title="UW College of the Environment">
+              <li><a href="http://environment.uw.edu" title="UW College of the Environment">
   <?php include("assets/img/college-of-the-environment.svg"); ?>
                   </a></li>
               <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
+                </ul>
           </div> 
         </li>          
       </ul>
