@@ -21,7 +21,7 @@ Template Name: Homepage
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
-<div class="row">
+<div class="hero row">
 <div class="small-12 large-12 columns">
 		<div class="playpause"></div>
 			<div class="homepage-features">
@@ -77,21 +77,21 @@ echo '<div class="feature">';
 		echo '</div><!-- .feature-info -->';
 
 	echo '</div><!-- .feature-info-container -->';
-	echo '</div>';
+echo '</div>';
 
 
 echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
-echo '</div>';
-echo '</div>';
 ?>
-
+        </div>
+    </div>
+</div>
 
 
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="row">
-    <div class="large-12 columns programs">
+    <div class="special-annoucement">
         <div class="widget-area home-content" role="complementary">
             <?php dynamic_sidebar( 'home-content' ); ?>
         </div><!-- .widget-area -->
@@ -99,15 +99,28 @@ echo '</div>';
 </div>
 <?php endif; ?>
                 
-                <hr />
-                
-<div class="row news-title">
-<div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
-    <div class="large-12">
-        <a name="More News & Stories" href="/news-stories">
-        <h2>News & Stories</h2></a>
+<div class="row about-summary">
+    <div class="summary columns large-12">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2742&show_featured_image=false'); ?>
     </div>
 </div>
+                
+<div class="row programs">
+    <div class="major columns large-6">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2752&show_featured_image=true'); ?>
+    </div>      
+    <div class="minor columns large-6">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2745&show_featured_image=true'); ?>
+    </div>
+</div>
+                
+<div class="row news">
+    <div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
+        <div class="large-12">
+            <a name="More News & Stories" href="/news-stories">
+            <h2>News & Stories</h2></a>
+        </div>
+    </div>
                 
                 <?php
 # Student/Alumni Spotlight
@@ -208,8 +221,6 @@ $wp_query = new WP_Query( $home_args );
 </div>
 </div>
 <?php endif; ?>
-    
-    <hr />
         
 <?php 
 # 3 Column Widget area for content blocks

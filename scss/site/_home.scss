@@ -1,8 +1,24 @@
 // Homepage Widgets
 
 .home {
-    .widget_coenv_base_index_dates ul {
-        margin-left: 1rem;
+    
+    div[role=main] {
+        margin-top: 0;
+    }
+    
+    [role=main] .row {
+        max-width: none;
+        padding: 4rem 0;
+        position: relative;
+        z-index: -1;
+    }
+    
+    .hero {
+        padding: 0!important;
+        margin: 0;
+        .columns {
+            padding: 0;
+        }
     }
     
     #custom_post_widget-20 { //temporary actionbox
@@ -42,66 +58,118 @@
         
     }
     
-    .widget_links {
-        float: right;
-        list-style: none;
+    .about-summary {
+        background: $bg-cream;
     }
-
-    .list-news-small {
-        list-style: none;
-    }
-
-    .widget_content {
-        ul {
-            list-style: none;	
+    
+    .about-summary p, .row .row h2 {
+        @include uni;
+        text-align: center;
+        font-size: 2rem;
+        color: $accent-blue-dk;
+        @media #{$medium-up} {
+            font-size: 3vw;
         }
+        @media #{$large-up} {
+            font-size: 2vw;
+        }
+    }
+
+    .programs {
+        padding: 0!important;
+        background: purple;
+        z-index: 1;
+        position: relative;
+        
+        .large-6 {
+            padding: 4rem 2rem;
+            text-align: center;
+            height: 275px;
+            
+            .widget {
+                position: relative;
+                z-index: 3;
+            }
+            
+            .widget_content p:nth-child(2), .widget_links {
+                display: none;
+                strong {
+                    display: block;
+                }
+            }
+            
+            &:after {
+                content: " ";
+                z-index: 2;
+                display: block;
+                position: absolute;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: $bg-transparent-blue;
+            }
+            
+            &:hover {
+                padding: 1rem 2rem;
+                .widget_content p:nth-child(2), .widget_links {
+                    display: block;
+                }
+                &:after {
+                    display: none;
+                }
+            }
+        }
+        
+        strong {
+            text-transform: uppercase;
+            display: block;
+            @include o_sans_bold;
+            font-weight: 800;
+            color: white;
+            font-size: 2rem;
+            @media #{$medium-up} {
+                font-size: 3vw;
+            }
+            @media #{$large-up} {
+                font-size: 2vw;
+            }
+            
+            &:after {
+                content: "";
+                position: relative;
+                height: 4px;
+                width: 34%;
+                background-color: white;
+                bottom: 0;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+        .widget_links {
+            margin: 0;
+            li {
+                display: inline-block;
+                margin: 1rem;
+                .button {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    .widget_content, .widget_links {
+        list-style: none;
     }
     
     .widgettitle {
         display: none;
     }
-    
-    .social-links {
-        .button {
-            margin-right: rem-calc(5);
-        }
-    }
-    
 
-    .home-news-section {
-        .featured-thumbnail {
-            max-height: rem-calc(350);
-            margin-bottom: rem-calc(10);
-            overflow: hidden;
-        }
-        :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
-        }
-
-    }
-    
-    .news-title {
+    .news {
         h2 {
             text-align: center;
         }
-    }
-    
-    .connect, .news {
-        margin-left: rem-calc(0);
-        margin-right: rem-calc(0);
-        .small-news {
-            padding-left: rem-calc(0);
-            padding-right: rem-calc(0);
-        }
-        h2 {
-            font-size: rem-calc(26);
-        }
-    }
-    
-    .spot-cat {
-        position: absolute;
-        background: $white;
-        right: rem-calc(15);
     }
     
     .three-columns {
