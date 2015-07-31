@@ -4,23 +4,23 @@
 .button {
 	display: inline-block;
 	vertical-align: middle;
-	@include rem('padding', 0.25, 1);
-	@include sans;
+	padding: .5rem 1rem;
+	@include o_sans_bold;
+    text-transform: uppercase;
+    letter-spacing: .3px;
 	@include font-size(12);
-	font-weight: 400;
-	background: $white-button;
+	font-weight: 800;
+	background: $accent-blue;
 	text-decoration: none;
-	color: $text;
-	//@include border-radius( $radius );
+	color: white;
 	border-radius: $radius;
-	//min-height: rem-calc(28);
 	
 	&:hover {
 		background: rgba(0,0,0,0.6);
 		color: #fff !important;
 	}
 	
-	.dark {
+	.solid {
 		background: $bg-dk;
 		color: $white;
 		

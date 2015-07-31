@@ -9,6 +9,7 @@ if ( !$apply_content_filters ) {
 $link_type = get_field( "link_type", $content_post -> ID );
 $link_type_internal = get_field( "link_page", $content_post -> ID );
 $link_position = get_field( "link_position", $content_post -> ID );
+$image_placement = get_field( "image_placement", $content_post -> ID );
 $widget_title = apply_filters( 'widget_title', $content_post->post_title);
 $widget_img_attr = array(
 	'src'	=> $src,
@@ -16,7 +17,7 @@ $widget_img_attr = array(
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
 );
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'full');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
@@ -57,15 +58,17 @@ if($rows) {
 
 if ( $widget_img ) {
     echo '<div class="solid-widget">';
+    $image = '<div class="widget_img"><a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a></div>';
+    if ( $image_placement[0] == 'outside' ) {
+        echo $image;
+    }
 }
 
 echo $before_widget;
 
-if ( $show_featured_image ) {
-	echo '<div class="widget_img">';
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
-	echo '</div>';
-	}
+if ( $show_featured_image && ( $image_placement == null ) ) {
+    echo $image;
+}
 echo '<div class="widget_content">';
 if ( $link_position[0] == 'title' ) {
     echo $buttons;

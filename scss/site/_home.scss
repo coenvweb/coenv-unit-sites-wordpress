@@ -78,19 +78,34 @@
         background: purple;
         z-index: 1;
         position: relative;
+        overflow: hidden;
         
         .large-6 {
-            padding: 4rem 2rem;
             text-align: center;
             height: 275px;
+            position: relative;
+            overflow: hidden;
             
             .widget {
-                position: relative;
+                position: absolute;
                 z-index: 3;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            
+            .widget_img {
+                position: absolute;
+                width: 100%;
+                max-width: none;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
             
             .widget_content p:nth-child(2), .widget_links {
                 display: none;
+                color: white;
                 strong {
                     display: block;
                 }
@@ -110,11 +125,8 @@
             
             &:hover {
                 padding: 1rem 2rem;
-                .widget_content p:nth-child(2), .widget_links {
+                .widget_content p, .widget_links {
                     display: block;
-                }
-                &:after {
-                    display: none;
                 }
             }
         }
@@ -137,7 +149,7 @@
                 content: "";
                 position: relative;
                 height: 4px;
-                width: 34%;
+                width: 75%;
                 background-color: white;
                 bottom: 0;
                 display: block;
@@ -191,7 +203,7 @@
     .fhl, .adviser {
         text-align: center;
         padding: 0!important;
-        max-height: rem-calc(400);
+        height: 20vw;
         overflow: hidden;
         .columns {
             padding: 0;
@@ -200,18 +212,14 @@
             @include grid-column(3);
             padding: 0;
             overflow: hidden;
+            max-height: 20vw;
         }
-        .widget_content {
+        .widget {
             @include grid-column(9);
-            padding: 4rem 2rem;
             text-align: center;
-            position: relative;
-            height: 100%;
-            .widget-content-center {
-              position: absolute;
-              left: 50%;
-              transform: translate(-50%);
-            }
+            position: absolute;
+            top: 50%;
+            transform: translatey(-50%);
         }
         strong {
             display: block;
@@ -252,6 +260,9 @@
     }
 
     .adviser {
+        .widget {
+            right: 0;
+        }
         .widget_img {
             float: left;
         }
