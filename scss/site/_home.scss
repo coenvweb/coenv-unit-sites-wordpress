@@ -9,8 +9,6 @@
     [role=main] .row {
         max-width: none;
         padding: 4rem 0;
-        position: relative;
-        z-index: -1;
     }
     
     .hero {
@@ -190,4 +188,93 @@
         }
     }
     
+    .fhl, .adviser {
+        text-align: center;
+        padding: 0!important;
+        max-height: rem-calc(400);
+        overflow: hidden;
+        .columns {
+            padding: 0;
+        }
+        .widget_img {
+            @include grid-column(3);
+            padding: 0;
+            overflow: hidden;
+        }
+        .widget_content {
+            @include grid-column(9);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            height: 100%;
+            .widget-content-center {
+              position: absolute;
+              left: 50%;
+              transform: translate(-50%);
+            }
+        }
+        strong {
+            display: block;
+            @include uni;
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            @media #{$medium-up} {
+                font-size: 3vw;
+            }
+            @media #{$large-up} {
+                font-size: 2vw;
+            }
+            
+            &:after {
+                content: "";
+                position: relative;
+                height: 4px;
+                width: 34%;
+                background-color: $accent-blue;
+                bottom: -1rem;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .fhl {
+        .widget_img {
+            float: right;
+        }
+        strong {
+            color: $accent-blue;
+        }
+        &:after {
+            background-color: $accent-blue;
+        }
+    }
+
+    .adviser {
+        .widget_img {
+            float: left;
+        }
+        .columns {
+            background-color: $bg-transparent-blue;
+        }
+        .widget_content {
+            p {
+                color: white;
+                font-size: 1vw;
+            }
+            a {
+                color: white;
+            }
+            strong {
+                color: white;
+                &:after {
+                    background-color: white;
+                }
+            }
+        }
+        .widget_links {
+            @extend .visuallyhidden;
+        }
+    }
 }

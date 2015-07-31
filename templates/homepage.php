@@ -221,18 +221,27 @@ $wp_query = new WP_Query( $home_args );
 </div>
 </div>
 <?php endif; ?>
-        
-<?php 
-# 3 Column Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-    <div class="row three-columns">
-        <div class="columns large-12">
-            <?php dynamic_sidebar( 'home-columns' ); ?>
-        </div>
-    </div>
-<?php endif; ?>
-        
+</div>
+
+<div class="row events">
+    <div class="list columns large-12">
+        <?php the_widget('custom_post_widget', 'custom_post_id=2752&show_featured_image=true'); ?>
+    </div>      
+</div>
+
+<div class="row fhl">
+    <div class="columns large-12">
+        <?php the_widget('custom_post_widget', 'custom_post_id=3154&show_featured_image=true'); ?>
+    </div>      
+</div>
+    
+<div class="row adviser">
+    <div class="columns large-12">
+        <?php the_widget('custom_post_widget', 'custom_post_id=3151&show_featured_image=true'); ?>
+    </div>      
+</div>
+    
+
 <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
