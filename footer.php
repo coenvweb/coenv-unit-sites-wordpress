@@ -3,9 +3,6 @@
     <div class="footer-row">
     <div class="row">
         <div class="medium-6 columns">
-            <div class="smea-logo left">
-                <?php get_template_part('assets/img/icons/inline', 'smea-logo.svg'); ?>
-            </div>
             <div class="site-footer__header">
                 <h2><?php bloginfo('name') ?></h2>
             </div>
