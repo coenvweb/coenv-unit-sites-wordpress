@@ -24,6 +24,7 @@
 
 
         panel.init = function () {
+
             panel.log({success: true, data: megamenu.debug_launched + " " + panel.settings.menu_item_id});
 
             $.colorbox({
@@ -163,18 +164,26 @@
 
                             });
 
-                            var enable_checkbox = content.find('input[type=checkbox]');
+                            var submenu_type = content.find('#mm_enable_mega_menu');
 
-                            enable_checkbox.on('change', function() {
+                            submenu_type.on('change', function() {
+
+                                if ( $(this).val() == 'megamenu' ) {
+                                    $("#widgets").removeClass('disabled');
+                                } else {
+                                    $("#widgets").addClass('disabled');
+                                }
 
                                 start_saving();
 
                                 var postdata = {
                                     action: "mm_save_menu_item_settings",
-                                    settings: { type: $(this).is(':checked') ? 'megamenu' : 'flyout'},
+                                    settings: { type: $(this).val() },
                                     menu_item_id: panel.settings.menu_item_id,
                                     _wpnonce: megamenu.nonce
                                 };
+
+
 
                                 $.post(ajaxurl, postdata, function (select_response) {
 
@@ -501,6 +510,20 @@ jQuery(function ($) {
         animate: 200
     });
 
+    var apply_megamenu_enabled_class = function() {
+        if ( $('input.megamenu_enabled:checked') && $('input.megamenu_enabled:checked').length ) {
+            $('body').addClass('megamenu_enabled');
+        } else {
+            $('body').removeClass('megamenu_enabled');
+        }
+    }
+
+    $('input.megamenu_enabled').on('change', function() {
+        apply_megamenu_enabled_class();
+    });
+
+    apply_megamenu_enabled_class();
+
     $('#menu-to-edit li.menu-item').each(function() {
 
         var menu_item = $(this);
@@ -512,6 +535,11 @@ jQuery(function ($) {
                                 .html(megamenu.launch_lightbox)
                                 .on('click', function(e) {
                                     e.preventDefault();
+
+                                    if ( ! $('body').hasClass('megamenu_enabled') ) {
+                                        alert(megamenu.is_disabled_error);
+                                        return;
+                                    }
 
                                     var depth = menu_item.attr('class').match(/\menu-item-depth-(\d+)\b/)[1];
 

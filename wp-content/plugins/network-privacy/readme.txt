@@ -2,8 +2,8 @@
 Contributors: wpmuguru, cgrymala, scribu
 Tags: privacy, plugin, wordpress, network 
 Requires at least: 3.3
-Tested up to: 3.5
-Stable tag: 0.1.4
+Tested up to: 4.2.3
+Stable tag: 0.1.5
 
 Adds more privacy options to both single Wordpress sites and WordPress networks.
 
@@ -27,7 +27,7 @@ In a WordPress network activated on an individual site adds the following privac
 
 When Network Activated or in the mu-plugins folder in a WordPress network adds the following:
 
-*	A privacy selector in the Super Admin -> Options page to allow individual site privacy or the 3 above across to network.
+*	A privacy selector in the Network Admin -> Settings page to allow individual site privacy or the 3 above across to network.
 
 Support can be obtained through:
 
@@ -43,7 +43,29 @@ Support can be obtained through:
 1. To install in the plugins folder Upload the `network-privacy` folder to the `/wp-content/plugins/` directory. It will be listed in your regular plugins list.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
+== Frequently Asked Questions ==
+
+= Why did I receive an email from Google saying the my CSS and JS files are blocked? =
+
+By default, this plugin generates a robots.txt file that blocks bot access to the following directories:
+
+* `''`
+* `'/wp-admin'`
+* `'/wp-includes'`
+* `'/wp-login.php'`
+* `'/wp-content/plugins'`
+* `'/wp-content/cache'`
+* `'/wp-content/themes'`
+* `'/trackback'`
+* `'/comments'`
+
+If you are having issues with this, you can filter the list of directories that are blocked in the robots.txt file by using the `ra_network_privacy_robots_disallow` filter. If you want to allow access to specific directories or files, you can also use the `ra_network_privacy_robots_allow` filter to populate the array of allowed items.
+
 == Changelog ==
+
+= 0.1.5 =
+* add `ra_network_privacy_robots_disallow` filter to allow filtering the list of directories that are disallowed by robots.txt
+* add `ra_network_privacy_robots_allow` filter to allow adding specific directories that should allow bot access (empty array by default)
 
 = 0.1.4 =
 * add 'ra_network_privacy_caps' filter
@@ -62,3 +84,7 @@ Support can be obtained through:
 
 = 0.1 =
 * Original version.
+
+== To Do ==
+
+* Update the robots.txt process to use the constants/functions for wp-content, wp-includes and wp-admin directories (in case those items are in a non-standard location, or the install is in a subdirectory)

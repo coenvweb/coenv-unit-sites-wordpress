@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:   Network Privacy
-Version:       0.1.4
+Version:       0.1.5
 Description:   Adds more privacy options to Settings -> Privacy pages and when Network activated: Super Admin -> Options & Sites pages.
 Author:        Ron Rennick
 Author URI:    http://ronandandrea.com/
@@ -23,6 +23,7 @@ TODO -
  * add if(is_feed) graceful_fail( 'Private Blog' );
  * add admin redirect if not primary site
  * proper gettext calls, pot file & load text domain
+ * use native WP functions for content, includes & admin directories rather than hardcoded locations
 
 */
 
@@ -92,21 +93,37 @@ class RA_Network_Privacy {
 		header( 'Content-Type: text/plain; charset=utf-8' );
 
 		do_action( 'do_robotstxt' );
-
+		
 		echo "User-agent: *\n";
 		if ( '1' != get_option( 'blog_public' ) ) {
-			echo "Disallow: /\n";
+			$disallows = array(
+				'/',
+			);
 		} else {
-			echo "Disallow:\n";
-			echo "Disallow: /wp-admin\n";
-			echo "Disallow: /wp-includes\n";
-			echo "Disallow: /wp-login.php\n";
-			echo "Disallow: /wp-content/plugins\n";
-			echo "Disallow: /wp-content/cache\n";
-			echo "Disallow: /wp-content/themes\n";
-			echo "Disallow: /trackback\n";
-			echo "Disallow: /comments\n";
+			$disallows = array(
+				'',
+				'/wp-admin',
+				'/wp-includes',
+				'/wp-login.php',
+				'/wp-content/plugins',
+				'/wp-content/cache',
+				'/wp-content/themes',
+				'/trackback',
+				'/comments',
+			);
 		}
+
+		$disallows = apply_filters( 'ra_network_privacy_robots_disallow', $disallows );
+		foreach ( $disallows as $disallow ) {
+			echo "Disallow: {$disallow}\n";
+		}
+		
+		$allows = apply_filters( 'ra_network_privacy_robots_allow', array() );
+		foreach ( $allows as $allow ) {
+			echo "Allow: {$allow}\n";
+		}
+		
+		do_action( 'do_robotstxt_after' );
 	}
 
 	function noindex() {

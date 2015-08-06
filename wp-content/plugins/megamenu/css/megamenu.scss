@@ -35,7 +35,7 @@
         background: -ms-linear-gradient(top, $from, $to);
         background: -o-linear-gradient(top, $from, $to);
         background: linear-gradient(to bottom, $from, $to);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$from}', endColorstr='#{$to}');
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie_hex_str($from)}', endColorstr='#{ie_hex_str($to)}');
     }
 }
 
@@ -150,6 +150,10 @@
 
         li.mega-menu-item a[class^='dashicons']:before {
             font-family: dashicons;
+        }
+
+        li.mega-disable-link > a {
+            cursor: default;
         }
 
         li.mega-menu-item a:before {
@@ -333,6 +337,10 @@
             }
 
             @media only screen and (max-width : $responsive_breakpoint) {
+                border: 0;
+                padding: 10px;
+                @include border-radius(0,0,0,0);
+
                 > li {
                     width: 50% !important;
                     clear: none;
@@ -370,7 +378,7 @@
                 }
 
                 /* Widget titles */
-                > h4.mega-block-title {
+                h4.mega-block-title {
                     color: $panel_header_color;
                     font-family: $panel_header_font;
                     font-size: $panel_header_font_size;
@@ -461,6 +469,8 @@
                 float: left;
                 position: static;
                 width: 100% !important;
+                padding: 0;
+                border: 0;
             }
 
             li.mega-menu-item {
@@ -498,11 +508,21 @@
                 &:first-child a {
                     border-top-left-radius: $flyout_border_radius_top_left;
                     border-top-right-radius: $flyout_border_radius_top_right;
+
+                    @media only screen and (max-width : $responsive_breakpoint) {
+                        border-top-left-radius: 0;
+                        border-top-right-radius: 0;
+                    }
                 }
 
                 &:last-child a {
                     border-bottom-right-radius: $flyout_border_radius_bottom_right;
                     border-bottom-left-radius: $flyout_border_radius_bottom_left;
+
+                    @media only screen and (max-width : $responsive_breakpoint) {
+                        border-bottom-right-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
                 }
 
                 a:hover,
