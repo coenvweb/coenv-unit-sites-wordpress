@@ -290,9 +290,7 @@ Template Name: Homepage
 							<div class="stat-label">Publications</div>	
 						</div>
 					</div>
-					<div class="row" style="text-align: center;">
-						<div class="large-12"><a class="button">Learn More About Our Partners</a></div>
-					</div>
+						<div class="large-12 text-center"><a class="button" href="/our-work/">Learn More About Our Work</a></div>
 				</div>
 		</div>
 	</div>
