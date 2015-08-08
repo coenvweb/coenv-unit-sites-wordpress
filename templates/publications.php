@@ -186,7 +186,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 					echo '<a class="button" href="' . $row['publication_upload_file'] . '" target="_blank">Download</a>';
 				} elseif ($row['publication_link_type'] == 'link') {
 					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">' . $row['publication_link_text'] . '</a>';
-				} 
+				} elseif ($row['publication_link_type'] == 'email') {
+					echo '<a class="button" href="mailto:' . $row['publication_email'] . '?subject=Publication Request:' . get_the_title() . '">Request this publication via email</a>';
+
+				}
 			}
 		}
 		echo '</div>';
