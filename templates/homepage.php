@@ -278,16 +278,16 @@ Template Name: Homepage
 				<div class="large-12">
 					<div class="row stats">
 						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">56</div>
+							<div class="stat-value">17</div>
 							<div class="stat-label">Projects in 2014</div>
 						</div>
 						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">163</div>
+							<div class="stat-value">56</div>
 							<div class="stat-label">Partners in the Field</div>
 						</div>
 						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">1,295</div>
-							<div class="stat-label">Papers Published</div>	
+							<div class="stat-value">724</div>
+							<div class="stat-label">Publications</div>	
 						</div>
 					</div>
 					<div class="row" style="text-align: center;">
