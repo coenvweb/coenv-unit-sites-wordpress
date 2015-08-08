@@ -1,5 +1,4 @@
 <?php
-
 /**
 * Custom Taxonomies for Publications
 **/
@@ -89,111 +88,38 @@ function pub_tax() {
 		'show_tagcloud'              => true,
 	);
 	register_taxonomy( 'publication_theme', array( 'publications' ), $args_3 );
+
+	$labels_4 = array(
+		'name'                       => _x( 'Groups', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Group', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Groups', 'text_domain' ),
+		'all_items'                  => __( 'All Groups', 'text_domain' ),
+		'parent_item'                => __( 'Parent Item', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
+		'new_item_name'              => __( 'New Group', 'text_domain' ),
+		'add_new_item'               => __( 'Add Group', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Group', 'text_domain' ),
+		'update_item'                => __( 'Update Group', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate groups with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Groups', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove groups', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from the most used groups', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$args_4 = array(
+		'labels'                     => $labels_4,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'publication_group', array( 'publications' ), $args_4 );
 }
 
 add_action( 'init', 'pub_tax' );
 
-/**
-* Custom Taxonomies for Blog Posts
-**/
-
-function blog_tax() {
-
-	$blog_labels = array(
-		'name'                       => _x( 'Blog Categories', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Blog Category', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Blog Categories', 'text_domain' ),
-		'all_items'                  => __( 'All Blog Categories', 'text_domain' ),
-		'parent_item'                => __( 'Parent Blog Category', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Blog Category:', 'text_domain' ),
-		'new_item_name'              => __( 'New Blog Category', 'text_domain' ),
-		'add_new_item'               => __( 'Add Blog Category', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Blog Category', 'text_domain' ),
-		'update_item'                => __( 'Update Blog Category', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Blog Categories', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove blog categories', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited blog categoriesblog categories', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$blog_args = array(
-		'labels'                     => $blog_labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'blog_category', array( 'student_blog' ), $blog_args );
-	
-	$blog_labels_2 = array(
-		'name'                       => _x( 'Blog Tags', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Blog Tag', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Blog Tags', 'text_domain' ),
-		'all_items'                  => __( 'All Blog Tags', 'text_domain' ),
-		'parent_item'                => __( 'Parent Blog Tag', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Blog Tag:', 'text_domain' ),
-		'new_item_name'              => __( 'New Blog Tag', 'text_domain' ),
-		'add_new_item'               => __( 'Add Blog Tag', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Blog Tag', 'text_domain' ),
-		'update_item'                => __( 'Update Blog Tag', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate blog tags with commas', 'text_domain' ),
-		'search_items'               => __( 'Search blog tags', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove blog tags', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most commonly used blog tags', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$blog_args_2 = array(
-		'labels'                     => $blog_labels_2,
-		'hierarchical'               => false,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'blog_post_tag', array( 'student_blog' ), $blog_args_2 );
-	
-}
-
-add_action( 'init', 'blog_tax' );
-
-/**
-* Custom Taxonomies for Faculty
-**/
-function fac_tax() {
-
-	$fac_labels = array(
-		'name'                       => _x( 'Research Areas', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Research Area', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Research Areas', 'text_domain' ),
-		'all_items'                  => __( 'All Research Areas', 'text_domain' ),
-		'parent_item'                => __( 'Parent Research Area', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Research Area:', 'text_domain' ),
-		'new_item_name'              => __( 'New Research Area', 'text_domain' ),
-		'add_new_item'               => __( 'Add Research Area', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Research Area', 'text_domain' ),
-		'update_item'                => __( 'Update Research Area', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Research Areas', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove Research Area', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited Research Areas', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$fac_args = array(
-		'labels'                     => $fac_labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'research_areas', array( 'faculty' ), $fac_args );
-}
-
-add_action( 'init', 'fac_tax' );
 
 /**
 * Custom Taxonomies for Datasets
