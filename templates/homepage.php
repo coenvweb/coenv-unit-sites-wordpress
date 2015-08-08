@@ -301,10 +301,10 @@ Template Name: Homepage
 	<div class="row">
 		<div class="small-12 columns">
 			<h2>Learn More About the Climate Impacts Group</h2>
-			<p>Aenean eu lacus fringilla nibh fringilla consectetur vitae a enim. Integer scelerisque at lectus ut semper. Aenean aliquam tortor in erat euismod hendrerit. Aliquam eu massa volutpat, fringilla odio sed, vulputate velit. Curabitur posuere tincidunt vehicula. Nulla non commodo ante, nec semper mi. Donec elit eros, euismod id sollicitudin nec, sollicitudin non orci. Donec in diam viverra, hendrerit felis vel, elementum sapien. Phasellus vitae tortor aliquet, placerat mauris sit amet, fermentum mauris. Fusce eu nisi eget ipsum auctor tempus.</p>
+			<p>The Climate Impacts Group (CIG) conducts pioneering research on climate variability, climate change, and climate impacts, and works with public and private entities to apply this information in risk assessment, planning, and decision making. Through research and interaction with stakeholders, we work to increase community and ecosystem resilience to fluctuations in climate.</p>
 			<ul class="links">
-				<li><a class="button" href="#">Learn More</a></li>
-				<li><a class="button" href="#">Contact Us</a></li>
+				<li><a class="button" href="/about-cig/">Learn More</a></li>
+				<li><a class="button" href="/about-cig/contact-us/">Contact Us</a></li>
 			</ul>
 		</div>
 	</div>
