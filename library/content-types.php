@@ -6,27 +6,6 @@
  */
 
 function coenv_base_post_types_init() {
-  /*
-  register_post_type( 'faculty',
-    array(
-      'labels' => array(    
-      'name' => __( 'Faculty' ),
-      'singular_name' => __( 'Faculty' ),
-      'add_new_item' => __( 'Add Faculty'),
-      'edit_item' => __( 'Edit Faculty Member'),
-      'new_item' => __( 'New Faculty'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'faculty'),
-    'menu_icon' => 'dashicons-id',
-    )
-
-  );
-  */
   register_post_type( 'features',
     array(
       'labels' => array(    
@@ -54,7 +33,7 @@ function coenv_base_post_types_init() {
       'edit_item' => __( 'Edit Publication'),
       'new_item' => __( 'New Publication'),
       ),
-    'hierarchical' => true,
+    //'hierarchical' => true,
     // drew - i think we need this for each tax connected to a content type
     'taxonomies' => array('author','publication_theme'),
     'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
@@ -146,7 +125,7 @@ function coenv_base_pubs_parent( $data, $postarr ) {
         return $data;
  
     if ( $post->post_type == "publications" ){
-        $data['post_parent'] = PUBS_PARENT_ID;
+        $data['post_parent'] = PUBS_PAGE_PARENT_ID;
     }
  
     return $data;
