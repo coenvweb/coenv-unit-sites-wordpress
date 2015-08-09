@@ -168,15 +168,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$rows = get_field('publication_link');
 		?>
 		<div class="publication-list-item post-<?php the_ID() ?>">
-		<div class="blog-meta"><h5>
-        <div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
-        <?php
-		echo $publication_terms_str . $publication_years_str;
-
-		echo '</h5></div>';
+		<div class="article-header">
+			<p><?php echo $publication_years_str . ' / ' . $publication_terms_str; ?></p>
+		</div>
+		<?php
 		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
 		echo '<div class="citation">' . $publication_citation . '</div>';
 		echo '<div class="publication-links right">';
@@ -187,8 +182,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 				} elseif ($row['publication_link_type'] == 'link') {
 					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">' . $row['publication_link_text'] . '</a>';
 				} elseif ($row['publication_link_type'] == 'email') {
-					echo '<a class="button" href="mailto:' . $row['publication_email'] . '?subject=Publication Request:' . get_the_title() . '">Request this publication via email</a>';
-
+					echo '<a class="button" href="mailto:' . $row['publication_link_email'] . '?subject=Publication Request:' . get_the_title() . '">' . $row['publication_link_email_text'] . '</a>';
 				}
 			}
 		}

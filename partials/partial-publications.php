@@ -71,8 +71,9 @@ if (!empty($publication_years)) {
 				} elseif ($row['publication_link_type'] == 'link') {
 					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">Link to file</a>';
 				} elseif ($row['publication_link_type'] == 'email') {
-					echo '<a class="button" href="mailto:cig@uw.edu">Request a copy of this publication</a>';
-				} 
+					echo '<a class="button" href="mailto:' . $row['publication_link_email'] . '?subject=Publication Request:' . get_the_title() . '">' . $row['publication_link_email_text'] . '</a>';
+
+				}
 			}
 		}
 		echo '</div><hr />';
