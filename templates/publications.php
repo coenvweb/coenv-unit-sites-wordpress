@@ -21,7 +21,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-			<div class=" large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
+			<h3 class="small-12 columns">Filter results</h3>
+			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
 				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
 			</div>
 			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="author">
@@ -139,7 +140,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			foreach ($publication_terms as &$term) {
 				$publication_terms_arr[] = '<a href="?tax=publication_theme&term=' . $term->slug . '">' . $term->name . '</a>';
 			}
-			$publication_terms_str = implode(', ', $publication_terms_arr) . ' | ';
+			$publication_terms_str = implode(', ', $publication_terms_arr);
 			$publication_terms = "";
 		} else {
 			$publication_terms_str = '';
@@ -168,11 +169,11 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$rows = get_field('publication_link');
 		?>
 		<div class="publication-list-item post-<?php the_ID() ?>">
-		<div class="article-header">
+		<div class="article__header">
 			<p><?php echo $publication_years_str . ' / ' . $publication_terms_str; ?></p>
 		</div>
 		<?php
-		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
+		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 		echo '<div class="citation">' . $publication_citation . '</div>';
 		echo '<div class="publication-links right">';
 		if($rows) {

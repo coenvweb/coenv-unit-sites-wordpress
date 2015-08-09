@@ -231,12 +231,11 @@ div[role="main"] {
 	} // h1
 
 	h2 {
-	@include encode_black;
+	@include o_sans_bold;
 	background-image: url("/wp-content/themes/coenv-cig/assets/img/purple-rule.png");
 	background-repeat: no-repeat;
 	background-position: bottom left;
 	color: $accent;
-		text-transform: uppercase;
 
 
 	@media #{$small-up} {

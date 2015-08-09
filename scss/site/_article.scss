@@ -18,8 +18,23 @@
 
 } // .article
 
-.article__header {	
+.article__header {
+	p {
+		margin-bottom: .5rem;
+	}
+	a {
+		color: #000;
+		//text-decoration: underline;
+	}
 	.article__meta {
+		h2 {
+			font-size: rem-calc(22);
+			text-transform: none;
+
+			a {
+				text-transform: none;
+			}
+		}
 		.post-info {
 			text-transform:uppercase;
 			letter-spacing:.1em;
@@ -324,7 +339,9 @@ background-color: rgba(0, 0, 0, .9);
 }
 
 
-
+.publication-list-item {
+	margin-bottom: rem-calc(12);
+}
 
 
 
