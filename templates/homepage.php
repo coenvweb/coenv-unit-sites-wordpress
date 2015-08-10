@@ -106,20 +106,20 @@ wp_reset_postdata();
 </div>
                 
 <div class="row programs">
-    <div class="major columns large-6">
-        <?php the_widget('custom_post_widget', 'custom_post_id=2752&show_featured_image=true'); ?>
-    </div>      
-    <div class="minor columns large-6">
-        <?php the_widget('custom_post_widget', 'custom_post_id=2745&show_featured_image=true'); ?>
-    </div>
+    <a href="/students/related-majors/" id="Majors in Marine Science" class="program">
+    <div class="columns large-6 major">
+        <h3>Majors in<br />Marine Science</h3>
+    </div></a>
+    <a href="/students/marine-biology-minor/" id="Minor in Marine Biology"  class="program">
+    <div class="columns large-6 minor">
+        <h3>Minor in <br />Marine Biology</h3>
+    </div></a>
 </div>
                 
 <div class="row news">
     <div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
-        <div class="large-12">
             <a name="More News & Stories" href="/news-stories">
             <h2>News & Stories</h2></a>
-        </div>
     </div>
                 
                 <?php
@@ -139,12 +139,8 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-    <div class="row news">
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
-            <div class="large-12">
-                <a name="More student & alumni stories" class="button right" href="/news-stories">More Student Spotlights</a>
-            <a name="More student & alumni spotlights" href="/news-stories">
-            <h3>Student Spotlight</h3></a>
+        <a name="More student & alumni stories" class="fake-cat button left" href="/news-stories">Student Spotlights</a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -155,20 +151,18 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
         }
-        if ( has_post_thumbnail()) {
-            echo '<div class="featured-thumbnail large-12">';
-            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-            the_post_thumbnail( 'large-sq' );
-            echo '</a></div>';
-        }
-        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
-        echo $post_link;
+        echo '<div class="featured-thumbnail">';
+        echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+        the_post_thumbnail( 'large-sq' );
+        echo '<h4>' . get_the_title() . '</h4>';
+        echo '</a></div>';
+        echo '<span class="excerpt">';
+        echo the_advanced_excerpt('length=20&finish=sentence');
+        echo $post_link . '</span>';
 	endwhile;
 	?>
-    </div>
 </div>
 <?php endif; ?>
                 
@@ -191,9 +185,7 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
             <div class="large-12 featured-news">
-                <a name="More research news" class="button right" href="/news-stories">More Research News</a>
-            <a name="More research news" href="/news-stories">
-            <h3>Research News</h3></a>
+                <a name="More research news" class="fake-cat button left" href="/news-stories">Research News</a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -204,21 +196,19 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
         }
-        if ( has_post_thumbnail()) {
-            echo '<div class="featured-thumbnail large-12">';
-            echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-            the_post_thumbnail( 'large-sq' );
-            echo '</a></div>';
-        }
-        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
-        echo $post_link;
+        echo '<div class="featured-thumbnail">';
+        echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+        the_post_thumbnail( 'large-sq' );
+        echo '<h4>' . get_the_title() . '</h4>';
+        echo '</a></div>';
+        echo '<span class="excerpt">';
+        echo the_advanced_excerpt('length=20&finish=sentence');
+        echo $post_link . '</span>';
 	endwhile;
 	?>
     </div>
-</div>
 </div>
 <?php endif; ?>
 </div>

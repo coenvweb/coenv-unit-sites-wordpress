@@ -75,42 +75,20 @@
 
     .programs {
         padding: 0!important;
-        background: purple;
-        z-index: 1;
         position: relative;
         overflow: hidden;
         
-        .large-6 {
-            text-align: center;
-            height: 275px;
-            position: relative;
-            overflow: hidden;
+        .major {
+            background-image: url("../assets/img/fhl-dock.jpg");
+        }
+        
+        .minor {
+            background-image: url("../assets/img/barnacles.jpg");
             
-            .widget {
-                position: absolute;
-                z-index: 3;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-            
-            .widget_img {
-                position: absolute;
-                width: 100%;
-                max-width: none;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-            
-            .widget_content p:nth-child(2), .widget_links {
-                display: none;
-                color: white;
-                strong {
-                    display: block;
-                }
-            }
-            
+        }
+        
+        .major, .minor {
+            background-size: cover; 
             &:after {
                 content: " ";
                 z-index: 2;
@@ -122,22 +100,35 @@
                 right: 0;
                 background: $bg-transparent-blue;
             }
-            
-            &:hover {
-                padding: 1rem 2rem;
-                .widget_content p, .widget_links {
-                    display: block;
-                }
+            &:hover:after {
+                transition-duration: .5s;
+                background: darken($bg-transparent-blue, 15%);
             }
         }
         
-        strong {
+        .large-6 {
+            text-align: center;
+            height: 275px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h3 {
+            z-index: 5;
             text-transform: uppercase;
             display: block;
             @include o_sans_bold;
+            font-family: "open-sans-bold"!important;
             font-weight: 800;
             color: white;
             font-size: 2rem;
+            max-width: 75%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: -.7rem;
+            
             @media #{$medium-up} {
                 font-size: 3vw;
             }
@@ -148,22 +139,12 @@
             &:after {
                 content: "";
                 position: relative;
-                height: 4px;
+                height: 2px;
                 width: 75%;
                 background-color: white;
-                bottom: 0;
+                bottom: -1rem;
                 display: block;
                 margin: 0 auto;
-            }
-        }
-        .widget_links {
-            margin: 0;
-            li {
-                display: inline-block;
-                margin: 1rem;
-                .button {
-                    margin: 0;
-                }
             }
         }
     }
@@ -177,8 +158,51 @@
     }
 
     .news {
+        background: $bg-light;
+        
         h2 {
             text-align: center;
+            color: $accent-blue;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            &:after {
+                content: "";
+                position: relative;
+                height: 4px;
+                width: 10rem;
+                background-color: $accent-blue;
+                bottom: -.5rem;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+        
+        h4 {
+            position: absolute;
+            bottom: 1.5rem;
+            background: white;
+            padding: .5rem;
+            max-width: 80%;
+        }
+        
+        .featured-thumbnail {
+            position: relative;
+        }
+        
+        .fake-cat {
+            position: absolute;
+            top: 1.5rem;
+            z-index: 1;
+        }
+        
+        .button {
+            margin: 0;
+        }
+        
+        .excerpt {
+            display: block;
+            background: white;
+            padding: 2rem;
         }
     }
     
