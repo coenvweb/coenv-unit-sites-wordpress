@@ -199,6 +199,93 @@
             float: right;
         }
     }
+
+    .events {
+        background-image: url("../assets/img/longbeach-54.jpg");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-position: 0 35%;
+        height: 32vw;
+        position: relative;
+        padding-top: 2rem!important;
+        
+        .more {
+            position: absolute;
+            right: 3.5vw;
+            top: 5rem;
+        }
+        
+        h2 {
+            color: white;
+            font-weight: 800;
+            font-size: 3.5vw;
+            text-align: center;
+            margin-bottom: 2rem;
+            &:after {
+                content: "";
+                position: relative;
+                height: 4px;
+                width: 15rem;
+                background-color: white;
+                bottom: -.7rem;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+        
+        .widgettitle {
+            @extend .visuallyhidden;
+        }
+        
+        .event-list {
+            @media #{$medium-up} {
+                @include block-grid($per-row:3, $spacing: 3.5vw);
+                margin: 0;
+            }
+            text-align: center;
+        
+            li {
+                .single-event {
+                    display: block;
+                    height: 15vw;
+                    background-color: white;
+                    border-top: 4px solid $accent-teal;
+                    color: $accent-blue-dk;
+                    padding: 2vw 3vw;
+                    @media #{$small-only} {
+                        margin-bottom: 3rem;
+                    }
+                    a {
+                        color: $accent-blue-dk;
+                    }
+                }
+                
+                .date {
+                    @include o_sans_bold;
+                    font-size: 1vw;
+                    padding-bottom: 2vw;
+                    i {
+                        @extend .visuallyhidden;
+                    }
+                    &:after {
+                        content: "";
+                        position: relative;
+                        height: 4px;
+                        width: 40%;
+                        background-color: $accent-blue-dk;
+                        bottom: -.5rem;
+                        display: block;
+                        margin: 0 auto;
+                    }
+                }
+                .title {
+                    @include uni;
+                    font-weight: 800;
+                    font-size: 1.5vw;
+                }
+            }
+        }
+    }
     
     .fhl, .adviser {
         text-align: center;

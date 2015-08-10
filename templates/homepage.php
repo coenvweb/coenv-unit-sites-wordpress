@@ -224,8 +224,10 @@ $wp_query = new WP_Query( $home_args );
 </div>
 
 <div class="row events">
+    <a href="/news-stories/events" class="more" id="More Events">More Events</a>
+    <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
     <div class="list columns large-12">
-        <?php the_widget('custom_post_widget', 'custom_post_id=2752&show_featured_image=true'); ?>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
     </div>      
 </div>
 

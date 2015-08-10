@@ -4,29 +4,51 @@
 .button {
 	display: inline-block;
 	vertical-align: middle;
-	padding: .5rem 1rem;
+	padding: .7rem 1rem;
 	@include o_sans_bold;
     text-transform: uppercase;
     letter-spacing: .3px;
 	@include font-size(12);
 	font-weight: 800;
-	background: $accent-blue;
+	@extend .dark-to-light;
 	text-decoration: none;
 	color: white;
 	border-radius: $radius;
+    transition: all 0s;
 	
 	&:hover {
-		background: rgba(0,0,0,0.6);
-		color: #fff !important;
+		background: $accent-blue-dk;
 	}
 	
-	.solid {
-		background: $bg-dk;
-		color: $white;
+	&.outline, &.hollow-hover:hover {
+        background: none;
+		border-right: .25rem solid #0A4160;
+        border-left: .25rem solid #038CC9;
+		color: $accent-blue-dk;
+        position: relative;
+        font-weight: 600;
+        padding: .7rem .75rem;
+        
+        &:before, &:after{
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 100%;
+            @extend .light-to-dark;
+            left: 0;
+        }
+        
+        &:before {
+            top: 0;
+        }
+        
+        &:after {
+            bottom: 0;
+        }
 		
 		&:hover {
-			background: $white-button;
-			color: $text;
+			@extend .light-to-dark;
+			color: white;
 		}
 	}
 

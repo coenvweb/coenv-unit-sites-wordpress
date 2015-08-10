@@ -36,6 +36,33 @@ $bg-lighter: #fcfcfc;
 $bg-cream: #F6F9EA;
 $bg-transparent-blue: rgba(1,163,233,0.7);
 
+/*  Gradients
+    ======================================================================== */
+
+.dark-to-light {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0a4160+0,038cc9+100 */
+    background: #0a4160; /* Old browsers */
+    background: -moz-linear-gradient(left,  #0a4160 0%, #038cc9 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#0a4160), color-stop(100%,#038cc9)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  #0a4160 0%,#038cc9 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  #0a4160 0%,#038cc9 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  #0a4160 0%,#038cc9 100%); /* IE10+ */
+    background: linear-gradient(to right,  #0a4160 0%,#038cc9 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a4160', endColorstr='#038cc9',GradientType=1 ); /* IE6-9 */
+}
+
+.light-to-dark {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#038cc9+0,0a4160+100 */
+    background: #038cc9; /* Old browsers */
+    background: -moz-linear-gradient(left,  #038cc9 0%, #0a4160 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#038cc9), color-stop(100%,#0a4160)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  #038cc9 0%,#0a4160 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  #038cc9 0%,#0a4160 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  #038cc9 0%,#0a4160 100%); /* IE10+ */
+    background: linear-gradient(to right,  #038cc9 0%,#0a4160 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#038cc9', endColorstr='#0a4160',GradientType=1 ); /* IE6-9 */
+}
+
 /*  Global shadow
     ======================================================================== */
 

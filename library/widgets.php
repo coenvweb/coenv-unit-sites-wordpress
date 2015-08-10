@@ -338,7 +338,7 @@ class CoEnv_Widget_Events extends WP_Widget {
       <?php echo $before_widget; ?>
             <?php if ( $events_url != '' ) : ?>
                                    
-            <a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
+            <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events">More</a>
             <?php endif ?>
         
         
@@ -361,10 +361,15 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li>
-              <a href="<?php echo $event['url'] ?>">
-              <p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
-              <p class="title"><?php echo $event['title'] ?></p>
-              </a>
+                <?  $date = substr($event['date'], 0, -6);
+                $date = strtotime($date);
+                $date = date('l, M j, Y ', $date); ?>
+                <a href="<?php echo $event['url'] ?>">
+                    <div class="single-event">
+                        <p class="date"><?php echo $date ?></p>
+                        <p class="title"><?php echo $event['title'] ?></p>
+                    </div>
+                </a>
             </li>
 
       
