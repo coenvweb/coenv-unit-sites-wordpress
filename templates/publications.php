@@ -170,7 +170,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		?>
 		<div class="publication-list-item post-<?php the_ID() ?>">
 		<div class="article__header">
-			<p><?php echo $publication_years_str . ' / ' . $publication_terms_str; ?></p>
+			<p><?php echo $publication_years_str; ?>
+			<?php
+			if (!empty($publication_terms_str)) {
+				echo '&nbsp;&nbsp;/&nbsp;&nbsp;' . $publication_terms_str; 
+			}
+			?>
+			</p>
 		</div>
 		<?php
 		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
@@ -178,11 +184,11 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		echo '<div class="publication-links right">';
 		if($rows) {
 			foreach($rows as $row) {
-				if($row['publication_link_type'] == 'upload') {
+				if($row['publication_link_type'] == 'upload' && !empty($row['publication_upload_file'])) {
 					echo '<a class="button" href="' . $row['publication_upload_file'] . '" target="_blank">Download</a>';
-				} elseif ($row['publication_link_type'] == 'link') {
+				} elseif ($row['publication_link_type'] == 'link' && !empty($row['publication_link_url']) && !empty($row['publication_link_text'])) {
 					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">' . $row['publication_link_text'] . '</a>';
-				} elseif ($row['publication_link_type'] == 'email') {
+				} elseif ($row['publication_link_type'] == 'email' && !empty($row['publication_link_email'])) {
 					echo '<a class="button" href="mailto:' . $row['publication_link_email'] . '?subject=Publication Request:' . get_the_title() . '">' . $row['publication_link_email_text'] . '</a>';
 				}
 			}
