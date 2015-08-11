@@ -17,7 +17,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 <?php get_header(); ?>
 <div class="row">
 
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-8 columns right" role="main">
         <div class="entry-content">
         	<div class="row filters">
 				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">

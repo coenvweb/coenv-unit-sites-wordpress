@@ -36,9 +36,6 @@ Template Name: Homepage
 			if (get_field('feature_color')) {
 				$feature_color = get_field('feature_color');
 			}
-			if (get_field('feature_excerpt')) {
-				$feature_excerpt = get_field('feature_excerpt');
-			}
 			if (get_the_post_thumbnail()) {
 				$feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
 				$feature_caption = get_post(get_post_thumbnail_id());
@@ -51,26 +48,19 @@ echo '<div class="feature">';
 
 		echo '<div class="feature-info-container">';
 		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
-			echo '<div class="feature-content">';
-				echo '<h2>' . get_the_title() . '</h2>';
-				echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
-				if($rows)
+if($rows)
 					{
 						foreach($rows as $row) {
-							if($row['feature_link_type'] == 'internal') {
-								$link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-								$link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-								$link_target = 'self';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} elseif ($row['feature_link_type'] == 'external') {
-								$link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-								$link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-								$link_target ='blank';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} 
+                    $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
+                    $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
+                    $link_target = 'self';
 						}
 					}
+echo '<a href="' . $link_url . '">';
+		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+			echo '<div class="feature-content">';
+				echo '<h2 class="feature-title"><span class="feature-white">' . get_the_title() . '</span></h2></a>';
+                echo '<a class="button" href="' . $link_url . '">' . $link_title . '</a>';
 
 			echo '</div><!-- .feature-content -->';
 
@@ -87,17 +77,6 @@ wp_reset_postdata();
         </div>
     </div>
 </div>
-
-
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="row">
-    <div class="special-annoucement">
-        <div class="widget-area home-content" role="complementary">
-            <?php dynamic_sidebar( 'home-content' ); ?>
-        </div><!-- .widget-area -->
-    </div>
-</div>
-<?php endif; ?>
                 
 <div class="row about-summary">
     <div class="summary columns large-12">
@@ -112,7 +91,7 @@ wp_reset_postdata();
     </div></a>
     <a href="/students/marine-biology-minor/" id="Minor in Marine Biology"  class="program">
     <div class="columns large-6 minor">
-        <h3>Minor in <br />Marine Biology</h3>
+        <h3>Minor in<br />Marine Biology</h3>
     </div></a>
 </div>
                 
@@ -121,7 +100,7 @@ wp_reset_postdata();
             <a name="More News & Stories" href="/news-stories">
             <h2>News & Stories</h2></a>
     </div>
-                
+                <div class="news-stories" data-equalizer>
                 <?php
 # Student/Alumni Spotlight
 		
@@ -139,7 +118,8 @@ $home_args = array(
 $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
+		<div class="medium-6 columns">
+        <div class="white-container" data-equalizer-watch>
         <a name="More student & alumni stories" class="fake-cat button left" href="/news-stories">Student Spotlights</a>
 		<?php
 		# The Loop
@@ -148,21 +128,22 @@ $wp_query = new WP_Query( $home_args );
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+            $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
         }
         echo '<div class="featured-thumbnail">';
         echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
         the_post_thumbnail( 'large-sq' );
-        echo '<h4><span class="white-title">' . get_the_title() . '</span></h4>';
+        echo '<h3 class="news-title"><span class="white-title">' . get_the_title() . '</span></h3>';
         echo '</a></div>';
         echo '<span class="excerpt">';
         echo the_advanced_excerpt('length=20&finish=sentence');
         echo $post_link . '</span>';
 	endwhile;
 	?>
+</div>
 </div>
 <?php endif; ?>
                 
@@ -184,7 +165,7 @@ $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
-            <div class="large-12 featured-news">
+        <div class="white-container" data-equalizer-watch>
                 <a name="More research news" class="fake-cat button left" href="/news-stories">Research News</a>
 		<?php
 		# The Loop
@@ -193,15 +174,15 @@ $wp_query = new WP_Query( $home_args );
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+            $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
         }
         echo '<div class="featured-thumbnail">';
         echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
         the_post_thumbnail( 'large-sq' );
-        echo '<h4><span class="white-title">' . get_the_title() . '</span></h4>';
+        echo '<h3 class="news-title"><span class="white-title">' . get_the_title() . '</span></h3>';
         echo '</a></div>';
         echo '<span class="excerpt">';
         echo the_advanced_excerpt('length=20&finish=sentence');
@@ -212,6 +193,14 @@ $wp_query = new WP_Query( $home_args );
 </div>
 <?php endif; ?>
 </div>
+    <div class="special-announcement columns large-12">
+        <div class="white-container">
+            <h4 class="announcement-title">Announcement</h3>
+            <?php the_widget('custom_post_widget', 'custom_post_id=3193'); ?>
+        </div>
+    </div>
+</div>
+
 
 <div class="row events">
     <a href="/news-stories/events" class="more" id="More Events">More Events</a>

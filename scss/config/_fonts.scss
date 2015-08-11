@@ -110,16 +110,28 @@
 }
 
 .intro {
-    font-size: rem-calc(20)!important;
+    font-size: rem-calc(30)!important;
     line-height: normal;
     margin: rem-calc(20) 0;
-    @include uni;
-    font-weight: 400;
+    @include o_sans;
+    font-weight: 200;
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
+    color: $accent-blue;
     
     @media #{$large-up} {
-        font-size: rem-calc(36)!important;
+        font-size: 3vw!important;
+    }
+    &:after {
+        content: "";
+        position: relative;
+        height: 3px;
+        width: 15rem;
+        background-color: $accent-blue;
+        bottom: -.7rem;
+        display: block;
+        margin-bottom: 3rem;
+        margin-top: 1rem;
     }
 }
 
@@ -178,20 +190,15 @@ h3 {
 
 } // h3
 
-.article__content {
-
-    h4 {
-        @include uni;
-        font-weight: 600;
-        font-size: rem-calc(14);
-        line-height: rem-calc(12);
-
-        @media #{$medium-up} {
-            font-size: rem-calc(20);
-            line-height: rem-calc(20);
-        }
-    }
-}
+h4 {
+    @include o_sans_bold;
+    font-weight: 800!important;
+    text-transform: uppercase;
+    color: $accent-blue!important;
+    font-size: rem-calc(16)!important;
+    line-height: rem-calc(14);
+    
+} // h4
 
 /*	Base font size
 		======================================================================== */

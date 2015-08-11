@@ -22,7 +22,7 @@ aside#sidebar {
 
 	// Second-level navigation
 	.coenv_base_subnav ul {
-		border-top: 1px solid #dddddd;
+		border-top: 3px solid $accent-blue;
 		margin: 0  1rem rem-calc(30) 0;
 		padding: 0;
 		line-height: 10px;
@@ -37,14 +37,17 @@ aside#sidebar {
 			a {
 				display: block;
 				line-height: 152%;
+                @include uni;
+                font-weight: 800;
 				&:not(.button) {
 					color: #000;
 				}
 				&:hover {
-					color: $accent;
+					color: $accent-blue;
 				}
 			}
 			ul {
+                border-top: 1px solid #ccc;
 				margin-bottom: 0;
 				li {
 					border: 0;
