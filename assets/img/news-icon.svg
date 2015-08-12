@@ -1,0 +1,35 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="172.5 330.3 128 128" style="enable-background:new 172.5 330.3 128 128;"
+	 xml:space="preserve" class="big-icon">
+<style type="text/css">
+	.st0{opacity:5.000000e-02;clip-path:url(#SVGID_2_);fill:#231F20;}
+	.st1{fill:#FFFFFF;stroke:#0C3855;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#01A4E9;stroke:#0C3855;stroke-width:3;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#0C3855;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#0C3855;stroke-width:3;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#01A4E9;stroke-width:3;stroke-miterlimit:10;}
+</style>
+<g>
+	<defs>
+		<circle id="SVGID_1_" cx="236.4" cy="394.2" r="62"/>
+	</defs>
+	<use xlink:href="#SVGID_1_"  style="overflow:visible;fill:#F1F1F2;"/>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<polygon class="st0" points="343.9,430.5 272.6,501.8 200.6,429.8 276.9,363.5 	"/>
+	<use xlink:href="#SVGID_1_"  style="overflow:visible;fill:none;stroke:#01A4E9;stroke-width:3;stroke-miterlimit:10;"/>
+</g>
+<g>
+	<path id="calendar-5-icon_1_" class="st1" d="M201.7,364.3v64.5h56.4l17.6-17.9v-46.6H201.7z M201.7,381.7h74"/>
+	<rect x="258.1" y="389.1" class="st2" width="11.4" height="12.9"/>
+	<polyline class="st3" points="258.1,428.8 258.1,410.9 275.7,410.9 	"/>
+</g>
+<line class="st4" x1="212.8" y1="389.1" x2="251.3" y2="389.1"/>
+<line class="st5" x1="212.8" y1="373.8" x2="269.5" y2="373.8"/>
+<line class="st4" x1="212.8" y1="401.8" x2="251.3" y2="401.8"/>
+<line class="st4" x1="212.8" y1="395.5" x2="251.3" y2="395.5"/>
+<line class="st4" x1="212.8" y1="408.1" x2="251.3" y2="408.1"/>
+<line class="st4" x1="212.8" y1="414.5" x2="251.3" y2="414.5"/>
+<line class="st4" x1="212.8" y1="420.8" x2="230.1" y2="420.8"/>
+</svg>

@@ -1,0 +1,36 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="128px" viewBox="172.5 330.3 128 128" style="enable-background:new 172.5 330.3 128 128;"
+	 xml:space="preserve" class="big-icon">
+<style type="text/css">
+	.st0{opacity:5.000000e-02;clip-path:url(#SVGID_2_);fill:#231F20;}
+	.st1{fill:#FFFFFF;stroke:#0C3855;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;stroke:#01A4E9;stroke-width:3;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#0C3855;stroke-width:3;stroke-miterlimit:10;}
+	.st4{fill:#01A4E9;stroke:#0C3855;stroke-width:3;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#0C3855;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<defs>
+		<circle id="SVGID_1_" cx="236.5" cy="394.3" r="62"/>
+	</defs>
+	<use xlink:href="#SVGID_1_"  style="overflow:visible;fill:#F1F1F2;"/>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<polygon class="st0" points="344,430.6 272.7,501.9 200.8,429.9 277,363.6 	"/>
+	<use xlink:href="#SVGID_1_"  style="overflow:visible;fill:none;stroke:#01A4E9;stroke-width:3;stroke-miterlimit:10;"/>
+</g>
+<g>
+	<path id="calendar-5-icon" class="st1" d="M201.8,364.5v64.5h56.4l17.6-17.9v-46.6H201.8z M201.8,381.8h74"/>
+	<path class="st2" d="M222.4,359.2c0-2.3-1.9-4.2-4.2-4.2c-2.3,0-4.2,1.9-4.2,4.2v10.5c0,2.3,1.9,4.2,4.2,4.2c2.3,0,4.2-1.9,4.2-4.2
+		V359.2z"/>
+	<path class="st2" d="M264,359.2c0-2.3-1.9-4.2-4.2-4.2c-2.3,0-4.2,1.9-4.2,4.2v10.5c0,2.3,1.9,4.2,4.2,4.2c2.3,0,4.2-1.9,4.2-4.2
+		V359.2z"/>
+	<rect x="232.4" y="389.3" class="st3" width="12.9" height="12.9"/>
+	<rect x="251.8" y="389.3" class="st3" width="12.9" height="12.9"/>
+	<rect x="213" y="408.1" class="st3" width="12.9" height="12.9"/>
+	<rect x="232.4" y="408.1" class="st4" width="12.9" height="12.9"/>
+	<rect x="213" y="389.3" class="st3" width="12.9" height="12.9"/>
+	<polyline class="st5" points="258.3,428.9 258.3,411 275.8,411 	"/>
+</g>
+</svg>

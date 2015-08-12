@@ -13,6 +13,9 @@
 		background-size: cover;
 		background-position: center;
 		position: relative;
+        @media #{$small-only} {
+            max-height: none;
+        }
 	}
 	
 	.feature-info-container {
@@ -22,20 +25,10 @@
 			position: absolute;
 			left: 0;
 			bottom: 3vw;
-			width: 50%;
-
-			@media #{$small-only} {
-				width: 50%;
-
-				h2 {
-					font-size: rem-calc(14);
-				}
-				p.feature-excerpt {
-					font-size: rem-calc(12);
-				}
-
-
-			 }
+            width: 100%;
+            @media #{$small-only} {
+                position: relative;
+            }
 		}
     
         .feature-title {
@@ -43,6 +36,7 @@
             max-width: 80%;
             margin-left: 2rem;
             @include uni();
+            font-size: 8vw;
             font-weight: 800;
             @media #{$medium-up} {
                 font-size: 5vw;
@@ -54,28 +48,31 @@
         
         .feature-white {
             display: inline;
+            position: relative;
             background-color: #FFf;
             box-shadow: .5em 0 0 #FFf, -3em 0 0 #FFf;
-            padding: 0.25em 0em 0.25em 0em;
+            padding: .75rem 0em .75rem 0em;
             box-decoration-break: clone;
+            z-index: 2;
         }
     
 		h2 {
+            position: relative;
+            z-index: 3;
             color: $text;
             font-weight: 800;
         }
 		
 		
 		.button {
+            position: relative;
+            z-index: 1;
 			padding-left: 4rem;
             margin-left: -2rem;
+            margin-top: -1.5rem;
             font-size: 1rem;
-            @media #{$large-up} {
-                font-size: 1vw;
-                margin-top: .1vw;
-            }
             @media #{$xlarge-up} {
-                margin-top: .2vw;
+                margin-top: -1.8rem;
             }
 		}
 		

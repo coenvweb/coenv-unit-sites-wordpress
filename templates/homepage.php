@@ -97,6 +97,8 @@ wp_reset_postdata();
                 
 <div class="row news">
     <div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
+        <a name="More News & Stories" href="/news-stories"><?php include(get_template_directory() . "/assets/img/news-icon.svg"); ?></a>
+        <a href="/news-stories/" class="more hide-for-small-only" id="More Events">More News & Stories <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
             <a name="More News & Stories" href="/news-stories">
             <h2>News & Stories</h2></a>
     </div>
@@ -140,6 +142,7 @@ $wp_query = new WP_Query( $home_args );
         echo '</a></div>';
         echo '<span class="excerpt">';
         echo the_advanced_excerpt('length=20&finish=sentence');
+        echo '<time class="article__time right" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
         echo $post_link . '</span>';
 	endwhile;
 	?>
@@ -186,6 +189,7 @@ $wp_query = new WP_Query( $home_args );
         echo '</a></div>';
         echo '<span class="excerpt">';
         echo the_advanced_excerpt('length=20&finish=sentence');
+        echo '<time class="article__time right" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
         echo $post_link . '</span>';
 	endwhile;
 	?>
@@ -203,7 +207,8 @@ $wp_query = new WP_Query( $home_args );
 
 
 <div class="row events">
-    <a href="/news-stories/events" class="more" id="More Events">More Events</a>
+    <a href="/news-stories/events" id="More Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a>
+    <a href="/news-stories/events" class="more hide-for-small-only" id="More Events">More Events <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
     <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
     <div class="list columns large-12">
         <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
@@ -211,6 +216,7 @@ $wp_query = new WP_Query( $home_args );
 </div>
 
 <div class="row fhl">
+    <?php include(get_template_directory() . "/assets/img/fhl-icon.svg"); ?>
     <div class="columns large-12">
         <?php the_widget('custom_post_widget', 'custom_post_id=3154&show_featured_image=true'); ?>
     </div>      

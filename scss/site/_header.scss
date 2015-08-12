@@ -3,8 +3,7 @@
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
-    background: $white;
-    border-bottom: 1px solid $border;
+    background: $accent;
     
     .tab-bar-section {
         padding-left: rem-calc(30);
@@ -13,13 +12,14 @@
 
     
     h1 {
-        color: $text!important;
+        color: $white!important;
         margin-top: rem-calc(15);
         font-size: rem-calc(28)!important;
         text-align: left;
         @media #{$small-up} {
-            font-size: rem-calc(12)!important;
-            line-height: rem-calc(14);
+            font-size: rem-calc(24)!important;
+            line-height: rem-calc(18);
+            text-transform: uppercase;
         }
     }
     .right-small, .left-small {
@@ -27,19 +27,19 @@
     }
 
     .mobile-logo {
-        color: $accent;
+        color: $white;
         font-size: rem-calc(20);
         
         #mobile-logo {
             width: rem-calc(55);
-            fill: $accent;
+            fill: $white;
             margin-top: rem-calc(-10);
             margin-left: rem-calc(10);
         }
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+        box-shadow: 0 0px 0 1px #fff,0 7px 0 1px #fff,0 14px 0 1px #fff;
     }
 
 }

@@ -2,6 +2,12 @@
 
 .home {
     
+    .big-icon {
+        height: 5vw;
+        width: 5vw;
+        text-align: center;
+    }
+    
     div[role=main] {
         margin-top: 0;
     }
@@ -9,6 +15,9 @@
     [role=main] .row {
         max-width: none;
         padding: 4rem 0;
+        @media #{$small-only} {
+            padding: 2rem 0;
+        }
     }
     
     .hero {
@@ -119,13 +128,59 @@
     .widget_content, .widget_links {
         list-style: none;
     }
-    
+
+    .more {
+        position: absolute;
+        @include o_sans_bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: white;
+        right: 3.5vw;
+        top: 4.5vw;
+        @media #{$medium-up} {
+            top: 5vw;
+        }
+        @media #{$large-up} {
+            top: 4vw;
+        }
+        svg {
+            fill: white;
+        }
+    }
+
 
     .news {
+        text-align: center;
         background: $bg-light;
+        
+        .medium-6 {
+            @media #{$small-only} {
+                margin-bottom: 2rem;
+            }
+            text-align: left;
+        }
         
         .white-container {
             background: white;
+        }
+
+        .more {
+            position: absolute;
+            @include o_sans_bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: $text;
+            right: 3.5vw;
+            top: 2.5vw;
+            @media #{$medium-up} {
+                top: 3vw;
+            }
+            @media #{$large-up} {
+                top: 2vw;
+            }
+            svg {
+                fill: $text;
+            }
         }
         
         h2 {
@@ -152,7 +207,10 @@
             margin-left: 3vw;
             @include uni();
             font-weight: 800;
-            font-size: 3.05vw;
+            font-size: 1.5rem;
+            @media #{$medium-up} {
+                font-size: 3.05vw;
+            }
         }
         
         .white-title {
@@ -186,17 +244,38 @@
             display: block;
             padding: 3vw;
             padding-bottom: 6vw;
+            @media #{$small-only} {
+                padding-bottom: 10vw;
+            }
+        }
+        
+        .article__time {
+            font-size: .8rem!important;
+            font-weight: 400;
+            @include o_sans_bold;
+            text-transform: uppercase;
+            color: $accent-blue-dk!important;
+            text-align: center;
+            position: absolute;
+            bottom: 3vw;
+            right: 4.5vw;
+            padding-bottom: .7rem;
+            @media #{$small-only} {
+                right: 2.5rem;
+            }
         }
     }
 
     .special-announcement { //temporary actionbox
         z-index: 1;
-        margin-top: 2rem;
+        @media #{$medium-up} {
+            margin-top: 2rem;
+        }
         
         .widget {
             display: block;
             background: white;
-            padding: 2rem;
+            padding: 1rem 1rem 2rem 1rem;
         }
         
         .widget_links {
@@ -213,8 +292,32 @@
             }
         }
         
+        .announcement-title {
+            font-size: .8rem!important;
+            text-transform: uppercase;
+            color: $accent-blue-dk!important;
+            text-align: center;
+            padding-top: 2rem;
+            &:after {
+                content: "";
+                position: relative;
+                height: 4px;
+                width: 8rem;
+                background-color: $accent-blue;
+                bottom: -.5rem;
+                display: block;
+                margin: 0 auto;
+            }
+            
+        }
         h3 {
-            color: $accent-blue;
+            color: $text;
+            @include uni();
+            font-weight: 800;
+            font-size: 1.5rem;
+            @media #{$medium-up} {
+                font-size: 3.05vw;
+            }
         }
         
     }
@@ -234,26 +337,22 @@
     }
 
     .events {
+        text-align: center;
         background-image: url("../assets/img/longbeach-54.jpg");
         background-repeat: no-repeat;
         background-size: 100%;
         background-position: 0 35%;
-        height: 32vw;
         position: relative;
         padding-top: 2rem!important;
-        
-        .more {
-            position: absolute;
-            right: 3.5vw;
-            top: 5rem;
-        }
         
         h2 {
             color: white;
             font-weight: 800;
-            font-size: 3.5vw;
             text-align: center;
             margin-bottom: 2rem;
+            @media #{$medium-up} {
+                font-size: 3.5vw;
+            }
             &:after {
                 content: "";
                 position: relative;
@@ -280,11 +379,11 @@
             li {
                 .single-event {
                     display: block;
-                    height: 15vw;
                     background-color: white;
                     border-top: 4px solid $accent-blue;
                     color: $accent-blue-dk;
                     padding: 2vw 3vw;
+                    height: 100%;
                     @media #{$small-only} {
                         margin-bottom: 3rem;
                     }
@@ -295,8 +394,14 @@
                 
                 .date {
                     @include o_sans_bold;
-                    font-size: 1vw;
-                    padding-bottom: 2vw;
+                    padding-bottom: 1.5vw;
+                    font-size: 1rem;
+                    @media #{$medium-up} {
+                        font-size: 1.5vw;
+                    }
+                    @media #{$large-up} {
+                        font-size: 1vw;
+                    }
                     i {
                         @extend .visuallyhidden;
                     }
@@ -306,7 +411,7 @@
                         height: 4px;
                         width: 40%;
                         background-color: $accent-blue;
-                        bottom: -.5rem;
+                        bottom: -.7vw;
                         display: block;
                         margin: 0 auto;
                     }
@@ -314,7 +419,13 @@
                 .title {
                     @include uni;
                     font-weight: 800;
-                    font-size: 1.5vw;
+                    font-size: 1.5rem;
+                    @media #{$medium-up} {
+                        font-size: 2vw;
+                    }
+                    @media #{$large-up} {
+                        font-size: 1.5vw;
+                    }
                 }
             }
         }

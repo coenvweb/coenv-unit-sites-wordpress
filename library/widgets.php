@@ -353,14 +353,14 @@ class CoEnv_Widget_Events extends WP_Widget {
                 }
         ?>
 
-      <ul class="event-list">
+      <ul class="event-list" data-equalizer>
 
       <?php if ( count( $events ) ) : ?>
 
         <?php foreach ( $events as $key => $event ) : ?>
 
 
-            <li>
+            <li data-equalizer-watch>
                 <?  $date = substr($event['date'], 0, -6);
                 $date = strtotime($date);
                 $date = date('l, M j, Y ', $date); ?>
