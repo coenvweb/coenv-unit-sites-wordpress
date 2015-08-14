@@ -12,6 +12,7 @@
     .top-bar-section {
         display: inline-block;
         width: 100%;
+        margin-left: rem-calc(5);
         
         #menu-main-menu { 
             .social {
@@ -19,7 +20,7 @@
                 .page_item {
                     background: transparent;
                     a {
-                        padding: 0 .5rem;
+                        padding: 0 .5rem!important;
                     }
                     &:first-of-type {
                         margin-top: .9rem;
@@ -45,9 +46,13 @@
             li a {
                 @media #{$large-up} {
                     font-size: rem-calc(14);
+                    padding: 0 1rem 0 1rem!important;
                 }
                 @media #{$medium-only} {
                     background-image: none!important;
+                }
+                @media #{$medium-only} {
+                    padding: 0 .9rem 0 .5rem!important;
                 }
                 font-size: rem-calc(12);
                 color: $text;
@@ -109,11 +114,11 @@
             }
     
             .has-dropdown > a {
-                padding-right: rem-calc(15)!important;
-                @media #{$medium-only} {
-                    padding-right: rem-calc(15)!important;
-                }
                 .has-dropdown > a {
+                    padding-right: rem-calc(15)!important;
+                    @media #{$medium-only} {
+                        padding-right: rem-calc(15)!important;
+                    }
                 }
                 &:after {
                     content: none;

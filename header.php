@@ -202,7 +202,7 @@
                       remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_reset_query();
                       ?>
-                        <div class="social"><li class="page_item">Follow Us ></li>
+                        <div class="social show-for-large-up"><li class="page_item">Follow Us ></li>
                      <?php if (get_option('facebook')) { ?>
                     <li class="page_item"><a class="facebook social-menu" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
                         <i class="fi-social-facebook"></i>

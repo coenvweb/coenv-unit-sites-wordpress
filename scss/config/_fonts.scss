@@ -109,6 +109,12 @@
     -webkit-font-smoothing: antialiased;
 }
 
+p {
+    @media #{$xlarge-up} {
+        font-size: 1vw!important;
+    }
+}
+
 .intro {
     font-size: rem-calc(30)!important;
     line-height: normal;

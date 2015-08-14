@@ -216,7 +216,6 @@ $wp_query = new WP_Query( $home_args );
 </div>
 
 <div class="row fhl">
-    <?php include(get_template_directory() . "/assets/img/fhl-icon.svg"); ?>
     <div class="columns large-12">
         <?php the_widget('custom_post_widget', 'custom_post_id=3154&show_featured_image=true'); ?>
     </div>      
