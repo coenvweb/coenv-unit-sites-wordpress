@@ -52,12 +52,24 @@
 
   
     <?php wp_head(); ?>
-      
-    <?php 
+            <?php 
         $banner = coenv_banner();
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
-    ?>
+        $post = get_queried_object();
+            $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+        $post_description = $advancedExcerpt;
+        $post_link = get_permalink();
+      if ( has_post_thumbnail( $post->ID ) ) {
+        $thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+        $post_image = $thumb_src[0];
+      } elseif ( $banner ) {
+        $post_image = $banner['url'];
+      } else {
+        $post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
+      }
+  
+  ?>
   </head>
   <body <?php body_class(); ?>>
   
@@ -221,27 +233,27 @@
             </nav>
         </div>
 
-<?php if (!is_front_page()) : ?>
+<?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
-<?php 
-        $banner = coenv_banner();
-        $banner_class = $banner ? 'has-banner' : '';
-        $banner_class .= ' template-print';
-?>
-    <?php if (($banner) && (!is_single())) {
-            echo '<div class="page-row">';
-            echo '<div>';
-        }
+    <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+            echo '<div class="page-row"';
+      } else {
+            echo '<div class="page-row mini"';
+      };
+    echo ' style="background-image: url(' . $banner['url'] . ');">';
+    echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
      ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini">';
-            echo '<div>';
-     }
-     ?>
-    <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
+    <div class="header-white show-for-medium-up"></div>
+    <div class="header-title-container show-for-medium-up">
+        <div class="page-title-row row">
+            <div class="page-title"><h1><span>
+                <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+            echo the_title();
+      } else {
+            echo '<a href="/about/news-events/" title="News & Events">News & Events</a>';
+      };?></span></h1></div>
+        </div>
     </div>
-
 </div>
 <?php endif; ?>
 <?php do_action('foundationPress_after_header'); ?>

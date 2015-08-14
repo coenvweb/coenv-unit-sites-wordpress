@@ -43,6 +43,9 @@
                     color: $accent-blue;
                 }
             }
+            & > li > .dropdown {
+                margin-left: 1rem;
+            }
             li a {
                 @media #{$large-up} {
                     font-size: rem-calc(14);
@@ -63,15 +66,15 @@
                 text-align: left;
 
                 &:hover, &:focus {
-                    color: $accent;
+                    color: $accent-blue;
                 }
                 
             }
             li.current_page_parent {
                 & > a {
-                    color: $accent;
+                    color: $text;
                     &:hover {
-                        color: $accent;
+                        color: $accent-blue;
                     }
                 }
                 & .current_page_item > a {
@@ -105,13 +108,47 @@
                     font-size: 10px;
                     content: "\2228";
                 }
+                
+                &:hover:after {
+                    color: $accent-blue;
+                }
 
-                &.current_page_item > a, & > a:hover{
-                    border-bottom: 3px solid $border;
+                &.current_page_item > a, & > a:hover, &.current_page_parent > a,{
+                    &:after {
+                        border: none;
+                        content: "";
+                        position: relative;
+                        height: 2px;
+                        width: 125%;
+                        background-color: $accent-blue;
+                        top: -.5rem;
+                        display: block;
+                        color: $accent-blue;
+                    }
+                }
+                &.page-item-3017 {
+                    a:hover, &.current_page_item > a, &.current_page_parent > a {
+                        &:after {
+                            width: 110%;
+                        }
+                    }
                 }
 
                 
             }
+
+            & > .current_page_item > a{
+                    &:after {
+                        border: none;
+                        content: "";
+                        position: relative;
+                        height: 2px;
+                        width: 100%;
+                        background-color: $accent-blue;
+                        top: -.7rem;
+                        display: block;
+                    }
+                }
     
             .has-dropdown > a {
                 .has-dropdown > a {

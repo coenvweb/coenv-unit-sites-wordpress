@@ -1,14 +1,13 @@
 // General sidebar
 aside#sidebar {
-	margin-top: rem-calc(57);
+	margin-top: 1rem;
 	padding-right: 1rem !important;
 
 	.section-title {
+        margin: 0;
 		@include encode_cb;
 		a {
-
-		font-size: rem-calc(22);
-
+		  font-size: rem-calc(22);
 		}
 	}
 
@@ -66,11 +65,4 @@ aside#sidebar {
 	.widget {
 		margin-bottom: rem-calc(30);
 	}
-
-
-
-
-
-
 }
-

@@ -64,6 +64,7 @@
         
         .major {
             background-image: url("../assets/img/fhl-dock.jpg");
+            background-position: bottom;
         }
         
         .minor {
@@ -92,7 +93,8 @@
         
         .large-6 {
             text-align: center;
-            height: 275px;
+            height: 20vw;
+            min-height: 275px;
             position: relative;
             overflow: hidden;
         }
@@ -232,6 +234,9 @@
         
         .featured-thumbnail {
             position: relative;
+            img {
+                width: 100%;
+            }
         }
         
         .fake-cat {
