@@ -7,6 +7,22 @@
  * Author URI: http://coenv.uw.edu
  */
 
+
+
+
+/**
+  * Add admin css
+  */
+
+add_action( 'admin_enqueue_scripts', 'load_admin_all_style' );
+      function load_admin_all_style() {
+        wp_enqueue_style( 'admin_css', plugins_url( 'coenv-admin-all.css', __FILE__ ), false, '1.0.0' );
+       }
+
+
+
+
+
 function getarchives_where_filter( $where, $args ) {
 
     if ( isset($args['post_type']) ) {      
