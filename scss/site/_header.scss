@@ -181,6 +181,9 @@
         @media #{$large-up} {
             height: 5.5vw;
         }
+        @media #{$xlarge-up} {
+            height: 4vw;
+        }
     }
     .header-white {
         position: absolute;
@@ -234,8 +237,8 @@
             @media #{$large-up} {
                 font-size: 4vw;
             }
-            @media #{$medium-up} {
-                margin-left: rem-calc(20);
+            @media #{$xlarge-up} {
+                font-size: 3vw;
             }
         }
     }

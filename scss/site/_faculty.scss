@@ -1,3 +1,11 @@
+.faculty-thumb {
+    max-height: 120px;
+    overflow: hidden;
+    img {
+        width: 100%;
+    }
+}
+
 article.type-faculty {
 
 	.faculty-info {
@@ -40,11 +48,7 @@ article.type-faculty {
 		} // end ul
 
 		.faculty-name {
-			@include rem('font-size', 1.5);
-			font-weight: bold;
-			line-height: 1;
-			@include rem('margin-bottom',.5);
-			@include rem('padding-bottom',0);
+            
 		}
 
 		.faculty-website {
@@ -77,16 +81,28 @@ article.type-faculty {
 	margin-top: 0;
 }
 
+.faculty-list-teach {
+    width: 105%;
+}
+
 .faculty-list-teach .faculty-list-item {
 	float: left;
 	margin-bottom: rem-calc(18px);
 	margin-right: rem-calc(18px);
 	width: rem-calc(120px);
-	min-height: 12rem;
+	height: 13.5rem;
+    background-color: $accent-blue-dk;
+    
 	h3 {
-		font-size: 1rem;
-		line-height: 1.25rem;
+		font-size: 1rem!important;
+		line-height: 1.25rem!important;
 		margin-top: .5rem;
+        font-family: 'open-sans'!important;
+        margin: 0;
+        padding: .7rem .7rem;
+        a {
+            color: white;
+        }
 	}
 
 }

@@ -5,9 +5,10 @@ aside#sidebar {
 
 	.section-title {
         margin: 0;
-		@include encode_cb;
+		@include uni;
 		a {
 		  font-size: rem-calc(22);
+            color: $text;
 		}
 	}
 
@@ -17,6 +18,7 @@ aside#sidebar {
 		@media #{$small-only} {
 			display:none;
 		}
+        line-height: 1;
 	}
 
 	// Second-level navigation

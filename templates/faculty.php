@@ -8,9 +8,9 @@ Template Name: Faculty Index
  */
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+$coenv_cat_1 = urlencode(htmlentities($_GET['fac-cat']));
+$coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
+$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
 $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 ?>
 
@@ -21,11 +21,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         <div class="entry-content">
         	<div class="row filters">
 				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
 				</div>
-				<div class="share columns large-6" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a></div>
 	</div>
 
 <?php
@@ -58,8 +54,7 @@ $query_args = array(
 );
 
 // Category filter
-if($coenv_cat_1 && $coenv_cat_term_1) :
-	$query_args['taxonomy'] = $coenv_cat_1;
+if($coenv_cat_term_1) :
 	$query_args['term'] = $coenv_cat_term_1;
 endif;
 $wp_query = new WP_Query( $query_args );
@@ -71,14 +66,14 @@ $wp_query = new WP_Query( $query_args );
 <?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all posts &raquo;</a></div>
+			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all posts &raquo;</a></div>
 		</div>
 	<?php endif; ?>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'faculty_sm');
+		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
 		$faculty_link = get_the_permalink();
 		$faculty_phone_rows = get_field('phone_number');
 		$faculty_email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
@@ -87,12 +82,12 @@ $wp_query = new WP_Query( $query_args );
 		$faculty_title_rows = get_field('job_titles' );
 		$first_faculty_title_row = $faculty_title_rows[0];
 		$first_faculty_title = $first_faculty_title_row['job_title'];
-		$faculty_img_src = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
+		$faculty_img_src = wp_get_attachment_thumb_url( get_post_thumbnail_id($post->ID));
 		if (!$faculty_img_src) {
 		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
 		echo '<div class="faculty-list-item">';
-		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
+		echo '<a href="' . $faculty_link . '"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div></a>';
 		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
 		echo '</div>';
 		endwhile;

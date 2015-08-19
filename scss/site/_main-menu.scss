@@ -96,6 +96,16 @@
                         background-color: $bg-lighter;
                     }
                 }
+                
+                &:hover {
+                    margin-top: -1px;
+                }
+            }
+            
+            .active .dropdown {
+                &:hover {
+                    margin-top: 0;
+                }
             }
 
             & > .page_item_has_children {
