@@ -44,8 +44,11 @@
                 }
             }
             & > li > .dropdown {
-                margin-left: 1rem;
-            }
+                @media #{$large-up} {
+                    margin-left: 1rem;
+                }
+                margin-left: .5rem;
+            }   
             li a {
                 @media #{$large-up} {
                     font-size: rem-calc(14);

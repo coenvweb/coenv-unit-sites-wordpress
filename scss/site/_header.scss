@@ -68,8 +68,7 @@
         @include uni;
         font-weight: 600;
         text-transform: uppercase;
-        font-size: 1.5vw;
-        @media #{$large-up} {
+        @media #{$medium-up} {
             font-size: 2vw!important;
         }
         float: left;
@@ -151,6 +150,10 @@
     overflow: hidden;
     height: 20vw;
     
+    @media #{$small-only} {
+        height: 200px;
+    }
+    
     a {
         color: $white;
         
@@ -164,6 +167,9 @@
     &.mini {
         height: 10vw!important;
         min-height: rem-calc(100);
+        @media #{$small-only} {
+            height: 200px!important;
+        }
         .header-title-container, .header-white {
             bottom: 6vw;
             @media #{$medium-up} {
@@ -173,9 +179,8 @@
     }
     
     .header-white, .page-title {
-        height: rem-calc(40);
-        background: $white;
         @media #{$medium-up} {
+            background: $white;
             height: rem-calc(45);
         }
         @media #{$large-up} {
@@ -234,6 +239,11 @@
             color: $text;
             font-size: rem-calc(32);
             font-weight: 800;
+            @media #{$small-only} {
+                background-color: #FFf;
+                box-shadow: 0.5em 0 0 #FFf,-3em 0 0 #FFf;
+                padding: 0.5rem 0em 0.5rem 0em;
+            }
             @media #{$large-up} {
                 font-size: 4vw;
             }

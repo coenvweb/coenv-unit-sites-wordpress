@@ -386,8 +386,8 @@
         .event-list {
             @media #{$medium-up} {
                 @include block-grid($per-row:3, $spacing: 3.5vw);
-                margin: 0;
             }
+            margin: 0;
             text-align: center;
         
             li {

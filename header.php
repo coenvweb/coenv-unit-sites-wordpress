@@ -241,10 +241,9 @@
             echo '<div class="page-row mini"';
       };
     echo ' style="background-image: url(' . $banner['url'] . ');">';
-    echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
      ?>
-    <div class="header-white show-for-medium-up"></div>
-    <div class="header-title-container show-for-medium-up">
+    <div class="header-white"></div>
+    <div class="header-title-container">
         <div class="page-title-row row">
             <div class="page-title"><h1><span>
                 <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) ) ) {

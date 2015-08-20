@@ -66,7 +66,7 @@ $wp_query = new WP_Query( $query_args );
 <?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all posts &raquo;</a></div>
+			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all faculty &raquo;</a></div>
 		</div>
 	<?php endif; ?>
 		<?php
@@ -74,14 +74,6 @@ $wp_query = new WP_Query( $query_args );
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
-		$faculty_link = get_the_permalink();
-		$faculty_phone_rows = get_field('phone_number');
-		$faculty_email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
-		$first_faculty_phone_row = $faculty_phone_rows[0];
-		$first_faculty_phone = $first_faculty_phone_row['number' ];
-		$faculty_title_rows = get_field('job_titles' );
-		$first_faculty_title_row = $faculty_title_rows[0];
-		$first_faculty_title = $first_faculty_title_row['job_title'];
 		$faculty_img_src = wp_get_attachment_thumb_url( get_post_thumbnail_id($post->ID));
 		if (!$faculty_img_src) {
 		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';

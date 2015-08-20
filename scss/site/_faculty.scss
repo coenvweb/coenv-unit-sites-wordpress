@@ -94,6 +94,15 @@ article.type-faculty {
             @extend .button;
             margin-top: -.5rem;
         }
+        
+        @media #{$small-only} {
+            height: 7rem;
+            margin-right: 1.2rem;
+            .right {
+                float: left!important;
+                margin-top: 1.2rem;
+            }
+        }
     }
         
 }
@@ -105,6 +114,11 @@ article.type-faculty {
 	width: rem-calc(120px);
 	height: 13.5rem;
     background-color: $accent-blue-dk;
+    
+    @media #{$small-only} {
+        width: rem-calc(102);
+        height: 12.5rem;
+    }
     
 	h3 {
 		font-size: 1rem!important;
