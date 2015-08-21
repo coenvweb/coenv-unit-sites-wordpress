@@ -1,6 +1,5 @@
 <?php get_header(); ?>
 <div class="row">
-	<h1>News and Events</h1>
 	<div class="small-12 medium-8 columns right" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>

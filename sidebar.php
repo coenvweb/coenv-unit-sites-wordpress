@@ -14,11 +14,13 @@
 <?php
 if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav">';
-		/*if ($GLOBALS['post']->post_parent) {
-			echo coenv_base_section_title($GLOBALS['post']->ID);
-		}*/
-        echo coenv_base_section_title($ancestor_post);
-		echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
+        if (is_singular('faculty')) {
+            $ancestor_post = '3078';
+        }
+        if ((!is_singular('post')) && (!is_page_template( 'templates/news.php' ))) {
+            echo coenv_base_section_title($ancestor_post);
+            echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
+        }
 	echo '</div>';
 }
 ?>

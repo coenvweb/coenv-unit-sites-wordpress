@@ -455,7 +455,7 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['blog-cat'], 'blog_categories' );
+          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
           $blog_cat = $blog_cat->slug;
      
           echo $args['before_widget'];
@@ -469,13 +469,28 @@ class coenv_base_blog_cats extends WP_Widget {
                     $cats_args  = array(
                       'orderby' => 'name',
                       'order' => 'ASC',
-                      'taxonomy' => 'blog_category'
+                      'taxonomy' => 'category'
                       );
                     $cats = get_categories($cats_args);
                     if ($cats) {
                          echo '<ul class="blog-cats inline-list">';
+                         if ($blog_cat) {
+                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
+                         }
                          foreach($cats as $cat) { 
-                              echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $cat->slug . '">' . $cat->name . '</a></li>';
+                             $slug = $cat->slug;
+                             if ($slug == $blog_cat) {
+                                 $check = 'checked';
+                             } else {
+                                 $check = 'unchecked';
+                             }
+                             
+                             if ($slug !== 'uncategorized') {
+                             
+                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                                 echo $cat->name;
+                                 echo '</a></li>';
+                             }
                          }
                          echo '</ul>';
                     }
@@ -540,6 +555,7 @@ class coenv_base_blog_cats extends WP_Widget {
 } 
 
 
+
 function register_coenv_base_blog_cats() {
     register_widget( 'coenv_base_blog_cats' );
 }
@@ -572,6 +588,8 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
+         $coenv_year = (string) $_GET['coenv-year'];
+         $coenv_month = (string) $_GET['coenv-month'];
      
           echo $args['before_widget'];
           
@@ -582,15 +600,7 @@ class coenv_base_index_dates extends WP_Widget {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
 
-          echo '<ul>';
-          echo '<li><a href="#">November 2014</a></li>';
-          echo '<li><a href="#">October 2014</a></li>';
-          echo '<li><a href="#">September 2014</a></li>';
-          echo '<li><a href="#">August 2014</a></li>';
-          echo '<li><a href="#">July 2014</a></li>';
-          echo '<li><a href="#">June 2014</a></li>';
-          echo '<li><a href="#">May 2014</a></li>';
-          echo '</ul>';
+          coenv_base_date_filter('post',$coenv_month,$coenv_year);
 
           echo $args['after_widget'];
      }
@@ -657,6 +667,7 @@ function register_coenv_base_index_dates() {
     register_widget( 'coenv_base_index_dates' );
 }
 add_action( 'widgets_init', 'register_coenv_base_index_dates' );
+
 
 /**
  * Social Links Widget

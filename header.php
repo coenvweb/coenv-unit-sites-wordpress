@@ -246,15 +246,17 @@
     <div class="header-title-container">
         <div class="page-title-row row">
             <div class="page-title"><h1><span>
-                <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) ) ) {
-         if (!is_singular('faculty')) {
-            echo the_title();
-         } else {
-             echo '<a href="/faculty-research/faculty-instructor-bios/" title="Faculty & Research">Faculty & Research</a>';
-         }
-      } else {
-            echo '<a href="/about/news-events/" title="News & Events">News & Events</a>';
-      };?></span></h1></div>
+        <?php
+        if ((is_single()) || (is_page_template( 'templates/news.php' ) ) ) {
+            if (is_singular('faculty')) {
+                echo '<a href="/faculty-research/faculty-instructor-bios/" title="Faculty & Research">Faculty</a>';
+            } else {
+                echo '<a href="/about/news-stories/" title="News & Stories">News & Stories</a>';
+            }
+        } else {
+             echo the_title();
+        }
+                ?></span></h1></div>
         </div>
     </div>
 </div>

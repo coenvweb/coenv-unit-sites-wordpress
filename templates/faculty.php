@@ -75,13 +75,11 @@ $wp_query = new WP_Query( $query_args );
 		$wp_query->the_post();
 		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
 		$faculty_img_src = wp_get_attachment_thumb_url( get_post_thumbnail_id($post->ID));
-		if (!$faculty_img_src) {
-		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
+        $faculty_link = get_the_permalink();
+        if (!$faculty_img_src) {
+		  $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
-		echo '<div class="faculty-list-item">';
-		echo '<a href="' . $faculty_link . '"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div></a>';
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '</div>';
+		echo '<a href="' . $faculty_link . '"><div class="faculty-list-item"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></div></a>';
 		endwhile;
 		?>
 				<div class="pager">

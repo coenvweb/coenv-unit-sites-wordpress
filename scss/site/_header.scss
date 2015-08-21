@@ -223,6 +223,11 @@
             font-size: rem-calc(22);
             margin-left: rem-calc(15);
             margin-top: rem-calc(-1);
+            @media #{small-only} {
+                border-left: 15px solid white;
+                padding-bottom: 8px;
+                margin-left: 0;
+            }
             @media #{$medium-up} {
                 font-size: rem-calc(32);
             }
