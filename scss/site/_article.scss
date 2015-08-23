@@ -24,7 +24,7 @@
 	}
 	a {
 		color: #000;
-		//text-decoration: underline;
+		text-decoration: underline;
 	}
 	.article__meta {
 		h2 {
@@ -343,6 +343,11 @@ background-color: rgba(0, 0, 0, .9);
 	margin-bottom: rem-calc(12);
 }
 
+.single-publications div[role="main"] h1 {
+	margin-bottom: 40px;
+}
 
-
+.tableauPlaceholder {
+	margin-bottom: 40px;
+}
 
