@@ -475,7 +475,7 @@ class coenv_base_blog_cats extends WP_Widget {
                     if ($cats) {
                          echo '<ul class="blog-cats inline-list">';
                          if ($blog_cat) {
-                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
+                         echo '<li><a class="cats unchecked" href="/news-stories/">All News</a></li>';
                          }
                          foreach($cats as $cat) { 
                              $slug = $cat->slug;
@@ -487,7 +487,7 @@ class coenv_base_blog_cats extends WP_Widget {
                              
                              if ($slug !== 'uncategorized') {
                              
-                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                                 echo '<li><a class="cats ' . $check . '" href="/news-stories/?tax=category&term=' . $cat->slug . '">';
                                  echo $cat->name;
                                  echo '</a></li>';
                              }
