@@ -188,10 +188,9 @@ h1, h2, h3 {
             font-size: rem-calc(28)!important;
             line-height: rem-calc(32)!important;
         }
-
         @media #{$xlarge-up} {
-            font-size: 1.4vw!important;
-            line-height: 2vw!important;
+            font-size: 1.7vw!important;
+            line-height: 2.5vw!important;
         }
 
     } // h2
@@ -204,12 +203,15 @@ h1, h2, h3 {
             font-size: rem-calc(18)!important;
             line-height: rem-calc(20)!important;
         }
-
         @media #{$xlarge-up} {
-            font-size: 1.7vw!important;
-            line-height: 2.5vw!important;
+            font-size: 1.4vw!important;
+            line-height: 2vw!important;
         }
     } // h3
+
+    ul {
+        margin-left: 1.5rem;
+    }
 }
 
     h4 {
