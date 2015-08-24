@@ -182,7 +182,7 @@
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>
-            <div class="units show-for-large-up">
+            <div class="units show-for-medium-up">
                 <ul>
               <li><a href="http://environment.uw.edu" title="UW College of the Environment">
   <?php include("assets/img/college-of-the-environment.svg"); ?>
