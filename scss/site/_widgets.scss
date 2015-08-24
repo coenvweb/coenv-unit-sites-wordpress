@@ -36,16 +36,35 @@ aside#sidebar div.columns {
 	
 	// Content blocks
 	.widget_custom_post_widget {
+        
+        border-top: 3px solid $accent-blue;
+
+        .image-area {
+            position: relative;
+            h4 {
+                @include uni;
+                font-size: rem-calc(22);
+                letter-spacing: .1rem;
+                position: absolute;
+                bottom: 1rem;
+                margin: 0 1rem;
+                a {
+                    color: $text;
+                    font-weight: 800;
+                    background-color: #FFF;
+                    box-shadow: 0.5em 0 0 #FFf,-3em 0 0 #FFf;
+                    padding: 0.5rem 0em 0.5rem 0em;
+                }
+            }   
+        }
+
 		.widget_content {
-			padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
-			h4 {
-				@include encode_cb;
-				font-size: rem-calc(22);
-				letter-spacing: .1rem;
-			}
+			padding: 1rem 1rem 0 1rem;
+            
 			p {
 				margin-bottom: 0;
 			}
+            
 		}
 		.widget_links {
 			margin-bottom: 0;
@@ -55,14 +74,10 @@ aside#sidebar div.columns {
 				display: inline;
 				width: 100%;
 				a {
-					
-
-					
 					letter-spacing: rem-calc(1);
-					margin: 0 0 rem-calc(6) 0;
+					margin: 0;
 					padding: rem-calc(10);
 					text-align: left;
-					width: 100%;
 				}
 				.button {
 					text-transform: uppercase;
@@ -79,11 +94,12 @@ aside#sidebar div.columns {
 				}
 			}
 			.widget_links {
-				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
+				padding: 0 1.25rem 1rem 1rem;
 				.button {
 					background-color: #333;
 					color: $white;
 					text-align: left;
+                    margin-bottom: .5rem;
 				}
 			}
 			

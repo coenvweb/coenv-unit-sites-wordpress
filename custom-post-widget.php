@@ -66,17 +66,23 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image && ( $image_placement == null ) ) {
-    echo $image;
-}
-echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
-    echo $buttons;
-}
+echo '<div class="image-area">';
+
 if ( $show_custom_post_title ) {
 	echo $before_title;
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
 	echo $after_title;
+}
+
+if ( $show_featured_image && ( $image_placement == null ) ) {
+    echo $image;
+}
+
+echo '</div>';
+
+echo '<div class="widget_content">';
+if ( $link_position[0] == 'title' ) {
+    echo $buttons;
 }
 echo $widget_copy;
 echo '</div>';
