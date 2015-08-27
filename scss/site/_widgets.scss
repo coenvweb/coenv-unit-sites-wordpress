@@ -123,6 +123,89 @@ aside#sidebar div.columns {
 		}
 		
 	}
+    
+    .widget_coenv_base_fac_cats, .widget_coenv_base_index_dates, .widget_coenv_base_blog_cats { //faculty categories
+        h4 {
+            @extend .section-title;
+            text-transform: none;
+            font-size: rem-calc(22)!important;
+            line-height: 2rem!important;
+            padding-bottom: .5rem;
+            border-bottom: 3px solid $accent-blue;
+            color: $text!important;
+            font-weight: 400!important;
+        }
+        .fac-cats {
+            background: $bg-light;
+            padding: 1rem;
+        }
+    }
+    
+    .widget-events {
+        text-align: center;
+        svg {
+            width: 4rem;
+            height: 4rem;
+        }
+        h4 {
+            @extend .section-title;
+            text-transform: none;
+            font-size: rem-calc(24)!important;
+            line-height: 2rem!important;
+            padding-bottom: .5rem;
+            a {
+                color: $accent-blue!important;
+            }
+        }
+        
+        .event-list {
+            margin: 0;
+        
+            li {
+                .single-event {
+                    display: block;
+                    background-color: $bg-light;
+                    border-top: 4px solid $accent-blue;
+                    color: $accent-blue-dk;
+                    padding: 1rem 2rem;
+                    height: 100%;
+                    margin-bottom: 1rem;
+                    a {
+                        color: $accent-blue-dk;
+                    }
+                }
+                
+                .date {
+                    @include o_sans_bold;
+                    padding-bottom: 1rem;
+                    margin-bottom: .7rem;
+                    font-size: .9rem;
+                    i {
+                        @extend .visuallyhidden;
+                    }
+                    &:after {
+                        content: "";
+                        position: relative;
+                        height: 4px;
+                        width: 40%;
+                        background-color: $accent-blue-dk;
+                        bottom: -.7rem;
+                        display: block;
+                        margin: 0 auto;
+                    }
+                }
+                .title {
+                    @include uni;
+                    font-weight: 800;
+                    font-size: 1.1rem!important;
+                    margin-bottom: 0;
+                }
+            }
+        }
+        .button {
+            margin-top: 1rem;
+        }
+    }
 }
 
 // After Content Widgets

@@ -535,7 +535,7 @@
     .fhl {
         .widget_img {
             @media #{$medium-up} {
-                float: right;
+                float: left;
             }
         }
         strong {
@@ -552,7 +552,7 @@
         }
         .widget_img {
             @media #{$medium-up} {
-                float: left;
+                float: right;
             }
             img {
                 max-width: 100%!important;

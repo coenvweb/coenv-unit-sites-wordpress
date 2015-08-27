@@ -336,22 +336,12 @@ class CoEnv_Widget_Events extends WP_Widget {
 
     ?>
       <?php echo $before_widget; ?>
-            <?php if ( $events_url != '' ) : ?>
-                                   
-            <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events">More</a>
-            <?php endif ?>
+
         
-        
-            <?php if (!is_front_page()) {
-                    echo $before_title;
-                }
-        ?>
-          <h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
-            <?php
-                if (!is_front_page()) {
-                    echo $after_title;
-                }
-        ?>
+        <?php if (!is_front_page()) : ?>
+                    <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a><h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
+
+        <?php endif; ?>
 
       <ul class="event-list" data-equalizer>
 
@@ -383,6 +373,10 @@ class CoEnv_Widget_Events extends WP_Widget {
       <?php endif ?>
         
       </ul>
+    <?php if ( $events_url != '' ) : ?>
+                                   
+            <a href="<?php echo $events_url; ?>" class="button more-events" title="View All Events">More Events</a>
+    <?php endif ?>
 
       <?php echo $after_widget ?>
     
