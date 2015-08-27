@@ -359,6 +359,10 @@
         position: relative;
         padding-top: 2rem!important;
         
+        .widget svg {
+            @extend .visuallyhidden;
+        }
+        
         h2 {
             color: white;
             font-weight: 800;

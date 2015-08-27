@@ -44,9 +44,9 @@
             font-weight: 800;
             @media #{$medium-up} {
                 font-size: 5vw;
+                margin-left: 2rem;
             }
             @media #{$large-up} {
-                margin-left: 2rem;
                 font-size: 4vw;
             }
         }

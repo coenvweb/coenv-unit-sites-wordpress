@@ -338,10 +338,10 @@ class CoEnv_Widget_Events extends WP_Widget {
       <?php echo $before_widget; ?>
 
         
-        <?php if (!is_front_page()) : ?>
-                    <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a><h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
+        <?php if (!is_home()): ?>
+            <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a><h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
 
-        <?php endif; ?>
+        <?php endif ?>
 
       <ul class="event-list" data-equalizer>
 
