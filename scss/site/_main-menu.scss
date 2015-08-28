@@ -44,9 +44,6 @@
                 }
             }
             & > li > .dropdown {
-                @media #{$large-up} {
-                    margin-left: 1rem;
-                }
                 margin-left: .5rem;
             }   
             li a {
@@ -91,6 +88,7 @@
                 @include shadow;
     
                 a {
+                    padding: 0 .5rem 0 .5rem!important;
                     font-size: rem-calc(14);
                     text-transform: none;
                     background-color: #f6f5f7;

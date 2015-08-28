@@ -59,3 +59,27 @@
 .widget_coenv_base_index_dates {
     padding-bottom: .5rem;
 }
+
+.blog-list-item {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $bg-light;
+    h3 {
+        font-weight: 800!important;
+    }
+}
+
+.blog-meta {
+    svg {
+        fill: $accent-blue-dk;
+    }
+    a:hover {
+        svg {
+            fill: $accent-blue;
+        }
+    }
+}
+
+.page-template-news #sidebar {
+	margin-top: 2rem;
+}

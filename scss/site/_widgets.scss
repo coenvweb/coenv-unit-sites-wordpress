@@ -20,14 +20,6 @@
     }
 }
 
-// Story Widget (Ultimate Posts)
-
-.widget_ultimate_posts > h4 {
-    padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
-    background-color: #f2f2f2;
-    margin-bottom: 0;
-}
-
 
 // Sidebar Widgets
 aside#sidebar div.columns {
@@ -36,7 +28,6 @@ aside#sidebar div.columns {
 	
 	// Content blocks
 	.widget_custom_post_widget {
-        
         border-top: 3px solid $accent-blue;
 
         .image-area {
@@ -105,26 +96,17 @@ aside#sidebar div.columns {
 			
 		}
 	}
-	&:nth-child(even) {
-		.widget_custom_post_widget {
-			background-color: #f2f2f2;
-		}
-		.widget_custom_post_widget .widget_content {
-
-		}
-		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			padding-left: rem-calc(20);
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
-			background-repeat: no-repeat;
-			background-position: bottom center;
-		}
-		
-	}
+    .widget_custom_post_widget {
+        background-color: #f2f2f2;
+    }
+    .widget_custom_post_widget .widget_links {
+        padding-top: 0;
+        padding-right: rem-calc(20);
+        padding-bottom: 1rem;
+        padding-left: 1rem;
+    }
     
-    .widget_coenv_base_fac_cats, .widget_coenv_base_index_dates, .widget_coenv_base_blog_cats { //faculty categories
+    .widget_coenv_base_fac_cats, .widget_coenv_base_index_dates, .widget_coenv_base_blog_cats, .widget_ultimate_posts { //faculty categories
         h4 {
             @extend .section-title;
             text-transform: none;
@@ -138,6 +120,12 @@ aside#sidebar div.columns {
         .fac-cats {
             background: $bg-light;
             padding: 1rem;
+        }
+        .widget_custom_post_widget {
+            border-top: none;
+            .entry-title {
+                border: none;
+            }
         }
     }
     
@@ -296,16 +284,6 @@ aside#sidebar div.columns {
 		.widget_custom_post_widget .widget_content {
 
 		}
-		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			padding-left: rem-calc(20);
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
-			background-repeat: no-repeat;
-			background-position: bottom center;
-		}
-		
 	}
 }
 
