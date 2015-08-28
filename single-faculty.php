@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-12 columns" role="main">
+	<div class="small-12 medium-8 columns right" role="main">
 	<?php do_action('foundationPress_before_content'); ?>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
 			<div class="entry-content">
@@ -129,5 +129,6 @@
 	<?php do_action('foundationPress_after_content'); ?>
 
 	</div>
+    <?php get_sidebar(); ?> 
 </div>	
 <?php get_footer(); ?>

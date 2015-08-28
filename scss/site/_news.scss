@@ -70,6 +70,7 @@
 }
 
 .blog-meta {
+    font-size: 1rem;
     svg {
         fill: $accent-blue-dk;
     }
@@ -82,4 +83,10 @@
 
 .page-template-news #sidebar {
 	margin-top: 2rem;
+}
+
+.single {
+    .article__title {
+        font-weight: 800;
+    }
 }

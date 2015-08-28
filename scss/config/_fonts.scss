@@ -137,17 +137,18 @@
 
 blockquote {
     margin: 0!important;
-    padding: rem-calc(20) rem-calc(80)!important;
+    padding: rem-calc(20) rem-calc(50)!important;
     border-left: 0px!important;
-    border-top: 2px solid #f6f5f7;
-    border-bottom: 2px solid #f6f5f7;
+    border-top: 4px solid $border;
+    background: $bg-light;
     
     p {
         margin: 0!important;
         @include encode_cb;
-        text-transform: none;
+        text-transform: uppercase;
         color: #000000!important;
         font-size: rem-calc(18);
+        color: $accent-blue-dk !important;
     }
 }
 

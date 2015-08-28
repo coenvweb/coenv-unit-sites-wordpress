@@ -22,7 +22,7 @@
 		@include font-size(18);
 		@include line-height(30);
 		font-weight: 400;
-		border-bottom: 2px solid $border;
+		border-bottom: 2px solid $accent-blue;
 
 		@media #{$medium-up} {
 			@include font-size(36);
@@ -48,7 +48,7 @@
 			color:#888;
 			vertical-align: middle;
 			text-decoration:none;
-			@include font-size(11);
+			font-size: .75rem;
 			color: $text-lt;
 		}
 		
@@ -268,9 +268,8 @@
 		margin: 0;
 		padding: 0;
 		//width: auto !important;
-		color: #fff;
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-		background-color: $bg-dk;
+		color: $text;
+		background-color: $bg-light;
 		
 		.source {
 			background-color: rgba(0,0,0,.5);
@@ -284,6 +283,7 @@
 			@include font-size(8);
 			//@include rem('margin-top', -1.8);
 			@include rem('padding', .25, 1);
+            background-color: $bg-dk;
 			
 			a {
 				color: white;
@@ -297,10 +297,10 @@
 
 		.wp-caption-text {
 			@include rem('margin', 0.25, 1, 0.5, 1);
-			@include rem('padding', .25, 1);
-			@include font-size(12);
+			@include rem('padding', .25, 1, 1, 1);
+			@include font-size(16);
 			@include rem('line-height', 1.25);
-			color: $text-very-lt;
+			color: $text;
 			text-align: left;
 
 
