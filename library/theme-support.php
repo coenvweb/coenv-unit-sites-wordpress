@@ -183,7 +183,12 @@ function coenv_banner() {
     
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
-        $ancestor_id = 7;
+        $ancestor_id = 3179;
+    }
+    
+    if ( is_singular( 'faculty' )) { //change faculty pages' section titles
+        unset ($ancestor_id);
+        $ancestor_id = 3013;
     }
     
     if ( has_post_thumbnail( $ancestor_id ) ) {
