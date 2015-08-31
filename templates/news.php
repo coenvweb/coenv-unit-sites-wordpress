@@ -55,15 +55,15 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<?php if ($wp_query->have_posts()): 
 		?>
 		<?php if ($coenv_cat_1): // Category filter ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+		<div class="panel row">
+			<div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+		<div class="panel row">
+			<div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
+			<div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 

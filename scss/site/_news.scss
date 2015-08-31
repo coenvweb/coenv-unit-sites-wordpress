@@ -17,7 +17,7 @@
     }
 
     ul {
-        margin: 0.5rem 1.5rem 0.5rem 3.5rem;
+        margin: 0.5rem 1.5rem 0.5rem 3rem;
     }
 
     li {
@@ -36,7 +36,7 @@
             width: 1rem;
             content: '';
             position: absolute;
-            left: 1.5rem;
+            left: 1rem;
             margin-top: 4px;
             border: $accent-blue-dk solid 3px;
         }
@@ -46,7 +46,7 @@
                 width: 1rem;
                 content: '';
                 position: absolute;
-                left: 1.5rem;
+                left: 1rem;
                 margin-top: 4px;
                 border: $accent-blue-dk solid 3px;
                 background-color: $accent-blue;
@@ -88,5 +88,25 @@
 .single {
     .article__title {
         font-weight: 800;
+    }
+}
+
+.panel {
+    padding: 1rem;
+    margin-bottom: 1rem!important;
+    border-top: $accent-blue solid 4px!important;
+    border: none;
+    
+    .columns {
+        padding: 0;
+    }
+    .post-number {
+        margin-top: .5rem;
+    }
+    .all {
+        text-align: right;
+        .button {
+            margin: 0;
+        }
     }
 }
