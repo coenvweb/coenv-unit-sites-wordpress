@@ -3,9 +3,6 @@
     <div class="footer-row">
     <div class="row">
         <div class="medium-6 columns">
-            <div class="smea-logo left">
-                <?php get_template_part('assets/img/icons/inline', 'smea-logo.svg'); ?>
-            </div>
             <div class="site-footer__header">
                 <h2><?php bloginfo('name') ?></h2>
             </div>
@@ -79,7 +76,6 @@
                 <ul id="menu-footer-links" class="menu-footer-links">
                     <li><a target="_blank" href="http://www.washington.edu/admin/hr/jobs/">Jobs</a></li>
                     <li><a target="_blank" href="http://myuw.washington.edu/">My UW</a></li>
-                    <li><a target="_blank" href="http://www.washington.edu/admin/rules/wac/rulesindex.html">Rules Docket</a></li>
                     <li><a target="_blank" href="http://www.washington.edu/online/privacy/">Privacy</a></li>
                     <li><a target="_blank" href="http://www.washington.edu/online/terms/">Terms</a></li>
                 </ul>
