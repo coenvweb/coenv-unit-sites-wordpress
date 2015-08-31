@@ -6,56 +6,60 @@
     }
 }
 
+.faculty-info {
+    background: $bg-light;
+    margin-bottom: rem-calc(20px);
+    margin-left: rem-calc(20px);
+    padding-bottom: rem-calc(10px);
+    padding-left: 0;
+    padding-right: 0;
+    width: rem-calc(240px);
+
+    p {
+        margin: 0;
+        padding: rem-calc(10px);
+    }
+    
+    .faculty_contact_fields {
+        border-top: 4px solid $accent-blue;
+    }
+
+    ul {
+        margin: 0;
+        padding: 1rem;
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+
+            &.job-titles {
+                margin-bottom: 1rem;
+            }
+
+            &.cv a {
+            }
+        }
+
+    } // end ul
+
+    .faculty-name {
+
+    }
+
+    .faculty-website {
+        padding-bottom: 0;
+    }
+
+}
+
 article.type-faculty {
 
-	.faculty-info {
-		background-color: #f4f4f4;
-		border: 1px solid #ddd;
-		margin-bottom: rem-calc(20px);
-		margin-left: rem-calc(20px);
-		padding-bottom: rem-calc(10px);
-		width: rem-calc(240px);
-
-		p {
-			margin: 0;
-			padding: rem-calc(10px);
-		}
-
-		ul {
-			margin: 0;
-			padding-right: rem-calc(10px);
-			padding-bottom: rem-calc(10px);
-			padding-left: rem-calc(10px);
-
-			ul {
-				margin: 0;
-				padding: 0;
-			}
-
-			li {
-				list-style: none;
-				margin-left: 0;
-				padding-left: 0;
-
-				&.job-titles {
-					margin-bottom: 1rem;
-				}
-
-				&.cv a {
-				}
-			}
-
-		} // end ul
-
-		.faculty-name {
-            
-		}
-
-		.faculty-website {
-			padding-bottom: 0;
-		}
-
-	}
 
 	.faculty-advising {
 		border-top: 1px solid #DDDDDD;
@@ -139,11 +143,10 @@ article.type-faculty {
 	margin-bottom: 1rem;
 }
 .article__categories h2 {
-	@include rem('font-size', 1);
+	font-size: 1rem!important;
 	line-height: 1;
-	@include sans;
 	padding: 0;
-	margin: 0 0 .5rem 0;
+	margin: 0;
 }
 
 ul.fac-cats,
@@ -161,7 +164,6 @@ ul.fac-terms {
 }
 
 .faculty-website a.button {
-	@include rem('font-size', 1);
 	margin: 1rem 0 0 0;
 	width: 100%;
 }

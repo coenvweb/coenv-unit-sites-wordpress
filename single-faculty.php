@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns right" role="main">
+	<div class="small-12 medium-9 columns right" role="main">
 	<?php do_action('foundationPress_before_content'); ?>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
 			<div class="entry-content">
@@ -23,24 +23,8 @@
             $faculty_pubs = $faculty_fields["selected_publications"];
             $faculty_img = get_the_post_thumbnail($page->ID, 'med');
             ?>
-            <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
-                <header class="article__header">
-                    <div class="article__meta">
-                    </div>
-                    <div class="faculty-title">
-                        <h1 class="article__title">
-                        <?php if ( is_page() || is_single()) : ?>
-                            <?php the_title() ?>
-                        <?php else : ?>
-                            <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a>
-                        <?php endif ?>
-                        </h1>	
-                    </div>
-                </header>
-                <section class="article__content">
-                    <div class="faculty-info right">
+                <div class="faculty-info right columns large-4">
                         <?php echo $faculty_img; ?>
-                        <p class="faculty-name"><?php echo $faculty_name; ?></p>
                         <?php echo '<ul class="faculty_contact_fields">';
                         if( have_rows('job_titles') ) {
                             echo '<li class="job-titles">';
@@ -92,10 +76,25 @@
                             echo '<li class="cv"><a href="' . $faculty_cv . '">Curriculum Vitae (CV)</a></li>';
                         }
                         if ($faculty_website_url) { ?>
-                            <li class="faculty-website"><a class="button" href="#" target="_blank">Visit <?php echo coenv_base_apostophe_fname($faculty_fname); ?> website</a></li>
+                            <li class="faculty-website"><a class="button" href="#" target="_blank">Visit faculty website</a></li>
                         <?php } ?>
                         </ul>		
                     </div>
+            <article id="post-<?php the_ID() ?>" class="columns large-8" <?php post_class( 'article' ) ?>>
+                <header class="article__header">
+                    <div class="article__meta">
+                    </div>
+                    <div class="faculty-title">
+                        <h1 class="article__title">
+                        <?php if ( is_page() || is_single()) : ?>
+                            <?php the_title() ?>
+                        <?php else : ?>
+                            <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a>
+                        <?php endif ?>
+                        </h1>	
+                    </div>
+                </header>
+                <section class="article__content">
                     <div class="article__categories">
                         <h2>Research areas</h2>
                         <?php coenv_base_fac_terms($post->ID); ?>
