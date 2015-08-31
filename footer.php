@@ -79,7 +79,6 @@
                 <ul id="menu-footer-links" class="menu-footer-links">
                     <li><a target="_blank" href="http://www.washington.edu/admin/hr/jobs/">Jobs</a></li>
                     <li><a target="_blank" href="http://myuw.washington.edu/">My UW</a></li>
-                    <li><a target="_blank" href="http://www.washington.edu/admin/rules/wac/rulesindex.html">Rules Docket</a></li>
                     <li><a target="_blank" href="http://www.washington.edu/online/privacy/">Privacy</a></li>
                     <li><a target="_blank" href="http://www.washington.edu/online/terms/">Terms</a></li>
                 </ul>
