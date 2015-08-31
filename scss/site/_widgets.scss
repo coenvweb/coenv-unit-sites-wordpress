@@ -24,7 +24,18 @@
 // Sidebar Widgets
 aside#sidebar div.columns {
     padding: 0;
-
+    
+    .widget_ultimate_posts {
+        h4:first-of-type {
+            @extend .section-title;
+            text-transform: none;
+            font-size: rem-calc(22)!important;
+            line-height: 1.7rem!important;
+            padding-bottom: .5rem;
+            color: $text!important;
+            font-weight: 400!important;
+        }
+    }
 	
 	// Content blocks
 	.widget_custom_post_widget {
@@ -34,17 +45,22 @@ aside#sidebar div.columns {
             position: relative;
             h4 {
                 @include uni;
-                font-size: rem-calc(22);
                 letter-spacing: .1rem;
                 position: absolute;
                 bottom: 1rem;
                 margin: 0 1rem;
+                text-transform: uppercase!important;
                 a {
+                    font-size: rem-calc(16)!important;
+                    line-height: 0!important;
                     color: $text;
                     font-weight: 800;
                     background-color: #FFF;
                     box-shadow: 0.5em 0 0 #FFf,-3em 0 0 #FFf;
                     padding: 0.5rem 0em 0.5rem 0em;
+                    &:hover {
+                        text-decoration: none!important;
+                    }
                 }
             }   
         }
@@ -106,7 +122,7 @@ aside#sidebar div.columns {
         padding-left: 1rem;
     }
     
-    .widget_coenv_base_fac_cats, .widget_coenv_base_index_dates, .widget_coenv_base_blog_cats, .widget_ultimate_posts { //faculty categories
+    .widget_coenv_base_fac_cats, .widget_coenv_base_index_dates, .widget_coenv_base_blog_cats{ //faculty categories
         h4 {
             @extend .section-title;
             text-transform: none;

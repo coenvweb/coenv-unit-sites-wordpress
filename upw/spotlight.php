@@ -33,9 +33,10 @@
                 <span class="entry-cats-list"><?php echo $categories; ?></span>
               </div>
               <?php endif; ?>
+            <div class="image-area">
 
             <?php if (current_theme_supports('post-thumbnails') && $instance['show_thumbnail'] && has_post_thumbnail()) : ?>
-              <div class="entry-image widget_img">
+              <div class="widget_img">
                 <a href="<?php the_permalink(); ?>" rel="bookmark">
                   <?php the_post_thumbnail($instance['thumb_size']); ?>
                 </a>
@@ -43,14 +44,14 @@
             <?php endif; ?>
 
             <?php if (get_the_title() && $instance['show_title']) : ?>
-              <div class="widget_content">
+              
               <h4 class="entry-title">
                 <a href="<?php the_permalink(); ?>" rel="bookmark">
                   <?php the_title(); ?>
                 </a>
               </h4>
-                  </div>
             <?php endif; ?>
+          </div>
 
             <?php if ($instance['show_date'] || $instance['show_author'] || $instance['show_comments']) : ?>
 
