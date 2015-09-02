@@ -29,7 +29,7 @@
                         font-style: italic;
                         font-weight: 600;
                         margin-right: .5rem;
-                        font-size: rem-calc(12);
+                        font-size: rem-calc(13);
                     }
                     
                     &:last-of-type {
@@ -39,12 +39,12 @@
             }
             .social-menu {
                 i {
-                    font-size: rem-calc(18);
+                    font-size: rem-calc(24);
                     color: $accent-blue;
                 }
             }
             & > li > .dropdown {
-                margin-left: .5rem;
+                margin-left: 1rem;
             }   
             li a {
                 @media #{$large-up} {
@@ -88,7 +88,7 @@
                 @include shadow;
     
                 a {
-                    padding: 0 .5rem 0 .5rem!important;
+                padding: 0 .9rem 0 .9rem!important;
                     font-size: rem-calc(14);
                     text-transform: none;
                     background-color: #f6f5f7;
