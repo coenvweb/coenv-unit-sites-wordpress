@@ -40,6 +40,7 @@
     
     .about-summary {
         background: $bg-cream;
+        background-image: url("../assets/img/paper-texture-marbio.jpg");
     }
     
     .about-summary p, .row .row h2 {
@@ -155,6 +156,7 @@
         
         text-align: center;
         background: $bg-light;
+        background-image: url("../assets/img/paper-texture-grey.jpg");
         
         .medium-6 {
             @media #{$small-only} {
