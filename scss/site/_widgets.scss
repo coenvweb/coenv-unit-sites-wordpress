@@ -43,6 +43,9 @@ aside#sidebar div.columns {
 
         .image-area {
             position: relative;
+            min-height: 120px;
+            @extend .light-to-dark;
+            
             h4 {
                 @include uni;
                 letter-spacing: .1rem;
