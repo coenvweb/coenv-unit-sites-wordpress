@@ -120,6 +120,8 @@ class coenv_base_fac_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
+         $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
+         if (empty($coenv_cat_term_1)) {
           $fac_cat = get_term_by( 'slug', (string) $_GET['fac-cat'], 'research_areas' );
           $fac_cat = $fac_cat->slug;
      
@@ -148,6 +150,7 @@ class coenv_base_fac_cats extends WP_Widget {
                          echo '</ul>';
                     }
           echo $args['after_widget'];
+         }
      }
 
      /**

@@ -144,11 +144,9 @@ blockquote {
     
     p {
         margin: 0!important;
-        @include encode_cb;
-        text-transform: uppercase;
+        @include uni;
         color: #000000!important;
-        font-size: rem-calc(18);
-        color: $accent-blue-dk !important;
+        font-size: rem-calc(20);
     }
 }
 
@@ -186,12 +184,12 @@ h1, h2, h3 {
         line-height: rem-calc(24)!important;
         font-weight: 400;
         @media #{$medium-up} {
-            font-size: rem-calc(28)!important;
-            line-height: rem-calc(32)!important;
+            font-size: rem-calc(24)!important;
+            line-height: rem-calc(28)!important;
         }
         @media #{$xlarge-up} {
-            font-size: 1.7vw!important;
-            line-height: 2.5vw!important;
+            font-size: 1.5vw!important;
+            line-height: 2.2vw!important;
         }
 
     } // h2
@@ -201,11 +199,11 @@ h1, h2, h3 {
         line-height: rem-calc(18)!important;
         font-weight: 800;
         @media #{$medium-up} {
-            font-size: rem-calc(18)!important;
-            line-height: rem-calc(20)!important;
+            font-size: rem-calc(16)!important;
+            line-height: rem-calc(18)!important;
         }
         @media #{$xlarge-up} {
-            font-size: 1.4vw!important;
+            font-size: 1.2vw!important;
             line-height: 2vw!important;
         }
     } // h3

@@ -19,10 +19,10 @@
 		margin-top: 0;
 		@include rem('padding-bottom', 1);
 		@include serif;
-		@include font-size(18);
+		@include font-size(24);
 		@include line-height(30);
 		font-weight: 400;
-		border-bottom: 2px solid $accent-blue;
+		border-bottom: 4px solid $bg-light;
 
 		@media #{$medium-up} {
 			@include font-size(36);
@@ -166,11 +166,12 @@
 
     // accordion
     .accordion-title {
-       background: $border;
-        padding: rem-calc(10);
+        background: $bg-light;
+        border-top: 4px solid $accent-blue;
+        padding: rem-calc(10) 1.5rem rem-calc(10) rem-calc(10);
         
         &:hover {
-            color: $accent;
+            color: $accent-blue;
             cursor: pointer;
             cursor: hand;
         }
@@ -182,7 +183,8 @@
             font-weight: normal;
             font-variant: normal;
             text-transform: none;
-            line-height: 1;
+            line-height: 1.8;
+            margin-left: 1rem;
             -webkit-font-smoothing: antialiased;
             display: inline-block;
             text-decoration: inherit;

@@ -96,7 +96,7 @@
         
         .large-6 {
             text-align: center;
-            height: 20vw;
+            height: 25vw;
             min-height: 275px;
             position: relative;
             overflow: hidden;
@@ -165,6 +165,7 @@
         
         .white-container {
             background: white;
+            overflow: hidden;
         }
 
         .more {
@@ -213,6 +214,9 @@
             @include uni();
             font-weight: 800;
             font-size: 1.5rem;
+            @media #{$small-only} {
+                margin-left: 1rem;
+            }
             @media #{$medium-up} {
                 font-size: 2.05vw;
             }
@@ -242,6 +246,9 @@
         .read-more {
             position: absolute;
             bottom: 2vw;
+            @media #{$small-only} {
+                bottom: 1rem;
+            }
         }
         
         .button {
@@ -253,7 +260,7 @@
             padding: 2vw;
             padding-bottom: 5vw;
             @media #{$small-only} {
-                padding-bottom: 10vw;
+                padding: 1rem 1rem 10vw 1rem;
             }
         }
         
@@ -269,7 +276,8 @@
             right: 4.5vw;
             padding-bottom: .7rem;
             @media #{$small-only} {
-                right: 2.5rem;
+                right: 3.5rem;
+                bottom: 1rem;
             }
         }
     }
@@ -440,6 +448,14 @@
             text-align: center;
         
             li {
+                @media #{$medium-up} {
+                    float: none;
+                    display: inline-table;
+                    max-width: 32%;
+                }
+                @media #{$large-up} {
+                    max-width: 33%;
+                }
                 .single-event {
                     display: block;
                     background-color: white;
@@ -505,7 +521,7 @@
             max-height: 30vw;
         }
         @media #{$xlarge-up} {
-            max-height: 20vw;
+            max-height: 25vw;
         }
         .columns {
             padding: 0;
@@ -518,6 +534,9 @@
             }
             p:first-of-type {
                 margin-bottom: .5rem;
+            }
+            @media #{$xlarge-up} {
+                padding-top: 2vw;
             }
         }
         .widget_img {
@@ -662,7 +681,7 @@
                 padding-top: 6vw;
             }
             @media #{$xlarge-up} {
-                padding-top: 5vw;
+                padding-top: 7vw;
             }
         }
         .widget_links {

@@ -1,10 +1,9 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-9 columns right" role="main">
 	<?php do_action('foundationPress_before_content'); ?>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
 			<div class="entry-content">
-
+            <div class="medium-8 columns right">
 			<?php  
 
             /**
@@ -23,9 +22,10 @@
             $faculty_pubs = $faculty_fields["selected_publications"];
             $faculty_img = get_the_post_thumbnail($page->ID, 'med');
             ?>
-                <div class="faculty-info right columns large-4">
+                <div class="faculty-info right">
                         <?php echo $faculty_img; ?>
                         <?php echo '<ul class="faculty_contact_fields">';
+                        echo '<h1 class="show-for-small-only">' . $faculty_name . '</h1>';
                         if( have_rows('job_titles') ) {
                             echo '<li class="job-titles">';
                             echo '<ul>';
@@ -80,11 +80,11 @@
                         <?php } ?>
                         </ul>		
                     </div>
-            <article id="post-<?php the_ID() ?>" class="columns large-8" <?php post_class( 'article' ) ?>>
+            <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
                 <header class="article__header">
                     <div class="article__meta">
                     </div>
-                    <div class="faculty-title">
+                    <div class="faculty-title hide-for-small-only">
                         <h1 class="article__title">
                         <?php if ( is_page() || is_single()) : ?>
                             <?php the_title() ?>
@@ -114,6 +114,7 @@
                 ?>
 
             </article><!-- .article -->
+        </div>
 			</div>
 			<footer>
 				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
@@ -126,8 +127,6 @@
 			<?php endif; ?>
 		</article>	
 	<?php do_action('foundationPress_after_content'); ?>
-
-	</div>
     <?php get_sidebar(); ?> 
 </div>	
 <?php get_footer(); ?>
