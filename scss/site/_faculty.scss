@@ -113,14 +113,13 @@ article.type-faculty {
 
 .faculty-list-teach {
     width: 105%;
+    margin: 0!important;
     
     .panel {
         padding: 1.2rem 1rem;
         height: 4rem;
         border-left: 0;
         border-right: 0;
-        max-width: 672px;
-        margin-right: 1.2rem;
         
         a {
             @extend .button;

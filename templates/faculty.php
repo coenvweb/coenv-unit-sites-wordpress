@@ -69,6 +69,9 @@ $wp_query = new WP_Query( $query_args );
 			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all faculty &raquo;</a></div>
 		</div>
 	<?php endif; ?>
+        
+        	<ul class="faculty-list-teach clearfix small-block-grid-3 medium-block-grid-4 large-block-grid-5">
+                
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -79,7 +82,7 @@ $wp_query = new WP_Query( $query_args );
         if (!$faculty_img_src) {
 		  $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
-		echo '<a href="' . $faculty_link . '"><div class="faculty-list-item"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></div></a>';
+		echo '<a href="' . $faculty_link . '"><li class="faculty-list-item"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></li></a>';
 		endwhile;
 		?>
 				<div class="pager">
