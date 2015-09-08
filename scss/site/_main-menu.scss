@@ -24,10 +24,10 @@
                     }
                     &:first-of-type {
                         margin-top: .9rem;
-                        @include uni;
+                        @include uni_regular;
                         text-transform: lowercase;
                         font-style: italic;
-                        font-weight: 600;
+                        font-weight: 400;
                         margin-right: .6rem;
                         font-size: rem-calc(13);
                     }
@@ -81,8 +81,8 @@
                 }
                 font-size: rem-calc(12);
                 color: $text;
-                @include uni;
-                font-weight: 600;
+                @include uni_regular;
+                font-weight: 400;
                 text-transform: uppercase;
                 background-color: #ffffff;
                 text-align: left;

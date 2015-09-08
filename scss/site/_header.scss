@@ -65,8 +65,8 @@
 
 .name {
     h1 {
-        @include uni;
-        font-weight: 600;
+        @include uni_regular;
+        font-weight: 400;
         text-transform: uppercase;
         @media #{$medium-up} {
             font-size: 1.8rem;
@@ -249,7 +249,8 @@
         span {
             color: $text;
             font-size: rem-calc(32);
-            font-weight: 800;
+            @include uni;
+            font-weight: 400;
             @media #{$small-only} {
                 background-color: #FFf;
                 box-shadow: 0.5em 0 0 #FFf,-3em 0 0 #FFf;

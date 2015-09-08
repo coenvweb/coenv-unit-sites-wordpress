@@ -47,7 +47,8 @@ aside#sidebar div.columns {
             @extend .light-to-dark;
             
             h4 {
-                @include uni;
+                @include uni_regular;
+                font-weight: 400!important;
                 letter-spacing: .1rem;
                 position: absolute;
                 bottom: 1rem;
@@ -57,7 +58,6 @@ aside#sidebar div.columns {
                     font-size: rem-calc(16)!important;
                     line-height: 0!important;
                     color: $text;
-                    font-weight: 800;
                     background-color: #FFF;
                     box-shadow: 0.5em 0 0 #FFf,-3em 0 0 #FFf;
                     padding: 0.5rem 0em 0.5rem 0em;
@@ -159,6 +159,7 @@ aside#sidebar div.columns {
             padding-bottom: .5rem;
             a {
                 color: $accent-blue!important;
+                font-weight: 400!important;
             }
         }
         
@@ -199,8 +200,7 @@ aside#sidebar div.columns {
                     }
                 }
                 .title {
-                    @include uni;
-                    font-weight: 800;
+                    @include uni_regular;
                     font-size: 1.1rem!important;
                     margin-bottom: 0;
                 }

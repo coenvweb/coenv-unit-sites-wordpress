@@ -74,6 +74,19 @@
 
 }
 
+@font-face {
+    font-family: 'uni-sans-regular';
+    src: url('../assets/fonts/fontfabric_-_unisansregular-webfont.eot');
+    src: url('../assets/fonts/fontfabric_-_unisansregular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/fontfabric_-_unisansregular-webfont.woff2') format('woff2'),
+         url('../assets/fonts/fontfabric_-_unisansregular-webfont.woff') format('woff'),
+         url('../assets/fonts/fontfabric_-_unisansregular-webfont.ttf') format('truetype'),
+         url('../assets/fonts/fontfabric_-_unisansregular-webfont.svg#uni_sans_regularregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 @mixin o_sans() {
     font-family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -100,6 +113,12 @@
 
 @mixin uni() {
     font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
+}
+
+@mixin uni_regular() {
+    font-family: "uni-sans-regular", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
     letter-spacing: .5px;
 }
@@ -151,7 +170,7 @@ blockquote {
 }
 
 h1, h2, h3 {
-    @include uni();
+    @include uni_regular();
 }
 
 .article__content {
@@ -161,7 +180,6 @@ h1, h2, h3 {
         letter-spacing: .5px!important;
         text-transform: uppercase;
         color: $accent-blue-dk!important;
-        font-weight: 800!important;
         a {
             color: $accent-blue-dk!important;
         }
@@ -170,7 +188,6 @@ h1, h2, h3 {
     h1 {
         font-size: rem-calc(26)!important;
         line-height: rem-calc(30);
-        font-weight: 800;
 
         @media #{$medium-up} {
             font-size: rem-calc(36);
@@ -197,7 +214,6 @@ h1, h2, h3 {
     h3 {
         font-size: rem-calc(16)!important;
         line-height: rem-calc(18)!important;
-        font-weight: 800;
         @media #{$medium-up} {
             font-size: rem-calc(16)!important;
             line-height: rem-calc(18)!important;

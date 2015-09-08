@@ -213,8 +213,8 @@
             bottom: 1.5rem;
             max-width: 80%;
             margin-left: 2vw;
-            @include uni();
-            font-weight: 800;
+            @include uni_regular;
+            font-weight: 400;
             font-size: 1.5rem;
             @media #{$small-only} {
                 margin-left: 1rem;
@@ -331,8 +331,8 @@
         }
         h3 {
             color: $text;
-            @include uni();
-            font-weight: 800;
+            @include uni_regular;
+            font-weight: 400;
             font-size: 1.5rem;
             @media #{$medium-up} {
                 font-size: 2.05vw;
@@ -498,8 +498,8 @@
                     }
                 }
                 .title {
-                    @include uni;
-                    font-weight: 800;
+                    @include uni_regular;
+                    font-weight: 400;
                     font-size: 1.5rem!important;
                     @media #{$medium-up} {
                         font-size: 2vw!important;
@@ -577,8 +577,8 @@
         }
         strong {
             display: block;
-            @include uni;
-            font-weight: 800;
+            @include uni_regular;
+            font-weight: 400;
             font-size: 2rem;
             margin-bottom: 3rem;
             @media #{$medium-up} {

@@ -5,7 +5,7 @@ aside#sidebar {
 
 	.section-title {
         margin: 0;
-		@include uni;
+		@include uni_regular;
 		a {
 		  font-size: rem-calc(22);
             color: $text;
@@ -38,8 +38,8 @@ aside#sidebar {
 			a {
 				display: block;
 				line-height: 152%;
-                @include uni;
-                font-weight: 800;
+                @include uni_regular;
+                font-weight: 400;
 				&:not(.button) {
 					color: #000;
 				}

@@ -40,40 +40,7 @@
 
 	} // .article__title
 	
-	.article__meta {
-		.post-info {
-			text-transform:uppercase;
-			letter-spacing:.1em;
-			font-weight:600;
-			color:#888;
-			vertical-align: middle;
-			text-decoration:none;
-			font-size: .75rem;
-			color: $text-lt;
-		}
-		
-		a:hover {
-		color: #8458BE!important;
-		}
-
-		.article__categories {
-			display: inline-block;
-
-			ul {
-				display: inline-block;
-				margin: 0;
-				padding: 0;
-				list-style: none;
-			}
-
-			li {
-				display: inline-block;
-
-			} //li
-
-		} // .article__categories
-
-	} // .article__meta
+	
 
 } // .article__header
 
@@ -103,7 +70,7 @@
 		@include serif;
 		@include font-size(18);
 		@include line-height(24);
-		font-weight: 400;
+		font-weight: 800;
 
 		@media #{$medium-up} {
 			@include font-size(24);
@@ -116,7 +83,7 @@
 		@include serif;
 		@include font-size(16);
 		@include line-height(24);
-		font-weight: 400;
+		font-weight: 800;
 
 		@media #{$medium-up} {
 			@include font-size(18);

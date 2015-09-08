@@ -94,13 +94,15 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         <div class="news-meta small-12 columns">
         <div class="blog-meta clearfix small-6 columns left">
 		<?php 
-        echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-            $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
+        echo '<p>' . get_the_date('M j, Y');
+                $terms = wp_get_post_terms( get_the_ID(), 'category');
+                foreach ($terms as $term) {
+                    $termlist = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                }
+                $termlist = rtrim($termlist,', ');
+                if (strpos($termlist,'uncategorized') == false)  {
+                    echo '  | ' . $termlist;
+                }
         ?>
         </p>
 		</div>

@@ -24,9 +24,8 @@
         padding: .35rem 0 .35rem 0;
         margin: 0;
         width: 100%;
-        @include uni();
+        @include uni_regular;
         font-size: rem-calc(16);
-        font-weight: 600;
         letter-spacing: .5px;
     }
     .cats {
@@ -64,9 +63,6 @@
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid $bg-light;
-    h3 {
-        font-weight: 800!important;
-    }
 }
 
 .blog-meta {
@@ -83,12 +79,6 @@
 
 .page-template-news #sidebar {
 	margin-top: 2rem;
-}
-
-.single {
-    .article__title {
-        font-weight: 800;
-    }
 }
 
 .panel {
