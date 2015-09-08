@@ -144,6 +144,7 @@ article.type-faculty {
 	width: rem-calc(120px);
 	height: 13.5rem;
     background-color: $accent-blue-dk;
+    list-style: none;
     
     @media #{$small-only} {
         width: rem-calc(102);
