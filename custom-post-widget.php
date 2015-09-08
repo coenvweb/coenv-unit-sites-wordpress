@@ -62,11 +62,12 @@ if ( $widget_img ) {
     if ( $image_placement[0] == 'outside' ) {
         echo $image;
     }
+    $class = 'image';
 }
 
 echo $before_widget;
 
-echo '<div class="image-area">';
+echo '<div class="image-area ' . $class . '">';
 
 if ( $show_custom_post_title ) {
 	echo $before_title;

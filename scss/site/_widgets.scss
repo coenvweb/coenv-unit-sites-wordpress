@@ -46,6 +46,13 @@ aside#sidebar div.columns {
             min-height: 120px;
             @extend .light-to-dark;
             
+            &.image {
+                min-height: 0!important;
+                h4 {
+                    margin-bottom: 5px;
+                }
+            }
+            
             h4 {
                 @include uni_regular;
                 font-weight: 400!important;

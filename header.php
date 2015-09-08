@@ -241,7 +241,7 @@
 
 <?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
-    <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) && (!is_page_template( 'templates/faculty.php' ))  )) {
+    <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single() && (!is_page_template( 'templates/faculty.php' ))  )) {
             echo '<div class="page-row"';
       } else {
             echo '<div class="page-row mini"';

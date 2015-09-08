@@ -196,12 +196,26 @@ ul.fac-terms {
 		margin: 0 .5rem .5rem 0;
 		padding: 0;
         .button {
-            margin-bottom: 0;
-            background: $bg-light!important;
-            color: $text;
+            @extend .fac-button;
         }
 
 	}
+}
+
+.fac-button {
+    margin-bottom: 0;
+    background: $bg-light!important;
+    color: $text;
+}
+
+#post-3082 {
+    .button {
+        @extend .fac-button;
+        margin-top: .5rem;
+        a {
+            color: $text!important;
+        }
+    }
 }
 
 .faculty-website a.button {
