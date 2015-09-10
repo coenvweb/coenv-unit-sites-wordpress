@@ -42,10 +42,7 @@
         @include uni_italic();
         
         &.light {
-            @media #{$small-only} {
-                left: -5%;
-            }
-            left: -8vw;
+            left: -9vw;
 background: -moz-linear-gradient(left,  rgba(11,7,19,0.8) 0%, rgba(35,31,51,0.8) 50%, rgba(54,42,84,0.8) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(11,7,19,0.8)), color-stop(50%,rgba(35,31,51,0.8)), color-stop(100%,rgba(54,42,84,0.8))); /* Chrome,Safari4+ */
 background: -webkit-linear-gradient(left,  rgba(11,7,19,0.8) 0%,rgba(35,31,51,0.8) 50%,rgba(54,42,84,0.8) 100%); /* Chrome10+,Safari5.1+ */
@@ -58,10 +55,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0b0713', e
                 bottom: 0;
                 width: 115%;
                 height: 40%;
+                left: -5%;
+            }
+            @media #{$large-up} {
+                left: -7vw;
             }
         }
         
-@media #{$small-only} {
+        @media #{$small-only} {
             position: absolute;
             bottom: 0;
             text-align: center;
@@ -71,18 +72,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0b0713', e
             height: 40%;
         }
 
-        @media #{$medium-only} {
-            width: 50%;
-        }
-
         @media #{$medium-up} {
             position: absolute;
             font-size: rem-calc(36);
             height: 100%;
             bottom: 0;
-            left: -10vw;
+            left: -7vw;
             padding: 0;
-            width: 45%;
+            width: 40%;
 background: -moz-linear-gradient(left,  rgba(10,5,21,0.9) 0%, rgba(34,29,53,0.79) 50%, rgba(51,36,89,0.68) 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(10,5,21,0.9)), color-stop(50%,rgba(34,29,53,0.79)), color-stop(100%,rgba(51,36,89,0.68))); /* Chrome,Safari4+ */
 background: -webkit-linear-gradient(left,  rgba(10,5,21,0.9) 0%,rgba(34,29,53,0.79) 50%,rgba(51,36,89,0.68) 100%); /* Chrome10+,Safari5.1+ */
@@ -92,6 +89,10 @@ background: linear-gradient(to right,  rgba(10,5,21,0.9) 0%,rgba(34,29,53,0.79) 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', endColorstr='#ad332459',GradientType=1 ); /* IE6-9 */
             @extend .uw-skew;
         }		
+        @media #{$large-up} {
+            width: 30%;
+            left: -5vw;
+        }
 		
 		.button {
 			margin: 0 rem-calc(5) 0 0;
@@ -136,13 +137,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
             }
 
             .hero-white {
-                width: 39vw;
-                margin: rem-calc(14) rem-calc(14) rem-calc(14) -2.5vw;
+                width: 45vw;
                 background: $white;
-                text-align: center;
                 @extend .uw-skew;
-                
+                @media #{$large-up} {
+                    margin: rem-calc(14) rem-calc(14) rem-calc(14) -19vw!important;
+                }
+                @media #{$medium-up} {
+                    margin: rem-calc(14) rem-calc(14) rem-calc(14) -11.2vw;
+                }
                 @media #{$small-only} {
+                    text-align: center;
                     width: 75vw;
                     margin: 5% 0 0 12%;
                 }
@@ -156,7 +161,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                 padding-bottom: .3rem;
                 overflow: auto;
                 text-transform: uppercase;
-                font-size: 3.3vw;
+                font-size: 5vw;
                 color: $text;
                 width: 100%;
                 @extend .uw-unskew;
@@ -166,23 +171,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', e
                     font-size: 6vw;
                     padding-bottom: .1rem;
                 }
-
+                @media #{$medium-up} {
+                    text-align: right;
+                    padding-right: 2vw;
+                }
                 @media #{$large-up} {
+                    font-size: 3.8vw;
                     padding-top: .1rem;
                     padding-bottom: 0;
                 }
             }
 
             .button {
-               font-size: 1rem;
-                @media #{$small-only} {
-                    font-size: .75rem;
+                @media #{$large-up} {
+                    font-size: 1rem;
                 }
+                font-size: .75rem;
             }
 
             p {
                 margin-bottom: rem-calc(10);
-                font-size: rem-calc(22);
+                font-size: 2.5vw;
                 @media #{$large-up} {
                     font-size: 1.8vw;
                 }

@@ -1,4 +1,10 @@
-.page-template-news {
+.single-post {
+    .article__title {
+        margin-bottom: 2rem;   
+    }
+}
+    
+.page-template-news, .single-post {
     h3 a {
         color: $text;
     }

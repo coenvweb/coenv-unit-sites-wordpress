@@ -12,21 +12,20 @@
                 <div class="article__categories">
 				<?php
                 $terms = wp_get_post_terms( get_the_ID(), 'category');
-                $termlist = '| ';
                 foreach ($terms as $term) {
-                    $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                    $termlist = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
                 }
                 $termlist = rtrim($termlist,', ');
-                echo $termlist;
+                if (strpos($termlist,'uncategorized') == false)  {
+                    echo '  | ' . $termlist;
+                }
                 ?>
                 </div>
 			</div>
             <?php endif ?>
         </div>
-		<?php if ($GLOBALS['post']->post_parent) : ?>
         <?php if ( is_single()) : ?>
             <h1 class="article__title"><?php the_title() ?></h1>
-        <?php endif ?>
         <?php endif ?>
 
 	</header>
