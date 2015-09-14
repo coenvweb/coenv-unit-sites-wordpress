@@ -19,6 +19,10 @@
     }
 }
 
+#main-col .widget {
+    margin-bottom: 2rem;
+}
+
 #sidebar .widget-events {
     overflow: hidden;
     @media #{$medium-only} {
@@ -141,6 +145,9 @@ aside#sidebar div.columns {
         }
         ul {
             list-style: none;
+        }
+        blockquote {
+            display: none;
         }
     }
     
