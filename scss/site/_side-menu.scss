@@ -143,10 +143,17 @@ aside#sidebar div.columns {
 				}
 			}
 			.widget_links {
-				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
+				margin-top: rem-calc(15);
+				
 				.button {
 					background-color: $accent;
 					color: $white;
+
+					&:hover {
+						background-color: #19004a;
+					}
+
+
 				}
 			}
 			
