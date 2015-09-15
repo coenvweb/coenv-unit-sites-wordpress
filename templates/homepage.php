@@ -211,7 +211,7 @@ $wp_query = new WP_Query( $home_args );
     <a href="/news-stories/events" class="more hide-for-small-only" id="More Events">More Events <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
     <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
     <div class="list columns large-12">
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_marinebio.rss&posts_per_page=3'); ?>
     </div>      
 </div>
 

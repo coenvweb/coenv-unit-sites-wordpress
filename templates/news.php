@@ -117,7 +117,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
         <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
         <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
-        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20UW%20' . $site_name .':%20' . $shortlink . '>'; ?>
         <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
 		</div>
 		</div>

@@ -3,4 +3,12 @@ body.search {
 	form .field-wrap input[type="text"] {
 		width: 100%;
 	}
+    .results {
+        min-height: 45vh;
+    }
+    .page-row {
+        @media #{$small-only} {
+            display: none;
+        }
+    }
 }

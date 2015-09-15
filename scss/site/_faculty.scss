@@ -206,6 +206,10 @@ ul.fac-terms {
     margin-bottom: 0;
     background: $bg-light!important;
     color: $text;
+    &:hover {
+        background: $accent-blue-dk!important;
+        color: white;
+    }
 }
 
 #post-3082 {

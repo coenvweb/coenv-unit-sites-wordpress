@@ -39,8 +39,14 @@
 		}
 
 	} // .article__title
+
+    .post-info {
+        margin-bottom: 1rem;
+    }
 	
-	
+    .article__categories {
+        display: inline;
+    }
 
 } // .article__header
 

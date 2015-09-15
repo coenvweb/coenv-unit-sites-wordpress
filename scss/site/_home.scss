@@ -600,9 +600,15 @@
     }
 
     .fhl {
+        @media #{$small-only} {
+            margin-top: -1rem;
+        }
         .widget_img {
             @media #{$medium-up} {
                 float: left;
+            }
+            @media #{$small-only} {
+                display: none;
             }
         }
         strong {
