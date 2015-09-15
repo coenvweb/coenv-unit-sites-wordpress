@@ -1,14 +1,14 @@
 <?php
 /*
  Plugin Name: Custom Post Widget
- Plugin URI: http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/
+ Plugin URI: http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/?utm_source=wordpress&utm_medium=plugin&utm_campaign=custom_post_widget
  Description: Show the content of a custom post of the type 'content_block' in a widget or with a shortcode.
- Version: 2.7.7
+ Version: 2.8
  Author: Johan van der Wijk
  Author URI: http://vanderwijk.nl
  License: GPL2
 
- Release notes: Version 2.7.7 Added Czech translation files
+ Release notes: Thanks to forum user Álvaro, version 2.8 adds the option to suppress the content filter when using the shortcode
  
  Copyright 2015 Johan van der Wijk
  

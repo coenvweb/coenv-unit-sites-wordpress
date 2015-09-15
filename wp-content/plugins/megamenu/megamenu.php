@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  http://www.maxmegamenu.com
  * Description: Mega Menu for WordPress.
- * Version:     1.8.3.1
+ * Version:     1.9
  * Author:      Tom Hemsley
  * Author URI:  http://www.maxmegamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
 	/**
 	 * @var string
 	 */
-	public $version = '1.8.3.1';
+	public $version = '1.9';
 
 
 	/**
@@ -100,7 +100,7 @@ final class Mega_Menu {
 	 */
 	public function admin_enqueue_scripts( $hook ) {
 
-        wp_enqueue_style( 'maxmegamenu-global', MEGAMENU_BASE_URL . 'css/global.css', array(), MEGAMENU_VERSION );
+        wp_enqueue_style( 'maxmegamenu-global', MEGAMENU_BASE_URL . 'css/admin/global.css', array(), MEGAMENU_VERSION );
 
         if ( 'nav-menus.php' == $hook ) {
         	do_action("megamenu_nav_menus_scripts", $hook );
@@ -389,18 +389,25 @@ final class Mega_Menu {
    	 */
 	public function apply_depth_to_menu_items( $items, $args ) {
 
-	    $level = 0;
-	    $stack = array('0');
+		// We can't assume the menu items are in any particular order.
+		// (for example, the  "Add Descendants as sub menu items" adds all items to the 'bottom' of the menu)
+		// We only need to know about top level menu items and their immediate children
+
+	    $parents = array();
 
 	    foreach ( $items as $key => $item ) {
-	        while ( count( $stack ) && $item->menu_item_parent != array_pop( $stack ) ) {
-	            $level--;
+	        if ( $item->menu_item_parent == 0 ) {
+	            $parents[] = $item->ID;
+	            $item->depth = 0;
 	        }
+	    }
 
-	        $level++;
-	        $stack[] = $item->menu_item_parent;
-	        $stack[] = $item->ID;
-	        $items[ $key ]->depth = $level - 1;
+	    if ( count( $parents ) ) {
+		    foreach ( $items as $key => $item ) {
+		        if ( in_array( $item->menu_item_parent, $parents ) ) {
+		            $item->depth = 1;
+		        }
+		    }
 	    }
 
 	    return $items;
@@ -444,7 +451,7 @@ final class Mega_Menu {
 
 	    foreach ( $items as $item ) {
 
-	        if ( $item->depth == 0 ) {
+	        if ( $item->depth === 0 ) {
 				$item->classes[] = 'align-' . $item->megamenu_settings['align'];
 				$item->classes[] = 'menu-' . $item->megamenu_settings['type'];
 			}
@@ -453,11 +460,11 @@ final class Mega_Menu {
 	        	$item->classes[] = 'hide-arrow';
 	        }
 
-	        if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth == 0 ) {
+	        if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth === 0 ) {
 	        	$item->classes[] = 'hide-text';
 	        }
 
-	        if ( $item->megamenu_settings['item_align'] != 'left' && $item->depth == 0 ) {
+	        if ( $item->megamenu_settings['item_align'] != 'left' && $item->depth === 0 ) {
 	        	$item->classes[] = 'item-align-' . $item->megamenu_settings['item_align'];
 	        }
 
@@ -530,7 +537,7 @@ final class Mega_Menu {
 	    foreach ( $items as $item ) {
 
 			// only look for widgets on top level items
-			if ( $item->depth == 0 && $item->megamenu_settings['type'] == 'megamenu' ) {
+			if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'megamenu' ) {
 
 				$panel_widgets = $widget_manager->get_widgets_for_menu_id( $item->ID );
 
@@ -625,7 +632,8 @@ final class Mega_Menu {
 				"data-effect" => isset( $menu_settings['effect'] ) ? $menu_settings['effect'] : 'disabled',
 				"data-panel-width" => preg_match('/^\d/', $menu_theme['panel_width']) !== 1 ? $menu_theme['panel_width'] : '',
 				"data-second-click" => isset( $settings['second_click'] ) ? $settings['second_click'] : 'close',
-				"data-mobile-behaviour" => isset( $settings['mobile_behaviour'] ) ? $settings['mobile_behaviour'] : 'standard',
+				"data-document-click" => 'collapse',
+				"data-vertical-behaviour" => isset( $settings['mobile_behaviour'] ) ? $settings['mobile_behaviour'] : 'standard',
 				"data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] )
 			), $menu_id, $menu_settings, $settings, $current_theme_location );
 
@@ -714,7 +722,7 @@ final class Mega_Menu {
 	    <div class="updated">
 	    	<?php
 
-	    		$link = "<a href='" . admin_url("admin.php?page=maxmegamenu&tab=tools") . "'>" . __( "regenerate the CSS", 'megamenu' ) . "</a>";
+	    		$link = "<a href='" . admin_url("admin.php?page=maxmegamenu&tab=tools") . "'>" . __( "clear the CSS cache", 'megamenu' ) . "</a>";
 
 	    	?>
 	        <p><?php echo sprintf( __( 'Max Mega Menu has been updated. Please %s to ensure maximum compatibility with the latest version.', 'megamenu' ), $link); ?></p>

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'maxmegamenu';
-  src: url('../font/maxmegamenu.eot?86003086');
-  src: url('../font/maxmegamenu.eot?86003086#iefix') format('embedded-opentype'),
-       url('../font/maxmegamenu.woff?86003086') format('woff'),
-       url('../font/maxmegamenu.ttf?86003086') format('truetype'),
-       url('../font/maxmegamenu.svg?86003086#maxmegamenu') format('svg');
+  src: url('../../font/maxmegamenu.eot?86003086');
+  src: url('../../font/maxmegamenu.eot?86003086#iefix') format('embedded-opentype'),
+       url('../../font/maxmegamenu.woff?86003086') format('woff'),
+       url('../../font/maxmegamenu.ttf?86003086') format('truetype'),
+       url('../../font/maxmegamenu.svg?86003086#maxmegamenu') format('svg');
   font-weight: normal;
   font-style: normal;
 }

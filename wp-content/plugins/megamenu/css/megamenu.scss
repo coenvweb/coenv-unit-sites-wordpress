@@ -8,81 +8,46 @@
 // -- Set "define("MEGAMENU_DEBUG", true);" in wp-config.php to disable CSS cache
 // -- Add &nocache to the CSS URL to regenerate cache
 
-
-@mixin border-radius($topleft: 0, $topright: 0, $bottomright: 0, $bottomleft: 0) {
-  -webkit-border-radius: $topleft $topright $bottomright $bottomleft;
-     -moz-border-radius: $topleft $topright $bottomright $bottomleft;
-      -ms-border-radius: $topleft $topright $bottomright $bottomleft;
-       -o-border-radius: $topleft $topright $bottomright $bottomleft;
-          border-radius: $topleft $topright $bottomright $bottomleft;
-}
-
-@mixin box-shadow($value) {
-    -webkit-box-shadow: $value;
-       -moz-box-shadow: $value;
-        -ms-box-shadow: $value;
-         -o-box-shadow: $value;
-            box-shadow: $value;
-}
-
-@mixin background($from, $to) {
-    @if $to == $from {
-        background: $to;
-    } @else {
-        background: $to;
-        background: -webkit-gradient(linear, left top, left bottom, from($from), to($to));
-        background: -moz-linear-gradient(top, $from, $to);
-        background: -ms-linear-gradient(top, $from, $to);
-        background: -o-linear-gradient(top, $from, $to);
-        background: linear-gradient(to bottom, $from, $to);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie_hex_str($from)}', endColorstr='#{ie_hex_str($to)}');
-    }
-}
-
-// resets
 #{$wrap},
 #{$wrap} #{$menu},
-#{$wrap} #{$menu} ul,
-#{$wrap} #{$menu} li,
-#{$wrap} #{$menu} p,
-#{$wrap} #{$menu} img,
-#{$wrap} #{$menu} div,
-#{$wrap} #{$menu} a {
-    color: $panel_font_color;
-    font-family: $panel_font_family;
-    font-size: $panel_font_size;
+#{$wrap} #{$menu} ul.mega-sub-menu,
+#{$wrap} #{$menu} li.mega-menu-item,
+#{$wrap} #{$menu} a.mega-menu-link {
+    -moz-transition: none;
+    -o-transition: none;
+    -webkit-transition: none;
+    transition: none;
+    @include border-radius(0, 0, 0, 0);
+    @include box-shadow(none);
     background: none;
     border: 0;
-    @include border-radius(0, 0, 0, 0);
+    bottom: auto;
+    box-sizing: border-box;
+    clip: auto;
+    color: $panel_font_color;
+    display: block;
+    float: none;
+    font-family: $panel_font_family;
+    font-size: $panel_font_size;
+    height: auto;
+    left: auto;
+    line-height: $line_height;
+    list-style-type: none;
     margin: 0;
+    min-height: 0;
     opacity: 1;
+    outline: none;
+    overflow: visible;
     padding: 0;
     position: relative;
     right: auto;
-    top: auto;
-    bottom: auto;
-    left: auto;
     text-align: left;
-    text-transform: none;
-    vertical-align: baseline;
-    @include box-shadow(none);
-    list-style-type: none;
-    line-height: $line_height;
-    box-sizing: border-box;
-    float: none;
-    overflow: visible;
-    display: block;
-    min-height: 0;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
-    transition: none;
     text-decoration: none;
-    width: auto;
-    clip: auto;
-    height: auto;
-    outline: none;
+    text-transform: none;
+    top: auto;
+    vertical-align: baseline;
     visibility: inherit;
+    width: auto;
 
     &:before,
     &:after {
@@ -90,44 +55,28 @@
     }
 }
 
-#{$wrap} #{$menu} {
-    visibility: visible;
-}
-
-#{$wrap} #{$menu} a {
-    display: inline;
-}
-
-#{$wrap} #{$menu} table,
-#{$wrap} #{$menu} td,
-#{$wrap} #{$menu} tr,
-#{$wrap} #{$menu} th {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    background: none;
-}
-
 #{$wrap} {
     @include background($container_background_from, $container_background_to);
     @include border-radius($container_border_radius_top_left, $container_border_radius_top_right, $container_border_radius_bottom_right, $container_border_radius_bottom_left);
 
     #{$menu} {
-
+        visibility: visible;
         text-align: $menu_item_align;
         padding: $container_padding_top $container_padding_right $container_padding_bottom $container_padding_left;
 
-        p {
-            margin-bottom: 10px;
+        a.mega-menu-link {
+            display: inline;
+
+            @if $transitions == 'on' {
+                -webkit-transition: background 200ms linear, color 200ms linear;
+                -moz-transition: background 200ms linear, color 200ms linear;
+                -o-transition: background 200ms linear, color 200ms linear;
+                transition: background 200ms linear, color 200ms linear;
+            }
         }
 
-        @if $transitions == 'on' {
-            a {
-              -webkit-transition: background 200ms linear, color 200ms linear;
-              -moz-transition: background 200ms linear, color 200ms linear;
-              -o-transition: background 200ms linear, color 200ms linear;
-              transition: background 200ms linear, color 200ms linear;
-            }
+        p {
+            margin-bottom: 10px;
         }
 
         input,
@@ -152,11 +101,11 @@
             font-family: dashicons;
         }
 
-        li.mega-disable-link > a {
+        li.mega-disable-link > a.mega-menu-link {
             cursor: default;
         }
 
-        li.mega-menu-item a:before {
+        li.mega-menu-item a.mega-menu-link:before {
             display: inline-block;
             font: inherit;
             font-family: dashicons;
@@ -168,7 +117,7 @@
             color: inherit;
         }
 
-        li.mega-menu-item.mega-hide-text a:before {
+        li.mega-menu-item.mega-hide-text a.mega-menu-link:before {
             margin: 0;
         }
 
@@ -177,7 +126,7 @@
 
             }
 
-            &.mega-toggle-on > a {
+            &.mega-toggle-on > a.mega-menu-link {
                 @include border-radius($menu_item_link_border_radius_top_left, $menu_item_link_border_radius_top_right, 0, 0);
             }
         }
@@ -187,7 +136,7 @@
                 right: 0;
             }
 
-            &.mega-toggle-on > a {
+            &.mega-toggle-on > a.mega-menu-link {
                 @include border-radius($menu_item_link_border_radius_top_left, $menu_item_link_border_radius_top_right, 0, 0);
             }
         }
@@ -226,8 +175,8 @@
             }
 
             &.mega-toggle-on > a,
-            > a:hover,
-            > a:focus {
+            > a.mega-menu-link:hover,
+            > a.mega-menu-link:focus {
                 @include background($menu_item_background_hover_from, $menu_item_background_hover_to);
                 color: $menu_item_link_color_hover;
                 font-weight: $menu_item_link_weight_hover;
@@ -239,7 +188,7 @@
 
                 &.mega-current-menu-item,
                 &.mega-current-menu-ancestor {
-                    > a {
+                    > a.mega-menu-link {
                         @include background($menu_item_background_hover_from, $menu_item_background_hover_to);
                         color: $menu_item_link_color_hover;
                         font-weight: $menu_item_link_weight_hover;
@@ -249,7 +198,7 @@
 
             }
 
-            > a {
+            > a.mega-menu-link {
                 border-top: $menu_item_border_top solid $menu_item_border_color;
                 border-left: $menu_item_border_left solid $menu_item_border_color;
                 border-right: $menu_item_border_right solid $menu_item_border_color;
@@ -284,7 +233,7 @@
                     float: none;
                 }
 
-                > a {
+                > a.mega-menu-link {
                     @include border-radius(0 0 0 0);
                     border: 0;
                     margin: 0;
@@ -341,7 +290,7 @@
                 padding: 10px;
                 @include border-radius(0,0,0,0);
 
-                > li {
+                > li.mega-menu-item {
                     width: 50% !important;
                     clear: none;
                 }
@@ -351,16 +300,16 @@
                 }
             }
 
-            > li ul.mega-sub-menu {
+            > li.mega-menu-item ul.mega-sub-menu {
                 clear: both;
-            }
 
-            > li ul.mega-sub-menu li ul.mega-sub-menu {
-                margin-left: 10px;
-            }
+                li.mega-menu-item ul.mega-sub-menu {
+                    margin-left: 10px;
 
-            > li ul.mega-sub-menu li ul.mega-sub-menu li ul.mega-sub-menu {
-                margin-left: 20px;
+                    li.mega-menu-item ul.mega-sub-menu {
+                        margin-left: 20px;
+                    }
+                }
             }
 
             > li.mega-menu-item {
@@ -396,7 +345,7 @@
                 }
 
                 /* Second level menu item */
-                > a {
+                > a.mega-menu-link {
                     color: $panel_second_level_font_color;
                     font-family: $panel_second_level_font;
                     font-size: $panel_second_level_font_size;
@@ -414,16 +363,16 @@
                 }
 
                 /* Second level menu item hover */
-                > a:hover,
-                > a:focus {
+                > a.mega-menu-link:hover,
+                > a.mega-menu-link:focus {
                     color: $panel_second_level_font_color_hover;
                     font-weight: $panel_second_level_font_weight_hover;
                     text-decoration: $panel_second_level_text_decoration_hover;
                     @include background($panel_second_level_background_hover_from, $panel_second_level_background_hover_to);
                 }
 
-                /* third level menu item */
-                li.mega-menu-item > a {
+                /* Third level menu item */
+                li.mega-menu-item > a.mega-menu-link {
                     color: $panel_third_level_font_color;
                     font-family: $panel_third_level_font;
                     font-size: $panel_third_level_font_size;
@@ -436,9 +385,9 @@
                     display: block;
                 }
 
-                /* Second level menu item hover */
-                li.mega-menu-item > a:hover,
-                li.mega-menu-item > a:focus {
+                /* Third level menu item hover */
+                li.mega-menu-item > a.mega-menu-link:hover,
+                li.mega-menu-item > a.mega-menu-link:focus {
                     color: $panel_third_level_font_color_hover;
                     font-weight: $panel_third_level_font_weight_hover;
                     text-decoration: $panel_third_level_text_decoration_hover;
@@ -491,7 +440,7 @@
                     clear: both;
                 }
 
-                a {
+                a.mega-menu-link {
                     display: block;
                     @include background($flyout_background_from, $flyout_background_to);
                     color: $flyout_link_color;
@@ -505,7 +454,7 @@
                     vertical-align: baseline;
                 }
 
-                &:first-child a {
+                &:first-child a.mega-menu-link {
                     border-top-left-radius: $flyout_border_radius_top_left;
                     border-top-right-radius: $flyout_border_radius_top_right;
 
@@ -515,7 +464,7 @@
                     }
                 }
 
-                &:last-child a {
+                &:last-child a.mega-menu-link {
                     border-bottom-right-radius: $flyout_border_radius_bottom_right;
                     border-bottom-left-radius: $flyout_border_radius_bottom_left;
 
@@ -525,8 +474,8 @@
                     }
                 }
 
-                a:hover,
-                a:focus {
+                a.mega-menu-link:hover,
+                a.mega-menu-link:focus {
                     @include background($flyout_background_hover_from, $flyout_background_hover_to);
                     font-weight: $flyout_link_weight_hover;
                     text-decoration: $flyout_link_text_decoration_hover;
@@ -545,7 +494,7 @@
                         left: 0;
                         width: 100%;
 
-                        a {
+                        a.mega-menu-link {
                             padding-left: 20px;
                         }
                     }
@@ -558,7 +507,7 @@
         li.mega-menu-flyout li.mega-menu-item-has-children,
         > li.mega-menu-item-has-children {
 
-            > a:after {
+            > a.mega-menu-link:after {
                 content: $arrow_down;
                 display: inline-block;
                 font: inherit;
@@ -576,25 +525,25 @@
             }
 
             @media only screen and (max-width : $responsive_breakpoint) {
-                a:after {
+                a.mega-menu-link:after {
                     float: right;
                 }
 
-                &.mega-toggle-on > a:after {
+                &.mega-toggle-on > a.mega-menu-link:after {
                     content: $arrow_up;
                 }
             }
         }
 
         // arrows
-        li.mega-menu-flyout.mega-menu-item-has-children.mega-hide-arrow > a:after,
-        li.mega-menu-flyout li.mega-menu-item-has-children.mega-hide-arrow > a:after,
-        > li.mega-menu-item-has-children.mega-hide-arrow > a:after {
+        li.mega-menu-flyout.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after,
+        li.mega-menu-flyout li.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after,
+        > li.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after {
             display: none;
         }
 
 
-        li.mega-menu-item li.mega-menu-item-has-children > a:after {
+        li.mega-menu-item li.mega-menu-item-has-children > a.mega-menu-link:after {
             content: $arrow_right;
             float: right;
             margin: 0;
@@ -606,7 +555,7 @@
 
         li.mega-menu-flyout.mega-align-bottom-right {
 
-            li a {
+            li.mega-menu-item a.mega-menu-link {
                 text-align: right;
 
                 @media only screen and (max-width : $responsive_breakpoint) {
@@ -614,7 +563,7 @@
                 }
             }
 
-            li a:before {
+            li.mega-menu-item a.mega-menu-link:before {
                 float: right;
                 margin: 0 0 0 6px;
 
@@ -624,7 +573,7 @@
                 }
             }
 
-            li.mega-menu-item-has-children > a:after {
+            li.mega-menu-item-has-children > a.mega-menu-link:after {
                 content: $arrow_left;
                 float: left;
                 margin: 0;

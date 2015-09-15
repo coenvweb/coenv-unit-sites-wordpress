@@ -46,14 +46,33 @@ class Mega_Menu_Nav_Menus {
         add_filter( 'hidden_meta_boxes', array( $this, 'show_mega_menu_metabox' ) );
 
         if ( function_exists( 'siteorigin_panels_admin_enqueue_scripts' ) ) {
-            //add_action( 'admin_print_scripts-nav-menus.php', 'siteorigin_panels_admin_enqueue_scripts' );
+            add_action( 'admin_print_scripts-nav-menus.php', array( $this, 'siteorigin_panels_admin_enqueue_scripts') );
         }
 
         if ( function_exists( 'siteorigin_panels_admin_enqueue_styles' ) ) {
-            //add_action( 'admin_print_styles-nav-menus.php', 'siteorigin_panels_admin_enqueue_styles' );
+            add_action( 'admin_print_styles-nav-menus.php', array( $this, 'siteorigin_panels_admin_enqueue_styles') );
         }
 
     }
+
+
+    /**
+     * Enqueue Page Builder scripts (https://wordpress.org/plugins/siteorigin-panels/)
+     * @since 1.9
+     */
+    public function siteorigin_panels_admin_enqueue_scripts() {
+        siteorigin_panels_admin_enqueue_scripts('', true);
+    }
+
+
+    /**
+     * Enqueue Page Builder styles (https://wordpress.org/plugins/siteorigin-panels/)
+     * @since 1.9
+     */
+    public function siteorigin_panels_admin_enqueue_styles() {
+        siteorigin_panels_admin_enqueue_styles('', true);
+    }
+
 
     /**
      * By default the mega menu meta box is hidden - show it.
@@ -120,8 +139,12 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_script('codemirror');
         wp_deregister_style('codemirror');
 
+        // Compatibility fix for Pinboard Theme
+        wp_deregister_script('colorbox');
+        wp_deregister_style('colorbox');
+
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
-        wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin-menus.css', false, MEGAMENU_VERSION );
+        wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
 
         wp_enqueue_script( 'mega-menu', MEGAMENU_BASE_URL . 'js/admin.js', array(
             'jquery',
@@ -326,9 +349,10 @@ class Mega_Menu_Nav_Menus {
                         <?php
                             $style_manager = new Mega_Menu_Style_Manager();
                             $themes = $style_manager->get_themes();
+                            $selected_theme = isset( $settings[$location]['theme'] ) ? $settings[$location]['theme'] : 'default';
 
                             foreach ( $themes as $key => $theme ) {
-                                echo "<option value='{$key}' " . selected( $settings[$location]['theme'], $key ) . ">{$theme['title']}</option>";
+                                echo "<option value='{$key}' " . selected( $selected_theme, $key ) . ">{$theme['title']}</option>";
                             }
                         ?>
                     </select>

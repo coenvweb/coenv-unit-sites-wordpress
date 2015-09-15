@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 2.9.2
-Tested up to: 4.2
-Stable tag: 2.7.7
+Tested up to: 4.3
+Stable tag: 2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ This plugin enables you to edit and display Content Blocks in a sidebar widget o
 
 == Description ==
 
-The [Custom Post Widget](http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/) allows you to display the contents of a specific custom post in a widget on in the content area using a shortcode.
+The [Custom Post Widget](http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/?utm_source=wordpress&utm_medium=website&utm_campaign=custom_post_widget) allows you to display the contents of a specific custom post in a widget on in the content area using a shortcode.
 
 Even though you could use the text widget that comes with the default WordPress install, this plugin has some major benefits:
 
@@ -74,7 +74,7 @@ This plugin has built-in support for the featured image functionality on the edi
 
 = My social sharing plugin adds buttons to all the Custom Post Widget areas =
 
-If your social media sharing plugin adds buttons to the widget areas you could check the 'Do not apply content filters' checkbox. Note that when this is done, WordPress will also stop adding paragraph tags to your text, so use this setting with caution. It is much better to ask the developer of the social media sharing buttons plugin to correctly use the content filters (see http://pippinsplugins.com/playing-nice-with-the-content-filter/ for more information on this).
+If your social media sharing plugin adds buttons to the widget areas you could check the 'Do not apply content filters' checkbox. Note that when this is done, WordPress will also stop adding paragraph tags to your text, so use this setting with caution. It is much better to ask the developer of the social media sharing buttons plugin to correctly use the content filters (see http://pippinsplugins.com/playing-nice-with-the-content-filter/ for more information on this). If you are embedding your content block with the shortcode, add the following: `suppress_content_filters="yes"`
 
 = The title and featured image are not displayed when using the shortcode =
 
@@ -130,6 +130,12 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 2.8 =
+Added the option to suppress the content filters when using the shortcode. Thanks to adelval for providing the code, see https://wordpress.org/support/topic/add-option-to-not-apply-content-filters-in-shortcode?replies=4
+
+= 2.7.9 =
+Changed method for creating the widget in preparation of PHP7 support.
 
 = 2.7.7 =
 Added Czech translation.

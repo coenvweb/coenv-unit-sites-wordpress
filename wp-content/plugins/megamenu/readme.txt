@@ -2,12 +2,12 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.2.3
-Stable tag: 1.8.3
+Tested up to: 4.3
+Stable tag: 1.8.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Easy to use drag & drop WordPress Mega Menu plugin. Integrates with the existing WordPress menu system. Responsive, retina & touch ready.
+Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
 
 == Description ==
 
@@ -91,6 +91,27 @@ See http://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 1.9 [14/09/2015] =
+
+* New feature: WPML Support
+* New feature: Polylang Support
+* New feature: Added 'Reset Widget Styling' option to theme editor
+* New feature: Page Builder by Site Origin support (Layout Builder widget now works within Mega Menus)
+* Change: Remove Appearance > Max Mega Menu redirect
+* Change: Update touch detection method. Use Modernizr if available.
+* Change: Make hoverintent interval filterable
+* Change: Refactor JS
+* Change: Allow animation speeds to be changed using filters
+* Fix: Unable to uncheck checkboxes in menu themes
+* Fix: Compatibility with Pinboard Theme (dequeue colorbox)
+* Fix: Mobile Second Click option reverts to default
+* Fix: Fix initial fade in animation
+* Fix: Sub menus within megamenus collapsing when Effect is set to 'Slide'
+
+= 1.8.3.2 [30/07/2015] =
+
+* Fix: Conflict with Add Descendents as Sub Menu Items plugin, where items are added resulting in an unordered list of menu items
 
 = 1.8.3.1 [30/07/2015] =
 

@@ -51,6 +51,21 @@ final class Mega_Menu_Style_Manager {
         add_action( 'megamenu_generate_css', array( $this, 'generate_css') );
         add_action( 'after_switch_theme', array( $this, 'generate_css') );
 
+        // PolyLang
+        if ( function_exists( 'pll_current_language' ) ) {
+            add_filter( 'megamenu_css_transient_key', array( $this, 'polylang_transient_key') );
+            add_filter( 'megamenu_css_filename', array( $this, 'polylang_css_filename') );
+            add_action( 'megamenu_delete_cache', array( $this, 'polylang_delete_cache') );
+        }
+
+        // WPML
+        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+            add_filter( 'megamenu_css_transient_key', array( $this, 'wpml_transient_key') );
+            add_filter( 'megamenu_css_filename', array( $this, 'wpml_css_filename') );
+            add_action( 'megamenu_delete_cache', array( $this, 'wpml_delete_cache') );
+        }
+
+
     }
 
 
@@ -242,6 +257,7 @@ final class Mega_Menu_Style_Manager {
             'shadow_spread'                             => '0px',
             'shadow_color'                              => 'rgba(0, 0, 0, 0.1)',
             'transitions'                               => 'off',
+            'resets'                                    => 'on',
             'custom_css'                                => '
 #{$wrap} #{$menu} {
     /** Custom styles should be added below this line **/
@@ -364,7 +380,7 @@ final class Mega_Menu_Style_Manager {
      */
     public function get_css() {
 
-        if ( ( $css = get_transient('megamenu_css') ) && ! $this->is_debug_mode() ) {
+        if ( ( $css = $this->get_cached_css() ) && ! $this->is_debug_mode() ) {
 
             return $css;
 
@@ -386,6 +402,8 @@ final class Mega_Menu_Style_Manager {
      * @param boolean $debug_mode (prints error messages to the CSS when enabled)
      */
     public function generate_css() {
+
+        $this->delete_cache();
 
         // the settings may have changed since the class was instantiated,
         // reset them here
@@ -418,7 +436,9 @@ final class Mega_Menu_Style_Manager {
 
         }
 
-        $this->save_to_cache( $css );
+        $css .= "/** " . date('l jS \of F Y h:i:s A') . " **/";
+
+        $this->set_cached_css( $css );
 
         if ( $this->get_css_output_method() == 'fs' ) {
             $this->save_to_filesystem( $css );
@@ -432,32 +452,29 @@ final class Mega_Menu_Style_Manager {
      *
      * @since 1.6.1
      */
-    private function save_to_cache( $css ) {
-
-        set_transient( 'megamenu_css', $css, 0 );
-        set_transient( 'megamenu_css_version', MEGAMENU_VERSION, 0 );
-
-    }
-
-
-    /**
-     *
-     * @since 1.6.1
-     */
     private function save_to_filesystem( $css ) {
         global $wp_filesystem;
 
         if ( ! $wp_filesystem ) {
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            require_once( ABSPATH . 'wp-admin/includes/file.php' );
         }
 
         $upload_dir = wp_upload_dir();
         $filename = $this->get_css_filename();
         $dir = trailingslashit( $upload_dir['basedir'] ) . 'maxmegamenu/';
 
-        WP_Filesystem(false, $upload_dir['basedir'], true);
+        WP_Filesystem( false, $upload_dir['basedir'], true );
         $wp_filesystem->mkdir( $dir );
-        $wp_filesystem->put_contents( $dir . $filename, $css );
+
+        if ( ! $wp_filesystem->put_contents( $dir . $filename, $css ) ) {
+
+            // File write failed.
+            // Update CSS output option to 'ajax' to stop us from attempting to regenerate the CSS on every request.
+            $settings = get_option( 'megamenu_settings' );
+            $settings['css'] = 'ajax';
+            update_option( 'megamenu_settings', $settings );
+
+        }
 
     }
 
@@ -471,6 +488,9 @@ final class Mega_Menu_Style_Manager {
      */
     private function load_scss_file() {
 
+        $scss  = file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'mixin.scss' );
+        $scss .= file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'reset.scss' );
+
         $locations = apply_filters( "megamenu_scss_locations", array(
             trailingslashit( get_stylesheet_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // child theme
             trailingslashit( get_template_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // parent theme
@@ -481,13 +501,14 @@ final class Mega_Menu_Style_Manager {
 
             if ( file_exists( $path ) ) {
 
-                return apply_filters( "megamenu_load_scss_file_contents", file_get_contents( $path ) );
+                $scss .= file_get_contents( $path );
 
             }
 
         }
 
-        return false;
+        return apply_filters( "megamenu_load_scss_file_contents", $scss);
+
     }
 
     /**
@@ -663,11 +684,13 @@ final class Mega_Menu_Style_Manager {
                 "effect" => array(
                     "fade" => array(
                         "in" => array(
-                            "animate" => array("opacity" => "show")
+                            "animate" => array("opacity" => "show"),
+                            "css" => array("display" => "none")
                         ),
                         "out" => array(
                             "animate" => array("opacity" => "hide")
-                        )
+                        ),
+                        "speed" => "fast"
                     ),
                     "slide" => array(
                         "in" => array(
@@ -676,12 +699,12 @@ final class Mega_Menu_Style_Manager {
                         ),
                         "out" => array(
                             "animate" => array("height" => "hide")
-                        )
+                        ),
+                        "speed" => "fast"
                     )
                 ),
-                "fade_speed" => "fast",
-                "slide_speed" => "fast",
-                "timeout" => 300
+                "timeout" => 300,
+                "interval" => 100
             )
         );
 
@@ -703,19 +726,6 @@ final class Mega_Menu_Style_Manager {
 
 
     /**
-     * Return the filename to use for the stylesheet, ensuring the filename is unique
-     * for multi site setups
-     *
-     * @since 1.6.1
-     */
-    private function get_css_filename() {
-
-        return apply_filters( "megamenu_css_filename", "style.css" );
-
-    }
-
-
-    /**
      * Enqueue the stylesheet held on the filesystem.
      *
      * @since 1.6.1
@@ -724,7 +734,7 @@ final class Mega_Menu_Style_Manager {
 
         $upload_dir = wp_upload_dir();
 
-        $cached_css = get_transient( 'megamenu_css' );
+        $cached_css = $this->get_cached_css();
 
         $filename = $this->get_css_filename();
 
@@ -743,6 +753,10 @@ final class Mega_Menu_Style_Manager {
 
         } else {
 
+            // regenerate the CSS and save to filesystem
+            $this->generate_css();
+
+            // enqueue via AJAX for this request
             $this->enqueue_ajax_style();
 
         }
@@ -763,6 +777,72 @@ final class Mega_Menu_Style_Manager {
 
 
     /**
+     *
+     * @since 1.6.1
+     */
+    private function set_cached_css( $css ) {
+
+        set_transient( $this->get_transient_key(), $css, 0 );
+        set_transient( 'megamenu_css_version', MEGAMENU_VERSION, 0 );
+
+    }
+
+
+    /**
+     * Return the cached css if it exists
+     *
+     * @since 1.9
+     * @return mixed
+     */
+    private function get_cached_css() {
+
+        return get_transient( $this->get_transient_key() );
+
+    }
+
+
+    /**
+     * Delete the cached CSS
+     *
+     * @since 1.9
+     * @return mixed
+     */
+    public function delete_cache() {
+
+        do_action('megamenu_delete_cache');
+
+        return delete_transient( $this->get_transient_key() );
+
+    }
+
+
+    /**
+     * Return the key to use for the CSS transient
+     *
+     * @since 1.9
+     * @return string
+     */
+    private function get_transient_key() {
+
+        return apply_filters( 'megamenu_css_transient_key', 'megamenu_css' );
+
+    }
+
+
+    /**
+     * Return the filename to use for the stylesheet, ensuring the filename is unique
+     * for multi site setups
+     *
+     * @since 1.6.1
+     */
+    private function get_css_filename() {
+
+        return apply_filters( "megamenu_css_filename", 'style' ) . '.css';
+
+    }
+
+
+    /**
      * Enqueue the stylesheet via admin-ajax.php
      *
      * @since 1.6.1
@@ -775,13 +855,16 @@ final class Mega_Menu_Style_Manager {
 
 
     /**
+     * Return the CSS output method, default to filesystem
      *
+     * @return string
      */
     private function get_css_output_method() {
 
         return isset( $this->settings['css'] ) ? $this->settings['css'] : 'fs';
 
     }
+
 
     /**
      * Print CSS to <head> to avoid an extra request to WordPress through admin-ajax.
@@ -799,6 +882,98 @@ final class Mega_Menu_Style_Manager {
         }
 
     }
+
+
+    /**
+     * Delete language specific transients created when PolyLang is installed
+     *
+     * @since 1.9
+     */
+    public function polylang_delete_cache() {
+        global $polylang;
+
+        foreach ( $polylang->model->get_languages_list() as $term ) {
+            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . $term->slug ) );
+        }
+
+    }
+
+
+    /**
+     * Modify the CSS transient key to make it unique to the current language
+     *
+     * @since 1.9
+     * @return string
+     */
+    public function polylang_transient_key( $key ) {
+
+        $key .= "_" . pll_current_language();
+
+        return $key;
+
+    }
+
+
+    /**
+     * Modify the CSS filename to make it unique to the current language
+     *
+     * @since 1.9
+     * @return string
+     */
+    public function polylang_css_filename( $filename ) {
+
+        $filename .= "_" . pll_current_language();
+
+        return $filename;
+
+    }
+
+
+    /**
+     * Delete language specific transients created when WPML is installed
+     *
+     * @since 1.9
+     */
+    public function wpml_delete_cache() {
+
+        $languages = icl_get_languages('skip_missing=N');
+
+        foreach ( $languages as $language ) {
+            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . $language['language_code'] ) );
+        }
+
+    }
+
+
+    /**
+     * Modify the CSS transient key to make it unique to the current language
+     *
+     * @since 1.9
+     * @return string
+     */
+    public function wpml_transient_key( $key ) {
+
+        $key .= "_" . ICL_LANGUAGE_CODE;
+
+        return $key;
+
+    }
+
+
+    /**
+     * Modify the CSS filename to make it unique to the current language
+     *
+     * @since 1.9
+     * @return string
+     */
+    public function wpml_css_filename( $filename ) {
+
+        $filename .= "_" . ICL_LANGUAGE_CODE;
+
+        return $filename;
+
+    }
+
 
 }
 

@@ -93,12 +93,14 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 		} else {
 
 			$atts = array();
-			$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
-			$atts['target'] = ! empty( $item->target )     ? $item->target     : '';
-			$atts['rel']    = ! empty( $item->xfn )        ? $item->xfn        : '';
+
+			$atts['title'] = ! empty( $item->attr_title ) ? $item->attr_title : '';
+			$atts['target'] = ! empty( $item->target ) ? $item->target : '';
+			$atts['class'] = '';
+			$atts['rel'] = ! empty( $item->xfn ) ? $item->xfn : '';
 
 			if ( $settings['disable_link'] != 'true') {
-				$atts['href']   = ! empty( $item->url )        ? $item->url        : '';
+				$atts['href'] = ! empty( $item->url ) ? $item->url : '';
 			}
 
 			if ( isset( $settings['icon']) && $settings['icon'] != 'disabled' ) {
@@ -106,6 +108,12 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			}
 
 			$atts = apply_filters( 'megamenu_nav_menu_link_attributes', $atts, $item, $args );
+
+			if ( strlen( $atts['class'] ) ) {
+				$atts['class'] = $atts['class'] . ' mega-menu-link';
+			} else {
+				$atts['class'] = 'mega-menu-link';
+			}
 
 			$attributes = '';
 
