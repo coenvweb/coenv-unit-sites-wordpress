@@ -4,7 +4,7 @@
 		======================================================================== */
  .post-meta {
         @include encode_black;
-        font-size: rem-calc(12);
+        font-size: rem-calc(14);
         line-height: 1;
         margin-bottom: 12px;
         text-transform: uppercase;
@@ -15,7 +15,7 @@
 	border-right: solid 2px #000;
     color: #595959;
     float: left;
-	font-size: rem-calc(12);
+	font-size: rem-calc(14);
 	margin-right: 5px;
 	padding-right: 6px;
 	position: relative;
