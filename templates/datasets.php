@@ -115,7 +115,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			foreach ($dataset_region as &$term) {
 				$dataset_region_arr[] = '<a href="?tax=dataset_region&term=' . $term->slug . '">' . $term->name . '</a>';
 			}
-			$dataset_region_str = implode(', ', $dataset_region_arr) . ' | ';
+			$dataset_region_str = implode(', ', $dataset_region_arr) . ', ';
 			$dataset_region = "";
 		} else {
 			$dataset_region_str = '';
@@ -139,15 +139,12 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$rows = get_field('dataset_link');
 		?>
 		<div class="dataset-list-item post-<?php the_ID() ?>">
-		<div class="blog-meta"><h5>
-        <div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
+		<div class="post-meta">
+			<div class="terms">
         <?php
 		echo $dataset_region_str . $dataset_type_str;
 
-		echo '</h5></div>';
+		echo '</div></div>';
 		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
 		echo '<div>' . coenv_base_custom_field_excerpt('dataset_overview') . '</div>';
 		echo '<div>';

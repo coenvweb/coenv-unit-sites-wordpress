@@ -29,7 +29,6 @@ $fields = get_fields();
 			<?php endif ?>
 			</h1>
 		</div>
-		<div class="article__categories"><?php coenv_base_fac_terms($post->ID); ?></div>
 
 	</header>
 	<section class="article__content">

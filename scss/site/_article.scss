@@ -221,6 +221,7 @@
 		margin-bottom: 27px;
 		margin-top: 0;
 		padding: 20px 0;
+		width: 100%;
 		
 		.source {
 			background-color: rgba(0,0,0,.5);
@@ -349,5 +350,12 @@ background-color: rgba(0, 0, 0, .9);
 
 .tableauPlaceholder {
 	margin-bottom: 40px;
+}
+
+h2.article__title {
+	a {
+		text-decoration: none;
+		text-transform: uppercase !important;
+	}
 }
 

@@ -1,0 +1,54 @@
+.page-template-datasets div[role="main"] {
+
+	.dataset-list-item {
+		margin-bottom: rem-calc(15);
+
+		.terms {
+			border-right: 0;
+			margin-bottom: rem-calc(10);
+			width: 100%;
+		}
+
+	}
+
+}
+
+
+
+body.single-datasets .entry-content {
+a.button {
+				color: #fff !important;
+				text-decoration: none !important;
+			}
+
+	.terms {
+		@include encode_black;
+		border: none;
+		
+		float: none;
+
+		width: 100%;
+
+		a {
+			color: #595959 !important;
+			text-decoration: none !important;
+			text-transform: uppercase;
+		}
+	}
+
+	.entry-content {
+		
+		h1.article__title {
+		background-image: none;
+		font-size: rem-calc(26);
+		margin-bottom: 0;
+
+			
+
+		}
+
+
+	}
+
+
+}
