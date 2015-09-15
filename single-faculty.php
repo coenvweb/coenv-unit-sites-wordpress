@@ -75,9 +75,9 @@
                         if ($faculty_cv) {
                             echo '<li class="cv"><a href="' . $faculty_cv . '">Curriculum Vitae (CV)</a></li>';
                         }
-                        if ($faculty_website_url) { ?>
-                            <li class="faculty-website"><a class="button" href="#" target="_blank">Visit faculty website</a></li>
-                        <?php } ?>
+                        if ($faculty_website_url) {
+                            echo '<li class="faculty-website"><a class="button" href="' . $faculty_website_url . '" target="_blank">Visit faculty website</a></li>';
+                        } ?>
                         </ul>		
                     </div>
             <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>

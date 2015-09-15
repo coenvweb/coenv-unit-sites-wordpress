@@ -235,7 +235,7 @@ $cats = get_categories($cats_args);
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;
 			echo $tax_value;
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+			echo '<option value="?fac-cat=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
 		}
 		echo '</select>';
 	}

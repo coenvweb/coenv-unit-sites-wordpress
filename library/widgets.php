@@ -596,9 +596,9 @@ class coenv_base_index_dates extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-
+          echo '<div data-url="'. $_SERVER['REQUEST_URI'] .'">';
           coenv_base_date_filter('post',$coenv_month,$coenv_year);
-
+          echo '</div>';
           echo $args['after_widget'];
      }
 

@@ -25,13 +25,14 @@
     padding-right: 0;
     z-index: 2;
     position: relative;
+    text-align: center;
     word-break:     break-word;
     -webkit-hyphens: auto;
     -moz-hyphens:    auto;
     hyphens:         auto;
     @media #{$small-only} {
-        margin-left: -1.2rem;
-        margin-right: -1.2rem;
+        margin-right: -4%;
+        min-width: 108%;
     }
     @media #{$medium-up} {
         max-width: 50%;
@@ -47,6 +48,7 @@
     }
     
     .faculty_contact_fields {
+        text-align: left;
         border-top: 4px solid $accent-blue;
     }
 
@@ -106,6 +108,10 @@ article.type-faculty {
 	} // end .faculty-pubs ul
 
 } // end article.type-faculty
+
+.article__categories h2 {
+    text-transform: uppercase;
+}
 
 .faculty-list-teach h2:first-child {
 	margin-top: 0;

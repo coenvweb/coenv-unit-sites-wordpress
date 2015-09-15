@@ -68,6 +68,7 @@
         @include uni_regular;
         font-weight: 400;
         text-transform: uppercase;
+        margin-left: -1rem!important;
         @media #{$medium-up} {
             font-size: 1.8rem;
         }
@@ -80,6 +81,7 @@
         float: left;
         margin-top: rem-calc(18);
         margin-bottom: 0;
+        margin-right: -2rem;
         a {
             color: white;
         }

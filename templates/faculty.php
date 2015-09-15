@@ -60,6 +60,12 @@ endif;
 $wp_query = new WP_Query( $query_args );
 
 ?>
+            <div id="filter" class="row filters show-for-small-only">
+			<h2 class="large-12 columns left">Filter By Research Area</h2>
+			<div class="large-6 columns left" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="category">
+				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
+			</div>
+		</div>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="faculty-list-teach clearfix">
 

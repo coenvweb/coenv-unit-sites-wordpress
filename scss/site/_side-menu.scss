@@ -13,7 +13,6 @@ aside#sidebar {
 	}
 
 	// Hide for mobile	
-	.coenv_base_subnav,
 	&.section-title {
 		@media #{$small-only} {
 			display:none;
