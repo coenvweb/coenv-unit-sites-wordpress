@@ -45,7 +45,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$query_args = array(
 			'post_type'	=> 'post',
 			'post_status' => 'publish',
-			'posts_per_page' => 2,
+			'posts_per_page' => 20,
 			'orderby' => 'date',
 			'order' => 'DESC',
 			'paged' => $paged
@@ -93,7 +93,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more!</a>';
         }
 		?>
 		<div class="blog-list-item clearfix">
@@ -151,16 +151,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			?>
 			</div>
 			<div class="blog-links right">
-			<?php
-			if($rows) {
-				foreach($rows as $row) {
-					if($row['blog_link_type'] == 'upload') {
-						echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-					} elseif ($row['blog_link_type'] == 'link') {
-						echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-					} 
-				}
-			} ?>
+			
 		</div>
 		</div>
 	</div>
