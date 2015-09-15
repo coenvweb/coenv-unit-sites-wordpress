@@ -183,7 +183,7 @@
             width: 100%;
         }
         .featured-news {
-            margin-right: 87px;
+            margin-right: 60px;
             @media#{$small-only} {
                 margin-right: 0;
             }
@@ -358,6 +358,11 @@
             max-height: rem-calc(350);
             margin-bottom: rem-calc(17);
             overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+            }
         }
         :not(:last-child) .small-news {
                 margin-bottom: rem-calc(30);	
