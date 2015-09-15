@@ -1,6 +1,9 @@
 // Homepage Widgets
 
 .home {
+    .post-meta {
+            margin-bottom: rem-calc(5);
+        }
     
         h2 {
         @include encode_black;
@@ -186,10 +189,12 @@
             }
         }
         .more-news {
-            margin-top: 9px;
 
             @media#{$small-only} {
                 text-align: center;
+            }
+            @media#{$small-up} {
+            padding-left: 0;
             }
 
 
@@ -205,7 +210,7 @@
         h3 {
             background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
             color: $accent;
-            font-size: rem-calc(16);
+            font-size: rem-calc(20);
             margin-bottom: 20px;
             text-transform: none;
         }
@@ -225,6 +230,7 @@
             margin-bottom: 25px;
             padding-bottom: 25px;
             padding-right: 20px;
+            width: 100%;
                 h3 {
                     background: none;
                     margin: 0;
@@ -364,6 +370,13 @@
     }
     .home-news-section .columns.small-news {
         padding-left: 80px;
+
+
+
+
+
+
+
     }
    
     
