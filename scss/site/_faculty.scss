@@ -214,7 +214,7 @@ ul.fac-terms {
     color: $text;
     &:hover {
         background: $accent-blue-dk!important;
-        color: white;
+        color: white!important;
     }
 }
 
@@ -224,6 +224,11 @@ ul.fac-terms {
         margin-top: .5rem;
         a {
             color: $text!important;
+        }
+        &:hover {
+            a {
+                color: white!important;
+            }
         }
     }
 }

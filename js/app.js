@@ -307,12 +307,6 @@ d=c?e.S(c).closest("["+this.attr_name()+"]"):e.S("["+this.attr_name()+"]");var f
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
-    // Category filter for custom post type indicies
-    $("select.select-date").on( 'change', function () {
-        var cat = $(this).parent('div').attr('data-url');
-        var catval = $(this).val();
-        window.location.href = '';
-    } );
 });
 
 
