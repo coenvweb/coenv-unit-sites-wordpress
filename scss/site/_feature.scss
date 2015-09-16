@@ -55,6 +55,10 @@
             @media #{$large-up} {
                 font-size: 4vw;
             }
+            .oldie & {
+                background-color: white;
+                border: 1px solid white;
+            }
         }
         
         .feature-white {

@@ -1,5 +1,6 @@
-<!doctype html>
-<html class="no-js" <?php language_attributes(); ?> >
+<!DOCTYPE html>
+<!--[if IE ]>    <html dir="ltr" lang="en-US" class="no-js ie8 oldie" <?php language_attributes(); ?>> <![endif]-->
+<!--[if (gte IE 9)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html dir="ltr" lang="en-US" class="no-js" <?php language_attributes(); ?>><!--<![endif]-->
   <head>
     <meta charset="utf-8" />
     <meta name='robots' content='noindex,follow' />

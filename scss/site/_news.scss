@@ -84,8 +84,12 @@
 .panel {
     padding: 1rem;
     margin-bottom: 1rem!important;
+    margin-right: 1.6rem;
     border-top: $accent-blue solid 4px!important;
     border: none;
+    @media #{$large-up} {
+        margin-right: 0;
+    }
     
     .columns {
         padding: 0;
@@ -98,6 +102,12 @@
         .button {
             margin: 0;
         }
+    }
+    
+    @media #{$small-only} {
+       .right, .left {
+           float: none!important;
+       }
     }
 }
 
