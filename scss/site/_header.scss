@@ -147,7 +147,6 @@
 
 .logotype {
     text-align: center;
-
     #unit-college-uw {
         overflow: hidden;
         height: 109px;
@@ -256,10 +255,6 @@
     .uw-name {
         width: 215px;
         height: 15px;
-        @media #{$xlarge-up} {
-            width: auto;
-            height: auto;
-        }
     }
     .college-name {
         width: 215px;
