@@ -315,6 +315,9 @@
 } // .article__footer
 div[role="main"] {
 	margin-top: 2rem;
+    @media #{$medium-up} {
+        min-height: 400px;
+    }
 }
 
 body.page div[role="main"] .share {
