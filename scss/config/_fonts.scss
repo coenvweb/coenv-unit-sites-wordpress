@@ -201,6 +201,11 @@ h3 {
         font-family: open-sans-bold;
         font-weight: 400!important;
     }
+    h1, h2, h3, h4 {
+        strong, b {
+            font-weight: inherit!important;
+        }
+    }
 }
 
 /*	Base font size
