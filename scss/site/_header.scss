@@ -147,9 +147,6 @@
 
 .logotype {
     text-align: center;
-    @media #{$xlarge-up} {
-        max-width: 25%;
-    }
 
     #unit-college-uw {
         overflow: hidden;
@@ -179,8 +176,6 @@
 
 
 #unit-college-uw {
-    float: left;
-    display: inline;
     ul {
         width: 220px;
         margin: 0;
@@ -230,10 +225,6 @@
     width: 300px;
     margin: 0 0 0 rem-calc(30);
     position: relative;
-    @media #{$xlarge-up} {
-        width: auto;
-        height: auto;
-    }
     
     li {
         display: block;
