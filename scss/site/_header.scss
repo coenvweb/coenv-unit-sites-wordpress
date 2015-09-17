@@ -147,6 +147,9 @@
 
 .logotype {
     text-align: center;
+    @media #{$xlarge-up} {
+        max-width: 25%;
+    }
 
     #unit-college-uw {
         overflow: hidden;
@@ -176,6 +179,8 @@
 
 
 #unit-college-uw {
+    float: left;
+    display: inline;
     ul {
         width: 220px;
         margin: 0;
@@ -251,6 +256,9 @@
                 left: 50.3%;
                 height: 16px;
                 top: -9px;
+                .oldie & {
+                    display: none;
+                }
             }
         }
     }
