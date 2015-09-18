@@ -6,8 +6,53 @@
         }
     }
     
-    .profiles {
-        page-break-inside: avoid;
+    
+    
+    .hero-row {
+        height: 7rem;
+        position: relative;
+    }
+    
+    .feature .feature-info-container .feature-content .hero-white {
+        margin: 0;
+        width: 100%;
+        text-align: left;
+        h2 {
+            font-size: 3rem;
+        }
+    }
+    .home .spotlight .widget_content {
+        padding: 0;
+        
+        p, a {
+        font-size: 1rem;
+        line-height: 1.9rem;
+        }
+    }
+    .spotlight {
+        color: $text!important;
+    }
+    
+    .home .programs .widget {
+        padding: 1rem;
+    }
+
+    
+    .major-program, .after-content {
+        .widget_img {
+            display: none;
+        }
+    }
+    
+    .page-row {
+        height: 100px;
+    }
+    
+    #sidebar {
+        .widget_img {
+            float: left;
+            margin-right: 20px;
+        }
     }
     
     .top-bar-menu {
@@ -26,11 +71,11 @@
         margin: 0;
     }
     
-    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters {
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title, .name, .purple-wedges, .top-bar-menu {
         display: none!important;
     }
     
-    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats {
+    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats, .article__categories, .post {
         a[href]:after {
             content: none!important;
         }
