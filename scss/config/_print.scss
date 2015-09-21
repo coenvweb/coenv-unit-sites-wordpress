@@ -6,7 +6,16 @@
         }
     }
     
+    .name svg {
+        fill: $accent!important;
+    }
     
+    .news-title {
+        bottom: -1.5rem!important;
+    }
+    .featured-thumbnail {
+        padding-bottom: 1.5rem!important;
+    }
     
     .hero-row {
         height: 7rem;
@@ -21,17 +30,6 @@
             font-size: 3rem;
         }
     }
-    .home .spotlight .widget_content {
-        padding: 0;
-        
-        p, a {
-        font-size: 1rem;
-        line-height: 1.9rem;
-        }
-    }
-    .spotlight {
-        color: $text!important;
-    }
     
     .home .programs .widget {
         padding: 1rem;
@@ -44,6 +42,10 @@
         }
     }
     
+    .faculty-list-teach {
+        width: 100%!important;
+    }
+    
     .page-row {
         height: 100px;
     }
@@ -52,6 +54,10 @@
         .widget_img {
             float: left;
             margin-right: 20px;
+            margin-bottom: 3rem;
+        }
+        .widget h4 {
+            bottom: -3rem;
         }
     }
     
@@ -63,6 +69,10 @@
         zoom: 85%;
     }
     
+    .news-stories .columns {
+        position: relative;
+    }
+    
     .widget_img {
         max-width: 300px;
     }
@@ -71,11 +81,11 @@
         margin: 0;
     }
     
-    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title, .name, .purple-wedges, .top-bar-menu {
+    .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .section-title, .purple-wedges, .social, #coenv_base_index_dates-3 {
         display: none!important;
     }
     
-    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats, .article__categories, .post {
+    .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-teach, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats, .article__categories, .page_item, .post, .fake-cat, .programs, .featured-thumbnail, .feature-image, .button {
         a[href]:after {
             content: none!important;
         }
