@@ -365,6 +365,8 @@ aside#sidebar div.columns {
                     padding: 0 2rem !important;
                     width: 110%;
                     transform: translateX(-95%) skew(-15deg);
+                    -webkit-transform: translateX(-95%) skew(-15deg);
+                    -ms-transform: translateX(-95%) skew(-15deg);
                     z-index: -1;
                     @media #{$small-only} {
                         display: none;
