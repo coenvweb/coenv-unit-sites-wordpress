@@ -217,11 +217,11 @@
                       ?>
                         <div class="social show-for-large-up"><li class="page_item">Follow Us ></li>
                 <?php if (get_option('twitter')) { ?>
-                    <li class="page_item"><a class="twitter social-menu" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
+                    <li class="page_item"><a class="twitter social-menu" target="blank" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
                             <i class="fi-social-twitter"></i>
                 </a></li><?php } ?>
                  <?php if (get_option('facebook')) { ?>
-                    <li class="page_item"><a class="facebook social-menu" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
+                    <li class="page_item"><a class="facebook social-menu" target="blank" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
                     <path id="facebook-icon" d="M204.067,184.692h-43.144v70.426h43.144V462h82.965V254.238h57.882l6.162-69.546h-64.044
 
