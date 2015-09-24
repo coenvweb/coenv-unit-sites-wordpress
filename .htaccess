@@ -13,6 +13,15 @@ RewriteRule ^(.*)$ http://smea.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} fish.washington.edu [NC]
 RewriteRule ^(.*)$ http://fish.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} envstudies.washington.edu [NC]
+RewriteRule ^(.*)$ http://envstudies.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} marinebiology.washington.edu [NC]
+RewriteRule ^(.*)$ http://marinebiology.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} hazards.washington.edu [NC]
+RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
