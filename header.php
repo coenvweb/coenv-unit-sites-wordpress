@@ -122,6 +122,7 @@
             
             add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             $exclude = implode(',',coenv_base_menu_exclude());
+            $exclude = str_replace('27', '', $exclude);
             wp_list_pages( array(
                 'depth' => 0,
                 'walker' => new top_bar_mobile_walker(),
