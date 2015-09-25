@@ -374,23 +374,18 @@
         @media #{$small-only} {
             display: table;
             overflow: hidden;
-            &:after {
-                content: "'";
+            &:before {
+                content: "";
                 position: absolute;
                 width: 181vw;
-                height: 100vw;
-                top: 25%;
-                left: -42%;
+                height: 200vw;
+                top: 0;
+                left: 0;
                 bottom: 0;
                 right: 0;
                 z-index: -1;
                 background-image: url("../assets/img/longbeach-54.jpg");
-                background-size: 105%;
-                -webkit-transform: rotate(90deg);
-                -moz-transform: rotate(90deg);
-                -ms-transform: rotate(90deg);
-                -o-transform: rotate(90deg);
-                transform: rotate(90deg);
+                background-size: 200%;
             }
         }
         
