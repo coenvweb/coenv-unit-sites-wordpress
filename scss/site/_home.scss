@@ -1,5 +1,10 @@
 // Homepage Widgets
-
+.home .full-news .post-meta {
+        @include o_sans_bold;
+    }
+     .home .full-stats .button {
+    font-size: rem-calc(16);
+    }
 .home {
     .post-meta {
             margin-bottom: rem-calc(5);
@@ -150,24 +155,17 @@
 
 
         }
-        .more {
-            background-color: $accent;
-            color: #fff;
-            @include encode_black;
-            text-transform: uppercase;
-            font-size: rem-calc(15);
+        .button {
+            font-size: rem-calc(18);
             letter-spacing: .15rem;
-            padding: 12px 12px;
-            border-radius: 2px;
-            box-shadow: 0 2px #fff;
-
-            @media #{$small-only} {
-                font-size: rem-calc(12);
-            }
-
-
+            padding: rem-calc(12);
         }
     }
+    .home .full-news h3 {
+        @include o_sans_bold;
+        line-height: 1;
+    }
+    
     .full-news {
         background-color: $white;
         background-image: url('/wp-content/themes/coenv-cig/assets/img/home-section-top-tile.png');
@@ -208,10 +206,11 @@
             float: left;
         }
         h3 {
-            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+            @include o_sans_bold;
             color: $accent;
-            font-size: rem-calc(20);
-            margin-bottom: 20px;
+            font-size: rem-calc(22);
+            margin-bottom: rem-calc(12);
+            padding-bottom: 0;
             text-transform: none;
         }
         .large-4 .small-news {
@@ -227,6 +226,7 @@
             background-repeat: no-repeat;
             background-position: bottom left;
             float: left;
+            list-style: none;
             margin-bottom: 25px;
             padding-bottom: 25px;
             padding-right: 20px;
@@ -240,7 +240,9 @@
                 }
 
             }
+
         }
+        
     
         
     }

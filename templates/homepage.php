@@ -11,7 +11,7 @@ Template Name: Homepage
 				<p>Together We Will</p>
 			</div>
 			<h3>Increase resilience to climate variability and change</h3>
-			<p><a class="more" href="/about-cig/">Learn More</a></p>
+			<p><a class="button" href="/about-cig/">Learn More</a></p>
 		</div>
 	</div>
 </div>			
@@ -154,8 +154,7 @@ Template Name: Homepage
 				}
         	?>
     		<?php if ( empty( $featured ) ): ?><div class="large-4 medium-12 columns"><?php endif; ?>
-		     <div class="small-news">
-		     	<div class="post-content">
+		     <li class="small-news">
 					<div class="post-meta">
 						<?php echo $more_terms_str; ?>
 						<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
@@ -165,8 +164,7 @@ Template Name: Homepage
 						<div class="show-for-medium-up"><?php echo the_advanced_excerpt( 'length=15&finish=sentence' ); ?></div>
 		    			<div class="show-for-medium-up"><?php echo $post_link; ?></div>
 		    		<?php } ?>
-		    	</div>
-			</div>
+			</li>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
 		<div class="more-news column"><a class="button" href="/news-and-events/">See All News</a></div>

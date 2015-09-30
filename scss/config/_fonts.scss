@@ -84,27 +84,27 @@
 
 @mixin encode() {
   font: {
-    family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 @mixin encode-thin() {
   font: {
-    family: "encode-sans-normal-thin", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "encode-sans-normal-thin", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 @mixin encode_black() {
   font: {
-    family: "encode-sans-black", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "encode-sans-black", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 @mixin encode_cb() {
-    font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 800!important;
     text-transform: uppercase;
     letter-spacing: .5px;
@@ -113,21 +113,10 @@
 
 @mixin uni() {
   font: {
-    family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
-
-.intro {
-    font-size: rem-calc(24)!important;
-    margin: rem-calc(20) 0;
-    @include o_sans_light;
-    font-weight: 400;
-    letter-spacing: .5px;
-    -webkit-font-smoothing: antialiased;
-}
-
-
 
 /*	Base font size
 		======================================================================== */

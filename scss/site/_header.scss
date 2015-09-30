@@ -10,10 +10,13 @@
     .tab-bar-section {
         margin: 0;
         text-align: center;
+
+        a {
+            @include encode_cb;
+            color: #fff;
+        }
     }
 
-    
-    
     .right-small, .left-small {
         border: none;
     }
@@ -42,6 +45,10 @@
 
 // desktop header
 
+.top-bar-container {
+    box-shadow: rgb(0, 0, 0) 1px 4px 9px -6px;
+}
+
 .banner-container {
     background-color: $accent;
     width: 100%;
@@ -63,16 +70,12 @@
     padding-left: 15px;
     position: relative;
 
-
     a {
 
     display: block;
     height: 109px;
     width: 130px;
-
-
     }
-
 
     #logo {
         fill: #fff;
@@ -140,8 +143,6 @@
             h2 {
                 position: absolute;
                 bottom: 0;
-
-               
             }
     
             a {
