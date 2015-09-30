@@ -99,6 +99,68 @@ REDIRECT 301 /alumni/giving.html /alumni-community/giving/
 REDIRECT 301 /alumni/index.html /alumni-community/
 REDIRECT 301 /faculty-research/research/alaska/ /faculty-research/research/
 
+REDIRECT 301 /canderson/ /faculty/chris-anderson/
+REDIRECT 301 /anderson/ /faculty/james-anderson/
+REDIRECT 301 /beauchamp/ /faculty/dave-beauchamp/
+REDIRECT 301 /branch/ /faculty/trevor-branch/
+REDIRECT 301 /essington/ /faculty/tim-essington/
+REDIRECT 301 /friedman/ /faculty/carolyn-friedman/
+REDIRECT 301 /gallucci/ /faculty/vincent-gallucci/
+REDIRECT 301 /grue/ /faculty/christian-grue/
+REDIRECT 301 /hauser/ /faculty/lorenz-hauser/
+REDIRECT 301 /hilborn/ /faculty/ray-hilborn/
+REDIRECT 301 /gholt/ /faculty/gordon-holtgrieve/
+REDIRECT 301 /hornefac/ /faculty/john-horne/
+REDIRECT 301 /hunt/ /faculty/george-hunt-jr/
+REDIRECT 301 /klaidre/ /kristin-ladre/
+REDIRECT 301 /naish/ /faculty/kerry-naish/
+REDIRECT 301 /olden/ /faculty/julian-olden/
+REDIRECT 301 /parrish/ /faculty/julia-parish/
+REDIRECT 301 /pietsch/ /faculty/theodore-w-pietsch/
+REDIRECT 301 /punt/ /faculty/andre-punt/
+REDIRECT 301 /tquinn/ /faculty/thomas-quinn/
+REDIRECT 301 /Roberts/ /faculty/steven-roberts/
+REDIRECT 301 /schindler/ /faculty/daniel-schindler/
+REDIRECT 301 /sebens/ /faculty/kenneth-sebens/
+REDIRECT 301 /jimseeb/ /faculty/james-seeb/
+REDIRECT 301 /lisaseeb/ /faculty/lisa-seeb/
+REDIRECT 301 /simenstad/ /faculty/charles-simenstad/
+REDIRECT 301 /skalski/ /faculty/john-skalski/
+REDIRECT 301 /summers/ /faculty/adam-summers/
+REDIRECT 301 /vanblaricom/ /faculty/glenn-vanblaricom/
+REDIRECT 301 /young/ /faculty/graham-young/
+
+REDIRECT 301 /people/canderson/ /faculty/chris-anderson/
+REDIRECT 301 /people/anderson/ /faculty/james-anderson/
+REDIRECT 301 /people/beauchamp/ /faculty/dave-beauchamp/
+REDIRECT 301 /people/branch/ /faculty/trevor-branch/
+REDIRECT 301 /people/essington/ /faculty/tim-essington/
+REDIRECT 301 /people/friedman/ /faculty/carolyn-friedman/
+REDIRECT 301 /people/gallucci/ /faculty/vincent-gallucci/
+REDIRECT 301 /people/grue/ /faculty/christian-grue/
+REDIRECT 301 /people/hauser/ /faculty/lorenz-hauser/
+REDIRECT 301 /people/hilborn/ /faculty/ray-hilborn/
+REDIRECT 301 /people/gholt/ /faculty/gordon-holtgrieve/
+REDIRECT 301 /people/hornefac/ /faculty/john-horne/
+REDIRECT 301 /people/hunt/ /faculty/george-hunt-jr/
+REDIRECT 301 /people/klaidre/ /kristin-ladre/
+REDIRECT 301 /people/naish/ /faculty/kerry-naish/
+REDIRECT 301 /people/olden/ /faculty/julian-olden/
+REDIRECT 301 /people/parrish/ /faculty/julia-parish/
+REDIRECT 301 /people/pietsch/ /faculty/theodore-w-pietsch/
+REDIRECT 301 /people/punt/ /faculty/andre-punt/
+REDIRECT 301 /people/tquinn/ /faculty/thomas-quinn/
+REDIRECT 301 /people/Roberts/ /faculty/steven-roberts/
+REDIRECT 301 /people/schindler/ /faculty/daniel-schindler/
+REDIRECT 301 /people/sebens/ /faculty/kenneth-sebens/
+REDIRECT 301 /people/jimseeb/ /faculty/james-seeb/
+REDIRECT 301 /people/lisaseeb/ /faculty/lisa-seeb/
+REDIRECT 301 /people/simenstad/ /faculty/charles-simenstad/
+REDIRECT 301 /people/skalski/ /faculty/john-skalski/
+REDIRECT 301 /people/summers/ /faculty/adam-summers/
+REDIRECT 301 /people/vanblaricom/ /faculty/glenn-vanblaricom/
+REDIRECT 301 /people/young/ /faculty/graham-young/
+
 
 
 
