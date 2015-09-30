@@ -1,0 +1,18 @@
+
+<h3 style="color:#555555;">2015-09-26 22:05:44 - Start</h3><hr><hr/>[ 2015-09-26 22:05:44  - Start ][ ip: 127.0.0.1 ]<hr /><b>Pipe: <a href="admin.php?page=pipes.pipe&id=1" target="_blank">1 - </a></b><br/ >[ 2015-09-26 22:05:44 ][ Engine:  ][ Found:  articles ]<br/ >
+<br/>2015-09-26 22:05:44 Stop: [1:0/]
+
+<hr/>[ 2015-09-26 22:05:45  - Start ][ ip: 127.0.0.1 ]<hr /><b>Pipe: <a href="admin.php?page=pipes.pipe&id=2" target="_blank">2 - Pipe#2</a></b><br/ >[ 2015-09-26 22:05:45 ][ Engine:  ][ Found: 0 articles ]<br/ >
+<br/>2015-09-26 22:05:45 Stop: [2:0/0]
+
+
+<hr /><b style="color:#555555;">2015-09-26 22:05:46 - Done</b> [ ip: 127.0.0.1 ]<hr />
+
+<h3 style="color:#555555;">2015-09-26 22:32:54 - Start</h3><hr><hr/>[ 2015-09-26 22:32:54  - Start ][ ip: 127.0.0.1 ]<hr /><b>Pipe: <a href="admin.php?page=pipes.pipe&id=1" target="_blank">1 - </a></b><br/ >[ 2015-09-26 22:32:54 ][ Engine:  ][ Found:  articles ]<br/ >
+<br/>2015-09-26 22:32:54 Stop: [1:0/]
+
+<hr/>[ 2015-09-26 22:32:54  - Start ][ ip: 127.0.0.1 ]<hr /><b>Pipe: <a href="admin.php?page=pipes.pipe&id=2" target="_blank">2 - </a></b><br/ >[ 2015-09-26 22:32:54 ][ Engine:  ][ Found:  articles ]<br/ >
+<br/>2015-09-26 22:32:54 Stop: [2:0/]
+
+
+<hr /><b style="color:#555555;">2015-09-26 22:32:55 - Done</b> [ ip: 127.0.0.1 ]<hr />
