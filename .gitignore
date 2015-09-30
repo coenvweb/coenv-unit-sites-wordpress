@@ -18,7 +18,7 @@ cig-static/*
 
 # Plugin junk
 wp-content/plugins/ns-cloner-site-copier/logs/ns-cloner-summary.log
-wp-content/cache/wp-pipes/cache*
+wp-content/plugins/wp-pipes/cache
 
 # wordpress specific
 #wp-config.php
