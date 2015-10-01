@@ -21,7 +21,7 @@ wp-content/plugins/ns-cloner-site-copier/logs/ns-cloner-summary.log
 wp-content/plugins/wp-pipes/cache
 
 # wordpress specific
-#wp-config.php
+wp-config.php
 wp-content/uploads/
 wp-content/blogs.dir/
 wp-content/upgrade/*
