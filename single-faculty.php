@@ -37,7 +37,7 @@
                             echo '</ul>';
                         }
                         if ($faculty_email_address) {
-                            echo '<li class="email"><a href="' . $faculty_email_address . '">' .  $faculty_email_address . '</a></li>';
+                            echo '<li class="email"><a href="mailto:' . $faculty_email_address . '">' .  $faculty_email_address . '</a></li>';
                         }
                         if( have_rows('phone_number') ) {
                             echo '<li class="phone-numbers">';
