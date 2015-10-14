@@ -7,6 +7,7 @@
 
     .widget_links {
         float: right;
+        list-style: none;
     }
 
     .list-news-small {
@@ -17,16 +18,10 @@
         ul {
             list-style: none;	
         }
-    }
-    
-    .widgettitle {
-        display: none;
-    }
-    
-    
+    }    
 
     .home-news-section {
-        .featured-thumbnail {
+        .first-thumbnail {
             max-height: rem-calc(350);
             margin-bottom: rem-calc(10);
             overflow: hidden;

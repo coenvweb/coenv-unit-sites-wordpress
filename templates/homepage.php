@@ -84,15 +84,18 @@ endwhile;
 wp_reset_postdata();
 echo '</div>';
 ?>
-<?php 
-# Widget area for content blocks
-if ( is_active_sidebar( 'home-columns' ) ) : 
-?>
-
-<?php dynamic_sidebar( 'home-columns' ); ?>
-
-
-<?php endif; ?>
+</div>
+<div class="row programs" data-equalizer data-equalizer-mq="large-up">
+    <div class="columns large-4 minor" data-equalizer-watch>
+        <?php the_widget('custom_post_widget', 'custom_post_id=3068&show_featured_image=true&show_custom_post_title=true'); ?>
+    </div>
+    <div class="columns large-4 certificate" data-equalizer-watch>
+        <?php the_widget('custom_post_widget', 'custom_post_id=3070&show_featured_image=true&show_custom_post_title=true'); ?>
+    </div>
+    <div class="columns large-4 courses" data-equalizer-watch>
+        <?php the_widget('custom_post_widget', 'custom_post_id=3072&show_featured_image=true&show_custom_post_title=true'); ?>
+    </div>
+</div>
 
 				
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
@@ -102,13 +105,9 @@ if ( is_active_sidebar( 'home-columns' ) ) :
 	</div><!-- .widget-area -->
 </div>
 <?php endif; ?>
+        
+<div class="row news">
 
-<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-<?php endif; ?>
 <?php
 # News with featured news
 
@@ -136,10 +135,9 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 	<hr />
 	<div class="home-news-section clearfix">
-		<div>
-			<h2 class="columns large-9 left" style="margin-top: 0; padding-top: 0;">News and Events</h2>
-			<a class="button columns large-3 right" href="/news-and-events">More News</a>
-		</div>
+        <div class="columns large-8 left" style="margin-top: 0; padding-top: 0;">
+        <h2 class="left">News</h2>
+        <a class="button right" href="/news-and-events">More News</a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -152,40 +150,39 @@ $wp_query = new WP_Query( $home_args );
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
+
 		if ( $wp_query->current_post == 0 ) {
             if ( has_post_thumbnail()) {
-
-                echo '<div class="large-8 columns featured-news">';
-				echo '<div class="featured-thumbnail">';
-				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-				the_post_thumbnail( 'large' );
+                echo '<div class="first-news row">';
+				echo '<div class="first-thumbnail">';
+                    echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+                    the_post_thumbnail( 'large' );
 				echo '</a></div>';
+                
 				echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
-				} else {
-					$terms_str = '';
-				}
-				$terms = "";
-				echo $terms_str;
+                    echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                    // Get categories
+                    $terms = wp_get_post_terms(get_the_id(), 'category');
+                    if (!empty($terms)) {
+                        $terms_arr = array();		
+                        foreach ($terms as &$term) {
+                            if ($term->slug != 'uncategorized') {
+                                $terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                            }
+                        }
+                        $terms_str = ' / ' . implode(', ', $terms_arr);
+                    } else {
+                        $terms_str = '';
+                    }
+                    $terms = "";
+                    echo $terms_str;
 	            echo '</div>';
+                
                 echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
 	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
 	            echo $post_link;
-			}
-            else {
-                echo '<div class="large-4 columns small-news">';
+        } else {
+                echo '<div class="first-news row">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
@@ -207,16 +204,13 @@ $wp_query = new WP_Query( $home_args );
 				//var_dump($terms_arr);
 				$terms = "";
                 echo '</div>';
-                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo $post_link;
-            }
-		
-		}
-
-		else {
+            echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+            echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+            echo $post_link;
+        }
+        } else {
 			
-		echo '<div class="large-4 columns small-news">';
+		echo '<div class="small-news row">';
 		echo '<div class="post-meta">';
 		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
 		// Get categories
@@ -244,7 +238,19 @@ $wp_query = new WP_Query( $home_args );
 	echo '</div>';
 	endwhile;
 	?>
+    </div>
 <?php endif; ?>
+<div class="large-4 columns">
+    <?php the_widget('wptt_TwitterTweets', 'title=twitter&name=drewcoll&consumerKey=bXSm7Nuq37MHLVIEkzrMmop4a&consumerSecret=jJ8pPMAvP4eTbx7rYEG8UqOwHADHyPZ7to48jByNre9B2qNKod&accessToken=59599201-2LSnZ7hqiL1wJJzNWSEl3rEX6FAbUV9ZMbsS9qScc&accessTokenSecret=IKDiaougH9033s0l2RmVYoX9kDDzDEKJiT8i5Gn378oZz'); ?>
+</div>
+</div>  
+        <!--&tweets_cnt=3&tweet_theme=light&tweet_border=false&store_time=4&replies_excl=true&disp_scr_name=false&dataLang=en&timeRef=false&timeAgo=true&twitterIntents=false&twitterIntentsText=false&intentColor=#999&showAvatar=false&border_rad=false&slide_style=list-->
+<div class="row events">
+    <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
+    <div class="list columns large-12">
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_marinebio.rss&posts_per_page=3'); ?>
+    </div>      
+</div>
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>

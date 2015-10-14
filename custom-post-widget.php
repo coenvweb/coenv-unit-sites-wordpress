@@ -16,12 +16,11 @@ $widget_img_attr = array(
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
 );
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'large');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
-$buttons = "";
-if( !empty( $rows ) )  {
+if($rows) {
     $buttons = '<ul class="widget_links">';
     $first = true;
     foreach($rows as $row) {
@@ -62,7 +61,7 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image && $widget_img ) {
+if ( $show_featured_image ) {
 	echo '<div class="widget_img">';
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
 	echo '</div>';
