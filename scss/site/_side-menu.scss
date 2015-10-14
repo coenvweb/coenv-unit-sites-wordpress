@@ -3,6 +3,36 @@ aside#sidebar {
 	margin-top: rem-calc(57);
 	padding-right: 1rem !important;
 
+
+	
+.tweets_avatar {
+	background-color: transparent;
+	border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
+	border-radius: 0;
+	border-style: solid;
+    border-width: 0;
+    padding-left: rem-calc(20) !important;
+    padding-right: rem-calc(20) !important;
+
+    .tweet_data {
+    	@include o_sans;
+
+    	a {
+    		color: $accent !important;
+    	}
+
+    }
+    .times em a {
+    	color: #000 !important;
+    }
+    
+}
+
+
+
+
+
+
 	.section-title {
 		@include encode_cb;
 		a {
@@ -102,13 +132,12 @@ aside#sidebar div.columns {
 
 	
 	// Content blocks
-	.widget_custom_post_widget {
+	.widget {
 		.widget_content {
 			padding: rem-calc(24) rem-calc(20) rem-calc(5) rem-calc(20);
 			h2 {
 				@include encode_cb;
 				font-size: rem-calc(22);
-				letter-spacing: .1rem;
 			}
 			p {
 				margin-bottom: 0;
@@ -132,7 +161,22 @@ aside#sidebar div.columns {
 		}
 	}
 	&:nth-child(odd) {
-		.widget_custom_post_widget {
+	.widget#wptt_twittertweets-2 {
+		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
+		background-repeat: no-repeat;
+		background-position: top left;
+		h2 {
+			color: $accent;
+			@include encode_cb;
+			font-size: rem-calc(22);
+			padding: rem-calc(20) rem-calc(20) 0 rem-calc(20);
+		}
+		.fetched_tweets > li {
+			box-shadow: none;
+		}
+
+	}
+		.widget {
 			background-color: #e8e3d3;
 			.widget_content {
 				background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
@@ -152,33 +196,46 @@ aside#sidebar div.columns {
 					&:hover {
 						background-color: #19004a;
 					}
-
-
 				}
 			}
 			
 		}
 	}
 	&:nth-child(even) {
-	.widget_custom_post_widget {
-		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
+		.widget {
+			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
 			background-repeat: no-repeat;
 			background-position: bottom center;
-	}
-		.widget_custom_post_widget .widget_content {
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-tile.png");
-			background-repeat: no-repeat;
-			background-position: top left;
-			h2 a {
-				color: #85754e;
+
+			.widget_content {
+				background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-tile.png");
+				background-repeat: no-repeat;
+				background-position: top left;
+				h2 a {
+					color: #85754e;
+				}
+			}
+			.widget_links {
+				padding-top: 0;
+				padding-right: rem-calc(20);
+				padding-bottom: rem-calc(25);
+				
 			}
 		}
-		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			
-		}
-		
 	}
+		
+
+
+
+	 
+
+
+
+
+
+
+
+
+
+
 }
