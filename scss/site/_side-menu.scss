@@ -5,14 +5,17 @@ aside#sidebar {
 
 
 	
-.tweets_avatar {
+li.tweets_avatar {
 	background-color: transparent;
 	border-color: rgb(238, 238, 238) rgb(221, 221, 221) rgb(187, 187, 187);
 	border-radius: 0;
 	border-style: solid;
     border-width: 0;
+    margin-bottom: rem-calc(5);
+    margin-top: 0;
     padding-left: rem-calc(20) !important;
     padding-right: rem-calc(20) !important;
+    padding-top: 0 !important;
 
     .tweet_data {
     	@include o_sans;
@@ -129,7 +132,15 @@ aside#sidebar {
 }
 
 aside#sidebar div.columns {
+	#trumba_events-2 {
+		ul.event-list {
+			margin-left: 0;
 
+			li {
+				margin-bottom: rem-calc(20);
+			}
+		}
+	}
 	
 	// Content blocks
 	.widget {
@@ -138,12 +149,16 @@ aside#sidebar div.columns {
 			h2 {
 				@include encode_cb;
 				font-size: rem-calc(22);
+				margin-bottom: rem-calc(15);
+
 			}
 			p {
+				font-size: rem-calc(16);
 				margin-bottom: 0;
 			}
 		}
 		.widget_links {
+			font-size: rem-calc(16);
 			margin-bottom: 0;
 			margin-left: 0;
 			margin-top: rem-calc(15);
@@ -165,6 +180,7 @@ aside#sidebar div.columns {
 		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
 		background-repeat: no-repeat;
 		background-position: top left;
+		font-size: rem-calc(16);
 		h2 {
 			color: $accent;
 			@include encode_cb;
@@ -175,6 +191,10 @@ aside#sidebar div.columns {
 			box-shadow: none;
 		}
 
+	}
+	
+	.widget#wptt_twittertweets-2 {
+		padding-bottom: rem-calc(25);
 	}
 		.widget {
 			background-color: #e8e3d3;
@@ -200,6 +220,7 @@ aside#sidebar div.columns {
 			}
 			
 		}
+		
 	}
 	&:nth-child(even) {
 		.widget {
@@ -223,6 +244,7 @@ aside#sidebar div.columns {
 			}
 		}
 	}
+
 		
 
 

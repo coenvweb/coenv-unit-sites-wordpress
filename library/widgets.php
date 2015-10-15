@@ -281,22 +281,10 @@ class CoEnv_Widget_Events extends WP_Widget {
     echo $before_widget;
     echo '<div class="widget_content">';
     ?>
-            <?php if ( $events_url != '' ) : ?>
-                                   
-            <a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
-            <?php endif ?>
+            
         
-        
-            <?php if (!is_front_page()) {
-                    echo $before_title;
-                }
-        ?>
           <h2><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h2>
-            <?php
-                if (!is_front_page()) {
-                    echo $after_title;
-                }
-        ?>
+            
 
       <ul class="event-list">
 
@@ -323,7 +311,6 @@ class CoEnv_Widget_Events extends WP_Widget {
       <?php endif ?>
         
       </ul>
-
       <?php
       echo '</div>';
       echo $after_widget
