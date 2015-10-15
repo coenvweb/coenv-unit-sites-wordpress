@@ -3,7 +3,24 @@ aside#sidebar {
 	margin-top: rem-calc(57);
 	padding-right: 1rem !important;
 
+.widget#wptt_twittertweets-2 {
+		background-color: #e8e3d3;
+		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
+		background-repeat: no-repeat;
+		background-position: top left;
+		font-size: rem-calc(16);
+		padding-bottom: rem-calc(25);
+		h2 {
+			color: $accent;
+			@include encode_cb;
+			font-size: rem-calc(22);
+			padding: rem-calc(20) rem-calc(20) 0 rem-calc(20);
+		}
+		.fetched_tweets > li {
+			box-shadow: none;
+		}
 
+	}
 	
 li.tweets_avatar {
 	background-color: transparent;
@@ -176,26 +193,8 @@ aside#sidebar div.columns {
 		}
 	}
 	&:nth-child(odd) {
-	.widget#wptt_twittertweets-2 {
-		background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-top-2.png");
-		background-repeat: no-repeat;
-		background-position: top left;
-		font-size: rem-calc(16);
-		h2 {
-			color: $accent;
-			@include encode_cb;
-			font-size: rem-calc(22);
-			padding: rem-calc(20) rem-calc(20) 0 rem-calc(20);
-		}
-		.fetched_tweets > li {
-			box-shadow: none;
-		}
-
-	}
 	
-	.widget#wptt_twittertweets-2 {
-		padding-bottom: rem-calc(25);
-	}
+	
 		.widget {
 			background-color: #e8e3d3;
 			.widget_content {
