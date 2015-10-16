@@ -61,20 +61,34 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image ) {
+if ( $show_featured_image && $first_link_url ) {
 	echo '<div class="widget_img">';
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
 	echo '</div>';
-	}
+} else {
+    if ( $show_featured_image ) {
+        echo '<div class="widget_img">';
+        echo $widget_img;
+        echo '</div>';
+    }
+}
 echo '<div class="widget_content">';
 if ( $link_position[0] == 'title' ) {
     echo $buttons;
 }
-if ( $show_custom_post_title ) {
+if ( $show_custom_post_title && $first_link_url ) {
 	echo $before_title;
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
 	echo $after_title;
+} else {
+    if ( $show_custom_post_title ) {
+        echo $before_title;
+        echo $widget_title;
+        echo $after_title;
+    }
 }
+
+
 echo $widget_copy;
 echo '</div>';
 if ( $link_position == null ) {
