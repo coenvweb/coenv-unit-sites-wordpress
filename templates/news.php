@@ -44,7 +44,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$query_args = array(
 			'post_type'	=> 'post',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,
+			'posts_per_page' => 10,
 			'orderby' => 'date',
 			'order' => 'DESC',
 			'paged' => $paged
@@ -92,7 +92,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more!</a>';
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
 		?>
 		<div class="blog-list-item clearfix">
@@ -126,20 +126,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
                 <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
             </div>
 		</div>
-    	<?php
-    			if (has_post_thumbnail()) {
-	    			$has_thumb = ' has-thumb';
-	    			echo '<div class="right show-for-medium-up' . $has_thumb . '">';
-					echo '<a href="' . get_the_permalink() . '">';
-					the_post_thumbnail( 'medium' );
-					echo '</a>';
-					echo '</div>';
-				} else {
-					$has_thumb = "";
-				}
-				?>
-
-    	<div class="post-content left <?php echo $has_thumb; ?>">
+    	<div class="post-content left>
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
 			<div class="post">
