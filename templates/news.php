@@ -126,7 +126,8 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
                 <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
             </div>
 		</div>
-    	<div class="post-content left>
+
+    	<div class="post-content left <?php echo $has_thumb; ?>">
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
 			<div class="post">
