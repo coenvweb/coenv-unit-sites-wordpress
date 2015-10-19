@@ -170,14 +170,11 @@ aside#sidebar div.columns {
                     color: $text;
                 }
             }   
-			p {
-				margin-bottom: 0;
-			}
 		}
 		.widget_links {
 			margin-bottom: 0;
 			margin-left: 0;
-			margin-top: rem-calc(20);
+			margin-top: 0;
             padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
 			li {
 				display: inline;
