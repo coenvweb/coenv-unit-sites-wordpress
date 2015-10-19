@@ -14,11 +14,14 @@ aside#sidebar {
 			color: $accent;
 			@include encode_cb;
 			font-size: rem-calc(22);
+			margin-bottom: rem-calc(25);
 			padding: rem-calc(20) rem-calc(20) 0 rem-calc(20);
 		}
 		.fetched_tweets > li {
 			box-shadow: none;
 		}
+		ul.light li.tweets_avatar .times a,ul.light li.tweets_avatar .wdtf-screen-name a,ul.light li.tweets_avatar .stats a{color:#000 !important;
+text-decoration:none; width: 100%;}
 
 	}
 	
@@ -28,7 +31,7 @@ li.tweets_avatar {
 	border-radius: 0;
 	border-style: solid;
     border-width: 0;
-    margin-bottom: rem-calc(5);
+    margin-bottom: rem-calc(20);
     margin-top: 0;
     padding-left: rem-calc(20) !important;
     padding-right: rem-calc(20) !important;
