@@ -112,6 +112,13 @@
     .button {
         margin: rem-calc(40) 0;
     }
+    
+    &.columns {
+        height: 134px;
+        .button {
+            margin: rem-calc(50) 0;
+        }
+    }
 }
 
 .post-content {
@@ -120,6 +127,13 @@
 }
 
 // Social Statement
+
+.social-row {
+    margin: 1.1rem!important;
+    .post-content {
+        padding: rem-calc(25) rem-calc(18);
+    }
+}
 
 .social-news {
     @media #{$medium-up} {

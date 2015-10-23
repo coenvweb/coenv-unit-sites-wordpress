@@ -80,8 +80,12 @@ echo '</div><!-- .feature -->';
 echo '</div>';
 endwhile;
 wp_reset_postdata();
-echo '</div>';
-echo '<div class="row news-row" id="main-col">';
+echo '</div>'; 
+                ?>
+                
+<div class="row news-row" id="main-col">
+                
+<?php
 
 # Featured News
 
@@ -170,38 +174,60 @@ $wp_query = new WP_Query( $feat_args );
                 
 			}
             else {
-                echo '<div class="large-4 medium-6 columns">';
+                if (get_field('story_link_url')) {
+                    $post_link_url = get_field('story_link_url');
+                    $post_link_target = ' target="_blank" ';
+                    $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                } else {
+                    $post_link_url = get_the_permalink();
+                    $post_link = '<a class="svg-link right" href="' . $post_link_url . '">More';
+                }	
+                echo '<div class="featured-section">';
+                echo '<div class="large-7 medium-6 columns left no-feature">';
                 echo '<div class="small-news">';
                 echo '<div class="post-content">';
                 echo '<div class="post-meta">';
                 echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
                 // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-                // Filter display of administrative post categories
-                $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
+                $more_terms = wp_get_post_terms(get_the_id(), 'category');
+                if (!empty($more_terms)) {
+                    $more_terms_arr = array();
 
-				} else {
-					$terms_str = '';
-				}
-				echo $terms_str;
-				//var_dump($terms_arr);
-				$terms = "";
+                    foreach ($more_terms as &$term) {
+                        if ($term->slug != 'uncategorized') {
+                            $more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                        }
+                    }
+                    $more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+
+                } else {
+                    $more_terms_str = '';
+                }
+                $more_terms = "";
+                echo $more_terms_str;
                 echo '</div>';
                 echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+                echo '<p>' . the_advanced_excerpt('length=15&finish=sentence') . '</p>';
                 echo $post_link;
-                echo '</div>';
-            	echo '</div>';
-                echo '</div>';  
+                if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
+                echo '</a></div></div>'; 
+                ?>
+
+            <div class="social-news show-for-medium-up">
+                <div class="post-content">
+                    <div class="social-statement center"><h3>Keep up-to-date with us</h3></div>
+                    <div class="social-buttons center">
+                        <a href="http://twitter.com/<?php echo get_option('twitter') ?>" target="_blank" title="Follow us on Twitter">
+                        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                        <a href="<?php echo get_option('facebook'); ?>" target="_blank" title="Like us on Facebook">
+                        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                        <a href="<?php bloginfo('rss2_url'); ?>" title="Subscribe to our RSS Feed" target="_blank">
+                        <?php get_template_part('assets/img/icons/inline', 'rss-circle.svg'); ?></a>
+                    </div>
+                </div>
+            </div>
+    </div>
+                <?php
             }
 	endwhile;
 endif; ?>
@@ -211,19 +237,26 @@ endif; ?>
 <?php
 # Other News
 $sticky = count(get_option('sticky_posts')); 
+if ($sticky > 2) {
+    $sticky = 2;
+} else {
+    $sticky = 1;
+}
 if(!empty($featured)) {
     $home_args = array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        'posts_per_page' => (2 - $sticky),
+        'posts_per_page' => 3 - $sticky,
         'post__not_in' => $featured,
-        'cat' => -19, //hide q+a posts
+        'cat' => -19, //hide q+a posts]
+        'orderby' => 'date',
+        'order' => 'DESC'
     );
 }
 else {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => (3 - $sticky),
+        'posts_per_page' => 3,
         'post_status' => 'publish',
         'cat' => -19,
     );
@@ -249,7 +282,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<a class="svg-link right" href="' . $post_link_url . '">More';
         }	
         if (empty( $featured )) {
-            echo '<div class="large-4 medium-6 columns right">';
+            echo '<div class="large-4 medium-6 columns left no-feature">';
         }
         echo '<div class="small-news">';
         echo '<div class="post-content">';
@@ -278,11 +311,23 @@ $wp_query = new WP_Query( $home_args );
        	echo $post_link;
         if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
         echo '</a></div></div>'; 
+        if (empty( $featured )) {
+            echo '</div>';
+        }
         endwhile;
         ?>
         <!--Small Social Media Box-->
+        <?php 
+        if (empty( $featured )) {
+            echo '</div>';
+            echo '<div class="social-row row">';
+            echo '<div class="social-news large-8 columns" style="margin: 0;">';
+        } else {
+            echo '<div class="social-news show-for-small-only" >';
+        }
+        ?>
 
-        <div class="social-news visible-for-small-only">
+        
         <div class="post-content">
             <div class="social-statement center"><h3>Keep up-to-date with us</h3></div>
             <div class="social-buttons center">
@@ -294,12 +339,17 @@ $wp_query = new WP_Query( $home_args );
                 <?php get_template_part('assets/img/icons/inline', 'rss-circle.svg'); ?></a>
             </div>
         </div>
-        </div>
         <?php
         if (empty( $featured )) {
             echo '</div>';
+                        echo '<a href="/about/news/" name="All Posts"><div class="all-news large-4 columns"><span class="button white">See All Posts</span></div></a>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
         }       
     if ( $featured ) {
+        echo '</div>';
         echo '<a href="/about/news/" name="All Posts"><div class="all-news"><span class="button white">See All Posts</span></div></a>';
         echo '</div>';
     }
@@ -310,7 +360,7 @@ $wp_query = new WP_Query( $home_args );
 <?php if ($featured) : ?>
     </div>
 <?php endif; ?>
-        
+</div>
 <?php if ( is_active_sidebar( 'student-spotlight' ) ) : ?>
 <div class="profiles">
     <div class="row">
