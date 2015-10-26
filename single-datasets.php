@@ -1,12 +1,8 @@
 <?php get_header(); ?>
 <div class="row">
 	<div class="small-12 medium-8 large-9 columns" role="main">
-			<header class="article__header">
-		        <div class="article__meta">
-					<h2 class="article__title"><a href="/resources/data/cig-datasets/">CIG Datasets</a></h2>
-				</div>
-			</header>
 			<div class="entry-content">
+				<h1 class="article__title"><a href="/resources/data/cig-datasets/" title="CIG Datasets">CIG Datasets</a></h1>
 				<?php 
 
 				// Publication themes list
@@ -40,11 +36,13 @@
 		$dataset_link = get_the_permalink();
 		$rows = get_field('dataset_link');
 		?>
+		<div class="post-meta">
 			<div class="terms">
         <?php
 		echo $dataset_region_str . $dataset_type_str;
 
 		echo '</div>'; ?>
+	</div>
 
 
 

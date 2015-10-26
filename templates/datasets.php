@@ -145,7 +145,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		echo $dataset_region_str . $dataset_type_str;
 
 		echo '</div></div>';
-		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
+		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 		echo '<div>' . coenv_base_custom_field_excerpt('dataset_overview') . '</div>';
 		echo '<div>';
 		echo '<a class="button" href="' . get_the_permalink() .'">View Details</a>';

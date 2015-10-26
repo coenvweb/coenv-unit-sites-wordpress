@@ -21,21 +21,6 @@ a.button {
 				text-decoration: none !important;
 			}
 
-	.terms {
-		@include encode_black;
-		border: none;
-		
-		float: none;
-
-		width: 100%;
-
-		a {
-			color: #595959 !important;
-			text-decoration: none !important;
-			text-transform: uppercase;
-		}
-	}
-
 	.entry-content {
 		
 		h1.article__title {
@@ -50,5 +35,23 @@ a.button {
 
 	}
 
+
+}
+#dataset-links {
+	background-color: #f3f3f3;
+	float: right;
+	margin: 0 2rem;
+	padding: 1rem;
+	width: 20rem;
+
+	a.button {
+		margin-right: 1rem;
+		color: #000;
+		text-decoration: none;
+	}
+	h2 {
+		font-size: 1.25rem;
+		margin-top: 0;
+	}
 
 }

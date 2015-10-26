@@ -38,8 +38,7 @@
     time {
         float: left;
     }
-    .terms,
-    .source {
+    .terms {
         border-left: solid 2px #000;
         color: #595959;
         float: left;
@@ -55,6 +54,16 @@
         li {
             display: inline;
         }
+
+        body.page-template-datasets &,
+        body.single-datasets & {
+            border-left: 0;
+            padding-left: 0;
+        }
+
+
+
+
     }
 }
 

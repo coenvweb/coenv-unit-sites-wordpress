@@ -12,25 +12,24 @@ $fields = get_fields();
 ?>
 <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 
-	<header class="article__header">
-        <div class="article__meta">
-   		<?php if ( is_single() ) : ?>
-			<div class="blog-meta"><h5>
+
+		   		<?php if ( is_single() ) : ?>
+
+			<div class="post-meta">
 			<?php echo $publication_terms_str . $publication_years_str; ?>
-			</h5></div>
+			</div>
         <?php endif ?>
-        </div>
         <div class="faculty-title clearfix">
-			<h1 class="article__title left">
+			<h2 class="article__title left">
 			<?php if ( is_page() || is_single()) : ?>
 				<?php the_title() ?>
 			<?php else : ?>
-				<a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?>1111</a>
+				<a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a>
 			<?php endif ?>
-			</h1>
+			</h2>
 		</div>
 
-	</header>
+
 	<section class="article__content">
 		<!--
 		<div>
