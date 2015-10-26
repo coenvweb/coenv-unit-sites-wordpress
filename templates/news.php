@@ -28,6 +28,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<div class="row filters">
+			<h3 class="small-12 columns">Filter News</h3>
 			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
@@ -131,13 +132,11 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
     	<div class="post-content left <?php echo $has_thumb; ?>">
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
-			<div class="post">
 			<?php 
 
 				echo the_excerpt();
 				echo $post_link;
 			?>
-			</div>
 			<div class="blog-links right">
 			
 		</div>

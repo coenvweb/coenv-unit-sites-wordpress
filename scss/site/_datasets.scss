@@ -55,3 +55,40 @@ a.button {
 	}
 
 }
+
+body.single.single-datasets {
+	
+	.post-meta {
+		margin-bottom: rem-calc(20);
+	}
+
+
+
+}
+
+
+
+ body.single.single-datasets,
+ body.single.single-publications {
+
+div[role="main"] h2.article__title {
+	margin-bottom: rem-calc(0)!important;
+}
+
+ .post-meta {
+    margin-bottom: rem-calc(40);
+    margin-left: 0;
+    width: 100%;
+
+    .terms {
+    	margin-left: 0;
+    }
+
+
+
+
+
+}
+
+
+        }

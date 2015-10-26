@@ -9,6 +9,10 @@
     margin-bottom: rem-calc(0);
     width: 100%;
 
+    body.page-template-publications & {
+        margin-bottom: rem-calc(20);
+    }
+
     h2 {
         background-image: none;
         font-size: rem-calc(24);
@@ -64,13 +68,24 @@
 
 
 
+
+
     }
+
+    body.single & {
+            padding-top: rem-calc(8);
+            width: 50%;
+        }
+   
 }
 
 .post-content {
     float: left;
 }
-
+div[role="main"] .filters h3 {
+    font-size: rem-calc(16);
+    text-transform: uppercase;
+}
 
 
 

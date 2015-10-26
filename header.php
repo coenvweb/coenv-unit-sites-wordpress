@@ -255,8 +255,38 @@
         }
      ?>
      <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
+
+
+      if ( 'post' == get_post_type()) :
+        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_3.jpg';
+      
+      elseif ('datasets' == get_post_type()) :
+        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_2.jpg';
+
+      else :
+
+        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_3.jpg';
+
+
+
+
+
+
+      endif;
+
+
+
+
+
+
+            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $stupid_banner_url . ');">';
             echo '<div class="section-title-wrapper">';
+
+
+
+
+
+
      }
      ?>
     <div class="section-row row">

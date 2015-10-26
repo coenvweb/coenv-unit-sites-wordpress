@@ -28,15 +28,19 @@
 
 
 .panel {
-	border: 0;
-	padding: .5rem 1rem;
+
 }
 
 div.news {
 	margin-bottom: 4rem;
 }
 .panel {
+	background-color: #f2f2f2;
+	border: solid 1px #ccc;
 	float:left;
+	margin-bottom: rem-calc(40);
+	padding: 1rem;
+
 	width: 100%;
 	p:first-child {
 		float:left;

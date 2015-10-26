@@ -21,16 +21,19 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-			<h3 class="small-12 columns">Filter results</h3>
-			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
-				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
+			<h3 class="small-12 columns">Filter Publications</h3>
+			<!--
+			<div class="large-4 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
+				<?php //coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="author">
-				<?php coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
+			<div class="large-4 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="author">
+				<?php //coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_year">
+			-->
+			<div class="large-12 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="publication_year">
 				<?php coenv_base_cat_filter('publication_year', $coenv_cat_term_1); // Category filter ?>
 			</div>
+
 		</div>
 		<hr>
 		
@@ -57,7 +60,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			),*/
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,
+			'posts_per_page' => 10,
 			// This doesn't work
 			//'meta_key' => (int) 'publication_years',
             //'orderby' => 'meta_value',
@@ -169,35 +172,23 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$abstract = get_field('publication_abstract');
 		$rows = get_field('publication_link');
 		?>
-		<div class="publication-list-item post-<?php the_ID() ?>">
-		<div class="article__header">
-			<p><?php echo $publication_years_str; ?>
-			<?php
+		<div class="blog-list-item post-<?php the_ID() ?>">
+		<?php if (!empty($publication_terms_str) || !empty($publication_years_str)) { ?>
+		<div class="post-meta clearfix">
+			<?php 
+			echo $publication_years_str;
 			if (!empty($publication_terms_str)) {
 				echo '&nbsp;&nbsp;/&nbsp;&nbsp;' . $publication_terms_str; 
 			}
 			?>
-			</p>
 		</div>
+		<?php } ?>
+		<div class="post-content left">
 		<?php
 		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
-		echo '<div class="citation">' . $publication_citation . '</div>';
-		/*echo '<div class="publication-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['publication_link_type'] == 'upload' && !empty($row['publication_upload_file'])) {
-					echo '<a class="button" href="' . $row['publication_upload_file'] . '" target="_blank">Download</a>';
-				} elseif ($row['publication_link_type'] == 'link' && !empty($row['publication_link_url']) && !empty($row['publication_link_text'])) {
-					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">' . $row['publication_link_text'] . '</a>';
-				} elseif ($row['publication_link_type'] == 'email' && !empty($row['publication_link_email'])) {
-					echo '<a class="button" href="mailto:' . $row['publication_link_email'] . '?subject=Publication Request:' . get_the_title() . '">' . $row['publication_link_email_text'] . '</a>';
-				}
-			}
-		}
-		echo '</div>';*/
-		if (!empty($abstract)) {
-			echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Abstract</a></div>';
-		}
+		echo '<p>' . $publication_citation . '</p>';
+		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">Read more</a></div>';
+		echo '</div>';
 		echo '</div>';
 		$publication_terms_arr = "";
 		$publication_years_arr = "";

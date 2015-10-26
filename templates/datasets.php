@@ -20,6 +20,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
+			<h3 class="small-12 columns">Filter Datasets</h3>
 			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="dataset_region">
 				<?php coenv_base_cat_filter('dataset_region', $coenv_cat_term_1); // Category filter ?>
 			</div>
