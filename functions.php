@@ -272,6 +272,15 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	wp_reset_postdata();
 	wp_reset_query();
 }
+
+
+
+
+
+
+
+
+
 /* 
  * Serve images over SSL, if enabled
  

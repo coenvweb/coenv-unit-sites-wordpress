@@ -98,7 +98,8 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<div class="blog-list-item clearfix">
 			<div class="post-meta clearfix">
 			<div class="left">
-			<div class="terms">
+				<time class="article__time" datetime="2014-10-30 06:56:38"><?php echo get_the_date('M j, Y'); ?></time>
+				<div class="terms">
 				<?php
 				$termlist = '';
 				foreach ($terms as $term) {
@@ -109,10 +110,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 				$termlist = rtrim($termlist,', ');
 				echo $termlist;
 				?>
+				</div>
+				
 			</div>
-			<time class="article__time" datetime="2014-10-30 06:56:38"><?php echo get_the_date('M j, Y'); ?></time>
-		</div>
-				<div class="sharer right">
+			<div class="sharer right">
                 <?php $title = rawurlencode(get_the_title());
                 $shortlink = rawurlencode(wp_get_shortlink());
                 $site_name = rawurlencode(get_bloginfo('name'));

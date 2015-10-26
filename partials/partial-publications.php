@@ -59,10 +59,12 @@ if (!empty($publication_years)) {
 	<section class="article__content">
 		<?php
 		$publication_link = get_the_permalink();
-		$publication_citation = get_field('publication_citation');
+		$citation = get_field('publication_citation');
 		$rows = get_field('publication_link');
-		echo '<div class="citation"><h3>Citation</h3>';
-		echo $publication_citation . '</div>';
+		$abstract = get_field('publication_abstract');
+		if (!empty($citation)) {
+			echo '<div class="citation"><h3>Citation</h3>' . $citation . '</div>';
+		}
 		echo '<div class="publication-links right">';
 		if($rows) {
 			foreach($rows as $row) {
@@ -76,10 +78,12 @@ if (!empty($publication_years)) {
 				}
 			}
 		}
-		echo '</div><hr />';
-		echo '<div class="abstract"><h3>Abstract</h3>';
-		echo get_field('publication_abstract');
 		echo '</div>';
+		if (!empty($abstract)) {
+			echo '<hr /><div class="abstract"><h3>Abstract</h3>';
+			echo get_field('publication_abstract');
+			echo '</div>';
+		}
 		?>
 	</section>
     <?php

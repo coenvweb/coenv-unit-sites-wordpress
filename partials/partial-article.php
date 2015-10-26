@@ -8,7 +8,7 @@
 	<header class="article__header">
         <div class="article__meta">
             <?php if ( !is_page() ) : ?>
-			<div class="post-info">
+			<div class="post-meta">
 				<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
 				<?php $categories = get_the_category_list(' ') ?>
 				<?php if ( $categories ) : ?>

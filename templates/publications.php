@@ -166,6 +166,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 		$publication_link = get_the_permalink();
 		$publication_citation = get_field('publication_citation');
+		$abstract = get_field('publication_abstract');
 		$rows = get_field('publication_link');
 		?>
 		<div class="publication-list-item post-<?php the_ID() ?>">
@@ -181,7 +182,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<?php
 		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 		echo '<div class="citation">' . $publication_citation . '</div>';
-		echo '<div class="publication-links right">';
+		/*echo '<div class="publication-links right">';
 		if($rows) {
 			foreach($rows as $row) {
 				if($row['publication_link_type'] == 'upload' && !empty($row['publication_upload_file'])) {
@@ -193,8 +194,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 				}
 			}
 		}
-		echo '</div>';
-		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Abstract</a></div>';
+		echo '</div>';*/
+		if (!empty($abstract)) {
+			echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Abstract</a></div>';
+		}
 		echo '</div>';
 		$publication_terms_arr = "";
 		$publication_years_arr = "";

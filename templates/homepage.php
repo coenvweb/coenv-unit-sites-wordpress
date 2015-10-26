@@ -20,6 +20,8 @@ Template Name: Homepage
 		<div class="large-12 home-news-section columns">
 			<div class="home-news-header">
 				<h2 class="left'">News &amp; Events</h2>
+				<div class="more-news right"><a class="button" href="/news-and-events/">All News &amp; Events</a></div>
+			</div>
 
 
 			<?php
@@ -32,7 +34,7 @@ Template Name: Homepage
 			);
 			$wp_query = new WP_Query( $featured_news_args );
 			?>
-			</div>
+			
 			<?php
 			# The Loop
 			while ( $wp_query->have_posts() ) { // start featured news loop
@@ -43,10 +45,11 @@ Template Name: Homepage
 		        if (get_field('story_link_url')) {
 					$post_link_url = get_field('story_link_url');
 					$post_link_target = ' target="_blank" ';
+					$source_link = '<a href="' . $post_link_url . '" target="_blank">' . get_field('story_source_name') . '</a>';
 		            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
 		        } else {
 		        	$post_link_url = get_the_permalink();
-		            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+		            $post_link = '<a class="button right" href="' . $post_link_url . '">Read more</a>';
 		        }
 
 				// Category display
@@ -82,8 +85,8 @@ Template Name: Homepage
 					
 						<div class="post-content">
 							<div class="post-meta">
+								<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
 								<?php echo $terms_str; ?>
-	               				<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
 							</div>
 							<h3><a href="<?php echo $post_link_url; ?>" <?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
 		            		<span class="show-for-medium-up"><?php echo the_advanced_excerpt('length=60&finish=sentence'); ?></span>
@@ -124,13 +127,15 @@ Template Name: Homepage
 			while ( $wp_query->have_posts() ) { // start other news loop
 
 				$wp_query->the_post();
-				if ( get_field( 'story_link_url' ) ) {
-					$post_link_url = get_field( 'story_link_url' );
+				// Link field display
+		        if (get_field('story_link_url')) {
+					$post_link_url = get_field('story_link_url');
 					$post_link_target = ' target="_blank" ';
-		            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field( 'story_source_name' ) . '</a></p>';
+					$source_link = '<a href="' . $post_link_url . '" target="_blank">' . get_field('story_source_name') . '</a>';
+		            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
 		        } else {
 		        	$post_link_url = get_the_permalink();
-		            $post_link = '<a class="svg-link right" href="' . $post_link_url . '">More';
+		            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
 		        }
 		        // Get categories
 		        $more_terms = wp_get_post_terms( get_the_id(), 'category' );
@@ -156,18 +161,19 @@ Template Name: Homepage
     		<?php if ( empty( $featured ) ): ?><div class="large-4 medium-12 columns"><?php endif; ?>
 		     <li class="small-news">
 					<div class="post-meta">
-						<?php echo $more_terms_str; ?>
 						<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
+						<?php echo $more_terms_str; ?>
 					</div>
 					<h3><a href="<?php echo $post_link_url; ?>"><?php echo get_the_title(); ?></a></h3>
 					<?php if ( !$featured ) { ?>
 						<div class="show-for-medium-up"><?php echo the_advanced_excerpt( 'length=15&finish=sentence' ); ?></div>
-		    			<div class="show-for-medium-up"><?php echo $post_link; ?></div>
+		    			
 		    		<?php } ?>
+		    			<div class="show-for-medium-up"><?php echo $post_link; ?></div>
 			</li>
 			<?php if ( empty( $featured ) ): ?></div><?php endif; ?>
 		<?php } // end other news loop ?>
-		<div class="more-news column"><a class="button" href="/news-and-events/">See All News</a></div>
+		
 
 
 

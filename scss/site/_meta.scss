@@ -2,30 +2,67 @@
 /*	Module: Terms
 		
 		======================================================================== */
- .post-meta {
-        @include encode_black;
-        font-size: rem-calc(12);
-        line-height: 1;
-        margin-bottom: 12px;
-        text-transform: uppercase;
-    }
-
-
-.terms {
-	border-right: solid 2px #000;
-    color: #595959;
+ 
+.blog-list-item {
+    display: block;
     float: left;
-	font-size: rem-calc(12);
-	margin-right: 5px;
-	padding-right: 6px;
-	position: relative;
+    margin-bottom: rem-calc(0);
+    width: 100%;
 
-    a {
-        color: #595959;
+    h2 {
+        background-image: none;
+        font-size: rem-calc(24);
+        margin-bottom: rem-calc(16) !important;
+        padding-bottom:0;
     }
+    p { 
+        font-size: rem-calc(16);
+    }
+    .post {
+        float: left;
+    }
+}
 
-	li {
-            display: inline;
+ .post-meta {
+    @include o_sans_bold;
+    float: left;
+    font-size: rem-calc(14);
+    line-height: 1;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    width: 100%;
+
+    .left {
+        padding-top: rem-calc(10);
+    }
+    time {
+        float: left;
+    }
+    .terms,
+    .source {
+        border-left: solid 2px #000;
+        color: #595959;
+        float: left;
+        font-size: rem-calc(14);
+        margin-left: 5px;
+        padding-left: 6px;
+        position: relative;
+
+        a {
+            text-decoration: underline;
         }
 
+        li {
+            display: inline;
+        }
+    }
 }
+
+.post-content {
+    float: left;
+}
+
+
+
+
+
