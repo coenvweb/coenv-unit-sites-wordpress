@@ -33,7 +33,12 @@
 <?php endif; ?>
 	<div class="row">
 		<div class="columns small-12">
-			<h1 class="article__title"><?php the_title() ?></h1>
+			<?php
+			global $post;
+			if ( is_page() && $post->post_parent ) { 
+			?>
+				<h1 class="article__title"><?php the_title() ?></h1>
+			<?php } ?>
 			<section class="article__content">
 			<?php the_content(); ?>
 			</section>
