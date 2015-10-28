@@ -281,7 +281,7 @@ class Mega_Menu_Nav_Menus {
 
             <?php
 
-            submit_button( __( 'Save' ), 'button-primary alignright');
+            submit_button( __( 'Save' ), 'max-mega-menu-save button-primary alignright');
 
         }
 

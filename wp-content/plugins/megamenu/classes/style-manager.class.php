@@ -56,10 +56,7 @@ final class Mega_Menu_Style_Manager {
             add_filter( 'megamenu_css_transient_key', array( $this, 'polylang_transient_key') );
             add_filter( 'megamenu_css_filename', array( $this, 'polylang_css_filename') );
             add_action( 'megamenu_delete_cache', array( $this, 'polylang_delete_cache') );
-        }
-
-        // WPML
-        if ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+        } else if ( defined( 'ICL_LANGUAGE_CODE' ) ) { // WPML
             add_filter( 'megamenu_css_transient_key', array( $this, 'wpml_transient_key') );
             add_filter( 'megamenu_css_filename', array( $this, 'wpml_css_filename') );
             add_action( 'megamenu_delete_cache', array( $this, 'wpml_delete_cache') );
@@ -893,9 +890,8 @@ final class Mega_Menu_Style_Manager {
         global $polylang;
 
         foreach ( $polylang->model->get_languages_list() as $term ) {
-            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . $term->slug ) );
+            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . strtolower( $term->locale ) ) );
         }
-
     }
 
 
@@ -907,7 +903,11 @@ final class Mega_Menu_Style_Manager {
      */
     public function polylang_transient_key( $key ) {
 
-        $key .= "_" . pll_current_language();
+        $locale = strtolower( pll_current_language('locale') );
+
+        if ( strlen( $locale ) ) {
+            $key .= $locale;
+        }
 
         return $key;
 
@@ -922,7 +922,11 @@ final class Mega_Menu_Style_Manager {
      */
     public function polylang_css_filename( $filename ) {
 
-        $filename .= "_" . pll_current_language();
+        $locale = strtolower( pll_current_language('locale') );
+
+        if ( strlen( $locale ) ) {
+            $filename .= "_" . $locale;
+        }
 
         return $filename;
 

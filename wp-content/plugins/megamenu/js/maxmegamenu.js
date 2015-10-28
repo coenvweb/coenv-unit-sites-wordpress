@@ -19,6 +19,7 @@
             panel_width: $menu.attr('data-panel-width'),
             second_click: $menu.attr('data-second-click'),
             vertical_behaviour: $menu.attr('data-vertical-behaviour'),
+            reverse_mobile_items: $menu.attr('data-reverse-mobile-items'),
             document_click: $menu.attr('data-document-click'),
             breakpoint: $menu.attr('data-breakpoint')
         };
@@ -26,10 +27,6 @@
         plugin.settings = {};
 
         var isTouchDevice = function() {
-            if (typeof Modernizr == 'object') {
-                return Modernizr.touch;
-            }
-
             return (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
         };
 
@@ -73,9 +70,7 @@
         plugin.hideSiblingPanels = function(anchor, immediate) {
             // all open children of open siblings
             anchor.parent().siblings().find('.mega-toggle-on').andSelf().children('a').each(function() {
-                if ( $(this).parent().hasClass('mega-toggle-on') ) {
-                    plugin.hidePanel($(this), immediate);
-                }
+                plugin.hidePanel($(this), immediate);
             });
         }
 
@@ -87,7 +82,7 @@
 
         plugin.hideOpenSiblings = function() {
             // desktops, horizontal
-            if ( plugin.isDesktopView() && $menu.hasClass('mega-menu-horizontal') ) {
+            if ( plugin.isDesktopView() && ( $menu.hasClass('mega-menu-horizontal') || $menu.hasClass('mega-menu-vertical') ) ) {
                 return 'immediately';
             }
 
@@ -198,6 +193,10 @@
                 openOnClick();
             } else {
                 openOnHover();
+            }
+
+            if (!plugin.isDesktopView() && plugin.settings.reverse_mobile_items == 'true') {
+                $menu.append($menu.children('li.mega-item-align-right').get().reverse());
             }
         };
 

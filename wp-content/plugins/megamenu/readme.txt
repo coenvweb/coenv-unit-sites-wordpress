@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.3
-Stable tag: 1.8.3.2
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,15 @@ See http://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 1.9.1 [20/10/2015] =
+
+* New feature: Reverse the order of right aligned menu items on mobiles (so they appear in the same order as they do in the desktop menu)
+* Fix: Remove Modernizr support - causing conflicts with some themes
+* Fix: Collapsing of open flyout menus
+* Fix: Active link styling not being applied to top level menu items when sub menus are open
+* Fix: Polylang language switcher added to menu each time the Mega Menu settings are saved
+* Fix: Polylang fixes
 
 = 1.9 [14/09/2015] =
 

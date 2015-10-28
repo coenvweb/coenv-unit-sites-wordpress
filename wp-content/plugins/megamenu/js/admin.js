@@ -563,4 +563,9 @@ jQuery(function ($) {
         tab.parent().siblings().hide();
         tab.parent().siblings("." + tab_id).show();
     });
+
+    // Polylang Fix - stop Language Switcher item being added every time the MMM settings are saved
+    $(".max-mega-menu-save").on('click', function() {
+        $(".nav-menu-meta").find('input[value="#pll_switcher"]').val("");
+    });
 });
