@@ -231,7 +231,7 @@ $wp_query = new WP_Query( $home_args );
 		$more_terms = "";
 		echo $more_terms_str;
 		echo '</div>';
-		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+		echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
 		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
        	echo $post_link;
 		}
@@ -248,7 +248,7 @@ $wp_query = new WP_Query( $home_args );
 <div class="row events">
     <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
     <div class="list columns large-12">
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_marinebio.rss&posts_per_page=3'); ?>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
     </div>      
 </div>
 <a href="#" class="back-to-top">Back to Top</a>
