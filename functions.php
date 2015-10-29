@@ -223,8 +223,7 @@ $tax_obj = get_taxonomy($tax);
 $tax_str = $tax_obj->labels->name;
 
 $cats_args  = array(
-	'orderby' => 'name',
-	'order' => 'ASC',
+	'orderby' => 'term_order',
 	'taxonomy' => $tax
 );
 $cats = get_categories($cats_args);

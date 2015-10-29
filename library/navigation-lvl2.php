@@ -16,6 +16,7 @@ function coenv_base_hierarchical_submenu($postid) {
 
 function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
     $menu = '';
+    $exclude = implode(',',coenv_base_menu_exclude());
     // Get all immediate children of this page
     $args = array(
         'sort_order' => 'ASC',
@@ -25,7 +26,8 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
         'parent' => $post->ID,
         'offset' => 0,
         'post_type' => 'page',
-        'post_status' => 'publish'
+        'post_status' => 'publish',
+        'exclude' => $exclude
     ); 
     $children = get_pages($args);
     if ($children) {

@@ -121,8 +121,8 @@ function coenv_base_pubs_parent( $data, $postarr ) {
  
     // verify if this is an auto save routine.
     // If it is our form has not been submitted, so we dont want to do anything
-    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-        return $data;
+    //if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+     //   return $data;
  
     if ( $post->post_type == "publications" ){
         $data['post_parent'] = PUBS_PAGE_PARENT_ID;

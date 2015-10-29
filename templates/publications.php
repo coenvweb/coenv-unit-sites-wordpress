@@ -41,31 +41,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		echo $coenv_inpress;
 		/**
 		* Publications loop
-		*/
-		function alter_pub_order($order,$qry) {
-		  remove_filter('posts_orderby','alter_order',1,2);
-		  $order = explode(',',$order);
-		  $order = implode( ' DESC,',$order);
-		  return $order;
-		}
-		add_filter('posts_orderby','alter_pub_order',1,2);
+		*/ 
 
 		$query_args = array(
-			/*'meta_query' => array(
-				array(
-					'key'     => 'in_press',
-					'value'     => 'inpress',
-					'compare' => 'IN'
-				)
-			),*/
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
 			'posts_per_page' => 10,
-			// This doesn't work
-			//'meta_key' => (int) 'publication_years',
-            //'orderby' => 'meta_value',
-            //'order' => 'DESC',
-            
+			'orderby' => array( 'date' => 'DESC', 'title' => 'ASC' ),
 			'paged' => $paged
 		);
 
@@ -75,24 +57,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 
-		// In press filter
-		//if ($coenv_inpress) {
-
-
-		//	$query_args['meta_query'] = array(
-	//'relation' => 'OR', // Optional, defaults to "AND"
-	//array(
-	//	'key'     => 'in_press',
-	//	'value'   => '1',
-	//	'compare' => '='
-	//)
-//);
-
-
-
-
-
-		//}
 		$wp_query = new WP_Query( $query_args );
 		?>
 
