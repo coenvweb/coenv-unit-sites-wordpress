@@ -73,7 +73,7 @@
 .article__content {
     @extend .clearfix;
     @media #{$large-up} {
-    	padding-right: rem-calc(100);
+    	padding-right: rem-calc(75);
     }
 
     li {
@@ -114,11 +114,15 @@
 	// tables
 	table {
 		width: 100%;
-
+		thead {
+			@include o_sans_bold;
+		}
 		th,
 		td {
-			@include rem('padding', 0.25, 0.25, 0.25, 0.5);
+			line-height: 1.8;
+			padding: 1rem;
 			text-align: left;
+			vertical-align: top;
 		}
 
 		th {
@@ -377,5 +381,7 @@ p span.intro {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
    }
-
+strong,b {
+	@include o_sans_bold;
+}
 
