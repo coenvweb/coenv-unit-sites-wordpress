@@ -6,8 +6,8 @@ jQuery(function ($) {
 		// share buttons
 		$('.share').coenvshare();
 		
-		// lightbox
-		$('a').nivoLightbox();
+		// lightbox -00
+		$('a:not([href*=youtube]):not([href*=vimeo])').nivoLightbox();
 
 		// lightbox captions
         $('figure a img').each(function () {

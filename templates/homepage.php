@@ -164,7 +164,7 @@ Template Name: Homepage
 						<time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s'); ?>"><?php echo get_the_date('M j, Y'); ?></time>
 						<?php echo $more_terms_str; ?>
 					</div>
-					<h3><a href="<?php echo $post_link_url; ?>"><?php echo get_the_title(); ?></a></h3>
+					<h3><a href="<?php echo $post_link_url . '" ' . $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
 					<?php if ( !$featured ) { ?>
 						<div class="show-for-medium-up"><?php echo the_advanced_excerpt( 'length=15&finish=sentence' ); ?></div>
 		    			

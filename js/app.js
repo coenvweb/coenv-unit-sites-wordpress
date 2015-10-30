@@ -244,8 +244,8 @@ f.attr("style")&&f.removeAttr("style"),c.removeClass("tip-override"),d&&d.indexO
 		// share buttons
 		$('.share').coenvshare();
 		
-		// lightbox
-		$('a').nivoLightbox();
+		// lightbox -00
+		$('a:not([href*=youtube]):not([href*=vimeo])').nivoLightbox();
 
 		// lightbox captions
         $('figure a img').each(function () {
