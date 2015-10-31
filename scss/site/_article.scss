@@ -112,6 +112,9 @@
 	} // blockquote
 
 	// tables
+
+
+
 	table {
 		width: 100%;
 		thead {
@@ -368,11 +371,6 @@ h2.article__title {
 		text-transform: uppercase !important;
 	}
 }
-
-
-
-
-
 p span.intro {
     font-size: rem-calc(26);
     line-height: 1.2;
@@ -384,4 +382,6 @@ p span.intro {
 strong,b {
 	@include o_sans_bold;
 }
-
+.page-id-58 table {
+	margin-top: rem-calc(20);
+}
