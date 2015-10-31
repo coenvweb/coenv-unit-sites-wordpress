@@ -29,6 +29,9 @@ body {
     @include rem('font-size', 1);
     @include rem('line-height', 1.5);
 }
+a {
+    text-decoration: underline;
+}
 
 /*
  * Image replacement

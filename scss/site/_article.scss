@@ -2,13 +2,9 @@
 /*	Module: article
 		
 		======================================================================== */
-
 .article {
 	position: relative;
 	margin-bottom: rem-calc(36);
-
-
-
 	a {
 		text-decoration: underline;
 	}
@@ -323,7 +319,10 @@ div[role="main"] {
 	
 
 
-
+	a {
+		color: #603ba8;
+		text-decoration: underline;
+	}
 
 
 
