@@ -115,18 +115,18 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 				
 			</div>
 			<div class="sharer right">
-                <?php $title = rawurlencode(get_the_title());
-                $shortlink = rawurlencode(wp_get_shortlink());
-                $site_name = rawurlencode(get_bloginfo('name'));
-                $twitter = get_option('twitter');
-                ?>
-                <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
-                <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
-                <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-                <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
-                <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
-                <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
-            </div>
+        <?php $title = rawurlencode(get_the_title());
+        $shortlink = rawurlencode(wp_get_shortlink());
+        $site_name = rawurlencode(get_bloginfo('name'));
+        $twitter = get_option('twitter');
+        ?>
+        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20UW%20' . $site_name .':%20' . $shortlink . '>'; ?>
+        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+		</div>
 		</div>
 
     	<div class="post-content left <?php echo $has_thumb; ?>">
