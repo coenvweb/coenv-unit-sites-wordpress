@@ -1,13 +1,10 @@
 div[role="main"] .blog-list-item,
-div[role="main"] .dataset-list-item  {
+div[role="main"] .dataset-list-item,
+div[role="main"] .pub-list-item  {
     display: block;
     float: left;
-    margin-bottom: rem-calc(0);
+    margin-bottom: rem-calc(40);
     width: 100%;
-
-    body.page-template-publications & {
-        margin-bottom: rem-calc(20);
-    }
 
     h2 {
         background-image: none;
@@ -22,6 +19,9 @@ div[role="main"] .dataset-list-item  {
     }
     p { 
         font-size: rem-calc(16);
+    }
+    .button {
+        margin-bottom: 0;
     }
     .post {
         float: left;

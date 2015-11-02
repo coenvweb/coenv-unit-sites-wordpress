@@ -4,8 +4,13 @@
     }
 }
 
-.sharer {
+div[role="main"] .sharer {
+	height: 30px;
     text-align: right;
+
+    a {
+    	text-decoration: none;
+    }
     svg {
         width: 30px;
         height: 30px;

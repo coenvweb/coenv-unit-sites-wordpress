@@ -90,7 +90,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
 			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+            $post_link = '<a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a>';
         } else {
         	$post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
@@ -132,14 +132,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
     	<div class="post-content left <?php echo $has_thumb; ?>">
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
-			<?php 
-
+			<?php 	
 				echo the_excerpt();
 				echo $post_link;
 			?>
-			<div class="blog-links right">
-			
-		</div>
 		</div>
 	</div>
 	<?php $has_thumb = ""; ?>

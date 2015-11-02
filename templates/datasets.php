@@ -80,8 +80,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			}
 			$dataset_region_str = implode(', ', $dataset_region_arr) . ', ';
 			$dataset_region = "";
-		} else {
-			$dataset_region_str = '';
 		}
 
 		// Publication year list
@@ -94,36 +92,21 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			}
 			$dataset_type_str = implode(', ', $dataset_type_arr);
 			$dataset_type = "";
-		} else {
-			$dataset_type_str = '';
-		}
+		} 
 
 		$dataset_link = get_the_permalink();
 		$rows = get_field('dataset_link');
 		?>
 		<div class="dataset-list-item post-<?php the_ID() ?>">
-		<div class="post-meta">
-			<div class="terms">
         <?php
-		
-
-		echo '</div></div>';
 		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
 		if (!empty($dataset_region_str) || !empty($dataset_type_str)) {
-		echo '<div class="post-meta clearfix">';
+			echo '<div class="post-meta clearfix">';
 			echo $dataset_region_str . $dataset_type_str;
-		echo '</div>';
+			echo '</div>';
 		}
-
-
-
-
-
-		
 		echo '<div>' . coenv_base_custom_field_excerpt('dataset_overview') . '</div>';
-		echo '<div>';
 		echo '<a class="button" href="' . get_the_permalink() .'">View Details</a>';
-		echo '</div>';
 		echo '</div>';
 		$publication_years_arr = "";
 		endwhile;

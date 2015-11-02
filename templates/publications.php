@@ -136,7 +136,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$abstract = get_field('publication_abstract');
 		$rows = get_field('publication_link');
 		?>
-		<div class="blog-list-item post-<?php the_ID() ?>">
+		<div class="pub-list-item post-<?php the_ID() ?>">
 		<div class="post-content left">
 		<?php
 		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
@@ -149,7 +149,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		echo '</div>';
 		}
 		echo '<p>' . strip_tags( $publication_citation, '<a>' ) . '</p>';
-		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">Read more</a></div>';
+		echo '<a class="button" href="' . get_the_permalink() .'">Read more</a>';
 		echo '</div>';
 		echo '</div>';
 		$publication_terms_arr = "";
