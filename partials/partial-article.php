@@ -29,9 +29,7 @@
                 <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
                 <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
 		</div>
-	</div>
 <?php endif; ?>
-	<div class="row">
 		<div class="columns small-12">
 			<?php
 			global $post;
