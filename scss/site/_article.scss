@@ -364,8 +364,10 @@ background-color: rgba(0, 0, 0, .9);
 	margin-bottom: 40px;
 }
 
-h2.article__title {
+h2.article__title,
+h1.article__title {
 	a {
+		color: #000;
 		text-decoration: none;
 		text-transform: uppercase !important;
 	}
