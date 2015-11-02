@@ -283,7 +283,7 @@ class CoEnv_Widget_Events extends WP_Widget {
     ?>
             
         
-          <h2><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h2>
+          <h2><span><a href="<?php echo $events_url; ?>" target="_blank"><?php echo $title ?></a></span></h2>
             
 
       <ul class="event-list">
@@ -294,7 +294,7 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li>
-              <a href="<?php echo $event['url'] ?>">
+              <a href="<?php echo $event['url'] ?>" target="_blank">
               <p class="date"><i class="fi-calendar"></i> <?php echo $event['date'] ?></p>
               <p class="title"><?php echo $event['title'] ?></p>
               </a>

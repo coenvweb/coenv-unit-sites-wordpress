@@ -11,7 +11,7 @@ Template Name: Homepage
 				<p>Together We Will</p>
 			</div>
 			<h3>Increase resilience to climate variability and change</h3>
-			<p><a class="button" href="/about-cig/">Learn More</a></p>
+			<p><a class="button" href="/about/">Learn More</a></p>
 		</div>
 	</div>
 </div>			
