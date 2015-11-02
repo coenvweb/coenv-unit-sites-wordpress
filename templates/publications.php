@@ -137,20 +137,18 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$rows = get_field('publication_link');
 		?>
 		<div class="blog-list-item post-<?php the_ID() ?>">
-		<?php if (!empty($publication_terms_str) || !empty($publication_years_str)) { ?>
-		<div class="post-meta clearfix">
-			<?php 
+		<div class="post-content left">
+		<?php
+		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
+		if (!empty($publication_terms_str) || !empty($publication_years_str)) {
+		echo '<div class="post-meta clearfix">';
 			echo $publication_years_str;
 			if (!empty($publication_terms_str)) {
 				echo '&nbsp;&nbsp;/&nbsp;&nbsp;' . $publication_terms_str; 
 			}
-			?>
-		</div>
-		<?php } ?>
-		<div class="post-content left">
-		<?php
-		echo '<h2><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h2>';
-		echo '<p>' . $publication_citation . '</p>';
+		echo '</div>';
+		}
+		echo '<p>' . strip_tags( $publication_citation, '<a>' ) . '</p>';
 		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">Read more</a></div>';
 		echo '</div>';
 		echo '</div>';
