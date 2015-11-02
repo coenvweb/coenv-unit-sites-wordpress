@@ -244,8 +244,8 @@ div[role="main"] {
 
 
 	&.article__title {
-		@include encode_black;
-		@include font-size(24);
+		@include o_sans_bold;
+		@include font-size(18);
 		@include line-height(30);
 		color: #000;
 		font-weight: 400;
