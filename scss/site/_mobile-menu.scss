@@ -36,6 +36,14 @@
         height: 32px;
         width: 32px;
     }
+    .item-3179 { // hide news expander
+        .small-3 {
+            display: none;
+        }
+        .small-9 {
+            @include grid-column(12);
+        }
+    }
     .item-27 { // hide homepage expander
         .small-3 {
             display: none;
@@ -72,7 +80,7 @@
     }
     .primary-link {
         height: rem-calc(45);
-        padding-top: rem-calc(10);
+        padding-top: .9rem;
         padding-left: rem-calc(10)!important;
         background: $border-dk-accent;
         text-transform: uppercase;
@@ -111,6 +119,27 @@
                     -ms-transform: rotate(90deg);
                     transform: rotate(90deg);
                 }
+            }
+        }
+    }
+}
+.move-left {
+    .menu-icon {
+        span:after {
+            content: none;
+        }
+        
+        i {
+            &:before {
+                @extend .fi-arrow-left:before;
+                content: "\f10a";
+                position: relative;
+                right: rem-calc(30);
+                font-size: rem-calc(28);
+                color: $white;
+                font-family: "foundation-icons";
+                font-style: normal;
+
             }
         }
     }

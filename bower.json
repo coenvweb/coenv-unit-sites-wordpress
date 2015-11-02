@@ -2,7 +2,7 @@
   "name": "coenv-base-theme",
   "version": "1.0.0",
   "dependencies": {
-    "foundation": "master",
+    "foundation": "zurb/bower-foundation#5.5.0",
     "nivo-lightbox": "~1.2.0",
 	"fastclick": "latest",
 	"jquery": "latest",
