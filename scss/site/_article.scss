@@ -88,17 +88,18 @@
 	}
 
 	blockquote {
-		@include encode_black;
+		@include o_sans_bold;
 		background-image: url("/wp-content/themes/coenv-cig/assets/img/blockquote-top.png");
 		background-repeat: no-repeat;
 		background-position: top left;
 		background-color: #ebebeb;
 		border: none;
+		color: #000;
 
 		margin: rem-calc(22) 0 rem-calc(28) 0;
 		padding: rem-calc(30) rem-calc(40);
 		p {
-			color: $accent;
+			color: #000;
 			font-size: rem-calc(16);
 			font-weight: bold;
 			letter-spacing: .1rem;
