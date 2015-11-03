@@ -33,3 +33,16 @@ div[role="main"] .pub-list-item  {
 .entry-content .inline-list {
 	margin: 0;
 }
+
+body.search-results h2 {
+     background-image: none;
+        font-size: rem-calc(22);
+        margin-bottom: rem-calc(10) !important;
+        padding-bottom:0;
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+    
+}

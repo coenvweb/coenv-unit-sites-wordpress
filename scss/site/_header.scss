@@ -143,19 +143,20 @@
             h2 {
                 position: absolute;
                 bottom: 0;
-            }
-    
-            a {
                 @include encode_cb;
                 color: $white;
                 display: block;
                 font-size: rem-calc(50);
                 letter-spacing: .12rem;
-                text-decoration: none;
 
-                 @media #{$small-only} {
+                @media #{$small-only} {
                 font-size: rem-calc(30);
                 }
+            }
+    
+            a {
+                color: $white;
+                text-decoration: none;
 
               }
 
