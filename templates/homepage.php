@@ -20,7 +20,7 @@ Template Name: Homepage
 		<div class="large-12 home-news-section columns">
 			<div class="home-news-header">
 				<h2 class="left'">News &amp; Events</h2>
-				<div class="more-news right"><a class="button" href="/news-and-events/">All News &amp; Events</a></div>
+				<div class="more-news right show-for-medium-up"><a class="button" href="/news-and-events/">All News &amp; Events</a></div>
 			</div>
 
 
