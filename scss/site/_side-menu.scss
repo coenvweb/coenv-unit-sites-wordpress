@@ -114,16 +114,12 @@ li.tweets_avatar {
 					color: #85754f;
 				}
 			}
-			
 
 
-
-			li.active a:not(.button) {
+			a.active:not(.button) {
 				color: #85754f;
 			}
-			li.active ul li a:not(.button) {
-				color: #000;
-			}
+			
 			ul {
 				margin-bottom: 0;
 				li {
