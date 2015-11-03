@@ -2,7 +2,6 @@
 <html class="no-js" <?php language_attributes(); ?> >
   <head>
     <meta charset="utf-8" />
-    <meta name='robots' content='noindex,follow' />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php if ( is_category() ) {
       echo 'Category Archive for &quot;'; single_cat_title(); echo '&quot; | '; bloginfo( 'name' );
@@ -81,15 +80,13 @@
   <meta property="og:site_name" content="<?php bloginfo('name') ?>" />
 
   <script>
-  /*
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-21836351-1', 'auto');
+    ga('create', 'UA-25914371-2', 'auto');
     ga('send', 'pageview');
-  */
   </script>
   </head>
   <body <?php body_class($banner_class); ?>>
