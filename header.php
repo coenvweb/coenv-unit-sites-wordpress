@@ -18,7 +18,7 @@
     } elseif ( is_single() ) {
       wp_title('');
     } else {
-      echo bloginfo( 'name' );
+      echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
 
     <meta name="title" content="<?php bloginfo('name'); ?>">
@@ -90,7 +90,6 @@
   </script>
   </head>
   <body <?php body_class($banner_class); ?>>
-  
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
   
