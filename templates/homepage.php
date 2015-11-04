@@ -241,7 +241,7 @@ $wp_query = new WP_Query( $home_args );
     </div>
 <?php endif; ?>
 <div class="large-4 columns">
-    <?php the_widget('wptt_TwitterTweets', 'title=twitter&name=drewcoll&consumerKey=bXSm7Nuq37MHLVIEkzrMmop4a&consumerSecret=jJ8pPMAvP4eTbx7rYEG8UqOwHADHyPZ7to48jByNre9B2qNKod&accessToken=59599201-2LSnZ7hqiL1wJJzNWSEl3rEX6FAbUV9ZMbsS9qScc&accessTokenSecret=IKDiaougH9033s0l2RmVYoX9kDDzDEKJiT8i5Gn378oZz'); ?>
+    <?php the_widget('wptt_TwitterTweets', 'title=twitter&name=CIG_UW&consumerKey=ivTXKU52g6Sx851RzmILf1svw&consumerSecret=6zVP3WDKPFVLhi8cI7XwiR0GNyGQF6ZIZa7mKULsxTiF6UrqdM&accessToken=47968457-Ccfpdt7oaFyoPQyOU5aNa8utxUXIzOIyKUWbAkXup&accessTokenSecret=BbefqWcc8WLG4s1iFQ1JkRWohhs0XJOXekbsGxnHjgtkV'); ?>
 </div>
 </div>  
         <!--&tweets_cnt=3&tweet_theme=light&tweet_border=false&store_time=4&replies_excl=true&disp_scr_name=false&dataLang=en&timeRef=false&timeAgo=true&twitterIntents=false&twitterIntentsText=false&intentColor=#999&showAvatar=false&border_rad=false&slide_style=list-->
