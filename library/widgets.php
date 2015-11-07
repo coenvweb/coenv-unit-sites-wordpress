@@ -352,16 +352,16 @@ class CoEnv_Widget_Events extends WP_Widget {
         <?php foreach ( $events as $key => $event ) : ?>
 
 
-            <li>
-            <?php
-            $date = substr($event['date'], 0, -6);
-            $date = strtotime($date);
-            $date = date('l, M j, Y ', $date);
-            ?>
-              <a href="<?php echo $event['url'] ?>">
-              <i class="fi-calendar"></i><p class="date"><?php echo $date ?></p>
-              <p class="title"><?php echo $event['title'] ?></p>
-              </a>
+            <li data-equalizer-watch>
+                <?  $date = substr($event['date'], 0, -6);
+                $date = strtotime($date);
+                $date = date('l, M j, Y ', $date); ?>
+                <a href="<?php echo $event['url'] ?>">
+                    <div class="single-event">
+                        <i class="fi-calendar"></i><p class="date"><?php echo $date ?></p>
+                        <p class="title"><?php echo $event['title'] ?></p>
+                    </div>
+                </a>
             </li>
 
       

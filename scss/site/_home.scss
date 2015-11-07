@@ -26,6 +26,9 @@
             margin-bottom: rem-calc(10);
             overflow: hidden;
         }
+        .first-news, .small-news {
+            display: block;
+        }
         :not(:last-child) .small-news {
                 margin-bottom: rem-calc(30);	
         }

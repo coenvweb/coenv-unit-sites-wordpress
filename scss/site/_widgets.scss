@@ -1,15 +1,71 @@
 // Events Widget
 
-.event-list {
-	list-style: none;
-	
-	.date {
-		margin-bottom: 0;
-	}
-	
-	.title {
-		margin-bottom: rem-calc(10);
-	}
+.widget-events {
+    text-align: center;
+    svg {
+        width: 4rem;
+        height: 4rem;
+    }
+    h4 {
+        @extend .section-title;
+        text-transform: none;
+        font-size: rem-calc(24)!important;
+        line-height: 2rem!important;
+        padding-bottom: .5rem;
+        a {
+            color: $accent-blue!important;
+            font-weight: 400!important;
+        }
+    }
+
+    .event-list {
+        list-style: none;
+        margin: 0 -1rem;
+
+        li {
+            @include grid-column(4);
+            .single-event {
+                display: block;
+                background-color: $bg-light;
+                border-top: 4px solid $accent;
+                color: $accent;
+                padding: 1rem 2rem;
+                height: 100%;
+                margin-bottom: 1rem;
+                a {
+                    color: $accent;
+                }
+            }
+
+            .date {
+                @include o_sans_bold;
+                padding-bottom: 1rem;
+                margin-bottom: .7rem;
+                font-size: .9rem;
+                margin-bottom: 0;
+                i {
+                    @extend .visuallyhidden;
+                }
+                &:after {
+                    content: "";
+                    position: relative;
+                    height: 4px;
+                    width: 40%;
+                    background-color: $accent;
+                    bottom: -.7rem;
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
+            .title {
+                font-size: 1.1rem!important;
+                margin-bottom: 0;
+            }
+        }
+    }
+    .button {
+        margin-top: 1rem;
+    }
 }
 
 // Social Widget
