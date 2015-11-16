@@ -43,6 +43,24 @@ function coenv_base_post_types_init() {
   'menu_icon' => 'dashicons-slides',
     )
   );
+  register_post_type( 'courses',
+    array(
+      'labels' => array(    
+      'name' => __( 'Courses' ),
+      'singular_name' => __( 'Course' ),
+      'add_new_item' => __( 'Add Course'),
+      'edit_item' => __( 'Edit Course'),
+      'new_item' => __( 'New Course'),
+      ),
+    'hierarchical' => true,
+    'supports' => array( 'title', 'editor', 'revisions' ),
+    'public' => true,
+    'has_archive' => false,
+    'show_ui' => true,
+    'rewrite' => array('slug' => 'courses'),
+  'menu_icon' => 'dashicons-welcome-learn-more',
+    )
+  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
