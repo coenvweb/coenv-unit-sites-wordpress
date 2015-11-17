@@ -18,21 +18,15 @@
     } elseif ( is_single() ) {
       wp_title('');
     } else {
-      echo bloginfo( 'name' );
+      echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
-
-    <meta name="title" content="<?php bloginfo('name'); ?>">
     <meta name="description" content="<?php
     wp_reset_query();   
     if (have_posts()) : while(have_posts()) the_post();
-        if (is_singular('faculty')) {
-            $advancedExcerpt = strip_tags(get_field('biography'));
-        } elseif (is_page_template( 'faculty.php' )) {    
-            $advancedExcerpt = 'Our world-class faculty are at the center of our work at The UW' . bloginfo('name');
-        } elseif (is_singular()&&is_front_page()==false ) {
+        if (!is_front_page() ) {
             $advancedExcerpt = strip_tags(get_the_excerpt());
         } else {
-            $advancedExcerpt = get_option('meta_description');
+            $advancedExcerpt = 'The Climate Impacts Group conducts pioneering research on climate variability, climate change, and climate impacts, and works with public and private entities to apply this information in risk assessment, planning, and decision making.';
         }
         endif;
     echo $advancedExcerpt ?>">
