@@ -283,7 +283,7 @@ Template Name: Homepage
 					<div class="row stats">
 						<div class="large-4 medium-4 small-12 columns">
 							<div class="stat-value">19</div>
-							<div class="stat-label">Projects in 2014</div>
+							<div class="stat-label">Projects in 2015</div>
 						</div>
 						<div class="large-4 medium-4 small-12 columns">
 							<div class="stat-value">90</div>
@@ -305,7 +305,7 @@ Template Name: Homepage
 			<h2>Learn More About the Climate Impacts Group</h2>
 			<p>The Climate Impacts Group conducts pioneering research on climate variability, climate change, and climate impacts, and works with public and private entities to apply this information in risk assessment, planning, and decision making. Through research and interaction with stakeholders, we work to increase community and ecosystem resilience to fluctuations in climate.</p>
 			<ul class="links">
-				<li><a class="button" href="/about-cig/">Learn More</a></li>
+				<li><a class="button" href="/about/what-we-do/">Learn More</a></li>
 				<li><a class="button" href="/about-cig/contact-us/">Contact Us</a></li>
 			</ul>
 		</div>

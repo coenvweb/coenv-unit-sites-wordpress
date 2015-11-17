@@ -84,7 +84,6 @@
   </script>
   </head>
   <body <?php body_class($banner_class); ?>>
-  
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
   
