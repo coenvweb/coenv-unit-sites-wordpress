@@ -12,7 +12,7 @@
     } elseif ( is_search() ) {
       echo 'Search for &quot;'.esc_html($s).'&quot; | '; bloginfo( 'name' );
     } elseif ( is_home() || is_front_page() ) {
-      bloginfo( 'name' ); echo ' | '; bloginfo( 'description' );
+      echo bloginfo( 'name' );
     }  elseif ( is_404() ) {
       echo 'Error 404 Not Found | '; bloginfo( 'name' );
     } elseif ( is_single() ) {
@@ -21,21 +21,20 @@
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
 
-    <meta name="title" content="<?php bloginfo('name'); ?>">
-    <meta name="description" content="<?php
+   <meta name="title" content="<?php bloginfo('name'); ?>">
+   <meta name="description" content="<?php
     wp_reset_query();   
     if (have_posts()) : while(have_posts()) the_post();
-        if (is_singular('faculty')) {
-            $advancedExcerpt = strip_tags(get_field('biography'));
-        } elseif (is_page_template( 'faculty.php' )) {    
+        if (is_page_template( 'faculty.php' )) {    
             $advancedExcerpt = 'Our world-class faculty are at the center of our work at The UW' . bloginfo('name');
         } elseif (is_singular()&&is_front_page()==false ) {
             $advancedExcerpt = strip_tags(get_the_excerpt());
         } else {
-            $advancedExcerpt = get_option('meta_description');
+            $advancedExcerpt = 'The Climate Impacts Group conducts pioneering research on climate variability, climate change, and climate impacts, and works with public and private entities to apply this information in risk assessment, planning, and decision making.';
         }
         endif;
     echo $advancedExcerpt ?>">
+
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
@@ -59,7 +58,7 @@
     ?>
     <?php
     $post = get_queried_object();
-        $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+    $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
     $post_description = $advancedExcerpt;
     $post_link = get_permalink();
   if ( has_post_thumbnail( $post->ID ) ) {
@@ -70,10 +69,11 @@
   } else {
     $post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
   }
-  
+  $coenv_excerpt = strip_tags(get_the_excerpt());
+  $coenv_excerpt = preg_replace( "/\r|\n/", "", $coenv_excerpt );
   ?>
   <meta property="og:title" content="<?php echo $post_title ?>" />
-  <meta property="og:description" content="<?php echo $post_description ?>" />
+  <meta property="og:description" content="<?php echo $coenv_excerpt; ?>" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="<?php echo $post_link ?>" />
   <meta property="og:image" content="<?php echo $post_image ?>" />
