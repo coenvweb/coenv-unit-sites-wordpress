@@ -96,7 +96,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         ?>
 		<li class="course-list-item post-<?php the_ID() ?> accordion-navigation">
         <?php
-        echo '<a href=#' . the_ID() . '>'
+        echo '<a href=#' . the_ID() . '>';
 		echo $publication_terms_str . $publication_years_str;
 
 		echo '</h5>';
@@ -130,8 +130,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	</div>
   	<?php else: ?>
   	<p>We're sorry. Your crtieria did not match any publications. <a href="/research/publications">Return to all publications &raquo;</a></p>
-	<?php endif; ?>
-	  </div>		
+	<?php endif; ?>	
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
