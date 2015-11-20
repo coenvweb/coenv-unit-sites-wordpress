@@ -130,7 +130,7 @@ $wp_query = new WP_Query( $home_args );
 	<div class="home-news-section clearfix">
         <div class="columns large-8 left" style="margin-top: 0; padding-top: 0;">
         <h2 class="news-title">News</h2>
-        <a class="button right" href="/news-and-events">More News</a>
+        <a class="button right" href="/pcc/about/news">More News</a>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :

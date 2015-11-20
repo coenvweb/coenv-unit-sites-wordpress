@@ -88,25 +88,21 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		</div>
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
-		<div class="course clearfix">
+        <ul class="accordion courses clearfix" data-accordion>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
         ?>
-		<div class="publication-list-item post-<?php the_ID() ?>">
-		<div class="blog-meta"><h5>
-        <div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
+		<li class="course-list-item post-<?php the_ID() ?> accordion-navigation">
         <?php
+        echo '<a href=#' . the_ID() . '>'
 		echo $publication_terms_str . $publication_years_str;
 
-		echo '</h5></div>';
+		echo '</h5>';
 		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
-		echo '<div class="citation">' . $publication_citation . '</div>';
-		echo '<div class="publication-links right">';
+		echo '<div class="course-description">' . $publication_citation . '</div>';
+		echo '<div class="course-links right">';
 		if($rows) {
 			foreach($rows as $row) {
 				if($row['publication_link_type'] == 'upload') {
@@ -123,7 +119,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$publication_years_arr = "";
 		endwhile;
 		?>
-	</div>
+    </ul>
 	<div class="pager">
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
 		<nav id="post-nav">
