@@ -197,7 +197,13 @@
 
             
             @media#{$small-only} {
+                background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
+                background-repeat: no-repeat;
+                background-position: bottom left;
+                float: left;
+                margin-bottom: 25px;
                 margin-right: 0;
+                padding-bottom: 20px;
             }
         }
         .more-news {
@@ -206,10 +212,8 @@
                 text-align: center;
             }
             @media#{$small-up} {
-            padding-left: 0;
+                padding-left: 0;
             }
-
-
         }
         
         
@@ -401,6 +405,32 @@
 
 
     }
-   
-    
+
+        
+        .social-news {
+            border: solid 1px #e6e6e6;
+            margin-top: 2.25rem;
+            padding: 1rem 1.5rem;
+            width: 100%;
+            background-color: #e8e8ed;
+            .right {
+                @media #{$large-up} {
+                    text-align: right;
+                }
+            }
+            h3 {
+                @include encode_black;
+                color: #000;
+                font-size: rem-calc(23);
+                margin-bottom: 0;
+                text-transform: uppercase;
+            }
+            p {
+                font-size: rem-calc(16);
+            }
+            svg {
+                fill: $accent;
+                height: 65px;
+            }
+}
 }
