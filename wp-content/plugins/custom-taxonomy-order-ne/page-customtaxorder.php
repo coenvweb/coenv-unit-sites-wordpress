@@ -19,7 +19,11 @@ function customtaxorder() {
 	// Remove filter for WPML
 	remove_filter( 'terms_clauses', array( $sitepress, 'terms_clauses' ), 10, 4 );
 	remove_filter( 'get_terms', array( $sitepress, 'get_terms_filter' ) );
+	?>
+	<div class='wrap customtaxorder'>
+		<div id="icon-customtaxorder"></div>
 
+	<?php
 	if ( $_GET['page'] == 'customtaxorder' ) {
 		?>
 		<h1>Custom Taxonomy Order NE</h1>
@@ -41,11 +45,15 @@ function customtaxorder() {
 
 		if ( !empty( $taxonomies ) ) {
 			echo "<h2>" . __('Taxonomies', 'custom-taxonomy-order-ne') . "</h2><ul>";
+			$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
+			echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-taxonomies' ) . '">' . __('Taxonomies', 'custom-taxonomy-order-ne') . '</a></li>
+				';
 			foreach ( $taxonomies as $taxonomy ) {
-				echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-' . $taxonomy->name ) . '">' . $taxonomy->label . '</a></li>';
+				echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-' . $taxonomy->name ) . '">' . $taxonomy->label . '</a></li>
+				';
 			}
 		}
-		echo "</ul></div>";
+		echo "</ul></div></div><!-- #wrap -->";
 		return;
 	} else {
 		$args = array( 'public' => true );
@@ -68,9 +76,12 @@ function customtaxorder() {
 					$options[$taxonomy->name] = 0; // default if not set in options yet
 				}
 				if ( $_GET['page'] == $com_page ) {
-					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="0" ' . checked('0', $options[$taxonomy->name], false) . ' /> ' . __('Order by ID (default).', 'custom-taxonomy-order-ne') . '</label><br />';
-					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="1" ' . checked('1', $options[$taxonomy->name], false) . ' /> ' . __('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />';
-					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="2" ' . checked('2', $options[$taxonomy->name], false) . ' /> ' . __('Alphabetical Order.', 'custom-taxonomy-order-ne') . '</label><br />';
+					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="0" ' . checked('0', $options[$taxonomy->name], false) . ' /> ' . __('Order by ID (default).', 'custom-taxonomy-order-ne') . '</label><br />
+						';
+					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="1" ' . checked('1', $options[$taxonomy->name], false) . ' /> ' . __('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />
+						';
+					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="2" ' . checked('2', $options[$taxonomy->name], false) . ' /> ' . __('Alphabetical Order.', 'custom-taxonomy-order-ne') . '</label><br />
+						';
 					$tax_label = $taxonomy->label;
 					$tax = $taxonomy->name;
 				} else {
@@ -102,8 +113,7 @@ function customtaxorder() {
 		customtaxorder_update_order();
 	}
 ?>
-<div class='wrap'>
-	<?php screen_icon('customtaxorder'); ?>
+
 	<h1><?php echo __('Order ', 'custom-taxonomy-order-ne') . $tax_label; ?></h1>
 	<form name="custom-order-form" method="post" action="">
 		<?php
@@ -179,60 +189,6 @@ function customtaxorder() {
 		</div>
 	</form>
 </div>
-<?php if ( $terms ) { ?>
-<script type="text/javascript">
-// <![CDATA[
 
-	jQuery(document).ready(function(jQuery) {
-		jQuery("#custom-loading").hide();
-		jQuery("#order-submit").click(function() {
-			orderSubmit();
-		});
-		jQuery("#order-alpha").click(function(e) {
-			e.preventDefault();
-			jQuery("#custom-loading").show();
-			orderAlpha();
-			//jQuery("#order-submit").trigger("click");
-			setTimeout(function(){
-				jQuery("#custom-loading").hide();
-			},500);
-			jQuery("#order-alpha").blur();
-		});
-	});
-
-	function customtaxorderAddLoadEvent(){
-		jQuery("#custom-order-list").sortable({
-			placeholder: "sortable-placeholder",
-			revert: false,
-			tolerance: "pointer"
-		});
-	};
-
-	addLoadEvent(customtaxorderAddLoadEvent);
-
-	function orderSubmit() {
-		var newOrder = jQuery("#custom-order-list").sortable("toArray");
-		jQuery("#custom-loading").show();
-		jQuery("#hidden-custom-order").val(newOrder);
-		return true;
-	}
-
-	function orderAlpha() {
-		jQuery("#custom-order-list li").sort(asc_sort).appendTo('#custom-order-list');
-		var newOrder = jQuery("#custom-order-list").sortable("toArray");
-		jQuery("#custom-loading").show();
-		jQuery("#hidden-custom-order").val(newOrder);
-		return true;
-	}
-
-	// accending sort
-	function asc_sort(a, b) {
-		//return (jQuery(b).text()) < (jQuery(a).text()) ? 1 : -1;
-		//console.log (jQuery(a).text());
-		return jQuery(a).text().toUpperCase().localeCompare(jQuery(b).text().toUpperCase());
-	}
-
-// ]]>
-</script>
-<?php }
+<?php
 }

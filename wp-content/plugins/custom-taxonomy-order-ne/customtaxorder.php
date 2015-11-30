@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.6.6
+Version: 2.7.3
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.6.6');
+define('CUSTOMTAXORDER_VER', '2.7.3');
 
 
 function customtaxorder_register_settings() {
@@ -77,7 +77,11 @@ function customtaxorder_menu() {
 		$taxonomies = array_merge($taxonomies, $taxonomies2);
 	}
 
-	add_menu_page(__('Term Order', 'customtaxorder'), __('Term Order', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder', 'customtaxorder', 'dashicons-images-alt', 122.35);
+	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
+
+	add_menu_page(__('Term Order', 'customtaxorder'), __('Term Order', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder', 'customtaxorder', 'dashicons-list-view', 122.35);
+	add_submenu_page('customtaxorder', __('Order Taxonomies', 'custom-taxonomy-order-ne'), __('Order Taxonomies', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder-taxonomies', 'custom_taxonomy_order');
+
 	foreach ($taxonomies as $taxonomy ) {
 		add_submenu_page('customtaxorder', __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, 'manage_categories', 'customtaxorder-'.$taxonomy->name, 'customtaxorder');
 	}
@@ -105,9 +109,10 @@ function customtaxorder_js_libs() {
 		$pos_args = 'customtaxorder';
 		$pos = strpos($pos_page,$pos_args);
 		if ( $pos === false ) {} else {
-			wp_enqueue_script('jquery');
-			wp_enqueue_script('jquery-ui-core');
-			wp_enqueue_script('jquery-ui-sortable');
+			wp_enqueue_script( 'jquery' );
+			wp_enqueue_script( 'jquery-ui-core' );
+			wp_enqueue_script( 'jquery-ui-sortable' );
+			wp_enqueue_script( 'customtaxorder', plugins_url( '/js/script.js', __FILE__ ), 'jquery-ui-sortable', CUSTOMTAXORDER_VER, true );
 		}
 	}
 }
@@ -409,5 +414,6 @@ add_action( 'wpmu_new_blog', 'customtaxorder_activate_new_site' );
 
 // include Settingspage
 include('page-customtaxorder.php');
-
+// Include functions for sorting taxonomies
+include('taxonomies.php');
 
