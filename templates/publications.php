@@ -22,15 +22,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
 			<h3 class="small-12 columns">Filter Publications</h3>
-			<!--
-			<div class="large-4 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
-				<?php //coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
+			<div class="small-12 large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
+				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="large-4 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="author">
-				<?php //coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
+			<div class="small-12 large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="author">
+				<?php coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			-->
-			<div class="large-12 columns" data-url="<?php //$_SERVER['REQUEST_URI']; ?>" data-cat="publication_year">
+			<div class="small-12 large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_year">
 				<?php coenv_base_cat_filter('publication_year', $coenv_cat_term_1); // Category filter ?>
 			</div>
 
