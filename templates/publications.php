@@ -36,15 +36,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<hr>
 		
 		<?php
-		
-
-		
-		function order_by_multiple( $orderby) {
-  			return "YEAR(post_date) DESC, post_title ASC";
-		}
-
-
-
 		/*
 		* Publications loop
 		*/ 
@@ -61,7 +52,11 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$query_args['taxonomy'] = $coenv_cat_1;
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
-		
+
+		// Order by date (year), then title and strip italics from sort
+		function order_by_multiple( $orderby) {
+  			return "YEAR(post_date) DESC, REPLACE(post_title,'<i>','') ASC";
+		}
 		add_filter("posts_orderby", "order_by_multiple");
 		$wp_query = new WP_Query( $query_args );
 		remove_filter( 'posts_orderby', 'filter_query' );
