@@ -36,8 +36,16 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<hr>
 		
 		<?php
-		echo $coenv_inpress;
-		/**
+		
+
+		
+		function order_by_multiple( $orderby) {
+  			return "YEAR(post_date) DESC, post_title ASC";
+		}
+
+
+
+		/*
 		* Publications loop
 		*/ 
 
@@ -45,7 +53,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
 			'posts_per_page' => 10,
-			'orderby' => array( 'date' => 'DESC', 'title' => 'ASC' ),
 			'paged' => $paged
 		);
 
@@ -54,8 +61,12 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$query_args['taxonomy'] = $coenv_cat_1;
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
-
+		
+		add_filter("posts_orderby", "order_by_multiple");
 		$wp_query = new WP_Query( $query_args );
+		remove_filter( 'posts_orderby', 'filter_query' );
+
+
 		?>
 
 		<?php if ($coenv_cat_1 == 'publication_theme'): ?>
