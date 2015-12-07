@@ -10,7 +10,7 @@ Template Name: Homepage
 			<div class="boundless-1">
 				<p>Together We Will</p>
 			</div>
-			<h3>Increase resilience to climate variability and change</h3>
+			<h3>Increase climate resilience</h3>
 			<p><a class="button" href="/about/">Learn More</a></p>
 		</div>
 	</div>
