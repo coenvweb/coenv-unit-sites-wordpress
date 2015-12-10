@@ -8,8 +8,8 @@
  * v1.5 OPML support by Dirk Clemens
  * v1.7.2+ On-the-fly feed generation by Fabian Wolf (info@f2w.de)
  * v1.7.3 ATOM 1.0 support by Mohammad Hafiz bin Ismail (mypapit@gmail.com)
- * v1.7.4 Custom XML by Thong Tran (thongta@wppipes.com)
- * v1.8.1 merged w/ 1.8.0-dev by Thong Tran (thongta@wppipes.com)
+ * v1.7.4 Custom XML by Thong Tran (thongta@thimpress.com)
+ * v1.8.1 merged w/ 1.8.0-dev by Thong Tran (thongta@thimpress.com)
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -1034,7 +1034,7 @@ class RSSCreator10 extends FeedCreator {
 /**
  * JSON Feed Creator class
  * Ref    https://developers.google.com/feed/v1/jsondevguide#resultJson
- * Written by Thong Tran - wppipes.com
+ * Written by Thong Tran - thimpress.com
  * */
 class OBJSONCreator extends FeedCreator {
 	function OBJSONCreator() {

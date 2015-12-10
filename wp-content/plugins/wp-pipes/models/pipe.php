@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin - PIPES
  * @version          $Id: item.php 156 2014-01-25 08:55:27Z tung $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -61,8 +61,8 @@ class PIPESModelPipe extends Model {
 		global $wpdb;
 		$error = false;
 		$qry   = "SELECT * FROM `{$wpdb->prefix}wppipes_items` WHERE `id`={$id}";
-		$db->setQuery( $qry );
-		$item = $db->loadObject();
+		$wpdb->setQuery( $qry );
+		$item = $wpdb->loadObject();
 
 		if ( isset( $_GET['x'] ) ) {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
@@ -83,8 +83,8 @@ class PIPESModelPipe extends Model {
 		$copy_id = $row->id;
 
 		$qry = "SELECT * FROM `{$wpdb->prefix}wppipes_pipes` WHERE `item_id`={$id} ORDER BY `ordering` ASC";
-		$db->setQuery( $qry );
-		$pipes = $db->loadObjectList();
+		$wpdb->setQuery( $qry );
+		$pipes = $wpdb->loadObjectList();
 
 		echo '<br />count($pipes): ' . count( $pipes ) . '<br /><br />QRY: ' . $qry;
 
@@ -94,10 +94,10 @@ class PIPESModelPipe extends Model {
 			$qry  = "INSERT INTO `{$wpdb->prefix}wppipes_pipes` (`id`,`code`,`name`,`item_id`,`params`,`ordering`)";
 			$qry .= "\n VALUES (NULL, '{$item->code}', '{$item->name}', {$copy_id}, '" . addslashes( $item->params ) . "', '{$item->ordering}')";
 
-			$db->setQuery( $qry );
-			if ( ! $db->query() ) {
-				echo $db->getQuery();
-				echo '<br />Error: ' . $db->getErrorMsg();
+			$wpdb->setQuery( $qry );
+			if ( ! $wpdb->query() ) {
+				echo $wpdb->getQuery();
+				echo '<br />Error: ' . $wpdb->getErrorMsg();
 				$error = true;
 			} elseif ( isset( $_GET['x'] ) ) {
 				echo '<br /><br />' . $qry;

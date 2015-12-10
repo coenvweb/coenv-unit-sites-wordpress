@@ -1,4 +1,4 @@
-﻿// --- ogb Ajax ---
+// --- ogb Ajax ---
 //ogbAjax(url,function(txt){ogbCron.next(txt)});
 function ogbAjax(url,func){	
 	var xmlhttp;

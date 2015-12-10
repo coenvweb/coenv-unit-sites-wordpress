@@ -2,8 +2,8 @@
 /**
  * @package		WP Pipes plugin
  * @version		$Id: post.php 135 2014-01-22 10:48:35Z tung $
- * @author		wppipes.com
- * @copyright	(c) 2007-2013 wppipes.com. All rights reserved.
+ * @author		thimpress.com
+ * @copyright	(c) 2007-2013 thimpress.com. All rights reserved.
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
 

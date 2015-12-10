@@ -2,8 +2,8 @@
 /**
  * @package              WP Pipes plugin - PIPES
  * @version              $Id: default.php 170 2014-01-26 06:34:40Z thongta $
- * @author               wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author               thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license              GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -46,7 +46,7 @@ echo PIPES::show_message( false );
 									<label title="Yes"><input type="radio" name="' . $setting->option_name . '" value="1" ' . ( ( $setting->option_value == 1 ) ? 'checked="checked"' : '' ) . '>
 									<span>Yes, I want to run my Pipes automatically when someone access my Wordpress site.</span></label><br>
 									<label title="No"><input type="radio" name="' . $setting->option_name . '" value="0" ' . ( ( $setting->option_value == 0 ) ? 'checked="checked"' : '' ) . '>
-									<span>No, I will create a cronjob task myself to run the script <a href="'.get_site_url().'/?pipes=cron&task=callaio" target="_blank">'.get_site_url().'/?pipes=cron&task=callaio</a>. More instruction can be found at <a href="http://wpbriz.com/settings-up-cronjob-schedule-for-pipes/" target="_blank">this cronjob guideline</a></span>.</label><br />
+									<span>No, I will create a cronjob task myself to run the script <a href="'.get_site_url().'/?pipes=cron&task=callaio" target="_blank">'.get_site_url().'/?pipes=cron&task=callaio</a>. More instruction can be found at <a href="http://thimpress.com/settings-up-cronjob-schedule-for-pipes/" target="_blank">this cronjob guideline</a></span>.</label><br />
 									</fieldset>';
 							echo '</td>';
 							break;
@@ -54,7 +54,7 @@ echo PIPES::show_message( false );
 		//						echo '<div class="alert alert-info">There are two methods to execute WPPipes Pipes automatically.
 		//								<ol>
 		//									<li>Activating "Auto Run" below to execute Pipes over your Joomla site. By using this method, your Pipes will be executed every time your Joomla site get accessed over Site or Admin area.</li>
-		//									<li>Create a cronjob task to the URL: http://yourjoomlasite.com/wp-admin/pipes.xyz&amp;task=callaio<br>Details instruction can be found <a href="http://wppipes.com/kb/wppipes/4983-setup-server-side-cronjob-for-wppipes" target="_blank">here</a></li>
+		//									<li>Create a cronjob task to the URL: http://yourjoomlasite.com/wp-admin/pipes.xyz&amp;task=callaio<br>Details instruction can be found <a href="http://thimpress.com/kb/wppipes/4983-setup-server-side-cronjob-for-wppipes" target="_blank">here</a></li>
 		//								</ol>
 		//							</div>';
 							echo '<th scope="row">' . __( 'Allow Auto Run' ) . '</th>';

@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin - PIPES
  * @version          $Id: grab.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -169,7 +169,7 @@ class obGrab {
 		$info     = "\nItem id:" . $item->id . ' name:' . $item->name;
 		$new_data = self::need_oeData_new( $item );
 		if ( $new_data ) {
-			$oeData = $this->getEngineData( $item->engine, $item->engine_params );
+			$oeData = $this->getEngineData( $item->engine, $item->engine_params, $item );
 			$total  = count( $oeData );
 			$this->setTotalRow( $item->id, $total );
 		} else {
@@ -199,7 +199,7 @@ class obGrab {
 		$limit = self::getItemInfo( $id );
 		$limit = json_decode( $limit->engine_params );
 
-		if ( $limit->limit_items < $total ) {
+		if ( property_exists($limit, 'limit_items') && $limit->limit_items < $total ) {
 			$total = $limit->limit_items;
 		}
 
@@ -284,7 +284,7 @@ class obGrab {
 		return $class;
 	}
 
-	function getEngineData( $name, $strParams ) {
+	function getEngineData( $name, $strParams, $pipe = null ) {
 		$eclass = 'WPPipesEngine_' . $name;
 		$error  = $this->importAddon( $name, OBGRAB_ENGINES, $eclass );
 		if ( $error != '' ) {
@@ -297,7 +297,7 @@ class obGrab {
 		}
 		$eParams = $this->getObjParam( $strParams );
 
-		$rows = ogbLib::call_method( $eclass, 'getData', array( $eParams ) );
+		$rows = ogbLib::call_method( $eclass, 'getData', array( $eParams, $pipe ) );
 		//$rows		= $eclass::getData($eParams);
 
 		if ( isset( $_GET['x2'] ) ) {

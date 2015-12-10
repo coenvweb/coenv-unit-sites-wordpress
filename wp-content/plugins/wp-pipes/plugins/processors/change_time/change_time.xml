@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="wppipes-processor" method="upgrade">
 	<name>Change Time</name>
-	<author>wppipes.com</author>
+	<author>thimpress.com</author>
 	<creationDate>Dec 2013</creationDate>
-	<copyright>© 2007-2013 wppipes.com. All rights reserved.</copyright>
+	<copyright>© 2007-2013 thimpress.com. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<authorEmail>info@wppipes.com</authorEmail>
-	<authorUrl>http://www.wppipes.com</authorUrl>
+	<authorEmail>info@thimpress.com</authorEmail>
+	<authorUrl>http://www.thimpress.com</authorUrl>
 	<version>3.1.8</version>
 	<description>Change Time Processor for WPPipes</description>
 	<files>

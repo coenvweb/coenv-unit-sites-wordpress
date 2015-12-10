@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin - PIPES
  * @version          $Id: view.php 141 2014-01-24 10:36:21Z tung $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );

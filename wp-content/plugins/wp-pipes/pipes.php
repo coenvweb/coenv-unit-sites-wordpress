@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: WP Pipes
-Plugin URI: http://thimpress.com/pipes
+Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.20
+Version: 1.21
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -11,11 +11,15 @@ define( '_JEXEC', 1 );
 @session_start();
 define( "PIPES_CORE", 1 );
 define( "PIPES_PATH", dirname( __FILE__ ) );
+define( "PIPES_MAIN_FILE_PATH", __FILE__ );
 defined( 'DS' ) or define( 'DS', DIRECTORY_SEPARATOR );
 require_once 'define.php';
 require_once dirname( __FILE__ ) . DS . 'includes' . DS . 'application.php';
 require_once dirname( __FILE__ ) . DS . 'helpers' . DS . 'common.php';
 
+/**
+ * Class PIPES
+ */
 class PIPES extends Application {
 	public static $__page_prefix = '';
 	public static $__prefix = '';
@@ -28,22 +32,23 @@ class PIPES extends Application {
 		register_deactivation_hook( __FILE__, array( $this, 'uninstall' ) );
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'admin_init', array( $this, 'pipes_plugin_redirect' ) );
+		//add_action( 'upgrader_process_complete', array( $this, 'update_pipe_option' ), 20 );
 		parent::__construct( $prefix, $page_prefix );
 	}
 
 	public function admin_init() {
-		wp_register_style( 'pipes-obstyle', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/css/obstyle.css' );
-		wp_register_style( 'pipes-bootstrap-min', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/css/bootstrap.min.css' );
+		wp_register_style( 'pipes-obstyle', plugin_dir_url( __FILE__ ) . '/assets/css/obstyle.css' );
+		wp_register_style( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . '/assets/css/bootstrap.min.css' );
 		wp_register_style( 'pipes-font-awesome-css', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' );
-		wp_register_style( 'pipes-process-css', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/css/process.css' );
-		wp_register_style( 'pipes-chosen-css', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/css/chosen.css' );
-		//wp_register_style( 'pipes-inputtags-css', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/css/bootstrap-tagsinput.css' );
-		wp_register_script( 'pipes-bootstrap-min', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/bootstrap.min.js' );
-		wp_register_script( 'pipes-process', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/process.js' );
-		wp_register_script( 'pipes-ogb-lib-admin', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/ogb-lib-admin.js' );
-		wp_register_script( 'pipes-chosen', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/chosen.jquery.js' );
+		wp_register_style( 'pipes-process-css', plugin_dir_url( __FILE__ ) . '/assets/css/process.css' );
+		wp_register_style( 'pipes-chosen-css', plugin_dir_url( __FILE__ ) . '/assets/css/chosen.css' );
+		//wp_register_style( 'pipes-inputtags-css', plugin_dir_url( __FILE__ ) . '/assets/css/bootstrap-tagsinput.css' );
+		wp_register_script( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap.min.js' );
+		wp_register_script( 'pipes-process', plugin_dir_url( __FILE__ ) . '/assets/js/process.js' );
+		wp_register_script( 'pipes-ogb-lib-admin', plugin_dir_url( __FILE__ ) . '/assets/js/ogb-lib-admin.js' );
+		wp_register_script( 'pipes-chosen', plugin_dir_url( __FILE__ ) . '/assets/js/chosen.jquery.js' );
 		//js for input tags
-		//wp_register_script( 'pipes-bootstrap-tagsinput', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/bootstrap-tagsinput.js' );
+		//wp_register_script( 'pipes-bootstrap-tagsinput', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap-tagsinput.js' );
 
 		parent::admin_init();
 	}
@@ -54,6 +59,10 @@ class PIPES extends Application {
 			wp_redirect( "admin.php?page=pipes.pipes" );
 		}
 	}
+
+	/*public function update_pipe_option(){
+		add_option( 'pipes_not_use_cache', 0 );
+	}*/
 
 	public function init() {
 		require_once dirname( __FILE__ ) . DS . 'plugin.php';

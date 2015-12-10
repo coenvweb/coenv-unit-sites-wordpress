@@ -2,15 +2,15 @@
 /**
  * @package          WP Pipes plugin
  * @version          $Id: get_fulltext.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          http://www.gnu.org/licenses/gpl-2.0.html
  */
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-require_once 'lib' . DS . 'psc.php';
+require_once 'lib' . DS . 'gcurl.php';
 
-class WPPipesPro_get_fulltext extends ogb_parser_code {
+class WPPipesPro_get_fulltext extends ogb_get_CURL {
 	public static function setStop( &$data, $msg = 'unknow', $state = true ) {
 		$stop        = new stdClass();
 		$stop->state = $state;
@@ -57,6 +57,9 @@ class WPPipesPro_get_fulltext extends ogb_parser_code {
 	}
 
 	public static function process( $data, $params ) {
+		$list_active_plg = get_option('active_plugins');
+		$html_parser_plg_path = WP_PLUGIN_DIR . DS . 'pipes-processor-htmlparser' . DS . 'pipes-processor-htmlparser.php';
+
 		$params = self::check_params_df( $params );
 		if ( isset( $_GET['php1'] ) ) {
 			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
@@ -139,7 +142,20 @@ class WPPipesPro_get_fulltext extends ogb_parser_code {
 			$html = $res->fulltext;
 		}
 		if ( $params->code != '' ) {
-			self::run_parser_code( $res, $html, $params );
+			if(in_array('pipes-processor-htmlparser/pipes-processor-htmlparser.php', $list_active_plg) && is_file($html_parser_plg_path)){
+				include_once($html_parser_plg_path);
+				$params->code = stripslashes($params->code);
+				$temp_params = $params;
+				$temp_params->input = 1;
+				WPPipesPro_htmlparser::run_parser_code($res, $html, $temp_params);
+			}else{
+				self::setStop( $res, "If you want to use Parser Code, you have to own HTML Parser Processor at http://thimpress.com/shop/ because it has not been supported with Get Fulltext Processor any more." );
+
+				return $res;
+			}
+			if ( isset( $res->stop ) ) {
+				return $res;
+			}
 		}
 		if ( isset( $_GET['php4'] ) ) {
 			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
@@ -208,7 +224,11 @@ class WPPipesPro_get_fulltext extends ogb_parser_code {
 			$origin_site = $params->origin_site;
 		}
 		$html = preg_replace( '/ href\s*=\s*"\//', " href=\"{$origin_site}/", $html );
-		$html = str_replace( '<a ', '<a target="_blank" ', $html );
+		if ( $params->atag == 2 ) {
+			$html = str_replace( '<a ', '<a target="_self" ', $html );
+		}else{
+			$html = str_replace( '<a ', '<a target="_blank" ', $html );
+		}
 
 		return $html;
 	}
@@ -228,7 +248,11 @@ class WPPipesPro_get_fulltext extends ogb_parser_code {
 	public static function clear_space( $html ) {
 		$html = str_replace( '&nbsp;', ' ', $html );
 		$html = str_replace( "\n", '', $html );
-		$html = preg_replace( "/\s+/", " ", $html );
+		$old_html = $html;
+		$html = preg_replace( "/\s+/iu", " ", $old_html );
+		if ( ! $html ) {
+			$html = preg_replace( "/\s+/i", " ", $old_html );
+		}
 		$html = str_replace( "> <", '><', $html );
 		$html = str_replace( "<div", "\n<div", $html );
 		$html = str_replace( "<p", "\n<p", $html );

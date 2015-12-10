@@ -2,8 +2,8 @@
 /**
  * @version        $Id: postformat.php 148 2014-01-25 04:47:00Z thongta $
  * @package        foobla RSS Feed Creator for Joomla.
- * @copyright      Copyright (C) 2007-2012 wppipes.com. All right reserved.
- * @author         wppipes.com.
+ * @copyright      Copyright (C) 2007-2012 thimpress.com. All right reserved.
+ * @author         thimpress.com.
  * @license        http://www.gnu.org/licenses/gpl-2.0.html
  */
 defined( '_JEXEC' ) or die();

@@ -2,8 +2,8 @@
 /**
  * @package              WP Pipes plugin - PIPES
  * @version              $Id: view.php 139 2014-01-23 10:09:44Z phonglq $
- * @author               wppipes.com
- * @copyright            2014 wppipes.com. All rights reserved.
+ * @author               thimpress.com
+ * @copyright            2014 thimpress.com. All rights reserved.
  * @license              GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -110,7 +110,7 @@ class PIPESViewPipes extends View {
 						<p class="hide-if-no-customize">
 							or
 						</p>
-						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=http://wpbriz.com/wp-content/uploads/pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
+						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=http://thimpress.com/wp-content/uploads/pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
 					</div>
 					<div class="welcome-panel-column">
 						<h4>Next Steps</h4>

@@ -2,8 +2,8 @@
 /**
  * @package        WP Pipes plugin
  * @version        $Id: postcategories.php 121 2014-01-20 10:14:24Z phonglq $
- * @author         wppipes.com
- * @copyright      2014 wppipes.com. All rights reserved.
+ * @author         thimpress.com
+ * @copyright      2014 thimpress.com. All rights reserved.
  * @license        http://www.gnu.org/licenses/gpl-2.0.html
  */
 

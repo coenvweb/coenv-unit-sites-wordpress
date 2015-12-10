@@ -3,7 +3,7 @@ Contributors: thimpress, thongta, phamtungpth
 Donate link: http://thimpress.com/
 Tags: pipes, csv, woocommerce, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, aggregation, autoblog, autoblogging, autoblogged, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, wordpress, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.2.2
+Tested up to: 4.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,8 +16,6 @@ Yahoo Pipes & Zapier are powerful online services for making pipeline of data, [
 You can create many Pipes, give your Pipes input and get output as your needs.
 
 Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, RSS Feed Creator, AutoBlogging, auto post to Twitter/Facebook/LinkedIn.
-
-Support: [WP Pipes Forum](http://thimpress.com/forums/forum/plugins/forum-pipes/)
 
 [youtube https://www.youtube.com/watch?v=zLHFqAHQj2A&hd=1&&cc_load_policy=1]
 
@@ -92,6 +90,8 @@ Support: [WP Pipes Forum](http://thimpress.com/forums/forum/plugins/forum-pipes/
 * Custom schedule for each Pipe instead of the whole Pipes.
 * Adding Pre-made / Template Fields Matching sets.
 
+> If you are looking for a [WordPress LMS](https://wordpress.org/plugins/learnpress/ "WordPress LMS"), check out our [WordPress LMS Plugin](https://wordpress.org/plugins/learnpress/ "WordPress LMS Plugin").
+
 == Installation ==
 
 This section describes how to install the plugin and get it working.
@@ -134,6 +134,13 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.21 =
+* Change: Parser Code function in Get Fulltext processor is disabled by default. To activate Parser Code function again you need install and acivate WP Pipes Addon HTML Parser Processor.
+* Fix: solved deprecated issue with iconv function in high version php.
+* Fix: solved bug when checking duplication with Post Destination.
+* Fix: solved the issue can not set feature image in Post Destination although the Get Image processor pulled images successfully into the server.
+* Fix: solved the issue which relates to slashes characters in Combine processor.
+* Improve: WPPipes can work interact with Amazon.
 
 = 1.20 =
 * Fix: solved issue "Parse error: syntax error, unexpected T_PAAMAYIM_NEKUDOTAYIM in /wp-content/plugins/wp-pipes/grab.php on line 163"

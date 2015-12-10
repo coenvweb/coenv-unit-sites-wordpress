@@ -21,12 +21,16 @@ if (extension_loaded('mbstring'))
 }
 
 // Same for iconv
-if (function_exists('iconv'))
+if (function_exists('iconv') && PHP_VERSION_ID < 50600)
 {
 	// These are settings that can be set inside code
 	iconv_set_encoding("internal_encoding", "UTF-8");
 	iconv_set_encoding("input_encoding", "UTF-8");
 	iconv_set_encoding("output_encoding", "UTF-8");
+}
+elseif (PHP_VERSION_ID >= 50600)
+{
+	ini_set('default_charset', 'UTF-8');
 }
 
 /**

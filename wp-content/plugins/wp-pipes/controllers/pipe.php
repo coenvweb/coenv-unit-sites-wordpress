@@ -2,8 +2,8 @@
 /**
  * @package              WP Pipes plugin - PIPES
  * @version              $Id: pipe.php 147 2014-01-25 04:25:54Z tung $
- * @author               wppipes.com
- * @copyright            2014 wppipes.com. All rights reserved.
+ * @author               thimpress.com
+ * @copyright            2014 thimpress.com. All rights reserved.
  * @license              GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -262,7 +262,7 @@ class PIPESControllerPipe extends Controller {
 		$cur_url    = urldecode( JRequest::getVar( 'cur_url' ) );
 		$from_name  = $config->get( 'fromname' );
 		$from_email = $config->get( 'mailfrom' );
-		$to_email   = 'iwant@wppipes.com';
+		$to_email   = 'iwant@thimpress.com';
 		$mailer->isHTML( true );
 		$message = JRequest::getVar( 'mess' );
 		$mes_arr = explode( ' ', $message );

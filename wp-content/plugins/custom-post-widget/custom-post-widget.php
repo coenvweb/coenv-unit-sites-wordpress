@@ -3,14 +3,14 @@
  Plugin Name: Custom Post Widget
  Plugin URI: http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/?utm_source=wordpress&utm_medium=plugin&utm_campaign=custom_post_widget
  Description: Show the content of a custom post of the type 'content_block' in a widget or with a shortcode.
- Version: 2.8.2
+ Version: 2.8.3
  Author: Johan van der Wijk
  Author URI: http://vanderwijk.nl
  Text Domain: custom-post-widget
  Domain Path: /languages
  License: GPL2
 
- Release notes: Updated the language files, please let me know if there are any translation errors or if you would like to create a new translation.
+ Release notes: Added Hebrew translation file as kindly created by Daniel Cohen Gindi
  
  Copyright 2015 Johan van der Wijk
  

@@ -2,7 +2,7 @@
 
 /**
  * @package   wppipes
- * @author    wpbriz.com
+ * @author    thimpress.com
  */
 class AppRequirements {
 
@@ -216,7 +216,7 @@ class AppRequirements {
 			<tfoot>
 			<tr>
 				<td colspan="3">Please visit
-					<a href="http://wpbriz.com/wp-pipes-system-requirements/" target="_blank">here</a> to get more help
+					<a href="http://thimpress.com/wp-pipes-system-requirements/" target="_blank">here</a> to get more help
 				</td>
 			</tr>
 			</tfoot>

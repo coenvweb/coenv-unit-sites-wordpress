@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin
  * @version          $Id: post.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright    (c) 2007-2013 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright    (c) 2007-2013 thimpress.com. All rights reserved.
  * @license          http://www.gnu.org/licenses/gpl-2.0.html
  */
 
@@ -25,7 +25,7 @@ class WPPipesAdapter_post {
 		}
 
 		$res = 0;
-		$qry = "SELECT `ID` FROM " . $wpdb->prefix . "posts WHERE `post_name`='" . addslashes( $fields['title'] ) . "' AND `post_type` = 'post'";
+		$qry = "SELECT `ID` FROM " . $wpdb->prefix . "posts WHERE (`post_title`='" . addslashes( $fields['title'] ) . "' OR `post_name` = '" . addslashes( $fields['slug'] ) . "') AND `post_type` = 'post'";
 		$res = (int) $wpdb->get_var( $qry );
 
 		return $res;
@@ -81,7 +81,7 @@ class WPPipesAdapter_post {
 		if ( '' == $data->slug ) {
 			$data->slug = sanitize_title( $data->title );
 		}
-		$dup_id = self::checkDuplicate( array( 'title' => $data->slug ) );
+		$dup_id = self::checkDuplicate( array( 'title' => $data->title, 'slug' => $data->slug ) );
 		$action = '';
 		$msg    = '';
 		if ( $dup_id > 0 ) {
@@ -145,6 +145,8 @@ class WPPipesAdapter_post {
 			$matches = array();
 			preg_match_all( '/src="(.+?)"/i', $images, $matches );
 			$img_url = $matches[1][0];
+		} elseif ( isset($data->images[0]->path) && $data->images[0]->path != '' ) {
+			$img_url = $data->images[0]->path;
 		} elseif ( isset($data->images[0]->src) && $data->images[0]->src != '' ) {
 			$img_url = $data->images[0]->src;
 		}
@@ -170,6 +172,7 @@ class WPPipesAdapter_post {
 		$post['post_date_gmt'] = $created;
 
 		$post['post_author'] = $params->author;
+		$post['post_format'] = ( !$params->postformat ) ? 'standard' : $params->postformat;
 
 		$post['post_type'] = 'post';
 
@@ -185,6 +188,7 @@ class WPPipesAdapter_post {
 		if ( isset( $img_url ) && '' != $img_url ) {
 			self::set_feature_image( $img_url, $post_id );
 		}
+		set_post_format( $post_id, $post['post_format'] );
 
 		$res->id  = $post_id;
 		$res->msg = 'Success';

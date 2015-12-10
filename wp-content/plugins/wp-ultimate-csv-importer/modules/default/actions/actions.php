@@ -1,4 +1,5 @@
 <?php
+
 /*********************************************************************************
  * WP Ultimate CSV Importer is a Tool for importing CSV for the Wordpress
  * plugin developed by Smackcoder. Copyright (C) 2014 Smackcoders.
@@ -32,25 +33,22 @@
  * WP Ultimate CSV Importer copyright notice. If the display of the logo is
  * not reasonably feasible for technical reasons, the Appropriate Legal
  * Notices must display the words
- * "Copyright Smackcoders. 2014. All rights reserved".
+ * "Copyright Smackcoders. 2015. All rights reserved".
  ********************************************************************************/
-
 class DefaultActions extends SkinnyActions {
 
-    public function __construct()
-    {
-    }
+	public function __construct() {
+	}
 
-  /**
-   * The actions index method
-   * @param array $request
-   * @return array
-   */
-    public function executeIndex($request)
-    {
-        // return an array of name value pairs to send data to the template
-        $data = array();
-        return $data;
-    }
+	/**
+	 * The actions index method
+	 * @param array $request
+	 * @return array
+	 */
+	public function executeIndex($request) {
+		// return an array of name value pairs to send data to the template
+		$data = array();
+		return $data;
+	}
 
 }

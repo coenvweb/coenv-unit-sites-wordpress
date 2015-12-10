@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin - PIPES
  * @version          $Id: common.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -350,6 +350,7 @@ class ogbFile {
 		} else {
 			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
 		}
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
 
 		ob_start();
 		curl_exec( $ch );
@@ -553,7 +554,7 @@ class ogbFile {
 	 * @return html
 	 */
 	public static function get_curl4( $url ) {
-		/*$link = "http://kha.wppipes.com/curl/?m=3&url=" . base64_encode( $url );
+		/*$link = "http://kha.thimpress.com/curl/?m=3&url=" . base64_encode( $url );
 		$html = self::get_curl( $link );
 		if ( isset( $_GET['php2'] ) ) {
 			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";

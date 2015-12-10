@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin
  * @version          $Id: cronjob.php 160 2013-12-31 08:05:48Z thongta $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          http://www.gnu.org/licenses/gpl-2.0.html
  */
 

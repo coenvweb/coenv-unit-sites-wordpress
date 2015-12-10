@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="wppipes-processor" method="upgrade">
 	<name>Get Fulltext</name>
-	<author>wppipes.com</author>
+	<author>thimpress.com</author>
 	<creationDate>July 2013</creationDate>
-	<copyright>© 2007-2012 wppipes.com. All rights reserved.</copyright>
+	<copyright>© 2007-2012 thimpress.com. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
-	<authorEmail>info@wppipes.com</authorEmail>
-	<authorUrl>http://www.wppipes.com</authorUrl>
+	<authorEmail>info@thimpress.com</authorEmail>
+	<authorUrl>http://www.thimpress.com</authorUrl>
 	<version>2.8</version>
 	<description>get_fulltext Processor for WPPipes</description>
 	<files>
@@ -37,12 +37,13 @@
 				<field name="atag" type="list" default="0" label="A tag" description="The options to process A tag">
 					<option value="0">Open in new tab</option>
 					<option value="1">Strip</option>
+					<option value="2">Open in same tab</option>
 				</field>
 				<field name="clear_attribute" type="text" default="id,class,style" label="clear Attribute" class="fullwidth"
 					   description="clear Attribute of Tags"/>
 				<field name="origin_site" type="text" size="30" default="" label="Origin Site" class="fullwidth"
 					   description="Origin Site"/>
-				<field name="code" type="htmlparse" rows="5" cols="50" class="fullwidth" default="" label="Parser Code"
+				<field name="code" type="hidden" rows="5" cols="50" class="fullwidth" default="" label="Parser Code"
 					   description="Parser Code" onblur="change_auto_fulltext(this)"/>
 				<field name="curl" type="list" default="1" label="get CURL" description="get CURL">
 					<option value="1">Level 1</option>

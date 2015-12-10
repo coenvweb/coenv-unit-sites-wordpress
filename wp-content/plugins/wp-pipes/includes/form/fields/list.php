@@ -106,7 +106,7 @@ class JFormFieldList extends JFormField {
 			// Create a new option object based on the <option /> element.
 			$tmp = JHtml::_(
 				'select.option', $value,
-				JText::alt( trim( (string) $option ), preg_replace( '/[^a-zA-Z0-9_\-]/', '_', trim( (string) $option ) ) ), 'value', 'text',
+				JText::alt( trim( (string) $option ), preg_replace( '/[^a-zA-Z0-9_.\-]/', '_', trim( (string) $option ) ) ), 'value', 'text',
 				$disabled
 			);
 

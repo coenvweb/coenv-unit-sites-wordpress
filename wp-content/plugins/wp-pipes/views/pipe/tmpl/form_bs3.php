@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin - PIPES
  * @version          $Id: form_bs3.php 148 2014-01-25 04:47:00Z thongta $
- * @author           wppipes.com
- * @copyright        2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright        2014 thimpress.com. All rights reserved.
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
@@ -182,7 +182,7 @@ if ( ! $pipes_js ) {
 <?php
 // Show arrow instruction for [Test this Pipe] button
 if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messages'] ) ) {
-	echo '<img src="' . plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/images/test-pipe.png" width="300" height="83" style="position:absolute;right:50px;top:45px;" />';
+	echo '<img src="' . plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/test-pipe.png" width="300" height="83" style="position:absolute;right:50px;top:45px;" />';
 }
 ?>
 
@@ -336,7 +336,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 		<i class="fa fa-chevron-right fa-2x"></i></div>
 	<!-- Engine / Source -->
 	<div class="col-md-6">
-		<img src="<?php echo plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/images/pipe-step-2.png'; ?>"
+		<img src="<?php echo plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-2.png'; ?>"
 		     width="145" height="83" />
 
 		<div class="panel panel-success" style="position: relative;">
@@ -368,7 +368,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 
 	<!-- Adapter / Destination -->
 	<div class="col-md-6">
-		<img src="<?php echo plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/images/pipe-step-3.png'; ?>"
+		<img src="<?php echo plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-3.png'; ?>"
 		     height="83" width="145" />
 
 		<div class="panel panel-warning" style="position: relative;">
@@ -486,7 +486,7 @@ if ( $item->inherit > 0 ) {
 				<h4>
 					<?php echo __( 'Processors' ); ?>
 					<small><?php echo __( 'Cooking fields with processors' ); ?>
-						<a href="http://wppipes.com/understanding-processors/" target="_blank" rel="tooltip"
+						<a href="http://thimpress.com/forums/forum/plugins/forum-pipes/" target="_blank" rel="tooltip"
 						   data-original-title="<?php echo __( 'Understanding processors' ); ?>"><i
 								class="fa fa-question-circle"></i></a>
 					</small>

@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin
  * @version          $Id: post.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright    2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright    2014 thimpress.com. All rights reserved.
  * @license          http://www.gnu.org/licenses/gpl-2.0.html
  */
 
@@ -26,9 +26,12 @@ class WPPipesEngine_post {
 				$image = wp_get_attachment_image_src( get_post_thumbnail_id( $value->ID ), 'single-post-thumbnail' );
 			}
 			$data[$key]->featured_image = @$image[0];
-			$data[$key]->author_name = get_the_author_meta( 'display_name' , $value->post_author );
-			$data[$key]->link = $value->guid;
-			$datas[] = $data[$key];
+			$data[$key]->author_name	= get_the_author_meta( 'display_name' , $value->post_author );
+			$data[$key]->link			= $value->guid;
+			$data[$key]->src_name		= isset($value->post_title)?$value->post_title:'';
+			$data[$key]->src_url		= isset($value->ID)?get_permalink($value->ID):'';
+			
+			$datas[]					= $data[$key];
 			$limit++;
 		}
 		if ( isset( $_GET['e1'] ) ) {

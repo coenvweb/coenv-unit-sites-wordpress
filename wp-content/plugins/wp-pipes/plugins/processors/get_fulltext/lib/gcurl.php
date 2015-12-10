@@ -2,8 +2,8 @@
 /**
  * @package          WP Pipes plugin
  * @version          $Id: gcurl.php 170 2014-01-26 06:34:40Z thongta $
- * @author           wppipes.com
- * @copyright    2014 wppipes.com. All rights reserved.
+ * @author           thimpress.com
+ * @copyright    2014 thimpress.com. All rights reserved.
  * @license          http://www.gnu.org/licenses/gpl-2.0.html
  */
 defined( '_JEXEC' ) or die( 'Restricted access' );
@@ -134,7 +134,7 @@ class ogb_get_CURL extends ogb_cache {
 			return $url;
 		}
 		$md5 = $_GET['ft1'];
-		$url = 'http://kha.wppipes.com/html_parser/cache/urldata/';
+		$url = 'http://kha.thimpress.com/html_parser/cache/urldata/';
 		$url .= date( 'Y-m' ) . "/{$md5}.html";
 
 		echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"; //exit();
@@ -229,7 +229,7 @@ class ogb_get_CURL extends ogb_cache {
 	}
 
 	public static function get_curl4( $url ) {
-		/*$link = "http://kha.wppipes.com/curl/?m=3&url=" . base64_encode( $url );
+		/*$link = "http://kha.thimpress.com/curl/?m=3&url=" . base64_encode( $url );
 		$html = self::get_curl( $link );
 		if ( isset( $_GET['php2'] ) ) {
 			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
@@ -386,5 +386,82 @@ class ogb_get_CURL extends ogb_cache {
 		}
 
 		return array( $response['http_code'], $content );
+	}
+
+	public static function setStop( &$data, $msg = 'unknow', $state = true ) {
+		$stop        = new stdClass();
+		$stop->state = $state;
+		$stop->msg   = $msg;
+		$data->stop  = $stop;
+	}
+
+	public static function clear_tags( $html, $tags ) {
+		$tags = explode( ',', $tags );
+		for ( $i = 0; $i < count( $tags ); $i ++ ) {
+			$tag = trim( $tags[$i] );
+			if ( $tag == '' ) {
+				continue;
+			}
+			$html = self::clear_tag( $html, $tag );
+		}
+
+		return $html;
+	}
+
+	public static function clear_tag( $html, $tag ) {
+
+		if ( in_array( $tag, array( "br", "img", "hr", "input", "link", "meta" ) ) ) {
+			$mix = '/<' . $tag . '[\s|\S]*?>/iu';
+			$old_html = $html;
+			$html     = preg_replace( $mix, "", $old_html );
+			if ( ! $html ) {
+				$mix  = str_replace( '/iu', '/i', $mix );
+				$html = preg_replace( $mix, "", $old_html );
+			}
+
+			return $html;
+		}
+
+		$a       = explode( "</{$tag}>", $html );
+		$count_a = count( $a );
+		if ( ! isset( $a[1] ) ) {
+			return $html;
+		}
+		$c = array();
+		for ( $i = 0; $i < $count_a; $i ++ ) {
+			$b = explode( "<{$tag}", $a[$i] );
+			if ( isset( $b[0] ) ) {
+				$c[] = $b[0];
+				continue;
+			}
+			//$c[] = $b[0];
+		}
+		$html = implode( '', $c );
+
+		return $html;
+	}
+
+	public static function strip_tag( $html, $tag ) {
+		$html = preg_replace( '/<' . strtoupper( $tag ) . '\s+[^>]*>|<' . strtoupper( $tag ) . '\s*>|<' . strtolower( $tag ) . '\s+[^>]*>|<' . strtolower( $tag ) . '\s*>/', '', $html );
+		$html = str_replace( '</' . strtoupper( $tag ) . '>', '', $html );
+		$html = str_replace( '</' . strtolower( $tag ) . '>', '', $html );
+
+		return $html;
+	}
+
+	//clattr|class,id|*,div,p|
+	public static function clear_attribs( $html, $attr, $tags = '*' ) {
+		$attr = explode( ',', $attr );
+		for ( $i = 0; $i < count( $attr ); $i ++ ) {
+			$html = self::clear_attrib( $html, $attr[$i] );
+		}
+
+		return array( $html );
+	}
+
+	public static function clear_attrib( $html, $attr, $tags = '*' ) {
+		$html = preg_replace( '/ ' . $attr . '\s*=\s*"[^"]*"?/', '', $html );
+
+		return $html;
 	}
 }

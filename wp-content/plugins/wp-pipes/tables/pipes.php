@@ -2,8 +2,8 @@
 /**
  * @package              WP Pipes plugin - PIPES
  * @version              $Id: items.php 148 2014-01-25 04:47:00Z thongta $
- * @author               wppipes.com
- * @copyright            2014 wppipes.com. All rights reserved.
+ * @author               thimpress.com
+ * @copyright            2014 thimpress.com. All rights reserved.
  * @license              GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );

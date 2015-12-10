@@ -18,9 +18,13 @@ class WPPipesPro_combine {
 			print_r($data);
 			echo '</pre>';	//exit();		
 		}
+
 		$res	= new stdClass();
-		if($params->combine!=''){
-			preg_match_all('/(?<={).*?(?=})/i',$params->combine,$matches);
+		if( $params->combine != '' ) {
+			$params->combine = stripcslashes( $params->combine );
+			$combine = str_replace( '\"', '"', $params->combine );
+			$combine = str_replace( "\'", "'", $combine );
+			preg_match_all('/(?<={).*?(?=})/i', $combine, $matches );
 			$inputs = array();
 			if(is_array($matches[0]) && count($matches[0])> 0){
 				foreach($matches[0] as $key=>$value){
@@ -38,11 +42,11 @@ class WPPipesPro_combine {
 			}
 
 			foreach($inputs as $key_ip=>$new_value){
-				$params->combine = str_replace('{'.$key_ip.'}',$new_value,$params->combine);
+				$combine = str_replace('{'.$key_ip.'}',$new_value,$combine);
 			}
 			//$static_value	= '<p>'.$params->static_value.'</p>';
 			//echo '<pre>';print_r($params->combine);die;
-			$html	= $params->combine;
+			$html	= $combine;
 		}else{
 			$html	= '';
 		}

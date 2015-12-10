@@ -64,8 +64,6 @@ $ret_arr=array();
 		</div>
 	</div>
 </div>
-
-
 <!--<div class= "promobox" id="pluginpromo" style="width:98%;">
         <div class="accordion-group" >
                 <div class="accordion-body in collapse">
