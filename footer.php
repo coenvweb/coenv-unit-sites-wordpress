@@ -10,7 +10,7 @@
                 <h2><?php bloginfo('name') ?></h2>
             </div>
             <div class="unit-contact">
-                <?php if (get_option('mail_address')) { ?><p><a href="http://maps.google.com/?q=<?php echo urlencode(get_option('mail_address')); ?>" title="Google Maps link"><?php echo get_option('mail_address'); ?></a></p><?php } ?>
+                <?php if (get_option('mail_address')) { ?><p><?php echo get_option('mail_address'); ?></p><?php } ?>
                 <?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo get_option('public_email_address'); ?>" title="Send us an Email"><?php echo get_option('public_email_address'); } ?></a>
                 <?php if (get_option('phone')) { ?> | <?php echo get_option('phone'); ?></p><?php } ?>
             </div>
@@ -42,7 +42,7 @@
                         <li><a target="_blank" href="http://www.atmos.washington.edu/">Atmospheric Sciences</a></li>
                         <li><a target="_blank" href="http://www.ess.washington.edu/">Earth and Space Sciences</a></li>
                         <li><a target="_blank" href="http://www.sefs.washington.edu/">Environmental and Forest Sciences</a></li>
-                        <li><a target="_blank" href="http://depts.washington.edu/smea/front">Marine and Environmental Affairs</a></li>
+                        <li><a target="_blank" href="https://smea.uw.edu">Marine and Environmental Affairs</a></li>
                         <li><a target="_blank" href="http://www.ocean.washington.edu/">Oceanography</a></li>
                         <li><a target="_blank" href="http://depts.washington.edu/poeweb/">Program on the Environment</a></li>
                         <li><a target="_blank" href="http://cses.washington.edu/cig/">Climate Impacts Group</a></li>
