@@ -55,16 +55,16 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$wp_query = new WP_Query( $query_args );
 		?>
 
-		<?php if ($coenv_cat_1 == 'publication_theme'): ?>
+		<?php if ($coenv_cat_1 == 'course_theme'): ?>
 		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> publications listed under <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
+			<div class="left"><?php echo $wp_query->found_posts; ?> courses listed under <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($coenv_cat_1 == 'author'): ?>
 		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> publications written by <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
+			<div class="left"><?php echo $wp_query->found_posts; ?> courses offered by <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($coenv_cat_1 == 'publication_year'): ?>
@@ -72,20 +72,20 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			<div class="left">
 				<?php if($coenv_cat_term_1 == 'in-press') { ?>
 				<?php echo $wp_query->found_posts; ?>
-				publications that are 
+				courses that are 
 				<strong>
 				<?php echo strtolower($coenv_cat_term_1_val); ?>
 				</strong>
 				<?php } elseif (is_numeric($coenv_cat_term_1)) { ?>
 				<?php echo $wp_query->found_posts; ?>
-				publications published in 
+				courses offered in 
 				<strong>
 				<?php echo $coenv_cat_term_1_val; ?>
 				</strong>
 				<?php } ?>
 				<strong><?php echo strtolower($year_cat->name); ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
-		</div>
+			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
+
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
         <ul class="accordion courses clearfix" data-accordion>
@@ -94,7 +94,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
         ?>
-		<li class="course-list-item post-<?php the_ID() ?> accordion-navigation">
+		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
         echo '<a href=#' . the_ID() . '>';
 		echo $publication_terms_str . $publication_years_str;
@@ -113,10 +113,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			}
 		}
 		echo '</div>';
-		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Abstract</a></div>';
-		echo '</div>';
+		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Course in Time Schedule</a></div>';
 		$publication_terms_arr = "";
 		$publication_years_arr = "";
+        echo '</li>';
 		endwhile;
 		?>
     </ul>
@@ -140,7 +140,9 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	<a href="#" class="back-to-top">Back to Top</a>
 	<?php do_action('foundationPress_after_content'); ?>
 	</div>
+    </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
 <?php get_sidebar(); ?>
+</div>
 </div>
 <?php get_footer(); ?>

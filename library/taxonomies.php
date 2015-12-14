@@ -258,3 +258,40 @@ function data_tax() {
 }
 
 add_action( 'init', 'data_tax' );
+
+/**
+* Custom Taxonomies for Courses
+**/
+function course_tax() {
+
+	$data_labels = array(
+		'name'                       => _x( 'Quarters', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Quarter', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Quarters', 'text_domain' ),
+		'all_items'                  => __( 'All Quarters', 'text_domain' ),
+		'parent_item'                => __( 'Parent Quarter', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Quarter:', 'text_domain' ),
+		'new_item_name'              => __( 'New Quarter', 'text_domain' ),
+		'add_new_item'               => __( 'Add Quarter', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Quarter', 'text_domain' ),
+		'update_item'                => __( 'Update Quarter', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Quarters', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Quarter', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from quarters with the most courses', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$data_args = array(
+		'labels'                     => $data_labels,
+		'hierarchical'               => false,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'course_quarter', array( 'courses' ), $data_args );
+
+}
+
+add_action( 'init', 'course_tax' );
