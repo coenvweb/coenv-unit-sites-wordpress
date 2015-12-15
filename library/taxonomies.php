@@ -283,7 +283,7 @@ function course_tax() {
 	);
 	$data_args = array(
 		'labels'                     => $data_labels,
-		'hierarchical'               => false,
+		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
 		'show_admin_column'          => true,

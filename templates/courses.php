@@ -55,7 +55,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$wp_query = new WP_Query( $query_args );
 		?>
 
-		<?php if ($coenv_cat_1 == 'course_theme'): ?>
+		<?php if ($coenv_cat_1 == 'course_quarters'): ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> courses listed under <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
 			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
@@ -96,24 +96,16 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         ?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<a href=#' . the_ID() . '>';
-		echo $publication_terms_str . $publication_years_str;
-
-		echo '</h5>';
-		echo '<h4><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h4>';
-		echo '<div class="course-description">' . $publication_citation . '</div>';
-		echo '<div class="course-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['publication_link_type'] == 'upload') {
-					echo '<a class="button" href="' . $row['publication_upload_file'] . '" target="_blank">Download</a>';
-				} elseif ($row['publication_link_type'] == 'link') {
-					echo '<a class="button" href="' . $row['publication_link_url'] . '" target="_blank">' . $row['publication_link_text'] . '</a>';
-				} 
-			}
-		}
-		echo '</div>';
-		echo '<div class="abstract"><a class="button" href="' . get_the_permalink() .'">View Course in Time Schedule</a></div>';
+        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args );
+        $quarter =  $terms[0]->name;
+        echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter . '</h5>';
+		echo '<h4>' . get_the_title() . '</h4>';
+        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
+		echo '<div class="course-description">' . get_field('course_description') . '</div>';
+        echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
+        if (get_field('course_website') ) {
+		echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';
+        }
 		$publication_terms_arr = "";
 		$publication_years_arr = "";
         echo '</li>';
