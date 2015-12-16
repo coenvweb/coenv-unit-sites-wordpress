@@ -20,6 +20,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
+            <?php the_content(); ?>
 		<div class="row filters">
 			<div class=" large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
 				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
@@ -88,7 +89,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
-        <ul class="accordion courses clearfix" data-accordion>
+        <ul>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -106,8 +107,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         if (get_field('course_website') ) {
 		echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';
         }
-		$publication_terms_arr = "";
-		$publication_years_arr = "";
         echo '</li>';
 		endwhile;
 		?>
