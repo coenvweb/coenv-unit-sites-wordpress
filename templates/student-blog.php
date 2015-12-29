@@ -12,7 +12,7 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
 // Dates
 $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
-$coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,0,(int)$coenv_year));
+$coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,1,(int)$coenv_year));
 
 //Categories
 $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
@@ -25,7 +25,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 <div class="row">
 	<div class="small-12 medium-8 columns right" role="main">
 		<div class="entry-content">
-		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
 			<div class=" large-6 columns" data-url="<?php echo $url_current; ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('blog_category', $coenv_cat_term_1); // Category filter ?>
@@ -34,7 +33,6 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 				<?php coenv_base_date_filter('student_blog',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
-		<hr>
 		<?php
 		/**
 		  * Blog loop
@@ -69,13 +67,13 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a class="button" href="/students/blog/">all posts</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a class="button" href="/students/blog/">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 
@@ -85,34 +83,59 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+		$terms = wp_get_post_terms( get_the_ID(), 'category');
+		// Filter display of administrative post categories
+		$terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        }
 		?>
-		<div class="blog-list-item post-<?php the_ID() ?>">
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
+		<div class="blog-list-item clearfix">
+        
+        <div class="blog-meta clearfix">
+            <div class="small-6 columns left">
+                <?php 
+                echo '<p>' . get_the_date('M j, Y') .' / ';
+                $termlist = '';
+                foreach ($terms as $term) {
+                    $termlist .= '<a href="/about/news/' . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                }
+                $termlist = rtrim($termlist,', ');
+                echo $termlist;
+                ?>
+                </p>
+            </div>
+            <div class="small-6 columns sharer right">
+                <?php $title = rawurlencode(get_the_title());
+                $shortlink = rawurlencode(wp_get_shortlink());
+                $site_name = rawurlencode(get_bloginfo('name'));
+                $twitter = get_option('twitter');
+                ?>
+                <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
+                <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+                <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+                <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
+                <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+            </div>
+		</div>
+            
         <?php
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '<div class="blog-meta">';
-		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-		 $termlist .= '<a href="' . $url_current . '?tax=' . $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
-		 echo '</p>';
-		
-		echo '</div>';
+		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
+
 		echo '<div class="post">';
-		if (has_post_thumbnail()):
-		echo '<a class="left" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+		/*if (has_post_thumbnail()):
+		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
-		endif;
+		endif;*/
 		echo the_excerpt();
-		echo '<a class="button" href="' . get_the_permalink() . '">Read more</a>';
+		echo $post_link;
 		'</div>';
 		echo '<div class="blog-links right">';
 		if($rows) {

@@ -134,6 +134,12 @@ function coenv_get_ancestor($attr = 'ID') {
         $ancestor = get_post( array_pop( $ancestors ) );
         return $ancestor->$attr;
     }
+    
+    if ( $post->post_type == 'student_blog' ) {
+
+        $ancestor = get_post(5094);
+        return $ancestor->$attr;
+    }
 
     // test for custom post types
     $custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
@@ -184,6 +190,11 @@ function coenv_banner() {
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
         $ancestor_id = 7;
+    }
+    
+    if ( is_singular( 'student_blog' )) { //change blog pages' section titles
+        unset ($ancestor_id);
+        $ancestor_id = 5094;
     }
     
     if ( has_post_thumbnail( $ancestor_id ) ) {
@@ -249,6 +260,16 @@ function coenv_base_section_title($id) {
     if ( is_page_template('templates/news.php')) { //change news index' section titles
         unset ($section_title);
         $section_title = '<div class="columns large-12 section-title"><h1><a href="about/news">News</a></h1></div>';
+    }
+    
+    if ( is_singular( 'student_blog' )) { //change news pages' section titles
+        unset ($section_title);
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="../"><span>&larr; View All</span>Student Blog</a></h2></div>';
+    }
+    
+    if ( is_page_template('templates/student-blog.php')) { //change news index' section titles
+        unset ($section_title);
+        $section_title = '<div class="columns large-12 section-title"><h1><a href="">Student Blog</a></h1></div>';
     }
         
         echo $section_title;

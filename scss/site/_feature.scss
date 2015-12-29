@@ -17,7 +17,11 @@
     font-weight: 800;
     @media #{$medium-up} {
         height: auto;
-        max-height: rem-calc(500);
+        max-height: 500px;
+    }
+    @media #{$xlarge-up} {
+        height: auto;
+        max-height: 30vw;
     }
 	
 	ul li {
@@ -50,6 +54,9 @@
 			color: $white;
             @media #{$small-only} {
                 font-size: rem-calc(14)!important;
+            }
+            @media #{$large-up} {
+                padding-top: 2vw;
             }
 		}
 		
@@ -102,7 +109,7 @@
             }
             
             @media #{$large-up}  {
-                padding: 0 20% 0 0;
+                padding: 0 35% 0 0;
                 
                 svg {
                     display: block;

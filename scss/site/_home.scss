@@ -102,6 +102,11 @@
     .small-news {
         margin-right: 0;
     }
+    .large-5 {
+        @media #{$medium-up} {
+            padding-left: 2rem;
+        }
+    }
 }
 
 .all-news {

@@ -1,5 +1,9 @@
-.page-template-templatesnews-php {
+.page-template-templatesnews-php, .page-template-student-blog {
     // selectors
+    
+    .entry-content {
+        padding-top: 0;
+    }
     
     .section-title h1 {
         line-height: rem-calc(42);
@@ -47,9 +51,9 @@
     
     // posts
     .blog-meta {
-        margin-bottom: rem-calc(15);
         margin-top: rem-calc(30);
-        border-bottom: 4px $text solid;
+        border-top: 4px $text solid;
+        padding-top: 1rem;
     }
     
     h3 a {

@@ -93,15 +93,49 @@
 
 .units {
     float: right;
-    list-style: none;
-    margin: rem-calc(30) 0 0 0;
+    padding: 0;
+    width: 300px;
+    margin: 0 0 0 rem-calc(30);
+    position: relative;
+    top: 30px;
     
-    .slash {
-        margin: 0 rem-calc(12);
+    li {
+        display: block;
+        height: 12px;
+        width: 215px;
+        padding: 0 0 0 0 !important;
+        margin: 0 0 8px 0   !important;
+        list-style: none;
+        &:first-of-type:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 1px;
+            top: 0;
+            left: 0;
+            height: 36px;
+            background-color: $text;
+            @extend .uw-skew;
+        }
     }
-    
     .uw-name {
-        margin-right: rem-calc(16);
+        width: 215px;
+        height: 15px;
+    }
+    .college-name {
+        width: 215px;
+        height: 12px;
+        margin-top: 2px;
+    }
+    a {
+        padding-bottom: 0;
+        color: black;
+    }
+    .slash {
+        margin: 0;
+    }
+    .college-name, .uw-name {
+        float: left;
     }
 }
 

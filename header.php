@@ -212,10 +212,13 @@
           </a>
           </h1>
             <div class="units show-for-large-up">
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/slash.png" class="slash left" alt="">
-                <a href="http://coenv.uw.edu" name="College of the Environment"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/College-of-the-Environment.png" alt="College of the Environment" class="right"></a><br />
-                <a href="http://uw.edu" name="University of Washington"><img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/UW-Tagline.png" alt="University of Washington" class="right uw-name"></a>
-          </div> 
+                <ul>
+              <li><a href="http://environment.uw.edu" title="UW College of the Environment">
+  <?php include("assets/img/college-of-the-environment.svg"); ?>
+                  </a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
+                </ul>
+          </div>
         </li>          
       </ul>
     </div>
@@ -246,13 +249,13 @@
 
 <?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
-    <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
+    <?php if (($banner) && (!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_page_template( 'templates/student-blog.php' ) ) ) {
             echo '<div class="page-row"';
             echo 'style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="teal-wedge">';
         }
      ?>
-     <?php if ( (empty($banner)) || (is_single()) || (is_page_template( 'templates/news.php' ) ) ) {
+     <?php if ( (empty($banner)) || (is_single()) || (is_page_template( 'templates/news.php' ) ) || (is_page_template( 'templates/student-blog.php' ) ) ) {
             echo '<div class="page-row mini">';
             echo '<div class="teal-wedge">';
      }

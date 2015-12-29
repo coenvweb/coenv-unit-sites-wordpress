@@ -268,7 +268,7 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 		<?php
         if( $featured ) {
-            echo '<div class="large-4 medium-6 columns right">';
+            echo '<div class="large-5 medium-6 columns right">';
         }
 		# The Loop
 		while ( $wp_query->have_posts() ) :

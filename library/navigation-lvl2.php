@@ -4,8 +4,16 @@
   */
 
 function coenv_base_hierarchical_submenu($postid) {
+
     $post = get_post($postid);
+    
+    if ( $post->post_type == 'student_blog' ) {
+        $postid = 5094;
+        $post = get_post($postid);
+    }
+
     $top_post = $post;
+    
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
         $top_post = get_post(end($post->ancestors));
