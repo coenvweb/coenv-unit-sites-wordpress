@@ -172,7 +172,9 @@ function custom_post_widget_shortcode( $atts ) {
 		'id' => '',
 		'slug' => '',
 		'class' => 'content_block',
-		'suppress_content_filters' => 'no'
+		'suppress_content_filters' => 'no',
+        'title' => 'no',
+        'title_tag' => 'h3'
 	), $atts ) );
 
 	if ( $slug ) {
@@ -194,6 +196,9 @@ function custom_post_widget_shortcode( $atts ) {
 
 		foreach( $content_post as $post ) :
 			$content .= '<div class="'. esc_attr($class) .'" id="custom_post_widget-' . $id . '">';
+			if ( $title === 'yes' ) {
+				$content .= '<' . esc_attr( $title_tag ) . '>' . $post->post_title . '</' . esc_attr( $title_tag ) . '>'; 
+			}
 			if ( $suppress_content_filters === 'no' ) {
 				$content .= apply_filters( 'the_content', $post->post_content);
 			} else {

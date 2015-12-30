@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: thimpress, thongta, phamtungpth
 Donate link: http://thimpress.com/
-Tags: pipes, csv, woocommerce, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, aggregation, autoblog, autoblogging, autoblogged, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, wordpress, blogger, blogspot, feed to post, rss to post
+Tags: pipes, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, autoblog, autoblogging, curating, curation, curated content, content curation, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.3.1
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,11 @@ RSS Feed to Post/bbPress, AutoBlogging, auto post to Twitter/Facebook/LinkedIn, 
 Yahoo Pipes & Zapier are powerful online services for making pipeline of data, [WP Pipes](http://thimpress.com/pipes "WP Pipes plugin") by [ThimPress](http://thimpress.com "WordPress Plugins & Themes for lazy people") comes available to the WordPress community to bring such of powerful abilities to WordPress site, works right inside your WordPress site.
 You can create many Pipes, give your Pipes input and get output as your needs.
 
+###WordPress Data Migration###
 Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, RSS Feed Creator, AutoBlogging, auto post to Twitter/Facebook/LinkedIn.
+
+###WordPress Content Curation###
+Curated Content is still safe with SEO, and this content curation plugin for WordPress works perfectly to create curated content from RSS Feed, Google News or any other sources.
 
 [youtube https://www.youtube.com/watch?v=zLHFqAHQj2A&hd=1&&cc_load_policy=1]
 
@@ -47,9 +51,9 @@ Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, R
 * RSS Reader: to read RSS Feed, to offer RSS Feed to Post functionality.
 * Post: to read Posts from WordPress.
 * [CSV: to read CSV files](http://thimpress.com/shop/csv-source-pipes/ "WordPress plugin import from CSV").
+* Email: to read mailbox.
 * WooCommerce: to deal with WooCommerce products (coming soon)
 * bbPress: to deal with bbPress topics (coming soon)
-* Email: to read mailbox (coming soon)
 * Facebook (coming soon)
 * WordPress.com: using oauth to connect to your blogs on wordpress.com.
 * WordPress: deal with xmlrpc from WordPress (hosted or wordpress.com) (coming soon)
@@ -57,11 +61,11 @@ Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, R
 <h4>AVAILABLE DESTINATIONS (more will come up later):</h4>
 * RSS Creator: to create RSS Feed for WordPress.
 * Post: to create Posts for WordPress. Can works with RSSReader source to offer RSS Feed to post functionality.
-* WooCommerce: to create products in WooCommerce plugin. (coming soon)
-* bbPress: to create topics in bbPress plugin. (coming soon)
-* Email: to send a new email to a mailbox. (coming soon)
+* WooCommerce: to create products in WooCommerce plugin.
 * [WordPress.com: to create post on WordPress.com blog](http://thimpress.com/shop/wordpress-com-destination-pipes/ "WordPress plugin auto post to WordPress.com").
 * [Blogger: to create blog post on Blogger](http://thimpress.com/shop/blogger-blogspot-destination-for-pipes/ "WordPress plugin Auto post to Blogger / Blogspot").
+* bbPress: to create topics in bbPress plugin. (coming soon)
+* Email: to send a new email to a mailbox. (coming soon)
 * [Twitter: to create Twitter tweets](http://thimpress.com/shop/twitter-destination-pipes/ "WordPress plugin Auto post to Twitter").
 * Facebook: to create message on Facebook personal wall. (coming soon)
 * Facebook Page: to create message on Facebook Page. (coming soon)
@@ -134,6 +138,12 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.22 =
+* Fix: solved bug lost input, output params of getFullText processor.
+* Fix: Check and use current using collation of database when installing new WP Pipes.
+* Change: add new layout for addons manager page.
+* Improve: Added [so] content which contains data of <content:encoded> elements from RSS feeds with RSSReader Source.
+
 = 1.21 =
 * Change: Parser Code function in Get Fulltext processor is disabled by default. To activate Parser Code function again you need install and acivate WP Pipes Addon HTML Parser Processor.
 * Fix: solved deprecated issue with iconv function in high version php.

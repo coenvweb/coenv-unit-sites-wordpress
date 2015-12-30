@@ -37,7 +37,7 @@ class SkinnyBaseControllerWPCsvFree {
 		if (isset($_GET['__module']) && !empty($_GET['__module'])) {
 			$module = $_GET['__module'];
 		} else {
-			$module = 'default';
+			$module = 'dashboard';
 			$action = 'index';
 		}
 

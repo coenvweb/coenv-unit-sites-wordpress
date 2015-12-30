@@ -30,6 +30,16 @@ foreach ( $users as $user ) {
 #--------------------------------------------------
 # Create Items table 
 #--------------------------------------------------
+$collation = '';
+
+if ( $wpdb->has_cap( 'collation' ) ) {
+	if ( ! empty( $wpdb->charset ) ) {
+		$collation .= "DEFAULT CHARACTER SET $wpdb->charset";
+	}
+	if ( ! empty( $wpdb->collate ) ) {
+		$collation .= " COLLATE $wpdb->collate";
+	}
+}
 
 $sql = 'CREATE TABLE IF NOT EXISTS `' . $wpdb->prefix . 'wppipes_items` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -43,7 +53,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS `' . $wpdb->prefix . 'wppipes_items` (
 	`inputs` text NOT NULL,
 	`outputs` text NOT NULL,
 	PRIMARY KEY (`id`)
-  ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8';
+  ) ' . $collation;
 dbDelta( $sql );
 
 
@@ -58,7 +68,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS `' . $wpdb->prefix . 'wppipes_pipes` (
   `params` text NOT NULL,
   `ordering` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8';
+) ' . $collation;
 dbDelta( $sql );
 #--------------------------------------------------
 # setup Cronjob

@@ -95,6 +95,10 @@
 
         plugin.showPanel = function(anchor) {
 
+            if ( !plugin.isDesktopView() && anchor.parent().hasClass('mega-hide-sub-menu-on-mobile') ) {
+                return;
+            }
+
             switch( plugin.hideOpenSiblings() ) {
                 case 'immediately':
                     plugin.hideSiblingPanels(anchor, true);
@@ -136,7 +140,7 @@
 
         var openOnClick = function() {
             // hide menu when clicked away from
-            $(document).on('click', function(event) {
+            $(document).on('click touchstart', function(event) {
                 if ( ( plugin.settings.document_click == 'collapse' || ! plugin.isDesktopView() ) && ! $(event.target).closest(".mega-menu li").length ) {
                     plugin.hideAllPanels();
                 }
@@ -144,6 +148,12 @@
 
             $('li.mega-menu-megamenu.mega-menu-item-has-children > a, li.mega-menu-flyout.mega-menu-item-has-children > a, li.mega-menu-flyout li.mega-menu-item-has-children > a', menu).on({
                 click: function(e) {
+
+                    // all clicks on parent items when sub menu is hidden on mobile
+                    if ( ! plugin.isDesktopView() && $(this).parent().hasClass('mega-hide-sub-menu-on-mobile') ) {
+                        return;
+                    }
+
                     // check for second click
                     if ( plugin.settings.second_click == 'go' || $(this).parent().hasClass("mega-click-click-go") ) {
                         if ( ! $(this).parent().hasClass("mega-toggle-on") ) {
@@ -165,7 +175,8 @@
 
 
         var openOnHover = function() {
-            $('li.mega-menu-megamenu.mega-menu-item-has-children, li.mega-menu-flyout.mega-menu-item-has-children, li.mega-menu-flyout li.mega-menu-item', menu).hoverIntent({
+
+            $('li.mega-menu-item-has-children', menu).not('li.mega-menu-megamenu li.mega-menu-item-has-children', menu).hoverIntent({
                 over: function () {
                     plugin.showPanel($(this).children('a'));
                 },
@@ -189,6 +200,8 @@
                 $(this).toggleClass('mega-menu-open');
             });
 
+            $('li.mega-menu-item, ul.mega-sub-menu', menu).unbind();
+
             if (isTouchDevice() || plugin.settings.event === 'click') {
                 openOnClick();
             } else {
@@ -198,6 +211,7 @@
             if (!plugin.isDesktopView() && plugin.settings.reverse_mobile_items == 'true') {
                 $menu.append($menu.children('li.mega-item-align-right').get().reverse());
             }
+
         };
 
         plugin.init();

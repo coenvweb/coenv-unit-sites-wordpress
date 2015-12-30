@@ -121,7 +121,9 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_theme_save");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme={$theme}&saved=true" ) );
+        do_action("megamenu_delete_cache");
+
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$theme}&saved=true" ) );
 
     }
 
@@ -147,7 +149,7 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_add_menu_location");
 
-        $this->redirect( admin_url( 'admin.php?page=maxmegamenu&tab=general_settings&add_location=true' ) );
+        $this->redirect( admin_url( 'admin.php?page=maxmegamenu&add_location=true' ) );
 
     }
 
@@ -172,7 +174,9 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_delete_menu_location");
 
-        $this->redirect( admin_url( 'admin.php?page=maxmegamenu&tab=general_settings&delete_location=true' ) );
+        do_action("megamenu_delete_cache");
+
+        $this->redirect( admin_url( 'admin.php?page=maxmegamenu&delete_location=true' ) );
 
     }
 
@@ -185,9 +189,9 @@ class Mega_Menu_Settings{
 
         check_admin_referer( 'megamenu_clear_css_cache' );
 
-        do_action( 'megamenu_generate_css' );
+        do_action( 'megamenu_delete_cache' );
 
-        $this->redirect( admin_url( 'admin.php?page=maxmegamenu&tab=tools&clear_css_cache=true' ) );
+        $this->redirect( admin_url( 'admin.php?page=maxmegamenu_tools&clear_css_cache=true' ) );
 
     }
 
@@ -200,6 +204,8 @@ class Mega_Menu_Settings{
     public function delete_data() {
 
         check_admin_referer( 'megamenu_delete_data' );
+
+        do_action("megamenu_delete_cache");
 
         // delete menu settings
         delete_option("megamenu_settings");
@@ -229,7 +235,7 @@ class Mega_Menu_Settings{
         // delete custom themes
         delete_site_option( "megamenu_themes" );
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=tools&delete_data=true" ) );
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_tools&delete_data=true" ) );
 
     }
 
@@ -262,9 +268,11 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_save_general_settings");
 
-        $tab = isset( $_POST['tab'] ) ? $_POST['tab'] : 'general_settings';
+        do_action("megamenu_delete_cache");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab={$tab}&saved=true" ) );
+        $url = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : admin_url( "admin.php?page=maxmegamenu&saved=true" );
+
+        $this->redirect( $url );
 
     }
 
@@ -298,11 +306,11 @@ class Mega_Menu_Settings{
 
             do_action("megamenu_after_theme_import");
 
-            $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=tools&theme_imported=true") );
+            $this->redirect( admin_url( "admin.php?page=maxmegamenu_tools&theme_imported=true") );
 
         } else {
 
-            $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=tools&theme_imported=false") );
+            $this->redirect( admin_url( "admin.php?page=maxmegamenu_tools&theme_imported=false") );
 
         }
 
@@ -338,7 +346,7 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_theme_duplicate");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme={$new_theme_id}&duplicated=true") );
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$new_theme_id}&duplicated=true") );
 
     }
 
@@ -354,9 +362,9 @@ class Mega_Menu_Settings{
 
         $theme = esc_attr( $_GET['theme_id'] );
 
-        if ( $this->theme_is_being_used_by_menu( $theme ) ) {
+        if ( $this->theme_is_being_used_by_location( $theme ) ) {
 
-            $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme={$theme}&deleted=false") );
+            $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$theme}&deleted=false") );
             return;
         }
 
@@ -370,7 +378,9 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_theme_delete");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme=default&deleted=true") );
+        do_action("megamenu_delete_cache");
+
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme=default&deleted=true") );
 
     }
 
@@ -396,7 +406,9 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_theme_revert");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme={$theme}&reverted=true") );
+        do_action("megamenu_delete_cache");
+
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$theme}&reverted=true") );
 
     }
 
@@ -428,7 +440,7 @@ class Mega_Menu_Settings{
 
         do_action("megamenu_after_theme_create");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu&tab=theme_editor&theme={$new_theme_id}&created=true") );
+        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$new_theme_id}&created=true") );
 
     }
 
@@ -519,7 +531,7 @@ class Mega_Menu_Settings{
      * @since 1.0
      * @param string $theme
      */
-    public function theme_is_being_used_by_menu( $theme ) {
+    public function theme_is_being_used_by_location( $theme ) {
         $settings = get_option( "megamenu_settings" );
 
         if ( ! $settings ) {
@@ -528,14 +540,23 @@ class Mega_Menu_Settings{
 
         $locations = get_nav_menu_locations();
 
+        $menus = get_registered_nav_menus();
+
+
+        $theme_in_use_locations = array();
+
         if ( count( $locations ) ) {
 
             foreach ( $locations as $location => $menu_id ) {
 
                 if ( has_nav_menu( $location ) && isset( $settings[ $location ]['theme'] ) && $settings[ $location ]['theme'] == $theme ) {
-                    return true;
+                    $theme_in_use_locations[] = isset( $menus[ $location ] ) ? $menus[ $location ] : $location;
                 }
 
+            }
+
+            if ( count( $theme_in_use_locations ) ) {
+                return $theme_in_use_locations;
             }
 
         }
@@ -552,6 +573,21 @@ class Mega_Menu_Settings{
     public function megamenu_themes_page() {
 
         $page = add_menu_page( __('Max Mega Menu', 'megamenu'), __('Mega Menu', 'megamenu'), 'edit_theme_options', 'maxmegamenu', array($this, 'page') );
+
+
+        $tabs = apply_filters("megamenu_menu_tabs", array(
+            'general_settings' => __("General Settings", "megamenu"),
+            'theme_editor' => __("Menu Themes", "megamenu"),
+            'tools' => __("Tools", "megamenu")
+        ));
+
+        foreach ( $tabs as $key => $title ) {
+            if ( $key == 'general_settings') {
+                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, 'edit_theme_options', 'maxmegamenu', array($this, 'page') );
+            } else {
+                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, 'edit_theme_options', 'maxmegamenu_' . $key, array($this, 'page') );
+            }
+        }
 
     }
 
@@ -597,30 +633,9 @@ class Mega_Menu_Settings{
                 <input type="hidden" name="action" value="megamenu_save_settings" />
                 <?php wp_nonce_field( 'megamenu_save_settings' ); ?>
 
-                <h4 class='first'><?php _e("General Settings", "megamenu"); ?></h4>
+                <h3 class='first'><?php _e("General Settings", "megamenu"); ?></h3>
 
                 <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("CSS Output", "megamenu"); ?>
-                            <div class='mega-description'>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <select name='settings[css]' id='mega_css'>
-                                <option value='fs' <?php echo selected( $css == 'fs'); ?>><?php _e("Save to filesystem", "megamenu"); ?></option>
-                                <option value='head' <?php echo selected( $css == 'head'); ?>><?php _e("Output in &lt;head&gt;", "megamenu"); ?></option>
-                                <option value='ajax' <?php echo selected( $css == 'ajax'); ?>><?php _e("Enqueue dynamically via admin-ajax.php", "megamenu"); ?></option>
-                                <option value='disabled' <?php echo selected( $css == 'disabled'); ?>><?php _e("Don't output CSS", "megamenu"); ?></option>
-                            <select>
-                            <div class='mega-description'>
-                                <div class='ajax' style='display: <?php echo $css == 'ajax' ? 'block' : 'none' ?>'><?php _e("CSS will be enqueued dynamically through admin-ajax.php and loaded from the cache.", "megamenu"); ?></div>
-                                <div class='fs' style='display: <?php echo $css == 'fs' ? 'block' : 'none' ?>'><?php _e("CSS will be saved to wp-content/uploads/maxmegamenu/style.css and enqueued from there.", "megamenu"); ?></div>
-                                <div class='head' style='display: <?php echo $css == 'head' ? 'block' : 'none' ?>'><?php _e("CSS will be loaded from the cache in a &lt;style&gt; tag in the &lt;head&gt; of the page.", "megamenu"); ?></div>
-                                <div class='disabled' style='display: <?php echo $css == 'disabled' ? 'block' : 'none' ?>'><?php _e("CSS will not be output, you must enqueue the CSS for the menu manually.", "megamenu"); ?></div>
-                            </div>
-                        </td>
-                    </tr>
                     <tr>
                         <td class='mega-name'>
                             <?php _e("Click Event Behaviour", "megamenu"); ?>
@@ -653,9 +668,30 @@ class Mega_Menu_Settings{
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td class='mega-name'>
+                            <?php _e("CSS Output", "megamenu"); ?>
+                            <div class='mega-description'>
+                            </div>
+                        </td>
+                        <td class='mega-value'>
+                            <select name='settings[css]' id='mega_css'>
+                                <option value='fs' <?php echo selected( $css == 'fs'); ?>><?php _e("Save to filesystem", "megamenu"); ?></option>
+                                <option value='head' <?php echo selected( $css == 'head'); ?>><?php _e("Output in &lt;head&gt;", "megamenu"); ?></option>
+                                <option value='ajax' <?php echo selected( $css == 'ajax'); ?>><?php _e("Enqueue dynamically via admin-ajax.php", "megamenu"); ?></option>
+                                <option value='disabled' <?php echo selected( $css == 'disabled'); ?>><?php _e("Don't output CSS", "megamenu"); ?></option>
+                            <select>
+                            <div class='mega-description'>
+                                <div class='ajax' style='display: <?php echo $css == 'ajax' ? 'block' : 'none' ?>'><?php _e("CSS will be enqueued dynamically through admin-ajax.php and loaded from the cache.", "megamenu"); ?></div>
+                                <div class='fs' style='display: <?php echo $css == 'fs' ? 'block' : 'none' ?>'><?php _e("CSS will be saved to wp-content/uploads/maxmegamenu/style.css and enqueued from there.", "megamenu"); ?></div>
+                                <div class='head' style='display: <?php echo $css == 'head' ? 'block' : 'none' ?>'><?php _e("CSS will be loaded from the cache in a &lt;style&gt; tag in the &lt;head&gt; of the page.", "megamenu"); ?></div>
+                                <div class='disabled' style='display: <?php echo $css == 'disabled' ? 'block' : 'none' ?>'><?php _e("CSS will not be output, you must enqueue the CSS for the menu manually.", "megamenu"); ?></div>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
 
-                <h4 class='first'><?php _e("Menu Locations", "megamenu"); ?></h4>
+                <h3 class='first'><?php _e("Menu Locations", "megamenu"); ?></h3>
 
                 <table>
                     <tr>
@@ -693,6 +729,9 @@ class Mega_Menu_Settings{
 
                             if ( count ( $locations ) ) {
 
+                                echo "<div class='accordion-container'>";
+                                echo "<ul class='outer-border'>";
+
                                 foreach ( $locations as $location => $description ) {
 
                                     $menu_id = $this->get_menu_id_for_location( $location );
@@ -701,9 +740,9 @@ class Mega_Menu_Settings{
 
                                     ?>
 
-                                    <div class='mega-location mega-closed'>
-                                        <div class='mega-location-header'>
-                                            <i class='mega-location-header-indicator'></i>
+
+                                    <li class='control-section accordion-section mega-location'>
+                                        <h4 class='accordion-section-title hndle'>
 
                                             <?php echo $description ?>
 
@@ -721,9 +760,8 @@ class Mega_Menu_Settings{
                                                     echo "</div>";
                                             ?>
 
-                                        </div>
-
-                                        <div class='mega-inner' style='display: none'>
+                                        </h4>
+                                        <div class='accordion-section-content'>
 
                                             <table>
                                                 <?php if ( $is_custom_location ) : ?>
@@ -795,9 +833,13 @@ class Mega_Menu_Settings{
                                             ?>
 
                                         </div>
-                                    </div>
+                                    </li>
                                 <?php
                                 }
+
+                                echo "</div>";
+                                echo "</div>";
+
                             }?>
 
                         </td>
@@ -869,7 +911,7 @@ class Mega_Menu_Settings{
 
         <div class='menu_settings'>
 
-            <h4 class='first'><?php _e("Tools", "megamenu"); ?></h4>
+            <h3 class='first'><?php _e("Tools", "megamenu"); ?></h3>
 
             <table>
                 <tr>
@@ -913,6 +955,7 @@ class Mega_Menu_Settings{
                             if ( isset( $_POST['theme_export'] ) ) {
 
                                 $theme_to_export = $_POST['theme_export'];
+
 
                                 if ( isset( $this->themes[ $theme_to_export ] ) ) {
 
@@ -963,17 +1006,26 @@ class Mega_Menu_Settings{
      */
     public function page() {
 
-        $tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'general_settings';
+        $tab = isset( $_GET['page'] ) ? substr( $_GET['page'], 12 ) : false;
+
+        // backwards compatibility
+        if ( isset ( $_GET['tab'] ) ) {
+            $tab = $_GET['tab'];
+        }
+
+        if ( ! $tab ) {
+            $tab = 'general_settings';
+        }
 
         $header_links = apply_filters( "megamenu_header_links", array(
             'homepage' => array(
-                'url' => 'http://www.maxmegamenu.com/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Homepage", "megamenu"),
                 'class' => ''
             ),
             'documentation' => array(
-                'url' => 'http://www.maxmegamenu.com/documentation/getting-started/installation/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/documentation/getting-started/installation/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
                 'text' => __("Documentation", "megamenu"),
                 'target' => '_mmmpro',
                 'class' => ''
@@ -982,7 +1034,7 @@ class Mega_Menu_Settings{
 
         if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
             $header_links['pro'] = array(
-                'url' => 'http://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Upgrade to Pro - $19", "megamenu"),
                 'class' => 'mega-highlight'
@@ -995,7 +1047,7 @@ class Mega_Menu_Settings{
                 'text' => __("Core version", "megamenu")
             ),
             'pro' => array(
-                'version' => "<a href='http://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
+                'version' => "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
                 'text' => __("Pro extension", "megamenu")
             )
         ) );
@@ -1047,6 +1099,8 @@ class Mega_Menu_Settings{
 
                         if ( has_action( "megamenu_page_{$tab}" ) ) {
                             do_action( "megamenu_page_{$tab}", $saved_settings );
+                        } else {
+                            do_action( "megamenu_page_general_settings", $saved_settings );
                         }
 
                     ?>
@@ -1066,13 +1120,14 @@ class Mega_Menu_Settings{
                         foreach ( $tabs as $key => $title ) {
                             $class = $tab == $key ? 'active' : '';
 
-                            $url = esc_url( add_query_arg(
-                                array(
-                                    'page'=>'maxmegamenu',
-                                    'tab' => $key
-                                ),
-                                admin_url("admin.php")
-                            ) );
+
+                            if ( $key == 'general_settings' ) {
+                                $args = array( 'page' => 'maxmegamenu' );
+                            } else {
+                                $args = array( 'page' => 'maxmegamenu_' . $key );
+                            }
+
+                            $url = esc_url( add_query_arg( $args, admin_url("admin.php") ) );
 
                             echo "<li><a class='{$class}' href='{$url}'>{$title}</a></li>";
                         }
@@ -1192,15 +1247,24 @@ class Mega_Menu_Settings{
         $list_items = "<select id='theme_selector'>";
 
         foreach ( $this->themes as $id => $theme ) {
+
+            $locations = $this->theme_is_being_used_by_location( $id );
+
             $selected = $id == $this->id ? 'selected=selected' : '';
 
-            $list_items .= "<option {$selected} value='" . admin_url("admin.php?page=maxmegamenu&tab=theme_editor&theme={$id}") . "'>{$theme['title']}</option>";
+            $list_items .= "<option {$selected} value='" . admin_url("admin.php?page=maxmegamenu_theme_editor&theme={$id}") . "'>";
+            $list_items .= $theme['title'];
+
+            if ( is_array( $locations ) ) {
+                $list_items .= " (" . implode( ", ", $locations ) . ")";
+            }
+
+            $list_items .= "</option>";
         }
 
         return $list_items .= "</select>";
 
     }
-
 
     /**
      * Checks to see if a given string contains any of the provided search terms
@@ -1273,1321 +1337,1585 @@ class Mega_Menu_Settings{
                 <a href='<?php echo $duplicate_url ?>'><?php _e("duplicate this theme", "megamenu"); ?></a>
             </div>
 
-            <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
+            <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="theme_editor">
                 <input type="hidden" name="theme_id" value="<?php echo $this->id; ?>" />
                 <input type="hidden" name="action" value="megamenu_save_theme" />
                 <?php wp_nonce_field( 'megamenu_save_theme' ); ?>
-                <h3><?php _e("Editing Theme:", "megamenu"); ?> <?php echo $this->active_theme['title']; ?></h3>
-                <h4><?php _e("General Theme Settings", "megamenu"); ?></h4>
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Theme Title", "megamenu"); ?>
-                            <div class='mega-description'>
-                            </div>
-                        </td>
-                        <td class='mega-value'><?php $this->print_theme_freetext_option( 'title' ); ?></td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Arrow", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Select the arrow styles.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Up", "megamenu"); ?></span>
-                                <?php $this->print_theme_arrow_option( 'arrow_up' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Down", "megamenu"); ?></span>
-                                <?php $this->print_theme_arrow_option( 'arrow_down' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_arrow_option( 'arrow_left' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_arrow_option( 'arrow_right' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Responsive Breakpoint", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the width at which the menu turns into a mobile menu. Set to 0 to disable responsive menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'><?php $this->print_theme_freetext_option( 'responsive_breakpoint' ); ?></td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Responsive Menu Text", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Text to display next to the mobile toggle icon.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value wide'><?php $this->print_theme_freetext_option( 'responsive_text' ); ?></td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Line Height", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the general line height to use in the panel contents.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'><?php $this->print_theme_freetext_option( 'line_height' ); ?></td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Z-Index", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the z-index to ensure the panels appear ontop of other content.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'><?php $this->print_theme_freetext_option( 'z_index' ); ?></td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Shadow", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Apply a shadow to mega and flyout menus.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Enabled", "megamenu"); ?></span>
-                                <?php $this->print_theme_checkbox_option( 'shadow' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Horizonal", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'shadow_horizontal' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Vertical", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'shadow_vertical' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Blur", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'shadow_blur' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Spread", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'shadow_spread' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'shadow_color' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Hover Transitions", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Apply hover transitions to menu items. Note: Transitions will not apply to gradient backgrounds.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Enabled", "megamenu"); ?></span>
-                                <?php $this->print_theme_checkbox_option( 'transitions' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Reset Widget Styling", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Reset the styling of widgets within the mega menu?", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Enabled", "megamenu"); ?></span>
-                                <?php $this->print_theme_checkbox_option( 'resets' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+                <?php
 
-                <h4><?php _e("Menu Bar", "megamenu"); ?></h4>
+                    $settings = apply_filters( 'megamenu_theme_editor_settings', array(
+                        'general' => array(
+                            'title' => __( "General Theme Settings", "megamenu" ),
+                            'settings' => array(
+                                'title' => array(
+                                    'title' => __( "Theme Title", "megamenu" ),
+                                    'description' => __( "", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'title'
+                                        )
+                                    )
+                                ),
+                                'arrow' => array(
+                                    'title' => __( "Arrow", "megamenu" ),
+                                    'description' => __( "Select the arrow styles.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Up", "megamenu" ),
+                                            'type' => 'arrow',
+                                            'key' => 'arrow_up'
+                                        ),
+                                        array(
+                                            'title' => __( "Down", "megamenu" ),
+                                            'type' => 'arrow',
+                                            'key' => 'arrow_down'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'arrow',
+                                            'key' => 'arrow_left'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'arrow',
+                                            'key' => 'arrow_right'
+                                        )
+                                    )
+                                ),
+                                'line_height' => array(
+                                    'title' => __( "Line Height", "megamenu" ),
+                                    'description' => __( "Set the general line height to use in the panel contents.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'line_height'
+                                        )
+                                    )
+                                ),
+                                'z_index' => array(
+                                    'title' => __( "Z Index", "megamenu" ),
+                                    'description' => __( "Set the z-index to ensure the panels appear ontop of other content.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'z_index',
+                                            'validation' => 'int'
+                                        )
+                                    )
+                                ),
+                                'shadow' => array(
+                                    'title' => __( "Shadow", "megamenu" ),
+                                    'description' => __( "Apply a shadow to mega and flyout menus.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'shadow'
+                                        ),
+                                        array(
+                                            'title' => __( "Horizontal", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'shadow_horizontal',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Vertical", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'shadow_vertical',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Blur", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'shadow_blur',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Spread", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'shadow_spread',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'shadow_color'
+                                        )
+                                    )
+                                ),
+                                'transitions' => array(
+                                    'title' => __( "Hover Transitions", "megamenu" ),
+                                    'description' => __( "Apply hover transitions to menu items. Note: Transitions will not apply to gradient backgrounds.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'transitions'
+                                        )
+                                    )
+                                ),
+                                'resets' => array(
+                                    'title' => __( "Reset Widget Styling", "megamenu" ),
+                                    'description' => __( "Reset the styling of widgets within the mega menu?", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'resets'
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        'menu_bar' => array(
+                            'title' => __( "Menu Bar", "megamenu" ),
+                            'settings' => array(
+                                'menu_background' => array(
+                                    'title' => __( "Menu Background", "megamenu" ),
+                                    'description' => __( "The background color for the main menu bar. Set each value to transparent for a 'button' style menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'container_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'container_background_to'
+                                        )
+                                    )
+                                ),
+                                'menu_padding' => array(
+                                    'title' => __( "Menu Padding", "megamenu" ),
+                                    'description' => __( "Padding for the main menu bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_border_radius' => array(
+                                    'title' => __( "Menu Border Radius", "megamenu" ),
+                                    'description' => __( "Set a border radius on the main menu bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_border_radius_top_left',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Top Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_border_radius_top_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_border_radius_bottom_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'container_border_radius_bottom_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_align' => array(
+                                    'title' => __( "Menu Items Align", "megamenu" ),
+                                    'description' => __( "Align <i>all</i> menu items to the left (default), centrally or to the right.", "megamenu" ),
+                                    'info' => array( __( "This option will apply to all menu items. To align an individual menu item to the right, edit the menu item itself and set 'Menu Item Align' to 'Right'.", "megamenu" ) ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'align',
+                                            'key' => 'menu_item_align'
+                                        )
+                                    )
+                                ),
+                                'top_level_menu_items' => array(
+                                    'title' => __( "Top Level Menu Items", "megamenu" ),
+                                    'description' => '',
+                                ),
+                                'menu_item_background' => array(
+                                    'title' => __( "Menu Item Background", "megamenu" ),
+                                    'description' => __( "The background color for each top level menu item. Tip: Set these values to transparent if you've already set a background color on the menu bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_background_to'
+                                        )
+                                    )
+                                ),
+                                'menu_item_background_hover' => array(
+                                    'title' => __( "Menu Item Background (Hover)", "megamenu" ),
+                                    'description' => __( "The background color for a top level menu item (on hover).", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_background_hover_to'
+                                        )
+                                    )
+                                ),
+                                'menu_item_spacing' => array(
+                                    'title' => __( "Menu Item Spacing", "megamenu" ),
+                                    'description' => __( "Define the size of the gap between each top level menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_spacing',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_height' => array(
+                                    'title' => __( "Menu Item Height", "megamenu" ),
+                                    'description' => __( "Define the height of each top level menu item. This value, plus the container top and bottom padding values define the overall height of the menu bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_height',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_font' => array(
+                                    'title' => __( "Font", "megamenu" ),
+                                    'description' => __( "The font to use for each top level menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_link_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'menu_item_link_font'
+                                        ),
+                                        array(
+                                            'title' => __( "Transform", "megamenu" ),
+                                            'type' => 'transform',
+                                            'key' => 'menu_item_link_text_transform'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'menu_item_link_weight'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'menu_item_link_text_decoration'
+                                        ),
+                                    )
+                                ),
+                                'menu_item_font_hover' => array(
+                                    'title' => __( "Font (Hover)", "megamenu" ),
+                                    'description' => __( "Set the font to use for each top level menu item (on hover).", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_link_color_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'menu_item_link_weight_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'menu_item_link_text_decoration_hover'
+                                        ),
+                                    )
+                                ),
+                                'menu_item_padding' => array(
+                                    'title' => __( "Menu Item Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for each top level menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_border' => array(
+                                    'title' => __( "Menu Item Border", "megamenu" ),
+                                    'description' => __( "Set the border to display on each top level menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_border_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_border_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_border_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_border_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_border_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_border_hover' => array(
+                                    'title' => __( "Menu Item Border (Hover)", "megamenu" ),
+                                    'description' => __( "Set the hover border color.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_border_color_hover'
+                                        )
+                                    )
+                                ),
+                                'menu_item_border_radius' => array(
+                                    'title' => __( "Menu Item Border Radius", "megamenu" ),
+                                    'description' => __( "Set rounded corners for each top level menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_border_radius_top_left',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Top Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_border_radius_top_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_border_radius_bottom_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_border_radius_bottom_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'menu_item_divider' => array(
+                                    'title' => __( "Menu Item Divider", "megamenu" ),
+                                    'description' => __( "Show a small divider bar between each menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'menu_item_divider'
+                                        ),
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'menu_item_divider_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Glow Opacity", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_divider_glow_opacity',
+                                            'validation' => 'float'
+                                        )
+                                    )
+                                ),
+                                'menu_item_highlight' => array(
+                                    'title' => __( "Highlight Current Item", "megamenu" ),
+                                    'description' => __( "Apply the 'hover' styling to current menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'menu_item_highlight_current'
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        'mega_panels' => array(
+                            'title' => __( "Mega Menus", "megamenu" ),
+                            'settings' => array(
+                                'panel_background' => array(
+                                    'title' => __( "Panel Background", "megamenu" ),
+                                    'description' => __( "Set a background color for a whole panel.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_background_to'
+                                        )
+                                    )
+                                ),
+                                'panel_width' => array(
+                                    'title' => __( "Panel Width", "megamenu" ),
+                                    'description' => __( "Mega Panel width.", "megamenu" ),
+                                    'info' => array(
+                                        __("A 100% wide panel will only ever be as wide as the menu itself. For a fixed panel width set this to a pixel value.", "megamenu"),
+                                        __("Advanced: Enter a jQuery selector to synchronize the width and position of the sub menu with existing page element (e.g. body, #container, .page).", "megamenu")
+                                    ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_width'
+                                        )
+                                    )
+                                ),
+                                'panel_padding' => array(
+                                    'title' => __( "Panel Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for the whole panel. Set these values 0px if you wish your panel content to go edge-to-edge.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'panel_border' => array(
+                                    'title' => __( "Panel Border", "megamenu" ),
+                                    'description' => __( "Set the border to display on the Mega Panel.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_border_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'panel_border_radius' => array(
+                                    'title' => __( "Panel Border Radius", "megamenu" ),
+                                    'description' => __( "Set rounded corners for the panel.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_radius_top_left',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Top Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_radius_top_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_radius_bottom_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_border_radius_bottom_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'panel_padding' => array(
+                                    'title' => __( "Widget Padding", "megamenu" ),
+                                    'description' => __( "Use this to define the spacing between each widget in the panel.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_widget_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_widget_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_widget_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_widget_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'widget_heading_font' => array(
+                                    'title' => __( "Widget Heading Font", "megamenu" ),
+                                    'description' => __( "Set the font to use Widget headers in the mega menu. Tip: set this to the same style as the Second Level Menu Item Header font to keep your styling consistent.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_header_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'panel_header_font'
+                                        ),
+                                        array(
+                                            'title' => __( "Transform", "megamenu" ),
+                                            'type' => 'transform',
+                                            'key' => 'panel_header_text_transform'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'panel_header_font_weight'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'panel_header_text_decoration'
+                                        ),
+                                    )
+                                ),
+                                'widget_content_font' => array(
+                                    'title' => __( "Widget Content Font", "megamenu" ),
+                                    'description' => __( "Set the font to use for panel contents.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_font_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'panel_font_family'
+                                        )
+                                    )
+                                ),
+                                'widget_heading_padding' => array(
+                                    'title' => __( "Widget Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for the widget headings.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'widget_heading_margin' => array(
+                                    'title' => __( "Widget Padding", "megamenu" ),
+                                    'description' => __( "Set the margin for the widget headings.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_margin_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_margin_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_margin_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_margin_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'widget_header_border' => array(
+                                    'title' => __( "Widget Header Border", "megamenu" ),
+                                    'description' => __( "Set the border for the widget headings.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_header_border_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_border_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_border_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_border_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_header_border_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'second_level_menu_items' => array(
+                                    'title' => __( "Second Level Menu Items", "megamenu" ),
+                                    'description' => '',
+                                ),
+                                'second_level_font' => array(
+                                    'title' => __( "Font", "megamenu" ),
+                                    'description' => __( "Set the font for second level menu items when they're displayed in a Mega Menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_second_level_font_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'panel_second_level_font'
+                                        ),
+                                        array(
+                                            'title' => __( "Transform", "megamenu" ),
+                                            'type' => 'transform',
+                                            'key' => 'panel_second_level_text_transform'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'panel_second_level_font_weight'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'panel_second_level_text_decoration'
+                                        ),
+                                    )
+                                ),
+                                'second_level_font_hover' => array(
+                                    'title' => __( "Font (Hover)", "megamenu" ),
+                                    'description' => __( "Set the font style on hover.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_second_level_font_color_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'panel_second_level_font_weight_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'panel_second_level_text_decoration_hover'
+                                        ),
+                                    )
+                                ),
+                                'second_level_background_hover' => array(
+                                    'title' => __( "Background (Hover)", "megamenu" ),
+                                    'description' => __( "Set the background hover color for second level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_second_level_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_second_level_background_hover_to'
+                                        )
+                                    )
+                                ),
+                                'second_level_padding' => array(
+                                    'title' => __( "Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for the second level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'second_level_margin' => array(
+                                    'title' => __( "Margin", "megamenu" ),
+                                    'description' => __( "Set the margin for the second level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_margin_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_margin_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_margin_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_margin_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'second_level_border' => array(
+                                    'title' => __( "Border", "megamenu" ),
+                                    'description' => __( "Set the border for the second level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_second_level_border_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_border_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_border_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_border_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_second_level_border_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'third_level_menu_items' => array(
+                                    'title' => __( "Third Level Menu Items", "megamenu" ),
+                                    'description' => '',
+                                ),
+                                'third_level_font' => array(
+                                    'title' => __( "Font", "megamenu" ),
+                                    'description' => __( "Set the font for third level menu items when they're displayed in a Mega Menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_third_level_font_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_third_level_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'panel_third_level_font'
+                                        ),
+                                        array(
+                                            'title' => __( "Transform", "megamenu" ),
+                                            'type' => 'transform',
+                                            'key' => 'panel_third_level_text_transform'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'panel_third_level_font_weight'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'panel_third_level_text_decoration'
+                                        ),
+                                    )
+                                ),
+                                'third_level_font_hover' => array(
+                                    'title' => __( "Font (Hover)", "megamenu" ),
+                                    'description' => __( "Set the font style on hover.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_third_level_font_color_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'panel_third_level_font_weight_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'panel_third_level_text_decoration_hover'
+                                        ),
+                                    )
+                                ),
+                                'third_level_background_hover' => array(
+                                    'title' => __( "Background (Hover)", "megamenu" ),
+                                    'description' => __( "Set the background hover color for third level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_third_level_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_third_level_background_hover_to'
+                                        )
+                                    )
+                                ),
+                                'third_level_padding' => array(
+                                    'title' => __( "Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for the third level menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_third_level_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_third_level_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_third_level_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_third_level_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        'flyout_menus' => array(
+                            'title' => __( "Flyout Menus", "megamenu"),
+                            'settings' => array(
+                                'flyout_menu_background' => array(
+                                    'title' => __( "Menu Background", "megamenu" ),
+                                    'description' => __( "Set the background color for the flyout menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_menu_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_menu_background_to'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_width' => array(
+                                    'title' => __( "Menu Width", "megamenu" ),
+                                    'description' => __( "The width of each flyout menu. This must be a fixed pixel value.", "megamenu" ),
+                                    'info' => array( __( "Set this value to the width of your longest menu item title to stop menu items wrapping onto 2 lines.", "megamenu" ) ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_width',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_padding' => array(
+                                    'title' => __( "Menu Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for the whole flyout menu.", "megamenu" ),
+                                    'info' => array( __( "Only suitable for single level flyout menus. If you're using multi level flyout menus set these values to 0px.", "megamenu" ) ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_border' => array(
+                                    'title' => __( "Menu Border", "megamenu" ),
+                                    'description' => __( "Set the border for the flyout menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_border_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_border_radius' => array(
+                                    'title' => __( "Menu Border Radius", "megamenu" ),
+                                    'description' => __( "Set rounded corners for flyout menus. Rounded corners will be applied to all flyout menu levels.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_radius_top_left',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Top Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_radius_top_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_radius_bottom_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_border_radius_bottom_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_item_background' => array(
+                                    'title' => __( "Item Background", "megamenu" ),
+                                    'description' => __( "Set the background color for a flyout menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_background_to'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_item_background_hover' => array(
+                                    'title' => __( "Item Background (Hover)", "megamenu" ),
+                                    'description' => __( "Set the background color for a flyout menu item (on hover).", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_background_hover_to'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_item_height' => array(
+                                    'title' => __( "Item Height", "megamenu" ),
+                                    'description' => __( "The height of each flyout menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_height',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_item_padding' => array(
+                                    'title' => __( "Item Padding", "megamenu" ),
+                                    'description' => __( "Set the padding for each flyout menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Top", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_padding_top',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Right", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_padding_right',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Bottom", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_padding_bottom',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Left", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_padding_left',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'flyout_menu_item_font' => array(
+                                    'title' => __( "Item Font", "megamenu" ),
+                                    'description' => __( "Set the font for the flyout menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_link_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'flyout_link_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'flyout_link_family'
+                                        ),
+                                        array(
+                                            'title' => __( "Transform", "megamenu" ),
+                                            'type' => 'transform',
+                                            'key' => 'flyout_link_text_transform'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'flyout_link_weight'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'flyout_link_text_decoration'
+                                        ),
+                                    )
+                                ),
+                                'flyout_menu_item_font_hover' => array(
+                                    'title' => __( "Item Font (Hover)", "megamenu" ),
+                                    'description' => __( "Set the font for the flyout menu items.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_link_color_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Weight", "megamenu" ),
+                                            'type' => 'weight',
+                                            'key' => 'flyout_link_weight_hover'
+                                        ),
+                                        array(
+                                            'title' => __( "Decoration", "megamenu" ),
+                                            'type' => 'decoration',
+                                            'key' => 'flyout_link_text_decoration_hover'
+                                        ),
+                                    )
+                                ),
+                                'flyout_menu_item_divider' => array(
+                                    'title' => __( "Item Divider", "megamenu" ),
+                                    'description' => __( "Show a line divider below each menu item.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Enabled", "megamenu" ),
+                                            'type' => 'checkbox',
+                                            'key' => 'flyout_menu_item_divider'
+                                        ),
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'flyout_menu_item_divider_color'
+                                        )
+                                    )
+                                ),
+                            )
+                        ),
+                        'mobile_menu' => array(
+                            'title' => __( "Mobile Menu", "megamenu" ),
+                            'settings' => array(
+                                'responsive_breakpoint' => array(
+                                    'title' => __( "Responsive Breakpoint", "megamenu" ),
+                                    'description' => __( "Set the width at which the menu turns into a mobile menu. Set to 0px to disable responsive menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'responsive_breakpoint',
+                                            'validation' => 'px'
+                                        )
+                                    ),
+                                ),
+                                'responsive_text' => array(
+                                    'title' => __( "Toggle Bar Text", "megamenu" ),
+                                    'description' => __( "Text to display next to the mobile toggle icon.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'responsive_text'
+                                        )
+                                    )
+                                ),
+                                'toggle_font' => array(
+                                    'title' => __( "Toggle Bar Text Color", "megamenu" ),
+                                    'description' => __( "Set the font color for the toggle bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'toggle_font_color'
+                                        )
+                                    )
+                                ),
+                                'toggle_bar_background' => array(
+                                    'title' => __( "Toggle Bar Background", "megamenu" ),
+                                    'description' => __( "Set the background color for the mobile menu toggle bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "From", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'toggle_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "To", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'toggle_background_to'
+                                        )
+                                    )
+                                ),
+                                'mobile_columns' => array(
+                                    'title' => __( "Mega Menu Columns", "megamenu" ),
+                                    'description' => __( "Number of columns to display widgets/second level menu items in.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'mobile_columns',
+                                            'key' => 'mobile_columns'
+                                        )
+                                    )
+                                ),
+                                'mobile_menu_item_height' => array(
+                                    'title' => __( "Menu Item Height", "megamenu" ),
+                                    'description' => __( "Height of each top level item in the mobile menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'mobile_menu_item_height'
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        'custom_styling' => array(
+                            'title' => __( "Custom Styling", "megamenu"),
+                            'settings' => array(
+                                'custom_styling' => array(
+                                    'title' => __( "CSS Editor", "megamenu" ),
+                                    'description' => __( "Define any custom CSS you wish to add to menus using this theme. You can use standard CSS or SCSS.", "megamenu"),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'textarea',
+                                            'key' => 'custom_css'
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                    ) );
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Background", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The background color for the main menu bar. Set each value to transparent for a 'button' style menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'container_background_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'container_background_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Padding for the main menu bar.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Border Radius", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set a border radius on the main menu bar.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_border_radius_top_left' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_border_radius_top_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_border_radius_bottom_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'container_border_radius_bottom_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Items Align", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Align <i>all</i> menu items to the left (default), centrally or to the right.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_align_option( 'menu_item_align' ); ?>
-                            <div class='mega-info'><?php _e("This option will apply to all menu items. To align an individual menu item to the right, edit the menu item itself and set 'Menu Item Align' to 'Right'.", "megamenu"); ?>
-                        </td>
-                    </tr>
-                </table>
+                    echo "<div class='accordion-container'>";
+                    echo "<ul class='outer-border'>";
 
-                <h4><?php _e("Top Level Menu Items", "megamenu"); ?></h4>
+                    $is_first = true;
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Background", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The background color for each top level menu item. Tip: Set these values to transparent if you've already set a background color on the menu bar.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_background_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_background_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Background (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The background color for a top level menu item (on hover).", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_background_hover_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_background_hover_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Spacing", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Define the size of the gap between each top level menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_freetext_option( 'menu_item_spacing' ); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Height", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Define the height of each top level menu item. This value, plus the container top and bottom padding values define the overall height of the menu bar.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_freetext_option( 'menu_item_link_height' ); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The font to use for each top level menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_link_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_font_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'menu_item_link_font' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Transform", "megamenu"); ?></span>
-                                <?php $this->print_theme_transform_option( 'menu_item_link_text_transform' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'menu_item_link_weight' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'menu_item_link_text_decoration' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font to use for each top level menu item (on hover).", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_link_color_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'menu_item_link_weight_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'menu_item_link_text_decoration_hover' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for each top level menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Border", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the border to display on each top level menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_border_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_border_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_border_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_border_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_border_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Border (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the hover border color.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_border_color_hover' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Border Radius", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set rounded corners for each top level menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_border_radius_top_left' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_border_radius_top_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_border_radius_bottom_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_link_border_radius_bottom_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Item Divider", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Show a small divider bar between each menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Enabled", "megamenu"); ?></span>
-                                <?php $this->print_theme_checkbox_option( 'menu_item_divider' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'menu_item_divider_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Glow Opacity", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'menu_item_divider_glow_opacity' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Highlight Current Item", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Apply the 'hover' styling to current menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'><?php $this->print_theme_checkbox_option( 'menu_item_highlight_current' ); ?></td>
-                    </tr>
-                </table>
+                    foreach ( $settings as $section_id => $section ) {
 
-                <h4><?php _e("Mega Panels", "megamenu"); ?></h4>
+                        $open = $is_first ? 'open' : '';
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Panel Background", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set a background color for a whole panel.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_background_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_background_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Panel Width", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Mega Panel width", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_freetext_option( 'panel_width' ); ?>
-                            <div class='mega-info'><?php _e("A 100% wide panel will only ever be as wide as the menu itself. For a fixed panel width set this to a pixel value.", "megamenu"); ?></div>
-                            <div class='mega-info'><?php _e("Advanced: Enter a jQuery selector to synchronize the width and position of the sub menu with existing page element (e.g. body, #container, .page).", "megamenu"); ?></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Panel Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for the whole panel. Set these values 0px if you wish your panel content to go edge-to-edge.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Panel Border", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the border to display on the Mega Panel.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_border_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Panel Border Radius", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set rounded corners for the panel.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_radius_top_left' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_radius_top_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_radius_bottom_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_border_radius_bottom_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Widget Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for each widget in the panel. Use this to define the spacing between each widget in the panel.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_widget_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_widget_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_widget_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_widget_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Widget Heading Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font to use Widget headers in the mega menu. Tip: set this to the same style as the Second Level Menu Item Header font to keep your styling consistent.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_header_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_font_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'panel_header_font' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'panel_header_font_weight' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Transform", "megamenu"); ?></span>
-                                <?php $this->print_theme_transform_option( 'panel_header_text_transform' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'panel_header_text_decoration' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Widget Content Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font to use for panel contents.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_font_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_font_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'panel_font_family' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Widget Heading Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for the widget headings.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Widget Heading Margin", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the margin for the widget headings.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_margin_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_margin_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_margin_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_margin_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Border", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the border for the widget headings.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_header_border_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_border_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_border_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_border_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_header_border_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+                        echo "    <li class='control-section accordion-section {$open} mega-{$section_id}'>";
+                        echo "        <h4 class='accordion-section-title hndle'>".$section['title'] . "</h4>";
+                        echo "        <div class='accordion-section-content '>";
+                        echo "            <table class='{$section_id}'>";
 
-                <h5><?php _e("Second Level Menu Items", "megamenu"); ?></h5>
+                        $is_first = false;
 
-                <table>
+                        foreach ( $section['settings'] as $group_id => $group ) {
 
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font for second level menu items when they're displayed in a Mega Menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_second_level_font_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_font_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'panel_second_level_font' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'panel_second_level_font_weight' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Transform", "megamenu"); ?></span>
-                                <?php $this->print_theme_transform_option( 'panel_second_level_text_transform' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'panel_second_level_text_decoration' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font style on hover.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_second_level_font_color_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'panel_second_level_font_weight_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'panel_second_level_text_decoration_hover' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Background (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the background hover color for second level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_second_level_background_hover_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_second_level_background_hover_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for the second level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Margin", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the margin for the second level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_margin_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_margin_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_margin_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_margin_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Border", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the border for the second level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_second_level_border_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_border_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_border_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_border_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_second_level_border_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+                            echo "<tr class='mega-{$group_id}'>";
 
-                <h5><?php _e("Third Level Menu Items", "megamenu"); ?></h5>
+                            if ( isset( $group['settings'] ) ) {
 
-                <table>
+                                echo "<td class='mega-name'>" . $group['title'] . "<div class='mega-description'>" . $group['description'] . "</div></td>";
+                                echo "<td class='mega-value'>";
 
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font for third level menu items when they're displayed in a Mega Menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_third_level_font_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_third_level_font_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'panel_third_level_font' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'panel_third_level_font_weight' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Transform", "megamenu"); ?></span>
-                                <?php $this->print_theme_transform_option( 'panel_third_level_text_transform' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'panel_third_level_text_decoration' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Font (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font style on hover.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_third_level_font_color_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'panel_third_level_font_weight_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'panel_third_level_text_decoration_hover' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Background (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the background hover color for third level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_third_level_background_hover_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'panel_third_level_background_hover_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for the third level menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_third_level_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_third_level_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_third_level_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'panel_third_level_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+                                foreach ( $group['settings'] as $setting_id => $setting ) {
 
-                <h4><?php _e("Flyout Menus", "megamenu"); ?></h4>
+                                    if ( isset( $setting['validation'] ) ) {
+                                        echo "<label class='mega-{$setting['key']}' data-validation='{$setting['validation']}'>";
+                                    } else {
+                                        echo "<label class='mega-{$setting['key']}'>";
+                                    }
+                                    echo "<span class='mega-short-desc'>{$setting['title']}</span>";
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Background", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the background color for the flyout menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_menu_background_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_menu_background_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
+                                    switch ( $setting['type'] ) {
+                                        case "freetext":
+                                            $this->print_theme_freetext_option( $setting['key'] );
+                                            break;
+                                        case "textarea":
+                                            $this->print_theme_textarea_option( $setting['key'] );
+                                            break;
+                                        case "align":
+                                            $this->print_theme_align_option( $setting['key'] );
+                                            break;
+                                        case "checkbox":
+                                            $this->print_theme_checkbox_option( $setting['key'] );
+                                            break;
+                                        case "arrow":
+                                            $this->print_theme_arrow_option( $setting['key'] );
+                                            break;
+                                        case "color":
+                                            $this->print_theme_color_option( $setting['key'] );
+                                            break;
+                                        case "weight":
+                                            $this->print_theme_weight_option( $setting['key'] );
+                                            break;
+                                        case "font":
+                                            $this->print_theme_font_option( $setting['key'] );
+                                            break;
+                                        case "transform":
+                                            $this->print_theme_transform_option( $setting['key'] );
+                                            break;
+                                        case "decoration":
+                                            $this->print_theme_text_decoration_option( $setting['key'] );
+                                            break;
+                                        case "mobile_columns":
+                                            $this->print_theme_mobile_columns_option( $setting['key'] );
+                                            break;
+                                    }
 
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Width", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The width of each flyout menu. This must be a fixed pixel value.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_freetext_option( 'flyout_width' ); ?>
-                            <div class='mega-info'><?php _e("Set this value to the width of your longest menu item title to stop menu items wrapping onto 2 lines.", "megamenu"); ?></div>
-                        </td>
-                    </tr>
-                   <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for the whole flyout menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_padding_left' ); ?>
-                            </label>
-                            <div class='mega-info'><?php _e("Only suitable for single level flyout menus. If you're using multi level flyout menus set these values to 0px.", "megamenu"); ?></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Border", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the border for the flyout menu.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_border_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Menu Border Radius", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set rounded corners for flyout menus. Rounded corners will be applied to all flyout menu levels.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_radius_top_left' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_radius_top_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_radius_bottom_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_border_radius_bottom_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Background", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the background color for a flyout menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_background_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_background_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Background (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the background color for a flyout menu item (on hover).", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("From", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_background_hover_from' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("To", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_background_hover_to' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Height", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("The height of each flyout menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_freetext_option( 'flyout_link_height' ); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Padding", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the padding for each flyout menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Top", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_link_padding_top' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Right", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_link_padding_right' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Bottom", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_link_padding_bottom' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Left", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_link_padding_left' ); ?>
-                            </label>
-                        </td>
-                    </tr>
+                                    echo "</label>";
 
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Font", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font for the flyout menu items.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_link_color' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Size", "megamenu"); ?></span>
-                                <?php $this->print_theme_freetext_option( 'flyout_link_size' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Family", "megamenu"); ?></span>
-                                <?php $this->print_theme_font_option( 'flyout_link_family' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Transform", "megamenu"); ?></span>
-                                <?php $this->print_theme_transform_option( 'flyout_link_text_transform' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'flyout_link_weight' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'flyout_link_text_decoration' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Font (Hover)", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Set the font weight for the flyout menu items (on hover).", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_link_color_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Weight", "megamenu"); ?></span>
-                                <?php $this->print_theme_weight_option( 'flyout_link_weight_hover' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Decoration", "megamenu"); ?></span>
-                                <?php $this->print_theme_text_decoration_option( 'flyout_link_text_decoration_hover' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("Item Divider", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Show a line divider below each menu item.", "megamenu"); ?>
-                            </div>
-                        </td>
-                        <td class='mega-value'>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Enabled", "megamenu"); ?></span>
-                                <?php $this->print_theme_checkbox_option( 'flyout_menu_item_divider' ); ?>
-                            </label>
-                            <label>
-                                <span class='mega-short-desc'><?php _e("Color", "megamenu"); ?></span>
-                                <?php $this->print_theme_color_option( 'flyout_menu_item_divider_color' ); ?>
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+                                }
 
-                <h4><?php _e("Custom Styling", "megamenu"); ?></h4>
+                                if ( isset( $group['info'] ) ) {
+                                    foreach ( $group['info'] as $paragraph ) {
+                                        echo "<div class='mega-info'>{$paragraph}</div>";
+                                    }
+                                }
 
-                <table>
-                    <tr>
-                        <td class='mega-name'>
-                            <?php _e("CSS Editor", "megamenu"); ?>
-                            <div class='mega-description'>
-                                <?php _e("Define any custom CSS you wish to add to menus using this theme. You can use standard CSS or SCSS.", "megamenu"); ?>
-                            </div>
+                                foreach ( $group['settings'] as $setting_id => $setting ) {
+                                    if ( isset( $setting['validation'] ) ) {
 
-                        </td>
-                        <td class='mega-value'>
-                            <?php $this->print_theme_textarea_option( 'custom_css' ); ?>
-                            <p><b><?php _e("Custom Styling Tips", "megamenu"); ?></b></p>
-                            <ul class='custom_styling_tips'>
-                                <li><code>#{$wrap}</code> <?php _e("converts to the ID selector of the menu wrapper, e.g. div#mega-menu-wrap-primary", "megamenu"); ?></li>
-                                <li><code>#{$menu}</code> <?php _e("converts to the ID selector of the menu, e.g. ul#mega-menu-primary", "megamenu"); ?></li>
-                                <li><?php _e("Use @import rules to import CSS from other plugins or your theme directory, e.g:"); ?>
-                                <br /><br /><code>#{$wrap} #{$menu} {<br />&nbsp;&nbsp;&nbsp;&nbsp;@import "shortcodes-ultimate/assets/css/box-shortcodes.css";<br />}</code></li>
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
+                                        echo "<div class='mega-validation-message mega-validation-message-{$setting['key']}'>";
+
+                                        if ( $setting['validation'] == 'int' ) {
+                                            $message = __("Enter a whole number (e.g. 1, 5, 100, 999)");
+                                        }
+
+                                        if ( $setting['validation'] == 'px' ) {
+                                            $message = __("Enter a value including a unit (e.g. 10px, 10rem, 10%)");
+                                        }
+
+                                        if ( $setting['validation'] == 'float' ) {
+                                            $message = __("Enter a valid number (e.g. 0.1, 1, 10, 999)");
+                                        }
+
+                                        if ( strlen( $setting['title'] ) ) {
+                                            echo $setting['title'] . ": " . $message;
+                                        } else {
+                                            echo $message;
+                                        }
+
+                                        echo "</div>";
+                                    }
+                                }
+
+                                echo "</td>";
+                            } else {
+                                echo "<td colspan='2'><h5>{$group['title']}</h5></td>";
+                            }
+
+                            echo "</tr>";
+
+                        }
+
+                        echo "</table>";
+                        echo "</div>";
+                        echo "</li>";
+
+                    }
+
+                ?>
+                    </ul>
+                </div>
 
                 <div class='megamenu_submit'>
                     <div class='mega_left'>
@@ -2626,6 +2954,27 @@ class Mega_Menu_Settings{
                 <option value='left' <?php selected( $value, 'left' ); ?>><?php _e("Left", "megamenu") ?></option>
                 <option value='center' <?php selected( $value, 'center' ); ?>><?php _e("Center", "megamenu") ?></option>
                 <option value='right' <?php selected( $value, 'right' ); ?>><?php _e("Right", "megamenu") ?></option>
+            </select>
+
+        <?php
+    }
+
+    /**
+     * Print a select dropdown with 1 and 2 options
+     *
+     * @since 1.2.0
+     * @param string $key
+     * @param string $value
+     */
+    public function print_theme_mobile_columns_option( $key ) {
+
+        $value = $this->active_theme[$key];
+
+        ?>
+
+            <select name='settings[<?php echo $key ?>]'>
+                <option value='1' <?php selected( $value, '1' ); ?>><?php _e("1 Column", "megamenu") ?></option>
+                <option value='2' <?php selected( $value, '2' ); ?>><?php _e("2 Columns", "megamenu") ?></option>
             </select>
 
         <?php
@@ -2807,8 +3156,19 @@ class Mega_Menu_Settings{
     public function print_theme_textarea_option( $key ) {
 
         $value = $this->active_theme[$key];
+        ?>
 
-        echo "<textarea id='codemirror' name='settings[$key]'>" . stripslashes( $value ) . "</textarea>";
+        <textarea id='codemirror' name='settings[<?php echo $key ?>]'><?php echo stripslashes( $value ) ?></textarea>
+
+        <p><b><?php _e("Custom Styling Tips", "megamenu"); ?></b></p>
+        <ul class='custom_styling_tips'>
+            <li><code>#{$wrap}</code> <?php _e("converts to the ID selector of the menu wrapper, e.g. div#mega-menu-wrap-primary", "megamenu"); ?></li>
+            <li><code>#{$menu}</code> <?php _e("converts to the ID selector of the menu, e.g. ul#mega-menu-primary", "megamenu"); ?></li>
+            <li><?php _e("Use @import rules to import CSS from other plugins or your theme directory, e.g:"); ?>
+            <br /><br /><code>#{$wrap} #{$menu} {<br />&nbsp;&nbsp;&nbsp;&nbsp;@import "shortcodes-ultimate/assets/css/box-shortcodes.css";<br />}</code></li>
+        </ul>
+
+        <?php
 
     }
 
@@ -2920,6 +3280,8 @@ class Mega_Menu_Settings{
      * @since 1.8.3
      */
     public function enqueue_scripts() {
+        wp_enqueue_script('accordion');
+
         wp_enqueue_style( 'spectrum', MEGAMENU_BASE_URL . 'js/spectrum/spectrum.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu-settings', MEGAMENU_BASE_URL . 'css/admin/settings.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'codemirror', MEGAMENU_BASE_URL . 'js/codemirror/codemirror.css', false, MEGAMENU_VERSION );

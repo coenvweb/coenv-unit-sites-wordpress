@@ -49,10 +49,10 @@ $noncedata = $skinnyData['wp_nonce'];
 
 		<div id="collapseTwo" class="accordion-body in collapse">
 			<span style="margin: 4% 0px 4% 22%; color: red; font-weight: bold;" name="warning" id="warning"><p>
-					<marquee onmouseover="this.stop();" onmouseout="this.start();">
+					<marquee>
 						<span><?php echo __('Check your system configuration before proceeding the export. It may help to prevent from facing server configuration issues', 'wp-ultimate-csv-importer'); ?></span><span
 							style='position:relative;left:4px;'><a
-								href='<?php echo $siteurl ?>/wp-admin/admin.php?page=wp-ultimate-csv-importer/index.php&__module=settings'><?php echo __('Click here', 'wp-ultimate-csv-importer'); ?></a><?php echo __('to refer your server configuration.'); ?></span>
+								href='<?php echo $siteurl ?>/wp-admin/admin.php?page=wp-ultimate-csv-importer/index.php&__module=settings'><?php echo __('Click here', 'wp-ultimate-csv-importer'); echo ' '; ?></a><?php echo __('to refer your server configuration.'); ?></span>
 					</marquee>
 				</p></span>
 

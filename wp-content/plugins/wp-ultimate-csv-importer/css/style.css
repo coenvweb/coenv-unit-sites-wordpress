@@ -43,7 +43,6 @@ body {
 
 .container-fluid {
     /*  padding-left: 20px;  */
-    padding-right: 20px;
     width: 100%;
     *zoom: 1;
 }
@@ -403,23 +402,13 @@ div#mappingheader select {
 .media_handling {
     height: 50px;
     padding-top: 15px;
-    padding-left: 15px;
+    padding-left: 5px;
 }
 
 .inside input[type=radio] {
     margin-top: -2px;
 }
 
-.inside label {
-    padding-right: 20px;
-}
-
-/*.mappingheader .table-condensed label {
-margin-top:13px;
-}
-.mappingheader .table-condensed span {
-margin-top:13px;
-}*/
 /*settings css*/
 .selected {
     background-color: #fcfcfc !important;
@@ -497,21 +486,6 @@ margin-top:13px;
 
 #settingmodule {
     width: 100%;
-}
-
-.title {
-    border-bottom: 1px solid #E7E7E7;
-    margin-left: 25px;
-    margin-right: 25px;
-}
-
-.title > h3 {
-    color: #222;
-    font-family: "Open Sans", sans-serif;
-    font-size: 1.3em;
-    font-weight: 600;
-    line-height: 2em;
-    margin-top: 10px;
 }
 
 #innertitle {
@@ -755,6 +729,7 @@ margin-top:13px;
 #importalign, #preview_of_row {
     padding-top: 5px !important;
     padding-left: 5px !important;
+    padding-right:15px;
     color: #666 !important;
     font-size: 14px !important;
     font-family: "open sans" !important;

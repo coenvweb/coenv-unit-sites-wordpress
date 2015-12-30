@@ -17,6 +17,14 @@ jQuery(function ($) {
         });
     }
 
+    $('.mega-custom_styling > h4').on('click', function() {
+        setTimeout( function() {
+            $('.mega-custom_styling').find('.CodeMirror').each(function(key, value) {
+                value.CodeMirror.refresh();
+            });
+        }, 160);
+    });
+
     $(".mm_colorpicker").spectrum({
         preferredFormat: "rgb",
         showInput: true,
@@ -63,5 +71,28 @@ jQuery(function ($) {
         select.next().children('.' + selected).show();
     });
 
+    $('form.theme_editor label[data-validation]').each(function() {
+        var label = $(this);
+        var validation = label.attr('data-validation');
+        var error_message = label.siblings( '.mega-validation-message-' + label.attr('class') );
+        var input = $('input', label);
+
+        input.on('blur', function() {
+
+            var value = $(this).val();
+
+            if ( ( validation == 'int' && Math.floor(value) != value )
+              || ( validation == 'px' && ! ( value.substr(value.length - 2) == 'px' || value.substr(value.length - 2) == 'em' || value.substr(value.length - 2) == 'pt' || value.substr(value.length - 3) == 'rem' || value.substr(value.length - 1) == '%' ) && value != 0 )
+              || ( validation == 'float' && ! $.isNumeric(value) ) ) {
+                label.addClass('mega-error');
+                error_message.show();
+            } else {
+                label.removeClass('mega-error');
+                label.siblings( '.mega-validation-message-' + label.attr('class') ).hide();
+            }
+
+        });
+
+    });
 
 });

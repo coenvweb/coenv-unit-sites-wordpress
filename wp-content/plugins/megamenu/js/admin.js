@@ -29,11 +29,12 @@
 
             $.colorbox({
                 html: "",
-                initialWidth: '991',
+                initialWidth: '1000',
                 scrolling: true,
                 fixed: true,
                 top: '10%',
-                initialHeight: '500'
+                initialHeight: '472',
+                maxHeight: '500'
             });
 
             $.ajax({
@@ -124,46 +125,6 @@
 
                         if (idx == 'mega_menu') {
 
-                            var widget_selector = content.find('#mm_widget_selector');
-
-                            widget_selector.on('change', function() {
-
-                                var selector = $(this);
-
-                                if (selector.val() != 'disabled') {
-
-                                    start_saving();
-
-                                    var postdata = {
-                                        action: "mm_add_widget",
-                                        id_base: selector.val(),
-                                        menu_item_id: panel.settings.menu_item_id,
-                                        title: selector.find('option:selected').text(),
-                                        _wpnonce: megamenu.nonce
-                                    };
-
-                                    $.post(ajaxurl, postdata, function (response) {
-
-                                        end_saving();
-
-                                        $(".no_widgets").hide();
-
-                                        var widget = $(response.data);
-
-                                        add_events_to_widget(widget);
-
-                                        $("#widgets").append(widget);
-
-                                        // reset the dropdown
-                                        selector.val('disabled');
-
-                                    });
-
-                                }
-
-
-                            });
-
                             var submenu_type = content.find('#mm_enable_mega_menu');
 
                             submenu_type.on('change', function() {
@@ -200,6 +161,8 @@
 
                                 content.find("#widgets").attr('data-columns', $(this).val());
 
+                                content.find(".widget-total-cols").html($(this).val());
+
                                 start_saving();
 
                                 var postdata = {
@@ -220,6 +183,31 @@
 
                             var widget_area = content.find('#widgets');
 
+                            widget_area.bind("reorder_widgets", function () {
+
+                                start_saving();
+
+                                var items = [];
+
+                                $(".widget").each(function() {
+                                    items.push({
+                                        'type' : $(this).attr('data-type'),
+                                        'order' : $(this).index() + 1,
+                                        'id' : $(this).attr('data-id'),
+                                        'parent_menu_item' : panel.settings.menu_item_id
+                                    });
+                                });
+
+                                $.post(ajaxurl, {
+                                    action: "mm_reorder_items",
+                                    items: items,
+                                    _wpnonce: megamenu.nonce
+                                }, function (move_response) {
+                                    end_saving();
+                                    panel.log(move_response);
+                                });
+                            });
+
                             widget_area.sortable({
                                 forcePlaceholderSize: true,
                                 items : '.widget:not(.sub_menu)',
@@ -235,9 +223,55 @@
                                     var start_pos = ui.item.data('start_pos');
 
                                     if (start_pos !== ui.item.index()) {
-                                        ui.item.trigger("on_drop");
+                                        widget_area.trigger("reorder_widgets");
                                     }
                                 }
+                            });
+
+
+                            var widget_selector = content.find('#mm_widget_selector');
+
+                            widget_selector.on('change', function() {
+
+                                var selector = $(this);
+
+                                if (selector.val() != 'disabled') {
+
+                                    start_saving();
+
+                                    var postdata = {
+                                        action: "mm_add_widget",
+                                        id_base: selector.val(),
+                                        menu_item_id: panel.settings.menu_item_id,
+                                        title: selector.find('option:selected').text(),
+                                        _wpnonce: megamenu.nonce
+                                    };
+
+                                    $.post(ajaxurl, postdata, function (response) {
+
+                                        $(".no_widgets").hide();
+
+                                        var widget = $(response.data);
+
+                                        var number_of_columns = content.find('#mm_number_of_columns').val();
+
+                                        widget.find(".widget-total-cols").html(number_of_columns);
+
+                                        add_events_to_widget(widget);
+
+                                        $("#widgets").append(widget);
+
+                                        widget_area.trigger("reorder_widgets");
+
+                                        end_saving();
+
+                                        // reset the dropdown
+                                        selector.val('disabled');
+
+                                    });
+
+                                }
+
                             });
 
 
@@ -288,27 +322,8 @@
             var contract = widget.find(".widget-contract");
             var edit = widget.find(".widget-action");
             var widget_inner = widget.find(".widget-inner");
-            var widget_id = widget.attr("data-widget-id");
-            var menu_item_id = widget.attr("data-menu-item-id");
-            var type = widget.is('[data-widget-id]') ? 'widget' : 'menu-item';
-
-            widget.bind("on_drop", function () {
-
-                start_saving();
-
-                var position = $(".widget").not(".sub_menu").index(widget);
-
-                $.post(ajaxurl, {
-                    action: "mm_move_widget",
-                    widget_id: widget_id,
-                    position: position,
-                    menu_item_id: panel.settings.menu_item_id,
-                    _wpnonce: megamenu.nonce
-                }, function (move_response) {
-                    end_saving();
-                    panel.log(move_response);
-                });
-            });
+            var id = widget.attr("data-id");
+            var type = widget.attr('data-type');
 
             expand.on("click", function () {
 
@@ -320,13 +335,15 @@
 
                     widget.attr("data-columns", cols);
 
+                    $('.widget-num-cols', widget).html(cols);
+
                     start_saving();
 
                     if (type == 'widget') {
 
                         $.post(ajaxurl, {
                             action: "mm_update_widget_columns",
-                            widget_id: widget_id,
+                            id: id,
                             columns: cols,
                             _wpnonce: megamenu.nonce
                         }, function (expand_response) {
@@ -336,12 +353,12 @@
 
                     }
 
-                    if (type == 'menu-item' ) {
+                    if (type == 'menu_item' ) {
 
                         $.post(ajaxurl, {
-                            action: "mm_save_menu_item_settings",
-                            menu_item_id: menu_item_id,
-                            settings: { mega_menu_columns: cols },
+                            action: "mm_update_menu_item_columns",
+                            id: id,
+                            columns: cols,
                             _wpnonce: megamenu.nonce
                         }, function (contract_response) {
                             end_saving();
@@ -368,6 +385,8 @@
                 if (cols > 1) {
                     cols = cols - 1;
                     widget.attr("data-columns", cols);
+
+                    $('.widget-num-cols', widget).html(cols);
                 } else {
                     return;
                 }
@@ -378,7 +397,7 @@
 
                     $.post(ajaxurl, {
                         action: "mm_update_widget_columns",
-                        widget_id: widget_id,
+                        id: id,
                         columns: cols,
                         _wpnonce: megamenu.nonce
                     }, function (contract_response) {
@@ -388,12 +407,12 @@
 
                 }
 
-                if (type == 'menu-item') {
+                if (type == 'menu_item') {
 
                     $.post(ajaxurl, {
-                        action: "mm_save_menu_item_settings",
-                        menu_item_id: menu_item_id,
-                        settings: { mega_menu_columns: cols },
+                        action: "mm_update_menu_item_columns",
+                        id: id,
+                        columns: cols,
                         _wpnonce: megamenu.nonce
                     }, function (contract_response) {
                         end_saving();
@@ -414,7 +433,7 @@
                     // retrieve the widget settings form
                     $.post(ajaxurl, {
                         action: "mm_edit_widget",
-                        widget_id: widget_id,
+                        widget_id: id,
                         _wpnonce: megamenu.nonce
                     }, function (response) {
 
@@ -427,7 +446,7 @@
 
                             var data = {
                                 action: "mm_delete_widget",
-                                widget_id: widget_id,
+                                widget_id: id,
                                 _wpnonce: megamenu.nonce
                             };
 
@@ -524,11 +543,19 @@ jQuery(function ($) {
 
     apply_megamenu_enabled_class();
 
+    $('.mega_menu_meta_box.mmm_get_started').attr('data-get-started', megamenu.get_started);
+
     $('#menu-to-edit li.menu-item').each(function() {
 
         var menu_item = $(this);
         var menu_id = $('input#menu').val();
         var title = menu_item.find('.menu-item-title').text();
+
+        // fix for Jupiter theme
+        if ( ! title ) {
+            title = menu_item.find('.item-title').text();
+        }
+
         var id = parseInt(menu_item.attr('id').match(/[0-9]+/)[0], 10);
 
         var button = $("<span>").addClass("mm_launch")
@@ -560,7 +587,7 @@ jQuery(function ($) {
 
         tab.addClass('active');
         tab.siblings().removeClass('active');
-        tab.parent().siblings().hide();
+        tab.parent().siblings().not('h4').hide();
         tab.parent().siblings("." + tab_id).show();
     });
 

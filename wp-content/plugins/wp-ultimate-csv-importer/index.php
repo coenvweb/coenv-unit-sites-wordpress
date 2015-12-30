@@ -2,7 +2,7 @@
 /******************************
  * Plugin Name: WP Ultimate CSV Importer
  * Description: A plugin that helps to import the data's from a CSV file.
- * Version: 3.8.5
+ * Version: 3.8.6
  * Author: smackcoders.com
  * Text Domain: wp-ultimate-csv-importer
  * Domain Path: /languages
@@ -80,7 +80,7 @@ define('WP_CONST_ULTIMATE_CSV_IMP_URL', 'http://www.smackcoders.com/wp-ultimate-
 define('WP_CONST_ULTIMATE_CSV_IMP_NAME', 'WP Ultimate CSV Importer');
 define('WP_CONST_ULTIMATE_CSV_IMP_SLUG', 'wp-ultimate-csv-importer');
 define('WP_CONST_ULTIMATE_CSV_IMP_SETTINGS', 'WP Ultimate CSV Importer');
-define('WP_CONST_ULTIMATE_CSV_IMP_VERSION', '3.8.5');
+define('WP_CONST_ULTIMATE_CSV_IMP_VERSION', '3.8.6');
 define('WP_CONST_ULTIMATE_CSV_IMP_DIR', WP_PLUGIN_URL . '/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/');
 define('WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY', plugin_dir_path(__FILE__));
 define('WP_CSVIMP_PLUGIN_BASE', WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY);
@@ -140,32 +140,11 @@ function action_csv_imp_admin_init() {
 		
 		// Code for use the global wordpress functons in javascript
 
-	/*	wp_register_script('ultimate-importer-free', plugins_url('js/ultimate-importer-free.js', __FILE__));
-		wp_enqueue_script('ultimate-importer-free',plugins_url('js/ultimate-importer-free.js', __FILE__),array('ultimate-importer-free'));
-		$pa = array(
-				'plugin_url' => plugins_url(),
-				'ajax_url'   => admin_url( 'admin-ajax.php'),
-				'abspath' => ABSPATH,
-			   );
-		wp_localize_script( 'ultimate-importer-free', 'csvimporterfree', $pa);*/
-
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_style('jquery-style', plugins_url('css/jquery-ui.css', __FILE__));
 		wp_register_script('ultimate-importer-js', plugins_url('js/ultimate-importer-free.js', __FILE__));
 		wp_enqueue_script('ultimate-importer-js');
-		wp_register_script('ultimate-importer-button', plugins_url('js/buttons.js', __FILE__));
-		wp_enqueue_script('ultimate-importer-button');
-		wp_enqueue_style('ultimate_importer_font_awesome', plugins_url('css/font-awesome.css', __FILE__));
-		wp_register_script('jquery-min', plugins_url('js/jquery.js', __FILE__));
-		wp_enqueue_script('jquery-min');
-		wp_register_script('jquery-widget', plugins_url('js/jquery.ui.widget.js', __FILE__));
-		wp_enqueue_script('jquery-widget');
-		wp_register_script('jquery-fileupload', plugins_url('js/jquery.fileupload.js', __FILE__));
-		wp_enqueue_script('jquery-fileupload');
-		wp_register_script('bootstrap-collapse', plugins_url('js/bootstrap-collapse.js', __FILE__));
-		wp_enqueue_script('bootstrap-collapse');
 		wp_enqueue_style('style', plugins_url('css/style.css', __FILE__));
-		wp_enqueue_style('jquery-fileupload', plugins_url('css/jquery.fileupload.css', __FILE__));
 		wp_enqueue_style('bootstrap-css', plugins_url('css/bootstrap.css', __FILE__));
 		wp_enqueue_style('ultimate-importer-css', plugins_url('css/main.css', __FILE__));
 		wp_enqueue_style('morris-css', plugins_url('css/morris.css', __FILE__));
@@ -174,7 +153,6 @@ function action_csv_imp_admin_init() {
 		wp_enqueue_script('raphael-min-js', plugins_url('js/raphael-min.js', __FILE__));
 		wp_enqueue_script('morris-min-js', plugins_url('js/morris.min.js', __FILE__));
 		wp_enqueue_script('data', plugins_url('js/dashchart.js', __FILE__));
-		//wp_enqueue_script('jquery-min-js', plugins_url('js/jquery.min.js', __FILE__));
 
 	}
 }

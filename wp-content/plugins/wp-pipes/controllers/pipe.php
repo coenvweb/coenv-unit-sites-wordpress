@@ -302,23 +302,42 @@ class PIPESControllerPipe extends Controller {
 			$stt        = $input_type;
 			$input_type = 'po';
 		}
-		if ( ! is_array( $current_default->pi ) ) {
+
+		if( !$current_default ) {
+			$current_default = new stdClass();
 			$current_default->pi = array();
-		}
-		if ( ! is_object( $current_default->pi[$ordering] ) ) {
 			$current_default->pi[$ordering] = new stdClass();
+		} else {
+			if ( ! is_array( $current_default->pi ) ) {
+				$current_default->pi = array();
+			}
+			if ( ! is_object( $current_default->pi[$ordering] ) ) {
+				$current_default->pi[$ordering] = new stdClass();
+			}
 		}
+
 		$current_default->pi[$ordering]->$input_name = $input_type . ',' . $input_value . ',' . $processor_id;
 
 		if ( isset( $stt ) ) {
 			$current_default->pi[$ordering]->$input_name .= ',' . $stt;
 		}
-		$current_default = $mod->get_first_output_processor( $current_default, $ordering, $processor_id );
 
-		$cache = serialize( $current_default );
+		$test_default = $mod->get_first_output_processor( $current_default, $ordering, $processor_id );
+		if(!$test_default){
+			$test_default = $current_default;
+		}
+
+		if(!json_encode( $test_default->po[$ordering] )){
+			$keys = array_keys(get_object_vars($test_default->po[$ordering]));
+			foreach( $keys as $key ) {
+				$test_default->po[$ordering]->$key = null;
+			}
+		}
+
+		$cache = serialize( $test_default );
 		$path  = OGRAB_EDATA . 'item-' . $id . DS . 'row-default.dat';
 		ogbFile::write( $path, $cache );
-		echo json_encode( $current_default->po[$ordering] );
+		echo json_encode( $test_default->po[$ordering] );
 		exit();
 		/*echo '<pre>';print_r( $current_default );die;
 		$pipe   = $mod->get_one_pipe( $processor_id );

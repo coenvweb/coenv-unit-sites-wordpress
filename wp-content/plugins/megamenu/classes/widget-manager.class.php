@@ -26,10 +26,11 @@ class Mega_Menu_Widget_Manager {
 
         add_action( 'wp_ajax_mm_edit_widget', array( $this, 'ajax_show_widget_form' ) );
         add_action( 'wp_ajax_mm_save_widget', array( $this, 'ajax_save_widget' ) );
-        add_action( 'wp_ajax_mm_update_widget_columns', array( $this, 'ajax_update_columns' ) );
+        add_action( 'wp_ajax_mm_update_widget_columns', array( $this, 'ajax_update_widget_columns' ) );
+        add_action( 'wp_ajax_mm_update_menu_item_columns', array( $this, 'ajax_update_menu_item_columns' ) );
         add_action( 'wp_ajax_mm_delete_widget', array( $this, 'ajax_delete_widget' ) );
         add_action( 'wp_ajax_mm_add_widget', array( $this, 'ajax_add_widget' ) );
-        add_action( 'wp_ajax_mm_move_widget', array( $this, 'ajax_move_widget' ) );
+        add_action( 'wp_ajax_mm_reorder_items', array( $this, 'ajax_reorder_items' ) );
 
         add_filter( 'widget_update_callback', array( $this, 'persist_mega_menu_widget_settings'), 10, 4 );
 
@@ -51,6 +52,10 @@ class Mega_Menu_Widget_Manager {
 
         if ( isset( $old_instance["mega_menu_columns"] ) && ! isset( $new_instance["mega_menu_columns"] ) ) {
             $instance["mega_menu_columns"] = $old_instance["mega_menu_columns"];
+        }
+
+        if ( isset( $old_instance["mega_menu_order"] ) && ! isset( $new_instance["mega_menu_order"] ) ) {
+            $instance["mega_menu_order"] = $old_instance["mega_menu_order"];
         }
 
         if ( isset( $old_instance["mega_menu_parent_menu_id"] ) && ! isset( $new_instance["mega_menu_parent_menu_id"] ) ) {
@@ -126,19 +131,42 @@ class Mega_Menu_Widget_Manager {
      *
      * @since 1.0
      */
-    public function ajax_update_columns() {
+    public function ajax_update_widget_columns() {
 
         check_ajax_referer( 'megamenu_edit' );
 
-        $widget_id = sanitize_text_field( $_POST['widget_id'] );
+        $widget_id = sanitize_text_field( $_POST['id'] );
         $columns = absint( $_POST['columns'] );
 
-        $updated = $this->update_columns( $widget_id, $columns );
+        $updated = $this->update_widget_columns( $widget_id, $columns );
 
         if ( $updated ) {
             $this->send_json_success( sprintf( __( "Updated %s (new columns: %d)", "megamenu"), $widget_id, $columns ) );
         } else {
             $this->send_json_error( sprintf( __( "Failed to update %s", "megamenu"), $widget_id ) );
+        }
+
+    }
+
+
+    /**
+     * Update the number of mega columns for a widget
+     *
+     * @since 1.0
+     */
+    public function ajax_update_menu_item_columns() {
+
+        check_ajax_referer( 'megamenu_edit' );
+
+        $id = absint( $_POST['id'] );
+        $columns = absint( $_POST['columns'] );
+
+        $updated = $this->update_menu_item_columns( $id, $columns );
+
+        if ( $updated ) {
+            $this->send_json_success( sprintf( __( "Updated %s (new columns: %d)", "megamenu"), $id, $columns ) );
+        } else {
+            $this->send_json_error( sprintf( __( "Failed to update %s", "megamenu"), $id ) );
         }
 
     }
@@ -195,20 +223,22 @@ class Mega_Menu_Widget_Manager {
      *
      * @since 1.0
      */
-    public function ajax_move_widget() {
+    public function ajax_reorder_items() {
 
         check_ajax_referer( 'megamenu_edit' );
 
-        $widget_to_move = sanitize_text_field( $_POST['widget_id'] );
-        $position = absint( $_POST['position'] );
-        $menu_item_id = absint( $_POST['menu_item_id'] );
+        $items = isset( $_POST['items'] ) ? $_POST['items'] : false;
 
-        $moved = $this->move_widget( $widget_to_move, $position, $menu_item_id );
+        $saved = false;
+
+        if ( $items ) {
+            $moved = $this->reorder_items( $items );
+        }
 
         if ( $moved ) {
-            $this->send_json_success( sprintf( __( "Moved %s to %d (%s)", "megamenu"), $widget_to_move, $position, json_encode($moved) ) );
+            $this->send_json_success( sprintf( __( "Moved (%s)", "megamenu"), json_encode( $items ) ) );
         } else {
-            $this->send_json_error( sprintf( __( "Failed to move %s to %d", "megamenu"), $widget_to_move, $position ) );
+            $this->send_json_error( sprintf( __( "Didn't move items", "megamenu"), json_encode( $items ) ) );
         }
 
     }
@@ -261,12 +291,74 @@ class Mega_Menu_Widget_Manager {
 
 
     /**
+     * Sorts a 2d array by the 'order' key
+     *
+     * @since 2.0
+     * @param array $a
+     * @param array $b
+     */
+    function sort_by_order( $a, $b ) {
+
+        if ($a['order'] == $b['order']) {
+            return 1;
+        }
+        return ($a['order'] < $b['order']) ? -1 : 1;
+
+    }
+
+
+    /**
+     * Returns an array of immediate child menu items for the current item
+     *
+     * @since 1.5
+     * @return array
+     */
+    private function get_second_level_menu_items( $parent_menu_item_id, $menu_id ) {
+
+        $items = array();
+
+        // check we're using a valid menu ID
+        if ( ! is_nav_menu( $menu_id ) ) {
+            return $items;
+        }
+
+        $menu = wp_get_nav_menu_items( $menu_id );
+
+        if ( count( $menu ) ) {
+
+            foreach ( $menu as $item ) {
+
+                // find the child menu items
+                if ( $item->menu_item_parent == $parent_menu_item_id ) {
+
+                    $saved_settings = array_filter( (array) get_post_meta( $item->ID, '_megamenu', true ) );
+
+                    $settings = array_merge( Mega_Menu_Nav_Menus::get_menu_item_defaults(), $saved_settings );
+
+                    $items[ $item->ID ] = array(
+                        'id' => $item->ID,
+                        'type' => 'menu_item',
+                        'title' => $item->title,
+                        'columns' => $settings['mega_menu_columns'],
+                        'order' => isset( $settings['mega_menu_order'][ $parent_menu_item_id ] ) ? $settings['mega_menu_order'][ $parent_menu_item_id ] : 0
+                    );
+
+                }
+
+            }
+
+        }
+
+        return $items;
+    }
+
+    /**
      * Returns an array of all widgets belonging to a specified menu item ID.
      *
      * @since 1.0
      * @param int $menu_item_id
      */
-    public function get_widgets_for_menu_id( $menu_item_id ) {
+    public function get_widgets_for_menu_id( $parent_menu_item_id, $menu_id ) {
 
         $widgets = array();
 
@@ -276,14 +368,16 @@ class Mega_Menu_Widget_Manager {
 
                 $settings = $this->get_settings_for_widget_id( $widget_id );
 
-                if ( isset( $settings['mega_menu_parent_menu_id'] ) && $settings['mega_menu_parent_menu_id'] == $menu_item_id ) {
+                if ( isset( $settings['mega_menu_parent_menu_id'] ) && $settings['mega_menu_parent_menu_id'] == $parent_menu_item_id ) {
 
                     $name = $this->get_name_for_widget_id( $widget_id );
 
                     $widgets[ $widget_id ] = array(
-                        'widget_id' => $widget_id,
+                        'id' => $widget_id,
+                        'type' => 'widget',
                         'title' => $name,
-                        'mega_columns' => $settings['mega_menu_columns']
+                        'columns' => $settings['mega_menu_columns'],
+                        'order' => isset( $settings['mega_menu_order'][ $parent_menu_item_id ] ) ? $settings['mega_menu_order'][ $parent_menu_item_id ] : 0
                     );
 
                 }
@@ -294,6 +388,48 @@ class Mega_Menu_Widget_Manager {
 
         return $widgets;
 
+    }
+
+
+    /**
+     * Returns an array of widgets and second level menu items for a specified parent menu item.
+     * Used to display the widgets/menu items in the mega menu builder.
+     *
+     * @since 2.0
+     * @param int $parent_menu_item_id
+     * @param int $menu_id
+     * @return array
+     */
+    public function get_widgets_and_menu_items_for_menu_id( $parent_menu_item_id, $menu_id ) {
+
+        $menu_items = $this->get_second_level_menu_items( $parent_menu_item_id, $menu_id );
+        $widgets = $this->get_widgets_for_menu_id( $parent_menu_item_id, $menu_id );
+
+        $items = array_merge( $menu_items, $widgets );
+
+        $parent_settings = get_post_meta( $parent_menu_item_id, '_megamenu', true );
+
+        $ordering = isset( $parent_settings['submenu_ordering'] ) ? $parent_settings['submenu_ordering'] : 'natural';
+
+        if ( $ordering == 'forced' ) {
+
+            uasort( $items, array( $this, 'sort_by_order' ) );
+
+            $new_items = $items;
+            $end_items = array();
+
+            foreach ( $items as $key => $value ) {
+                if ( $value['order'] == 0 ) {
+                    unset( $new_items[$key] );
+                    $end_items[] = $value;
+                }
+            }
+
+            $items = array_merge( $new_items, $end_items );
+
+        }
+
+        return $items;
     }
 
 
@@ -417,7 +553,6 @@ class Mega_Menu_Widget_Manager {
         }
 
         return "";
-
     }
 
 
@@ -515,15 +650,16 @@ class Mega_Menu_Widget_Manager {
 
         $widget_id = $this->add_widget_to_sidebar( $id_base, $next_id );
 
-        $return  = '<div class="widget" data-columns="2" id="' . $widget_id . '" data-widget-id="' . $widget_id . '">';
+        $return  = '<div class="widget" title="' . esc_attr( $title ) . '" data-columns="2" id="' . $widget_id . '" data-type="widget" data-id="' . $widget_id . '">';
         $return .= '    <div class="widget-top">';
         $return .= '        <div class="widget-title-action">';
-        $return .= '            <a class="widget-option widget-contract"></a>';
-        $return .= '            <a class="widget-option widget-expand"></a>';
-        $return .= '            <a class="widget-option widget-action"></a>';
+        $return .= '            <a class="widget-option widget-contract" title="' . esc_attr( __("Contract", "megamenu") ) . '"></a>';
+        $return .= '            <span class="widget-cols"><span class="widget-num-cols">2</span><span class="widget-of">/</span><span class="widget-total-cols">X</span></span>';
+        $return .= '            <a class="widget-option widget-expand" title="' . esc_attr( __("Expand", "megamenu") ) . '"></a>';
+        $return .= '            <a class="widget-option widget-action" title="' . esc_attr( __("Edit", "megamenu") ) . '"></a>';
         $return .= '        </div>';
         $return .= '        <div class="widget-title">';
-        $return .= '            <h4>' . $title . '</h4>';
+        $return .= '            <h4>' . esc_html( $title ) . '</h4>';
         $return .= '        </div>';
         $return .= '    </div>';
         $return .= '    <div class="widget-inner"></div>';
@@ -592,7 +728,7 @@ class Mega_Menu_Widget_Manager {
      * @param string $widget_id
      * @param int $columns
      */
-    public function update_columns($widget_id, $columns) {
+    public function update_widget_columns( $widget_id, $columns ) {
 
         $id_base = $this->get_id_base_for_widget_id( $widget_id );
 
@@ -600,11 +736,81 @@ class Mega_Menu_Widget_Manager {
 
         $current_widgets = get_option( 'widget_' . $id_base );
 
-        $current_widgets[ $widget_number ]["mega_menu_columns"] = $columns;
+        $current_widgets[ $widget_number ]["mega_menu_columns"] = absint( $columns) ;
 
         update_option( 'widget_' . $id_base, $current_widgets );
 
         do_action( "megamenu_after_widget_save" );
+
+        return true;
+
+    }
+
+
+    /**
+     * Updates the number of mega columns for a specified widget.
+     *
+     * @since 1.10
+     * @param string $menu_item_id
+     * @param int $columns
+     */
+    public function update_menu_item_columns( $menu_item_id, $columns ) {
+
+        $settings = get_post_meta( $menu_item_id, '_megamenu', true);
+
+        $settings['mega_menu_columns'] = absint( $columns );
+
+        update_post_meta( $menu_item_id, '_megamenu', $settings );
+
+        return true;
+
+    }
+
+
+    /**
+     * Updates the order of a specified widget.
+     *
+     * @since 1.10
+     * @param string $widget_id
+     * @param int $columns
+     */
+    public function update_widget_order( $widget_id, $order, $parent_menu_item_id ) {
+
+        $id_base = $this->get_id_base_for_widget_id( $widget_id );
+
+        $widget_number = $this->get_widget_number_for_widget_id( $widget_id );
+
+        $current_widgets = get_option( 'widget_' . $id_base );
+
+        $current_widgets[ $widget_number ]["mega_menu_order"] = array( $parent_menu_item_id => absint( $order ) );
+
+        update_option( 'widget_' . $id_base, $current_widgets );
+
+        return true;
+
+    }
+
+
+    /**
+     * Updates the order of a specified menu item.
+     *
+     * @since 1.10
+     * @param string $menu_item_id
+     * @param int $order
+     */
+    public function update_menu_item_order( $menu_item_id, $order, $parent_menu_item_id ) {
+
+        $submitted_settings['mega_menu_order'] = array( $parent_menu_item_id => absint( $order ) );
+
+        $existing_settings = get_post_meta( $menu_item_id, '_megamenu', true);
+
+        if ( is_array( $existing_settings ) ) {
+
+            $submitted_settings = array_merge( $existing_settings, $submitted_settings );
+
+        }
+
+        update_post_meta( $menu_item_id, '_megamenu', $submitted_settings );
 
         return true;
 
@@ -630,59 +836,46 @@ class Mega_Menu_Widget_Manager {
 
 
     /**
-     * Moves a widget from one position to another. The widgets are stored as an ordered
-     * array in the database.
+     * Moves a widget from one position to another.
      *
-     * @since 1.0
-     * @param string $widget_to_move
-     * @param int $new_widget_position. Zero based index.
+     * @since 1.10
+     * @param array $items
      * @return string $widget_id. The widget that has been moved.
      */
-    public function move_widget( $widget_to_move, $new_widget_position, $menu_item_id ) {
+    public function reorder_items( $items ) {
 
-        // $new_widget_position assumes that all widgets belong to this Menu ID,
-        // but widgets are stored in this area for _all_ Menu IDs.
-        // Work out the new widget position taking into account that other menu IDs
-        // also store their widgets here
-        $menu_widgets = array();
-        $non_menu_widgets = array();
+        foreach ( $items as $item ) {
 
-        if ( $mega_menu_widgets = $this->get_mega_menu_sidebar_widgets() ) {
+            if ( $item['parent_menu_item'] ) {
 
-            foreach ( $mega_menu_widgets as $widget_id ) {
+                $submitted_settings = array( 'submenu_ordering' => 'forced' );
 
-                $settings = $this->get_settings_for_widget_id( $widget_id );
+                $existing_settings = get_post_meta( $item['parent_menu_item'], '_megamenu', true );
 
-                // split our widgets into arrays that belong with this menu ID, and ones that don't
-                if ( $settings['mega_menu_parent_menu_id'] == $menu_item_id ) {
+                if ( is_array( $existing_settings ) ) {
 
-                    $menu_widgets[] = $widget_id;
-
-                } else {
-
-                    $non_menu_widgets[] = $widget_id;
+                    $submitted_settings = array_merge( $existing_settings, $submitted_settings );
 
                 }
 
+                update_post_meta( $item['parent_menu_item'], '_megamenu', $submitted_settings );
             }
 
-            // find the old position of the widget
-            $old_widget_position = array_search( $widget_to_move, $menu_widgets );
+            if ( $item['type'] == 'widget' ) {
 
-            // move widget from old position to new position
-            $out = array_splice( $menu_widgets, $old_widget_position, 1 );
-            array_splice( $menu_widgets, $new_widget_position, 0, $out );
+                $this->update_widget_order( $item['id'], $item['order'], $item['parent_menu_item'] );
 
-            // merge back together the menu and non menu widgets
-            $mega_menu_widgets = array_merge( $non_menu_widgets, $menu_widgets );
+            }
 
-            $this->set_mega_menu_sidebar_widgets( $mega_menu_widgets );
+            if ( $item['type'] == 'menu_item' ) {
+
+                $this->update_menu_item_order( $item['id'], $item['order'], $item['parent_menu_item'] );
+
+            }
 
         }
 
-        do_action( "megamenu_after_widget_save" );
-
-        return $mega_menu_widgets;
+        return true;
 
     }
 

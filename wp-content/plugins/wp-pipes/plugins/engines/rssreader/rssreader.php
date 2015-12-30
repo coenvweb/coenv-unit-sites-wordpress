@@ -42,7 +42,7 @@ class WPPipesEngine_rssreader {
 
 	public static function getDataFields() {
 		$data         = new stdClass();
-		$data->output = array( 'title', 'link', 'description', 'author', 'date', 'enclosures' );
+		$data->output = array( 'title', 'link', 'description', 'content', 'author', 'date', 'enclosures' );
 		$id           = filter_input( INPUT_GET, 'id' );
 		$path         = OGRAB_EDATA . 'item-' . $id . DS . 'row-default.dat';
 		if ( ! is_file( $path ) ) {
@@ -158,6 +158,7 @@ class WPPipesEngine_rssreader {
 			$row->title       = html_entity_decode( $items[$i]->get_title(), ENT_QUOTES, 'UTF-8' ); # the title for the post
 			$row->link        = $items[$i]->get_link(); # a single link for the post
 			$row->description = $items[$i]->get_description(); # the content of the post (prefers summaries)
+			$row->content 	  = $items[$i]->get_content(); # the content of the post (prefers <content:encoded>)
 			$row->author      = $items[$i]->get_author(); # a single author for the post
 			$row->date        = $items[$i]->get_date( 'Y-m-d H:i:s' );
 			$row->enclosures  = $items[$i]->get_enclosures();
@@ -251,6 +252,7 @@ class WPPipesEngine_rssreader {
 		$row->title       = html_entity_decode( $items[0]->get_title(), ENT_QUOTES, 'UTF-8' ); # the title for the post
 		$row->link        = $items[0]->get_link(); # a single link for the post
 		$row->description = $items[0]->get_description(); # the content of the post (prefers summaries)
+        $row->content 	  = $items[0]->get_content(); # the content of the post (prefers <content:encoded>)
 		$row->author      = $items[0]->get_author(); # a single author for the post
 		$row->date        = $items[0]->get_date( 'Y-m-d H:i:s' );
 		$row->enclosures  = $items[0]->get_enclosures();
@@ -258,6 +260,9 @@ class WPPipesEngine_rssreader {
 			$source = new stdClass();
 		} else {
 			$source = ogb_common::get_default_data( '', $id );
+		}
+		if( !$source ) {
+			$source = new stdClass();
 		}
 		$source->so = $row;
 		$cache      = serialize( $source );

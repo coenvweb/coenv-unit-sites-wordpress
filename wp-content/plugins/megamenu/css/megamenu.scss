@@ -223,7 +223,7 @@
                 cursor: pointer;
             }
 
-            @media only screen and (max-width : $responsive_breakpoint) {
+            @include mobile {
                 display: list-item;
                 margin: 0;
                 clear: both;
@@ -237,8 +237,8 @@
                     @include border-radius(0 0 0 0);
                     border: 0;
                     margin: 0;
-                    line-height: 40px;
-                    height: 40px;
+                    line-height: $mobile_menu_item_height;
+                    height: $mobile_menu_item_height;
                     padding: 0 10px;
                 }
 
@@ -268,7 +268,7 @@
                 @include box-shadow($shadow_horizontal $shadow_vertical $shadow_blur $shadow_spread $shadow_color);
             }
 
-            @media only screen and (max-width : $responsive_breakpoint) {
+            @include mobile {
                 float: left;
                 position: static;
                 width: 100% !important;
@@ -285,20 +285,6 @@
                 }
             }
 
-            @media only screen and (max-width : $responsive_breakpoint) {
-                border: 0;
-                padding: 10px;
-                @include border-radius(0,0,0,0);
-
-                > li.mega-menu-item {
-                    width: 50% !important;
-                    clear: none;
-                }
-
-                > li:nth-child(odd) {
-                    clear: left;
-                }
-            }
 
             > li.mega-menu-item ul.mega-sub-menu {
                 clear: both;
@@ -395,6 +381,26 @@
                 }
             }
 
+            @include mobile {
+                border: 0;
+                padding: 10px;
+                @include border-radius(0,0,0,0);
+
+                @if $mobile_columns == 2 {
+                    > li.mega-menu-item {
+                        width: 50%;
+                    }
+
+                    > li:nth-child(odd) {
+                        clear: left;
+                    }
+                } @else {
+                    > li.mega-menu-item {
+                        width: 100%;
+                        clear: both;
+                    }
+                }
+            }
         }
 
         // sub menu items (flyout)
@@ -414,7 +420,7 @@
                 @include box-shadow($shadow_horizontal $shadow_vertical $shadow_blur $shadow_spread $shadow_color);
             }
 
-            @media only screen and (max-width : $responsive_breakpoint) {
+            @include mobile {
                 float: left;
                 position: static;
                 width: 100% !important;
@@ -436,7 +442,7 @@
                     }
                 }
 
-                @media only screen and (max-width : $responsive_breakpoint) {
+                @include mobile {
                     clear: both;
                 }
 
@@ -458,7 +464,7 @@
                     border-top-left-radius: $flyout_border_radius_top_left;
                     border-top-right-radius: $flyout_border_radius_top_right;
 
-                    @media only screen and (max-width : $responsive_breakpoint) {
+                    @include mobile {
                         border-top-left-radius: 0;
                         border-top-right-radius: 0;
                     }
@@ -468,7 +474,7 @@
                     border-bottom-right-radius: $flyout_border_radius_bottom_right;
                     border-bottom-left-radius: $flyout_border_radius_bottom_left;
 
-                    @media only screen and (max-width : $responsive_breakpoint) {
+                    @include mobile {
                         border-bottom-right-radius: 0;
                         border-bottom-left-radius: 0;
                     }
@@ -488,7 +494,7 @@
                     top: 0;
                 }
 
-                @media only screen and (max-width : $responsive_breakpoint) {
+                @include mobile {
                     ul.mega-sub-menu {
                         position: static;
                         left: 0;
@@ -524,13 +530,17 @@
                 color: inherit;
             }
 
-            @media only screen and (max-width : $responsive_breakpoint) {
+            @include mobile {
                 a.mega-menu-link:after {
                     float: right;
                 }
 
                 &.mega-toggle-on > a.mega-menu-link:after {
                     content: $arrow_up;
+                }
+
+                &.mega-hide-sub-menu-on-mobile > a.mega-menu-link:after {
+                    display: none;
                 }
             }
         }
@@ -548,7 +558,7 @@
             float: right;
             margin: 0;
 
-            @media only screen and (max-width : $responsive_breakpoint) {
+            @include mobile {
                 content: $arrow_down;
             }
         }
@@ -558,7 +568,7 @@
             li.mega-menu-item a.mega-menu-link {
                 text-align: right;
 
-                @media only screen and (max-width : $responsive_breakpoint) {
+                @include mobile {
                     text-align: left;
                 }
             }
@@ -567,7 +577,7 @@
                 float: right;
                 margin: 0 0 0 6px;
 
-                @media only screen and (max-width : $responsive_breakpoint) {
+                @include mobile {
                     float: left;
                     margin: 0 6px 0 0;
                 }
@@ -578,7 +588,7 @@
                 float: left;
                 margin: 0;
 
-                @media only screen and (max-width : $responsive_breakpoint) {
+                @include mobile {
                     content: $arrow_down;
                     float: right;
                 }
@@ -594,6 +604,21 @@
         li[class^='mega-lang-item'] > a.mega-menu-link > img {
             display: inline;
         }
+
+        @include mobile {
+            li.mega-menu-item.mega-hide-on-mobile,
+            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-item.mega-hide-on-mobile {
+                display: none;
+            }
+        }
+
+        @include desktop {
+            li.mega-menu-item.mega-hide-on-desktop,
+            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-item.mega-hide-on-desktop {
+                display: none;
+            }
+        }
+
     }
 
     // responsive toggle hamburger
@@ -603,13 +628,13 @@
         z-index: 1;
         cursor: pointer;
         text-align: right;
-        @include background($container_background_from, $container_background_to);
+        @include background($toggle_background_from, $toggle_background_to);
         @include border-radius(2px, 2px, 2px, 2px);
         line-height: 40px;
         height: 40px;
-        color: $menu_item_link_color;
+        color: $toggle_font_color;
 
-        @media only screen and (max-width : $responsive_breakpoint) {
+        @include mobile {
             display: block;
         }
 
@@ -635,7 +660,7 @@
             }
         }
 
-        @media only screen and (max-width : $responsive_breakpoint) {
+        @include mobile {
             + #{$menu} {
                 display: none;
 

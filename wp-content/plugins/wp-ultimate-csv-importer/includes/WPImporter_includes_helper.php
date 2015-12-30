@@ -568,6 +568,29 @@ class WPImporter_includes_helper {
 			$this->postFlag = $this->duplicateChecks('title && content', $data_array ['post_content'], $data_array ['post_type'], $currentLimit, $data_array ['post_title']);
 		}
 
+		// Date format post
+                        if (isset($data_array['post_date'])) {
+                                $data_array ['post_date'] = str_replace('/', '-', $data_array ['post_date']);
+                        } else {
+                                $data_array['post_date'] = date('Y-m-d');
+                        }
+                        if ($data_array ['post_date'] == null) {
+                                $data_array ['post_date'] = date('Y-m-d');
+                                $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
+                        } else {
+                                if(strtotime($data_array ['post_date'])){
+                                       $data_array ['post_date'] = date('Y-m-d H:i:s', strtotime($data_array ['post_date']));
+                                       $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
+                               }
+                               else {
+                                       $data_array ['post_date'] = date('Y-m-d H:i:s');
+                                       $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'] . ' . Unformatted date so current date was replaced.';
+                               }
+                        }
+                        if (isset($data_array ['post_slug'])) {
+                                $data_array ['post_name'] = $data_array ['post_slug'];
+                        }
+
 
 		if ($this->postFlag) {
 			unset ($sticky);
@@ -600,10 +623,12 @@ class WPImporter_includes_helper {
 					break;
 				case 4 :
 					$data_array ['post_status'] = 'draft';
+					$data_array['post_date_gmt'] = $data_array['post_date'];
 					$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('draft', 'wp-ultimate-csv-importer');
 					break;
 				case 5 :
 					$data_array ['post_status'] = 'pending';
+					$data_array['post_date_gmt'] = $data_array['post_date'];
 					$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('pending', 'wp-ultimate-csv-importer');
 					break;
 				default :
@@ -611,10 +636,12 @@ class WPImporter_includes_helper {
 					$poststatus = $data_array['post_status'] = strtolower($data_array['post_status']);
 					if ($data_array['post_status'] == 'pending') {
 						$data_array['post_status'] = 'pending';
+						$data_array['post_date_gmt'] = $data_array['post_date'];
 						$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('pending', 'wp-ultimate-csv-importer');
 					}
 					if ($data_array['post_status'] == 'draft') {
 						$data_array['post_status'] = 'draft';
+						$data_array['post_date_gmt'] = $data_array['post_date'];
 						$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('draft', 'wp-ultimate-csv-importer');
 					}
 					if ($data_array['post_status'] == 'publish') {
@@ -757,28 +784,11 @@ class WPImporter_includes_helper {
 				$this->noPostAuthCount++;
 			}
 
-			// Date format post
-			if (isset($data_array['post_date'])) {
-				$data_array ['post_date'] = str_replace('/', '-', $data_array ['post_date']);
-			} else {
-				$data_array['post_date'] = date('Y-m-d');
-			}
-			if ($data_array ['post_date'] == null) {
-				$data_array ['post_date'] = date('Y-m-d');
-				$this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
-			} else {
-				$data_array ['post_date'] = date('Y-m-d H:i:s', strtotime($data_array ['post_date']));
-				$this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
-			}
-			if (isset($data_array ['post_slug'])) {
-				$data_array ['post_name'] = $data_array ['post_slug'];
-			}
-
 			//add global password
 			if ($data_array) {
 				if ($ret_array['importallwithps'] == 6) {
 					$data_array['post_password'] = $ret_array['globalpassword_txt'];
-					$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('protected with password', 'wp-ultimate-csv-importer');
+					$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('protected with password', 'wp-ultimate-csv-importer') . $ret_array['globalpassword_txt'];
 				}
 			}
 			if ($data_array) {
@@ -1064,61 +1074,17 @@ class WPImporter_includes_helper {
 	// Function for common footer
 	public function common_footer_for_other_plugin_promotions() {
 		$content = '<div class="accordion-inner">
-			<label class="plugintags"><a href="http://blog.smackcoders.com/category/free-wordpress-plugins/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">Social All in One Bot</a></label>
-			<label class="plugintags"><a href="http://blog.smackcoders.com/category/free-wordpress-plugins/google-seo-author-snippet-plugin/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">Google SEO Author Snippet</a></label>
-			<label class="plugintags"><a href="http://blog.smackcoders.com/category/free-wordpress-plugins/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WP Advanced Importer</a></label>
-			<label class="plugintags"><a href="http://blog.smackcoders.com/category/free-wordpress-plugins/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WP Sugar</a></label>
-			<label class="plugintags"><a href="http://blog.smackcoders.com/category/free-wordpress-plugins/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WP Zoho crm Sync</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/vtigercrm-magento-connector.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">VTiger 6 Magento Sync</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/vtigercrm-mailchimp-integration.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">VTiger 6 Mailchimp</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/vtiger-crm-quickbooks-integration-module-online.html/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">Vtiger QuickBooks</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/xero-vtiger-crm-6-0-integration.html/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">Vtiger Xero Sync</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/hr-payroll.html/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">Vtiger HR and Payroll</a></label>
 
-			<label class="plugintags"><a href="http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WP Ultimate CSV Importer Pro</a></label>
-			<label class="plugintags"><a href="http://www.smackcoders.com/wordpress-sugar-integration-automated-multi-web-forms-generator-pro.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WordPress Sugar Pro</a></label>
-			<div style="position:relative;float:right;"><a href="http://www.smackcoders.com/"><img width=80 src="http://www.smackcoders.com/skin/frontend/default/megashop/images/logo.png?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" /></a></div>
+			<label class="plugintags"><a href="https://www.wpultimatecsvimporter.com/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WP Ultimate CSV Importer Pro</a></label>
+			<label class="plugintags"><a href="https://www.smackcoders.com/product/crm-sugar-wordpress-web-forms-builder?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">WordPress Sugar Pro</a></label>
+			<div style="position:relative;float:right;"><a href="http://www.smackcoders.com/"><img width=80 src="https://www.smackcoders.com/wp-content/uploads/2015/06/smackcoders-logo.png?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" /></a></div>
 			</div>';
 		echo $content;
-	}
-
-	// Function for social sharing
-	public function importer_social_profile_share() {
-		$urlCurrentPage = "http://www.smackcoders.com/wp-ultimate-csv-importer.html";
-		$fbimgsrc = WP_CONTENT_URL . "/plugins/" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/images/facebook.png";
-		$googleimgsrc = WP_CONTENT_URL . "/plugins/" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/images/googleplus.png";
-		$linkedimgsrc = WP_CONTENT_URL . "/plugins/" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/images/linkedin.png";
-		$twitimgsrc = WP_CONTENT_URL . "/plugins/" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/images/twitter.png";
-		$strPageTitle = 'WP Ultimate CSV Importer';
-		$linked_in_username = 'smackcoders';
-
-		//Facebook
-		$htmlShareButtons = '<span class="sociallink">';
-		$htmlShareButtons .= '<a id="wpcsv_facebook_share" href="http://www.facebook.com/sharer.php?u=' . $urlCurrentPage . '" target="_blank">';
-		$htmlShareButtons .= '<img title="Facebook" class="wpcsv" src="' . $fbimgsrc . '" alt="Facebook" />';
-		$htmlShareButtons .= '</a>';
-		$htmlShareButtons .= '</span>';
-
-		//Google Plus
-		$htmlShareButtons .= '<span class="sociallink">';
-		$htmlShareButtons .= '<a id="wpcsv_google_share" href="https://plus.google.com/share?url=' . $urlCurrentPage . '" target="_blank" >';
-		$htmlShareButtons .= '<img title="Google+" class="wpcsv" src="' . $googleimgsrc . '" alt="Google+" />';
-		$htmlShareButtons .= '</a>';
-		$htmlShareButtons .= '</span>';
-
-		//Linked in
-		$htmlShareButtons .= '<span class="sociallink">';
-		$htmlShareButtons .= '<a id="wpcsv_linkedin_share" class="wpcsv_share_link" href="http://www.linkedin.com/shareArticle?mini=true&url=' . urlencode($urlCurrentPage) . '&title=' . urlencode($strPageTitle) . '&source=' . $linked_in_username . '" target="_blank" >';
-		$htmlShareButtons .= '<img title="LinkedIn" class="wpcsv" src="' . $linkedimgsrc . '" alt="LinkedIn" />';
-		$htmlShareButtons .= '</a>';
-		$htmlShareButtons .= '</span>';
-
-		//Twitter
-		$username = "smackcoders";
-		// format the URL into friendly code
-		$twitterShareText = urlencode(html_entity_decode($strPageTitle . ' ', ENT_COMPAT, 'UTF-8'));
-		// twitter share link
-		$htmlShareButtons .= '<span class="sociallink">';
-		$htmlShareButtons .= '<a id="wpcsv_twitter_share" href="http://twitter.com/share?url=' . $urlCurrentPage . '&via=' . $username . '&related=' . $username . '&text=' . $twitterShareText . '" target="_blank">';
-		$htmlShareButtons .= '<img title="Twitter" class="wpcsv" src="' . $twitimgsrc . '" alt="Twitter" />';
-		$htmlShareButtons .= '</a>';
-		$htmlShareButtons .= '</span>';
-		echo $htmlShareButtons;
 	}
 
 	public function common_footer() {
@@ -1131,14 +1097,14 @@ class WPImporter_includes_helper {
 		$footer .= '</div>';
 		$footer .= '<div style="padding:10px;margin-bottom:20px;">';
 		if (isset ($_REQUEST['__module']) && $_REQUEST['__module'] != 'settings') {
-			$footer .= "<div style='float:right;margin-top:-49px;'><a class='label label-info' href='" . get_admin_url() . "admin.php?page=" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/index.php&__module=settings'>" . __('Click here to Enable any disabled module', 'wp-ultimate-csv-importer') . "</a></div>";
+//			$footer .= "<div style='float:right;margin-top:-49px;'><a class='label label-info' href='" . get_admin_url() . "admin.php?page=" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/index.php&__module=settings'>" . __('Click here to Enable any disabled module', 'wp-ultimate-csv-importer') . "</a></div>";
 		}
 		if (isset ($_REQUEST['__module']) && $_REQUEST['__module'] == 'settings') {
 			$footer .= "<div style='float:right;margin-top:-48px;'><span style='margin-right:20px;'><a class='label label-info' href='http://wordpress.org/plugins/wp-ultimate-csv-importer/developers/'>" . __('Get Old Versions', 'wp-ultimate-csv-importer') . "</a></span><a class='label label-info' href='" . get_admin_url() . "admin.php?page=" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/index.php&__module=support'>" . __('Click here to Get some useful links') . "</a></div>";
 			$footer .= "<div style='float:right;margin-right:15px;'> </span> " . __('Current Version', 'wp-ultimate-csv-importer') . ":" . $get_pluginData['Version'] . " </div>";
 		}
 		if (isset ($_REQUEST['__module']) && $_REQUEST['__module'] != 'support' && $_REQUEST['__module'] != 'settings') {
-			$footer .= "<div style='float:right;margin-right:225px;margin-top:-48px;'><span style='margin-right:20px;'> <a class='label label-info' href='http://wordpress.org/plugins/wp-ultimate-csv-importer/developers/'>" . __('Get Old Versions', 'wp-ultimate-csv-importer') . "</a></span><a class='label label-info' href='" . get_admin_url() . "admin.php?page=" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/index.php&__module=support'>" . __('Click here to Get some useful links', 'wp-ultimate-csv-importer') . "</a></div>";
+			$footer .= "<div style='float:right;margin-top:-48px;'><span style='margin-right:20px;'> <a class='label label-info' href='http://wordpress.org/plugins/wp-ultimate-csv-importer/developers/'>" . __('Get Old Versions', 'wp-ultimate-csv-importer') . "</a></span><a class='label label-info' href='" . get_admin_url() . "admin.php?page=" . WP_CONST_ULTIMATE_CSV_IMP_SLUG . "/index.php&__module=support'>" . __('Click here to Get some useful links', 'wp-ultimate-csv-importer') . "</a></div>";
 			$footer .= "<div style='float:right;margin-right:15px;'> " . 'Current Version' . ": " . $get_pluginData['Version'] . " </div>";
 		}
 		if (isset ($_REQUEST['__module']) && $_REQUEST['__module'] == 'support') {
@@ -1158,29 +1124,24 @@ class WPImporter_includes_helper {
 			<label><span class="radio-icon"><input type="radio" name="importmethod" id="uploadfilefromcomputer" onclick="choose_import_method(this.id);" checked/></span> <span class="header-text" id="importopt">' . __('From Computer', 'wp-ultimate-csv-importer') . '</span> </label> <br>
 			<!-- The fileinput-button span is used to style the file input field as button -->
 			<div id="method1" style="display:block;height:40px;">
-			<span class="btn btn-success fileinput-button">
+			<progress id ="progressbar" value="0" max="100"> </progress>
+			<span class="btn btn-success fileinput">
 			<span>' . __('Browse', 'wp-ultimate-csv-importer') . '</span>
-			<input id="fileupload" type="file" name="files[]" multiple>
+			<input id="fileupload" type="file" name="files[]" multiple onchange="prepareUpload()">
 			<a href="#" id="zip_process" style = "display:none">  Click Here To Process Zip </a>
 			</span>';
 		// The global progress bar 
-		$smack_csv_import_method .= '<span style="padding-top:10px;">
-			<div id="progress" class="progress">
-			<div class="progress-bar progress-bar-success"></div>
-			<div align="center" id="helpnotify" style="width:100%;"><p class="msgborder" style="color:green;">' . __('You can also drag and drop files here', 'wp-ultimate-csv-importer') . '</div>
-			</div>
-			</span>
-			</div>
+		$smack_csv_import_method .= '</div>
 			</div>
 			<div  style = "opacity: 0.3;background-color: ghostwhite;">
 			<div id="boxmethod2" class="method2">
-			<label><span class="radio-icon"><input type="radio" name="importmethod" id="dwnldftpfile"  /></span> <span class="header-text" id="importopt">' . __('From FTP', 'wp-ultimate-csv-importer') . '</span> </label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
+			<label><span class="radio-icon"><input type="radio" name="importmethod" id="dwnldftpfile"  disabled/></span> <span class="header-text" id="importopt">' . __('From FTP', 'wp-ultimate-csv-importer') . '</span> </label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
 			</div>
 			<div id="boxmethod3" class="method3">
-			<label> <span class="radio-icon"><input type="radio" name="importmethod" id="dwnldextrfile"  /></span> <span class="header-text" id="importopt">' . __('From URL', 'wp-ultimate-csv-importer') . '</span></label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
+			<label> <span class="radio-icon"><input type="radio" name="importmethod" id="dwnldextrfile" disabled/></span> <span class="header-text" id="importopt">' . __('From URL', 'wp-ultimate-csv-importer') . '</span></label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
 			</div>
 			<div id="boxmethod4" class="method4">
-			<label><span class="radio-icon"><input type="radio" name="importmethod" id="useuploadedfile"  /></span> <span class="header-text" id="importopt">' . __('From Already Uploaded', 'wp-ultimate-csv-importer') . '</span></label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
+			<label><span class="radio-icon"><input type="radio" name="importmethod" id="useuploadedfile"  disabled/></span> <span class="header-text" id="importopt">' . __('From Already Uploaded', 'wp-ultimate-csv-importer') . '</span></label> <img src="' . WP_CONTENT_URL . '/plugins/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/images/pro_icon.gif" title="PRO Feature" /> <br>
 			</div>
 			</div>
 
@@ -1188,8 +1149,8 @@ class WPImporter_includes_helper {
 			</div>';
 		$curr_module = $_REQUEST['__module'];
 		if ($curr_module == 'post' || $curr_module == 'page' || $curr_module == 'custompost' || $curr_module == 'eshop') {
-			$smack_csv_import_method .= '<div class="media_handling" align="left">
-			<span class="advancemediahandling"> <label id="importalign"> <input type="checkbox" name="advance_media_handling" id="advance_media_handling"   onclick = "filezipopen();" /> ' . __("Advance Media Handling", 'wp-ultimate-csv-importer') . ' </label> </span>
+			$smack_csv_import_method .= '<div class="media_handling">
+			<span class="advancemediahandling"> <b><label> <input type="checkbox" name="advance_media_handling" id="advance_media_handling"   onclick = "filezipopen();" /> ' . __("Advance Media Handling", 'wp-ultimate-csv-importer') . ' </label></b> </span>
 			<span id = "filezipup" style ="display:none;">
 			<span class="advancemediahandling" style="padding-left:30px;"> <input type="file" name="inlineimages" id="inlineimages" onchange ="checkextension(this.value);" /> </span>
 			</span>
@@ -1254,18 +1215,6 @@ class WPImporter_includes_helper {
 		return $convert_str;
 	}
 
-	function customfieldui($count) {
-		$result = "<div class='left_align columnheader' style='background-color: #E5E4E2; border: 1px solid #d6e9c6;padding: 10px; width:100%;'>
-			<div id = 'custfield_core'><b>Custom Fields:</b>
-			</div>
-			</div>";
-		$result .= "<table style='font-size: 12px;' class = 'table table-striped' id='CORECUST'><tr>
-			<td class='left_align columnheader'><b>CUSTOM FIELD</b></td>
-			<td class='columnheader'><b>CSV HEADER</b></td><td></td><td></td></tr></table>
-			<input type='button' class='btn btn-primary' name='addcustomfd' value='Add Custom Field' style='margin-left:20px;margin-bottom:15px;margin-top:20px;' onclick = 'addcorecustomfield(CORECUST," . $count . ");'>";
-		return $result;
-
-	}
                 public function getStatsWithDate() {
                         global $wpdb;
                         $returnArray = array();

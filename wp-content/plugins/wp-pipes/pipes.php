@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.21
+Version: 1.22
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -47,6 +47,7 @@ class PIPES extends Application {
 		wp_register_script( 'pipes-process', plugin_dir_url( __FILE__ ) . '/assets/js/process.js' );
 		wp_register_script( 'pipes-ogb-lib-admin', plugin_dir_url( __FILE__ ) . '/assets/js/ogb-lib-admin.js' );
 		wp_register_script( 'pipes-chosen', plugin_dir_url( __FILE__ ) . '/assets/js/chosen.jquery.js' );
+		wp_register_script( 'pipes-angular', plugin_dir_url( __FILE__ ) . '/assets/js/angular.js' );
 		//js for input tags
 		//wp_register_script( 'pipes-bootstrap-tagsinput', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap-tagsinput.js' );
 
@@ -97,6 +98,7 @@ class PIPES extends Application {
 				add_submenu_page( $this->_page_prefix . '.pipes', __( 'Settings', 'settings' ), __( 'Settings', 'settings' ), "manage_options", $this->_page_prefix . ".settings", array( $this, 'display' ) );
 				add_action( 'admin_print_styles-' . $item_page, array( $this, 'admin_style_item' ) );
 				add_action( 'admin_print_styles-' . $items_page, array( $this, 'admin_style_item' ) );
+				add_action( 'admin_print_styles-' . $addon_page, array( $this, 'admin_enqueue_addon_page' ) );
 			}
 			add_action( 'load-' . $item_page, array( $this, 'on_load_page' ) );
 			add_action( 'load-' . $items_page, array( $this, 'on_load_page' ) );
@@ -129,9 +131,19 @@ class PIPES extends Application {
 		wp_enqueue_script( 'pipes-process' );
 		wp_enqueue_script( 'pipes-ogb-lib-admin' );
 		wp_enqueue_script( 'pipes-chosen' );
+		wp_enqueue_script( 'pipes-angular' );
+		$page = isset($_GET['page'])?$_GET['page']:'';
+		if( $page == 'pipes.plugins' ) {
+			wp_enqueue_script( 'pipes-angular' );
+		}
 		//js for input tags
 		//wp_enqueue_script( 'pipes-bootstrap-tagsinput' );
 
+	}
+	
+	public function admin_enqueue_addon_page() {
+		wp_enqueue_style( 'pipes-bootstrap-min' );
+		wp_enqueue_script( 'pipes-angular' );
 	}
 
 	public static function add_message( $msg, $type = 'message' ) {

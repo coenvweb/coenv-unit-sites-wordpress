@@ -225,13 +225,13 @@ class AppRequirements {
 			foreach ( $this->_required_results as $i => $req ) : ?>
 				<tr <?php echo ( $i ++ % 2 ) ? 'class="alternate"' : ''; ?>>
 					<td class="key"><?php echo $req['name']; ?></td>
-					<td style="text-align: center;color:#0f0">
+					<td style="text-align: center;">
 						<?php $style = $req['status'] ? 'font-weight: bold; color: green;' : 'font-weight: bold; color: red;'; ?>
 
 						<?php if ( $req['status'] ): ?>
-							<span class="badge badge-success"><i class="fa fa-check-circle"></i></span>
+						<span class="badge badge-success" style="color:green;"><i class="fa fa-check-circle"></i></span>
 						<?php else: ?>
-							<span class="badge badge-important"><i class="fa fa-times-circle"></i></span>
+							<span class="badge badge-important" style="color:red;"><i class="fa fa-times-circle"></i></span>
 						<?php endif; ?>
 					</td>
 					<td>

@@ -53,9 +53,7 @@ $active_plugins = get_option('active_plugins');
 if(in_array('eshop/eshop.php', $active_plugins)){
         $eshop = true;
 }
-if(in_array('custom-post-type-ui/custom-post-type-ui.php', $active_plugins)){
         $custompost = true;
-}
 $impCEM = CallWPImporterObj::getInstance();
 $get_settings = array();
 $get_settings = $impCEM->getSettings();

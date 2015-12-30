@@ -45,53 +45,40 @@ $impCE = new WPImporter_includes_helper();
 	<div style="width:99%;">
 
 		<div class="contactus" id="contactus" style="height:480px">
-			<div class="title">
-				<h3><?php echo __('Video Walk Through', 'wp-ultimate-csv-importer'); ?></h3>
-			</div>
-			<div id="data">
-				<div id="video">
-					<iframe width="560" height="315"
-							src="//www.youtube.com/embed/FhTUXE5zk0o?list=PL2k3Ck1bFtbRli9VdJaqwtzTSzzkOrH4j"
-							frameborder="0" allowfullscreen></iframe>
-				</div>
+				<div style='position:relative;left:10%;bottom:10px;width:45%;'>
+					<h3><?php echo __('Smackcoders Support', 'wp-ultimate-csv-importer'); ?> </h3><br />
 
-				<div id="relatedpages" style='position:relative;left:630px;bottom:345px;'>
-					<h2 id="doctitle"><?php echo __('Smackcoders Support', 'wp-ultimate-csv-importer'); ?> </h2>
+						<a href="https://smackcoders.freshdesk.com/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic" target="_blank">
+                                                <img height= "120" width="220"src = 'https://www.wpultimatecsvimporter.com/wp-content/uploads/2015/07/support.png'>
+						</a>
 
-					<p style="line-height:20px;padding-top:20px"><?php echo __('Click', 'wp-ultimate-csv-importer');
+					<p style="line-height:20px;padding-top:20px; padding-left:14px;"><?php echo __('Click', 'wp-ultimate-csv-importer');
 						echo ' ';
 						echo __('here', 'wp-ultimate-csv-importer'); ?> <a
 							href="https://www.smackcoders.com/blog/category/web-development-news/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic"
-							target="_blank"> <?php echo __('for Development News', 'wp-ultimate-csv-importer'); ?> </a>
+							target="_blank"> <?php echo __('Recent News', 'wp-ultimate-csv-importer'); ?> </a>
 					</p>
 
-					<p style="line-height:20px"><?php echo __('View', 'wp-ultimate-csv-importer'); ?> <a
-							href="http://www.wpultimatecsvimporter.com/?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic"
-							target="_blank"><?php echo __('Recent News', 'wp-ultimate-csv-importer'); ?></a></p>
-
-					<p style="line-height:20px"><?php echo __('Refer', 'wp-ultimate-csv-importer'); ?> <a
-							href="http://www.wpultimatecsvimporter.com/documentation?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic"
-							target="_blank"><?php echo __('Detailed Document', 'wp-ultimate-csv-importer'); ?></a></p>
-
-					<p style="line-height:20px"><?php echo __('For', 'wp-ultimate-csv-importer'); ?><a
-							href="https://www.smackcoders.com/blog/csv-importer-a-simple-and-easy-csv-importer-tutorial.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic"
-							target="_blank"> <?php echo __('Tutorials', 'wp-ultimate-csv-importer'); ?> </a></p>
-
-					<p style="line-height:20px"><?php echo __('For', 'wp-ultimate-csv-importer'); ?> <a
+					<p style="line-height:20px; padding-left:14px;"><?php echo __('For', 'wp-ultimate-csv-importer'); ?> <a
 							href="http://www.youtube.com/user/smackcoders/channels"
 							target="_blank"> <?php echo __('Youtube Channel', 'wp-ultimate-csv-importer'); ?> </a></p>
 
-					<p style="line-height:20px"><?php echo __('To', 'wp-ultimate-csv-importer'); ?> <a
-							href="http://www.wpultimatecsvimporter.com/contact-us"
-							target="_blank"><?php echo __('Get Support', 'wp-ultimate-csv-importer'); ?></a></p>
-
-					<p style="line-height:20px"><?php echo __('To Know the detail of', 'wp-ultimate-csv-importer'); ?>
+					<p style="line-height:20px; padding-left:14px;"><?php echo __('To Know the detail of', 'wp-ultimate-csv-importer'); ?>
 						<a href="https://www.smackcoders.com/store/products-46/wordpress.html?utm_source=WpPlugin&utm_medium=Free&utm_campaign=SupportTraffic"
 						   target="_blank"> <?php echo __('Other Plugins', 'wp-ultimate-csv-importer'); ?> </a></p>
-
 				</div>
-			</div>
+<!-- For Vedio -->
+                    <div style = "position:relative;left:70%;bottom:66%";>
+                                <h3 style='padding-left:22px'><?php echo __('Video Walk Through', 'wp-ultimate-csv-importer'); ?></h3>
+                        </div>
 
+				<div id = 'data' style = "position:relative;left:65%;bottom:63%";>
+				<div id="video">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/c-2wNw61d6s" frameborder="0" allowfullscreen></iframe>
+                                </div>
+ 
+			</div>
+<!-- End -->
 
 		</div>
 	</div>
@@ -105,6 +92,6 @@ $impCE = new WPImporter_includes_helper();
 				</div>
 			</div>
 		</div>
-		-
+		
 	</div>
 </div>

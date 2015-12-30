@@ -1084,7 +1084,7 @@ class PIPESModelPipe extends Model {
 				$res->err = $wpdb->last_error;
 				return $res;
 			}
-		}else{
+		} else {
 			$res->err = 'There is error';
 		}
 		return $res;

@@ -23,10 +23,14 @@ class Mega_Menu_Nav_Menus {
             'icon' => 'disabled',
             'hide_text' => 'false',
             'disable_link' => 'false',
+            'hide_on_mobile' => 'false',
+            'hide_on_desktop' => 'false',
+            'hide_sub_menu_on_mobile' => 'false',
             'hide_arrow' => 'false',
             'item_align' => 'left',
             'panel_columns' => 6, // total number of columns displayed in the panel
-            'mega_menu_columns' => 1 // for sub menu items, how many columns to span in the panel
+            'mega_menu_columns' => 1, // for sub menu items, how many columns to span in the panel,
+            'mega_menu_order' => 0
         );
 
         return apply_filters( "megamenu_menu_item_defaults", $defaults );
@@ -105,8 +109,14 @@ class Mega_Menu_Nav_Menus {
 
         if ( 'nav-menus.php' == $pagenow ) {
 
+            if ( isset( $_GET['mmm_get_started'] ) &&  ( ! isset( $_POST ) || ! count( $_POST ) ) ) {
+                $class = 'mega_menu_meta_box mmm_get_started';
+            } else {
+                $class = 'mega_menu_meta_box';
+            }
+
             add_meta_box(
-                'mega_menu_meta_box',
+                $class,
                 __("Max Mega Menu Settings", "megamenu"),
                 array( $this, 'metabox_contents' ),
                 'nav-menus',
@@ -143,6 +153,10 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_script('colorbox');
         wp_deregister_style('colorbox');
 
+        // Compatibility fix for AGP Font Awesome Collection
+        wp_deregister_script('colorbox-js');
+        wp_deregister_style('colorbox-css');
+
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
 
@@ -158,6 +172,7 @@ class Mega_Menu_Nav_Menus {
         wp_localize_script( 'mega-menu', 'megamenu',
             array(
                 'debug_launched' => __("Launched for Menu ID", "megamenu"),
+                'get_started' => __("Use these settings to enable Max Mega Menu", "megamenu"),
                 'launch_lightbox' => __("Mega Menu", "megamenu"),
                 'is_disabled_error' => __("Please enable Max Mega Menu using the settings on the left of this page.", "megamenu"),
                 'saving' => __("Saving", "megamenu"),
@@ -213,6 +228,8 @@ class Mega_Menu_Nav_Menus {
 
             do_action( "megamenu_after_save_settings" );
 
+            do_action( "megamenu_delete_cache" );
+
         }
 
     }
@@ -233,7 +250,7 @@ class Mega_Menu_Nav_Menus {
 
         if ( ! count( $theme_locations ) ) {
 
-            $link = '<a href="http://www.maxmegamenu.com/documentation/getting-started/max-mega-menu-widget/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro" target="_blank">' . __("here", "megamenu") . '</a>';
+            $link = '<a href="https://www.maxmegamenu.com/documentation/getting-started/max-mega-menu-widget/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro" target="_blank">' . __("here", "megamenu") . '</a>';
 
             echo "<p>" . __("This theme does not register any menu locations.", "megamenu") . "</p>";
             echo "<p>" . __("You will need to create a new menu location and use the Max Mega Menu widget or shortcode to display the menu on your site.", "megamenu") . "</p>";

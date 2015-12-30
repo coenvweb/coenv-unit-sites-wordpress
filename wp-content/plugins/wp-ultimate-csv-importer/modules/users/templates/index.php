@@ -100,17 +100,6 @@ require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . '/includes/WPImporter_include
 										<div class="form-group" style="padding-bottom:20px;">
 											<table>
 												<tr>
-													<div id='showmappingtemplate' style='float:left;padding-left:10px;'>
-														<select disabled/>
-														<option
-															value='select template'/> <?php echo __('select template', 'wp-ultimate-csv-importer'); ?> </option>
-														</select>
-														<img
-															src="<?php echo WP_CONTENT_URL; ?>/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG; ?>/images/pro_icon.gif"
-															title="PRO Feature"/>
-													</div>
-
-										</div>
 										<div style="float:right;">
 											<input type='button' name='clearform' id='clearform'
 												   value='<?php echo __("Clear", 'wp-ultimate-csv-importer'); ?>'
@@ -129,100 +118,7 @@ require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . '/includes/WPImporter_include
 		<div id="files" class="files"></div>
 		<br>
 	</div>
-	<script>
-		var check_upload_dir = document.getElementById('is_uploadfound').value;
-		if (check_upload_dir == 'notfound') {
-			document.getElementById('browsefile').style.display = 'none';
-			jQuery('#defaultpanel').css('visibility', 'hidden');
-			jQuery('<p/>').text("").appendTo('#warning');
-			jQuery("#warning").empty();
-			jQuery('#warning').css('display', 'inline');
-			jQuery('<p/>').text("Warning:   Sorry. There is no uploads directory Please create it with write permission.").appendTo('#warning');
-			jQuery('#warning').css('color', 'red');
-			jQuery('#warning').css('font-weight', 'bold');
-			jQuery('#progress .progress-bar').css('visibility', 'hidden');
-		}
-		else {
-			jQuery(function () {
-				'use strict';
-				var url = (document.getElementById('pluginurl').value + '/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG;?>/modules/default/templates/index.php');
-				var filesdata;
-				var uploadPath = document.getElementById('uploaddir').value;
-
-				function prepareUpload(event) {
-					filesdata = event.target.files;
-					var curraction = '<?php echo $_REQUEST['__module']; ?>';
-					var frmdata = new FormData();
-					var uploadfile_data = jQuery('#fileupload').prop('files')[0];
-					frmdata.append('files', uploadfile_data);
-					frmdata.append('action', 'uploadfilehandle');
-					frmdata.append('curr_action', curraction);
-					frmdata.append('uploadPath', uploadPath);
-					jQuery.ajax({
-						url: ajaxurl,
-						type: 'post',
-						data: frmdata,
-						cache: false,
-						contentType: false,
-						processData: false,
-						success: function (data) {
-							var fileobj = JSON.parse(data);
-							jQuery.each(fileobj, function (objkey, objval) {
-								jQuery.each(objval, function (o_key, file) {
-									document.getElementById('uploadFileName').value = file.name;
-									var filewithmodule = file.uploadedname.split(".");
-									var check_file = filewithmodule[filewithmodule.length - 1];
-									if (check_file != "csv" && check_file != "txt") {
-										alert('Un Supported File Format');
-										return false;
-									}
-									if (check_file == "csv") {
-										var filenamecsv = file.uploadedname.split(".csv");
-										file.uploadedname = filenamecsv[0] + "-<?php echo $_REQUEST['__module']; ?>" + ".csv";
-									}
-									if (check_file == "txt") {
-										var filenametxt = file.uploadedname.split(".txt");
-										file.uploadedname = filenametxt[0] + "-<?php echo $_REQUEST['__module']; ?>" + ".txt";
-									}
-									document.getElementById('upload_csv_realname').value = file.uploadedname;
-									var get_version1 = file.name.split("-<?php echo $_REQUEST['__module']; ?>");
-									var get_version2 = get_version1[1].split(".csv");
-									var get_version3 = get_version2[0].split("-");
-									document.getElementById('current_file_version').value = get_version3[1];
-									jQuery('#uploadedfilename').val(file.uploadedname);
-									jQuery("#filenamedisplay").empty();
-									if (file.size > 1024 && file.size < (1024 * 1024)) {
-										var fileSize = (file.size / 1024).toFixed(2) + ' kb';
-									}
-									else if (file.size > (1024 * 1024)) {
-										var fileSize = (file.size / (1024 * 1024)).toFixed(2) + ' mb';
-									}
-									else {
-										var fileSize = (file.size) + ' byte';
-									}
-									jQuery('<p/>').text((file.name) + ' - ' + fileSize).appendTo('#filenamedisplay');
-									jQuery('#importfile').attr('disabled', false);
-									jQuery('#fileupload').prop('disabled', !jQuery.support.fileInput)
-										.parent().addClass(jQuery.support.fileInput ? undefined : 'disabled');
-								});
-							});
-
-						}
-					});
-				}
-
-				jQuery('#fileupload').on('change', prepareUpload);
-				jQuery('#fileupload').fileupload({
-					url: url,
-					progressall: function (e, data) {
-						var progress = parseInt(data.loaded / data.total * 100, 10);
-						jQuery('#progress .progress-bar').css('width', progress + '%');
-					}
-				});
-			});
-		}
-	</script>
-	<input type='hidden' name='importid' id='importid'>
+		<input type='hidden' name='importid' id='importid'>
 	</form>
 </div>
 </div>
@@ -456,7 +352,7 @@ require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . '/includes/WPImporter_include
 					<label id='importalign'><input type='radio' id='scheduleNow' name='importMode' value=''
 												   onclick='choose_import_mode(this.id);'
 												   disabled/> <?php echo __("Schedule now", 'wp-ultimate-csv-importer'); ?>
-					</label>
+					<img src="<?php echo WP_CONTENT_URL; ?>/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG; ?>/images/pro_icon.gif" title="PRO Feature"/> </label>
 
 					<div id='schedule' style='display:none'>
 						<input type='hidden' id='select_templatename' name='#select_templatename'

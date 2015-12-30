@@ -91,17 +91,6 @@ $nonce_Key = $impCE->create_nonce_key();
 									<div class="form-group" style="padding-bottom:20px;">
 										<table>
 											<tr>
-												<div id='showmappingtemplate' style='float:left;padding-left:10px;'>
-													<select disabled>
-														<option
-															value='select template'> <?php echo __('select template', 'wp-ultimate-csv-importer'); ?> </option>
-													</select>
-													<img
-														src="<?php echo WP_CONTENT_URL; ?>/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG; ?>/images/pro_icon.gif"
-														title="PRO Feature"/>
-												</div>
-
-									</div>
 									<div style="float:right;">
 										<input type='button' name='clearform' id='clearform'
 											   value='<?php echo __("Clear", 'wp-ultimate-csv-importer'); ?>'
@@ -121,100 +110,6 @@ $nonce_Key = $impCE->create_nonce_key();
 		<div id="files" class="files"></div>
 		<br>
 	</div>
-	<script>
-		var check_upload_dir = document.getElementById('is_uploadfound').value;
-		if (check_upload_dir == 'notfound') {
-			document.getElementById('browsefile').style.display = 'none';
-			jQuery('#defaultpanel').css('visibility', 'hidden');
-			jQuery('<p/>').text("").appendTo('#warning');
-			jQuery("#warning").empty();
-			jQuery('#warning').css('display', 'inline');
-			jQuery('<p/>').text("Warning:   Sorry. There is no uploads directory Please create it with write permission.").appendTo('#warning');
-			jQuery('#warning').css('color', 'red');
-			jQuery('#warning').css('font-weight', 'bold');
-			jQuery('#progress .progress-bar').css('visibility', 'hidden');
-		}
-		else {
-			jQuery(function () {
-				'use strict';
-				var url = (document.getElementById('pluginurl').value + '/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG;?>/modules/default/templates/index.php');
-				var filesdata;
-				var uploadPath = document.getElementById('uploaddir').value;
-
-				function prepareUpload(event) {
-					filesdata = event.target.files;
-					var curraction = '<?php echo $_REQUEST['__module']; ?>';
-					var frmdata = new FormData();
-					var uploadfile_data = jQuery('#fileupload').prop('files')[0];
-					frmdata.append('files', uploadfile_data);
-					frmdata.append('action', 'uploadfilehandle');
-					frmdata.append('curr_action', curraction);
-					frmdata.append('uploadPath', uploadPath);
-					jQuery.ajax({
-						url: ajaxurl,
-						type: 'post',
-						data: frmdata,
-						cache: false,
-						contentType: false,
-						processData: false,
-						success: function (data) {
-							var fileobj = JSON.parse(data);
-							jQuery.each(fileobj, function (objkey, objval) {
-								jQuery.each(objval, function (o_key, file) {
-									document.getElementById('uploadFileName').value = file.name;
-									var filewithmodule = file.uploadedname.split(".");
-									var check_file = filewithmodule[filewithmodule.length - 1];
-									if (check_file != "csv" && check_file != "txt") {
-										alert('Un Supported File Format');
-										return false;
-									}
-									if (check_file == "csv") {
-										var filenamecsv = file.uploadedname.split(".csv");
-										file.uploadedname = filenamecsv[0] + "-<?php echo $_REQUEST['__module']; ?>" + ".csv";
-									}
-									if (check_file == "txt") {
-										var filenametxt = file.uploadedname.split(".txt");
-										file.uploadedname = filenametxt[0] + "-<?php echo $_REQUEST['__module']; ?>" + ".txt";
-									}
-									document.getElementById('upload_csv_realname').value = file.uploadedname;
-									var get_version1 = file.name.split("-<?php echo $_REQUEST['__module']; ?>");
-									var get_version2 = get_version1[1].split(".csv");
-									var get_version3 = get_version2[0].split("-");
-									document.getElementById('current_file_version').value = get_version3[1];
-									jQuery('#uploadedfilename').val(file.uploadedname);
-									jQuery("#filenamedisplay").empty();
-									if (file.size > 1024 && file.size < (1024 * 1024)) {
-										var fileSize = (file.size / 1024).toFixed(2) + ' kb';
-									}
-									else if (file.size > (1024 * 1024)) {
-										var fileSize = (file.size / (1024 * 1024)).toFixed(2) + ' mb';
-									}
-									else {
-										var fileSize = (file.size) + ' byte';
-									}
-									jQuery('<p/>').text((file.name) + ' - ' + fileSize).appendTo('#filenamedisplay');
-									jQuery('#importfile').attr('disabled', false);
-									jQuery('#fileupload').prop('disabled', !jQuery.support.fileInput)
-										.parent().addClass(jQuery.support.fileInput ? undefined : 'disabled');
-								});
-							});
-
-						}
-					});
-				}
-
-				jQuery('#fileupload').on('change', prepareUpload);
-				jQuery('#fileupload').fileupload({
-					url: url,
-					progressall: function (e, data) {
-						var progress = parseInt(data.loaded / data.total * 100, 10);
-						jQuery('#progress .progress-bar').css('width', progress + '%');
-					}
-				});
-			});
-
-		}
-	</script>
 	<input type='hidden' name='importid' id='importid'>
 	</form>
 </div>
@@ -282,14 +177,39 @@ $nonce_Key = $impCE->create_nonce_key();
 									<option value='select'>---Select---</option>
 									<?php
 									$cust_post_list_count = 0;
-									foreach (get_post_types() as $key => $value) {
-									if(in_array('custom-post-type-ui/custom-post-type-ui.php',$activeplugins)){
-											if (($value != 'featured_image') && ($value != 'attachment') && ($value != 'wpsc-product') && ($value != 'wpsc-product-file') && ($value != 'revision') && ($value != 'nav_menu_item') && ($value != 'post') && ($value != 'page') && ($value != 'wp-types-group') && ($value != 'wp-types-user-group') && ($value != 'product') && ($value != 'product_variation') && ($value != 'shop_order') && ($value != 'shop_coupon') && ($value != 'acf') && ($value != 'createdByCCTM') && ($value != 'createdByTypes') && ($value != 'shop_order_refund') && ($value != 'shop_webhook')) { ?>
-												<option id="<?php echo($value); ?>"> <?php echo($value); ?> </option>
-												<?php
-												$cust_post_list_count++;
-											}
-										}
+				foreach (get_post_types() as $key => $value) {
+                                $cctm_post_type = array();
+                                $cctm_post_type = get_option('cctm_data');
+                                if(!empty($cctm_post_type)){
+                                        foreach($cctm_post_type['post_type_defs'] as $cctmptkey => $cctmptval) {
+                                                if($cctmptkey == $value){
+                                                        $value = 'createdByCCTM';
+                                                }
+                                        }
+                                }
+                                $types_post_types = array();
+                                $types_post_types = get_option('wpcf-custom-types');
+                                if(!empty($types_post_types)) {
+                                        foreach($types_post_types as $tptKey => $tptVal){
+                                                if($tptKey == $value) {
+                                                        $value = 'createdByTypes';
+                                                }
+                                        }
+                                }
+				$pods_post_types = array();
+				$pods_post_types = get_option('_transient_pods_get_type_post_type');
+				if(!empty($pods_post_types)){
+                                	foreach($pods_post_types as $podskey => $podsvalue){
+                                        	if($podsvalue['name'] == $value){
+                                                        $value = 'createdByPODS';
+                                                }
+                                	}
+				}
+                                        if (($value != 'featured_image') && ($value != 'attachment') && ($value != 'wpsc-product') && ($value != 'wpsc-product-file') && ($value != 'revision') && ($value != 'nav_menu_item') && ($value != 'post') && ($value != 'page') && ($value != 'wp-types-group') && ($value != 'wp-types-user-group') && ($value != 'product') && ($value != 'product_variation') && ($value != 'shop_order') && ($value != 'shop_coupon') && ($value != 'acf') && ($value != 'acf-field-group') && ($value != 'acf-field') && ($value != '_pods_pod') && ($value != '_pods_field') && ($value != 'mp_order') && ($value != 'createdByTypes') &&($value != 'createdByCCTM') && ($value != 'createdByPODS')) {?>
+                                                <option id="<?php echo($value); ?>"> <?php echo($value);?> </option>
+                                                        <?php
+                                                        $cust_post_list_count++;
+                                        }
 									} ?>
 								</select>
 								<input type='hidden' id='cust_post_list_count' name='cust_post_list_count'
@@ -529,6 +449,7 @@ $nonce_Key = $impCE->create_nonce_key();
 								<input type='button' class='btn btn-primary' name='addcustomfd' value='Add Custom Field'
 									   style='margin-left:20px;margin-bottom:15px;margin-top:20px;'
 									   onclick='addcorecustomfield(CF_FIELDGRP);'>
+								<input type='hidden' id ='addcorecustomfields' value ='' >
 							</td>
 						</tr>
 					</table>
@@ -597,8 +518,6 @@ $nonce_Key = $impCE->create_nonce_key();
 					<?php $basic_count = $count - 1; ?>
 					<input type="hidden" id="basic_count" name="basic_count" value="<?php echo $basic_count; ?>"/>
 					<input type="hidden" id="corecustomcount" name="corecustomcount" value=0/>
-					<?php //echo $impCE->customfieldui($count); ?>
-
 					<input type="hidden" id="mapping_fields_array" name="mapping_fields_array"
 						   value="<?php if (isset($mFieldsArr)) {
 							   print_r($mFieldsArr);
@@ -687,39 +606,18 @@ $nonce_Key = $impCE->create_nonce_key();
 					<label id="importalign"><input type='radio' id='scheduleNow' name='importMode' value=''
 												   onclick='choose_import_mode(this.id);'
 												   disabled/> <?php echo __("Schedule now", 'wp-ultimate-csv-importer'); ?>
-					</label>
+					<img src="<?php echo WP_CONTENT_URL; ?>/plugins/<?php echo WP_CONST_ULTIMATE_CSV_IMP_SLUG; ?>/images/pro_icon.gif" title="PRO Feature"/> </label>
 
 					<div id='schedule' style='display:none'>
 						<input type='hidden' id='select_templatename' name='#select_templatename'
 							   value='<?php if (isset($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['templateid'])) {
 								   echo $_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['templateid'];
 							   } ?>'>
-						<?php //echo WPImporter_includes_schedulehelper::generatescheduleHTML(); ?>
 					</div>
 					<div id='importrightaway' style='display:block'>
 						<form method="POST">
 							<ul id="settings">
 								<li>
-									<!--Get all posts with an <strong>content-similarity</strong> of more than:                        <strong><span id="similarity_amount">80</span>%</strong>
-									<div id="similarity" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 60%;"></a></div>
-									</li>
-									<input type="hidden" value="80" name="similarity">
-									<li id="statuses">Include these <strong>statuses</strong>: <br>
-									<input name="status[]" type="checkbox" value="draft"> Draft<br><input name="status[]" type="checkbox" value="pending"> Pending Review<br><input name="status[]" type="checkbox" value="private"> Private<br><input name="status[]" type="checkbox" value="publish" checked=""> Published<br>                    </li>
-									<li id="dates">Limit by <strong>post date</strong>:<br>
-									from <input id="datefrom" name="datefrom" class="datepicker hasDatepicker" type="text" value="" readonly="readonly"><img class="ui-datepicker-trigger" src="images/date-button.gif" alt="..." title="..."> until                        <input id="dateto" name="dateto" class="datepicker hasDatepicker" type="text" value="" readonly="readonly"><img class="ui-datepicker-trigger" src="images/date-button.gif" alt="..." title="...">
-									</li>
-									<li>
-									Compare <select name="search_field" id="search_field">
-									<option value="0" selected="selected">
-									content (post_content)                            </option>
-									<option value="1">
-									title (post_title)                            </option>
-									<option value="2">
-									content and title                            </option>
-									</select><br>
-									<input name="filterhtml" id="filterhtml" type="checkbox" value="1"> Filter out HTML-Tags while comparing <br>
-									<input name="filterhtmlentities" id="filterhtmlentities" type="checkbox" value="1"> Decode HTML-Entities before comparing <br>-->
 									<label id="importalign"><input name='duplicatecontent' id='duplicatecontent'
 																   type="checkbox"
 																   value=""> <?php echo __('Detect duplicate post content', 'wp-ultimate-csv-importer'); ?>
@@ -745,15 +643,8 @@ $nonce_Key = $impCE->create_nonce_key();
 									<label id='importalign'> <input type='checkbox' id='multiimage' name='multiimage'
 																	value=''> <?php echo __('Insert Inline Images', 'wp-ultimate-csv-importer'); ?>
 									</label><br>
-									<!--   <div id='inlineimageoption' style="display:none;" >
-									   <label id="importalign"><input type="radio" name="inlineimage_location" id="imagewithextension" value="imagewithextension" onclick="inline_image_option(this.value);" /> Image name with extension </label>
-									   <label id="importalign"><input type="radio" name="inlineimage_location" id="inlineimage_location" value="inlineimage_location" onclick="inline_image_option(this.value);" /> <input type="text" name="imagelocation" id="imagelocation" placeholder="Inline Image Location" value="" onblur="customimagelocation(this.value);" style="margin-top:5px;margin-left:10px"/></label>
-									   </div> -->
 									<input type='hidden' id='inlineimagevalue' name='inlineimagevalue' value='none'/>
 								</li>
-								<!--<li>
-								Ignore these words while comparing <input name="filterwords" id="filterwords" type="text" value="">
-								</li>-->
 							</ul>
 							<input id="startbutton" class="btn btn-primary" type="button"
 								   value="<?php echo __('Import Now', 'wp-ultimate-csv-importer'); ?>"
@@ -767,7 +658,6 @@ $nonce_Key = $impCE->create_nonce_key();
 							<input id="continuebutton" class="btn btn-lg btn-success" type="button"
 								   value="<?php echo __('Continue', 'wp-ultimate-csv-importer'); ?>"
 								   style="display:none;color: #ffffff;" onclick="continueprocess();">
-							<!--<input id="continuebutton" class="button" type="button" value="Continue old search" style="color: #ffffff;background:#2E9AFE;">-->
 							<div id="ajaxloader" style="display:none"><img
 									src="<?php echo WP_CONST_ULTIMATE_CSV_IMP_DIR; ?>images/ajax-loader.gif"> <?php echo __('Processing...', 'wp-ultimate-csv-importer'); ?>
 							</div>
@@ -776,7 +666,6 @@ $nonce_Key = $impCE->create_nonce_key();
 					</div>
 					<div class="clear"></div>
 					<br>
-					<!--	Compared <span id="done">0</span> of <span id="count">6</span> posts<br>Found <span id="found">0</span> duplicates            <br><input id="deletebutton" style="display: none" class="button" type="button" value="Move selected posts to trash">-->
 				</div>
 			</div>
 			<?php } ?>
@@ -814,7 +703,6 @@ $nonce_Key = $impCE->create_nonce_key();
 	<div class="accordion-group">
 		<div class="accordion-body in collapse">
 			<div>
-				<?php //$impCE->common_footer_for_other_plugin_promotions(); ?>
 				<?php $impCE->common_footer(); ?>
 			</div>
 		</div>

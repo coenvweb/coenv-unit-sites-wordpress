@@ -94,7 +94,7 @@ class WPCSVProExportData {
 		global $wpdb;
 		$Header = array();
 		$post_type = $exporttype;
-		$unwantedHeader = array('_eshop_product', '_wp_attached_file', '_wp_page_template', '_wp_attachment_metadata', '_encloseme');
+		$unwantedHeader = array('_eshop_product', '_wp_attached_file', '_wp_page_template', '_wp_attachment_metadata', '_encloseme',);
 		if ($exporttype == 'woocommerce' || $exporttype == 'marketpress') {
 			$post_type = 'product';
 		}
@@ -142,6 +142,15 @@ class WPCSVProExportData {
 			$Header[] = $yoastseoval;
 			$unwantedHeader[] = $yoastseokey;
 		}
+		$alltaxonomies = get_taxonomies();
+                if(!empty($alltaxonomies)){
+                        foreach($alltaxonomies as $alltaxkey){
+				if($alltaxkey == 'category')
+					$Header[] = 'post_category';
+				else 
+                                	$Header[] = $alltaxkey;
+                        }
+                }
 		foreach ($result_header_query2 as $rhq2_headkey) {
 			if (!in_array($rhq2_headkey->meta_key, $Header)) {
 				if (!in_array($rhq2_headkey->meta_key, $unwantedHeader)) {
@@ -150,7 +159,6 @@ class WPCSVProExportData {
 			}
 		}
 
-		#print('<pre>'); print_r($Header); die;
 		if ($exporttype == 'woocommerce' || $exporttype == 'marketpress' || $exporttype == 'wpcommerce' || $exporttype == 'eshop') {
 			if ($exporttype == 'woocommerce') {
 				foreach ($this->WoocommerceMetaHeaders() as $woo_hkey => $woo_hval) {
@@ -411,7 +419,12 @@ class WPCSVProExportData {
 	 *
 	 */
 	public function getAIOSEOfields() {
+		global $wpdb;
+		$active_plugins = get_option('active_plugins');
+		if(in_array('all-in-one-seo-pack/all_in_one_seo_pack.php',$active_plugins))
 		$aioseofields = array('_aioseop_keywords' => 'seo_keywords', '_aioseop_description' => 'seo_description', '_aioseop_title' => 'seo_title', '_aioseop_noindex' => 'seo_noindex', '_aioseop_nofollow' => 'seo_nofollow', '_aioseop_disable' => 'seo_disable', '_aioseop_disable_analytics' => 'seo_disable_analytics', '_aioseop_noodp' => 'seo_noodp', '_aioseop_noydir' => 'seo_noydir',);
+		else
+		$aioseofields = array();
 		return $aioseofields;
 	}
 
@@ -419,7 +432,12 @@ class WPCSVProExportData {
 	 *
 	 */
 	public function getYoastSEOfields() {
+		global $wpdb;
+                $active_plugins = get_option('active_plugins');
+		if(in_array('wordpress-seo/wp-seo.php',$active_plugins))
 		$yoastseofields = array('_yoast_wpseo_focuskw' => 'focus_keyword', '_yoast_wpseo_title' => 'title', '_yoast_wpseo_metadesc' => 'meta_desc', '_yoast_wpseo_meta-robots-noindex' => 'meta-robots-noindex', '_yoast_wpseo_meta-robots-nofollow' => 'meta-robots-nofollow', '_yoast_wpseo_meta-robots-adv' => 'meta-robots-adv', '_yoast_wpseo_sitemap-include' => 'sitemap-include', '_yoast_wpseo_sitemap-prio' => 'sitemap-prio', '_yoast_wpseo_canonical' => 'canonical', '_yoast_wpseo_redirect' => 'redirect', '_yoast_wpseo_opengraph-description' => 'opengraph-description', '_yoast_wpseo_google-plus-description' => 'google-plus-description',);
+		else
+		$yoastseofields = array();
 		return $yoastseofields;
 	}
 
@@ -534,7 +552,6 @@ class WPCSVProExportData {
 	 * @return array
 	 */
 	public function WPImpPROExportData($request) {
-		#print('<pre>'); print_r($this->getACFvalues()); die;
 		global $wpdb;
 		$exporttype = $_POST['export'];
 		if (isset($_POST['getdatawithdelimiter']) && isset($_POST['postwithdelimiter']) && $_POST['postwithdelimiter'] != 'Select') {
@@ -552,19 +569,12 @@ class WPCSVProExportData {
 
 			$export_delimiter = ',';
 		}
-		/*if(isset($_POST['getdatawithdelimeter']) && isset($_POST['delimeterstatus'])){
-			$export_delimiter = $_POST['delimeterstatus'];
-		}else{
-			$export_delimiter = ',';
-		}*/
 		if ($_POST['export_filename']) {
 			$csv_file_name = $_POST['export_filename'] . '.csv';
 		} else {
 			$csv_file_name = 'exportas_' . date("Y") . '-' . date("m") . '-' . date("d") . '.csv';
 		}
 		$wptypesfields = get_option('wpcf-fields');
-		#print('<pre>'); print_r($wptypesfields); die;
-		#print('<pre>'); print_r($_POST); print('</pre>');
 		//if($exporttype=='post' || $exporttype=='page' || $exporttype=='custompost') {
 		if ($exporttype == 'custompost') {
 			$exporttype = $_POST['export_post_type'];
@@ -572,15 +582,14 @@ class WPCSVProExportData {
 		$Header = $this->generateCSVHeaders($exporttype);
 		$result = $this->get_all_record_ids($exporttype, $request);
 		$PostData = array();
+		$PostMetaData = array();
 		#print('<pre>'); print_r($Header); print_r($result); print('</pre>'); die;
 		$fieldsCount = count($result);
 		if (isset($result)) {
 			foreach ($result as $postID) {
-				#$pId = $pId . ',' . $postID;
 				$PostData[$postID] = $this->getPostDatas($postID);
 				#print('<pre>'); print_r($PostData); #die;
 				$result_query2 = $this->getPostMetaDatas($postID);
-				$PostMetaData = array();
 				#print('<pre>'); print_r($result_query2); print('</pre>'); #die;
 
 				$possible_values = array('s:', 'a:', ':{');
@@ -1157,19 +1166,29 @@ class WPCSVProExportData {
 		foreach ($Header as $header_key) {
 			if (is_array($ExportData)) {
 				foreach ($ExportData as $ED_key => $ED_val) {
+					foreach($ED_val as $unkey => $unval){
+ 					       if(!in_array($unkey,$Header)){
+					                unset($ED_val[$unkey]);
+					        }
+				}
 					if (in_array($header_key, $this->getAIOSEOfields())) { #die($header_key);
 						foreach ($this->getAIOSEOfields() as $aioseokey => $aioseoval) {
 							if (array_key_exists($aioseokey, $ED_val)) {
 								$CSVContent[$ED_key][$aioseoval] = $ED_val[$aioseokey];
 							}
+							else {
+								$CSVContent[$ED_key][$aioseoval] = null;
+							}
 
-							#unset($CSVContent[$ED_key][$header_key]);
 						}
 					} else {
 						if (in_array($header_key, $this->getYoastSEOfields())) {
 							foreach ($this->getYoastSEOfields() as $yoastseokey => $yoastseoval) {
 								if (array_key_exists($yoastseokey, $ED_val)) {
 									$CSVContent[$ED_key][$yoastseoval] = $ED_val[$yoastseokey];
+								}
+								else {
+									$CSVContent[$ED_key][$yoastseoval] = null;
 								}
 								#unset($CSVContent[$ED_key][$header_key]);
 							}
@@ -1192,11 +1211,11 @@ class WPCSVProExportData {
 							}
 						}
 					}
-				}
+			}
 			}
 		}
-		#print(count($CSVContent[22]));print('<br>' . count($Header));
-		#print('<pre>'); print_r($CSVContent) ;print('</pre>'); die;
+//echo '<pre>';print_r(count($Header));echo '</pre>';
+//die;
 		$csv = new WPImpCSVParserLib();
 		$csv->output($csv_file_name, $CSVContent, $Header, $export_delimiter);
 	}

@@ -8,17 +8,18 @@
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 require_once dirname( dirname( dirname( __FILE__ ) ) ) . DS . 'includes' . DS . 'view.php';
-
+require_once OBGRAB_HELPERS.'plugins.php';
 class PIPESViewPlugins extends View {
 	public $items = array();
 	public $itemsTable = null;
+	public $data = null;
 	public function __construct(){
 		parent::__construct();
 	}
 	
 	public function display(){
 		$model = $this->getModel();
-		$this->itemsTable = $model->getTable();
+		$this->data = $model->getPipesPlugins();		
 		parent::display();
 	}
 

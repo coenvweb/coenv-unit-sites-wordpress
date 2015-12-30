@@ -6,11 +6,6 @@ jQuery(document).ready(function () {
         if (!jQuery.trim(jQuery('#log').html()).length) {
             document.getElementById('log').innerHTML = '<p style="margin:15px;color:red;">' + translateAlertString("NO LOGS YET NOW.") + '</p>';
 	}
-
-//pieStats();
-//lineStats();
-
-
     }
     if (checkmodule == 'custompost') {
         var step = jQuery('#stepstatus').val();
@@ -66,142 +61,91 @@ jQuery(document).ready(function () {
     }
 });
 
-function goto_mapping(id) {
-    if (id == 'importfile') {
-        var currentURL = document.URL;
-        var go_to_url = currentURL.replace("uploadfile", "mapping_settings");
-        window.location.assign(go_to_url);
-        document.getElementById('sec-one').style.display = 'none';
-        document.getElementById('sec-two').style.display = '';
-    }
-}
+jQuery(function() {
+   jQuery('marquee').mouseover(function() {
+       jQuery(this).attr('scrollamount',0,0);
+   }).mouseout(function() {
+        jQuery(this).attr('scrollamount',5,0);
+   });
+});
 
-function showcsvrow() {
-    var i, j = 0, index = 0;
-    mappedheaders = new Array();
-    for (i = 0; i < 12; i++) {
-        csvmappingdata = document.getElementById('mapping' + i).value;
-        if (csvmappingdata != '-- Select --') {
-            mappedheaders[j] = csvmappingdata;
-            j++;
-        }
-    }
-    if (mappedheaders.length > index) {
-        var dir_path = jQuery('#dirpathval').val();
-        var uploadedFile = jQuery('#uploadedFile').val();
-        var noncekey = jQuery('#nonceKey').val();
-        var select_delim = jQuery('#select_delim').val();
-        var checkmodule = jQuery('#checkmodule').val();
-        if (uploadedFile != '' && select_delim != '') {
-            var tmpLoc = jQuery('#tmpLoc').val();
+function prepareUpload(){
+	var check_upload_dir = document.getElementById('is_uploadfound').value;
+	if (check_upload_dir == 'notfound') {
+		document.getElementById('browsefile').style.display = 'none';
+		jQuery('#defaultpanel').css('visibility', 'hidden');
+		jQuery('<p/>').text("").appendTo('#warning');
+		jQuery("#warning").empty();
+		jQuery('#warning').css('display', 'inline');
+		jQuery('<p/>').text("Warning:   Sorry. There is no uploads directory Please create it with write permission.").appendTo('#warning');
+		jQuery('#warning').css('color', 'red');
+		jQuery('#warning').css('font-weight', 'bold');
+		jQuery('#progress .progress-bar').css('visibility', 'hidden');
+	}
+	else {
+	var uploadPath = document.getElementById('uploaddir').value;
+	var curraction = document.getElementById('current_module').value;
+	var frmdata = new FormData();
+	var uploadfile_data = jQuery('#fileupload').prop('files')[0];
+	frmdata.append('files', uploadfile_data);
+	frmdata.append('action','uploadfilehandle');
+	frmdata.append('curr_action', curraction);
+	frmdata.append('uploadPath', uploadPath);
+	jQuery.ajax({
+		url : ajaxurl,
+		type : 'post',
+		data : frmdata,
+		cache: false,
+		contentType : false,
+		processData: false,
+		success : function(data) {
+			var fileobj =JSON.parse(data);
+			jQuery.each(fileobj,function(objkey,objval){
+			jQuery.each(objval,function(o_key,file){
+			document.getElementById('uploadFileName').value=file.name;
+			var filewithmodule = file.uploadedname.split(".");
+			var check_file = filewithmodule[filewithmodule.length - 1];
+			if(check_file != "csv" && check_file != "txt") {
+				alert('Un Supported File Format');
+				return false;
+			}
+			if(check_file == "csv"){
+				var filenamecsv = file.uploadedname.split(".csv");
+				file.uploadedname = filenamecsv[0] + curraction + ".csv";
+			}
+			if(check_file == "txt"){
+				var filenametxt = file.uploadedname.split(".txt");
+				file.uploadedname = filenametxt[0] + curraction + ".txt";
+			}	
+			document.getElementById('upload_csv_realname').value = file.uploadedname;
+			document.getElementById('progressbar').value = '100';
+			var get_version1 = file.name.split(curraction);
+			var get_version2 = get_version1[1].split(".csv");
+			var get_version3 = get_version2[0].split("-");
+			document.getElementById('current_file_version').value = get_version3[1];
+			jQuery('#uploadedfilename').val(file.uploadedname);
+			jQuery( "#filenamedisplay" ).empty();
+			if(file.size>1024 && file.size<(1024*1024))
+			{
+				var fileSize =(file.size/1024).toFixed(2)+' kb';
+                        }
+                        else if(file.size>(1024*1024))
+                        {
+                                var fileSize =(file.size/(1024*1024)).toFixed(2)+' mb';
+                        }
+                        else
+                        {
+                                var fileSize= (file.size)+' byte';
+                        }
+                        jQuery('<p/>').text((file.name)+' - '+fileSize).appendTo('#filenamedisplay');
+                        jQuery('#importfile').attr('disabled', false);
+                        });
+                    });
 
-
-            jQuery.ajax({
-                url: ajaxurl,
-                type: 'post',
-                //dataType: 'json',
-                data: {
-                    'record_no': '1',
-                    'file_name': uploadedFile,
-                    'selected_delimeter': select_delim,
-                    'checkmodule': checkmodule,
-                    'temloc': tmpLoc,
-                    'dir_path': dir_path,
-                    'wpnonce': noncekey,
-                    'mappedheaders': mappedheaders,
-                    'action': 'shownextrecords',
-                },
-                success: function (response) {
-                    alert(response);
-                }
+                 }
             });
-        }
-    }
+	}
 }
-
-function gotoelement(id) {
-    var gotoElement = document.getElementById('current_record').value;
-    var dir_path = jQuery('#dirpathval').val();
-    var noncekey = document.getElementById('nonceKey').value;
-    var no_of_records = document.getElementById('totRecords').value;
-    var uploadedFile = document.getElementById('uploadedFile').value;
-    var delim = document.getElementById('select_delimeter').value;
-    var checkmodule = jQuery('#checkmodule').val();
-    if (id == 'prev_record') {
-        gotoElement = parseInt(gotoElement) - 1;
-    }
-    if (id == 'next_record') {
-        gotoElement = parseInt(gotoElement) + 1;
-    }
-    if (parseInt(gotoElement) <= 0) {
-        gotoElement = 0;
-    }
-    if (parseInt(gotoElement) >= parseInt(no_of_records)) {
-        gotoElement = parseInt(no_of_records) - 1;
-    }
-    if (id == 'apply_element') {
-        gotoElement = parseInt(document.getElementById('goto_element').value);
-        if (isNaN(gotoElement)) {
-            showMapMessages('error', translateAlertString('Please provide valid record number.'));
-        }
-        if (gotoElement <= 0) {
-            gotoElement = 0;
-            showMapMessages('error', translateAlertString('Please provide valid record number.'));
-        } else {
-            gotoElement = gotoElement - 1;
-        }
-        if (gotoElement >= no_of_records) {
-            gotoElement = parseInt(no_of_records) - 1;
-            showMapMessages('error', translateAlertString('CSV file have only ') + no_of_records + translateAlertString(' records.'));
-            return false;
-        }
-    }
-    var tmpLoc = document.getElementById('tmpLoc').value;
-    jQuery.ajax({
-        url: ajaxurl,
-        type: 'post',
-        data: {
-            'record_no': gotoElement,
-            'file_name': uploadedFile,
-            'delim': delim,
-            'checkmodule': checkmodule,
-            'dir_path': dir_path,
-            'wpnonce': noncekey,
-            'action': 'shownextrecords',
-        },
-        dataType: 'json',
-        success: function (response) {
-            var totalLength = response.length;
-            for (var i = 0; i < totalLength; i++) {
-                if (response[i] == null) {
-                    document.getElementById('elementVal_' + i).innerHTML = response[i];
-                } else if ((response[i].length) >= 32) {
-                    document.getElementById('elementVal_' + i).innerHTML = response[i].substring(0, 28) + '...';
-                } else {
-                    document.getElementById('elementVal_' + i).innerHTML = response[i];
-                }
-            }
-            var displayRecCount = gotoElement + 1;
-            document.getElementById('preview_of_row').innerHTML = translateAlertString("Showing preview of row #") + displayRecCount;
-            document.getElementById('current_record').value = gotoElement;
-        }
-    });
-}
-
-function showtemplatediv_wpuci(checked, div) {
-    if (checked)
-        jQuery('#' + div).show();
-    else
-        jQuery('#' + div).hide();
-}
-
-function showtemplatediv_edit(checked, value) {
-    if (value == 'saveas')
-        jQuery('#showtemplate_edit_div').show();
-    else
-        jQuery('#showtemplate_edit_div').hide();
-}
-
 
 function selectpoststatus() {
     var poststate = '';
@@ -305,14 +249,34 @@ function clearMapping() {
         for (var j = wpfield; j < customfield; j++) {
             document.getElementById('coremapping' + j).selectedIndex = "0";
         }
-        if (document.getElementById("seofields")) {
-            var seofield = document.getElementById('seofields').value;
+	if(document.getElementById("seofields") && document.getElementById("addcorecustomfields")){
+                var seofield = document.getElementById('seofields').value;
+                var addcorecustomfield= document.getElementById('basic_count').value;
         }
-        if (seofield != null) {
-            for (var j = customfield; j < seofield; j++) {
-                document.getElementById('seomapping' + j).selectedIndex = "0";
-            }
+        if(seofield != null && addcorecustomfield != null){
+        	for(var j=customfield;j<seofield;j++) {
+                	document.getElementById('seomapping'+j).selectedIndex = "0";
+                }
+                for(var j=seofield;j<=addcorecustomfield;j++) {
+                        document.getElementById('addcoremapping'+j).selectedIndex = "0";
+                }
         }
+        else if(document.getElementById("seofields")){
+                var seofield = document.getElementById('seofields').value;
+                if(seofield != null){
+                	for(var j=customfield;j<seofield;j++) {
+                        	document.getElementById('seomapping'+j).selectedIndex = "0";
+                        }
+                }
+        }
+        else if(document.getElementById("addcorecustomfields")){
+        	var addcorecustomfield= document.getElementById('basic_count').value;
+                if(addcorecustomfield != null){
+                	for(var j=customfield;j<=addcorecustomfield;j++) {
+                        	document.getElementById('addcoremapping'+j).selectedIndex = "0";
+                        }
+                }
+       }
     }
 }
 
@@ -627,17 +591,6 @@ function customimagelocation(val) {
     document.getElementById('inlineimagevalue').value = val;
 }
 
-function enableinlineimageoption() {
-    var importinlineimage = document.getElementById('multiimage').checked;
-    if (importinlineimage == true) {
-        document.getElementById('inlineimageoption').style.display = '';
-        document.getElementById('startbutton').disabled = true;
-    } else {
-        document.getElementById('inlineimageoption').style.display = 'none';
-        document.getElementById('startbutton').disabled = false;
-    }
-}
-
 function importRecordsbySettings(siteurl) {
     var importlimit = document.getElementById('importlimit').value;
     var noncekey = document.getElementById('wpnoncekey').value;
@@ -801,8 +754,6 @@ function continueprocess() {
     }, 0);
 }
 
-// Enable/Disable WP-e-Commerce Custom Fields
-
 function saveSettings() { 
 	jQuery('#ShowMsg').css("display", "");
         jQuery('#ShowMsg').delay(2000).fadeOut();
@@ -832,19 +783,6 @@ function import_again() {
     var get_current_url = document.getElementById('current_url').value;
     window.location.assign(get_current_url);
 }
-function sendemail2smackers() {
-    var message_content = document.getElementById('message').value;
-    var firstname = document.getElementById('firstname').value;
-    var lastname = document.getElementById('lastname').value;
-    if (message_content != '' && firstname != '' && lastname != '')
-        return true;
-    else
-        document.getElementById('showMsg').style.display = '';
-    document.getElementById('showMsg').innerHTML = '<p id="warning-msg" class="alert alert-warning">' + translateAlertString('Fill all mandatory fields.') + '</p>';
-    jQuery("#showMsg").fadeOut(10000);
-    return false;
-}
-
 
 function check_allnumeric(inputtxt) {
     var numbers = /^[0-9]+$/;
@@ -860,10 +798,6 @@ function check_allnumeric(inputtxt) {
     }
 }
 
-function gotoback() {
-    var currentURL = document.getElementById('current_url').value;
-    var set_assigned_step = currentURL.replace("uploadfile", "mapping_settings");
-}
 function export_module() {
     var get_selected_module = document.getElementsByName('export');
     for (var i = 0, length = get_selected_module.length; i < length; i++) {
@@ -954,86 +888,4 @@ function addexportfilter(id) {
     }
 }
 
-//Settings js code
-//Security and performance
-function authorimportsetting(id) {
-    if (id == 'enableimport') {
-        jQuery('#allowimport').removeClass("disablesetting");
-        jQuery('#allowimport').addClass("enablesetting");
-        jQuery('#donallowimport').addClass("disablesetting");
-        jQuery('#donallowimport').removeClass("enablesetting");
-    }
-    else {
-        jQuery('#donallowimport').removeClass("disablesetting");
-        jQuery('#donallowimport').addClass("enablesetting");
-        jQuery('#allowimport').addClass("disablesetting");
-        jQuery('#allowimport').removeClass("enablesetting");
-    }
-}
-//Additional Features
-function schedulesetting(id) {
-    if (id == 'scheduled') {
-        jQuery('#schedulecheck').removeClass("disablesetting");
-        jQuery('#schedulecheck').addClass("enablesetting");
-        jQuery('#scheduleuncheck').addClass("disablesetting");
-        jQuery('#scheduleuncheck').removeClass("enablesetting");
-    }
-    else {
-        jQuery('#scheduleuncheck').removeClass("disablesetting");
-        jQuery('#scheduleuncheck').addClass("enablesetting");
-        jQuery('#schedulecheck').addClass("disablesetting");
-        jQuery('#schedulecheck').removeClass("enablesetting");
-    }
-}
-
-function categoryiconsetting(id) {
-    if (id == 'caticonenable') {
-        jQuery('#catenable').removeClass("disablesetting");
-        jQuery('#catenable').addClass("enablesetting");
-        jQuery('#catdisable').addClass("disablesetting");
-        jQuery('#catdisable').removeClass("enablesetting");
-    }
-    else {
-        jQuery('#catdisable').removeClass("disablesetting");
-        jQuery('#catdisable').addClass("enablesetting");
-        jQuery('#catenable').addClass("disablesetting");
-        jQuery('#catenable').removeClass("enablesetting");
-    }
-}
-
-
-function dropsetting(id) {
-    if (id == 'drop_table') {
-        jQuery('#dropon').removeClass("disablesetting");
-        jQuery('#dropon').addClass("enablesetting");
-        jQuery('#dropoff').addClass("disablesetting");
-        jQuery('#dropoff').removeClass("enablesetting");
-    }
-    else {
-        jQuery('#dropoff').removeClass("disablesetting");
-        jQuery('#dropoff').addClass("enablesetting");
-        jQuery('#dropon').addClass("disablesetting");
-        jQuery('#dropon').removeClass("enablesetting");
-    }
-}
-
-// Enable / Disable the debug mode 
-function debugmode_check(id) {
-    if (id == 'enabled') {
-        jQuery('#debugmode_enable').removeClass("disablesetting");
-        jQuery('#debugmode_enable').addClass("enablesetting");
-        jQuery('#debugmode_disable').removeClass("enablesetting");
-        jQuery('#debugmode_disable').addClass("disablesetting");
-    } else {
-        jQuery('#debugmode_disable').removeClass("disablesetting");
-        jQuery('#debugmode_disable').addClass("enablesetting");
-        jQuery('#debugmode_enable').removeClass("enablesetting");
-        jQuery('#debugmode_enable').addClass("disablesetting");
-    }
-}
-
-
-//End of settings js
-
-			
 

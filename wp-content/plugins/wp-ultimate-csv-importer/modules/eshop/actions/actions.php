@@ -554,13 +554,10 @@ class EshopActions extends SkinnyActions {
 							$poststatus = substr($poststatus_pwd, 1);
 							$stripPSL = substr($poststatus, -1);
 							if ($stripPSL == '}') {
-								$postpwd = substr($poststatus, 0, -1);
+								$postpwd = substr($poststatus, 1, -1);
 								$data_array['post_status'] = 'publish';
 								$data_array ['post_password'] = $postpwd;
-								if (strlen($postpwd) !=0)
 								$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('protected with password', 'wp-ultimate-csv-importer');
-								else
-								$this->detailedLog[$currentLimit]['poststatus'] = "<b>". __('Status','csv-import')." - </b>".__('publish','csv-import');
 							} else {
 								$data_array['post_status'] = 'publish';
 								$this->detailedLog[$currentLimit]['poststatus'] = "<b>" . __('Status', 'wp-ultimate-csv-importer') . " - </b>" . __('publish', 'wp-ultimate-csv-importer');
@@ -633,7 +630,7 @@ class EshopActions extends SkinnyActions {
 
 			//add global password
 			if ($data_array) {
-				if ($ret_array['importallwithps'] == 6) {
+				if ($ret_array['importallwithps'] == 3) {
 					$data_array['post_password'] = $ret_array['globalpassword_txt'];
 					$this->detailedLog[$currentLimit]['poststatus'] = "<b>Status - </b>protected with password " . $ret_array['globalpassword_txt'];
 				}
