@@ -8,8 +8,9 @@ function coenv_base_hierarchical_submenu($postid) {
     $post = get_post($postid);
     
     if ( $post->post_type == 'student_blog' ) {
-        $postid = 5094;
-        $post = get_post($postid);
+        $index_page = get_page_by_path('students/blog');
+        $ancestors = get_post_ancestors( $index_page->ID );
+        $post = get_post( array_pop( $ancestors ) );
     }
 
     $top_post = $post;

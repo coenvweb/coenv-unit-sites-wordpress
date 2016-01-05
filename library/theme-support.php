@@ -136,8 +136,9 @@ function coenv_get_ancestor($attr = 'ID') {
     }
     
     if ( $post->post_type == 'student_blog' ) {
-
-        $ancestor = get_post(5094);
+        $index_page = get_page_by_path('students/blog');
+        $ancestors = get_post_ancestors( $index_page->ID );
+        $ancestor = get_post( array_pop( $ancestors ) );
         return $ancestor->$attr;
     }
 
