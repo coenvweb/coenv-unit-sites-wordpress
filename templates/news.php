@@ -88,7 +88,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         echo '<div class="blog clearfix">';
 		get_template_part( 'partials/partial', 'story' );
         ?>
-	</div>
+		</div>
 	<?php endwhile; ?>
 	<div class="pager">
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
