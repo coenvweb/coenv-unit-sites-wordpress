@@ -143,105 +143,19 @@ $wp_query = new WP_Query( $home_args );
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
+        $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
 		$wp_query->the_post();
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
-        }
+
 		if ( $wp_query->current_post == 0 ) {
-            if ( has_post_thumbnail()) {
-
-                echo '<div class="large-8 columns featured-news">';
-				echo '<div class="featured-thumbnail">';
-				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-				the_post_thumbnail( 'large' );
-				echo '</a></div>';
-				echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
-				} else {
-					$terms_str = '';
-				}
-				$terms = "";
-				echo $terms_str;
-	            echo '</div>';
-                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h4>' . get_the_title() . '</h4></a>';
-	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
-	            echo $post_link;
-			}
-            else {
-                echo '<div class="large-4 columns small-news">';
-                echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $terms = wp_get_post_terms(get_the_id(), 'category');
-				if (!empty($terms)) {
-					$terms_arr = array();
-					
-					foreach ($terms as &$term) {
-						if ($term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-						}
-					}
-					$terms_str = ' / ' . implode(', ', $terms_arr);
-
-				} else {
-					$terms_str = '';
-				}
-				echo $terms_str;
-				//var_dump($terms_arr);
-				$terms = "";
-                echo '</div>';
-                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-                echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-                echo $post_link;
-            }
-		
+            echo '<div class="large-8 columns featured-news">';
+            get_template_part( 'partials/partial', 'story' );		
 		}
-
 		else {
-			
-		echo '<div class="large-4 columns small-news">';
-		echo '<div class="post-meta">';
-		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-		// Get categories
-        $more_terms = wp_get_post_terms(get_the_id(), 'category');
-		if (!empty($more_terms)) {
-			$more_terms_arr = array();
-			
-			foreach ($more_terms as &$term) {
-				if ($term->slug != 'uncategorized') {
-					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-				}
-			}
-			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+            echo '<div class="large-4 columns small-news">';
+            get_template_part( 'partials/partial', 'story' );
+        }
 
-		} else {
-			$more_terms_str = '';
-		}
-		$more_terms = "";
-		echo $more_terms_str;
-		echo '</div>';
-		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
-		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-       	echo $post_link;
-		}
-	echo '</div>';
+	   echo '</div>';
 	endwhile;
 	?>
 <?php endif; ?>

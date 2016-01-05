@@ -83,50 +83,18 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 		<div class="blog clearfix">
 		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+            # The Loop
+            while ( $wp_query->have_posts() ) :
+            $wp_query->the_post();
+            $rows = get_field('blog_link');
+            $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
 		?>
 		<div class="blog-list-item post-<?php the_ID() ?>">
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
         <?php
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '<div class="blog-meta">';
-		echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-		 $termlist .= '<a href="' . $url_current . '?tax=' . $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
-		 echo '</p>';
-		
-		echo '</div>';
-		echo '<div class="post">';
-		if (has_post_thumbnail()):
-		echo '<a class="left" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
-		the_post_thumbnail( 'medium' );
-		echo '</a>';
-		endif;
-		echo the_excerpt();
-		echo '<a class="button" href="' . get_the_permalink() . '">Read more</a>';
-		'</div>';
-		echo '<div class="blog-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['blog_link_type'] == 'upload') {
-					echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-				} elseif ($row['blog_link_type'] == 'link') {
-					echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-				} 
-			}
-		} ?>
-		</div>
+        delete_post_thumbnail( get_the_ID() );
+		get_template_part( 'partials/partial', 'story' );
+        ?>
+
 		</div>
 	</div>
 	<?php endwhile; ?>
