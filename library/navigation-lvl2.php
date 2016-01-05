@@ -6,6 +6,11 @@
 function coenv_base_hierarchical_submenu($postid) {
     $post = get_post($postid);
     $top_post = $post;
+    if ( $post->post_type == 'post' ) {
+        $index_page = get_page_by_path('news-and-events');
+        $ancestors = get_post_ancestors( $index_page->ID );
+        $post = get_post( array_pop( $ancestors ) );
+    }
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
         $top_post = get_post(end($post->ancestors));
