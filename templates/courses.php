@@ -22,14 +22,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <?php the_content(); ?>
 		<div class="row filters">
-			<div class=" large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_theme">
-				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
-			</div>
-			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="author">
-				<?php coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
-			</div>
-			<div class="large-4 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="publication_year">
-				<?php coenv_base_cat_filter('publication_year', $coenv_cat_term_1); // Category filter ?>
+			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
+				<?php coenv_base_cat_filter('course_quarter', $coenv_cat_term_1); // Category filter ?>
 			</div>
 		</div>
 		<hr>
@@ -56,36 +50,17 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$wp_query = new WP_Query( $query_args );
 		?>
 
-		<?php if ($coenv_cat_1 == 'course_quarters'): ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> courses listed under <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
-		</div>
-		<?php endif; ?>
-		<?php if ($coenv_cat_1 == 'author'): ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> courses offered by <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
-		</div>
-		<?php endif; ?>
-		<?php if ($coenv_cat_1 == 'publication_year'): ?>
+		<?php if ($coenv_cat_1 == 'course_quarter'): ?>
 		<div class="panel">
 			<div class="left">
-				<?php if($coenv_cat_term_1 == 'in-press') { ?>
-				<?php echo $wp_query->found_posts; ?>
-				courses that are 
-				<strong>
-				<?php echo strtolower($coenv_cat_term_1_val); ?>
-				</strong>
-				<?php } elseif (is_numeric($coenv_cat_term_1)) { ?>
 				<?php echo $wp_query->found_posts; ?>
 				courses offered in 
 				<strong>
 				<?php echo $coenv_cat_term_1_val; ?>
 				</strong>
-				<?php } ?>
-				<strong><?php echo strtolower($year_cat->name); ?></strong></div>
-			<div class="right"><a href="/education/courses-and-seminars/">all courses &raquo;</a></div>
+				</div>
+			<div class="right"><a href="../courses-and-seminars">all courses &raquo;</a></div>
+        </div>
 
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
@@ -98,14 +73,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
         $terms = wp_get_post_terms($post->ID, 'course_quarter', $args );
-        $quarter =  $terms[0]->name;
-        echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter . '</h5>';
-		echo '<h4>' . get_the_title() . '</h4>';
+        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $terms[0]->name . '</a></h5>';
+		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
         echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
 		echo '<div class="course-description">' . get_field('course_description') . '</div>';
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         if (get_field('course_website') ) {
-		echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';
+		echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'">View course website</a></div>';
         }
         echo '</li>';
 		endwhile;
@@ -120,7 +94,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any publications. <a href="/research/publications">Return to all publications &raquo;</a></p>
+  	<p>We're sorry. Your crtieria did not match any courses. <a href="pcc/education/courses-and-seminars/">Return to all courses &raquo;</a></p>
 	<?php endif; ?>	
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>

@@ -12,6 +12,8 @@
 
             // display a sub field value
         
+        
+        
         if (get_sub_field('instructor_link')) {
                 echo '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
             } else {
