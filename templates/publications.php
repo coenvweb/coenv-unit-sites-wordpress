@@ -43,7 +43,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		$query_args = array(
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
-			'posts_per_page' => 10,
+			'posts_per_page' => 100,
 			'paged' => $paged
 		);
 
