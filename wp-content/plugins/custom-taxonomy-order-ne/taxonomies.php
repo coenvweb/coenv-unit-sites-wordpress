@@ -140,8 +140,8 @@ function customtaxorder_sort_taxonomies_array( $taxonomies = array() ) {
 	// Main sorted taxonomies.
 	if ( ! empty($order) && is_array($order) && ! empty($taxonomies) && is_array($taxonomies) ) {
 		foreach ( $order as $tax ) {
-			foreach ( $taxonomies as $taxonomy ) {
-				if ( is_array( $taxonomy ) && $tax === $taxonomy['name'] ) {
+			foreach ( $taxonomies as $key => $taxonomy ) {
+	 			if ( is_array( $taxonomy ) && $tax === $taxonomy['name'] ) {
 					$taxonomies_woo[ $taxonomy['name'] ] = $taxonomy;
 					unset( $taxonomies[$taxonomy['name']] );
 				}
@@ -150,8 +150,8 @@ function customtaxorder_sort_taxonomies_array( $taxonomies = array() ) {
 	}
 
 	// Unsorted taxonomies, the leftovers.
-	foreach ( $taxonomies as $taxonomy ) {
-		$taxonomies_woo[ $taxonomy['name'] ] = $taxonomy;
+	foreach ( $taxonomies as $key => $taxonomy ) {
+		$taxonomies_woo[ $key ] = $taxonomy;
 	}
 
 	return $taxonomies_woo;
