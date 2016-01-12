@@ -169,4 +169,3 @@ function coenv_base_custom_field_excerpt($field_name) {
 
 
 
-

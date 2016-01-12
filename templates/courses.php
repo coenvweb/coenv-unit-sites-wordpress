@@ -38,8 +38,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
 			'posts_per_page' => 20,            
-			'paged' => $paged
+			'paged' => $paged,
+            'orderby' => 'menu_order'
 		);
+        $current_category = '';
 
 		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
@@ -69,19 +71,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        ?>
-		<li class="course-list-item post-<?php the_ID() ?>">
-        <?php
-        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args );
-        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $terms[0]->name . '</a></h5>';
-		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
-		echo '<div class="course-description">' . get_field('course_description') . '</div>';
-        echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
-        if (get_field('course_website') ) {
-		echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'">View course website</a></div>';
-        }
-        echo '</li>';
+        
 		endwhile;
 		?>
     </ul>
@@ -96,6 +86,41 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
   	<?php else: ?>
   	<p>We're sorry. Your crtieria did not match any courses. <a href="pcc/education/courses-and-seminars/">Return to all courses &raquo;</a></p>
 	<?php endif; ?>	
+
+<?php $terms = get_terms('course_quarter');
+foreach($terms as $term) {
+    $posts = get_posts(array(
+            'post_type' => 'courses',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'course_quarter',
+                    'field' => 'slug',
+                    'terms' => $term->slug
+                )
+            ),
+            'numberposts' => -1
+        ));
+    foreach($posts as $post) {
+        $quarter = wp_get_post_terms($post->ID, 'course_quarter', $args );
+                if ( $quarter != $current_category ) {
+                    $current_category = $quarter; ?>
+                    <h3 class="category panel">
+                        <?php echo $quarter[0]->name; ?>
+                    </h3>
+                <?php } ?>
+		<li class="course-list-item post-<?php the_ID() ?>">
+        <?php
+        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $quarter[0]->slug . '">' . $quarter[0]->name . '</a></h5>';
+		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
+        echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
+        echo '</li>';
+    }
+}   
+            ?>
+            
+            
+            
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
