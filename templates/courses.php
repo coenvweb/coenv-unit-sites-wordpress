@@ -12,8 +12,16 @@ $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
 $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
 $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
 $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-$coenv_inpress = urlencode(htmlentities($_GET['inpress']));
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+$current_quarters = get_field('quarter_to_display');
+$qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
+$qtr_term_1 = get_term_by('id', $current_quarters[1], 'course_quarter');
+if (empty($coenv_cat_1)) {
+    $coenv_cat_1 = 'course_quarter';
+    $coenv_cat_term_1 = $qtr_term_0->slug;
+    $coenv_cat_term_1_arr = $qtr_term_0;
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+}
 ?>
 <?php get_header(); ?>
 <div class="row">
@@ -21,15 +29,37 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <?php the_content(); ?>
+            <?php echo 'Current Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name); ?>
 		<div class="row filters">
 			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
-				<?php coenv_base_cat_filter('course_quarter', $coenv_cat_term_1); // Category filter ?>
+				<?php 
+                
+$tax_obj = get_taxonomy($tax);
+$tax_str = $tax_obj->labels->name;
+
+$cats_args  = array(
+	'orderby' => 'name',
+	'order' => 'ASC',
+	'taxonomy' => $tax
+);
+$cats = get_categories($cats_args);
+	if ($cats) {
+		echo '<select name="select-category" class="select-category">';
+		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+		foreach($cats as $cat) { 
+			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+			echo $cat->slug;
+			echo $tax_value;
+			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+		}
+		echo '</select>';
+	} 
+                // Category filter ?>
 			</div>
 		</div>
 		<hr>
 		
 		<?php
-		echo $coenv_inpress;
 		/**
 		* Courses loop
 		*/
@@ -38,10 +68,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
 			'posts_per_page' => 20,            
-			'paged' => $paged,
-            'orderby' => 'menu_order'
+			'paged' => $paged
 		);
-        $current_category = '';
 
 		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
@@ -61,7 +89,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 				<?php echo $coenv_cat_term_1_val; ?>
 				</strong>
 				</div>
-			<div class="right"><a href="../courses-and-seminars">all courses &raquo;</a></div>
         </div>
 
 		<?php endif; ?>
@@ -71,7 +98,14 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        
+        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); ?>
+		<li class="course-list-item post-<?php the_ID() ?>">
+        <?php
+        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $terms[0]->name . '</a></h5>';
+		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
+        echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
+        echo '</li>';
 		endwhile;
 		?>
     </ul>
@@ -86,41 +120,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
   	<?php else: ?>
   	<p>We're sorry. Your crtieria did not match any courses. <a href="pcc/education/courses-and-seminars/">Return to all courses &raquo;</a></p>
 	<?php endif; ?>	
-
-<?php $terms = get_terms('course_quarter');
-foreach($terms as $term) {
-    $posts = get_posts(array(
-            'post_type' => 'courses',
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'course_quarter',
-                    'field' => 'slug',
-                    'terms' => $term->slug
-                )
-            ),
-            'numberposts' => -1
-        ));
-    foreach($posts as $post) {
-        $quarter = wp_get_post_terms($post->ID, 'course_quarter', $args );
-                if ( $quarter != $current_category ) {
-                    $current_category = $quarter; ?>
-                    <h3 class="category panel">
-                        <?php echo $quarter[0]->name; ?>
-                    </h3>
-                <?php } ?>
-		<li class="course-list-item post-<?php the_ID() ?>">
-        <?php
-        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $quarter[0]->slug . '">' . $quarter[0]->name . '</a></h5>';
-		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
-        echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
-        echo '</li>';
-    }
-}   
-            ?>
-            
-            
-            
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
