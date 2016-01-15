@@ -9,23 +9,16 @@
     if( have_rows('instructor(s)') ) {
         // loop through the rows of data
         while ( have_rows('instructor(s)') ) : the_row();
-
-            // display a sub field value
-        
-        
-        
+        // display a sub field value
         if (get_sub_field('instructor_link')) {
-                echo '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
+                $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
             } else {
-                echo get_sub_field('instructor_name') . ' ';
+                $instructors[] = get_sub_field('instructor_name');
             }
-        
-
         endwhile;
-
+        echo implode(', ',$instructors);
     }
     echo '<div class="course-description">' . get_field('course_description') . '</div>';
-    echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
     if (get_field('course_website') ) {
         echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';
     }

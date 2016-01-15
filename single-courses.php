@@ -1,9 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="columns large-12 section-title"><h2><a href="/research/publications">Courses</a></h2></div>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
+	<div class="columns large-12 section-title"><h2><a href="../../">Courses</a></h2></div>
 	<div class="small-12 medium-8 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>

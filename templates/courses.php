@@ -104,12 +104,11 @@ $cats = get_categories($cats_args);
 		$wp_query->the_post();
         $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); 
         $quarter_name = get_field('quarter');
-        $course_year = substr( $terms[0]->slug , -4);
-        echo $quarter_name; ?>
+        $course_year = substr( $terms[0]->slug , -4); ?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $quarter_name . ' ' . $course_year . '</a></h5>';
-		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
+        echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . '</h5>';
+		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
         echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         echo '</li>';

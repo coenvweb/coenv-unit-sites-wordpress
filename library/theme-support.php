@@ -226,7 +226,7 @@ function coenv_base_section_title($id) {
     
     if ( is_singular( 'courses' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="../"><span>&larr; View All</span>Courses</a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="../../"><span>&larr; View All</span></a></h2></div>';
     }
     
     // if ( is_page_template('templates/courses.php')) { //change news index' section titles

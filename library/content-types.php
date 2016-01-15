@@ -38,7 +38,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    'rewrite' => array('slug' => 'education/courses-and-seminars/courses', 'with_front' => false),
+    'rewrite' => array('slug' => 'education/climate-related-courses/courses', 'with_front' => false),
   'menu_icon' => 'dashicons-welcome-learn-more',
     )
   );
