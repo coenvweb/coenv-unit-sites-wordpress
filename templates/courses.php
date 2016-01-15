@@ -28,7 +28,7 @@ if (empty($coenv_cat_1)) {
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-            <?php echo 'Current Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name); ?>
+            <?php echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name) . '</h4>'; ?>
             <?php the_content(); ?>
             
 		<div class="row filters">
@@ -59,6 +59,7 @@ $cats = get_categories($cats_args);
                 // Category filter ?>
 			</div>
 		</div>
+            </div>
 		<hr>
 		
 		<?php
@@ -69,7 +70,8 @@ $cats = get_categories($cats_args);
 		$query_args = array(
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,            
+			'posts_per_page' => 20,     
+            'order_by' => 'name',
 			'paged' => $paged
 		);
 
@@ -95,15 +97,18 @@ $cats = get_categories($cats_args);
 
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
-        <ul>
+        <ul class="courses">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); ?>
+        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); 
+        $quarter_name = get_field('quarter');
+        $course_year = substr( $terms[0]->slug , -4);
+        echo $quarter_name; ?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $terms[0]->name . '</a></h5>';
+        echo '<h5>' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term=' . $terms[0]->slug . '">' . $quarter_name . ' ' . $course_year . '</a></h5>';
 		echo '<a href="' . get_field('course_website') .'"><h4>' . get_the_title() . '</h4></a>';
         echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
@@ -125,7 +130,6 @@ $cats = get_categories($cats_args);
 	</div>
     </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
-</div>
 <?php get_sidebar(); ?>
 </div>
 </div>
