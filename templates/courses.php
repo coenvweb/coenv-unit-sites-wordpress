@@ -28,31 +28,33 @@ if (empty($coenv_cat_1)) {
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-            <?php the_content(); ?>
             <?php echo 'Current Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name); ?>
+            <?php the_content(); ?>
+            
 		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
+			<div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
 				<?php 
-                
 $tax_obj = get_taxonomy($tax);
 $tax_str = $tax_obj->labels->name;
 
 $cats_args  = array(
-	'orderby' => 'name',
+	'orderby' => 'term_group',
 	'order' => 'ASC',
-	'taxonomy' => $tax
+	'taxonomy' => 'course_quarter',
+    'hide_empty' => 0
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-		echo '<select name="select-category" class="select-category">';
-		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+        $i = 6;
+        echo '<div>';
 		foreach($cats as $cat) { 
-			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
-			echo $cat->slug;
-			echo $tax_value;
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+            $year = substr( $cat->slug , -4);
+            if($i % 6 == 0) {echo '</div><div><p> Academic Year: ' . ($year - 1) . ' - ' . $year . '</p>';}
+			$selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
+			echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+            $i++;
+            
 		}
-		echo '</select>';
 	} 
                 // Category filter ?>
 			</div>
@@ -109,16 +111,8 @@ $cats = get_categories($cats_args);
 		endwhile;
 		?>
     </ul>
-	<div class="pager">
-	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
-		<nav id="post-nav">
-			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
-			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
-		</nav>
-	<?php } ?>
-	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any courses. <a href="pcc/education/courses-and-seminars/">Return to all courses &raquo;</a></p>
+  	<p>There are no courses advertised for this quarter yet. Try again later, or check another quarter.</p>
 	<?php endif; ?>	
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
@@ -131,6 +125,7 @@ $cats = get_categories($cats_args);
 	</div>
     </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+</div>
 <?php get_sidebar(); ?>
 </div>
 </div>
