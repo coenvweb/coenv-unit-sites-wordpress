@@ -25,7 +25,7 @@
                                         <?php if ( $terms ) : ?>
                                             | <?php 
                                                 foreach ($terms as $term) {
-                                                    $termlist .= '<a href="' . get_permalink( '5094' ) . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                                                    $termlist .= '<a href="' . get_permalink( '5150' ) . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
                                                 };
                                             $termlist = rtrim($termlist,', ');
                                             echo $termlist; ?>

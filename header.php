@@ -90,6 +90,13 @@
 	<meta property="og:url" content="<?php echo $post_link ?>" />
 	<meta property="og:image" content="<?php echo $post_image ?>" />
 	<meta property="og:site_name" content="<?php bloginfo('name') ?>" />
+      
+    <?php if ((is_page_template( 'templates/student-blog.php' )) || (is_singular( 'student_blog' )) ){
+        echo '<link rel="alternate" type="application/rss+xml" 
+  title="RSS Feed for SMEA Student Blog" 
+  href="'. get_site_url() .'/feed/?post_type=student_blog" />';
+    };
+    ?>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

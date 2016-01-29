@@ -265,7 +265,7 @@ function coenv_base_section_title($id) {
     
     if ( is_singular( 'student_blog' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="../"><span>&larr; View All</span>Student Blog</a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="../../"><span>&larr; View All</span>Student Blog</a></h2></div>';
     }
     
     if ( is_page_template('templates/student-blog.php')) { //change news index' section titles

@@ -67,13 +67,13 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a class="button" href="/students/blog/">all posts</a></div>
+			<div class="right"><a class="button" href="about/student-blog">all posts</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a class="button" href="/students/blog/">all posts &raquo;</a></div>
+			<div class="right"><a class="button" href="about/student-blog">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 
@@ -101,13 +101,16 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
             <div class="small-6 columns left">
                 <?php 
                 echo '<p>' . get_the_date('M j, Y') .' / ';
-                $termlist = '';
-                foreach ($terms as $term) {
-                    $termlist .= '<a href="/about/news/' . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-                }
-                $termlist = rtrim($termlist,', ');
-                echo $termlist;
-                ?>
+                $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+                // Filter display of administrative post categories
+                $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
+                if ( $terms ) {
+                        foreach ($terms as $term) {
+                            $termlist .= '<a href="' . get_permalink( '5150' ) . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                        };
+                    $termlist = rtrim($termlist,', ');
+                    echo $termlist;
+                } ?>
                 </p>
             </div>
             <div class="small-6 columns sharer right">
@@ -130,7 +133,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 		echo '<div class="post">';
 		if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+		echo '<a class="right" style="margin: 1rem 0 1rem 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
 		endif;

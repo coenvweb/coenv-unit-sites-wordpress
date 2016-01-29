@@ -90,12 +90,24 @@ echo '</div>';
 # Featured News
 
 $feat_args = array(
-    'post_type' => 'post',
+    'post_type' => array('student_blog', 'post'),
     'post_status' => 'publish',
     'posts_per_page' => 1,
-    'category_name' => 'featured',
-    'cat' => -19,
+    'tax_query' => array(
+        'relation' => 'OR',
+        array(
+            'taxonomy' => 'category',
+            'terms' => 'featured',
+            'field' => 'slug'
+        ),
+        array(
+            'taxonomy' => 'blog_category',
+            'terms' => 'featured',
+            'field' => 'slug'
+        )
+    )
 );
+    
 
 $wp_query = new WP_Query( $feat_args );
 ?>

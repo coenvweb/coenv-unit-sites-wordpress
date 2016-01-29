@@ -57,7 +57,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     //'has_archive' => false,
     'show_ui' => true,
-    'rewrite' => array('slug' => '/students/blog', 'with_front' => false),
+    'rewrite' => array('slug' => '/about/student-blog/blog', 'with_front' => false),
   'menu_icon' => 'dashicons-exerpt-view',
     )
   );
