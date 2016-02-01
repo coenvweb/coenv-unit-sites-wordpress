@@ -264,6 +264,11 @@
                 left: 0;
             }
 
+            @if unit($panel_inner_width) == '%' and $panel_inner_width < '100%' {
+                padding-left: (100 - $panel_inner_width) / 2;
+                padding-right: (100 - $panel_inner_width) / 2;
+            }
+
             @if $shadow == 'on' {
                 @include box-shadow($shadow_horizontal $shadow_vertical $shadow_blur $shadow_spread $shadow_color);
             }

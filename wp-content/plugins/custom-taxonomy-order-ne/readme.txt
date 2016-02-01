@@ -127,6 +127,11 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.7.5 =
+* 2016-01-11
+* Support Advanced Custom Fields with its Taxonomy Fields.
+
 = 2.7.4 =
 * 2016-01-06
 * Really fix Woo get_attribute() (thanks eddy_boy).

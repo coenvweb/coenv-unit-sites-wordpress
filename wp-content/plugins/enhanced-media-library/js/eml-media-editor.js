@@ -1,30 +1,20 @@
 window.wp = window.wp || {};
 window.eml = window.eml || { l10n: {} };
 
+
+
 ( function( $, _ ) {
 
     var media = wp.media,
-        l10n = media.view.l10n,
-        original = {},
-        gallery = wp.mce.views.get('gallery');
-
-
-
-    _.extend( eml.l10n, wpuxss_eml_media_editor_l10n );
+        l10n = media.view.l10n;
 
 
 
     /**
-     * wp.media.gallery
+     * eml.mediaCollection
      *
      */
-    _.extend( media.gallery.defaults, {
-		orderby : 'menuOrder'
-    });
-
-    delete media.gallery.defaults.id;
-
-    _.extend( media.gallery, {
+    eml.mediaCollection = {
 
         collections: {},
 
@@ -34,13 +24,13 @@ window.eml = window.eml || { l10n: {} };
                 shortcodeString = shortcode.string(),
                 result = collections[ shortcodeString ],
                 attrs, args, query, others, self = this,
-                isFilterBased = emlIsGalleryFilterBased( shortcode.attrs.named );
+                isFilterBased = emlIsFilterBased( shortcode.attrs.named );
 
 
             delete collections[ shortcodeString ];
 
 
-            if ( result && ! isFilterBased ) {
+            if ( result && ! isFilterBased && _.isUndefined( shortcode.attrs.named.limit ) ) {
                 return result;
             }
 
@@ -48,8 +38,15 @@ window.eml = window.eml || { l10n: {} };
             attrs = _.defaults( shortcode.attrs.named, this.defaults );
             args  = _.pick( attrs, 'orderby', 'order' );
 
-            args.type    = this.type;
-            args.perPage = -1;
+            if ( ! attrs.limit || _.isNaN( parseInt( attrs.limit, 10 ) ) || parseInt( attrs.limit, 10 ) < 1 ) {
+                delete attrs.limit;
+            }
+            else {
+                attrs.limit = parseInt( attrs.limit, 10 );
+            }
+
+            args.type = this.type;
+            args.perPage = attrs.limit || -1;
 
 
             if ( 'rand' === attrs.orderby ) {
@@ -69,13 +66,13 @@ window.eml = window.eml || { l10n: {} };
                 args.order = 'ASC';
             }
 
-            if ( undefined === attrs.id && ! isFilterBased ) {
+            if ( _.isUndefined( attrs.id )  && ! isFilterBased ) {
                 attrs.id = media.view.settings.post && media.view.settings.post.id;
             }
 
             if ( isFilterBased ) {
 
-                if ( undefined !== attrs.id ) {
+                if ( attrs.id ) {
                     args.uploadedTo = attrs.id;
                 }
 
@@ -128,6 +125,8 @@ window.eml = window.eml || { l10n: {} };
                 others[ key ] = self.coerce( others, key );
             });
 
+            media.model.Query.cleanQueries();
+
             query = wp.media.query( args );
             query[ this.tag ] = new Backbone.Model( others );
 
@@ -140,7 +139,7 @@ window.eml = window.eml || { l10n: {} };
                 props = attachments.props.toJSON(),
                 attrs = _.pick( props, 'orderby', 'order' ),
                 shortcode, clone,
-                isFilterBased = emlIsGalleryFilterBased( props );
+                isFilterBased = emlIsFilterBased( props );
 
 
             if ( attachments.type ) {
@@ -152,7 +151,7 @@ window.eml = window.eml || { l10n: {} };
                 _.extend( attrs, attachments[this.tag].toJSON() );
             }
 
-            if ( ! isFilterBased || 'menuOrder' === attrs.orderby ) {
+            if ( ! isFilterBased ) {
                 // Convert all gallery shortcodes to use the `ids` property.
                 // Ignore `post__in` and `post__not_in`; the attachments in
                 // the collection will already reflect those properties.
@@ -160,7 +159,7 @@ window.eml = window.eml || { l10n: {} };
             }
 
             // Copy the `uploadedTo` post ID.
-            if ( undefined !==  props.uploadedTo && null !== props.uploadedTo ) {
+            if ( props.uploadedTo ) {
                 attrs.id = props.uploadedTo;
             }
 
@@ -192,8 +191,15 @@ window.eml = window.eml || { l10n: {} };
                 delete attrs.order;
             }
 
-            attrs = this.setDefaults( attrs );
+            if ( ! attrs.limit || _.isNaN( parseInt( attrs.limit, 10 ) ) || parseInt( attrs.limit, 10 ) < 1 ) {
+                delete attrs.limit;
+                delete media.galleryDefaults.limit;
+            }
+            else {
+                attrs.limit = parseInt( attrs.limit, 10 ).toString();
+            }
 
+            attrs = this.setDefaults( attrs );
 
             shortcode = new wp.shortcode({
                 tag:    this.tag,
@@ -214,7 +220,8 @@ window.eml = window.eml || { l10n: {} };
         edit: function( content ) {
 
             var shortcode = wp.shortcode.next( this.tag, content ),
-                attachments, selection, state;
+                defaultPostId = this.defaults.id,
+                attachments, selection, state, props;
 
             // Bail if we didn't match the shortcode or all of the content.
             if ( ! shortcode || shortcode.content !== content ) {
@@ -224,7 +231,12 @@ window.eml = window.eml || { l10n: {} };
             // Ignore the rest of the match object.
             shortcode = shortcode.shortcode;
 
+            if ( _.isUndefined( shortcode.get('id') ) && ! _.isUndefined( defaultPostId ) ) {
+                shortcode.set( 'id', defaultPostId );
+            }
+
             attachments = this.attachments( shortcode );
+            attachments.props.set( 'perPage', -1 );
 
             selection = new wp.media.model.Selection( attachments.models, {
                 props:    attachments.props.toJSON(),
@@ -264,6 +276,36 @@ window.eml = window.eml || { l10n: {} };
 
             return this.frame;
         }
+    };
+
+
+
+    /**
+     * wp.media.gallery
+     *
+     */
+    _.extend( media.gallery.defaults, {
+		orderby : 'menuOrder'
     });
+
+    delete media.gallery.defaults.id;
+
+    _.extend( media.gallery, eml.mediaCollection );
+
+
+
+    /**
+     * wp.media.playlist
+     *
+     */
+
+    _.extend( media.playlist.defaults, {
+        orderby: 'menuOrder',
+        order: 'ASC'
+    });
+
+    delete media.playlist.defaults.id;
+
+    _.extend( media.playlist, eml.mediaCollection );
 
 })( jQuery, _ );

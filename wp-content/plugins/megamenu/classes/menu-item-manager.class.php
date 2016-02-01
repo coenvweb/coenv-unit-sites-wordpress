@@ -263,7 +263,7 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= "</div>";
 
         $tabs['mega_menu'] = array(
-            'title' => __('Sub Menu', 'megamenu'),
+            'title' => __('Mega Menu', 'megamenu'),
             'content' => $return
         );
 
@@ -326,14 +326,6 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= '        </tr>';
         $return .= '        <tr>';
         $return .= '            <td class="mega-name">';
-        $return .=                  __("Hide Sub Menu on Mobile", "megamenu");
-        $return .= '            </td>';
-        $return .= '            <td class="mega-value">';
-        $return .= '                <input type="checkbox" name="settings[hide_sub_menu_on_mobile]" value="true" ' . checked( $menu_item_meta['hide_sub_menu_on_mobile'], 'true', false ) . ' />';
-        $return .= '            </td>';
-        $return .= '        </tr>';
-        $return .= '        <tr>';
-        $return .= '            <td class="mega-name">';
         $return .=                  __("Hide Item on Desktop", "megamenu");
         $return .= '            </td>';
         $return .= '            <td class="mega-value">';
@@ -383,6 +375,14 @@ class Mega_Menu_Menu_Item_Manager {
             $return .= '<em>' . __("Option only available for top level menu items", "megamenu") . '</em>';
         }
 
+        $return .= '            </td>';
+        $return .= '        </tr>';
+        $return .= '        <tr>';
+        $return .= '            <td class="mega-name">';
+        $return .=                  __("Hide Sub Menu on Mobile", "megamenu");
+        $return .= '            </td>';
+        $return .= '            <td class="mega-value">';
+        $return .= '                <input type="checkbox" name="settings[hide_sub_menu_on_mobile]" value="true" ' . checked( $menu_item_meta['hide_sub_menu_on_mobile'], 'true', false ) . ' />';
         $return .= '            </td>';
         $return .= '        </tr>';
         $return .= '    </table>';
@@ -524,6 +524,9 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f102' => 'dashicons-admin-home',
             'dash-f111' => 'dashicons-admin-generic',
             'dash-f148' => 'dashicons-admin-collapse',
+            'dash-f536' => 'dashicons-filter',
+            'dash-f540' => 'dashicons-admin-customizer',
+            'dash-f541' => 'dashicons-admin-multisite',
             'dash-f119' => 'dashicons-welcome-write-blog',
             'dash-f133' => 'dashicons-welcome-add-page',
             'dash-f115' => 'dashicons-welcome-view-site',
@@ -555,11 +558,22 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f490' => 'dashicons-media-video',
             'dash-f492' => 'dashicons-playlist-audio',
             'dash-f493' => 'dashicons-playlist-video',
+            'dash-f522' => 'dashicons-controls-play',
+            'dash-f523' => 'dashicons-controls-pause',
+            'dash-f519' => 'dashicons-controls-forward',
+            'dash-f517' => 'dashicons-controls-skipforward',
+            'dash-f518' => 'dashicons-controls-back',
+            'dash-f516' => 'dashicons-controls-skipback',
+            'dash-f515' => 'dashicons-controls-repeat',
+            'dash-f521' => 'dashicons-controls-volumeon',
+            'dash-f520' => 'dashicons-controls-volumeoff',
             'dash-f165' => 'dashicons-image-crop',
+            'dash-f531' => 'dashicons-image-rotate',
             'dash-f166' => 'dashicons-image-rotate-left',
             'dash-f167' => 'dashicons-image-rotate-right',
             'dash-f168' => 'dashicons-image-flip-vertical',
             'dash-f169' => 'dashicons-image-flip-horizontal',
+            'dash-f533' => 'dashicons-image-filter',
             'dash-f171' => 'dashicons-undo',
             'dash-f172' => 'dashicons-redo',
             'dash-f200' => 'dashicons-editor-bold',
@@ -589,19 +603,24 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f224' => 'dashicons-editor-strikethrough',
             'dash-f225' => 'dashicons-editor-unlink',
             'dash-f320' => 'dashicons-editor-rtl',
-            'dash-f464' => 'dashicons-editor-break',
+            'dash-f474' => 'dashicons-editor-break',
             'dash-f475' => 'dashicons-editor-code',
             'dash-f476' => 'dashicons-editor-paragraph',
+            'dash-f535' => 'dashicons-editor-table',
             'dash-f135' => 'dashicons-align-left',
             'dash-f136' => 'dashicons-align-right',
             'dash-f134' => 'dashicons-align-center',
             'dash-f138' => 'dashicons-align-none',
             'dash-f160' => 'dashicons-lock',
+            'dash-f528' => 'dashicons-unlock',
             'dash-f145' => 'dashicons-calendar',
+            'dash-f508' => 'dashicons-calendar-alt',
             'dash-f177' => 'dashicons-visibility',
+            'dash-f530' => 'dashicons-hidden',
             'dash-f173' => 'dashicons-post-status',
             'dash-f464' => 'dashicons-edit',
             'dash-f182' => 'dashicons-trash',
+            'dash-f537' => 'dashicons-sticky',
             'dash-f504' => 'dashicons-external',
             'dash-f142' => 'dashicons-arrow-up',
             'dash-f140' => 'dashicons-arrow-down',
@@ -620,6 +639,7 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f503' => 'dashicons-randomize',
             'dash-f163' => 'dashicons-list-view',
             'dash-f164' => 'dashicons-exerpt-view',
+            'dash-f509' => 'dashicons-grid-view',
             'dash-f237' => 'dashicons-share',
             'dash-f240' => 'dashicons-share-alt',
             'dash-f242' => 'dashicons-share-alt2',
@@ -655,9 +675,9 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f326' => 'dashicons-translation',
             'dash-f323' => 'dashicons-tag',
             'dash-f318' => 'dashicons-category',
-            'dash-f478' => 'dashicons-archive',
+            'dash-f480' => 'dashicons-archive',
             'dash-f479' => 'dashicons-tagcloud',
-            'dash-f480' => 'dashicons-text',
+            'dash-f478' => 'dashicons-text',
             'dash-f147' => 'dashicons-yes',
             'dash-f158' => 'dashicons-no',
             'dash-f335' => 'dashicons-no-alt',
@@ -670,6 +690,7 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f459' => 'dashicons-star-half',
             'dash-f154' => 'dashicons-star-empty',
             'dash-f227' => 'dashicons-flag',
+            'dash-f534' => 'dashicons-warning',
             'dash-f230' => 'dashicons-location',
             'dash-f231' => 'dashicons-location-alt',
             'dash-f178' => 'dashicons-vault',
@@ -703,7 +724,19 @@ class Mega_Menu_Menu_Item_Manager {
             'dash-f472' => 'dashicons-desktop',
             'dash-f471' => 'dashicons-tablet',
             'dash-f470' => 'dashicons-smartphone',
-            'dash-f328' => 'dashicons-smiley'
+            'dash-f525' => 'dashicons-phone',
+            'dash-f510' => 'dashicons-index-card',
+            'dash-f511' => 'dashicons-carrot',
+            'dash-f512' => 'dashicons-building',
+            'dash-f513' => 'dashicons-store',
+            'dash-f514' => 'dashicons-album',
+            'dash-f527' => 'dashicons-palmtree',
+            'dash-f524' => 'dashicons-tickets-alt',
+            'dash-f526' => 'dashicons-money',
+            'dash-f328' => 'dashicons-smiley',
+            'dash-f529' => 'dashicons-thumbs-up',
+            'dash-f542' => 'dashicons-thumbs-down',
+            'dash-f538' => 'dashicons-layout'
         );
 
         $icons = apply_filters( "megamenu_dashicons", $icons );

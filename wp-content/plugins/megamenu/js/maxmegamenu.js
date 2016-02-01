@@ -17,6 +17,7 @@
             event: $menu.attr('data-event'),
             effect: $menu.attr('data-effect'),
             panel_width: $menu.attr('data-panel-width'),
+            panel_inner_width: $menu.attr('data-panel-inner-width'),
             second_click: $menu.attr('data-second-click'),
             vertical_behaviour: $menu.attr('data-vertical-behaviour'),
             reverse_mobile_items: $menu.attr('data-reverse-mobile-items'),
@@ -32,6 +33,9 @@
 
 
         plugin.hidePanel = function(anchor, immediate) {
+
+            anchor.siblings('.mega-sub-menu').children('.mega-toggle-on').removeClass('mega-toggle-on');
+
             if (immediate) {
                 anchor.siblings('.mega-sub-menu').removeClass('mega-toggle-on').css('display', '');
                 anchor.parent().removeClass('mega-toggle-on').triggerHandler("close_panel");
@@ -118,6 +122,29 @@
                     left: (target_offset.left - submenu_offset.left) + "px"
                 });
             }
+
+
+            // apply inner width to sub menu by adding padding to the left and right of the mega menu
+            if ( anchor.parent().hasClass('mega-menu-megamenu') && plugin.settings.panel_inner_width && plugin.settings.panel_inner_width.length > 0 ) {
+
+                if ( $(plugin.settings.panel_inner_width).length ) {
+                    // jQuery selector
+                    var target_width = parseInt($(plugin.settings.panel_inner_width).width(), 10);
+                } else {
+                    // we're using a pixel width
+                    var target_width = parseInt(plugin.settings.panel_inner_width, 10);
+                }
+
+                var submenu_width = parseInt(anchor.siblings('.mega-sub-menu').width(), 10);
+
+                if ( (target_width > 0) && (target_width < submenu_width) ) {
+                    anchor.siblings('.mega-sub-menu').css({
+                        'paddingLeft': (submenu_width - target_width) / 2 + 'px',
+                        'paddingRight': (submenu_width - target_width) / 2 + 'px'
+                    });
+                }
+            }
+
 
             if ( megamenu.effect[plugin.settings.effect] ) {
                 var effect = megamenu.effect[plugin.settings.effect]['in'];

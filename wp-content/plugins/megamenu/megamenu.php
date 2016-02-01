@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.maxmegamenu.com
  * Description: Mega Menu for WordPress.
- * Version:     2.0
+ * Version:     2.0.1
  * Author:      Tom Hemsley
  * Author URI:  https://www.maxmegamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.0';
+    public $version = '2.0.1';
 
 
     /**
@@ -703,6 +703,7 @@ final class Mega_Menu {
                 "data-event" => isset( $menu_settings['event'] ) ? $menu_settings['event'] : 'hover',
                 "data-effect" => isset( $menu_settings['effect'] ) ? $menu_settings['effect'] : 'disabled',
                 "data-panel-width" => preg_match('/^\d/', $menu_theme['panel_width']) !== 1 ? $menu_theme['panel_width'] : '',
+                "data-panel-inner-width" => substr( $menu_theme['panel_inner_width'], -1 ) !== '%' ? $menu_theme['panel_inner_width'] : '',
                 "data-second-click" => isset( $settings['second_click'] ) ? $settings['second_click'] : 'close',
                 "data-document-click" => 'collapse',
                 "data-reverse-mobile-items" => 'true',
@@ -714,7 +715,7 @@ final class Mega_Menu {
 
             foreach( $wrap_attributes as $attribute => $value ) {
                 if ( strlen( $value ) ) {
-                    $attributes .= " " . $attribute . '="' . $value . '"';
+                    $attributes .= " " . $attribute . '="' . esc_attr( $value ) . '"';
                 }
             }
 

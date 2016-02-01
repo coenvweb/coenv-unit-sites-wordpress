@@ -568,6 +568,7 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                                 $html .= '<li><label>' . __('Edit in Media Popup','eml') . '</label><input type="checkbox" class="wpuxss-eml-media_popup_taxonomy_edit" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][media_popup_taxonomy_edit]" value="1" ' . checked( 1, $wpuxss_eml_taxonomies[$taxonomy->name]['media_popup_taxonomy_edit'], false ) . ' /></li>';
                                                 $html .= '<li><label>' . __('Show in Nav Menu','eml') . '</label><input type="checkbox" class="wpuxss-eml-show_in_nav_menus" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][show_in_nav_menus]" value="1" ' . checked( 1, $taxonomy->show_in_nav_menus, false ) . ' /></li>';
                                                 $html .= '<li><label>' . __('Remember Terms Order (sort)','eml') . '</label><input type="checkbox" class="wpuxss-eml-sort" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][sort]" value="1" ' . checked( 1, $taxonomy->sort, false ) . ' /></li>';
+                                                $html .= '<li><label>' . __('Show in REST','eml') . '</label><input type="checkbox" class="wpuxss-eml-show_in_rest" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][show_in_rest]" value="1" ' . checked( 1, $taxonomy->show_in_rest, false ) . ' /></li>';
                                                 $html .= '<li><label>' . __('Rewrite Slug','eml') . '</label><input type="text" class="wpuxss-eml-slug" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][rewrite][slug]" value="' . esc_attr($taxonomy->rewrite['slug']) . '" /></li>';
                                                 $html .= '<li><label>' . __('Slug with Front','eml') . '</label><input type="checkbox" class="wpuxss-eml-rewrite-with-front" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][rewrite][with_front]" value="1" ' . checked( 1, $taxonomy->rewrite['with_front'], false ) . ' /></li>';
                                                 $html .= '</ul>';
@@ -636,6 +637,7 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                     $html .= '<li><label>' . __('Edit in Media Popup','eml') . '</label><input class="wpuxss-eml-media_popup_taxonomy_edit" type="checkbox" name="" value="1" /></li>';
                                     $html .= '<li><label>' . __('Show in Nav Menu','eml') . '</label><input type="checkbox" class="wpuxss-eml-show_in_nav_menus" name="" value="1" /></li>';
                                     $html .= '<li><label>' . __('Remember Terms Order (sort)','eml') . '</label><input type="checkbox" class="wpuxss-eml-sort" name="" value="1" /></li>';
+                                    $html .= '<li><label>' . __('Show in REST','eml') . '</label><input type="checkbox" class="wpuxss-eml-show_in_rest" name="" value="1" /></li>';
                                     $html .= '<li><label>' . __('Rewrite Slug','eml') . '</label><input type="text" class="wpuxss-eml-slug" name="" value="" /></li>';
                                     $html .= '<li><label>' . __('Slug with Front','eml') . '</label><input type="checkbox" class="wpuxss-eml-rewrite-with-front" name="" value="1" checked="checked" /></li>';
                                     $html .= '</ul>';
@@ -724,11 +726,13 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
 
                             <h2><?php _e('Options','eml'); ?></h2>
 
+                            <?php $wpuxss_eml_tax_options = get_option( 'wpuxss_eml_tax_options' ); ?>
+
                             <div class="postbox">
 
-                                <div class="inside">
+                                <h3 class="hndle"><?php _e('General','eml'); ?></h3>
 
-                                    <?php $wpuxss_eml_tax_options = get_option( 'wpuxss_eml_tax_options' ); ?>
+                                <div class="inside">
 
                                     <table class="form-table">
                                         <tr>
@@ -751,26 +755,84 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                                 </fieldset>
                                             </td>
                                         </tr>
+                                    </table>
+
+                                    <?php submit_button(); ?>
+
+                                </div>
+
+                            </div>
+
+                            <div class="postbox">
+
+                                <h3 class="hndle"><?php _e('Filters','eml'); ?></h3>
+
+                                <div class="inside">
+
+                                    <table class="form-table">
 
                                         <tr>
-                                            <th scope="row"><?php _e('Force filters','eml'); ?></th>
+                                            <th scope="row"><label for="wpuxss_eml_tax_options[force_filters]"><?php _e('Force filters','eml'); ?></label></th>
                                             <td>
-                                                <fieldset>
-                                                    <legend class="screen-reader-text"><span><?php _e('Force filters','eml'); ?></span></legend>
-                                                    <label for="wpuxss_eml_tax_options[force_filters]"><input name="wpuxss_eml_tax_options[force_filters]" type="hidden" value="0" /><input name="wpuxss_eml_tax_options[force_filters]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_tax_options['force_filters'], true ); ?> /> <?php _e('Show media filters for ANY Media Popup','eml'); ?></label>
-                                                    <p class="description"><?php _e( 'May be useful for those who need forcing filters for third-party plugins or themes.', 'eml' ); ?></p>
-                                                </fieldset>
+                                                <input name="wpuxss_eml_tax_options[force_filters]" type="hidden" value="0" /><input name="wpuxss_eml_tax_options[force_filters]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_tax_options['force_filters'], true ); ?> /> <?php _e('Show media filters for ANY Media Popup','eml'); ?>
+                                                <p class="description"><?php _e( 'Try this if filters are not shown for third-party plugins or themes.', 'eml' ); ?></p>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <th scope="row"><?php _e('Turn off enhanced gallery','eml'); ?></th>
+                                            <th scope="row"><label for="wpuxss_eml_tax_options[media_orderby]"><?php _e('Order media items by','eml'); ?></label></th>
+                                            <td>
+                                                <select name="wpuxss_eml_tax_options[media_orderby]" id="wpuxss_eml_tax_options_media_orderby">
+                                                    <option value="date" <?php selected( $wpuxss_eml_tax_options['media_orderby'], 'date' ); ?>>Date</option>
+                                                    <option value="title" <?php selected( $wpuxss_eml_tax_options['media_orderby'], 'title' ); ?>>Title</option>
+                                                    <option value="menuOrder" <?php selected( $wpuxss_eml_tax_options['media_orderby'], 'menuOrder' ); ?>>Custom Order</option>
+                                                </select>
+                                                <?php _e('For media library and media popups','eml'); ?>
+                                                <p class="description"><?php _e( 'Option allows to change order by drag and drop with Custom Order value.', 'eml' ); ?></p>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th scope="row"><label for="wpuxss_eml_tax_options[media_order]"><?php _e('Sort order','eml'); ?></label></th>
+                                            <td>
+                                                <select name="wpuxss_eml_tax_options[media_order]" id="wpuxss_eml_tax_options_media_order">
+                                                    <option value="ASC" <?php selected( $wpuxss_eml_tax_options['media_order'], 'ASC' ); ?>>Ascending</option>
+                                                    <option value="DESC" <?php selected( $wpuxss_eml_tax_options['media_order'], 'DESC' ); ?>>Descending</option>
+                                                </select>
+                                                <?php _e('For media library and media popups','eml'); ?>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <?php submit_button(); ?>
+
+                                </div>
+
+                            </div>
+
+                            <div class="postbox">
+
+                                <h3 class="hndle"><?php _e('Media Shortcodes','eml'); ?></h3>
+
+                                <div class="inside">
+
+                                    <table class="form-table">
+
+                                        <tr>
+                                            <th scope="row"><?php _e('Enhanced media shortcodes','eml'); ?></th>
                                             <td>
                                                 <fieldset>
-                                                    <legend class="screen-reader-text"><span><?php _e('Turn off enhanced gallery','eml'); ?></span></legend>
-                                                    <label for="wpuxss_eml_tax_options[turn_off_gallery_shortcode]"><input name="wpuxss_eml_tax_options[turn_off_gallery_shortcode]" type="hidden" value="0" /><input name="wpuxss_eml_tax_options[turn_off_gallery_shortcode]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_tax_options['turn_off_gallery_shortcode'], true ); ?> /> <?php _e('Do not enhance WordPress native gallery shortcode','eml'); ?></label>
-                                                    <p class="description"><?php _e( 'May be useful in case of incompatibility with other plugins or themes. Use the option if you think it breaks your galleries in any way.', 'eml' ); ?></p>
-                                                    <p class="description"><?php _e( 'Please inform plugin authors about the issue. We would like to fix it!', 'eml' ); ?></p>
+                                                    <legend class="screen-reader-text"><span><?php _e('Enhanced media shortcodes','eml'); ?></span></legend>
+                                                    <label for="wpuxss_eml_tax_options[enhance_media_shortcodes]"><input name="wpuxss_eml_tax_options[enhance_media_shortcodes]" type="hidden" value="0" /><input name="wpuxss_eml_tax_options[enhance_media_shortcodes]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_tax_options['enhance_media_shortcodes'], true ); ?> /> <?php _e('Enhance WordPress media shortcodes to make them understand media taxonomies, uploade date, and media items number limit','eml'); ?></label>
+                                                    <p class="description"><?php _e( 'Gallery example: [gallery media_category="5" limit="10" monthnum="12" year="2015"]', 'eml' ); ?></p>
+                                                    <p class="description"><?php _e( 'Audio playlist example: [playlist media_category="5" limit="10" monthnum="12" year="2015"]', 'eml' ); ?></p>
+                                                    <p class="description"><?php _e( 'Video playlist example: [playlist type="video" media_category="5" limit="10" monthnum="12" year="2015"]', 'eml' ); ?></p>
+                                                    <p class="description"><?php
+                                                    printf( __( '%sWarning:%s Incompatibility with other gallery plugins or themes possible!', 'eml' ), '<strong style="color:red">', '</strong>' );
+
+                                                    printf( __( '%sLearn more%s.', 'eml' ), ' <a href="http://www.wpuxsolutions.com/documents/enhanced-media-library/enhanced-gallery-possible-conflicts/">', '</a> ' );
+
+                                                    printf( __( 'Please check out your gallery front-end and back-end functionality once this option activated. If you find an issue please inform plugin authors at %s or %s.', 'eml' ), '<a href="https://wordpress.org/support/plugin/enhanced-media-library">wordpress.org</a>', '<a href="http://www.wpuxsolutions.com/support/create-new-ticket/">wpuxsolutions.com</a>' ); ?></p>
                                                 </fieldset>
                                             </td>
                                         </tr>

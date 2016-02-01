@@ -106,7 +106,7 @@
     float: left;
     position: relative;
     height: 424px;
-    background: #FAFAFA;
+    background: white;
 	-webkit-box-shadow: inset -10px 0px 7px -12px rgba(0,0,0,0.2);
 	-moz-box-shadow: inset -10px 0px 7px -12px rgba(0,0,0,0.2);
 	box-shadow: inset -10px 0px 7px -12px rgba(0,0,0,0.2);

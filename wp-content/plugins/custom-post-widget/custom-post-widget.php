@@ -3,14 +3,14 @@
  Plugin Name: Custom Post Widget
  Plugin URI: http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/?utm_source=wordpress&utm_medium=plugin&utm_campaign=custom_post_widget
  Description: Show the content of a custom post of the type 'content_block' in a widget or with a shortcode.
- Version: 2.8.4
+ Version: 2.8.5
  Author: Johan van der Wijk
  Author URI: http://vanderwijk.nl
  Text Domain: custom-post-widget
  Domain Path: /languages
  License: GPL2
 
- Release notes: You can now show the post title when using the shortcode
+ Release notes: Fix for compatibility issue with Slider Revolution plugin
  
  Copyright 2015 Johan van der Wijk
  

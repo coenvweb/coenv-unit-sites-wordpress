@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.7.4
+Version: 2.7.5
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.7.4');
+define('CUSTOMTAXORDER_VER', '2.7.5');
 
 
 function customtaxorder_register_settings() {
@@ -276,6 +276,27 @@ add_filter( 'wp_get_object_terms', 'customtaxorder_wp_get_object_terms_order_fil
 add_filter( 'get_terms', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
 add_filter( 'get_the_terms', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
 add_filter( 'tag_cloud_sort', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
+
+
+/*
+ * Support Advancd Custom Fields with its Taxonomy Fields.
+ */
+function customtaxorder_wp_get_object_terms_order_filter_acf( $terms ) {
+
+	if ( empty($terms) || ! is_array($terms) ) {
+		return $terms; // only work with an array of terms
+	}
+	foreach ($terms as $term) {
+		if ( ! is_object($term) || ! is_a($term, 'WP_Term') ) {
+			return $terms; // not an array with terms
+		}
+	}
+
+	$terms = customtaxorder_wp_get_object_terms_order_filter( $terms );
+
+	return $terms;
+}
+add_filter('acf/format_value_for_api', 'customtaxorder_wp_get_object_terms_order_filter_acf', 99 );
 
 
 /*

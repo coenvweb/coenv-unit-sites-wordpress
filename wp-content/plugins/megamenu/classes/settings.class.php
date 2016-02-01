@@ -1337,6 +1337,8 @@ class Mega_Menu_Settings{
                 <a href='<?php echo $duplicate_url ?>'><?php _e("duplicate this theme", "megamenu"); ?></a>
             </div>
 
+            <h3 class='editing_theme'><?php echo __("Editing theme", "megamenu") . ": " . $this->active_theme['title']; ?></h3>
+
             <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="theme_editor">
                 <input type="hidden" name="theme_id" value="<?php echo $this->id; ?>" />
                 <input type="hidden" name="action" value="megamenu_save_theme" />
@@ -1850,9 +1852,14 @@ class Mega_Menu_Settings{
                                     ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "Enabled", "megamenu" ),
+                                            'title' => __( "Outer Width", "megamenu" ),
                                             'type' => 'freetext',
                                             'key' => 'panel_width'
+                                        ),
+                                        array(
+                                            'title' => __( "Inner Width", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_inner_width'
                                         )
                                     )
                                 ),
@@ -1951,7 +1958,7 @@ class Mega_Menu_Settings{
                                         )
                                     )
                                 ),
-                                'panel_padding' => array(
+                                'widget_padding' => array(
                                     'title' => __( "Widget Padding", "megamenu" ),
                                     'description' => __( "Use this to define the spacing between each widget in the panel.", "megamenu" ),
                                     'settings' => array(
@@ -2041,7 +2048,7 @@ class Mega_Menu_Settings{
                                     )
                                 ),
                                 'widget_heading_padding' => array(
-                                    'title' => __( "Widget Padding", "megamenu" ),
+                                    'title' => __( "Widget Heading Padding", "megamenu" ),
                                     'description' => __( "Set the padding for the widget headings.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2071,7 +2078,7 @@ class Mega_Menu_Settings{
                                     )
                                 ),
                                 'widget_heading_margin' => array(
-                                    'title' => __( "Widget Padding", "megamenu" ),
+                                    'title' => __( "Widget Heading Margin", "megamenu" ),
                                     'description' => __( "Set the margin for the widget headings.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2794,18 +2801,13 @@ class Mega_Menu_Settings{
                     echo "<div class='accordion-container'>";
                     echo "<ul class='outer-border'>";
 
-                    $is_first = true;
 
                     foreach ( $settings as $section_id => $section ) {
 
-                        $open = $is_first ? 'open' : '';
-
-                        echo "    <li class='control-section accordion-section {$open} mega-{$section_id}'>";
+                        echo "    <li class='control-section accordion-section open mega-{$section_id}'>";
                         echo "        <h4 class='accordion-section-title hndle'>".$section['title'] . "</h4>";
                         echo "        <div class='accordion-section-content '>";
                         echo "            <table class='{$section_id}'>";
-
-                        $is_first = false;
 
                         foreach ( $section['settings'] as $group_id => $group ) {
 

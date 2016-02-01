@@ -38,6 +38,7 @@ final class Mega_Menu_Style_Manager {
 
         add_action( 'wp_ajax_megamenu_css', array( $this, 'ajax_get_css') );
         add_action( 'wp_ajax_nopriv_megamenu_css', array( $this, 'ajax_get_css') );
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 999 );
         add_action( 'wp_head', array( $this, 'head_css' ), 9999 );
 
@@ -61,12 +62,9 @@ final class Mega_Menu_Style_Manager {
 
     /**
      *
-     *
-     * @since 1.0
      */
-    public function default_themes() {
-
-        $themes['default'] = array(
+    public function get_default_theme() {
+        return array(
             'title'                                     => __("Default", "megamenu"),
             'container_background_from'                 => '#222',
             'container_background_to'                   => '#222',
@@ -122,6 +120,7 @@ final class Mega_Menu_Style_Manager {
             'panel_background_from'                     => '#f1f1f1',
             'panel_background_to'                       => '#f1f1f1',
             'panel_width'                               => '100%',
+            'panel_inner_width'                         => '100%',
             'panel_border_color'                        => '#fff',
             'panel_border_left'                         => '0px',
             'panel_border_right'                        => '0px',
@@ -261,6 +260,15 @@ final class Mega_Menu_Style_Manager {
     clear: both;
 }'
         );
+    }
+
+    /**
+     *
+     * @since 1.0
+     */
+    public function default_themes() {
+
+        $themes['default'] = $this->get_default_theme();
 
         return apply_filters( "megamenu_themes", $themes );
     }
@@ -279,13 +287,6 @@ final class Mega_Menu_Style_Manager {
         if ( $saved_themes = get_site_option( "megamenu_themes" ) ) {
 
             foreach ( $default_themes as $key => $settings ) {
-
-
-                if ( $key != 'default') {
-
-                    $default_themes[ $key ] = array_merge( $default_themes[ 'default' ], $default_themes[ $key ] );
-
-                }
 
                 // Merge in any custom modifications to default themes
                 if ( isset( $saved_themes[ $key ] ) ) {
@@ -307,9 +308,13 @@ final class Mega_Menu_Style_Manager {
 
         }
 
-        // process replacements
+
         foreach ( $default_themes as $key => $settings ) {
 
+            // merge in any new settings from the default theme
+            $default_themes[ $key ] = array_merge( $this->get_default_theme(), $default_themes[ $key ] );
+
+            // process replacements
             foreach ( $settings as $var => $val ) {
 
                 if ( isset( $default_themes[$key][$val] ) ) {
@@ -589,7 +594,7 @@ final class Mega_Menu_Style_Manager {
                 continue;
             }
 
-            if ( in_array( $name, array( 'panel_width' ) ) ) {
+            if ( in_array( $name, array( 'panel_width', 'panel_inner_width' ) ) ) {
 
                 if ( preg_match('/^\d/', $value) !== 1 ) { // doesn't start with number (jQuery selector)
                     $vars[$name] = '100%';
@@ -669,6 +674,27 @@ final class Mega_Menu_Style_Manager {
      *
      * @since 1.0
      */
+    public function enqueue_styles() {
+
+        if ( $this->get_css_output_method() == 'fs' ) {
+            $this->enqueue_fs_style();
+        }
+
+        if ( $this->get_css_output_method() == 'ajax' ) {
+            $this->enqueue_ajax_style();
+        }
+
+        wp_enqueue_style( 'dashicons' );
+
+        do_action( 'megamenu_enqueue_public_scripts' );
+
+    }
+
+    /**
+     * Enqueue public CSS and JS files required by Mega Menu
+     *
+     * @since 1.0
+     */
     public function enqueue_scripts() {
 
         wp_enqueue_script( 'hoverIntent' );
@@ -704,18 +730,6 @@ final class Mega_Menu_Style_Manager {
         );
 
         wp_localize_script( 'megamenu', 'megamenu', $params );
-
-        if ( $this->get_css_output_method() == 'fs' ) {
-            $this->enqueue_fs_style();
-        }
-
-        if ( $this->get_css_output_method() == 'ajax' ) {
-            $this->enqueue_ajax_style();
-        }
-
-        wp_enqueue_style( 'dashicons' );
-
-        do_action( 'megamenu_enqueue_public_scripts' );
 
     }
 
@@ -808,6 +822,8 @@ final class Mega_Menu_Style_Manager {
         $wp_filesystem->rmdir( $dir, true );
 
         delete_transient( $this->get_transient_key() );
+
+        $this->generate_css();
 
         do_action( "megamenu_after_delete_cache" );
 

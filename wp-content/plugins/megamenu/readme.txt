@@ -2,8 +2,8 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.3
-Stable tag: 1.9.1
+Tested up to: 4.4
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,19 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.0.1 [07/01/2016] =
+
+* Fix: Typos in the Theme Editor
+* Fix: CSS Compilation Failed error for Helping Hands (and possibly other themes)
+* Fix: Regenerate CSS after clearing cache to fix a conflict with caching plugins - ensure style.css always exists
+* Fix: Enqueue menu CSS before the theme CSS, as it was pre 2.0
+* Change: Theme Editor accordion open by default (to avoid JS conflicts which make it impossible to open the closed panels)
+* Change: Use visibility: hidden to hide mobile sub menu instead of display: none (to allow Google Maps to render properly)
+* Change: Admin Styling toned down
+* Change: Hide mobile sub menu option moved to "Sub Menu Options" section
+* New Feature: Sub Menu Inner Width setting added
+* Improvement: Update Dashicons
 
 = 2.0 [28/12/2015] =
 

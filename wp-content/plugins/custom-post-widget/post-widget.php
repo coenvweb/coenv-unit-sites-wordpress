@@ -215,7 +215,7 @@ add_shortcode( 'content_block', 'custom_post_widget_shortcode' );
 // Only add content_block icon above posts and pages
 function cpw_add_content_block_button() {
 	global $current_screen;
-	if( 'content_block' != $current_screen -> post_type ) {
+    if ( ( 'content_block' != $current_screen -> post_type ) && ( 'toplevel_page_revslider' != $current_screen -> id ) ) {
 		add_action( 'media_buttons', 'add_content_block_icon' );
 		add_action( 'admin_footer', 'add_content_block_popup' );
 	}
