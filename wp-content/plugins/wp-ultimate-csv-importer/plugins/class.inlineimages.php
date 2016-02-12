@@ -309,6 +309,7 @@ class WPImporter_inlineImages {
 							array('width' => 624, 'height' => 468, 'crop' => false));
 						$resize = $img->multi_resize($sizes_array);
 					}
+					$get_inline_guid = str_replace(' ', '-', $get_inlineimage_val);
 					$inline_file ['guid'] = $baseurl . "/" . $get_inlineimage_val;
 					$inline_file ['post_title'] = $get_inlineimage_val;
 					$inline_file ['post_content'] = '';
@@ -316,9 +317,9 @@ class WPImporter_inlineImages {
 					$wp_upload_dir = wp_upload_dir();
 					$attachment = array('guid' => $inline_file ['guid'], 'post_mime_type' => 'image/jpeg', 'post_title' => preg_replace('/\.[^.]+$/', '', @basename($inline_file ['guid'])), 'post_content' => '', 'post_status' => 'inherit');
 					if ($get_media_settings == 1) {
-						$generate_attachment = $dirname . '/' . $get_inlineimage_val;
+						$generate_attachment = $dirname . '/' . $get_inline_guid;
 					} else {
-						$generate_attachment = $get_inlineimage_val;
+						$generate_attachment = $get_inline_guid;
 					}
 					$uploadedImage = $wp_upload_dir['path'] . '/' . $get_inlineimage_val;
 					//duplicate check
@@ -339,7 +340,7 @@ class WPImporter_inlineImages {
 
 						$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
 						wp_update_attachment_metadata($attach_id, $attach_data);
-						set_post_thumbnail($postID, $attach_id);
+						//set_post_thumbnail($postID, $attach_id);
 					}
 
 					// if($shortcode_mode == 'Inline') {

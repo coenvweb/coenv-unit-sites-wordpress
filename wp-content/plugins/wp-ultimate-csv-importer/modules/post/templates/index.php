@@ -327,8 +327,8 @@ $nonce_Key = $impCE->create_nonce_key();
 															}?>
 														</select>
 														<script type="text/javascript">
-															jQuery("select#mapping<?php print(esc_js($count)); ?>").find('option').each(function () {
-																if (jQuery(this).val() == "<?php print(esc_js($key));?>") {
+															jQuery("select#coremapping<?php print(esc_js($count)); ?>").find('option').each(function () {
+																if (jQuery(this).val() == "<?php print(esc_js($value));?>") {
 																	jQuery(this).prop('selected', true);
 																}
 															});
@@ -385,7 +385,7 @@ $nonce_Key = $impCE->create_nonce_key();
 														</select>
 														<script type="text/javascript">
 															jQuery("select#term_mapping<?php print(esc_js($count)); ?>").find('option').each(function () {
-																if (jQuery(this).val() == "<?php print(esc_js($key));?>") {
+																if (jQuery(this).val() == "<?php print(esc_js($value));?>") {
 																	jQuery(this).prop('selected', true);
 																}
 															});
@@ -418,8 +418,8 @@ $nonce_Key = $impCE->create_nonce_key();
 										<?php
 										if(is_array($impCE->defCols) && !empty($impCE->defCols)) {
 											foreach ($impCE->defCols as $key => $value) {
-												if (strstr($key, 'SEO:')) {
-													$value = str_replace('SEO:', '', $value)
+												if (strstr($key, 'SEO: ')) {
+													$value = str_replace('SEO: ', '', $value)
 													?>
 													<tr>
 														<td class="left_align" style='width:53%; padding-left:170px;'>
@@ -440,8 +440,8 @@ $nonce_Key = $impCE->create_nonce_key();
 																}?>
 															</select>
 															<script type="text/javascript">
-																jQuery("select#mapping<?php print(esc_js($count)); ?>").find('option').each(function () {
-																	if (jQuery(this).val() == "<?php print(esc_js($key));?>") {
+																jQuery("select#seomapping<?php print(esc_js($count)); ?>").find('option').each(function () {
+																	if (jQuery(this).val() == "<?php print(esc_js($value));?>") {
 																		jQuery(this).prop('selected', true);
 																	}
 																});

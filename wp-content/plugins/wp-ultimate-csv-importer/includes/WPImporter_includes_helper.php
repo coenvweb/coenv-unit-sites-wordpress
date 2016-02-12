@@ -550,9 +550,9 @@ class WPImporter_includes_helper {
 							$f_img = $new_post [$ckey];
 							$fimg_path = $full_path;
 							$fimg_name = @basename($f_img);
-							$featured_image = $fimg_name;
-							$fimg_name = strtolower(str_replace(' ', '-', $fimg_name));
-							$fimg_name = preg_replace('/[^a-zA-Z0-9._\s]/', '', $fimg_name);
+
+							$fimg_name = str_replace(' ', '-', $fimg_name);
+							$fimg_name = preg_replace('/[^a-zA-Z0-9._\-\s]/', '', $fimg_name);
 							$fimg_name = urlencode($fimg_name);
 							$parseURL = parse_url($f_img);
 							$path_parts = pathinfo($f_img);
@@ -560,8 +560,9 @@ class WPImporter_includes_helper {
 								$fimg_name = $fimg_name . '.jpg';
 							}
 							$f_img_slug = '';
+							$featured_image = $path_parts['filename'];
 							$f_img_slug = strtolower(str_replace('', '-', $f_img_slug));
-							$f_img_slug = preg_replace('/[^a-zA-Z0-9._\s]/', '', $f_img_slug);
+							$f_img_slug = preg_replace('/[^a-zA-Z0-9._\-\s]/', '', $f_img_slug);
 							$post_slug_value = strtolower($f_img_slug);
 							if (array_key_exists('extension', $path_parts)) {
 								//$fimg_name = wp_unique_filename($fimg_path, $fimg_name, $path_parts['extension']);
@@ -572,7 +573,7 @@ class WPImporter_includes_helper {
 							if (@getimagesize($filepath)) {
 								$img = wp_get_image_editor($filepath);
 								$file ['guid'] = $baseurl . "/" . $fimg_name;
-								$file ['post_title'] = $fimg_name;
+								$file ['post_title'] = $featured_image;
 								$file ['post_content'] = '';
 								$file ['post_status'] = 'attachment';
 							} else {
@@ -602,24 +603,19 @@ class WPImporter_includes_helper {
 		}
 
 		// Date format post
-		if (isset($data_array['post_date'])) {
-			$data_array ['post_date'] = str_replace('/', '-', $data_array ['post_date']);
-		} else {
-			$data_array['post_date'] = date('Y-m-d');
-		}
-		if ($data_array ['post_date'] == null) {
-			$data_array ['post_date'] = date('Y-m-d');
-			$this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
-		} else {
-			if(strtotime($data_array ['post_date'])){
-				$data_array ['post_date'] = date('Y-m-d H:i:s', strtotime($data_array ['post_date']));
-				$this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
-			}
-			else {
-				$data_array ['post_date'] = date('Y-m-d H:i:s');
-				$this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'] . ' . Unformatted date so current date was replaced.';
-			}
-		}
+		if (!isset($data_array ['post_date'])) {
+                       $data_array ['post_date'] = date('Y-m-d H:i:s');
+                       $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
+                } else {
+                       if(strtotime($data_array ['post_date'])){
+                               $data_array ['post_date'] = date('Y-m-d H:i:s', strtotime($data_array ['post_date']));
+                               $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
+                       }
+                       else {
+                               $data_array ['post_date'] = date('Y-m-d H:i:s');
+                               $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'] . ' . Unformatted date so current date was replaced.';
+                       }
+               }
 		if (isset($data_array ['post_slug'])) {
 			$data_array ['post_name'] = $data_array ['post_slug'];
 		}
@@ -919,7 +915,7 @@ class WPImporter_includes_helper {
 				if (!empty ($file)) {
 					//$wp_filetype = wp_check_filetype(@basename($file ['guid']), null);
 					$wp_upload_dir = wp_upload_dir();
-					$attachment = array('guid' => $file ['guid'], 'post_mime_type' => 'image/jpeg', 'post_title' => preg_replace('/[^a-zA-Z0-9._\s]/', '', @basename($file ['guid'])), 'post_content' => '', 'post_status' => 'inherit');
+					$attachment = array('guid' => $file ['guid'], 'post_mime_type' => 'image/jpeg', 'post_title' => preg_replace('/[^a-zA-Z0-9._\s]/', '', @basename($file ['post_title'])), 'post_content' => '', 'post_status' => 'inherit');
 					if ($get_media_settings == 1) {
 						$generate_attachment = $dirname . '/' . $fimg_name;
 					} else {
@@ -931,15 +927,17 @@ class WPImporter_includes_helper {
 					wp_update_attachment_metadata($attach_id, $attach_data);*/
 					$existing_attachment = array();
 					$query = $wpdb->get_results($wpdb->prepare("select post_title from $wpdb->posts where post_type = %s and post_mime_type = %s",'attachment','image/jpeg'));
-					foreach ($query as $key) {
-						$existing_attachment[] = $key->post_title;
+					if(!empty($query)) {
+						foreach ( $query as $key ) {
+							$existing_attachment[] = $key->post_title;
+						}
 					}
-					if (!in_array($fimg_name, $existing_attachment)) {
+					if (!in_array($attachment['post_title'], $existing_attachment)) {
 						$attach_id = wp_insert_attachment($attachment, $generate_attachment, $post_id);
 						$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
 						wp_update_attachment_metadata($attach_id, $attach_data);
 					} else {
-						$query2 = $wpdb->get_results($wpdb->prepare("select ID from $wpdb->posts where post_title = %s  and post_type = %s",$fimg_name,'attachment'));
+						$query2 = $wpdb->get_results($wpdb->prepare("select ID from $wpdb->posts where post_title = %s  and post_type = %s",$attachment['post_title'],'attachment'));
 						foreach ($query2 as $key2) {
 							$attach_id = $key2->ID;
 						}
@@ -949,7 +947,6 @@ class WPImporter_includes_helper {
 			} else {
 				$skippedRecords[] = $_SESSION['SMACK_SKIPPED_RECORDS'];
 			}
-
 			$this->detailedLog[$currentLimit]['verify_here'] = "<b>Verify Here -</b> <a href='" . get_permalink($post_id) . "' title='" . esc_attr(sprintf(__('View &#8220;%s&#8221;'), $data_array['post_title'])) . "' rel='permalink' target='_blank'>" . __('Web View', 'wp-ultimate-csv-importer') . "</a> | <a href='" . get_edit_post_link($post_id) . "' title='" . esc_attr(__('Edit this item', 'wp-ultimate-csv-importer')) . "' target='_blank'>" . __('Admin View', 'wp-ultimate-csv-importer') . "</a>";
 		}
 		unset($data_array);

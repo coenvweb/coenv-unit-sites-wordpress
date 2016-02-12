@@ -149,7 +149,6 @@ for ($i = $limit; $i < $count; $i++) {
 		echo "<div style='margin-left:10px;'> Total no of records - " . $totRecords . ".</div><br>";
 		echo "<div style='margin-left:10px;'> Total no of mapped fields for single record - " . $mapped . ".</div><br>";
 		echo "<div style='margin-left:10px;'> Total no of unmapped fields for a record - " . $unmapped . ".</div><br>";
-		echo "<div style='margin-left:10px;'> Chosen server request is " . $count . " .</div><br>";
 	}
 	$colCount = count($resultArr[$i]);
 	$_SESSION['SMACK_SKIPPED_RECORDS'] = $i;

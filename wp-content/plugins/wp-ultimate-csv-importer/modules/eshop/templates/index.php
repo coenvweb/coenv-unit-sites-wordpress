@@ -331,8 +331,8 @@ if ($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['isplugin_avail'] !== 'not_avail'
                                         </select>
 
                                         <script type="text/javascript">
-                                        jQuery("select#mapping<?php print(esc_js($count)); ?>").find('option').each(function() {
-                                                        if(jQuery(this).val() == "<?php print(esc_js($key));?>") {
+                                        jQuery("select#coremapping<?php print(esc_js($count)); ?>").find('option').each(function() {
+                                                        if(jQuery(this).val() == "<?php print(esc_js($value));?>") {
                                                         jQuery(this).prop('selected', true);
                                                         }
                                         });
@@ -423,8 +423,8 @@ if ($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['isplugin_avail'] !== 'not_avail'
                         <?php
 			if(!empty($impCE->defCols) && is_array($impCE->defCols)) {
                         foreach($impCE->defCols as $key => $value){
-                                if(strstr($key,'SEO:')){
-                                $value = str_replace('SEO:','',$value)
+                                if(strstr($key,'SEO: ')){
+                                $value = str_replace('SEO: ','',$value)
                         ?>
 			<tr>
                                 <td class="left_align" style='width:53%; padding-left:150px;'>
@@ -445,8 +445,8 @@ if ($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['isplugin_avail'] !== 'not_avail'
                                         </select>
 
                                         <script type="text/javascript">
-                                        jQuery("select#mapping<?php print(esc_js($count)); ?>").find('option').each(function() {
-                                                        if(jQuery(this).val() == "<?php print(esc_js($key));?>") {
+                                        jQuery("select#seomapping<?php print(esc_js($count)); ?>").find('option').each(function() {
+                                                        if(jQuery(this).val() == "<?php print(esc_js($value));?>") {
                                                         jQuery(this).prop('selected', true);
                                                         }
                                         });

@@ -141,7 +141,7 @@ class UploadHandler {
 		$HelperObj = new WPImporter_includes_helper();
 		$uploadDir = $HelperObj->uploadDir;
 
-		$file_name = $file_name ? $file_name : '';
+		$file_name = $file_name ? sanitize_file_name($file_name) : '';
 		if (empty($version)) {
 			$version_path = '';
 		} else {

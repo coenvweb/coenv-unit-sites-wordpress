@@ -2,10 +2,10 @@
 Contributors: smackcoders
 Donate link: http://www.smackcoders.com/donate.html
 Tags: categories, category, custom post type, e-commerce, ecommerce, free, html, html5, image, images, import, multisite, page, pages, picture, plugin, Post, products, rss, seo, shortcode, tag, Taxonomy, template, thumbnail, upload, url, user, woocommerce, WordPress, wpmu, xml.
-Requires at least: 4.3.1
-Tested up to: 4.4.1
-Stable tag: 3.8.8
-Version: 3.8.8
+Requires at least: 4.0
+Tested up to: 4.4.2
+Stable tag: 3.9
+Version: 3.9
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 
@@ -114,6 +114,12 @@ php_value auto_append_file none
 This will solve your issue or get support from hosting if you didn’t have sufficient permission.
 
 == Changelog ==
+
+= 3.9 =
+* Added: PHP 7 compatibility.
+* Added: Support for all post date formats.
+* Fixed: Featured image and Inline image naming issues.
+* Fixed: Auto mapping issues in Custom Fields and SEO Fields.
 
 = 3.8.8 =
 * Added: Localize script for multi language support.
@@ -427,6 +433,9 @@ This will solve your issue or get support from hosting if you didn’t have suff
 
 
 == Upgrade Notice ==
+
+= 3.9 =
+* Upgrade now for PHP 7 and WordPress 4.4.2 compatibility.
 
 = 3.8.8 =
 * Upgrade now for security fix and WordPress 4.1.1 compatibility with minor bug fixes.
