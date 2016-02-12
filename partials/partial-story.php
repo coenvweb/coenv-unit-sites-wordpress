@@ -13,7 +13,7 @@ if (get_field('story_link_url')) {
 
     <?php if ( has_post_thumbnail() ) : ?>
         <div class="featured-thumbnail">
-            <a href="<?php echo $post_link_url ?>" class="img" <?php echo $post_link_target ?>>
+            <a href="<?php echo $post_link_url ?>" class="img" <?php if(isset($post_link_target)) {echo $post_link_target;} ?>>
                 <?php the_post_thumbnail( 'large' ); ?>
             </a>
         </div>
@@ -42,7 +42,7 @@ if (get_field('story_link_url')) {
         <div class="blog-meta clearfix sharer small-6 columns right">
             <?php
                 $title = rawurlencode(get_the_title());
-                $wshortlink = rawurlencode(wp_get_shortlink());
+                $shortlink = rawurlencode(wp_get_shortlink());
                 $site_name = rawurlencode(get_bloginfo('name'));
                 $twitter = get_option('twitter');
             ?>
@@ -63,7 +63,7 @@ if (get_field('story_link_url')) {
             <a href="<?php echo $post_link_url ?>" class="button">Read more »</a>
         <?php else : ?>
             <div class="blog-links right">
-		<?php if($rows) {
+		<?php if(isset($rows)) {
             foreach($rows as $row) {
                 if($row['blog_link_type'] == 'upload') {
                     echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
