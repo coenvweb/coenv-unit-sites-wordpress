@@ -209,7 +209,9 @@ add_action('init', 'tinymce_clear_addbuttons');
 
 function tinymce_clear_buttons_before_init( $init ) {
     // do not remove empty divs
-    $init['extended_valid_elements'] .= ',div[clear|style|class]';
+    if ( isset( $init['extended_valid_elements'] ) ) {
+        $init['extended_valid_elements'] .= ',div[clear|style|class]';
+    }
     return $init;
 }
 
