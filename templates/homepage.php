@@ -30,10 +30,10 @@ Template Name: Homepage
 				$feature_link_type = get_field('feature_link_type');
 				$feature_link_type_internal = get_field('feature_link_page');
 			}
-			if (get_field('feature_color')) {
-				$feature_color = get_field('feature_color');
+			if ((get_field('feature_color')) !== null) {
+				$feature_color = 'style="background-color: ' . get_field('feature_color');
 			}
-			if (get_field('feature_excerpt')) {
+			if ((get_field('feature_excerpt'))!== null) {
 				$feature_excerpt = get_field('feature_excerpt');
 			}
 			if (get_the_post_thumbnail()) {
@@ -47,7 +47,7 @@ echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 echo '</div>';
 	echo '<div class="feature-info-container medium-6 small-12 columns right">';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+		echo '<div class="feature-info" ' . $feature_color . '">';
         echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 			echo '<div class="feature-content">';
                 get_template_part('assets/img/icons/inline', 'smea-white-slash.svg');
@@ -125,6 +125,7 @@ $wp_query = new WP_Query( $feat_args );
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
+            $post_link_target = null;
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         } if ( has_post_thumbnail()) {
                 

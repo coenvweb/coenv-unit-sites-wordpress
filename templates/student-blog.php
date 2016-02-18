@@ -83,7 +83,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'blog_pcategory');
+		$terms = wp_get_post_terms( get_the_ID(), 'blog_category');
 		// Filter display of administrative post categories
 		$terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
 		if (get_field('story_link_url')) {
@@ -96,6 +96,12 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
         }
 		?>
 		<div class="blog-list-item clearfix">
+         
+        <?php if ((has_post_thumbnail()) && has_term( 'featured', 'blog_category', get_the_id() )):
+		echo '<a class="featured-thumb" href="' . get_the_permalink() . '">';
+		the_post_thumbnail('full');
+		echo '</a>';
+		endif; ?>
         
         <div class="blog-meta clearfix">
             <div class="small-6 columns left">
@@ -132,11 +138,13 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
 		echo '<div class="post">';
-		if (has_post_thumbnail()):
+            
+		if ((has_post_thumbnail()) && !has_term( 'featured', 'blog_category', get_the_id() )):
 		echo '<a class="right" style="margin: 1rem 0 1rem 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
 		endif;
+            
 		echo the_excerpt();
 		echo $post_link;
 		'</div>';

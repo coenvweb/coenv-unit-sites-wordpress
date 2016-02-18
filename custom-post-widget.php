@@ -10,12 +10,20 @@ $link_type = get_field( "link_type", $content_post -> ID );
 $link_type_internal = get_field( "link_page", $content_post -> ID );
 $link_position = get_field( "link_position", $content_post -> ID );
 $widget_title = apply_filters( 'widget_title', $content_post->post_title);
+$src = 0;
+$size = 0;
+if (isset($attachment)){
 $widget_img_attr = array(
 	'src'	=> $src,
 	'class'	=> "attachment-$size",
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
-);
+);}else {
+$widget_img_attr = array(
+	'src'	=> $src,
+	'class'	=> "attachment-$size",
+    );
+}
 $widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
@@ -67,7 +75,7 @@ if ( $show_featured_image ) {
 	echo '</div>';
 	}
 echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
+if (isset($link_position[0])) {
     echo $buttons;
 }
 if ( $show_custom_post_title ) {
