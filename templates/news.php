@@ -126,11 +126,11 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
 		echo '<div class="post">';
-		/*if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+		if (has_post_thumbnail()):
+		echo '<a class="right" style="margin-left: 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
-		endif;*/
+		endif;
 		echo the_excerpt();
 		echo $post_link;
 		'</div>';
