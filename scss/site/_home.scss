@@ -180,9 +180,6 @@
 
 .profiles {
     padding-bottom: rem-calc(70);
-    background-image: url(../assets/img/RainAngle-2685.svg);
-    background-color: $accent-teal-dk;
-    background-size: 10px;
     
     @media #{$small-only} {
         padding-bottom: rem-calc(30);
@@ -192,7 +189,7 @@
         text-align: center;
         
         h3 {
-            color: $white;
+            color: $accent-blue;
             padding: rem-calc(30) 0;
             text-transform: uppercase;
             font-weight: 800;
@@ -244,7 +241,6 @@
         text-align: left;
         @include shadow;
         background-color: $white;
-        border: 2px darken( $accent-teal-dk, 7% ) solid;
                 
         .widget_img {
             background-color: #DADADA;

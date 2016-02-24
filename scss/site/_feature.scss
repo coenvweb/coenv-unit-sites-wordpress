@@ -21,7 +21,7 @@
     }
     @media #{$xlarge-up} {
         height: auto;
-        max-height: 30vw;
+        max-height: 32vw;
     }
 	
 	ul li {
@@ -35,6 +35,9 @@
 		background-size: cover;
 		background-position: center;
         min-height: rem-calc(220);
+        @media #{$medium-up} {
+            width: 60%;
+        }
 	}
 	
 	.feature-info-container {
@@ -56,7 +59,7 @@
                 font-size: rem-calc(14)!important;
             }
             @media #{$large-up} {
-                padding-top: 2vw;
+                padding-top: 3vw;
             }
 		}
 		
@@ -74,12 +77,23 @@
             right: 0;
             text-align: center;
             padding: 0;
-            width: 55%;
-            background-image: url(../assets/img/blue_wedge.svg);
-            background-repeat: no-repeat;
-            background-position: 0;
-            background-size: 250%;
+            width: 55%;            
             background-color: none!important;
+            &:after {
+              content: "";
+              background-image: url(../assets/img/water.jpg);
+              background-repeat: no-repeat;
+              background-position: 50%;
+              background-size: 250%;
+              @extend .uw-skew;
+              opacity: 1;
+              top: 0;
+              left: 10vw;
+              bottom: 0;
+              right: -5vw;
+              position: absolute;
+              z-index: 0;   
+            }
         }
         
 		
@@ -93,6 +107,7 @@
                 padding: 0;
                 vertical-align: middle;
                 text-align: right;
+                z-index: 2;
             }
 		}
 		

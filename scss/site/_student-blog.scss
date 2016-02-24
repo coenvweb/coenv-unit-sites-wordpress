@@ -8,3 +8,25 @@
         width: 100%
     }
 }
+
+.page-template-student-blog {
+    .filters {
+        padding: 2rem;
+        border-top: #10806b 7px solid;
+    }
+    
+    .section-title {
+        h1 {
+            line-height: 1;
+        }
+        a {
+            font-size: 2.3rem!important;
+        }
+        h4 {
+            margin-left: 1.1rem;
+            line-height: 1;
+            color: white;
+            text-transform: uppercase;
+        }
+    }
+}

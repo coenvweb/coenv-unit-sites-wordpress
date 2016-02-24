@@ -90,7 +90,7 @@ echo '</div>';
 # Featured News
 
 $feat_args = array(
-    'post_type' => array('student_blog', 'post'),
+    'post_type' => array('post'),
     'post_status' => 'publish',
     'posts_per_page' => 1,
     'tax_query' => array(
@@ -100,11 +100,6 @@ $feat_args = array(
             'terms' => 'featured',
             'field' => 'slug'
         ),
-        array(
-            'taxonomy' => 'blog_category',
-            'terms' => 'featured',
-            'field' => 'slug'
-        )
     )
 );
     

@@ -450,6 +450,32 @@ class coenv_base_blog_cats extends WP_Widget {
           $blog_cat = $blog_cat->slug;
      
           echo $args['before_widget'];
+         
+         $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
+
+        /*
+         * Query variables
+         */
+
+        // Dates
+        if(isset($_GET['coenv-year'])){
+            $coenv_year = urlencode(htmlentities($_GET['coenv-year']));
+            $coenv_month = urlencode(htmlentities($_GET['coenv-month']));
+            $coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month,1,(int)$coenv_year));
+        } else {
+            $coenv_month = $coenv_year = null;
+        }
+
+        //Categories
+        if(isset($_GET['tax'])){
+            $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+            $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+            $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+            $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+        } else {
+            $coenv_cat_term_1 = $coenv_cat_1 = null;
+        }
+          echo '<div class="filters">';
           
           if ( ! empty( $instance['title'] ) ) {
                echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
@@ -457,19 +483,11 @@ class coenv_base_blog_cats extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'blog_category'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                         echo '<ul class="blog-cats inline-list">';
-                         foreach($cats as $cat) { 
-                              echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $cat->slug . '">' . $cat->name . '</a></li>';
-                         }
-                         echo '</ul>';
-                    }
+        echo '<div data-url="' . $url_current . '" data-cat="blog_category">';
+				coenv_base_cat_filter('blog_category', $coenv_cat_term_1); // Category filter 
+			echo '</div><div data-url="' . $url_current . '" data-cat="blog_category">';
+            coenv_base_date_filter('student_blog',$coenv_month,$coenv_year); // Date filter
+		 	echo '</div>';
           echo $args['after_widget'];
      }
 

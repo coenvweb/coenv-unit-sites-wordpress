@@ -241,8 +241,8 @@ function coenv_base_section_title($id) {
     $coenv_post = get_post($id);
     //print_r($coenv_post);
     
+    $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
     if (isset($coenv_post_section)) {
-        $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
         if (coenv_base_post_parent($id)):
             $section_title = '<div class="columns large-8 section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
         elseif (!is_front_page()):
@@ -267,12 +267,12 @@ function coenv_base_section_title($id) {
     
     if ( is_singular( 'student_blog' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="../../"><span>&larr; View All</span>Student Blog</a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h1><a href="">Currents</a></h1><h4>' . get_field('secondary_title') . '</h4></div>';
     }
     
     if ( is_page_template('templates/student-blog.php')) { //change news index' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h1><a href="">Student Blog</a></h1></div>';
+        $section_title = '<div class="columns large-12 section-title"><h1><a href="">Currents</a></h1><h4>' . get_field('secondary_title', 5150) . '</h4></div>';
     }
         
         echo $section_title;
