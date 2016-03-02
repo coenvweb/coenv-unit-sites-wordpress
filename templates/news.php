@@ -89,7 +89,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
+			$post_link_target = '';
+			if (!strpos($post_link_url,'cig.uw.') || strpos($post_link_url,'.pdf')) {
+				$post_link_target = ' target="_blank" ';
+			}
             $post_link = '<a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a>';
         } else {
         	$post_link_url = get_the_permalink();
@@ -133,7 +136,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
 			<?php 	
-				echo the_excerpt();
+				echo the_advanced_excerpt('length=100&length_type=words&no_custom=1&allowed_tags=p,a');
 				echo $post_link;
 			?>
 		</div>
