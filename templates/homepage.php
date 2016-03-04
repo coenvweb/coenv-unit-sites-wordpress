@@ -44,7 +44,7 @@ Template Name: Homepage
 			 	// Link field display
 		        if (get_field('story_link_url')) {
 					$post_link_url = get_field('story_link_url');
-					if ( !strpos( $post_link_url, 'cig.uw.edu' ) ) {
+					if ( !strpos( $post_link_url, 'cig.uw' ) ) {
 						$post_link_target = ' target="_blank" ';
 					} else {
 						$post_link_target = '';
@@ -195,7 +195,11 @@ Template Name: Homepage
 				// Link field display
 		        if (get_field('story_link_url')) {
 					$post_link_url = get_field('story_link_url');
-					$post_link_target = ' target="_blank" ';
+					if ( !strpos( $post_link_url, 'cig.uw' ) ) {
+						$post_link_target = ' target="_blank" ';
+					} else {
+						$post_link_target = '';
+					}
 					$source_link = '<a href="' . $post_link_url . '" target="_blank">' . get_field('story_source_name') . '</a>';
 		            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
 		        } else {
