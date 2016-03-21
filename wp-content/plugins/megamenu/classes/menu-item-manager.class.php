@@ -504,7 +504,7 @@ class Mega_Menu_Menu_Item_Manager {
      * @since 1.0
      * @return array - Sorted list of icon classes
      */
-    private function all_icons() {
+    public function all_icons() {
 
         $icons = array(
             'dash-f333' => 'dashicons-menu',

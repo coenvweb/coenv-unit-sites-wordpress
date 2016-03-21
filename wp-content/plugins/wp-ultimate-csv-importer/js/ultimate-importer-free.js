@@ -1,3 +1,4 @@
+var jQuery = jQuery.noConflict();
 jQuery(document).ready(function () {
     jQuery('.dropdown-toggle').dropdown('toggle');
     var checkmodule = document.getElementById('checkmodule').value;
@@ -498,6 +499,10 @@ function customimagelocation(val) {
 
 function importRecordsbySettings(siteurl) {
     var importlimit = document.getElementById('importlimit').value;
+    var check_limit = check_allnumeric(importlimit);
+	if(!check_limit){
+		return false;
+	}
     var noncekey = document.getElementById('wpnoncekey').value;
     var get_requested_count = importlimit;
     var tot_no_of_records = document.getElementById('checktotal').value;
@@ -560,6 +565,7 @@ function importRecordsbySettings(siteurl) {
         'dupContent': dupContent,
         'dupTitle': dupTitle,
         'importlimit': importlimit,
+	'get_requested_count': get_requested_count,
         'limit': currentlimit,
         'totRecords': tot_no_of_records,
         'selectedImporter': importas,
@@ -585,7 +591,7 @@ function importRecordsbySettings(siteurl) {
             if (parseInt(tmpCnt) == parseInt(tot_no_of_records)) {
                 document.getElementById('terminatenow').style.display = "none";
             }
-            if (parseInt(tmpCnt) < parseInt(tot_no_of_records)) {
+            if (parseInt(tmpCnt) <= parseInt(tot_no_of_records)) {
                 var terminate_action = document.getElementById('terminateaction').value;
                 currentlimit = parseInt(currentlimit) + parseInt(importlimit);
                 document.getElementById('currentlimit').value = currentlimit;
@@ -682,6 +688,13 @@ function import_again() {
 function check_allnumeric(inputtxt) {
     var numbers = /^[0-9]+$/;
     if (inputtxt.match(numbers)) {
+        no_of_tot_records = document.getElementById('tot_records').value;
+    if (parseInt(inputtxt) <= parseInt(no_of_tot_records)) {
+        document.getElementById('server_request_warning').style.display = 'none';
+    } else {
+        document.getElementById('server_request_warning').style.display = '';
+        return false;
+    }
         return true;
     }
     else {

@@ -10,10 +10,16 @@ function ns_wp_create_site( $site_name, $site_title, $logfile ) {
 	$site_meta = apply_filters( 'ns_wp_create_site_meta', array("public"=>1) );
 	// use wp's built in wpmu_validate_blog_signup validation for all new site vars
 	// also, use a test on  a known valid name/title to filter out any validation errors added by other plugins via the wpmu_validate_blog_signup filter
-	$baseline_validation = wpmu_validate_blog_signup( '1000000', 'NS Cloner Test' );
+	$baseline_validation = wpmu_validate_blog_signup( 'nsclonertest', 'NS Cloner Test' );
 	$site_data = wpmu_validate_blog_signup( $site_name, $site_title, $user );
 	$site_errors = array_diff( $baseline_validation['errors']->get_error_messages(), $site_data['errors']->get_error_messages() );
-	if( !empty( $site_errors ) && false ){
+	foreach( $site_errors as $index=>$error ){
+		// if the error is only because there are dashes in the site name, ignore the error since that's fine/allowable
+		if( $error=='Only lowercase letters (a-z) and numbers are allowed.' && preg_match('/^[a-z0-9-]+$/',$site_name) ){
+			unset( $site_errors[ $index ] );
+		}
+	}
+	if( !empty( $site_errors ) ){
 		ns_log_write( array("Error creating site with name '$site_name' and title '$site_title'. One or more problems errors detected by WP:",$site_errors), $logfile );
 		return false;
 	}

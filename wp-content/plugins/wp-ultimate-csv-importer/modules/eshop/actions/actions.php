@@ -94,7 +94,7 @@ class EshopActions extends SkinnyActions {
 	/**
 	 * Mapping fields
 	 */
-	public $defCols = array('post_title' => null, 'post_content' => null, 'post_excerpt' => null, 'post_date' => null, 'post_name' => null, 'post_status' => null, 'post_author' => null, 'post_parent' => 0, 'comment_status' => 'open', 'ping_status' => 'open', 'SKU' => null, 'products_option' => null, 'sale_price' => 0, 'regular_price' => 0, 'description' => null, 'shiprate' => 'no', 'optset' => null, 'featured_product' => 'no', 'product_in_sale' => 'no', 'stock_available' => 'no', 'cart_option' => 'null', 'featured_image' => null,'tags'=>null,'category'=>null);
+	public $defCols = array('post_title' => null, 'post_content' => null, 'post_excerpt' => null, 'post_date' => null, 'post_name' => null, 'post_status' => null, 'post_author' => null, 'post_parent' => 0, 'comment_status' => 'open', 'ping_status' => 'open', 'SKU' => null, 'products_option' => null, 'sale_price' => 0, 'regular_price' => 0, 'description' => null, 'shiprate' => 'no', 'optset' => null, 'featured_product' => 'no', 'product_in_sale' => 'no', 'stock_available' => 'no', 'cart_option' => 'null', 'featured_image' => null);
 
 	/**
 	 * Manage duplicates

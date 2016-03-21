@@ -38,7 +38,7 @@
 if (!defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
-$noncevar = isset($_POST['postdata']['wpnonce']) ? $_POST['postdata']['wpnonce'] : '';
+$noncevar = isset($_POST['postdata']['wpnonce']) ? sanitize_text_field($_POST['postdata']['wpnonce']) : '';
 if (!wp_verify_nonce($noncevar, 'smack_nonce')) {
 	die('You are not allowed to do this operation.Please contact your admin.');
 }
@@ -68,11 +68,11 @@ if ($curr_action == 'post' || $curr_action == 'page' || $curr_action == 'customp
 	if ($curr_action == 'custompost') {
 		$importedAs = 'Custom Post';
 	}
-	$importObj->MultiImages = $_POST['postdata']['importinlineimage'];
+	$importObj->MultiImages = sanitize_text_field($_POST['postdata']['importinlineimage']);
 } elseif ($curr_action == 'eshop') {
 	$importObj = new EshopActions();
 	$importedAs = 'Eshop';
-	$importObj->MultiImages = $_POST['postdata']['importinlineimage'];
+	$importObj->MultiImages = sanitize_text_field($_POST['postdata']['importinlineimage']);
 } elseif ($curr_action == 'wpcommerce') {
 	$importObj = new WpcommerceActions();
 } elseif ($curr_action == 'woocommerce') {
@@ -94,13 +94,14 @@ if ($curr_action == 'post' || $curr_action == 'page' || $curr_action == 'customp
 }
 
 
-$limit = $_POST['postdata']['limit'];
-$totRecords = $_POST['postdata']['totRecords'];
-$_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['importlimit'] = $_POST['postdata']['importlimit'];
-$count = $_POST['postdata']['importlimit'];
-$requested_limit = $_POST['postdata']['importlimit'];
-$tmpCnt = $_POST['postdata']['tmpcount'];
-if ($count < $totRecords) {
+$limit = intval($_POST['postdata']['limit']);
+$get_request_limit = $_POST['postdata']['get_requested_count'];
+$totRecords = intval($_POST['postdata']['totRecords']);
+$_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['importlimit'] = intval($_POST['postdata']['importlimit']);
+$count = intval($_POST['postdata']['importlimit']);
+$requested_limit = intval($_POST['postdata']['importlimit']);
+$tmpCnt = intval($_POST['postdata']['tmpcount']);
+if ($count <= $totRecords) {
 	$count = $tmpCnt + $count;
 	if ($count > $totRecords) {
 		$count = $totRecords;
@@ -113,13 +114,16 @@ $res2 = array();
 $res1 = array();
 $get_mapped_array = array();
 $mapping_value = '';
+$import_obj = new WPImporter_includes_helper();
 $filename = $_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['uploadedFile'];
-$resultArr = $skinnyObj->csv_file_data($filename);
-if ($_POST['postdata']['dupTitle']) {
-	$importObj->titleDupCheck = $_POST['postdata']['dupTitle'];
+$parserObj = new SmackCSVParser();
+$file = $import_obj->getUploadDirectory() . '/' . $filename;
+$resultArr = $parserObj->parseCSV($file, $limit, $get_request_limit);
+if (sanitize_text_field($_POST['postdata']['dupTitle'])) {
+	$importObj->titleDupCheck = sanitize_text_field($_POST['postdata']['dupTitle']);
 }
-if ($_POST['postdata']['dupContent']) {
-	$importObj->conDupCheck = $_POST['postdata']['dupContent'];
+if (sanitize_text_field($_POST['postdata']['dupContent'])) {
+	$importObj->conDupCheck = sanitize_text_field($_POST['postdata']['dupContent']);
 }
 $csv_rec_count = $_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['h2'];
 $available_groups = $skinnyObj->get_availgroups($curr_action);
@@ -143,9 +147,8 @@ foreach ($_SESSION['SMACK_MAPPING_SETTINGS_VALUES'] as $seskey => $sesval ) {
 }
 $mapped = count($res2);
 $unmapped = count($res1);
-
-for ($i = $limit; $i < $count; $i++) {
-	if ($limit == 0) {
+for ($i = $limit; $i <= $count; $i++) {
+	if ($limit == 1) {
 		echo "<div style='margin-left:10px;'> Total no of records - " . $totRecords . ".</div><br>";
 		echo "<div style='margin-left:10px;'> Total no of mapped fields for single record - " . $mapped . ".</div><br>";
 		echo "<div style='margin-left:10px;'> Total no of unmapped fields for a record - " . $unmapped . ".</div><br>";
@@ -158,12 +161,12 @@ for ($i = $limit; $i < $count; $i++) {
 	$importinlineimageoption = null;
 	if (isset($_POST['postdata']['inline_image_location'])) {
 		$importinlineimageoption = 'imagewithextension';
-		$extracted_image_location = $_POST['postdata']['inline_image_location'];
+		$extracted_image_location = sanitize_text_field($_POST['postdata']['inline_image_location']);
 	}
-	if ($_POST['postdata']['inlineimagehandling'] != 'imagewithextension') {
+	if (sanitize_text_field($_POST['postdata']['inlineimagehandling']) != 'imagewithextension') {
 		$importinlineimageoption = 'imagewithurl';
-		$extracted_image_location = $_POST['postdata']['inline_image_location'];
-		$sample_inlineimage_url = $_POST['postdata']['inlineimagehandling'];
+		$extracted_image_location = sanitize_text_field($_POST['postdata']['inline_image_location']);
+		$sample_inlineimage_url = sanitize_text_field($_POST['postdata']['inlineimagehandling']);
 	}
 	$importObj->processDataInWP($to_be_import_rec, $_SESSION['SMACK_MAPPING_SETTINGS_VALUES'], $_SESSION['SMACK_MAPPING_SETTINGS_VALUES'], $i, $extracted_image_location, $importinlineimageoption, $sample_inlineimage_url);
 	$logarr = array('post_id','Failed','assigned_author', 'category', 'tags', 'postdate', 'image', 'poststatus');
@@ -206,11 +209,10 @@ for ($i = $limit; $i < $count; $i++) {
 	}
 
 	$limit++;
-	unset($to_be_import_rec);
+	//unset($to_be_import_rec);
 }
-
-if ($limit >= $totRecords) {
-	$advancemedia = $_POST['postdata']['advance_media'];
+if ($limit > $totRecords) {
+	$advancemedia = sanitize_text_field($_POST['postdata']['advance_media']);
 	$dir = $skinnyObj->getUploadDirectory();
 	$get_inline_imageDir = explode('/', $extracted_image_location);
 	$explodedCount = count($get_inline_imageDir);
@@ -260,7 +262,7 @@ if ($inserted_post_count != 0) {
 	unset($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['updatedPostCount']);
 	unset($_SESSION['SMACK_MAPPING_SETTINGS_VALUES']['captureId']);
 }
-if ($limit == $totRecords) {
+if ($limit > $totRecords) {
 	echo "<br><div style='margin-left:10px; color:green;'>";
 	echo __('Import successfully completed!.', 'wp-ultimate-csv-importer');
 	echo "</div>";

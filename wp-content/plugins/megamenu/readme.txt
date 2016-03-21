@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.4
-Stable tag: 2.0
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,32 @@ See https://www.maxmegamenu.com for more screenshots
 
 == Changelog ==
 
+= 2.1.3 [21/03/2016] =
+
+* Fix: JSON Theme Export
+* Fix: "Output in <head>" CSS option edgecase (not working when the static CSS file exists but is not writable)
+* Change: Don't apply Menu Padding theme setting to mobile menu (revisited - using a different method used to allow desktop padding to still be overridden in Custom Styling area)
+
+= 2.1.2 [15/03/2016] =
+
+* New feature: Mobile Toggle bar height setting added
+* Fix: CSS "Don't output CSS" setting
+* Change: Don't apply Menu Padding theme setting to mobile menu
+
+= 2.1.1 [14/03/2016] =
+
+* Fix: PHP Warnings
+* Fix: SCSS variable doesn't exist warning
+* Change: Reverse right aligned menu items in the mobile menu on window resize instead of reload
+* Change: Some updates to the mobile toggle designer to ease extending the functionality with filters
+
+= 2.1 [14/03/2016] =
+
+* New Feature: Drag and drop designer for the mobile toggle bar
+* Fix: WPML Language switcher flags
+* New Feature: Export menu theme in PHP format (for inclusion in a functions.php file)
+* Change: Remove CSS Enqueue via admin-ajax.php option due to slow performance
+
 = 2.0.1 [07/01/2016] =
 
 * Fix: Typos in the Theme Editor
@@ -99,7 +125,6 @@ See https://www.maxmegamenu.com for more screenshots
 * Fix: Regenerate CSS after clearing cache to fix a conflict with caching plugins - ensure style.css always exists
 * Fix: Enqueue menu CSS before the theme CSS, as it was pre 2.0
 * Change: Theme Editor accordion open by default (to avoid JS conflicts which make it impossible to open the closed panels)
-* Change: Use visibility: hidden to hide mobile sub menu instead of display: none (to allow Google Maps to render properly)
 * Change: Admin Styling toned down
 * Change: Hide mobile sub menu option moved to "Sub Menu Options" section
 * New Feature: Sub Menu Inner Width setting added

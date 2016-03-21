@@ -64,6 +64,10 @@
         text-align: $menu_item_align;
         padding: $container_padding_top $container_padding_right $container_padding_bottom $container_padding_left;
 
+        @include mobile {
+            padding: 0;
+        }
+
         a.mega-menu-link {
             display: inline;
 
@@ -161,7 +165,7 @@
                 box-shadow: inset 1px 0 0 0 rgba(255,255,255,$menu_item_divider_glow_opacity);
 
                 /* Hide divider on first menu item */
-                &:first-child {
+                &:first-of-type {
                     border-left: 0;
                     -webkit-box-shadow: none;
                     -moz-box-shadow: none;
@@ -264,7 +268,7 @@
                 left: 0;
             }
 
-            @if unit($panel_inner_width) == '%' and $panel_inner_width < '100%' {
+            @if unit($panel_inner_width) == '%' and $panel_inner_width < 100% {
                 padding-left: (100 - $panel_inner_width) / 2;
                 padding-right: (100 - $panel_inner_width) / 2;
             }
@@ -610,6 +614,12 @@
             display: inline;
         }
 
+        // WPML Flags
+        a.mega-menu-link > img.iclflag {
+            display: inline;
+            margin-right: 8px;
+        }
+
         @include mobile {
             li.mega-menu-item.mega-hide-on-mobile,
             > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-item.mega-hide-on-mobile {
@@ -627,42 +637,46 @@
     }
 
     // responsive toggle hamburger
-
     .mega-menu-toggle {
         display: none;
         z-index: 1;
         cursor: pointer;
-        text-align: right;
         @include background($toggle_background_from, $toggle_background_to);
         @include border-radius(2px, 2px, 2px, 2px);
-        line-height: 40px;
-        height: 40px;
-        color: $toggle_font_color;
+        line-height: $toggle_bar_height;
+        height: $toggle_bar_height;
+        text-align: center;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
         @include mobile {
             display: block;
         }
 
-        &:before {
-            content: "\f333";
-            font-family: 'dashicons';
-            font-size: 24px;
-            margin: 0 5px;
+        .mega-toggle-block {
+            text-align: left;
+            display: inline-block;
+            height: 100%;
+        }
+
+        .mega-toggle-block-left {
+            float: left;
+            margin-left: 6px;
+        }
+
+        .mega-toggle-block-center {
+            float: none;
+            margin-left: 3px;
+            margin-right: 3px;
+        }
+
+        .mega-toggle-block-right {
             float: right;
-        }
-
-        &.mega-menu-open:before {
-            content: "\f153";
-        }
-
-        @if str-length($responsive_text) > 0 {
-            &:after {
-                content: $responsive_text;
-            }
-
-            &.mega-menu-open:after {
-                content: "";
-            }
+            margin-right: 6px;
         }
 
         @include mobile {

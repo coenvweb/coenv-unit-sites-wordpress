@@ -3,12 +3,12 @@ Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.0.1
-Tested up to: 4.2
-Stable tag: 3.0.5.2
+Tested up to: 4.4.2
+Stable tag: 3.0.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-ALL NEW V3! The NS Cloner saves multisite admins and developers TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
+The NS Cloner saves multisite admins and developers TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
 
 == Description ==
 
@@ -18,7 +18,7 @@ This is by far the easiest, fastest, and most user-friendly way you will ever cr
 
 The NS Cloner will take any existing site on your WordPress multisite network and clone it into a new site that is completely identical in theme & theme settings, plugins & plugin configurations, content, pictures, videos, and site settings. **Everything** is preserved and intelligent replacements are made so that the new site settings reflect your choices for the name and title of the new site as well as other automated background housekeeping to make sure the new site works exactly the same way as if you had taken the time to set it all up manually.
 
-= ALL NEW Features with V3 =
+= V3 Features =
 * Advanced validation and preemptive issue detection
 * Robust system configuration and action logging to help with troubleshooting
 * All new Custom Add-on Architecture
@@ -82,12 +82,23 @@ YES!
 = Why do I get a white screen after cloning a site? = 
 Usually this means that the clone operation did not complete successfully. The most common cause for this is a script timeout. By default, PHP script execution for a single script is set to 30 seconds. This might not be enough time for larger sites with numerous posts, pages, and users to complete cloning - especially since the Cloner runs advanced search and replace operations against every table cloned to the new site to make sure that it reflects the new site url and title throughout all its data. Try increasing the max_execution_time in php.ini or wherever your host supports updating PHP configuration settings. You can <a title="Cloning White Screen Issue" href="http://support.neversettle.it/knowledgebase/articles/379601-white-screen-or-404-and-blank-site-after-cloning" target="_blank">read more detailed troubleshooting tips for this issue</a> on our support site.
 
+= Are there other troubleshooting guides? =
+[See these articles](http://support.neversettle.it/knowledgebase/topics/56303-ns-cloner-troubleshooting) for additional help on cloning issues.
+
 == Screenshots ==
 
 1. All new dynamic, responsive, add-on aware UI
 2. All new Add-on manager
 
 == Changelog ==
+
+= 3.0.5.4 =
+* Fixed issue with latest version of WP where a test validation site name containing only numbers is no longer valid
+
+= 3.0.5.3 =
+* Small formatting fix to sidebar
+* Fixed php Notice: Undefined variable: query when WP_DEBUG is true under certain conditions
+* Updated README
 
 = 3.0.5.2 =
 * Fixed mysql errors for unquoted numeric strings and empty values
@@ -246,3 +257,6 @@ Usually this means that the clone operation did not complete successfully. The m
 * New search selector for source sites
 * Revamped logs for better utility/readability
 * Centralized ns_cloner_addon class for maintability
+
+= 3.0.5.4 =
+* Fixed issue with latest version of WP where a test validation site name containing only numbers is no longer valid

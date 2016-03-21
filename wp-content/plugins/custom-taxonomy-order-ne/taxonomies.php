@@ -3,6 +3,13 @@
 
 function custom_taxonomy_order() {
 
+	// Set your custom capability through this filter.
+	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
+
+	if ( function_exists('current_user_can') && !current_user_can( $custom_cap ) ) {
+		die(__( 'Cheatin&#8217; uh?', 'custom-taxonomy-order-ne' ));
+	}
+
 	if (isset($_POST['order-submit'])) {
 		customtaxorder_update_taxonomies();
 	}

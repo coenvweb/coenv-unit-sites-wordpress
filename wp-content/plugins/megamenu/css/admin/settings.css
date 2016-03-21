@@ -232,7 +232,7 @@
 }
 
 .megamenu_outer_wrap .megamenu_right .menu_settings table textarea,
-.megamenu_outer_wrap .megamenu_right .menu_settings table input,
+.megamenu_outer_wrap .megamenu_right .menu_settings table input[type=text],
 .megamenu_outer_wrap .megamenu_right .menu_settings table select {
 	font-size: 0.9em;
 	height: 28px;
@@ -242,6 +242,9 @@
 .megamenu_outer_wrap .megamenu_right .menu_settings table input[type=number] {
 	height: auto;
 	line-height: 1.2em;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table input[name=export] {
+	margin-top: 20px;
 }
 .megamenu_outer_wrap .megamenu_right .menu_settings table input.mega-setting-title {
 	width: 100px;
@@ -278,7 +281,154 @@
 	border: 1px solid red;
 	background: #FFDDDD;
 }
-.megamenu_outer_wrap .megamenu_right .menu_settings table input {
+
+.megamenu_outer_wrap .megamenu_right .menu_settings table label.mega-toggle_blocks {
+	width: 100%;
+	cursor: auto;
+}
+
+.megamenu_outer_wrap .megamenu_right .menu_settings table .block input[type=text] {
+    width: 50%;
+}
+
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 5px 0 0;
+}
+
+.megamenu_outer_wrap .select2-container-sm .select2-choice>.select2-chosen {
+    line-height: 28px;
+    margin-right: 0px;
+}
+.megamenu_outer_wrap .tpx-select2-container .select2-choice .select2-arrow:before {
+    font: 400 17px/26px dashicons;
+}
+
+.mega-menu_page_maxmegamenu_theme_editor .tpx-select2-drop {
+    box-shadow: 0 0 0;
+}
+.megamenu_outer_wrap .select2-container-sm .select2-choice .select2-arrow {
+    display: none;
+}
+.mega-menu_page_maxmegamenu_theme_editor .select2-results li:first-child {
+    float: none;
+}
+.mega-menu_page_maxmegamenu_theme_editor .select2-results li:first-child i {
+    display: none;
+}
+.mega-menu_page_maxmegamenu_theme_editor .select2-results li {
+    float: left;
+}
+.megamenu_outer_wrap .select2-container-sm .select2-choice {
+    padding: 0 5px 0 5px;
+    height: 28px;
+    color: #B5B5B5;
+}
+
+.megamenu_outer_wrap .icon_dropdown .select2-chosen i:before {
+    line-height: 28px;
+    font-size: 16px;
+    color: #333;
+}
+
+
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-left,
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-center,
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-right {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    width: 33%;
+    height: 60px;
+    padding: 10px;
+    margin-top: 15px;
+    float: left;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-left {
+	border-right: 0px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-center {
+    border-left: 1px dashed #ccc;
+    border-right: 1px dashed #ccc;
+    text-align: center;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-right {
+    border-left: 0px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-right .block {
+    float: right;
+    margin: 0 0 0 5px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block.mega-open .block-title {
+    border-bottom: 1px solid white;
+    border-radius: 3px 3px 0 0;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block .block-title {
+    padding: 0 10px;
+    display: inline-block;
+    height: 35px;
+    line-height: 35px;
+    background: white;
+    color: #555;
+    cursor: move;
+    border: 1px solid #ccc;
+    position: relative;
+    z-index: 2;
+    border-radius: 3px;
+}
+
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block .block-title .dashicons {
+    line-height: 35px;
+    cursor: pointer;
+    font-size: 20px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block .block-settings {
+    padding: 10px;
+    display: none;
+    width: 300px;
+    vertical-align: top;
+    background: white;
+    text-align: left;
+    color: #ccc;
+    position: absolute;
+    left: 0px;
+    top: 36px;
+    z-index: 1;
+    border: 1px solid #ccc;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .mega-right .block .block-settings {
+    left: auto;
+    right: 0;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .mega-blocks .block h3 {
+    margin-top: 5px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .block-settings label {
+    width: 100%;
+    clear: both;
+    color: #333;
+    font-size: 1em;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .block-settings label input,
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .block-settings label select,
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .block-settings label input,
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .block-settings label .icon_dropdown {
+	float: right;
+	font-size: 0.9em;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .toggle-left {
+	border-right: 1px dashed #ccc;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table .toggle-bar-designer .toggle-right {
+    border-left: 0px solid #ccc;
+    text-align: right;
+
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table input[type=text] {
 	width: 70px;
 }
 .megamenu_outer_wrap .megamenu_right .menu_settings table label {
@@ -359,15 +509,11 @@
 .megamenu_outer_wrap .megamenu_right .menu_settings select.icon_dropdown {
 	margin-right: 0;
 }
-.megamenu_outer_wrap .megamenu_right .menu_settings .selected_icon::before {
-	font: 400 20px/1 dashicons;
-	speak: none;
-	padding: 5px 0 0 0;
-	margin-right: 20px;
-	display: inline-block;
-	vertical-align: top;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+.select2-drop {
+	min-width: 150px;
+}
+.select2-results .select2-result-label {
+	font-size: 0.9em;
 }
 .megamenu_outer_wrap .megamenu_right .menu_settings h3.editing_theme {
 	margin: 0px 0 30px 0;
@@ -392,6 +538,8 @@
 	margin: 0;
 }
 
+
+
 .megamenu_outer_wrap .mm-picker-container {
 	border-radius: 3px;
 	box-shadow: 0 1px 0 rgba(0,0,0,.08);
@@ -399,6 +547,11 @@
 	font-size: 0.9em;
 	margin-right: 10px;
 	float: left;
+}
+
+.megamenu_outer_wrap .block .mm-picker-container {
+    float: right;
+    margin-right: 0;
 }
 
 .megamenu_outer_wrap .mm-picker-container div.chosen-color {
@@ -428,6 +581,7 @@
 }
 .megamenu_outer_wrap .mega-delete {
 	margin-bottom: 15px;
+    cursor: pointer;
 }
 .megamenu_outer_wrap .megamenu_right .mega-location .mega-assigned-menu:before {
 	content: "\f333";
@@ -449,3 +603,4 @@
 	width: 100%;
 	box-sizing: border-box;
 }
+

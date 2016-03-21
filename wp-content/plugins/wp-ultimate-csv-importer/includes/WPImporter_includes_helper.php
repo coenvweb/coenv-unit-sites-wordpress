@@ -178,6 +178,7 @@ class WPImporter_includes_helper {
 			if (!isset($_REQUEST['__module'])) {
 				if (!isset($_REQUEST['__module'])) {
 					wp_redirect(get_admin_url() . 'admin.php?page=' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/index.php&__module=dashboard');
+					exit();
 				}
 			}
 		}
@@ -293,33 +294,52 @@ class WPImporter_includes_helper {
 	 * @param $delim delimiter for the CSV
 	 * @return array formatted CSV output as array
 	 */
-	function csv_file_data($file) {
+	function csv_file_data($file,$startlimit,$endlimit = null) {
 		$file = $this->getUploadDirectory() . '/' . $file;
-		require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . 'includes/Importer.php');
-		$csv = new ImporterLib();
-		$csv->delim($file);
-		foreach ($csv->data as $hkey => $hval) {
-			foreach ($hval as $hk => $hv) {
-				$this->headers[] = $hk;
+		require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . 'includes/SmackCSVParser.php');
+		if(file_exists($file)){
+			$csv = new SmackCSVParser();
+			$data = $csv->parseCSV($file,$startlimit,$endlimit);
+			foreach ($data as $hkey => $hval) {
+				foreach ($hval as $hk => $hv) {
+					$this->headers[] = $hk;
+				}
+				break;
 			}
-			break;
+			return $data;
+		}else{
+			return false;
 		}
-		return $csv->data;
 	}
-
-	function csv_file_readdata($file, $obj) {
-		$file = $obj->getUploadDirectory() . '/' . $file;
-		require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . 'includes/Importer.php');
-		$csv = new ImporterLib();
-		$csv->delim($file);
-		foreach ($csv->data as $hkey => $hval) {
-			foreach ($hval as $hk => $hv) {
-				$this->headers[] = $hk;
-			}
-			break;
-		}
-		return $csv->data;
-	}
+	function csv_file_readdata($file,$path,$delim) {
+                $data_rows = array();
+                $path = $this->getUploadDirectory() . '/' . $file;
+		require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . 'includes/SmackCSVParser.php');
+                $csv = new SmackCSVParser();
+                $csv->parseCSV($path,1,1);
+                $delim = $csv->delimiter;
+                # Check whether file is present in the given file location
+                $fileexists = file_exists($path);
+                if ($fileexists) {
+                        $resource = fopen($path, 'r');
+                        $init = 0;
+                        while ($keys = fgetcsv($resource, '', $delim, '"')) {
+                                if ($init == 0) {
+                                        $this->headers = $keys;
+                                } else {
+                                        if (!(($keys[0] == null) && (count($keys) == 1))) {
+                                                array_push($data_rows, $keys);
+                                        }
+                                }
+                                $init++;
+                        }
+                        fclose($resource);
+                        ini_set("auto_detect_line_endings", false);
+                } else {
+			return false;
+                }
+                return $data_rows;
+        }
 
 	function get_availgroups($module) {
 		$groups = array();
@@ -604,7 +624,7 @@ class WPImporter_includes_helper {
 
 		// Date format post
 		if (!isset($data_array ['post_date'])) {
-                       $data_array ['post_date'] = date('Y-m-d H:i:s');
+                       $data_array ['post_date'] = current_time('Y-m-d H:i:s');
                        $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
                 } else {
                        if(strtotime($data_array ['post_date'])){
@@ -612,7 +632,7 @@ class WPImporter_includes_helper {
                                $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'];
                        }
                        else {
-                               $data_array ['post_date'] = date('Y-m-d H:i:s');
+                               $data_array ['post_date'] = current_time('Y-m-d H:i:s');
                                $this->detailedLog[$currentLimit]['postdate'] = "<b>" . __('Date', 'wp-ultimate-csv-importer') . " - </b>" . $data_array ['post_date'] . ' . Unformatted date so current date was replaced.';
                        }
                }
@@ -820,6 +840,27 @@ class WPImporter_includes_helper {
 					$postid = wp_insert_post($data_array);
 					$post_id = $inlineImagesObj->importwithInlineImages($postid, $currentLimit, $data_array, $this, $importinlineimageoption, $extractedimagelocation, $sample_inlineimage_url);
 				} else {
+					/* Check post parent is exist or not */
+					if(isset($data_array['post_parent']) && isset($data_array['post_type']) && $data_array['post_type'] == 'page'){
+						global $wpdb;
+						$postparent = $data_array['post_parent'];
+						if(is_numeric($postparent)){
+							$get_data = $wpdb->get_results($wpdb->prepare("select post_title from $wpdb->posts where id = %d",$postparent));
+							if(empty($get_data)){
+								$data_array['post_parent'] = '';
+							}
+						}else{
+					
+							$post_tit_id = $wpdb->get_results($wpdb->prepare("select ID from $wpdb->posts where post_title = %s and post_type = %s order by ID DESC",$postparent,$data_array['post_type']));
+
+							$post_name_id = $wpdb->get_results($wpdb->prepare("select ID from $wpdb->posts where post_name = %s and post_type = %s order by ID DESC",$postparent,$data_array['post_type']));
+							if($post_tit_id){
+								$data_array['post_parent'] = $post_tit_id[0]->ID;
+							}elseif($post_name_id){
+								$data_array['post_parent'] = $post_name_id[0]->ID;
+							}
+						}
+					}
 					$post_id = wp_insert_post($data_array);
 					if($post_id != false) {
 						$this->detailedLog[$currentLimit]['post_id'] = "<b>" . __('Created Post_ID', 'wp-ultimate-csv-importer') . " - </b>" . $post_id . " - success";
@@ -1186,7 +1227,7 @@ class WPImporter_includes_helper {
 
 	function helpnotes() {
 		$smackhelpnotes = '<span style="position:absolute;margin-top:6px;margin-left:15px;">
-			<a href="" class="tooltip">
+			<a href="#" class="tooltip">
 			<img src="' . esc_url(WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/help.png").'" />
 			<span class="tooltipPostStatus">
 			<img class="callout" src="' . esc_url(WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/callout.gif").'" />
@@ -2077,6 +2118,7 @@ class WPImpCSVParserLib {
 		if ($value !== null && $value != '') {
 			$delimiter = preg_quote($this->delimiter, '/');
 			$enclosure = preg_quote($this->enclosure, '/');
+			if($value[0]=='=') $value="'".$value;
 			if (preg_match("/" . $delimiter . "|" . $enclosure . "|\n|\r/i", $value) || ($value{0} == ' ' || substr($value, -1) == ' ')) {
 				$value = str_replace($this->enclosure, $this->enclosure . $this->enclosure, $value);
 				$value = $this->enclosure . $value . $this->enclosure;

@@ -58,11 +58,18 @@ jQuery(function ($) {
         }
     });
 
-    $('.icon_dropdown').on("change", function() {
-        var icon = $("option:selected", $(this)).attr('data-class');
-        // clear and add selected dashicon class
-        $(this).next('.selected_icon').removeClass().addClass(icon).addClass('selected_icon');
+    $('.icon_dropdown').select2({
+      containerCssClass: 'tpx-select2-container select2-container-sm',
+      dropdownCssClass: 'tpx-select2-drop',
+      minimumResultsForSearch: -1,
+      formatResult: function(icon) {
+        return '<i class="dashicons ' + $(icon.element).attr('data-class') + '"></i>';
+      },
+      formatSelection: function (icon) {
+        return '<i class="dashicons ' + $(icon.element).attr('data-class') + '"></i>';
+        }
     });
+
 
     $('select#mega_css').on("change", function() {
         var select = $(this);

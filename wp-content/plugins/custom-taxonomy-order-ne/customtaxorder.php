@@ -3,14 +3,14 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.7.5
+Version: 2.7.6
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
 Text Domain: custom-taxonomy-order-ne
 Domain Path: /lang/
 
-Copyright 2013-2015   Marcel Pol   (email: marcel@timelord.nl)
+Copyright 2013-2016   Marcel Pol   (email: marcel@timelord.nl)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.7.5');
+define('CUSTOMTAXORDER_VER', '2.7.6');
 
 
 function customtaxorder_register_settings() {
@@ -78,14 +78,18 @@ function customtaxorder_menu() {
 	}
 
 	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
+	// Set your custom capability through this filter.
+	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
-	add_menu_page(__('Term Order', 'customtaxorder'), __('Term Order', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder', 'customtaxorder', 'dashicons-list-view', 122.35);
-	add_submenu_page('customtaxorder', __('Order Taxonomies', 'custom-taxonomy-order-ne'), __('Order Taxonomies', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder-taxonomies', 'custom_taxonomy_order');
+	add_menu_page(__('Term Order', 'customtaxorder'), __('Term Order', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder', 'customtaxorder', 'dashicons-list-view', 122.35);
+	add_submenu_page('customtaxorder', __('Order Taxonomies', 'custom-taxonomy-order-ne'), __('Order Taxonomies', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-taxonomies', 'custom_taxonomy_order');
 
 	foreach ($taxonomies as $taxonomy ) {
-		add_submenu_page('customtaxorder', __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, 'manage_categories', 'customtaxorder-'.$taxonomy->name, 'customtaxorder');
+		// Set your finegrained capability for this taxonomy for this custom filter.
+		$custom_cap_tax = apply_filters( 'customtaxorder_custom_cap_' . $taxonomy->name, $custom_cap );
+		add_submenu_page('customtaxorder', __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, __('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, $custom_cap_tax, 'customtaxorder-'.$taxonomy->name, 'customtaxorder');
 	}
-	add_submenu_page('customtaxorder', __('About', 'custom-taxonomy-order-ne'), __('About', 'custom-taxonomy-order-ne'), 'manage_categories', 'customtaxorder-about', 'customtaxorder_about');
+	add_submenu_page('customtaxorder', __('About', 'custom-taxonomy-order-ne'), __('About', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-about', 'customtaxorder_about');
 }
 add_action('admin_menu', 'customtaxorder_menu');
 
@@ -124,7 +128,6 @@ add_action('admin_print_scripts', 'customtaxorder_js_libs');
  * Sorting of an array with objects, ordered by term_order
  * Sorting the query with get_terms() doesn't allow sorting with term_order
  */
-
 function customtax_cmp( $a, $b ) {
 	if ( $a->term_order ==  $b->term_order ) {
 		return 0;
@@ -140,7 +143,6 @@ function customtax_cmp( $a, $b ) {
  * customtaxorder_update_order
  * Function to update the database with the submitted order
  */
-
 function customtaxorder_update_order() {
 	if (isset($_POST['hidden-custom-order']) && $_POST['hidden-custom-order'] != "") {
 		global $wpdb;
@@ -183,7 +185,6 @@ function customtaxorder_update_order() {
  * customtaxorder_sub_query
  * Function to give an option for the list of sub-taxonomies
  */
-
 function customtaxorder_sub_query( $terms, $tax ) {
 	$options = '';
 	foreach ( $terms as $term ) :
@@ -200,7 +201,6 @@ function customtaxorder_sub_query( $terms, $tax ) {
  * customtaxorder_apply_order_filter
  * Function to sort the standard WordPress Queries.
  */
-
 function customtaxorder_apply_order_filter($orderby, $args) {
 	global $customtaxorder_settings;
 	$options = $customtaxorder_settings;
@@ -236,12 +236,11 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
  * Default sorting is by name (according to the codex).
  *
  */
-
 function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 	global $customtaxorder_settings;
 	$options = $customtaxorder_settings;
 
-	if ( empty($terms) || !is_array($terms) ) {
+	if ( empty($terms) || ! is_array($terms) ) {
 		return $terms; // only work with an array of terms
 	}
 	foreach ($terms as $term) {
@@ -279,7 +278,7 @@ add_filter( 'tag_cloud_sort', 'customtaxorder_wp_get_object_terms_order_filter',
 
 
 /*
- * Support Advancd Custom Fields with its Taxonomy Fields.
+ * Support Advanced Custom Fields with its Taxonomy Fields.
  */
 function customtaxorder_wp_get_object_terms_order_filter_acf( $terms ) {
 
@@ -304,7 +303,6 @@ add_filter('acf/format_value_for_api', 'customtaxorder_wp_get_object_terms_order
  * Filter to sort the categories according to term_order
  *
  */
-
 function customtaxorder_order_categories($categories) {
 	global $customtaxorder_settings;
 	$options = $customtaxorder_settings;
@@ -361,7 +359,6 @@ function customtaxorder_about() {
  * Add Settings link to the main plugin page
  *
  */
-
 function customtaxorder_links( $links, $file ) {
 	if ( $file == plugin_basename( dirname(__FILE__).'/customtaxorder.php' ) ) {
 		$links[] = '<a href="' . admin_url( 'admin.php?page=customtaxorder' ) . '">' . __( 'Settings', 'custom-taxonomy-order-ne' ) . '</a>';
@@ -378,7 +375,6 @@ add_filter( 'plugin_action_links', 'customtaxorder_links', 10, 2 );
  * - set defaults
  * - get settings
  */
-
 function customtaxorder_initialize() {
 	global $customtaxorder_settings, $customtaxorder_defaults;
 
@@ -402,7 +398,6 @@ add_action('plugins_loaded', 'customtaxorder_initialize');
  * customtaxorder_activate
  * Function called at activation time.
  */
-
 function _customtaxorder_activate() {
 	global $wpdb;
 	$init_query = $wpdb->query("SHOW COLUMNS FROM $wpdb->terms LIKE 'term_order'");
@@ -433,7 +428,8 @@ function customtaxorder_activate_new_site($blog_id) {
 }
 add_action( 'wpmu_new_blog', 'customtaxorder_activate_new_site' );
 
-// include Settingspage
+
+// Include Settingspage
 include('page-customtaxorder.php');
 // Include functions for sorting taxonomies
 include('taxonomies.php');

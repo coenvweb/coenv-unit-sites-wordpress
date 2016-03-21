@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.maxmegamenu.com
  * Description: Mega Menu for WordPress.
- * Version:     2.0.1
+ * Version:     2.1.3
  * Author:      Tom Hemsley
  * Author URI:  https://www.maxmegamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.0.1';
+    public $version = '2.1.3';
 
 
     /**
@@ -82,6 +82,10 @@ final class Mega_Menu {
             new Mega_Menu_Menu_Item_Manager();
             new Mega_Menu_Settings();
 
+        }
+
+        if ( class_exists( 'Mega_Menu_Toggle_Blocks' ) ) {
+            new Mega_Menu_Toggle_Blocks();
         }
 
         $mega_menu_style_manager = new Mega_Menu_Style_Manager();
@@ -266,6 +270,7 @@ final class Mega_Menu {
             'mega_menu_style_manager'     => MEGAMENU_PATH . 'classes/style-manager.class.php',
             'mega_menu_settings'          => MEGAMENU_PATH . 'classes/settings.class.php',
             'mega_menu_widget'            => MEGAMENU_PATH . 'classes/widget.class.php',
+            'mega_menu_toggle_blocks'     => MEGAMENU_PATH . 'classes/toggle-blocks.class.php',
             'scssc'                       => MEGAMENU_PATH . 'classes/scssc.inc.php',
 
         );
@@ -359,7 +364,11 @@ final class Mega_Menu {
 
         $find = 'class="' . $args->container_class . '">';
 
-        $content = apply_filters( "megamenu_toggle_bar_content", "", $nav_menu, $args );
+        $theme_id = mmm_get_theme_id_for_location( $args->theme_location );
+
+        $content = "";
+
+        $content = apply_filters( "megamenu_toggle_bar_content", $content, $nav_menu, $args, $theme_id );
 
         $replace = $find . '<div class="mega-menu-toggle">' . $content . '</div>';
 
@@ -690,11 +699,7 @@ final class Mega_Menu {
                 return $args;
             }
 
-            $style_manager = new Mega_Menu_Style_Manager();
-            $themes = $style_manager->get_themes();
-
-            $menu_theme = isset( $themes[ $settings[ $current_theme_location ]['theme'] ] ) ? $themes[ $settings[ $current_theme_location ]['theme'] ] : $themes['default'];
-
+            $menu_theme = mmm_get_theme_for_location( $current_theme_location );
             $menu_settings = $settings[ $current_theme_location ];
 
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
@@ -818,6 +823,68 @@ add_action( 'plugins_loaded', array( 'Mega_Menu', 'init' ), 10 );
 
 endif;
 
+
+if ( ! function_exists( 'mmm_get_theme_id_for_location' ) ) {
+
+    /**
+     * @since 2.1
+     * @param string $location - theme location identifier
+     */
+    function mmm_get_theme_id_for_location( $location = false ) {
+
+        if ( ! $location ) {
+            return false;
+        }
+
+        if ( ! has_nav_menu( $location ) ) {
+            return false;
+        }
+
+        // if a location has been passed, check to see if MMM has been enabled for the location
+        $settings = get_option( 'megamenu_settings' );
+
+        if ( is_array( $settings ) && isset( $settings[ $location ]['enabled'] ) && isset( $settings[ $location ]['theme'] ) ) {
+            return $settings[ $location ]['theme'];
+        }
+
+        return false;
+    }
+}
+
+if ( ! function_exists( 'mmm_get_theme_for_location' ) ) {
+
+    /**
+     * @since 2.0.2
+     * @param string $location - theme location identifier
+     */
+    function mmm_get_theme_for_location( $location = false ) {
+
+        if ( ! $location ) {
+            return false;
+        }
+
+        if ( ! has_nav_menu( $location ) ) {
+            return false;
+        }
+
+        // if a location has been passed, check to see if MMM has been enabled for the location
+        $settings = get_option( 'megamenu_settings' );
+
+        $style_manager = new Mega_Menu_Style_Manager();
+
+        $themes = $style_manager->get_themes();
+
+        if ( is_array( $settings ) && isset( $settings[ $location ]['enabled'] ) && isset( $settings[ $location ]['theme'] ) ) {
+            $theme = $settings[ $location ]['theme'];
+
+            $menu_theme = isset( $themes[ $theme ] ) ? $themes[ $theme ] : $themes['default'];
+
+            return $menu_theme;
+        }
+
+        return $themes['default'];
+    }
+}
 
 if ( ! function_exists( 'max_mega_menu_is_enabled' ) ) {
 

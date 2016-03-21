@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
-Tested up to: 4.4
-Stable tag: 2.7.4
+Tested up to: 4.5
+Stable tag: 2.7.6
 License: GPLv2 or later
 
 
@@ -127,6 +127,10 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.7.6 =
+* 2016-03-01
+* Add filters for custom capabilities.
 
 = 2.7.5 =
 * 2016-01-11

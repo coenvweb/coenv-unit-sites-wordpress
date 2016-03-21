@@ -135,7 +135,7 @@
                     var target_width = parseInt(plugin.settings.panel_inner_width, 10);
                 }
 
-                var submenu_width = parseInt(anchor.siblings('.mega-sub-menu').width(), 10);
+                var submenu_width = parseInt(anchor.siblings('.mega-sub-menu').innerWidth(), 10);
 
                 if ( (target_width > 0) && (target_width < submenu_width) ) {
                     anchor.siblings('.mega-sub-menu').css({
@@ -217,14 +217,33 @@
             });
         };
 
+        plugin.check_width = function() {
+
+            if ( plugin.settings.reverse_mobile_items == 'true' ) {
+
+                if ( $(window).width() <= plugin.settings.breakpoint && $menu.data('view') == 'desktop' ) {
+                    $menu.data('view', 'mobile');
+                    $menu.append($menu.children('li.mega-item-align-right').get().reverse());
+                }
+
+                if ( $(window).width() >= plugin.settings.breakpoint && $menu.data('view') == 'mobile' ) {
+                    $menu.data('view', 'desktop');
+                    $menu.append($menu.children('li.mega-item-align-right').get().reverse());
+                }
+
+            }
+
+        }
 
         plugin.init = function() {
             plugin.settings = $.extend({}, defaults, options);
 
             $menu.removeClass('mega-no-js');
 
-            $menu.siblings('.mega-menu-toggle').on('click', function() {
-                $(this).toggleClass('mega-menu-open');
+            $menu.siblings('.mega-menu-toggle').on('click', function(e) {
+                if ( $(e.target).is('.mega-menu-toggle-block, .mega-menu-toggle') ) {
+                    $(this).toggleClass('mega-menu-open');
+                }
             });
 
             $('li.mega-menu-item, ul.mega-sub-menu', menu).unbind();
@@ -235,9 +254,17 @@
                 openOnHover();
             }
 
-            if (!plugin.isDesktopView() && plugin.settings.reverse_mobile_items == 'true') {
-                $menu.append($menu.children('li.mega-item-align-right').get().reverse());
+            if ( plugin.isDesktopView() ) {
+                $menu.data('view', 'desktop');
+            } else {
+                $menu.data('view', 'mobile');
             }
+
+            plugin.check_width();
+
+            $(window).resize(function() {
+                plugin.check_width();
+            });
 
         };
 
