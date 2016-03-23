@@ -76,6 +76,9 @@ if ( $show_featured_image && $widget_img ) {
 	echo '</div>';
 	}
 echo '<div class="widget_content">';
+if (isset($link_position[0])) {
+    echo $buttons;
+}
 if ( $show_custom_post_title ) {
 	echo $before_title;
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
