@@ -28,7 +28,7 @@ if (empty($coenv_cat_1)) {
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-            <?php echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name) . '</h4>'; ?>
+            <?php if(isset($qtr_term_1->name)) { echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . $qtr_term_1->name . '</h4>'; } elseif(isset($qtr_term_1->name)) {echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . '</h4>';}?>
             <?php the_content(); ?>
             
 		<div class="row filters">
@@ -38,18 +38,18 @@ $tax_obj = get_taxonomy($tax);
 $tax_str = $tax_obj->labels->name;
 
 $cats_args  = array(
-	'orderby' => 'term_group',
+	'orderby' => 'none',
 	'order' => 'ASC',
 	'taxonomy' => 'course_quarter',
     'hide_empty' => 0
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-        $i = 6;
+        $i = 4;
         echo '<div>';
 		foreach($cats as $cat) { 
             $year = substr( $cat->slug , -4);
-            if($i % 6 == 0) {echo '</div><div><p> Academic Year: ' . ($year - 1) . ' - ' . $year . '</p>';}
+            if($i % 4 == 0) {echo '</div><div><p> Academic Year: ' . $year . ' - ' . ($year + 1) . '</p>';}
 			$selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
 			echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
             $i++;
