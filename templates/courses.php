@@ -15,7 +15,9 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $current_quarters = get_field('quarter_to_display');
 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
-$qtr_term_1 = get_term_by('id', $current_quarters[1], 'course_quarter');
+if (isset($current_quarters[1])) {
+    $qtr_term_1 = get_term_by('id', $current_quarters[1], 'course_quarter');
+};
 if (empty($coenv_cat_1)) {
     $coenv_cat_1 = 'course_quarter';
     $coenv_cat_term_1 = $qtr_term_0->slug;
