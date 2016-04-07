@@ -33,9 +33,7 @@ if (empty($coenv_cat_1)) {
             
 		<div class="row filters">
 			<div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
-				<?php 
-$tax_obj = get_taxonomy($tax);
-$tax_str = $tax_obj->labels->name;
+				<?php
 
 $cats_args  = array(
 	'orderby' => 'none',
@@ -70,8 +68,9 @@ $cats = get_categories($cats_args);
 		$query_args = array(
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,     
-            'order_by' => 'name',
+			'posts_per_page' => 20,   
+            'meta_key' => 'course_acronym',
+            'order_by' => 'meta_value',
 			'paged' => $paged
 		);
 
@@ -102,7 +101,7 @@ $cats = get_categories($cats_args);
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); 
+        $terms = wp_get_post_terms($post->ID, 'course_quarter' ); 
         $quarter_name = get_field('quarter');
         $course_year = substr( $terms[0]->slug , -4); ?>
 		<li class="course-list-item post-<?php the_ID() ?>">

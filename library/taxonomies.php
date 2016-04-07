@@ -298,7 +298,8 @@ add_action( 'init', 'course_tax' );
 
 function mbe_change_table_column_titles($columns){
     unset($columns['date']);// temporarily remove, to have custom column before date column
-    $columns['quarters'] = 'Quarters-new';
+    $columns['quarters'] = 'Quarters';
+    $columns['course_acronym'] = 'Course Acronym';
     $columns['date'] = 'Date';// readd the date column
     return $columns;
 }
@@ -308,18 +309,22 @@ function mbe_change_column_rows($column_name, $post_id){
     if($column_name == 'quarters'){
         echo get_the_term_list($post_id, 'course_quarter', '', ', ', '').PHP_EOL;
     }
+    if($column_name == 'course_acronym'){
+        echo get_field('course_acronym', $post_id).PHP_EOL;
+    }
 }
 add_action('manage_courses_posts_custom_column', 'mbe_change_column_rows', 10, 2);
 
 function mbe_change_sortable_columns($columns){
     $columns['quarters'] = 'quarters';
+    $columns['course_acronym'] = 'course_acronym';
     return $columns;
 }
 add_filter('manage_edit-courses_sortable_columns', 'mbe_change_sortable_columns');
 
 function mbe_sort_custom_column($clauses, $wp_query){
     global $wpdb;
-    if(isset($wp_query->query['orderby']) && $wp_query->query['orderby'] == 'quarter'){
+    if(isset($wp_query->query['orderby']) && $wp_query->query['orderby'] == 'quarters'){
         $clauses['join'] .= <<<SQL
 LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
 LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
@@ -337,3 +342,16 @@ SQL;
     return $clauses;
 }
 add_filter('posts_clauses', 'mbe_sort_custom_column', 10, 2);
+
+add_action( 'pre_get_posts', 'acronym_orderby' );
+function acronym_orderby( $query ) {
+    if( ! is_admin() )
+        return;
+ 
+    $orderby = $query->get( 'orderby');
+ 
+    if( 'course_acronym' == $orderby ) {
+        $query->set('meta_key','course_acronym');
+        $query->set('orderby','meta_value');
+    }
+}
