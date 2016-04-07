@@ -68,9 +68,10 @@ $cats = get_categories($cats_args);
 		$query_args = array(
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,   
+			'posts_per_page' => -1,   
             'meta_key' => 'course_acronym',
-            'order_by' => 'meta_value',
+            'orderby' => 'meta_value',
+            'order' => 'ASC',
 			'paged' => $paged
 		);
 

@@ -49,6 +49,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
             'ignore_sticky_posts' => 1,
 			'paged' => $paged
 		);
+            
 		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
 			$query_args['taxonomy'] = $coenv_cat_1;
@@ -62,6 +63,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		if($coenv_month) {
 			$query_args['monthnum'] = $coenv_month;
 		}
+            
 		$wp_query = new WP_Query( $query_args );
 		?>
 		<?php if ($wp_query->have_posts()): 

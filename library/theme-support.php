@@ -236,17 +236,3 @@ function coenv_base_section_title($id) {
         
         echo $section_title;
     }
-
-
-function theme_course_orderby_course_custom_field($query)
-{
-    if(!is_admin()
-       && $query->is_main_query()
-       && $query->query_vars['post_type'] == 'courses'
-      ){
-        $query->set('meta_key','_number_of_credits');      
-        $query->set('orderby', 'meta_value_num');
-        $query->set('order', 'DESC');
-    }
-}
-add_action( 'pre_get_posts', 'theme_course_orderby_course_custom_field' );
