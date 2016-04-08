@@ -9,14 +9,13 @@
         // loop through the rows of data
         while ( have_rows('instructor(s)') ) : the_row();
         // display a sub field value
-        echo '<p>Instructor(s): ';
         if (get_sub_field('instructor_link')) {
                 $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
             } else {
                 $instructors[] = get_sub_field('instructor_name');
             }
         endwhile;
-        echo implode(', ',$instructors);
+        echo '<p>Instructor(s): ' . implode(', ',$instructors);
     }
     echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
     echo '<div class="course-description">' . get_field('course_description') . '</div>';
