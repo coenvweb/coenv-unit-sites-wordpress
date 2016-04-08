@@ -106,12 +106,30 @@ $cats = get_categories($cats_args);
 		$wp_query->the_post();
         $terms = wp_get_post_terms($post->ID, 'course_quarter' ); 
         $quarter_name = get_field('quarter');
-        $course_year = substr( $terms[0]->slug , -4); ?>
+        $course_year = substr( $terms[0]->slug , -4);
+        if( have_rows('instructor(s)') ) {
+            // loop through the rows of data
+            while ( have_rows('instructor(s)') ) : the_row();
+            // display a sub field value
+            if (get_sub_field('instructor_link')) {
+                    $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
+                } else {
+                    $instructors[] = get_sub_field('instructor_name');
+                }
+            endwhile;
+            $instructors = implode(', ',$instructors);
+        }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
         echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . '</h5>';
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
+            
+        if (isset($instructors)) {
+            echo '<p>Credits: ' . get_field('number_of_credits') . ' | Instructor(s): ' . $instructors . '</p>';
+            unset ($instructors);
+        } else {
+            echo '<p>Credits: ' . get_field('number_of_credits');
+        }
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         echo '</li>';
 		endwhile;
