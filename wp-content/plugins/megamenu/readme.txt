@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== Max Mega Menu ===
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.4
-Stable tag: 2.1.2
+Tested up to: 4.5
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,17 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.1.5 [13/04/2016] =
+
+* Change: Allow "Hide Text" option to be used on second level menu items
+
+= 2.1.4 [11/04/2016] =
+
+* Fix for WordPress v4.5: Unable to save mega menu settings on Appearance > Menus page
+(Works around this change to core: https://core.trac.wordpress.org/changeset/36426)
+* Change: Allow textarea fields in toggle blocks
+* Change: Remove margin from Spacer toggle blocks
 
 = 2.1.3 [21/03/2016] =
 

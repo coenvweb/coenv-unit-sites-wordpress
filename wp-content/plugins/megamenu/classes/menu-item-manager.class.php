@@ -291,13 +291,7 @@ class Mega_Menu_Menu_Item_Manager {
         $return .=                  __("Hide Text", "megamenu");
         $return .= '            </td>';
         $return .= '            <td class="mega-value">';
-
-        if ( $this->menu_item_depth == 0 ) {
-            $return .= '<input type="checkbox" name="settings[hide_text]" value="true" ' . checked( $menu_item_meta['hide_text'], 'true', false ) . ' />';
-        } else {
-            $return .= '<em>' . __("Option only available for top level menu items", "megamenu") . '</em>';
-        }
-
+        $return .= '                <input type="checkbox" name="settings[hide_text]" value="true" ' . checked( $menu_item_meta['hide_text'], 'true', false ) . ' />';
         $return .= '            </td>';
         $return .= '        </tr>';
         $return .= '        <tr>';

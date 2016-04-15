@@ -46,7 +46,7 @@ class Mega_Menu_Nav_Menus {
 
         add_action( 'admin_init', array( $this, 'register_nav_meta_box' ), 9 );
         add_action( 'megamenu_nav_menus_scripts', array( $this, 'enqueue_menu_page_scripts' ), 9 );
-        add_action( 'megamenu_save_settings', array($this, 'save') );
+        add_action( 'wp_ajax_mm_save_settings', array($this, 'save') );
         add_filter( 'hidden_meta_boxes', array( $this, 'show_mega_menu_metabox' ) );
 
         if ( function_exists( 'siteorigin_panels_admin_enqueue_scripts' ) ) {
@@ -194,8 +194,6 @@ class Mega_Menu_Nav_Menus {
 
         $menu_id = $this->get_selected_menu_id();
 
-        do_action("megamenu_save_settings");
-
         $this->print_enable_megamenu_options( $menu_id );
 
     }
@@ -208,13 +206,33 @@ class Mega_Menu_Nav_Menus {
      */
     public function save() {
 
+        check_ajax_referer( 'megamenu_edit', 'nonce' );
+
         if ( isset( $_POST['menu'] ) && $_POST['menu'] > 0 && is_nav_menu( $_POST['menu'] ) && isset( $_POST['megamenu_meta'] ) ) {
 
-            $submitted_settings = $_POST['megamenu_meta'];
+            $raw_submitted_settings = $_POST['megamenu_meta'];
+
+            $parsed_submitted_settings = json_decode( stripslashes( $raw_submitted_settings ), true );
+
+            $submitted_settings = array();
+
+            foreach ( $parsed_submitted_settings as $index => $value ) {
+                $name = $value['name'];
+
+                // find values between square brackets
+                preg_match_all( "/\[(.*?)\]/", $name, $matches );
+
+                if ( isset( $matches[1][0] ) && isset( $matches[1][1] ) ) {
+                    $location = $matches[1][0];
+                    $setting = $matches[1][1];
+
+                    $submitted_settings[$location][$setting] = $value['value'];
+                }
+            }
 
             if ( ! get_option( 'megamenu_settings' ) ) {
 
-                add_option( 'megamenu_settings', $submitted_settings );
+                update_option( 'megamenu_settings', $submitted_settings );
 
             } else {
 
@@ -231,6 +249,8 @@ class Mega_Menu_Nav_Menus {
             do_action( "megamenu_delete_cache" );
 
         }
+
+        wp_die();
 
     }
 
@@ -299,6 +319,12 @@ class Mega_Menu_Nav_Menus {
             <?php
 
             submit_button( __( 'Save' ), 'max-mega-menu-save button-primary alignright');
+
+            ?>
+
+            <span class='spinner'></span>
+
+            <?php
 
         }
 

@@ -28,9 +28,8 @@
         plugin.settings = {};
 
         var isTouchDevice = function() {
-            return (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
+            return ('ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0 || (window.DocumentTouch && document instanceof DocumentTouch));
         };
-
 
         plugin.hidePanel = function(anchor, immediate) {
 
