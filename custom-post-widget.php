@@ -10,17 +10,26 @@ $link_type = get_field( "link_type", $content_post -> ID );
 $link_type_internal = get_field( "link_page", $content_post -> ID );
 $link_position = get_field( "link_position", $content_post -> ID );
 $widget_title = apply_filters( 'widget_title', $content_post->post_title);
+$src = 0;
+$size = 0;
+if (isset($attachment)){
 $widget_img_attr = array(
 	'src'	=> $src,
 	'class'	=> "attachment-$size",
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
-);
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'large');
+);}else {
+$widget_img_attr = array(
+	'src'	=> $src,
+	'class'	=> "attachment-$size",
+    );
+}
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
-if($rows) {
+$buttons = "";
+if( !empty( $rows ) )  {
     $buttons = '<ul class="widget_links">';
     $first = true;
     foreach($rows as $row) {
@@ -61,18 +70,25 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image ) {
-	echo '<div class="widget_img">';
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
-	echo '</div>';
-	}
-echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
-    echo $buttons;
+if ( $show_featured_image && $widget_img ) {
+    if (isset($first_link_title)) {
+        echo '<div class="widget_img">';
+        echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
+        echo '</div>';
+    } else {
+        echo $widget_img;
+    }
 }
+echo '<div class="widget_content">';
 if ( $show_custom_post_title ) {
 	echo $before_title;
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
+    if (isset($first_link_url)) {
+        echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">';
+        echo $widget_title;
+        echo '</a>';
+    } else {
+        echo $widget_title;
+    }
 	echo $after_title;
 }
 echo $widget_copy;

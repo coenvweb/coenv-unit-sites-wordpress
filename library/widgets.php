@@ -300,10 +300,24 @@ class CoEnv_Widget_Events extends WP_Widget {
   public function widget( $args, $instance ) {
     extract( $args );
 
-    $title = apply_filters( 'widget_title', $instance['title'] );
-    $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
-    $events_url = apply_filters( 'events_url', $instance['events_url'] );
-    $posts_per_page = (int) $instance['posts_per_page'];
+    if (isset($instance['title'])) {
+        $title = apply_filters( 'widget_title', $instance['title'] );
+    } else {
+        $title = null;
+    }
+    if (isset($instance['feed_url'])) {
+        $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
+    }
+    if (isset($instance['events_url'])) {
+        $events_url = apply_filters( 'events_url', $instance['events_url'] );
+    } else {
+        $events_url = null;
+    }
+    if (isset($instance['posts_per_page'])) {
+        $posts_per_page = (int) $instance['posts_per_page'];
+    } else {
+        $posts_per_page = 3;
+    }
 
     if ( !isset( $feed_url ) || empty( $feed_url ) ) {
       return;
