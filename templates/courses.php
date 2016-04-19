@@ -8,10 +8,14 @@ Template Name: Courses Page
  */
 
 // Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if(isset($_GET['tax'])) {
+    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+}
+if(isset($_GET['term'])) {
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+}
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $current_quarters = get_field('quarter_to_display');
 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
@@ -20,9 +24,13 @@ if (isset($current_quarters[1])) {
 };
 if (empty($coenv_cat_1)) {
     $coenv_cat_1 = 'course_quarter';
-    $coenv_cat_term_1 = $qtr_term_0->slug;
-    $coenv_cat_term_1_arr = $qtr_term_0;
-    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    if (isset($qtr_term)) {
+        $coenv_cat_term_1 = $qtr_term_0->slug;
+        $coenv_cat_term_1_arr = $qtr_term_0;
+        $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    } else {
+        $coenv_cat_term_1 = $coenv_cat_term_1_arr = $coenv_cat_term_1_val = null;
+    }
 }
 ?>
 <?php get_header(); ?>
@@ -146,7 +154,6 @@ $cats = get_categories($cats_args);
 	<?php endif; ?>
 	<a href="#" class="back-to-top">Back to Top</a>
 	<?php do_action('foundationPress_after_content'); ?>
-	</div>
     </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
 <?php get_sidebar(); ?>
