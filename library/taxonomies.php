@@ -258,3 +258,100 @@ function data_tax() {
 }
 
 add_action( 'init', 'data_tax' );
+
+/**
+* Custom Taxonomies for Courses
+**/
+function course_tax() {
+
+	$data_labels = array(
+		'name'                       => _x( 'Quarters', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Quarter', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Quarters', 'text_domain' ),
+		'all_items'                  => __( 'All Quarters', 'text_domain' ),
+		'parent_item'                => __( 'Parent Quarter', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Quarter:', 'text_domain' ),
+		'new_item_name'              => __( 'New Quarter', 'text_domain' ),
+		'add_new_item'               => __( 'Add Quarter', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Quarter', 'text_domain' ),
+		'update_item'                => __( 'Update Quarter', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Quarters', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Quarter', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from quarters with the most courses', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$data_args = array(
+		'labels'                     => $data_labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'course_quarter', array( 'courses' ), $data_args );
+
+}
+
+add_action( 'init', 'course_tax' );
+
+function mbe_change_table_column_titles($columns){
+    unset($columns['date']);// temporarily remove, to have custom column before date column
+    $columns['quarters'] = 'Quarters';
+    $columns['course_acronym'] = 'Course Acronym';
+    $columns['date'] = 'Date';// readd the date column
+    return $columns;
+}
+add_filter('manage_courses_posts_columns', 'mbe_change_table_column_titles');
+
+function mbe_change_column_rows($column_name, $post_id){
+    if($column_name == 'quarters'){
+        echo get_the_term_list($post_id, 'course_quarter', '', ', ', '').PHP_EOL;
+    }
+    if($column_name == 'course_acronym'){
+        echo get_field('course_acronym', $post_id).PHP_EOL;
+    }
+}
+add_action('manage_courses_posts_custom_column', 'mbe_change_column_rows', 10, 2);
+
+function mbe_change_sortable_columns($columns){
+    $columns['quarters'] = 'quarters';
+    $columns['course_acronym'] = 'course_acronym';
+    return $columns;
+}
+add_filter('manage_edit-courses_sortable_columns', 'mbe_change_sortable_columns');
+
+function mbe_sort_custom_column($clauses, $wp_query){
+    global $wpdb;
+    if(isset($wp_query->query['orderby']) && $wp_query->query['orderby'] == 'quarters'){
+        $clauses['join'] .= <<<SQL
+LEFT OUTER JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.ID={$wpdb->term_relationships}.object_id
+LEFT OUTER JOIN {$wpdb->term_taxonomy} USING (term_taxonomy_id)
+LEFT OUTER JOIN {$wpdb->terms} USING (term_id)
+SQL;
+        $clauses['where'] .= "AND (taxonomy = 'course_quarter' OR taxonomy IS NULL)";
+        $clauses['groupby'] = "object_id";
+        $clauses['orderby'] = "GROUP_CONCAT({$wpdb->terms}.name ORDER BY name ASC)";
+        if(strtoupper($wp_query->get('order')) == 'ASC'){
+            $clauses['orderby'] .= 'ASC';
+        } else{
+            $clauses['orderby'] .= 'DESC';
+        }
+    }
+    return $clauses;
+}
+add_filter('posts_clauses', 'mbe_sort_custom_column', 10, 2);
+
+add_action( 'pre_get_posts', 'acronym_orderby' );
+function acronym_orderby( $query ) {
+    if( ! is_admin() )
+        return;
+ 
+    $orderby = $query->get( 'orderby');
+ 
+    if( 'course_acronym' == $orderby ) {
+        $query->set('meta_key','course_acronym');
+        $query->set('orderby','meta_value');
+    }
+}
