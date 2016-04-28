@@ -45,9 +45,6 @@ require_once('library/faculty.php');
 // Custom taxonomies functions
 require_once('library/taxonomies.php');
 
-// Publications functions
-require_once('library/publications.php');
-
 // Need to be sorted into includes
 
 

@@ -38,7 +38,9 @@ $feature_query = new WP_Query( $feature_args );
 			$feature_excerpt = get_field( 'feature_excerpt' );
 		}
 		if ( get_the_post_thumbnail() ) {
-			$feature_image = wp_get_attachment_image_src( get_post_thumbnail_id(), 'thumbnail-size', true );
+            $thumb_id = get_post_thumbnail_id();
+			$feature_image = wp_get_attachment_image_src( $thumb_id, 'thumbnail-size', true );
+            $alt = get_post_meta($thumb_id, '_wp_attachment_image_alt', true);
 			$feature_caption = get_post( get_post_thumbnail_id() );
 			$feature_caption = $feature_caption->post_excerpt;
 		}

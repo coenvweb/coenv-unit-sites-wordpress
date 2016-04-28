@@ -47,8 +47,11 @@ class top_bar_new_walker extends Walker_Page {
 
         function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
         $element->has_children = !empty( $children_elements[$element->ID] );
+        if ( ! isset( $element->classes ) ) {
+            $element->classes = array();
+        }
         $element->classes[] = ( $element->current || $element->current_item_ancestor ) ? 'active' : '';
-        $element->classes[] = ( $element->has_children && $max_depth !== 1 ) ? 'has-dropdown' : '';
+        $element->classes[] .= ( $element->has_children && $max_depth !== 1 ) ? 'has-dropdown' : '';
         
         parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
     }
@@ -110,7 +113,7 @@ class top_bar_mobile_walker extends Walker_Page {
         }
     }
     
-    function end_lvl( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+    function end_lvl( &$output, $depth = 0, $args = array(), $id = 0 ) {
         $output .= '</div>';
     }
 }
