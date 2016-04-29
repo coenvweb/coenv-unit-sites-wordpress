@@ -24,7 +24,7 @@
     } ?></title>
     <meta name="description" content="We are dedicated to sustaining healthy marine and freshwater environments. Our faculty are recognized leaders in aquatic biology, sustainable fisheries management and aquatic resource conservation."></meta>
     
-  <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
+  <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css?time=<?php echo time(); ?>" />
       
     <link rel="apple-touch-icon" sizes="57x57" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-57x57.png">
@@ -77,12 +77,12 @@
               <path id="XMLID_14_" class="st0" d="M53.5,0c0,0.6,0,8.3,0,8.8c0.6,0,6.2,0,6.2,0l-6.9,25.8c0,0-8.5-34.2-8.6-34.6c-0.5,0-8.5,0-9,0
   c-0.1,0.5-9.3,34.6-9.3,34.6L19.5,8.8c0,0,5.9,0,6.5,0c0-0.6,0-8.3,0-8.8C25.3,0,0.6,0,0,0c0,0.6,0,8.3,0,8.8c0.6,0,5.7,0,5.7,0
   s9.9,39.7,10,40.2c0.5,0,13.5,0,13.9,0c0.1-0.5,6.6-25.3,6.6-25.3s6.2,24.8,6.3,25.3c0.5,0,13.5,0,13.9,0
-  c0.1-0.5,10.6-40.2,10.6-40.2s5.1,0,5.7,0c0-0.6,0-8.3,0-8.8C72.3,0,54.1,0,53.5,0z"/>
+  c0.1-0.5,10.6-40.2,10.6-40.2s5.1,0,5.7,0c0-0.6,0-8.3,0-8.8C72.3,0,54.1,0,53.5,0z"/> <span class="visuallyhidden">School of Aquatic and Fishery Sciences</span>
 </svg>
 </a>
     </div>
     <div class="middle tab-bar-section">
-      <h1 class="title"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo( 'name' ); ?></a></h1>
+      <h1 class="title"><a href="<?php bloginfo('url') ?>" rel="home" title="Home"><?php bloginfo( 'name' ); ?></a></h1>
     </div>
     <div class="right-small">
       <a class="right-off-canvas-toggle menu-icon" ><span><i></i></span></a>
@@ -107,22 +107,7 @@
                 'exclude' => $exclude,
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            echo '<ul class="off-canvas-list"><li>';
            ?>
-                <div class="accordion" data-accordion="">
-                  <div class="accordion-navigation">
-                      <a class="right columns small-3 expander-link" href="#accordion-50"> </a>
-                  </div>
-                </div>
-           
-
-
-
-       
-
-
-
-                
     </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
@@ -167,7 +152,7 @@
       <li class="name">
         <h1>
           <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-            <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-w.png" id="logo" alt="University of Washington W" height="108px" width="158">
+            <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-w.png" id="logo" alt="University of Washington W" height="108" width="158">
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>

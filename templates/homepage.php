@@ -16,7 +16,7 @@ $feature_args = array(
 
 $feature_query = new WP_Query( $feature_args );
 ?>
-<div class="full-feature">
+<div class="full-feature" id="main-col">
 	<!--<div class="playpause"></div>-->
 	<div class="homepage-features">
 
@@ -57,7 +57,7 @@ $feature_query = new WP_Query( $feature_args );
 		-->
 			<div class="feature-image" id="pid-<?php echo $feature_query->post->ID; ?>" data-interchange="['/wp-content/themes/coenv-fish/assets/img/black.png', (default)][<?php echo $feature_image[0]; ?>, (medium)]">
 				<div class="feature-info-container">
-					<img class="show-for-small-only mobile-hero" src="<?php echo $feature_image[0]; ?>" />
+					<img class="show-for-small-only mobile-hero" src="<?php echo $feature_image[0]; ?>" alt="<?php echo $alt; ?>" />
 					<div class="feature-info row" style="background-color:<?php $feature_color; ?>">
 						<div class="feature-content">
 							<h2><?php echo get_the_title(); ?></h2>
@@ -109,14 +109,14 @@ $feature_query = new WP_Query( $feature_args );
 		<div class="widget-area home-content" role="complementary">
 	<div class="solid-widget">
 		<div class="widget-title">
-			<h4><a title="Learn more" href="/about/" target="_self">Join our community</a></h4>
+			<h4><a title="Learn more about the School of Aquatic and Fishery Sciences" href="/about/" target="_self">Join our community</a></h4>
 		</div>
 		<div class="widget-content">
 			<p><span class="intro">The School of Aquatic and Fishery Sciences (SAFS) is dedicated to sustaining healthy marine and freshwater environments. Our faculty conduct innovative research from the organism to the ecosystem scale, and are recognized leaders in aquatic biology, sustainable fisheries management and aquatic resource conservation.</span></p>
 			<ul class="widget_links">
 				<li class="visible-for-small-only"><a class="button" href="/students">Explore our Programs</a></li>
 				<li class="visible-for-small-only"><a class="button" href="/faculty-research">Meet Our Faculty</a></li>
-				<li><a class="button" title="Learn more" href="/about/" target="_self">Learn more</a></li>
+				<li><a class="button" title="Learn more about the School of Aquatic and Fishery Sciences" href="/about/" target="_self">Learn more</a></li>
 			</ul>
 		</div>
 	</div>							
@@ -157,6 +157,7 @@ $feature_query = new WP_Query( $feature_args );
 	<?php while( has_sub_field('social_media', 'option') ) { ?>
 		<a class="<?php the_sub_field('service_name'); ?> icon" href="<?php the_sub_field('url'); ?>" title="<?php the_sub_field('service_name'); ?>">
 			<i class="fi-social-<?php the_sub_field('service_name'); ?>"></i>
+            <span class="visuallyhidden"><?php the_sub_field('service_name'); ?></span>
 		</a>
 	<?php } ?>
 	</div>
