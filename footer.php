@@ -17,14 +17,17 @@
                 <?php if (get_option('facebook')) { ?>
                     <a class="facebook button" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
                         <i class="fi-social-facebook"></i>
+                        <span class="visuallyhidden">Facebook</span>
                     </a><?php } ?>
                 <?php if (get_option('twitter')) { ?>
                     <a class="twitter button" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
-                            <i class="fi-social-twitter"></i>
+                        <i class="fi-social-twitter"></i>
+                        <span class="visuallyhidden">Twitter</span>
                     </a><?php } ?>
                 <?php if (get_option('youtube')) { ?>
                     <a class="youtube button" href="<?php echo get_option('youtube'); ?>" title="Join us on YouTube">
-                            <i class="fi-social-youtube"></i>
+                        <i class="fi-social-youtube"></i>
+                        <span class="visuallyhidden">YouTube</span>
                     </a><?php } ?>
                 </div>
             </div>
@@ -59,8 +62,8 @@
     <div class="layout-container row">
 
         <div class="be-boundless">
-            <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?></a><br />
-            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?></a>
+            <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?><span class="visuallyhidden">University of Washington</span></a><br />
+            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?><span class="visuallyhidden">Be Boundless</span></a>
         </div>
 
         <div class="medium-6 columns">

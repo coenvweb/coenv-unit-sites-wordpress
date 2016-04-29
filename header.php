@@ -21,8 +21,6 @@
     } else {
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
-    
-  <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
 
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
@@ -58,6 +56,7 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
     ?>
+      <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
   </head>
   <body <?php body_class(); ?>>
   
@@ -78,7 +77,7 @@
                 s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
                 c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
-</svg></a>
+</svg><span class="visuallyhidden"><?php bloginfo('name') ?></span></a>
     </div>
     <div class="middle tab-bar-section">
         <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
@@ -173,8 +172,8 @@
                 <ul>
               <li><a href="http://environment.uw.edu" title="UW College of the Environment">
   <?php include("assets/img/college-of-the-environment.svg"); ?>
-                  </a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
+                  <span class="visuallyhidden">College of the Environment</span></a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
                 </ul>
           </div> 
         </li>          
