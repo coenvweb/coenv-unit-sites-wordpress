@@ -152,7 +152,7 @@
       <li class="name">
         <h1>
           <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-            <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-w.png" id="logo" alt="University of Washington W" height="108px" width="158">
+            <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/logo-w.png" id="logo" alt="University of Washington W" height="108" width="158">
             <span><?php bloginfo('name') ?></span> 
           </a>
           </h1>
