@@ -157,6 +157,7 @@ $feature_query = new WP_Query( $feature_args );
 	<?php while( has_sub_field('social_media', 'option') ) { ?>
 		<a class="<?php the_sub_field('service_name'); ?> icon" href="<?php the_sub_field('url'); ?>" title="<?php the_sub_field('service_name'); ?>">
 			<i class="fi-social-<?php the_sub_field('service_name'); ?>"></i>
+            <span class="visuallyhidden"><?php the_sub_field('service_name'); ?></span>
 		</a>
 	<?php } ?>
 	</div>
