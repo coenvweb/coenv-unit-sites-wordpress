@@ -234,7 +234,7 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-        echo '<label for="select-category">Choose a category</label>';
+        echo '<label class="visuallyhidden" for="select-category">Choose a category</label>';
 		echo '<select name="select-category" class="select-category" id="select-category">';
 		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">Chooose a category</option>';
 		echo '<ul class="select-category small-block-grid-3">';
@@ -255,7 +255,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	$counter = 0;
 	$ref_month = '';
 	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
-    echo '<label for="select-month">Choose a month</label>';
+    echo '<label class="visuallyhidden" for="select-month">Choose a month</label>';
 	echo '<select name="select-category" class="select-category" id="select-month">';
 	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">Choose a month</option>';
 	if( $monthly->have_posts() ) :
