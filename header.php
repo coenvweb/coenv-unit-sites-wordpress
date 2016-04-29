@@ -82,7 +82,7 @@
 </a>
     </div>
     <div class="middle tab-bar-section">
-      <h1 class="title"><a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>"><?php bloginfo( 'name' ); ?></a></h1>
+      <h1 class="title"><a href="<?php bloginfo('url') ?>" rel="home" title="Home"><?php bloginfo( 'name' ); ?></a></h1>
     </div>
     <div class="right-small">
       <a class="right-off-canvas-toggle menu-icon" ><span><i></i></span></a>
