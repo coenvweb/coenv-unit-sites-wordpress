@@ -15,7 +15,9 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $current_quarters = get_field('quarter_to_display');
 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
-$qtr_term_1 = get_term_by('id', $current_quarters[1], 'course_quarter');
+if (isset($current_quarters[1])) {
+    $qtr_term_1 = get_term_by('id', $current_quarters[1], 'course_quarter');
+};
 if (empty($coenv_cat_1)) {
     $coenv_cat_1 = 'course_quarter';
     $coenv_cat_term_1 = $qtr_term_0->slug;
@@ -28,28 +30,26 @@ if (empty($coenv_cat_1)) {
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-            <?php echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . ($qtr_term_1->name) . '</h4>'; ?>
+            <?php if(isset($qtr_term_1->name)) { echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . $qtr_term_1->name . '</h4>'; } elseif(isset($qtr_term_1->name)) {echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . '</h4>';}?>
             <?php the_content(); ?>
             
 		<div class="row filters">
 			<div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
-				<?php 
-$tax_obj = get_taxonomy($tax);
-$tax_str = $tax_obj->labels->name;
+				<?php
 
 $cats_args  = array(
-	'orderby' => 'term_group',
+	'orderby' => 'none',
 	'order' => 'ASC',
 	'taxonomy' => 'course_quarter',
     'hide_empty' => 0
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-        $i = 6;
+        $i = 4;
         echo '<div>';
 		foreach($cats as $cat) { 
             $year = substr( $cat->slug , -4);
-            if($i % 6 == 0) {echo '</div><div><p> Academic Year: ' . ($year - 1) . ' - ' . $year . '</p>';}
+            if($i % 4 == 0) {echo '</div><div><p> Academic Year: ' . $year . ' - ' . ($year + 1) . '</p>';}
 			$selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
 			echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
             $i++;
@@ -70,8 +70,10 @@ $cats = get_categories($cats_args);
 		$query_args = array(
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
-			'posts_per_page' => 20,     
-            'order_by' => 'name',
+			'posts_per_page' => -1,   
+            'meta_key' => 'course_acronym',
+            'orderby' => 'meta_value',
+            'order' => 'ASC',
 			'paged' => $paged
 		);
 
@@ -102,14 +104,32 @@ $cats = get_categories($cats_args);
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        $terms = wp_get_post_terms($post->ID, 'course_quarter', $args ); 
+        $terms = wp_get_post_terms($post->ID, 'course_quarter' ); 
         $quarter_name = get_field('quarter');
-        $course_year = substr( $terms[0]->slug , -4); ?>
+        $course_year = substr( $terms[0]->slug , -4);
+        if( have_rows('instructor(s)') ) {
+            // loop through the rows of data
+            while ( have_rows('instructor(s)') ) : the_row();
+            // display a sub field value
+            if (get_sub_field('instructor_link')) {
+                    $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
+                } else {
+                    $instructors[] = get_sub_field('instructor_name');
+                }
+            endwhile;
+            $instructors = implode(', ',$instructors);
+        }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
         echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . '</h5>';
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>Credits: ' . get_field('number_of_credits') . ' | Meeting times: ' . get_field('class_meeting_times') . ' | Location: ' . get_field('location') . '</p>';
+            
+        if (isset($instructors)) {
+            echo '<p>Credits: ' . get_field('number_of_credits') . ' | Instructor(s): ' . $instructors . '</p>';
+            unset ($instructors);
+        } else {
+            echo '<p>Credits: ' . get_field('number_of_credits');
+        }
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         echo '</li>';
 		endwhile;

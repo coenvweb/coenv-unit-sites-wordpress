@@ -10,18 +10,29 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
  */
 
 // Dates
+if(isset($_GET['coenv-year'])){
 $coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
 $coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
 
 // Month needs an offset because php and WordPress calculate dates differently.
 $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+} else {
+    $coenv_year = $coenv_month = $coenv_date = null;
+}
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if(isset($_GET['tax'])){
+    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+}
+if(isset($_GET['term'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
+}
 ?>
+
 
 <?php get_header(); ?>
 <div class="row">
@@ -78,90 +89,18 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
-
-		<div class="blog clearfix">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
-        }
-		?>
-		<div class="blog-list-item clearfix">
-		<!--
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
-		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
-        </div>
-    	-->
-        
-        <div class="news-meta small-12 columns">
-        <div class="blog-meta clearfix small-6 columns left">
-		<?php 
-        echo '<p>' . get_the_date('M j, Y') .' / ';
-		$termlist = '';
-		foreach ($terms as $term) {
-            $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
-		}
-		$termlist = rtrim($termlist,', ');
-		echo $termlist;
+        delete_post_thumbnail( get_the_ID() );
+        echo '<div class="blog clearfix">';
+		get_template_part( 'partials/partial', 'story' );
         ?>
-        </p>
 		</div>
-
-        <div class="blog-meta clearfix sharer small-6 columns right">
-        <?php $title = rawurlencode(get_the_title());
-        $shortlink = rawurlencode(wp_get_shortlink());
-        $site_name = rawurlencode(get_bloginfo('name'));
-        $twitter = get_option('twitter');
-        if ($twitter) {
-            $twitter = '%20from%20' . $twitter;
-        }
-        ?>
-        <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . $twitter . ' target="_blank">' ?>
-        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
-        <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
-        <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20' . $site_name .'%20at%20UW:%20' . $shortlink . '>'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
-		</div>
-		</div>
-            
-        <?php
-		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
-
-		echo '<div class="post">';
-		/*if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
-		the_post_thumbnail( 'medium' );
-		echo '</a>';
-		endif;*/
-		echo the_excerpt();
-		echo $post_link;
-		'</div>';
-		echo '<div class="blog-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['blog_link_type'] == 'upload') {
-					echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-				} elseif ($row['blog_link_type'] == 'link') {
-					echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-				} 
-			}
-		} ?>
-		</div>
-		</div>
-	</div>
 	<?php endwhile; ?>
-	</div>
 	<div class="pager">
 	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
 		<nav id="post-nav">

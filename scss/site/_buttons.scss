@@ -29,5 +29,10 @@
 			color: $text;
 		}
 	}
+    
+    &.active {
+        background: $accent;
+        color: white;
+    }
 
 } // .button
