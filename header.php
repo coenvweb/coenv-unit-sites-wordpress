@@ -77,7 +77,7 @@
               <path id="XMLID_14_" class="st0" d="M53.5,0c0,0.6,0,8.3,0,8.8c0.6,0,6.2,0,6.2,0l-6.9,25.8c0,0-8.5-34.2-8.6-34.6c-0.5,0-8.5,0-9,0
   c-0.1,0.5-9.3,34.6-9.3,34.6L19.5,8.8c0,0,5.9,0,6.5,0c0-0.6,0-8.3,0-8.8C25.3,0,0.6,0,0,0c0,0.6,0,8.3,0,8.8c0.6,0,5.7,0,5.7,0
   s9.9,39.7,10,40.2c0.5,0,13.5,0,13.9,0c0.1-0.5,6.6-25.3,6.6-25.3s6.2,24.8,6.3,25.3c0.5,0,13.5,0,13.9,0
-  c0.1-0.5,10.6-40.2,10.6-40.2s5.1,0,5.7,0c0-0.6,0-8.3,0-8.8C72.3,0,54.1,0,53.5,0z"/>
+  c0.1-0.5,10.6-40.2,10.6-40.2s5.1,0,5.7,0c0-0.6,0-8.3,0-8.8C72.3,0,54.1,0,53.5,0z"/> <span class="visuallyhidden">School of Aquatic and Fishery Sciences</span>
 </svg>
 </a>
     </div>
@@ -107,22 +107,7 @@
                 'exclude' => $exclude,
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            echo '<ul class="off-canvas-list"><li>';
            ?>
-                <div class="accordion" data-accordion="">
-                  <div class="accordion-navigation">
-                      <a class="right columns small-3 expander-link" href="#accordion-50"> </a>
-                  </div>
-                </div>
-           
-
-
-
-       
-
-
-
-                
     </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
