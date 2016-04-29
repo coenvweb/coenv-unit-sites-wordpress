@@ -88,7 +88,7 @@ if (!empty($publication_years)) {
 		<?php if (!empty($publication_link)) { ?>
 			<a class="button" href="<?php echo $publication_link; ?>" target="_blank">Download this publication</a>
 		<?php } else { ?>
-			<a class="button" href="mailto:cig@uw.edu?subject=<?php the_title() ?>">Contact us for access to this publication</a>
+			<a class="button" href="mailto:<?php echo antispambot("cig@uw.edu") ?>?subject=<?php the_title() ?>">Contact us for access to this publication</a>
 		<?php } ?>
 		</div>
 	</section>
