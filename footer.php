@@ -11,7 +11,7 @@
             </div>
             <div class="unit-contact">
                 <?php if (get_option('mail_address')) { ?><p><a href="http://maps.google.com/?q=<?php echo urlencode(get_option('mail_address')); ?>" title="Google Maps link"><?php echo get_option('mail_address'); ?></a></p><?php } ?>
-                <?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo get_option('public_email_address'); ?>" title="Send us an Email"><?php echo get_option('public_email_address'); } ?></a>
+                <?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo antispambot(get_option('public_email_address')); ?>" title="Send us an Email"><?php echo antispambot(get_option('public_email_address')); } ?></a>
                 <?php if (get_option('phone')) { ?> | <?php echo get_option('phone'); ?></p><?php } ?>
             </div>
             <div class="footer__info">
