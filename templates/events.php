@@ -31,7 +31,7 @@ get_header();
 				// ]]></script>
 				</div>
 				<noscript>Your browser must support JavaScript to view this content. Please enable JavaScript in your browser settings then try again.</noscript>
-				<p>To suggest additions to this calendar, email <a href="mailto:safsdesk@uw.edu">safsdesk@uw.edu</a>.</p>
+				<p>To suggest additions to this calendar, email <a href="mailto:<?php echo antispambot('safsdesk@uw.edu')?>"><?php echo antispambot('safsdesk@uw.edu')?></a>.</p>
 			</div>
 			<footer>
 				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
