@@ -2,8 +2,8 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 4.5
-Tested up to: 4.5
-Stable tag: 2.2.1
+Tested up to: 4.5.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,19 +66,11 @@ We spend hours to make plugins features work as though they were native WordPres
 Support is free for both versions of the plugin. "PRO"-users do not have priority. We do out best to respond in 24 hours if not sooner.
 
 
-= Available Languages (Assistance with the translation is highly appreciated) =
+= Available Languages =
 
-* French
-* Dutch
-* German
-* Hebrew
-* Japanese (thanks to Sakuma)
-* Korean
-* Polish
-* Spanish (thanks to Jose Antonio Ruiz)
-* Swedish
+You can see available translations and their progress here: https://translate.wordpress.org/projects/wp-plugins/enhanced-media-library Many thanks to all involved!
 
-Many thanks to the authors of the translations! If you wish to be credited here please just let us know what name and URL we have to use.
+Assistance with the translation is highly appreciated!
 
 
 = Compatibility with Other Plugins =
@@ -206,6 +198,22 @@ No, all your data will remain intact. Your created media categories and their ti
 
 == Changelog ==
 
+= 2.2.2 =
+*Release Date - April 30, 2016*
+
+= Improvements =
+* Many typos corrected
+* Localization added for default taxonomy Media Categories and credits
+* CSS for RTL improved
+* Encoding for Japanese translation fixed
+* Taxonomy queries (filtering) improved for List mode of the media library
+* Count number added to filters for List and Grid modes
+* Media Taxonomy tab: various CSS and JS improvements, minor bugs fixed
+* Performance: enhanced media library loading time reduced for about 40%
+* Media taxonomy 'years' is now being renamed to 'media_years' automatically on creation to avoid issues with WP queries
+
+
+&nbsp;
 = 2.2.1 =
 *Release Date - April 13, 2016*
 

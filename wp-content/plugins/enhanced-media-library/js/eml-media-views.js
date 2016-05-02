@@ -415,11 +415,6 @@ window.eml = window.eml || { l10n: {} };
             original.AttachmentsBrowser.initialize.apply( this, arguments );
 
             this.on( 'ready', this.fixLayout, this );
-            //
-            // $( window ).on( 'resize', _.debounce( _.bind( this.fixLayout, this ), 15 ) );
-
-            // ACF compatibility
-            // $( document ).on( 'click', '.acf-expand-details', _.debounce( _.bind( this.fixLayout, this ), 250 ) );
         },
 
         fixLayout: function() {

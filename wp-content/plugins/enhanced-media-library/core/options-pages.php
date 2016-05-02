@@ -200,6 +200,8 @@ if ( ! function_exists( 'wpuxss_eml_print_media_settings_tabs' ) ) {
 /**
  *  wpuxss_eml_print_media_settings
  *
+ *  Based on wp-admin/options-media.php
+ *
  *  @since    2.2.1
  *  @created  11/04/16
  */
@@ -284,8 +286,8 @@ if ( ! function_exists( 'wpuxss_eml_print_media_settings' ) ) {
         <th scope="row"><label for="upload_path"><?php _e('Store uploads in this folder'); ?></label></th>
         <td><input name="upload_path" type="text" id="upload_path" value="<?php echo esc_attr(get_option('upload_path')); ?>" class="regular-text code" />
         <p class="description"><?php
-            /* translators: %s: wp-content/uploads */
-            printf( __( 'Default is %s' ), '<code>wp-content/uploads</code>' );
+        	/* translators: %s: wp-content/uploads */
+        	printf( __( 'Default is %s' ), '<code>wp-content/uploads</code>' );
         ?></p>
         </td>
         </tr>
@@ -384,19 +386,33 @@ if ( ! function_exists( 'wpuxss_eml_taxonomies_options_page_scripts' ) ) {
             'all' => __( 'All', 'enhanced-media-library' ),
             'search' => __( 'Search', 'enhanced-media-library' ),
 
-            'tax_deletion_confirm' => __( 'Taxonomy will be deleted permanently! Your media files will remain intacted, but all the connections with this taxonomy and its terms will be lost.', 'enhanced-media-library' ),
-            'tax_error_duplicate' => __( 'There is already a taxonomy with the same name. Please chose other one.', 'enhanced-media-library' ),
             'tax_new' => __( 'New Taxonomy', 'enhanced-media-library' ),
-            'tax_error_empty_both' => __( 'Please choose Singular and Plural names for all your new taxomonies.', 'enhanced-media-library' ),
-            'tax_error_empty_singular' => __( 'Please choose Singilar name for all your new taxomonies.', 'enhanced-media-library' ),
-            'tax_error_empty_plural' => __( 'Please choose Plural Name for all your new taxomonies.', 'enhanced-media-library' ),
 
-            'bulk_edit_nonce' => wp_create_nonce( 'eml-bulk-edit-nonce' ),
+            'tax_deletion_confirm_title' => __( 'Remove Taxonomy', 'enhanced-media-library' ),
+            'tax_deletion_confirm_text_p1' => '<p>' . __( 'Taxonomy will be removed.', 'enhanced-media-library' ) . '</p>',
+            'tax_deletion_confirm_text_p2' => '<p>' . __( 'Taxonomy terms (categories) will remain intact in the database. If you create a taxonomy with the same name in the future, its terms (categories) will be available again.', 'enhanced-media-library' ) . '</p>',
+            'tax_deletion_confirm_text_p3' => '<p>' . __( 'Media items will remain intact.', 'enhanced-media-library' ) . '</p>',
+            'tax_deletion_confirm_text_p4' => '<p>' . __( 'Are you still sure?', 'enhanced-media-library' ) . '</p>',
+            'tax_deletion_yes' => __( 'Yes, remove taxonomy', 'enhanced-media-library' ),
+
+            'tax_error_duplicate_title' => __( 'Duplicate', 'enhanced-media-library' ),
+            'tax_error_duplicate_text' => __( 'Taxonomy with the same name already exists. Please chose other one.', 'enhanced-media-library' ),
+
+            'tax_error_empty_fileds_title' => __( 'Empty Fields', 'enhanced-media-library' ),
+            'tax_error_empty_both' => __( 'Please choose Singular and Plural names for all new taxomonies.', 'enhanced-media-library' ),
+            'tax_error_empty_singular' => __( 'Please choose Singilar name for all new taxomonies.', 'enhanced-media-library' ),
+            'tax_error_empty_plural' => __( 'Please choose Plural Name for all new taxomonies.', 'enhanced-media-library' ),
+
+            'okay' => __( 'Ok', 'enhanced-media-library' ),
+            'cancel' => __( 'Cancel', 'enhanced-media-library' ),
+
             'sync_warning_title' => __( 'Synchronize Now', 'enhanced-media-library' ),
-            'sync_warning_text' => __( 'This operation cannot be canceled. Are you still sure?', 'enhanced-media-library' ),
+            'sync_warning_text' => __( 'This operation cannot be canceled! Are you still sure?', 'enhanced-media-library' ),
             'sync_warning_yes' => __( 'Synchronize', 'enhanced-media-library' ),
             'sync_warning_no' => __( 'Cancel', 'enhanced-media-library' ),
-            'in_progress_sync_text' => __( 'Synchronizing...', 'enhanced-media-library' )
+            'in_progress_sync_text' => __( 'Synchronizing...', 'enhanced-media-library' ),
+
+            'bulk_edit_nonce' => wp_create_nonce( 'eml-bulk-edit-nonce' )
         );
 
         wp_localize_script(
@@ -471,12 +487,12 @@ if ( ! function_exists( 'wpuxss_eml_options_page_scripts' ) ) {
         );
 
         $l10n_data = array(
-            'cleanup_warning_p1' => '<p>' . __( 'You are about to <strong style="text-transform:uppercase">delete all plugin data</strong> from the database including backups.', 'enhanced-media-library' ) . '</p>',
-            'cleanup_warning_p2' => '<p>' . __( 'The operation cannot be canceled! Are you still sure?', 'enhanced-media-library') . '</p>',
             'cleanup_warning_title' => __( 'Complete Cleanup', 'enhanced-media-library' ),
+            'cleanup_warning_text_p1' => '<p>' . __( 'You are about to <strong style="text-transform:uppercase">delete all plugin data</strong> from the database including backups.', 'enhanced-media-library' ) . '</p>',
+            'cleanup_warning_text_p2' => '<p>' . __( 'This operation cannot be canceled! Are you still sure?', 'enhanced-media-library') . '</p>',
             'cleanup_warning_yes' => __( 'Yes, delete all data', 'enhanced-media-library' ),
-            'cleanup_warning_no' => __( 'Cancel', 'enhanced-media-library' ),
-            'in_progress_cleanup_text' => __( 'Cleaning...', 'enhanced-media-library' )
+            'in_progress_cleanup_text' => __( 'Cleaning...', 'enhanced-media-library' ),
+            'cancel' => __( 'Cancel', 'enhanced-media-library' )
         );
 
         wp_localize_script(
@@ -520,7 +536,7 @@ if ( ! function_exists( 'wpuxss_eml_print_settings' ) ) {
 
                             <div class="inside">
 
-                                <p><?php _e( 'The plugin settings <strong>Media Settings > Taxonomies</strong> and <strong>Media Settings > MIME Types</strong> will be exported to a configuration file. It allows you to easily import the configuration into another website.', 'enhanced-media-library' ); ?></p>
+                                <p><?php _e( 'Plugin settings tabs <strong>Media Library</strong>, <strong>Media Taxonomies</strong>, and <strong>MIME Types</strong> will be exported to a configuration file. It allows you to easily import the configuration into another website.', 'enhanced-media-library' ); ?></p>
 
                                 <form method="post">
 
@@ -539,8 +555,8 @@ if ( ! function_exists( 'wpuxss_eml_print_settings' ) ) {
 
                             <div class="inside">
 
-                                <p><?php _e( 'The plugin settings <strong>Media Settings > Taxonomies</strong> and <strong>Media Settings > MIME Types</strong> will be imported from a configuration file which can be obtained by exporting the settings on another website using the export button above.', 'enhanced-media-library' ); ?></p>
-                                <p><?php _e( 'All plugin settings will be overriden by the import. You will have a chance to restore current data from an automatic backup in case you are not satisfied with the result of the import.', 'enhanced-media-library' ); ?></p>
+                                <p><?php _e( 'Plugin settings tabs <strong>Media Library</strong>, <strong>Media Taxonomies</strong>, and <strong>MIME Types</strong> will be imported from a configuration file which can be obtained by exporting the settings on another website using the export button above.', 'enhanced-media-library' ); ?></p>
+                                <p><?php _e( 'All plugin settings will be overridden by the import. You will have a chance to restore current data from an automatic backup in case you are not satisfied with the result of the import.', 'enhanced-media-library' ); ?></p>
 
                                 <form method="post" enctype="multipart/form-data">
 
@@ -571,7 +587,7 @@ if ( ! function_exists( 'wpuxss_eml_print_settings' ) ) {
 
                                 <?php else : ?>
 
-                                    <p><?php _e( 'The backup had been automatically created before the latest import opetarion.', 'enhanced-media-library' ); ?></p>
+                                    <p><?php _e( 'The backup has been automatically created before the latest import operation.', 'enhanced-media-library' ); ?></p>
                                     <form method="post">
 
                                         <?php wp_nonce_field( 'eml_settings_restore_nonce', 'eml-settings-restore-nonce' ); ?>
@@ -984,10 +1000,10 @@ if ( ! function_exists( 'wpuxss_eml_print_media_library_options' ) ) {
                                             <td>
                                                 <fieldset>
                                                     <legend class="screen-reader-text"><span><?php _e('Enhanced media shortcodes','enhanced-media-library'); ?></span></legend>
-                                                    <label><input name="wpuxss_eml_lib_options[enhance_media_shortcodes]" type="hidden" value="0" /><input name="wpuxss_eml_lib_options[enhance_media_shortcodes]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_lib_options['enhance_media_shortcodes'], true ); ?> /> <?php _e('Enhance WordPress media shortcodes to make them understand media taxonomies, uploade date, and media items number limit','enhanced-media-library'); ?></label>
-                                                    <p class="description"><?php _e( 'Gallery example: [gallery media_category="5" limit="10" monthnum="12" year="2015"]', 'enhanced-media-library' ); ?></p>
-                                                    <p class="description"><?php _e( 'Audio playlist example: [playlist media_category="5" limit="10" monthnum="12" year="2015"]', 'enhanced-media-library' ); ?></p>
-                                                    <p class="description"><?php _e( 'Video playlist example: [playlist type="video" media_category="5" limit="10" monthnum="12" year="2015"]', 'enhanced-media-library' ); ?></p>
+                                                    <label><input name="wpuxss_eml_lib_options[enhance_media_shortcodes]" type="hidden" value="0" /><input name="wpuxss_eml_lib_options[enhance_media_shortcodes]" type="checkbox" value="1" <?php checked( true, $wpuxss_eml_lib_options['enhance_media_shortcodes'], true ); ?> /> <?php _e('Enhance WordPress media shortcodes to make them understand media taxonomies, upload date, and media items number limit','enhanced-media-library'); ?></label>
+                                                    <p class="description"><?php _e( 'Gallery example:', 'enhanced-media-library' );  ?> [gallery media_category="5" limit="10" monthnum="12" year="2015"]</p>
+                                                    <p class="description"><?php _e( 'Audio playlist example:', 'enhanced-media-library' ); ?> [playlist media_category="5" limit="10" monthnum="12" year="2015"]</p>
+                                                    <p class="description"><?php _e( 'Video playlist example:', 'enhanced-media-library' ); ?> [playlist type="video" media_category="5" limit="10" monthnum="12" year="2015"]</p>
                                                     <p class="description"><?php
                                                     printf( __( '%sWarning:%s Incompatibility with other gallery plugins or themes possible!', 'enhanced-media-library' ), '<strong style="color:red">', '</strong>' );
 
@@ -1121,7 +1137,7 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                                 $html .= '<li><label>' . __('Remember Terms Order (sort)','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-sort" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][sort]" value="1" ' . checked( 1, $taxonomy->sort, false ) . ' /></li>';
                                                 $html .= '<li><label>' . __('Show in REST','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-show_in_rest" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][show_in_rest]" value="1" ' . checked( 1, $taxonomy->show_in_rest, false ) . ' /></li>';
                                                 $html .= '<li><label>' . __('Rewrite Slug','enhanced-media-library') . '</label><input type="text" class="wpuxss-eml-slug" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][rewrite][slug]" value="' . esc_attr($taxonomy->rewrite['slug']) . '" /></li>';
-                                                $html .= '<li><label>' . __('Slug with Front','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-rewrite-with-front" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][rewrite][with_front]" value="1" ' . checked( 1, $taxonomy->rewrite['with_front'], false ) . ' /></li>';
+                                                $html .= '<li><label>' . __('Slug with Front','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-with_front" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][rewrite][with_front]" value="1" ' . checked( 1, $taxonomy->rewrite['with_front'], false ) . ' /></li>';
                                                 $html .= '</ul>';
                                                 $html .= '</div>';
 
@@ -1147,7 +1163,8 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
 
                                     $html .= '<li class="wpuxss-eml-clone" style="display:none">';
                                     $html .= '<input name="" type="hidden" class="wpuxss-eml-eml_media" value="1" />';
-                                    $html .= '<label class="wpuxss-eml-taxonomy-label"><input class="wpuxss-eml-assigned" name="" type="checkbox" class="wpuxss-eml-assigned" value="1" checked="checked" title="' . __('Assign Taxonomy','enhanced-media-library') . '" />' . __('New Taxonomy','enhanced-media-library') . '</label>';
+                                    $html .= '<input name="" type="hidden" class="wpuxss-eml-create_taxonomy" value="1" />';
+                                    $html .= '<label class="wpuxss-eml-taxonomy-label"><input class="wpuxss-eml-assigned" name="" type="checkbox" class="wpuxss-eml-assigned" value="1" checked="checked" title="' . __('Assign Taxonomy','enhanced-media-library') . '" />' . '<span>' . __('New Taxonomy','enhanced-media-library') . '</span></label>';
 
                                     $html .= '<a class="wpuxss-eml-button-remove" title="' . __('Delete Taxonomy','enhanced-media-library') . '" href="javascript:;">&ndash;</a>';
 
@@ -1183,7 +1200,7 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                     $html .= '<li><label>' . __('Remember Terms Order (sort)','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-sort" name="" value="1" /></li>';
                                     $html .= '<li><label>' . __('Show in REST','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-show_in_rest" name="" value="1" /></li>';
                                     $html .= '<li><label>' . __('Rewrite Slug','enhanced-media-library') . '</label><input type="text" class="wpuxss-eml-slug" name="" value="" /></li>';
-                                    $html .= '<li><label>' . __('Slug with Front','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-rewrite-with-front" name="" value="1" checked="checked" /></li>';
+                                    $html .= '<li><label>' . __('Slug with Front','enhanced-media-library') . '</label><input type="checkbox" class="wpuxss-eml-with_front" name="" value="1" checked="checked" /></li>';
                                     $html .= '</ul>';
                                     $html .= '</div>';
 
@@ -1226,7 +1243,7 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
 
                                                     if ( $taxonomy->name != 'post_format' ) {
 
-                                                        $html .= '<li>';
+                                                        $html .= '<li class="wpuxss-non-eml-taxonomy" id="' . $taxonomy->name . '">';
                                                         $html .= '<input name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][eml_media]" type="hidden" value="' . $wpuxss_eml_taxonomies[$taxonomy->name]['eml_media'] . '" />';
                                                         $html .= '<label><input class="wpuxss-eml-assigned" name="wpuxss_eml_taxonomies[' . $taxonomy->name . '][assigned]" type="checkbox" value="1" ' . checked( 1, $wpuxss_eml_taxonomies[$taxonomy->name]['assigned'], false ) . ' title="' . __('Assign Taxonomy','enhanced-media-library') . '" />' . $taxonomy->label . '</label>';
                                                         $html .= '<a class="wpuxss-eml-button-edit" title="' . __('Edit Taxonomy','enhanced-media-library') . '" href="javascript:;">' . __('Edit','enhanced-media-library') . ' &darr;</a>';
@@ -1479,19 +1496,19 @@ if ( ! function_exists( 'wpuxss_eml_print_credits' ) ) {
 
             <div class="inside">
 
-                <h4>Changelog</h4>
-                <p>What's new in <a href="http://wordpress.org/plugins/enhanced-media-library/changelog/">version <?php echo $wpuxss_eml_version; ?></a>.</p>
+                <h4><?php _e( 'Changelog', 'enhanced-media-library' ); ?></h4>
+                <p><?php _e( 'What\'s new in', 'enhanced-media-library' ); ?> <a href="http://wordpress.org/plugins/enhanced-media-library/changelog/"><?php _e( 'version', 'enhanced-media-library' ); echo ' ' . $wpuxss_eml_version; ?></a>.</p>
 
                 <h4>Enhanced Media Library PRO</h4>
-                <p>More features under the hood <a href="http://www.wpuxsolutions.com/plugins/enhanced-media-library/">www.wpuxsolutions.com</a>.</p>
+                <p><?php _e( 'More features under the hood', 'enhanced-media-library' ); ?> <a href="http://www.wpuxsolutions.com/plugins/enhanced-media-library/">www.wpuxsolutions.com</a>.</p>
 
-                <h4>Support</h4>
-                <p>Feel free to ask for help on <a href="http://www.wpuxsolutions.com/support/">www.wpuxsolutions.com</a>. Support is free for both versions of the plugin.</p>
+                <h4><?php _e( 'Support', 'enhanced-media-library' ); ?></h4>
+                <p><?php _e( 'Feel free to ask for help on', 'enhanced-media-library' ); ?> <a href="http://www.wpuxsolutions.com/support/">www.wpuxsolutions.com</a>. <?php _e( 'Support is free for both versions of the plugin.', 'enhanced-media-library' ); ?></p>
 
-                <h4>Plugin rating <span class="dashicons dashicons-thumbs-up"></span></h4>
-                <p>Please <a href="http://wordpress.org/support/view/plugin-reviews/enhanced-media-library">vote for the plugin</a>. Thanks!</p>
+                <h4><?php _e( 'Plugin rating', 'enhanced-media-library' ); ?> <span class="dashicons dashicons-thumbs-up"></span></h4>
+                <p><?php _e( 'Please', 'enhanced-media-library' ); ?> <a href="http://wordpress.org/support/view/plugin-reviews/enhanced-media-library"><?php _e( 'vote for the plugin', 'enhanced-media-library' ); ?></a>. <?php _e( 'Thanks!', 'enhanced-media-library' ); ?></p>
 
-                <h4>Other plugins you may find useful</h4>
+                <h4><?php _e( 'Other plugins you may find useful', 'enhanced-media-library' ); ?></h4>
                 <ul>
                     <li><a href="http://wordpress.org/plugins/toolbar-publish-button/">Toolbar Publish Button</a></li>
                 </ul>
@@ -1527,7 +1544,10 @@ if ( ! function_exists( 'wpuxss_eml_settings_link' ) ) {
 
         return array_merge(
             array(
-                'settings' => '<a href="' . admin_url('options-general.php?page=eml-settings') . '">' . __( 'Settings', 'enhanced-media-library' ) . '</a>'
+                'settings' => '<a href="' . admin_url('options-general.php?page=media') . '">' . __( 'Media Settings', 'enhanced-media-library' ) . '</a>'
+            ),
+            array(
+                'utility' => '<a href="' . admin_url('options-general.php?page=eml-settings') . '">' . __( 'Utility', 'enhanced-media-library' ) . '</a>'
             ),
             $links
         );

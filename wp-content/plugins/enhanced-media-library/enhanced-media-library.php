@@ -3,7 +3,7 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: http://wpUXsolutions.com
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.2.1
+Version: 2.2.2
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
@@ -27,7 +27,7 @@ global $wp_version,
 
 
 
-$wpuxss_eml_version = '2.2.1';
+$wpuxss_eml_version = '2.2.2';
 
 
 
@@ -477,9 +477,9 @@ if ( ! function_exists( 'wpuxss_eml_enqueue_media' ) ) {
             'force_filters'             => $wpuxss_eml_tax_options['force_filters'],
             'wp_version'                => $wp_version,
             'uncategorized'             => __( 'All Uncategorized', 'enhanced-media-library' ),
-            'filter_by'                 => __( 'Filter by ', 'enhanced-media-library' ),
-            'in'                        => __( 'All ', 'enhanced-media-library' ),
-            'not_in'                    => __( 'Not in ', 'enhanced-media-library' ),
+            'filter_by'                 => __( 'Filter by', 'enhanced-media-library' ),
+            'in'                        => __( 'All', 'enhanced-media-library' ),
+            'not_in'                    => __( 'Not in', 'enhanced-media-library' ),
             'reset_filters'             => __( 'Reset All Filters', 'enhanced-media-library' ),
             'current_screen'            => isset( $current_screen ) ? $current_screen->id : ''
         );
@@ -557,18 +557,18 @@ if ( ! function_exists( 'wpuxss_eml_on_activation' ) ) {
             'public' => 1,
 
             'labels' => array(
-                'name' => 'Media Categories',
-                'singular_name' => 'Media Category',
-                'menu_name' => 'Media Categories',
-                'all_items' => 'All Media Categories',
-                'edit_item' => 'Edit Media Category',
-                'view_item' => 'View Media Category',
-                'update_item' => 'Update Media Category',
-                'add_new_item' => 'Add New Media Category',
-                'new_item_name' => 'New Media Category Name',
-                'parent_item' => 'Parent Media Category',
-                'parent_item_colon' => 'Parent Media Category:',
-                'search_items' => 'Search Media Categories'
+                'name' => __( 'Media Categories', 'enhanced-media-library' ),
+                'singular_name' => __( 'Media Category', 'enhanced-media-library' ),
+                'menu_name' => __( 'Media Categories', 'enhanced-media-library' ),
+                'all_items' => __( 'All Media Categories', 'enhanced-media-library' ),
+                'edit_item' => __( 'Edit Media Category', 'enhanced-media-library' ),
+                'view_item' => __( 'View Media Category', 'enhanced-media-library' ),
+                'update_item' => __( 'Update Media Category', 'enhanced-media-library' ),
+                'add_new_item' => __( 'Add New Media Category', 'enhanced-media-library' ),
+                'new_item_name' => __( 'New Media Category Name', 'enhanced-media-library' ),
+                'parent_item' => __( 'Parent Media Category', 'enhanced-media-library' ),
+                'parent_item_colon' => __( 'Parent Media Category:', 'enhanced-media-library' ),
+                'search_items' => __( 'Search Media Categories', 'enhanced-media-library' )
             ),
 
             'hierarchical' => 1,

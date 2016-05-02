@@ -1,11 +1,11 @@
-=== CSV Import for Wordpress ===
+=== CSV Import for WordPress ===
 Contributors: smackcoders
 Donate link: http://www.smackcoders.com/donate.html
 Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, import inline images
 Requires at least: 4.0 
 Tested up to: 4.5
-Stable tag: 3.9.3
-Version: 3.9.3
+Stable tag: 3.9.4
+Version: 3.9.4
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 License: GPLv2 or later
@@ -59,9 +59,11 @@ Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and i
 * [Imported modules can be managed in the File manager and the logs are maintained in the Log manager.](https://www.youtube.com/watch?v=iBqWrq7M6g0)
 
 = Helpful Links =
-[Documentation](https://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv)
+[Documentation](https://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv).
 
-Try the demo of our [PRO plugin](http://demo.smackcoders.com/wordpressdemofour/wp-admin/admin.php?page=wp-ultimate-csv-importer-pro%2Findex.php&__module=dashboard).  You can also read our [blog](https://www.smackcoders.com/blog/category/wordpress-products) to know more about the new features of our WordPress plugins.
+You can try the [live demo](http://demo.smackcoders.com/wordpressdemofour/wp-admin/admin.php?page=wp-ultimate-csv-importer-pro%2Findex.php&__module=dashboard) or request for free trial in [WordPress Ultimate CSV Importer](https://www.smackcoders.com/wp-ultimate-csv-importer-pro.html) page to generate your own WordPress test environment.  
+
+Read our [blog](https://www.smackcoders.com/blog/category/wordpress-products) to know more about the new [features](https://www.smackcoders.com/wp-ultimate-csv-importer-pro/features.html) of our WordPress plugins.
 
 [Troubleshooting tips](https://wordpress.org/support/topic/tips-to-trouble-shoot-wp-ultimate-csv-importer-issues-1)
 
@@ -87,6 +89,8 @@ php_value auto_prepend_file none<br />
 php_value auto_append_file none<br />
 This will solve your issue or get support from hosting if you didn’t have sufficient permission.
 == Changelog ==
+= 3.9.4 =
+* Improvements: Duplicate image handling. Option to skip or rename image as imagename-number if image name is same as existing media image name. 
 = 3.9.3 =
 * Added: Compatibility for WordPress 4.5
 * Fixed: Environment issue with custom port id in MAMP.
@@ -352,6 +356,8 @@ This will solve your issue or get support from hosting if you didn’t have suff
 * Initial release version. Tested and found works well without any issues.
 
 == Upgrade Notice ==
+= 3.9.4 =
+* Upgrade now for duplicate image handling feature.
 = 3.9.3 =
 * Upgrade now to get support for custom port id in MAMP environment and WordPress 4.5 compatibility.
 = 3.9.2 =
