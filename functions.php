@@ -30,6 +30,9 @@ require_once('library/enqueue-scripts.php');
 // Add theme support
 require_once('library/theme-support.php');
 
+// Add shortcode support
+require_once('library/shortcodes.php');
+
 // Photo functions
 require_once('library/photos.php');
 
