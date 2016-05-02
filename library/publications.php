@@ -2,7 +2,7 @@
 // filter for authors (as a taxonomy) with comma
 //  replace '--' with ', ' in the output - allow authors with comma this way
 
-if(!is_admin()){ // make sure the filters are only called in the frontend
+if(!is_admin() && is_singular('publication')){ // make sure the filters are only called in the frontend
 	
 	$custom_taxonomy_type = 'author';	// here goes your taxonomy type
 	

@@ -298,3 +298,5 @@ function coenv_url_ssl($url)
   return $url;
 }
 add_filter('wp_get_attachment_url', 'coenv_url_ssl');
+
+*/
