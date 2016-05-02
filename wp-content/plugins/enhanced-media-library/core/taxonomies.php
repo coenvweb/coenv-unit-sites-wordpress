@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) )
  *  @created  28/09/13
  */
 
-if( ! function_exists( 'wpuxss_eml_taxonomies_validate' ) ) {
+if ( ! function_exists( 'wpuxss_eml_taxonomies_validate' ) ) {
 
-    function wpuxss_eml_taxonomies_validate($input) {
+    function wpuxss_eml_taxonomies_validate( $input ) {
 
         if ( ! $input ) $input = array();
 
@@ -75,15 +75,12 @@ if( ! function_exists( 'wpuxss_eml_taxonomies_validate' ) ) {
             }
         }
 
-        if ( ! isset( $_POST['eml-settings-import'] ) && ! isset( $_POST['eml-settings-restore'] ) ) {
-
-            add_settings_error(
-                'wpuxss_eml_taxonomies',
-                'eml_taxonomy_settings_saved',
-                __('Taxonomy settings saved.', 'eml'),
-                'updated'
-            );
-        }
+        add_settings_error(
+            'media-taxonomies',
+            'eml_taxonomy_settings_saved',
+            __('Media Taxonomies settings saved.', 'enhanced-media-library'),
+            'updated'
+        );
 
         return $input;
     }
@@ -98,7 +95,7 @@ if( ! function_exists( 'wpuxss_eml_taxonomies_validate' ) ) {
  *  @created  07/02/15
  */
 
-if( ! function_exists( 'wpuxss_eml_sanitize_slug' ) ) {
+if ( ! function_exists( 'wpuxss_eml_sanitize_slug' ) ) {
 
     function wpuxss_eml_sanitize_slug( $slug, $fallback_slug = '' ) {
 
@@ -118,6 +115,37 @@ if( ! function_exists( 'wpuxss_eml_sanitize_slug' ) ) {
 
 
 
+if ( ! function_exists( 'wpuxss_eml_lib_options_validate' ) ) {
+
+    function wpuxss_eml_lib_options_validate( $input ) {
+
+        foreach ( (array)$input as $key => $option ) {
+
+            if ( 'media_orderby' === $key || 'media_order' === $key ) {
+                $input[$key] = sanitize_text_field( $option );
+            }
+            else {
+                $input[$key] = isset( $option ) && !! $option ? 1 : 0;
+            }
+        }
+
+        if ( ! isset( $input['media_order'] ) ) {
+            $input['media_order'] = 'ASC';
+        }
+
+        add_settings_error(
+            'media-library',
+            'eml_library_settings_saved',
+            __('Media Library settings saved.', 'enhanced-media-library'),
+            'updated'
+        );
+
+        return $input;
+    }
+}
+
+
+
 /**
  *  wpuxss_eml_tax_options_validate
  *
@@ -126,22 +154,12 @@ if( ! function_exists( 'wpuxss_eml_sanitize_slug' ) ) {
  *  @created  28/01/15
  */
 
-if( ! function_exists( 'wpuxss_eml_tax_options_validate' ) ) {
+if ( ! function_exists( 'wpuxss_eml_tax_options_validate' ) ) {
 
     function wpuxss_eml_tax_options_validate( $input ) {
 
         foreach ( (array)$input as $key => $option ) {
-
-            if ( 'media_orderby' === $key || 'media_order' === $key ) {
-                $input[$key] = sanitize_text_field( $option );
-            }
-            else {
-                $input[$key] = intval( $option );
-            }
-        }
-
-        if ( ! isset( $input['media_order'] ) ) {
-            $input['media_order'] = 'ASC';
+            $input[$key] = isset( $option ) && !! $option ? 1 : 0;
         }
 
         return $input;
@@ -161,7 +179,7 @@ if( ! function_exists( 'wpuxss_eml_tax_options_validate' ) ) {
 
 add_action( 'wp_ajax_query-attachments', 'wpuxss_eml_ajax_query_attachments', 0 );
 
-if( ! function_exists( 'wpuxss_eml_ajax_query_attachments' ) ) {
+if ( ! function_exists( 'wpuxss_eml_ajax_query_attachments' ) ) {
 
     function wpuxss_eml_ajax_query_attachments() {
 
@@ -174,6 +192,7 @@ if( ! function_exists( 'wpuxss_eml_ajax_query_attachments' ) ) {
 
         $uncategorized = ( isset( $query['uncategorized'] ) && $query['uncategorized'] ) ? 1 : 0;
 
+        // TODO: delete code for < 4.1
         if ( version_compare( $wp_version, '4.1', '<' ) ) {
 
             if ( isset( $query['year'] ) && $query['year'] &&
@@ -295,7 +314,7 @@ if( ! function_exists( 'wpuxss_eml_ajax_query_attachments' ) ) {
 
 add_action( 'restrict_manage_posts', 'wpuxss_eml_restrict_manage_posts' );
 
-if( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
+if ( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
 
     function wpuxss_eml_restrict_manage_posts() {
 
@@ -316,15 +335,15 @@ if( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
 
                 if ( $wpuxss_eml_taxonomies[$taxonomy->name]['admin_filter'] ) {
 
-                    echo "<label for='{$taxonomy->name}' class='screen-reader-text'>" . __('Filter by ','eml') . "{$taxonomy->labels->singular_name}</label>";
+                    echo "<label for='{$taxonomy->name}' class='screen-reader-text'>" . __('Filter by ','enhanced-media-library') . "{$taxonomy->labels->singular_name}</label>";
 
                     $selected = ( ! $uncategorized && isset( $wp_query->query[$taxonomy->name] ) ) ? $wp_query->query[$taxonomy->name] : 0;
 
                     wp_dropdown_categories(
                         array(
-                            'show_option_all'    =>  __( 'Filter by ', 'eml' ) . $taxonomy->labels->singular_name,
-                            'show_option_in'     =>  '— ' . __( 'All ', 'eml' ) . $taxonomy->labels->name . ' —',
-                            'show_option_not_in' =>  '— ' . __( 'Not in ', 'eml' ) . $taxonomy->labels->singular_name . ' —',
+                            'show_option_all'    =>  __( 'Filter by ', 'enhanced-media-library' ) . $taxonomy->labels->singular_name,
+                            'show_option_in'     =>  '— ' . __( 'All ', 'enhanced-media-library' ) . $taxonomy->labels->name . ' —',
+                            'show_option_not_in' =>  '— ' . __( 'Not in ', 'enhanced-media-library' ) . $taxonomy->labels->singular_name . ' —',
                             'taxonomy'           =>  $taxonomy->name,
                             'name'               =>  $taxonomy->name,
                             'orderby'            =>  'name',
@@ -355,7 +374,7 @@ if( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
 
 add_filter( 'wp_dropdown_cats', 'wpuxss_eml_dropdown_cats', 10, 2 );
 
-if( ! function_exists( 'wpuxss_eml_dropdown_cats' ) ) {
+if ( ! function_exists( 'wpuxss_eml_dropdown_cats' ) ) {
 
     function wpuxss_eml_dropdown_cats( $output, $r ) {
 
@@ -423,7 +442,7 @@ if( ! function_exists( 'wpuxss_eml_dropdown_cats' ) ) {
 
 add_action( 'parse_tax_query', 'wpuxss_eml_parse_tax_query' );
 
-if( ! function_exists( 'wpuxss_eml_parse_tax_query' ) ) {
+if ( ! function_exists( 'wpuxss_eml_parse_tax_query' ) ) {
 
     function wpuxss_eml_parse_tax_query( $query ) {
 
@@ -544,7 +563,7 @@ if( ! function_exists( 'wpuxss_eml_parse_tax_query' ) ) {
 
 add_filter( 'attachment_fields_to_edit', 'wpuxss_eml_attachment_fields_to_edit', 10, 2 );
 
-if( ! function_exists( 'wpuxss_eml_attachment_fields_to_edit' ) ) {
+if ( ! function_exists( 'wpuxss_eml_attachment_fields_to_edit' ) ) {
 
     function wpuxss_eml_attachment_fields_to_edit( $form_fields, $post ) {
 
@@ -709,7 +728,7 @@ if( ! class_exists('Walker_Media_Taxonomy_Uploader_Filter') ) {
 
 add_action( 'wp_ajax_save-attachment-compat', 'wpuxss_eml_save_attachment_compat', 0 );
 
-if( ! function_exists('wpuxss_eml_save_attachment_compat') ) {
+if ( ! function_exists( 'wpuxss_eml_save_attachment_compat' ) ) {
 
     function wpuxss_eml_save_attachment_compat() {
 
@@ -781,7 +800,7 @@ if( ! function_exists('wpuxss_eml_save_attachment_compat') ) {
 
 add_action( 'wp_ajax_save-attachment-order', 'wpuxss_eml_save_attachment_order', 0 );
 
-if( ! function_exists( 'wpuxss_eml_save_attachment_order' ) ) {
+if ( ! function_exists( 'wpuxss_eml_save_attachment_order' ) ) {
 
     function wpuxss_eml_save_attachment_order() {
 
@@ -829,7 +848,7 @@ if( ! function_exists( 'wpuxss_eml_save_attachment_order' ) ) {
  *  @created  13/03/16
  */
 
-if( ! function_exists( 'wpuxss_eml_get_eml_taxonomies' ) ) {
+if ( ! function_exists( 'wpuxss_eml_get_eml_taxonomies' ) ) {
 
     function wpuxss_eml_get_eml_taxonomies() {
 
@@ -849,7 +868,7 @@ if( ! function_exists( 'wpuxss_eml_get_eml_taxonomies' ) ) {
  *  @created  13/03/16
  */
 
-if( ! function_exists( 'wpuxss_eml_filter_by_eml_taxonomies' ) ) {
+if ( ! function_exists( 'wpuxss_eml_filter_by_eml_taxonomies' ) ) {
 
     function wpuxss_eml_filter_by_eml_taxonomies( $taxonomy ) {
 
@@ -862,7 +881,7 @@ if( ! function_exists( 'wpuxss_eml_filter_by_eml_taxonomies' ) ) {
 // TODO: Quick Edit for the List mode (MediaFrame.EditAttachments)
 // add_filter( 'media_row_actions', 'wpuxss_eml_media_row_actions', 10, 2 );
 //
-// if( ! function_exists( 'wpuxss_eml_media_row_actions' ) ) {
+// if ( ! function_exists( 'wpuxss_eml_media_row_actions' ) ) {
 //
 //     function wpuxss_eml_media_row_actions( $actions, $post ) {
 //
@@ -886,7 +905,7 @@ if( ! function_exists( 'wpuxss_eml_filter_by_eml_taxonomies' ) ) {
 
 add_action( 'pre_get_posts', 'wpuxss_eml_pre_get_posts', 99 );
 
-if( ! function_exists('wpuxss_eml_pre_get_posts') ) {
+if ( ! function_exists('wpuxss_eml_pre_get_posts') ) {
 
     function wpuxss_eml_pre_get_posts( $query ) {
 
@@ -914,15 +933,15 @@ if( ! function_exists('wpuxss_eml_pre_get_posts') ) {
         if ( is_admin() && $query->is_main_query() &&  'attachment' === $query->get('post_type') ) {
 
             $media_library_mode = get_user_option( 'media_library_mode'  ) ? get_user_option( 'media_library_mode'  ) : 'grid';
-            $wpuxss_eml_tax_options = get_option('wpuxss_eml_tax_options');
+            $wpuxss_eml_lib_options = get_option('wpuxss_eml_lib_options');
 
             $query_orderby = $query->get('orderby');
             $query_order = $query->get('order');
 
             if ( isset( $current_screen ) && 'upload' === $current_screen->base && 'list' === $media_library_mode && empty( $query_orderby ) && empty( $query_order ) ) {
 
-                $orderby = 'menuOrder' === $wpuxss_eml_tax_options['media_orderby'] ? 'menu_order' : $wpuxss_eml_tax_options['media_orderby'];
-                $order = $wpuxss_eml_tax_options['media_order'];
+                $orderby = ( 'menuOrder' === $wpuxss_eml_lib_options['media_orderby'] ) ? 'menu_order' : $wpuxss_eml_lib_options['media_orderby'];
+                $order = $wpuxss_eml_lib_options['media_order'];
 
                 $query->set('orderby', $orderby );
                 $query->set('order', $order );

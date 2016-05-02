@@ -1,11 +1,11 @@
-=== WP Ultimate CSV Importer ===
+=== CSV Import for Wordpress ===
 Contributors: smackcoders
 Donate link: http://www.smackcoders.com/donate.html
-Tags: csv importer, import, export, featured image, migration, scheduled importer, categories, custom post type, ecommerce, free, images, multisite, page, plugin, Post, products, rss, seo, shortcode, tag, Taxonomy, template, thumbnail, upload, url, user, woocommerce, MarketPress, WordPress, wpml, multilingual, csv, xml, csvimporter.
+Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, import inline images
 Requires at least: 4.0 
-Tested up to: 4.4.2
-Stable tag: 3.9.2
-Version: 3.9.2
+Tested up to: 4.5
+Stable tag: 3.9.3
+Version: 3.9.3
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 License: GPLv2 or later
@@ -18,7 +18,8 @@ Please show your support for WP Ultimate CSV Importer by giving it a [rating](ht
 = Modules supported in Import and Export =
 * Core Modules - Post, Page, Custom Post and Users.
 * eCommerce Products - eShop.
-* Custom Post - CPT UI and default WordPress Custom Post.
+* Custom Post - CPT UI, CustomPress and default WordPress Custom Post.
+* Custom Field - CustomPress.
 * SEO field - All in One SEO.
 = Modules supported in Export =
 * Core Modules - Category, Tag, Custom Taxonomy, Customer Reviews, Comments.
@@ -45,27 +46,22 @@ Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and i
 * Core Module - Post, Page, Custom Post, Category, Tags, Users, Customer Reviews.
 * eCommerce Products – WooCommerce, MarketPress, eShop, WP e-Commerce.
 * SEO field - All in One SEO and Yoast SEO.
-* Custom fields – ACF, Types, Pods, CCTM.
-* Custom Post – Types, Pods, CPT UI, CCTM.
+* Custom fields – CustomPress, ACF, Types, Pods, CCTM.
+* Custom Post – CustomPress, Types, Pods, CPT UI, CCTM.
 = Highlighted Feature of PRO =
 * [Import inline image with shortcode and featured images with shortcode or external URL.](https://www.youtube.com/watch?v=VvcVLERTEHo)
 * The image zip can be uploaded even after the completion of the import flow to populate the shortcode image.
 * Supports WooCommerce product import along with 5 WooCommerce add-on.
 * Imports MarketPress PRO add-on to import products.
-* Registers Custom Fields of [ACF](https://www.youtube.com/watch?v=6tdiOjw4EDk&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=4), Types, [Pods](https://www.youtube.com/watch?v=ziDeb0iXXXA&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=5) and WordPress fields in the flow of import.])
+* Registers Custom Fields of [ACF](https://www.youtube.com/watch?v=6tdiOjw4EDk&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=4), Types, [Pods](https://www.youtube.com/watch?v=ziDeb0iXXXA&list=PL2k3Ck1bFtbTtSX3hEFoBvK_Ka0pfYwp_&index=5) and WordPress fields in the flow of import.
 * Supports Custom Posts created with CPT UI, CCTM, Types and Pods
 * Specific record import. (i.e) Selective records in a CSV/XML can be imported or scheduled.
 * [Imported modules can be managed in the File manager and the logs are maintained in the Log manager.](https://www.youtube.com/watch?v=iBqWrq7M6g0)
 
 = Helpful Links =
-[Documentation](https://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv/?utm_source=WpOrg&utm_medium=Readme&utm_campaign=ListingTraffic)
+[Documentation](https://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv)
 
-Try the demo of our [PRO plugin](http://demo.smackcoders.com/wordpressdemofour/wp-admin/admin.php?page=wp-ultimate-csv-importer-pro%2Findex.php&__module=dashboard)
- and [Free plugin](http://demo.smackcoders.com/wordpressdemotwo/wp-admin/admin.php?page=wp-ultimate-csv-importer%2Findex.php&__module=dashboard
-).  You can also read our [blog](https://www.smackcoders.com/blog/import-marketpress-pro-event-manager-and-more.html) to know more about the new features of PRO plugin.
-
-Compare Free Vs Pro [Features](https://www.smackcoders.com/wp-ultimate-csv-importer-pro/features.html?utm_source=WpOrg&utm_medium=Readme&utm_campaign=ListingTraffic)
-
+Try the demo of our [PRO plugin](http://demo.smackcoders.com/wordpressdemofour/wp-admin/admin.php?page=wp-ultimate-csv-importer-pro%2Findex.php&__module=dashboard).  You can also read our [blog](https://www.smackcoders.com/blog/category/wordpress-products) to know more about the new features of our WordPress plugins.
 
 [Troubleshooting tips](https://wordpress.org/support/topic/tips-to-trouble-shoot-wp-ultimate-csv-importer-issues-1)
 
@@ -78,24 +74,24 @@ Compare Free Vs Pro [Features](https://www.smackcoders.com/wp-ultimate-csv-impor
 2. Upload section view of CSV/XML.
 3. Mapping view of the uploaded CSV/XML fields with WordPress fields
 4. Duplicate identification and performance improvement section.
-5. Detailed real time log.
+5. Detailed real-time log.
 6. Settings with php.ini details.
 7. Export module with filters.
-
 == Frequently Asked Questions ==
-
 = Common Issues =
-How to solve auto_prepend_file and auto_append_file error? <br />
+How to solve auto_prepend_file and auto_append_file error?<br />
 Check your phpinfo.php. Ensure that auto_prepend_file and auto_append_file options are disabled.
-If not you can disable it in php.ini settings file yourself. You can also do it by a .htaccess file
-Create an .htaccess file in the root and set the following values.  <br />
-php_value auto_prepend_file none  <br />
-php_value auto_append_file none  <br />
-This will solve your issue or get support from hosting if you didn’t have sufficient permission.  <br />
-
+If not you can disable it in php.ini settings file. You can also do it by a .htaccess file
+Create a .htaccess file in the root and set the following values.<br />
+php_value auto_prepend_file none<br />
+php_value auto_append_file none<br />
+This will solve your issue or get support from hosting if you didn’t have sufficient permission.
 == Changelog ==
+= 3.9.3 =
+* Added: Compatibility for WordPress 4.5
+* Fixed: Environment issue with custom port id in MAMP.
 = 3.9.2 =
-* Replaced CSVParserEngine with SmackCSVParser, a high speed robust parser
+* Modified: CSVParserEngine with SmackCSVParser, a high-speed robust parser.
 = 3.9.1 =
 * Added: Post parent now supports for post title and post name.
 * Fixed: jQuery conflicts.
@@ -105,7 +101,7 @@ This will solve your issue or get support from hosting if you didn’t have suff
 * Fixed: Featured image and Inline image naming issues.
 * Fixed: Auto mapping issues in Custom Fields and SEO Fields.
 = 3.8.8 =
-* Added: Localize script for multi language support.
+* Added: Localize script for multi-language support.
 * Added: WordPress 4.4.1 compatibility.
 * Improved: Code cleanups with WordPress standards.
 * Fixed: Vulnerability security issue.
@@ -356,8 +352,10 @@ This will solve your issue or get support from hosting if you didn’t have suff
 * Initial release version. Tested and found works well without any issues.
 
 == Upgrade Notice ==
+= 3.9.3 =
+* Upgrade now to get support for custom port id in MAMP environment and WordPress 4.5 compatibility.
 = 3.9.2 =
-* Upgrade now to get a high speed robust parser.
+* Upgrade now to get high speed robust parser.
 = 3.9.1 =
 * Upgrade now for import post parent with post name and post title.
 = 3.9 =
@@ -472,5 +470,3 @@ This will solve your issue or get support from hosting if you didn’t have suff
 * Added features to import multiple tags and categories with different delimiters.
 = 1.0.0 =
 * Initial release of plugin.
-
-

@@ -591,8 +591,22 @@ jQuery(function ($) {
         tab.parent().siblings("." + tab_id).show();
     });
 
-    // Polylang Fix - stop Language Switcher item being added every time the MMM settings are saved
-    $(".max-mega-menu-save").on('click', function() {
-        $(".nav-menu-meta").find('input[value="#pll_switcher"]').val("");
+    // AJAX Save MMM Settings
+    $(".max-mega-menu-save").on('click', function(e) {
+        e.preventDefault();
+
+        $(".mega_menu_meta_box .spinner").css('visibility', 'visible');
+
+        var settings = JSON.stringify($( "[name^='megamenu_meta']" ).serializeArray());
+
+        // retrieve the widget settings form
+        $.post(ajaxurl, {
+            action: "mm_save_settings",
+            menu: $('#menu').val(),
+            megamenu_meta: settings,
+            nonce: megamenu.nonce
+        }, function (response) {
+            $(".mega_menu_meta_box .spinner").css('visibility', 'hidden');
+        });
     });
 });

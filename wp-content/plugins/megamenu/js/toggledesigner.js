@@ -44,7 +44,7 @@ jQuery(function($) {
 
             var block = $(this);
 
-            block.find('input, select').each(function() {
+            block.find('input, select, textarea').each(function() {
                 // account for inputs created by select2
                 if (typeof $(this).attr('name') !== 'undefined') {
                     $(this).attr('name', $(this).attr('name').replace(/\[\d+\]/g, "[" + i + "]"));

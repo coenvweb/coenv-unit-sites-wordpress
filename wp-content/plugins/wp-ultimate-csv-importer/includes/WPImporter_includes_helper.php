@@ -43,20 +43,9 @@ class WPImporter_includes_helper {
 
 	public $baseUrl;
 
-	public $baseUrlParamNames = array('page', 'pagenum', 'order', 'order_by', 'type', 's', 'f', '__module', '__action', 'step');
-
 	public function __construct() {
 		$this->getKeyVals();
-		$remove = array_diff(array_keys($_GET), $this->baseUrlParamNames);
-
-		$p_url = parse_url( site_url() );
-
-		$url = $p_url['scheme'] . '://' . $p_url['host'];
-		if ($remove) {
-			$this->baseUrl = $url . remove_query_arg($remove);
-		} else {
-			$this->baseUrl = $url . $_SERVER['REQUEST_URI'];
-		}
+		$this->baseUrl = admin_url('admin.php');
 	}
 
 	// @var string CSV upload directory name

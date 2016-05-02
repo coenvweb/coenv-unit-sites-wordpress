@@ -933,11 +933,14 @@
 }
 
 .mega_menu_meta_box p.submit {
-	float: left;
+	float: right;
 	text-align: right;
-	width: 100%;
+	width: auto;
 	margin: 0 0 15px 0;
 	padding: 0;
+}
+.mega_menu_meta_box .spinner {
+	float: right;
 }
 
 #nav-menu-meta .mega_menu_meta_box .accordion-section-content  {

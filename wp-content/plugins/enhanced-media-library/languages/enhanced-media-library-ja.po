@@ -1,0 +1,1221 @@
+# Copyright (C) 2015 Enhanced Media Library PRO
+# This file is distributed under the same license as the Enhanced Media Library PRO package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Enhanced Media Library PRO\n"
+"POT-Creation-Date: 2016-04-14 02:55+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: wpUXsolutions <wpUXsolutions@gmail.com>\n"
+"Language-Team: \n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;"
+"esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;"
+"__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: core/mime-types.php:30
+msgid "MIME Types settings restored."
+msgstr ""
+
+#: core/mime-types.php:39
+msgid "MIME Types settings saved."
+msgstr ""
+
+#: core/mime-types.php:115
+#, php-format
+msgid " <span class=\"count\">(%s)</span>"
+msgid_plural " <span class=\"count\">(%s)</span>"
+msgstr[0] " <span class=\"count\">(%s)</span>"
+
+#: core/options-pages.php:97 core/options-pages.php:215 core/options-pages.php:916
+#: core/options-pages.php:1041 core/options-pages.php:1353
+msgid "Media Settings"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢è¨­å®š"
+
+#: core/options-pages.php:106 core/options-pages.php:189
+msgid "Media Library"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ¼"
+
+#: core/options-pages.php:115
+msgid "Taxonomies"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼"
+
+#: core/options-pages.php:124 core/options-pages.php:191
+msgid "MIME Types"
+msgstr "MIME ã‚¿ã‚¤ãƒ—"
+
+#: core/options-pages.php:135 core/options-pages.php:136
+msgid "Enhanced Media Library"
+msgstr "Enhanced Media Library"
+
+#: core/options-pages.php:188
+msgid "General"
+msgstr "ä¸€èˆ¬"
+
+#: core/options-pages.php:190 core/options-pages.php:1062
+msgid "Media Taxonomies"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ï¼ˆåˆ†é¡žæ³•ï¼‰"
+
+#: core/options-pages.php:212 core/options-pages.php:504 core/options-pages.php:912
+#: core/options-pages.php:1037 core/options-pages.php:1349
+msgid "You do not have sufficient permissions to access this page."
+msgstr "ã“ã®ãƒšãƒ¼ã‚¸ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã®ååˆ†ãªæ¨©é™ãŒã‚ã‚Šã¾ã›ã‚“ã€‚"
+
+#: core/options-pages.php:226
+msgid "Image sizes"
+msgstr ""
+
+#: core/options-pages.php:227
+msgid ""
+"The sizes listed below determine the maximum dimensions in pixels to use when adding an image to "
+"the Media Library."
+msgstr ""
+
+#: core/options-pages.php:231
+msgid "Thumbnail size"
+msgstr ""
+
+#: core/options-pages.php:233
+msgid "Width"
+msgstr ""
+
+#: core/options-pages.php:235
+msgid "Height"
+msgstr ""
+
+#: core/options-pages.php:238
+msgid "Crop thumbnail to exact dimensions (normally thumbnails are proportional)"
+msgstr ""
+
+#: core/options-pages.php:243 core/options-pages.php:244
+msgid "Medium size"
+msgstr ""
+
+#: core/options-pages.php:245 core/options-pages.php:255
+msgid "Max Width"
+msgstr ""
+
+#: core/options-pages.php:247 core/options-pages.php:257
+msgid "Max Height"
+msgstr ""
+
+#: core/options-pages.php:253 core/options-pages.php:254
+msgid "Large size"
+msgstr ""
+
+#: core/options-pages.php:270
+msgid "Embeds"
+msgstr ""
+
+#: core/options-pages.php:277
+msgid "Uploading Files"
+msgstr ""
+
+#: core/options-pages.php:284
+msgid "Store uploads in this folder"
+msgstr ""
+
+#: core/options-pages.php:288
+#, php-format
+msgid "Default is %s"
+msgstr ""
+
+#: core/options-pages.php:294
+msgid "Full URL path to files"
+msgstr ""
+
+#: core/options-pages.php:296
+msgid "Configuring this is optional. By default, it should be blank."
+msgstr ""
+
+#: core/options-pages.php:304
+msgid "Organize my uploads into month- and year-based folders"
+msgstr ""
+
+#: core/options-pages.php:376 core/options-pages.php:1086 core/options-pages.php:1101
+#: core/options-pages.php:1163 core/options-pages.php:1232
+msgid "Edit"
+msgstr "ç·¨é›†"
+
+#: core/options-pages.php:377 pro/enhanced-media-library-pro.php:125
+msgid "Close"
+msgstr "é–‰ã˜ã‚‹"
+
+#: core/options-pages.php:378 core/options-pages.php:1102 core/options-pages.php:1164
+msgid "View"
+msgstr "è¡¨ç¤º"
+
+#: core/options-pages.php:379 core/options-pages.php:1103 core/options-pages.php:1165
+msgid "Update"
+msgstr "æ›´æ–°"
+
+#: core/options-pages.php:380 core/options-pages.php:1104 core/options-pages.php:1166
+msgid "Add New"
+msgstr "æ–°è¦è¿½åŠ "
+
+#: core/options-pages.php:381 core/options-pages.php:1105 core/options-pages.php:1167
+msgid "New"
+msgstr "æ–°è¦"
+
+#: core/options-pages.php:382
+msgid "Name"
+msgstr "åå‰"
+
+#: core/options-pages.php:383 core/options-pages.php:1106 core/options-pages.php:1168
+msgid "Parent"
+msgstr "è¦ªã‚«ãƒ†ã‚´ãƒªãƒ¼"
+
+#: core/options-pages.php:384 core/options-pages.php:600 core/options-pages.php:1100
+#: core/options-pages.php:1162
+msgid "All"
+msgstr "å…¨ã¦"
+
+#: core/options-pages.php:385 core/options-pages.php:1107 core/options-pages.php:1169
+msgid "Search"
+msgstr "æ¤œç´¢"
+
+#: core/options-pages.php:387
+msgid ""
+"Taxonomy will be deleted permanently! Your media files will remain intacted, but all the "
+"connections with this taxonomy and its terms will be lost."
+msgstr ""
+"ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã¯å®Œå…¨ã«å‰Šé™"
+"¤ã•ã‚Œã¾ã™ï¼ã‚ãªãŸã®ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ãŒã€ã“ã®åˆ†é¡žæ³•ã¨ãã®æ¡ä»¶ã®å…"
+"¨ã¦ãŒå¤±ã‚ã‚Œã¾ã™ã€‚"
+
+#: core/options-pages.php:388
+msgid "There is already a taxonomy with the same name. Please chose other one."
+msgstr "åŒã˜åå‰ã®ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼(åˆ†é¡žæ³•)ã¯æ—¢ã«å­˜åœ¨ã—ã¾ã™ã€‚åˆ¥ã®ã‚‚ã®ã‚’é¸ã‚“ã§ä¸‹ã•ã„ã€‚"
+
+#: core/options-pages.php:389 core/options-pages.php:1150
+msgid "New Taxonomy"
+msgstr "æ–°ã—ã„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ ï¼ˆåˆ†é¡žï¼‰"
+
+#: core/options-pages.php:390
+msgid "Please choose Singular and Plural names for all your new taxomonies."
+msgstr "å…¨ã¦ã®æ–°ã—ã„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®å˜æ•°å½¢ã¨è¤‡æ•°å½¢ã®åå‰ã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:391
+msgid "Please choose Singilar name for all your new taxomonies."
+msgstr "å…¨ã¦ã®æ–°ã—ã„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®å˜æ•°åå‰ã‚’é¸æŠžã—ã¦ä¸‹ã•ã„ã€‚"
+
+#: core/options-pages.php:392
+msgid "Please choose Plural Name for all your new taxomonies."
+msgstr "å…¨ã¦ã®æ–°ã—ã„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®è¤‡æ•°ã®åå‰ã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:395 pro/core/options-pages.php:165
+msgid "Synchronize Now"
+msgstr ""
+
+#: core/options-pages.php:396
+msgid "This operation cannot be canceled. Are you still sure?"
+msgstr ""
+
+#: core/options-pages.php:397
+msgid "Synchronize"
+msgstr ""
+
+#: core/options-pages.php:398 core/options-pages.php:478
+msgid "Cancel"
+msgstr ""
+
+#: core/options-pages.php:399
+msgid "Synchronizing..."
+msgstr ""
+
+#: core/options-pages.php:435
+msgid "Warning! All your custom MIME Types will be deleted by this operation."
+msgstr "è­¦å‘Šï¼ã™ã¹ã¦ã®ã‚«ã‚¹ã‚¿ãƒ MIMEã‚¿ã‚¤ãƒ—ã¯ã€ã“ã®æ“ä½œã«ã‚ˆã£ã¦å‰Šé™¤ã•ã‚Œã¾ã™ã€‚"
+
+#: core/options-pages.php:436
+msgid "Please fill into all fields."
+msgstr "ã™ã¹ã¦ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«è¨˜å…¥ã—ã¦ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:437
+msgid "Duplicate extensions or MIME types. Please chose other one."
+msgstr "æ‹¡å¼µå­ã‚„MIMEã‚¿ã‚¤ãƒ—ã‚’è¤‡è£½ã—ã¾ã™ã€‚åˆ¥ã®ã‚‚ã®ã‚’ãŠé¸ã³ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:474
+msgid ""
+"You are about to <strong style=\"text-transform:uppercase\">delete all plugin data</strong> from "
+"the database including backups."
+msgstr ""
+
+#: core/options-pages.php:475
+msgid "The operation cannot be canceled! Are you still sure?"
+msgstr ""
+
+#: core/options-pages.php:476 core/options-pages.php:591
+msgid "Complete Cleanup"
+msgstr ""
+
+#: core/options-pages.php:477
+msgid "Yes, delete all data"
+msgstr ""
+
+#: core/options-pages.php:479
+msgid "Cleaning..."
+msgstr ""
+
+#: core/options-pages.php:509
+msgid "Enhanced Media Library Settings"
+msgstr "Enhanced Media Library è¨­å®š"
+
+#: core/options-pages.php:519
+msgid "Export"
+msgstr "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
+
+#: core/options-pages.php:523
+msgid ""
+"The plugin settings <strong>Media Settings > Taxonomies</strong> and <strong>Media Settings > "
+"MIME Types</strong> will be exported to a configuration file. It allows you to easily import the "
+"configuration into another website."
+msgstr ""
+"ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šã®<strong>ãƒ¡ãƒ‡ã‚£ã‚¢è¨­å®š > ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ </"
+"strong>ã¨<strong>ãƒ¡ãƒ‡ã‚£ã‚¢è¨­å®š > MIMEã‚¿ã‚¤ãƒ—</strong>ã®è¨­"
+"å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ã¾ã™ã€‚ãã‚Œã¯åˆ¥ã®ã‚¦ã‚§ãƒ–ã‚µã‚¤ãƒˆã«è¨­"
+"å®šã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹äº‹ãŒå¯èƒ½ã§ã™ã€‚"
+
+#: core/options-pages.php:528
+msgid "Export Plugin Settings"
+msgstr "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"
+
+#: core/options-pages.php:538
+msgid "Import"
+msgstr "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
+
+#: core/options-pages.php:542
+msgid ""
+"The plugin settings <strong>Media Settings > Taxonomies</strong> and <strong>Media Settings > "
+"MIME Types</strong> will be imported from a configuration file which can be obtained by "
+"exporting the settings on another website using the export button above."
+msgstr ""
+"ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šã¯ã€<strong>ãƒ¡ãƒ‡ã‚£ã‚¢è¨­å®š > ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ </"
+"strong>ã¨<strong>ãƒ¡ãƒ‡ã‚£ã‚¢è¨­å®š > MIMEã‚¿ã‚¤ãƒ—</"
+"strong>ã§ä¸Šè¨˜ã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒœã‚¿ãƒ³ã‚’ä½¿ç”¨ã—ã¦åˆ¥ã®Webã‚µã‚¤ãƒˆã®è¨­"
+"å®šã‚’åˆ©ç”¨ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ãŒã€ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ"
+"¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚"
+
+#: core/options-pages.php:543
+msgid ""
+"All plugin settings will be overriden by the import. You will have a chance to restore current "
+"data from an automatic backup in case you are not satisfied with the result of the import."
+msgstr ""
+"å…¨ã¦ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šã¯ã€ã‚¤ãƒ³ãƒãƒ¼ãƒˆã«ã‚ˆã£ã¦ä¸Šæ›¸ãã•ã‚Œã¾ã™ã"
+"€‚ã‚ãªãŸãŒã‚¤ãƒ³ãƒãƒ¼ãƒˆã®çµæžœã«æº€è¶³ã—ã¦ã„ãªã„å ´åˆã«ã¯ã€è‡ªå‹•ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—"
+"ã‹ã‚‰ç¾åœ¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’å¾©å…ƒã™ã‚‹ãƒãƒ£ãƒ³ã‚¹ãŒã‚ã‚Šã¾ã™ã€‚"
+
+#: core/options-pages.php:550
+msgid "Import Plugin Settings"
+msgstr "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³è¨­å®šã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"
+
+#: core/options-pages.php:562
+msgid "Restore"
+msgstr "ãƒªã‚¹ãƒˆã‚¢(å¾©å…ƒã™ã‚‹)"
+
+#: core/options-pages.php:568
+msgid "No backup available at the moment."
+msgstr "ç¾åœ¨åˆ©ç”¨ã§ãã‚‹ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚"
+
+#: core/options-pages.php:570
+msgid "Backup will be created automatically before any import operation."
+msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¯ã€ä»»æ„ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ“ä½œã®å‰ã«è‡ªå‹•çš„ã«ä½œæˆã•ã‚Œã¾ã™ã€‚"
+
+#: core/options-pages.php:574
+msgid "The backup had been automatically created before the latest import opetarion."
+msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¯è‡ªå‹•çš„ã«æœ€æ–°ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆæ“ä½œã®å‰ã«ä½œæˆã•ã‚Œã¦ã„ã¾ã™ã€‚"
+
+#: core/options-pages.php:578
+msgid "Restore Settings from the Backup"
+msgstr "ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰è¨­å®šã‚’å¾©å…ƒã•ã›ã¦ä¸‹ã•ã„ã€‚"
+
+#: core/options-pages.php:598
+msgid "What will be deleted:"
+msgstr ""
+
+#: core/options-pages.php:603
+msgid "All plugin options"
+msgstr ""
+
+#: core/options-pages.php:604
+msgid "All plugin backups stored in database"
+msgstr ""
+
+#: core/options-pages.php:608
+msgid "What will remain intact:"
+msgstr ""
+
+#: core/options-pages.php:609
+msgid "All media items"
+msgstr ""
+
+#: core/options-pages.php:610
+msgid "All taxonomies not listed above"
+msgstr ""
+
+#: core/options-pages.php:613
+msgid ""
+"The plugin cannot delete itself because of security reason. Please delete it manually from "
+"plugin list after cleanup."
+msgstr ""
+
+#: core/options-pages.php:615
+msgid ""
+"If you are not sure about this operation please create a backup of your database prior to "
+"cleanup!"
+msgstr ""
+
+#: core/options-pages.php:621
+msgid "Delete All Data & Deactivate"
+msgstr ""
+
+#: core/options-pages.php:726
+msgid "Please upload a file to import settings."
+msgstr "è¨­å®šã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã—ã¦ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:746
+msgid "Plugin settings imported."
+msgstr "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šãŒã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã—ãŸã€‚"
+
+#: core/options-pages.php:793
+msgid "Plugin settings restored from the backup."
+msgstr "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è¨­å®šã¯ã€ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å¾©å…ƒã•ã›ã¦ä¸‹ã•ã„ã€‚"
+
+#: core/options-pages.php:937
+msgid "Media Items Order"
+msgstr ""
+
+#: core/options-pages.php:944
+msgid "Order media items by"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¢ã‚¤ãƒ†ãƒ ã®é †ç•ª"
+
+#: core/options-pages.php:951 core/options-pages.php:963
+msgid "For media library and media popups"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ãƒ¡ãƒ‡ã‚£ã‚¢ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã«ã¤ã„ã¦"
+
+#: core/options-pages.php:952
+msgid "Option allows to change order by drag and drop with Custom Order value."
+msgstr ""
+"ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯ã€ãƒ‰ãƒ©ãƒƒã‚°ã™ã‚‹ã“ã¨ã«ã‚ˆã£ã¦é †åºã‚’å¤‰æ›´ã—ã€ã‚«ã‚¹ã‚¿ãƒ ã‚ªãƒ¼ãƒ€ãƒ¼ã®å€"
+"¤ã§ãƒ‰ãƒ­ãƒƒãƒ—ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚"
+
+#: core/options-pages.php:957
+msgid "Sort order"
+msgstr "ã‚½ãƒ¼ãƒˆé †"
+
+#: core/options-pages.php:976
+msgid "Media Shortcodes"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚³ãƒ¼ãƒ‰"
+
+#: core/options-pages.php:983 core/options-pages.php:986
+msgid "Enhanced media shortcodes"
+msgstr "å¼·åŒ–ã•ã‚ŒãŸãƒ¡ãƒ‡ã‚£ã‚¢ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚³ãƒ¼ãƒ‰"
+
+#: core/options-pages.php:987
+msgid ""
+"Enhance WordPress media shortcodes to make them understand media taxonomies, uploade date, and "
+"media items number limit"
+msgstr ""
+"WordPressã®ãƒ¡ãƒ‡ã‚£ã‚¢ã‚·ãƒ§ãƒ¼ãƒˆã‚³ãƒ¼ãƒ‰ã§ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã€ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ"
+"‰ã®æ—¥ä»˜ã¨ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ»ã‚¢ã‚¤ãƒ†ãƒ æ•°ã®ä¸Šé™ã‚’å–å¾—ã•ã›ã¾ã™ã€‚"
+
+#: core/options-pages.php:988
+msgid "Gallery example: [gallery media_category=\"5\" limit=\"10\" monthnum=\"12\" year=\"2015\"]"
+msgstr ""
+"ã‚®ãƒ£ãƒ©ãƒªãƒ¼ã®ä¾‹: [gallery media_category=\"5\" limit=\"10\" monthnum=\"12\" year=\"2015\"]"
+
+#: core/options-pages.php:989
+msgid ""
+"Audio playlist example: [playlist media_category=\"5\" limit=\"10\" monthnum=\"12\" year="
+"\"2015\"]"
+msgstr ""
+"ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®ä¾‹: [playlist media_category=\"5\" limit=\"10\" monthnum="
+"\"12\" year=\"2015\"]"
+
+#: core/options-pages.php:990
+msgid ""
+"Video playlist example: [playlist type=\"video\" media_category=\"5\" limit=\"10\" monthnum="
+"\"12\" year=\"2015\"]"
+msgstr ""
+"ãƒ“ãƒ‡ã‚ªãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã®ä¾‹: [playlist type=\"video\" media_category=\"5\" limit=\"10\" "
+"monthnum=\"12\" year=\"2015\"]"
+
+#: core/options-pages.php:992
+#, php-format
+msgid "%sWarning:%s Incompatibility with other gallery plugins or themes possible!"
+msgstr "%sè­¦å‘Š:%s ä»–ã®ã‚®ãƒ£ãƒ©ãƒªãƒ¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³åˆã¯ãƒ†ãƒ¼ãƒžã¨ã®éžäº’æ›æ€§ã®å¯èƒ½æ€§ï¼"
+
+#: core/options-pages.php:994
+#, php-format
+msgid "%sLearn more%s."
+msgstr "%sã‚‚ã£ã¨è©³ã—ã%s."
+
+#: core/options-pages.php:996
+#, php-format
+msgid ""
+"Please check out your gallery front-end and back-end functionality once this option activated. "
+"If you find an issue please inform plugin authors at %s or %s."
+msgstr ""
+"ã‚ãªãŸã®ã‚®ãƒ£ãƒ©ãƒªãƒ¼ãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰ã‚’ãƒã‚§ãƒƒã‚¯ã‚¢ã‚¦ãƒˆã—ã€æ´»æ€§åŒ–ã™ã‚‹ã«ã¯ã"
+"€ã“ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ©Ÿèƒ½ã‚’ä¸€æ—¦ãƒãƒƒã‚¯ã‚¨ãƒ³ãƒ‰ã—ã¦ä¸‹ã•ã„ã€‚ã‚ãªãŸãŒå•é¡Œã‚’è¦‹ã¤ã‘ãŸå "
+"´åˆã¯ã€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ä½œè€…ã¾ã§ã”é€£çµ¡ãã ã•ã„ %s ã‹ %s."
+
+#: core/options-pages.php:1066 core/options-pages.php:1212
+msgid "Assign following taxonomies to Media Library:"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«æ¬¡ã®ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼(åˆ†é¡žæ³•)ã‚’å‰²ã‚Šå½“ã¦ã¾ã™:"
+
+#: core/options-pages.php:1085 core/options-pages.php:1150 core/options-pages.php:1231
+msgid "Assign Taxonomy"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã‚’å‰²ã‚Šå½“ã¦"
+
+#: core/options-pages.php:1086 core/options-pages.php:1232
+msgid "Edit Taxonomy"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®ç·¨é›†"
+
+#: core/options-pages.php:1090 core/options-pages.php:1152
+msgid "Delete Taxonomy"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã‚’å‰Šé™¤ã—ã¾ã™"
+
+#: core/options-pages.php:1095 core/options-pages.php:1157
+msgid "Labels"
+msgstr "ãƒ©ãƒ™ãƒ«"
+
+#: core/options-pages.php:1097 core/options-pages.php:1159
+msgid "Singular"
+msgstr "å˜æ•°"
+
+#: core/options-pages.php:1098 core/options-pages.php:1160
+msgid "Plural"
+msgstr "è¤‡æ•°"
+
+#: core/options-pages.php:1099 core/options-pages.php:1161
+msgid "Menu Name"
+msgstr "ãƒ¡ãƒ‹ãƒ¥ãƒ¼å"
+
+#: core/options-pages.php:1112 core/options-pages.php:1135 core/options-pages.php:1174
+#: core/options-pages.php:1235 core/options-pages.php:1530
+msgid "Settings"
+msgstr "è¨­å®š"
+
+#: core/options-pages.php:1114 core/options-pages.php:1176
+msgid "Taxonomy Name"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼å"
+
+#: core/options-pages.php:1115 core/options-pages.php:1177
+msgid "Hierarchical"
+msgstr "éšŽå±¤"
+
+#: core/options-pages.php:1116 core/options-pages.php:1178
+msgid "Column for List View"
+msgstr ""
+
+#: core/options-pages.php:1117 core/options-pages.php:1137 core/options-pages.php:1179
+#: core/options-pages.php:1237
+msgid "Filter for List View"
+msgstr ""
+
+#: core/options-pages.php:1118 core/options-pages.php:1138 core/options-pages.php:1180
+#: core/options-pages.php:1238
+msgid "Filter for Grid View / Media Popup"
+msgstr ""
+
+#: core/options-pages.php:1119 core/options-pages.php:1139 core/options-pages.php:1181
+#: core/options-pages.php:1239
+msgid "Edit in Media Popup"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ç·¨é›†"
+
+#: core/options-pages.php:1120 core/options-pages.php:1182
+msgid "Show in Nav Menu"
+msgstr "ãƒŠãƒ“ã‚²ãƒ¼ã‚·ãƒ§ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã«è¡¨ç¤º"
+
+#: core/options-pages.php:1121 core/options-pages.php:1183
+msgid "Remember Terms Order (sort)"
+msgstr ""
+
+#: core/options-pages.php:1122 core/options-pages.php:1184
+msgid "Show in REST"
+msgstr "ãƒªã‚¹ãƒˆã«è¡¨ç¤º"
+
+#: core/options-pages.php:1123 core/options-pages.php:1185
+msgid "Rewrite Slug"
+msgstr "ã‚¹ãƒ©ãƒƒã‚°ã‚’æ›¸ãæ›ãˆ"
+
+#: core/options-pages.php:1124 core/options-pages.php:1186
+msgid "Slug with Front"
+msgstr "ãƒ•ãƒ­ãƒ³ãƒˆã¨ã‚¹ãƒ©ãƒƒã‚°"
+
+#: core/options-pages.php:1198
+msgid "Add New Taxonomy"
+msgstr "æ–°ã—ã„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã‚’è¿½åŠ "
+
+#: core/options-pages.php:1208
+msgid "Non-Media Taxonomies"
+msgstr "éžãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼(è¨˜äº‹ã‚«ãƒ†ã‚´ãƒªãƒ¼åŠã³ã‚¿ã‚°ã§åˆ†é¡ž)"
+
+#: core/options-pages.php:1269
+msgid "Options"
+msgstr "ã‚ªãƒ—ã‚·ãƒ§ãƒ³"
+
+#: core/options-pages.php:1279 core/options-pages.php:1282
+msgid "Taxonomy archive pages"
+msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ãƒšãƒ¼ã‚¸"
+
+#: core/options-pages.php:1283
+msgid "Turn on media taxonomy archive pages on the front-end"
+msgstr ""
+"ãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰ã®ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼(åˆ†é¡ž)ã®ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–"
+"ãƒšãƒ¼ã‚¸ã‚’ã‚ªãƒ³ã«ã—ã¾ã™"
+
+#: core/options-pages.php:1284
+msgid "Re-save your permalink settings after this option change to make it work."
+msgstr ""
+"ã“ã‚Œã‚’å‹•ä½œã•ã›ã‚‹ã«ã¯ã€ã“ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å¤‰æ›´ã—ãŸå¾Œã€ãƒ‘ãƒ¼ãƒžãƒªãƒ³ã‚¯ã®è¨­å®šã‚’å†ä¿å­"
+"˜ã—ã¾ã—ã‚‡ã†ã€‚"
+
+#: core/options-pages.php:1290 core/options-pages.php:1293
+msgid "Assign all like hierarchical"
+msgstr "éšŽå±¤ã®ã‚ˆã†ã«å…¨ã¦å‰²ã‚Šå½“ã¦ã¾ã™"
+
+#: core/options-pages.php:1294
+msgid "Show non-hierarchical taxonomies like hierarchical in Grid View / Media Popup"
+msgstr ""
+"ã‚°ãƒªãƒƒãƒˆè¡¨ç¤ºã®/ãƒ¡ãƒ‡ã‚£ã‚¢ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã§ã€éšŽå±¤ã®ã‚ˆã†ãªéžéšŽå±"
+"¤çš„ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹"
+
+#: core/options-pages.php:1300 core/options-pages.php:1303
+msgid "Force filters"
+msgstr "ãƒ•ã‚©ãƒ¼ã‚¹ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼"
+
+#: core/options-pages.php:1304
+msgid "Show media filters for ANY Media Popup"
+msgstr "ã‚ã‚‰ã‚†ã‚‹ãƒ¡ãƒ‡ã‚£ã‚¢ã«ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã™ã‚‹ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚"
+
+#: core/options-pages.php:1305
+msgid "Try this if filters are not shown for third-party plugins or themes."
+msgstr ""
+"ãƒ•ã‚£ãƒ«ã‚¿ãŒã€ã‚µãƒ¼ãƒ‰ãƒ‘ãƒ¼ãƒ†ã‚£è£½ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã‚„ãƒ†ãƒ¼ãƒžã®ç‚ºã«ç¤ºã•ã‚Œã¦ã„ãªã„å "
+"´åˆã¯ã€è©¦ã—ã¦ã¿ã¦ãã ã•ã„ã€‚"
+
+#: core/options-pages.php:1359
+msgid "Add New MIME Type"
+msgstr "MIMEã‚¿ã‚¤ãƒ—æ–°è¦è¿½åŠ "
+
+#: core/options-pages.php:1377 core/options-pages.php:1432
+msgid "Extension"
+msgstr "æ‹¡å¼µå­"
+
+#: core/options-pages.php:1378 core/options-pages.php:1433
+msgid "MIME Type"
+msgstr "MIMEã‚¿ã‚¤ãƒ—"
+
+#: core/options-pages.php:1379 core/options-pages.php:1434
+msgid "Singular Label"
+msgstr "å˜æ•°ã®ãƒ©ãƒ™ãƒ«"
+
+#: core/options-pages.php:1380 core/options-pages.php:1435
+msgid "Plural Label"
+msgstr "è¤‡æ•°ã®ãƒ©ãƒ™ãƒ«"
+
+#: core/options-pages.php:1381 core/options-pages.php:1411 core/options-pages.php:1424
+#: core/options-pages.php:1436
+msgid "Add Filter"
+msgstr "ãƒ•ã‚£ãƒ«ã‚¿ã‚’è¿½åŠ "
+
+#: core/options-pages.php:1382 core/options-pages.php:1412 core/options-pages.php:1425
+#: core/options-pages.php:1437
+msgid "Allow Upload"
+msgstr "ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã‚’è¨±å¯"
+
+#: core/options-pages.php:1426
+msgid "Delete MIME Type"
+msgstr "MIMEã‚¿ã‚¤ãƒ—ã‚’å‰Šé™¤ã—ã¾ã™"
+
+#: core/options-pages.php:1443
+msgid "Restore WordPress default MIME Types"
+msgstr "WordPressã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®MIMEã‚¿ã‚¤ãƒ—ã‚’å¾©å…ƒ"
+
+#: core/options-pages.php:1445 pro/enhanced-media-library-pro.php:124
+msgid "Save Changes"
+msgstr "å¤‰æ›´å†…å®¹ã‚’ä¿å­˜"
+
+#: core/options-pages.php:1551
+msgid "Vote!"
+msgstr ""
+
+#: core/taxonomies.php:81
+msgid "Media Taxonomies settings saved."
+msgstr ""
+
+#: core/taxonomies.php:139
+msgid "Media Library settings saved."
+msgstr ""
+
+#: core/taxonomies.php:338 core/taxonomies.php:344 enhanced-media-library.php:489
+msgid "Filter by "
+msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼"
+
+#: core/taxonomies.php:345 enhanced-media-library.php:490
+msgid "All "
+msgstr "å…¨ã¦ã®"
+
+#: core/taxonomies.php:346 enhanced-media-library.php:491
+msgid "Not in "
+msgstr "æ·»ä»˜ãªã—"
+
+#: enhanced-media-library.php:331 enhanced-media-library.php:488
+msgid "All Uncategorized"
+msgstr "æœªåˆ†é¡ž"
+
+#: enhanced-media-library.php:332 enhanced-media-library.php:492
+msgid "Reset All Filters"
+msgstr "çµžã‚Šè¾¼ã¿ã‚’è§£é™¤"
+
+#: enhanced-media-library.php:523
+msgid "Uploaded to post #"
+msgstr "æŠ•ç¨¿ã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ #"
+
+#: enhanced-media-library.php:524
+msgid "Based On"
+msgstr ""
+
+#: pro/core/bulk-edit.php:58 pro/core/bulk-edit.php:65
+msgid "Remove"
+msgstr "å‰Šé™¤"
+
+#: pro/core/bulk-edit.php:60 pro/core/bulk-edit.php:67
+msgid "Deselect"
+msgstr "é¸æŠžã‚’è§£é™¤"
+
+#: pro/core/bulk-edit.php:112
+msgid "Caption this image&hellip;"
+msgstr "ã“ã®ç”»åƒã‚’ã‚­ãƒ£ãƒ—ã‚·ãƒ§ãƒ³&hellip;"
+
+#: pro/core/bulk-edit.php:116
+msgid "Describe this video&hellip;"
+msgstr "ã“ã®ãƒ“ãƒ‡ã‚ªã‚’èª¬æ˜Žã—ã¦ãã ã•ã„&hellip;"
+
+#: pro/core/bulk-edit.php:118
+msgid "Describe this audio file&hellip;"
+msgstr "ã“ã®ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª¬æ˜Žã—ã¦ãã ã•ã„&hellip;"
+
+#: pro/core/bulk-edit.php:120
+msgid "Describe this media file&hellip;"
+msgstr "ã“ã®ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨˜è¿°ã—ã¾ã™&hellip;"
+
+#: pro/core/bulk-edit.php:129
+msgid "Attachments Details"
+msgstr "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®è©³ç´°"
+
+#: pro/core/bulk-edit.php:181 pro/core/bulk-edit.php:186
+msgid "Select All"
+msgstr "å…¨ã¦é¸æŠž"
+
+#: pro/core/bulk-edit.php:182 pro/core/bulk-edit.php:187
+msgid "Edit Selection"
+msgstr "ç·¨é›†é¸æŠž"
+
+#: pro/core/bulk-edit.php:183 pro/core/bulk-edit.php:188
+msgid "Deselect All"
+msgstr "å…¨ã¦ã®é¸æŠžã‚’è§£é™¤"
+
+#: pro/core/bulk-edit.php:184 pro/core/bulk-edit.php:189
+msgid "Delete Selected"
+msgstr "é¸æŠžã‚’å‰Šé™¤ã—ã¾ã™"
+
+#: pro/core/medialist.php:24 pro/core/medialist.php:69
+msgid "Order By"
+msgstr ""
+
+#: pro/core/medialist.php:28 pro/core/medialist.php:73
+msgid "Date"
+msgstr "æ—¥ä»˜"
+
+#: pro/core/medialist.php:31 pro/core/medialist.php:76
+msgid "Title"
+msgstr "ã‚¿ã‚¤ãƒˆãƒ«"
+
+#: pro/core/medialist.php:34 pro/core/medialist.php:79
+msgid "Custom Order"
+msgstr "ã‚«ã‚¹ã‚¿ãƒ ã‚ªãƒ¼ãƒ€ãƒ¼"
+
+#: pro/core/medialist.php:37 pro/core/medialist.php:82
+msgid "Random"
+msgstr "ãƒ©ãƒ³ãƒ€ãƒ "
+
+#: pro/core/medialist.php:43 pro/core/medialist.php:88
+msgid "Order"
+msgstr " ä¸¦ã³é †"
+
+#: pro/core/medialist.php:47 pro/core/medialist.php:92
+msgid "Ascending"
+msgstr "æ˜‡é †"
+
+#: pro/core/medialist.php:50 pro/core/medialist.php:95
+msgid "Descending"
+msgstr "é™é †"
+
+#: pro/core/medialist.php:60 pro/core/medialist.php:101
+msgid "Limit"
+msgstr "åˆ¶é™"
+
+#: pro/core/options-pages.php:78
+msgid "Your license has been deactivated."
+msgstr "ã‚ãªãŸã®ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ãŒç„¡åŠ¹ã«ãªã£ã¦ã„ã¾ã™ã€‚"
+
+#: pro/core/options-pages.php:88
+msgid "Please check if your license key is correct and try again."
+msgstr "ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼ãŒæ­£ã—ã„ã‹ã©ã†ã‹ã‚’ç¢ºèªã—ã¦ã€ã‚‚ã†ä¸€åº¦ãŠè©¦ã—ãã ã•ã„ã€‚"
+
+#: pro/core/options-pages.php:101
+msgid "Wrong license key or a server error occured. Please check your license key and try again."
+msgstr ""
+"é–“é•ã£ãŸãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼ã¾ãŸã¯ã‚µãƒ¼ãƒãƒ¼ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­"
+"ãƒ¼ã‚’ç¢ºèªã—ã¦ã‚‚ã†ä¸€åº¦ãŠè©¦ã—ãã ã•ã„ã€‚"
+
+#: pro/core/options-pages.php:111
+msgid "You license has been activated."
+msgstr "æ´»æ€§åŒ–ã•ã‚Œã¦ã„ã‚‹ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’è¨±è«¾ã—ã¾ã™ã€‚"
+
+#: pro/core/options-pages.php:164
+#, php-format
+msgid "Auto-assign media items to parent %s %s on upload"
+msgstr ""
+
+#: pro/core/options-pages.php:165
+#, php-format
+msgid ""
+"%sWarning:%s As a result of clicking \"Synchronize Now\" all media items attached to a %s will "
+"be assigned to %s of their parent %s. Currently assigned %s will not be saved. Media items that "
+"are not attached to any %s will not be affected."
+msgstr ""
+
+#: pro/core/options-pages.php:188 pro/enhanced-media-library-pro.php:127
+msgid "Bulk Edit"
+msgstr "ä¸€æ‹¬ç·¨é›†"
+
+#: pro/core/options-pages.php:196 pro/core/options-pages.php:199
+msgid "Turn off 'Save Changes' button"
+msgstr "[å¤‰æ›´ã‚’ä¿å­˜]ãƒœã‚¿ãƒ³ã‚ªãƒ•"
+
+#: pro/core/options-pages.php:200
+msgid "Save changes on the fly"
+msgstr "å¤‰æ›´å†…å®¹ã‚’ä¿å­˜"
+
+#: pro/core/options-pages.php:201
+msgid ""
+"Any click on a taxonomy checkbox during media files bulk edition will lead to an <strong style="
+"\"color:red\">immediate saving</strong> of the data. Please, be careful! You have much greater "
+"chance to <strong style=\"color:red\">accidentally perform wrong re-assigning</strong> of a lot "
+"of your media files / taxonomies with this option turned on."
+msgstr ""
+"ãƒ¡ãƒ‡ã‚£ã‚¢ã®é–“ã«åˆ†é¡žã™ã‚‹ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ä¸Šã®ä»»æ„ã®ã‚¯ãƒªãƒƒã‚¯ã¯ã€ãƒãƒ«ã‚¯ç"
+"‰ˆã«ç¹‹ãŒã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’<strong style=\"color:red\">å³æ™‚ä¿å­˜ã™ã‚‹</strong>ã®ã§ æ°—"
+"ã‚’ä»˜ã‘ã¦ãã ã•ã„ï¼ã‚ãªãŸã«ã¯å¤§ããªãƒãƒ£ãƒ³ã‚¹ãŒã‚ã‚Šã¾ã™<strong style=\"color:red\">é–“é•ã"
+"£ã¦ã‚‚å†å‰²ã‚Šå½“ã¦ã‚’è¡Œã„ã¾ã™</strong> å¤šãã®ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«/ã“ã®ã‚ªãƒ—"
+"ã‚·ãƒ§ãƒ³ã‚’æŒ‡å®šã—ãŸã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã‚’ã‚ªãƒ³ã«ã—ã¾ã™ã€‚"
+
+#: pro/core/options-pages.php:202
+msgid "Strongly NOT recommended option if you work with more than hundred of files at a time."
+msgstr "ä¸€åº¦ã«100ä»¥ä¸Šã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ä½œæ¥­ã™ã‚‹å ´åˆã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’æŽ¨å¥¨ã—ã¾ã›ã‚“ã€‚"
+
+#: pro/core/options-pages.php:241 pro/core/options-pages.php:259
+msgid "License Key"
+msgstr "ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼"
+
+#: pro/core/options-pages.php:252
+#, php-format
+msgid ""
+"To unlock updates please enter your license key below. You can get your license key in <a href="
+"\"%s\">Your Account</a>. If you do not have a license, you are welcome to <a href=\"%s"
+"\">purchase it</a>."
+msgstr ""
+"ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã®ãƒ­ãƒƒã‚¯ã‚’è§£é™¤ã™ã‚‹ã«ã¯ã€ä»¥ä¸‹ã®ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã"
+"€‚ã‚ãªãŸã®ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™<a href=\"%s\">ã‚ãªãŸã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ</"
+"a>ã«ã€‚ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’ãŠæŒã¡ã§ãªã„å ´åˆã¯ã€æ­“è¿Žã—ã¦ã„ã¾ã™<a href=\"%s\">è³¼å…¥</a>ã«ã€‚"
+
+#: pro/core/options-pages.php:262
+msgid "Activate License"
+msgstr "ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’æœ‰åŠ¹åŒ–"
+
+#: pro/core/options-pages.php:269
+msgid "Your license is active!"
+msgstr "ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ã¦ã„ã¾ã™ï¼"
+
+#: pro/core/options-pages.php:273
+msgid "Deactivate License"
+msgstr "ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’ç„¡åŠ¹åŒ–"
+
+#: pro/core/update.php:113 pro/core/update.php:119 pro/core/update.php:125
+msgid ""
+"An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s "
+"configuration. If you continue to have problems, please try the <a href=\"https://wordpress.org/"
+"support/\">support forums</a>."
+msgstr ""
+"äºˆæœŸã—ãªã„ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚WordPress.orgã¾ãŸã¯ã€ã“ã®ã‚µãƒ¼ãƒãƒ¼ã§ä½•ã‹ãŒé–“é•ã"
+"£ã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™&#8217;s è¨­å®šã€‚å•é¡ŒãŒè§£æ±ºã—ãªã„å ´åˆã¯ã€è©¦ã—ã¦ã¿ã¦ãã ã•ã„<a "
+"href=\"https://wordpress.org/support/\">ã‚µãƒãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒ©ãƒ </a>."
+
+#: pro/core/update.php:113
+msgid ""
+"(WordPress could not establish a secure connection to WordPress.org. Please contact your server "
+"administrator.)"
+msgstr ""
+"ï¼ˆWordPressã¯WordPress.orgã¸ã®å®‰å…¨ãªæŽ¥ç¶šã‚’ç¢ºç«‹ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚ã‚µãƒ¼ãƒãƒ¼ç®¡ç†è€…"
+"ã«å•ã„åˆã‚ã›ã¦ãã ã•ã„ã€‚ï¼‰"
+
+#: pro/core/update.php:180
+#, php-format
+msgid ""
+"To unlock updates, please <a href=\"%s\">activate your license</a>. You can get your license key "
+"in <a href=\"%s\">Your Account</a>. If you do not have a license, you are welcome to <a href=\"%s"
+"\">purchase it</a>."
+msgstr ""
+"ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã®ãƒ­ãƒƒã‚¯ã‚’è§£é™¤ã™ã‚‹ã«ã¯ã€ <a href=\"%s\">ãƒ©ã‚¤ã‚»ãƒ³ã‚¹</a>ã‚’æ´»æ€§åŒ–"
+"ã•ã›ã‚‹<a href=\"%s\">ã‚ãªãŸã¯ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚­ãƒ¼ã¯ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ</a>ã‚’å¾—ã‚‹ã“ã¨ãŒã§ãã¾ã™ã"
+"€‚ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’ãŠæŒã¡ã§ãªã„å ´åˆã¯ã€<a href=\"%s\">ãŒè³¼å…¥ã‚’æ­“è¿Žã—ã¦ã„ã¾ã™ã€‚</a>"
+
+#: pro/enhanced-media-library-pro.php:119
+msgid "ALL files belong to this item"
+msgstr "å…¨ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã“ã®é …ç›®ã«å±žã—ã¦ã„ã¾ã™"
+
+#: pro/enhanced-media-library-pro.php:120
+msgid "SOME files belong to this item"
+msgstr "ã„ãã¤ã‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã€ã“ã®é …ç›®ã«å±žã—ã¦ã„ã¾ã™"
+
+#: pro/enhanced-media-library-pro.php:121
+msgid "NO files belong to this item"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ãªã— ã“ã®é …ç›®ã«å±žã—ã¦ã„ã¾ã›ã‚“"
+
+#: pro/enhanced-media-library-pro.php:122
+msgid "Changes saved."
+msgstr "å¤‰æ›´ãŒä¿å­˜ã•ã‚Œã¾ã—ãŸã€‚"
+
+#: pro/enhanced-media-library-pro.php:123
+msgid "Something went wrong."
+msgstr "ä½•ã‹ãŒé–“é•ã£ã¦ã„ã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:126
+msgid "Edit Media Files"
+msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«ç·¨é›†"
+
+#: pro/enhanced-media-library-pro.php:151
+msgid "Create a filter-based gallery"
+msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ãƒ™ãƒ¼ã‚¹ã®ã‚®ãƒ£ãƒ©ãƒªãƒ¼ã‚’ä½œæˆã—ã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:152
+msgid "Create a filter-based playlist"
+msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ãƒ™ãƒ¼ã‚¹ã®ãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:153
+msgid "Create a filter-based video playlist"
+msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ãƒ™ãƒ¼ã‚¹ã®ãƒ“ãƒ‡ã‚ªãƒ—ãƒ¬ã‚¤ãƒªã‚¹ãƒˆã‚’ä½œæˆã—ã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:231
+msgid ""
+"Please deactivate and <strong>remove</strong> the old FREE version prior to the <strong>Enhanced "
+"Media Library PRO</strong> activation. All your data will remain intact."
+msgstr ""
+"ç„¡åŠ¹åŒ–ã—ã¦ãã ã•ã„<strong>å‰Šé™¤</strong>ã®å‰ã«å¤ã„ç„¡æ–™ç‰ˆã‚’ã€‚<strong>Enhanced Media "
+"Library PRO</ strong>ã®æ´»æ€§åŒ–ã€‚ã™ã¹ã¦ã®ãƒ‡ãƒ¼ã‚¿ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:231
+msgid "Return to Plugins"
+msgstr "ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã«æˆ»ã‚Šã¾ã™"
+
+#: pro/enhanced-media-library-pro.php:282
+msgid ""
+"Both FREE and PRO versions of the Enhanced Media Library are network active. <strong>Enhanced "
+"Media Library PRO</strong> does not require free version to be active. Please network deactivate "
+"and delete the free versions of the plugin. All your data will remail intact."
+msgstr ""
+"Enhanced Media Libraryã®ç„¡æ–™ç‰ˆã¨PROãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ä¸¡æ–¹ã§ã€ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãŒæœ‰åŠ¹åŒ–"
+"ã«ãªã£ã¦ã„ã¾ã™ã€‚ <strong>Enhanced Media Library PRO</ strong>ã‚’æœ‰åŠ¹åŒ–ã™ã‚‹å ´åˆç„¡æ–™ç"
+"‰ˆã¯å¿…è¦ã‚ã‚Šã¾ã›ã‚“ã€‚ç„¡åŠ¹åŒ–ã—ã€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç„¡æ–™ç‰ˆã‚’å‰Šé™¤ã—ã¦ãã ã•ã„ã€‚å…"
+"¨ã¦ã®ãƒ‡ãƒ¼ã‚¿ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:299
+msgid ""
+"<strong>Enhanced Media Library PRO</strong> does not require free version to be active. Please "
+"deactivate and delete the free version of the plugin. All your data will remain intact."
+msgstr ""
+"<strong>Enhanced Media Library PRO</strong> ã¯ç„¡æ–™ç‰ˆã‚’å¿…è¦ã¨ã—ã¾ã›ã‚“ã€‚æœ‰åŠ¹åŒ–ã—ã¾ã™ã"
+"€‚ç„¡åŠ¹åŒ–ã—ã€ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ç„¡æ–™ç‰ˆã‚’å‰Šé™¤ã—ã¦ãã ã•ã„ã€‚å…"
+"¨ã¦ã®ãƒ‡ãƒ¼ã‚¿ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ã€‚"
+
+#: pro/enhanced-media-library-pro.php:315
+msgid ""
+"Both FREE and PRO versions of the Enhanced Media Library are active for this site. "
+"<strong>Enhanced Media Library PRO</strong> does not require free version to be active. Please "
+"deactivate (or network deactivate) and delete the free version of the plugin for this site. All "
+"your data will remail intact."
+msgstr ""
+"Enhanced Media Library ã®ç„¡æ–™ç‰ˆã¨PROãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ã€ã©ã¡ã‚‰ã‚‚ã“ã®ã‚µã‚¤ãƒˆã®æœ‰åŠ¹ã§ã™ã"
+"€‚ <strong>Enhanced Media Library PRO</strong>ã‚’æœ‰åŠ¹åŒ–ã«ã™ã‚‹å ´åˆç„¡æ–™ç‰ˆã‚’å¿…è¦ã¨ã—"
+"ã¾ã›ã‚“ã€‚ç„¡åŠ¹åŒ–ï¼ˆã¾ãŸã¯ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ç„¡åŠ¹åŒ–ï¼‰ã—ã€ã“ã®ã‚µã‚¤ãƒˆã®ãƒ—"
+"ãƒ©ã‚°ã‚¤ãƒ³ã®ç„¡æ–™ç‰ˆã‚’å‰Šé™¤ã—ã¦ãã ã•ã„ã€‚å…¨ã¦ã®ãƒ‡ãƒ¼ã‚¿ã¯ãã®ã¾ã¾æ®‹ã‚Šã¾ã™ã€‚"
+
+#~ msgctxt "uploaded files"
+#~ msgid "All (%s)"
+#~ msgid_plural "All (%s)"
+#~ msgstr[0] "å…¨ã¦(%s)"
+
+#~ msgctxt "detached files"
+#~ msgid "Unattached (%s)"
+#~ msgid_plural "Unattached (%s)"
+#~ msgstr[0] "æœªæ·»ä»˜ (%s)"
+
+#~ msgctxt "uploaded files"
+#~ msgid "Trash (%s)"
+#~ msgid_plural "Trash (%s)"
+#~ msgstr[0] "ã”ã¿ç®± (%s)"
+
+#~ msgid "Filter"
+#~ msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼"
+
+#~ msgid "Empty Trash"
+#~ msgstr "ã”ã¿ç®±ã‚’ç©ºã«"
+
+#~ msgid "You do not have permission to upload files."
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ã™ã‚‹æ¨©é™ãŒã‚ã‚Šã¾ã›ã‚“ã€‚"
+
+#~ msgid "Overview"
+#~ msgstr "æ¦‚è¦"
+
+#~ msgid ""
+#~ "You can view your media in a simple visual grid or a list with columns. Switch between these "
+#~ "views using the icons to the left above the media."
+#~ msgstr ""
+#~ "å˜ç´”ãªè¦–è¦šçš„ãªã‚°ãƒªãƒƒãƒ‰ã¾ãŸã¯åˆ—ã®ãƒªã‚¹ãƒˆã«ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’è¡¨ç¤ºã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã"
+#~ "€‚ãƒ¡ãƒ‡ã‚£ã‚¢ã®å·¦ä¸Šã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä½¿ç”¨ã—ã¦ã€ã“ã‚Œã‚‰ã®ãƒ“ãƒ"
+#~ "¥ãƒ¼ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚"
+
+#~ msgid ""
+#~ "To delete media items, click the Bulk Select button at the top of the screen. Select any "
+#~ "items you wish to delete, then click the Delete Selected button. Clicking the Cancel "
+#~ "Selection button takes you back to viewing your media."
+#~ msgstr ""
+#~ "ãƒ¡ãƒ‡ã‚£ã‚¢é …ç›®ã‚’å‰Šé™¤ã™ã‚‹ã«ã¯ã€ç”»é¢ä¸Šéƒ¨ã®ä¸€æ‹¬é¸æŠž]ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã"
+#~ "€‚å‰Šé™¤ã—ãŸã„é …ç›®ã‚’é¸æŠžã—ã€[é¸æŠžé …ç›®ã®å‰Šé™¤]ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã"
+#~ "€‚ã‚»ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³[ã‚­ãƒ£ãƒ³ã‚»ãƒ«]ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€ãƒ¡ãƒ‡ã‚£ã‚¢ã®è¡¨ç"
+#~ "¤ºã«æˆ»ã‚Šã¾ã™ã€‚"
+
+#~ msgid "Attachment Details"
+#~ msgstr "æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®è©³ç´°"
+
+#~ msgid ""
+#~ "Clicking an item will display an Attachment Details dialog, which allows you to preview media "
+#~ "and make quick edits. Any changes you make to the attachment details will be automatically "
+#~ "saved."
+#~ msgstr ""
+#~ "é …ç›®ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã—ã€è¿…é"
+#~ "€Ÿãªç·¨é›†ã‚’è¡Œã†ã“ã¨ãŒã§ãã¾ã™ã€‚æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®è©³ç´°]ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã"
+#~ "€‚æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã®è©³ç´°ã«åŠ ãˆãŸå¤‰æ›´ã¯å…¨ã¦ã€è‡ªå‹•çš„ã«ä¿å­˜ã•ã‚Œã¾ã™ã€‚"
+
+#~ msgid ""
+#~ "Use the arrow buttons at the top of the dialog, or the left and right arrow keys on your "
+#~ "keyboard, to navigate between media items quickly."
+#~ msgstr ""
+#~ "ã™ãã«ãƒ¡ãƒ‡ã‚£ã‚¢é …ç›®é–“ã‚’ç§»å‹•ã™ã‚‹ã«ã¯ã€ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã€ã¾ãŸã¯ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã®å·¦å³ã®çŸ"
+#~ "¢å°ã‚­ãƒ¼ã®ä¸Šéƒ¨ã«ã‚ã‚‹çŸ¢å°ãƒœã‚¿ãƒ³ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚"
+
+#~ msgid ""
+#~ "You can also delete individual items and access the extended edit screen from the details "
+#~ "dialog."
+#~ msgstr ""
+#~ "å€‹ã€… ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤ã—ã€[è©³ç´°] ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‹ã‚‰æ‹¡å¼µç·¨é›†ç”»é"
+#~ "¢ã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã™ã€‚"
+
+#~ msgid "For more information:"
+#~ msgstr "è©³ç´°ã¯ã“ã¡ã‚‰ï¼š"
+
+#~ msgid ""
+#~ "<a href=\"http://codex.wordpress.org/Media_Library_Screen\" target=\"_blank\">Documentation "
+#~ "on Media Library</a>"
+#~ msgstr ""
+#~ "<a href=\"http://codex.wordpress.org/Media_Library_Screen\" target=\"_blank"
+#~ "\">ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ</a>"
+
+#~ msgid "<a href=\"https://wordpress.org/support/\" target=\"_blank\">Support Forums</a>"
+#~ msgstr ""
+#~ "<a href=\"https://wordpress.org/support/\" target=\"_blank\">ã‚µãƒãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒ©ãƒ </a>"
+
+#~ msgctxt "file"
+#~ msgid "Add New"
+#~ msgstr "æ–°è¦è¿½åŠ "
+
+#~ msgid ""
+#~ "The grid view for the Media Library requires JavaScript. <a href=\"upload.php?mode=list"
+#~ "\">Switch to the list view</a>."
+#~ msgstr ""
+#~ "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãŸã‚ã®ã‚°ãƒªãƒƒãƒ‰ãƒ“ãƒ¥ãƒ¼ã«ã¯JavaScriptãŒå¿…è¦ã§ã™ã€‚<a href="
+#~ "\"upload.php?mode=list\">ãƒªã‚¹ãƒˆãƒ“ãƒ¥ãƒ¼ã«åˆ‡ã‚Šæ›¿ãˆã¾ã™ã€‚</a>."
+
+#~ msgid "You are not allowed to edit this post."
+#~ msgstr "ã“ã®æŠ•ç¨¿ã‚’ç·¨é›†ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "You are not allowed to move this post to the trash."
+#~ msgstr "ã‚´ãƒŸç®±ã«ã“ã®æŠ•ç¨¿ã‚’ç§»å‹•ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "Error in moving to trash."
+#~ msgstr "ã‚´ãƒŸç®±ã«ç§»å‹•ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚"
+
+#~ msgid "You are not allowed to move this post out of the trash."
+#~ msgstr "ã‚´ãƒŸç®±ã«ã“ã®æŠ•ç¨¿ã‚’ç§»å‹•ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "Error in restoring from trash."
+#~ msgstr "ã”ã¿ç®±ã‹ã‚‰ã®å¾©å…ƒä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚"
+
+#~ msgid "You are not allowed to delete this post."
+#~ msgstr "ã“ã®æŠ•ç¨¿ã‚’å‰Šé™¤ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "Error in deleting."
+#~ msgstr "å‰Šé™¤ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚"
+
+#~ msgctxt "items per page (screen options)"
+#~ msgid "Media items"
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚¢ã‚¤ãƒ†ãƒ "
+
+#~ msgid ""
+#~ "You can narrow the list by file type/status using the text link filters at the top of the "
+#~ "screen. You also can refine the list by date using the dropdown menu above the media table."
+#~ msgstr ""
+#~ "ç”»é¢ã®ä¸Šéƒ¨ã«ã‚ã‚‹ãƒ†ã‚­ã‚¹ãƒˆãƒªãƒ³ã‚¯ã®ãƒ•ã‚£ãƒ«ã‚¿ã‚’ä½¿ç”¨ã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡ž/"
+#~ "çŠ¶æ…‹ã§ãƒªã‚¹ãƒˆã‚’çµžã‚Šè¾¼ã‚€ã“ã¨ãŒã§ãã¾ã™ã€‚ã¾ãŸã€ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä¸Šã«ã‚ã‚‹ãƒ"
+#~ "‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’ä½¿ç”¨ã—ã¦æ—¥ä»˜ã§ãƒªã‚¹ãƒˆã‚’çµžã‚Šè¾¼ã‚€ã“ã¨ãŒã§ãã¾ã™ã€‚"
+
+#~ msgid "Available Actions"
+#~ msgstr "åˆ©ç”¨å¯èƒ½ãªã‚¢ã‚¯ã‚·ãƒ§ãƒ³"
+
+#~ msgid ""
+#~ "Hovering over a row reveals action links: Edit, Delete Permanently, and View. Clicking Edit "
+#~ "or on the media file&#8217;s name displays a simple screen to edit that individual file&#8217;"
+#~ "s metadata. Clicking Delete Permanently will delete the file from the media library (as well "
+#~ "as from any posts to which it is currently attached). View will take you to the display page "
+#~ "for that file."
+#~ msgstr ""
+#~ "è¡Œã®ä¸Šã«ç½®ãã¨ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒªãƒ³ã‚¯ã‚’æ˜Žã‚‰ã‹ã«ã—ã¾ã™ã€‚ç·¨é›†ã¯ã€å®Œå…¨ã«å‰Šé™¤ã"
+#~ "€åŠã³è¡¨ç¤ºã€‚ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç·¨é›†åˆã¯ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™&#8217;s ãã®å€‹ã€…ã®åã¯ã"
+#~ "€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç·¨é›†ã™ã‚‹ç‚ºã®ç°¡å˜ãªç”»é¢ãŒè¡¨ç¤ºã•ã‚Œã¾ã™&#8217;s ã®ãƒ¡ã‚¿ãƒ‡ãƒ¼ã‚¿ã"
+#~ "€‚ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã—ã¾ã™[å®Œå…¨ã«å‰Šé™"
+#~ "¤]ã‚’ã‚¯ãƒªãƒƒã‚¯ï¼ˆæŠ•ç¨¿ã‹ã‚‰ã ã‘ã§ãªãã€ãã‚ŒãŒç¾åœ¨æŽ¥ç¶šã•ã‚Œã¦ã„ã‚‹ãŸã‚ï¼‰ã€‚ãƒ“ãƒ¥ãƒ¼ã¯ã"
+#~ "€ãã®ãƒ•ã‚¡ã‚¤ãƒ«ã®è¡¨ç¤ºãƒšãƒ¼ã‚¸ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚"
+
+#~ msgid "Attaching Files"
+#~ msgstr "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ·»ä»˜"
+
+#~ msgid ""
+#~ "If a media file has not been attached to any post, you will see that in the Attached To "
+#~ "column, and can click on Attach File to launch a small popup that will allow you to search "
+#~ "for a post and attach the file."
+#~ msgstr ""
+#~ "ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ•ã‚¡ã‚¤ãƒ«ãŒã€ä»»æ„ã®æŠ•ç¨¿ã«æ·»ä»˜ã•ã‚Œã¦ã„ãªã„å ´åˆã€åˆ—ã«æœªæ·»ä»˜ã¨è¡¨ç"
+#~ "¤ºã•ã‚Œã€æŠ•ç¨¿ã‚’æ¤œç´¢ã—ã€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ·»ä»˜ã™ã‚‹ã“ã¨ãŒå‡ºæ¥ã¾ã™ã€‚å°ã•ãªãƒãƒƒãƒ—ã‚¢ãƒƒãƒ"
+#~ "—ã‚’èµ·å‹•ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚‚æ·»ä»˜ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã“ã¨ãŒå¯èƒ½ã§ã™ã€‚"
+
+#~ msgid "Search results for &#8220;%s&#8221;"
+#~ msgstr "æ¤œç´¢çµæžœã® &#8220;%s&#8221;"
+
+#~ msgid "Media attachment updated."
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›´æ–°ã—ã¾ã—ãŸã€‚"
+
+#~ msgid "Reattached %d attachment."
+#~ msgid_plural "Reattached %d attachments."
+#~ msgstr[0] "å†æŽ¥ç¶š %d æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã€‚"
+
+#~ msgid "Undo"
+#~ msgstr "å…ƒã«æˆ»ã™"
+
+#~ msgid "Media permanently deleted."
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’å®Œå…¨ã«å‰Šé™¤ã€‚"
+
+#~ msgid "Error saving media attachment."
+#~ msgstr "ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒ‡ã‚£ã‚¢ã®æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã—ã¾ã™ã€‚"
+
+#~ msgid "Media moved to the trash."
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’ã€ã‚´ãƒŸç®±ã«ç§»å‹•ã—ã¾ã—ãŸã€‚"
+
+#~ msgid "Media restored from the trash."
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢ã‚’ã‚´ãƒŸç®±ã‹ã‚‰å¾©å…ƒã€‚"
+
+#~ msgid ""
+#~ "<a href=\"https://codex.wordpress.org/Media_Library_Screen\" target=\"_blank\">Documentation "
+#~ "on Media Library</a>"
+#~ msgstr ""
+#~ "<a href=\"http://codex.wordpress.org/Media_Library_Screen\" target=\"_blank"
+#~ "\">ãƒ¡ãƒ‡ã‚£ã‚¢ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ</a>"
+
+#~ msgid "You are not allowed to move this item to the Trash."
+#~ msgstr "ã‚´ãƒŸç®±ã«ã“ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç§»å‹•ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "You are not allowed to move this item out of the Trash."
+#~ msgstr "ã‚´ãƒŸç®±ã‹ã‚‰ã“ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç§»å‹•ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "You are not allowed to delete this item."
+#~ msgstr "ã“ã®é …ç›®ã‚’å‰Šé™¤ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚"
+
+#~ msgid "Filter media items list"
+#~ msgstr "ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ãƒ¡ãƒ‡ã‚£ã‚¢é …ç›®ãƒªã‚¹ãƒˆ"
+
+#~ msgid "Media items list navigation"
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢é …ç›®ãƒªã‚¹ãƒˆãƒŠãƒ“ã‚²ãƒ¼ã‚·ãƒ§ãƒ³"
+
+#~ msgid "Media items list"
+#~ msgstr "ãƒ¡ãƒ‡ã‚£ã‚¢é …ç›®ãƒªã‚¹ãƒˆ"
+
+#~ msgid "Detached %d attachment."
+#~ msgid_plural "Detached %d attachments."
+#~ msgstr[0] "åˆ‡ã‚Šé›¢ã™ %d æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã€‚"
+
+#~ msgid "%d media attachment permanently deleted."
+#~ msgid_plural "%d media attachments permanently deleted."
+#~ msgstr[0] "%d ãƒ¡ãƒ‡ã‚£ã‚¢æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å®Œå…¨ã«å‰Šé™¤ã€‚"
+
+#~ msgid "%d media attachment moved to the trash."
+#~ msgid_plural "%d media attachments moved to the trash."
+#~ msgstr[0] "%d ãƒ¡ãƒ‡ã‚£ã‚¢æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚´ãƒŸç®±ã«ç§»å‹•ã—ã¾ã—ãŸã€‚"
+
+#~ msgid "%d media attachment restored from the trash."
+#~ msgid_plural "%d media attachments restored from the trash."
+#~ msgstr[0] "%d ãƒ¡ãƒ‡ã‚£ã‚¢æ·»ä»˜ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã”ã¿ç®±ã‹ã‚‰å¾©å…ƒã€‚"
+
+#~ msgid "MIME type settings restored."
+#~ msgstr "MIMEã‚¿ã‚¤ãƒ—ã®è¨­å®šã‚’å¾©å…ƒã—ã¾ã—ãŸã€‚"
+
+#~ msgid "MIME type settings saved."
+#~ msgstr "MIMEã‚¿ã‚¤ãƒ—ã®è¨­å®šãŒä¿å­˜ã•ã‚Œã¾ã—ãŸã€‚"
+
+#~ msgid "Column in List View"
+#~ msgstr "ãƒªã‚¹ãƒˆè¡¨ç¤ºã®åˆ—"
+
+#~ msgid "Filter in List View"
+#~ msgstr "ãƒªã‚¹ãƒˆè¡¨ç¤ºã®ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼"
+
+#~ msgid "Filter in Grid View / Media Popup"
+#~ msgstr "ã‚°ãƒªãƒƒãƒˆè¡¨ç¤º/ãƒ¡ãƒ‡ã‚£ã‚¢ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼"
+
+#~ msgid "Filters"
+#~ msgstr "ãƒ•ã‚£ãƒ«ã‚¿"
+
+#~ msgid "Taxonomy settings saved."
+#~ msgstr "ã‚¿ã‚¯ã‚½ãƒŽãƒŸãƒ¼ã®è¨­å®šãŒä¿å­˜ã•ã‚Œã¾ã—ãŸã€‚"
+
+#~ msgid "Expand Details"
+#~ msgstr "è©³ç´°ã‚’å±•é–‹ã—ã¾ã™"
+
+#~ msgid "Collapse Details"
+#~ msgstr "æŠ˜ã‚ŠãŸãŸã¿ã®è©³ç´°"
+
+#~ msgid "Validation Failed. One or more fields below are required."
+#~ msgstr "æ¤œè¨¼ã«å¤±æ•—ã—ã¾ã—ãŸã€‚ä»¥ä¸‹ã®1ã¤ä»¥ä¸Šã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒå¿…è¦ã§ã™ã€‚"
+
+#~ msgid "The changes you made will be lost if you navigate away from this page"
+#~ msgstr ""
+#~ "ã“ã®ãƒšãƒ¼ã‚¸ã‹ã‚‰ç§»å‹•ã—ãŸå ´åˆã¯ã€å¤‰æ›´å†…å®¹ãŒå¤±ã‚ã‚Œã¾ã™ã€‚ã‚»ãƒ¼ãƒ–ã—ã¦ä¸‹ã•ã„ã€‚"

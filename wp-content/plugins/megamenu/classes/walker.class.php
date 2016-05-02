@@ -129,7 +129,7 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			$item_output = $args->before;
 			$item_output .= '<a'. $attributes .'>';
 
-			if ( $settings['hide_text'] == 'true' && $depth == 0 ) {
+			if ( $settings['hide_text'] == 'true' ) {
 				/** This filter is documented in wp-includes/post-template.php */
 			} else {
 				$item_output .= $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after;

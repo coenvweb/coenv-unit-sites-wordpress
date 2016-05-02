@@ -1,7 +1,6 @@
 ( function( $ ) {
 
-    var orderValue,
-        l10n = wpuxss_eml_taxonomies_options_l10n_data;
+    var l10n = wpuxss_eml_taxonomies_options_l10n_data;
 
 
 
@@ -271,27 +270,6 @@
         if ( !submit_it ) alert(alert_text);
 
         return submit_it;
-    });
-
-
-
-    $( document ).ready( function() {
-
-        orderValue = $('#wpuxss_eml_tax_options_media_order').val();
-        $('#wpuxss_eml_tax_options_media_orderby').change();
-    });
-
-
-
-    $( document ).on( 'change', '#wpuxss_eml_tax_options_media_orderby', function( event ) {
-
-        var isMenuOrder = 'menuOrder' === $( event.target ).val(),
-            value;
-
-        orderValue = isMenuOrder ? $('#wpuxss_eml_tax_options_media_order').val() : orderValue;
-        value = isMenuOrder ? 'ASC' : orderValue;
-
-        $('#wpuxss_eml_tax_options_media_order').prop( 'disabled', isMenuOrder ).val( value );
     });
 
 
