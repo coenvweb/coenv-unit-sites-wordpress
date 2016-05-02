@@ -1,4 +1,5 @@
-*~ .DS_Store .svn .cvs *.bak *.swp Thumbs.db
+*.swp
+.DS_store
 
 # Editor generated files
 *.sublime-project
