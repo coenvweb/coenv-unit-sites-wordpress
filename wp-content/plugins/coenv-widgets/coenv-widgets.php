@@ -38,10 +38,9 @@ class coenv_base_content extends WP_Widget {
     *   js and css assets
     */
     public function coenv_widget_scripts() {
+        wp_enqueue_media();
         wp_enqueue_script('media-upload');
-        wp_enqueue_script('thickbox');
         wp_enqueue_script('coenv_static_widget', plugin_dir_url(__FILE__) . 'upload-media.js', array('jquery'));
-        wp_enqueue_style('thickbox');
     }
 
 
@@ -126,6 +125,11 @@ class coenv_base_content extends WP_Widget {
             $image = $instance['image'];
         }
 
+        $imageID = '';
+        if(isset($instance['imageID'])) {
+            $imageID = $instance['imageID'];
+        }
+
         $content = '';
         if(isset($instance['content'])) {
             $content = $instance['content'];
@@ -160,9 +164,11 @@ class coenv_base_content extends WP_Widget {
 
         <p>
             <label for="<?php echo $this->get_field_name( 'image' ); ?>"><?php _e( 'Image:' ); ?></label>
-            <input name="<?php echo $this->get_field_name( 'image' ); ?>" class="coenv_widget_base_image" readonly type="text" size="36"  value="<?php echo esc_url( $image ); ?>" />
-            <input class="upload_image_button button button-primary" type="button" value="Upload/Select Image" />
-            <input class="cancel_image_button button button-danger" type="button" value="Remove Image" />
+            <img id="coenv_media_image<?php echo $this->number; ?>" style="width:100%" <?=(empty($image) ? 'hidden' : '')?> src="<?php echo $image; ?>" />
+            <input name="<?php echo $this->get_field_name( 'image' ); ?>" id="coenv_media_url<?php echo $this->number; ?>" readonly type="text" size="36"  value="<?php echo esc_url( $image ); ?>" />
+            <input name="<?php echo $this->get_field_name( 'imageID' ); ?>" id="coenv_media_id<?php echo $this->number; ?>" hidden type="text" size="36"  value="<?php echo $imageid; ?>" />
+            <input class="custom_media_upload button button-primary" id="<?php echo $this->number; ?>" type="button" value="Upload/Select Image" />
+            <input class="remove_custom_media button" type="button" id="<?php echo $this->number; ?>" value="Remove Image" />
         </p>
     <?php
     }
@@ -195,15 +201,16 @@ class coenv_base_content extends WP_Widget {
             $instance['link'] = $new_instance['link'];
         } else {
             $widget_error = new WP_Error;
-            $widget_error->add('invalid_link', 'Title link must be a valid url');
+            $widget_error->add('invalid_link', 'Link must be a valid url');
         }
 
         $instance['linktext'] = $new_instance['linktext'];
 
         $instance['image'] = $new_instance['image'];
+        $instance['imageID'] = $new_instance['imageID'];
 
         if ( is_wp_error( $widget_error ) ) {
-            return $old_instance;
+            return false;
         } else {
             return $instance;
         }

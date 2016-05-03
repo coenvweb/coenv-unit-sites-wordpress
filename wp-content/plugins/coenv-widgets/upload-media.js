@@ -1,25 +1,26 @@
-jQuery(document).ready(function($) {
-   $(document).on("click", ".upload_image_button", function() {
-
-        jQuery.data(document.body, 'prevElement', $(this).prev());
-
-        window.send_to_editor = function(html) {
-            var imgurl = jQuery('img',html).attr('src');
-            var inputText = jQuery.data(document.body, 'prevElement');
-
-            if(inputText != undefined && inputText != '')
-            {
-                inputText.val(imgurl);
-            }
-
-            tb_remove();
-        };
-
-        tb_show('', 'media-upload.php?type=image&TB_iframe=true');
-        return false;
+jQuery(document).ready(function($){
+    $('body').on('click', '.custom_media_upload', function(e) {
+        var id = $(this).attr('id');
+        e.preventDefault();
+        var custom_uploader = wp.media({
+            title: 'Widget Image',
+            button: {
+                text: 'Add Image',
+            },
+            multiple: false  // Set this to true to allow multiple files to be selected
+        })
+        .on('select', function() {
+            var attachment = custom_uploader.state().get('selection').first().toJSON();
+            $('#coenv_media_image' + id).attr('src', attachment.url).show();
+            $('#coenv_media_url' + id).val(attachment.url);
+            $('#coenv_media_id' + id).val(attachment.id);
+        })
+        .open();
     });
-    
-    $(document).on("click", ".cancel_image_button", function() {
-        $(this).prev().prev().val('');;
-    }); 
+    $('body').on('click', '.remove_custom_media', function(e) {
+        var id = $(this).attr('id');
+        $('#coenv_media_image' + id).attr('src', '').hide();
+        $('#coenv_media_url' + id).val('');
+        $('#coenv_media_id' + id).val('');
+    });
 });
