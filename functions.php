@@ -286,7 +286,7 @@ function coenv_url_ssl($url)
 add_filter('wp_get_attachment_url', 'coenv_url_ssl');
 
 function remove_plaintext_email($emailAddress) {
-    $emailRegEx = '/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4})/i';
+    $emailRegEx = '/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4})/i';
     return preg_replace_callback($emailRegEx, "encodeEmail", $emailAddress);
 }
 function encodeEmail($result) {
