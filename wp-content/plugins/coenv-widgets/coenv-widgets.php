@@ -44,6 +44,21 @@ class coenv_base_content extends WP_Widget {
     }
 
 
+
+    /*
+        Determine if a link is internal or external and return the correct target
+    */
+    public function getLinkTarget($url, $homeurl) {
+        $link_url = parse_url($url);
+        $home_url = parse_url($homeurl);
+        if($link_url['host'] == $home_url['host']) {
+            $target = '_self';
+        } else {
+            $target = '_target';
+        }
+        return $target;
+    }
+
      /** 
       * Front-end display of widget.
       *
@@ -85,8 +100,9 @@ class coenv_base_content extends WP_Widget {
                         }
 
                         if(!empty($instance['link']) && !empty($instance['linktext'])) {
+                            $target = $this->getLinkTarget($instance['link'], home_url());
                             echo "<ul class='widget_links'>";
-                                echo "<li><a class='button' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
+                                echo "<li><a class='button' target='".$target."' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
                             echo "</ul>";
                         }
 
