@@ -74,6 +74,11 @@ class coenv_base_content extends WP_Widget {
         echo "<div class='solid-widget'>";
             echo "<div class='small-12 columns'>";
                 echo "<article class='row widget widget_custom_post_widget'>";
+        
+                    if(!empty($instance['link'])) {
+                        $target = $this->getLinkTarget($instance['link'], home_url());
+                            echo "<a target='".$target."' href='".$instance['link']."'>";
+                    }
 
                     if(!empty($instance['image'])) {
                         echo "<div class='widget_img'>";
@@ -83,28 +88,32 @@ class coenv_base_content extends WP_Widget {
 
                     echo "<div class='widget_content'>";
 
-                        if (!empty($instance['title'])) { 
-                            echo $args['before_title'];
+                    if (!empty($instance['title'])) { 
+                        echo $args['before_title'];
 
-                            if(!empty($instance['link'])) {
-                                echo apply_filters('widget_title', $instance['title']);
-                            } else {
-                                echo apply_filters('widget_title', $instance['title']);
-                            }
-
-                            echo $args['after_title'];
+                        if(!empty($instance['link'])) {
+                            echo apply_filters('widget_title', $instance['title']);
+                        } else {
+                            echo apply_filters('widget_title', $instance['title']);
                         }
 
-                        if(!empty($instance['content'])) {
-                            echo apply_filters('the_content', $instance['content']);
-                        }
+                        echo $args['after_title'];
+                    }
+        
+                    if(!empty($instance['link'])) {
+                        echo '</a>';
+                    }
 
-                        if(!empty($instance['link']) && !empty($instance['linktext'])) {
-                            $target = $this->getLinkTarget($instance['link'], home_url());
-                            echo "<ul class='widget_links'>";
-                                echo "<li><a class='button' target='".$target."' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
-                            echo "</ul>";
-                        }
+                    if(!empty($instance['content'])) {
+                        echo apply_filters('the_content', $instance['content']);
+                    }
+
+                    if(!empty($instance['link']) && !empty($instance['linktext'])) {
+                        $target = $this->getLinkTarget($instance['link'], home_url());
+                        echo "<ul class='widget_links'>";
+                            echo "<li><a class='button' target='".$target."' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
+                        echo "</ul>";
+                    }
 
                     echo "</div>";
                 echo "</article>";
@@ -174,7 +183,7 @@ class coenv_base_content extends WP_Widget {
             <input class="widefat" placeholder="http(s)://" id="<?php echo $this->get_field_id( 'link' ); ?>" name="<?php echo $this->get_field_name( 'link' ); ?>" type="text" value="<?php echo esc_attr( $link ); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_name( 'linktext' ); ?>"><?php _e( 'Link Text:' ); ?></label>
+            <label for="<?php echo $this->get_field_name( 'linktext' ); ?>"><?php _e( 'Link Button Text:' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'linktext' ); ?>" name="<?php echo $this->get_field_name( 'linktext' ); ?>" type="text" value="<?php echo $linktext; ?>" />
         </p>
 
