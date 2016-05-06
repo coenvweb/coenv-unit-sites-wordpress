@@ -77,7 +77,7 @@ class coenv_base_content extends WP_Widget {
 
                     if(!empty($instance['image'])) {
                         echo "<div class='widget_img'>";
-                        echo "<img src='".$instance['image']."' />";
+                        echo "<img src='".$instance['image']."' alt='".get_post_meta($instance['imageID'], '_wp_attachment_image_alt', true)."' />";
                         echo "</div>";
                     }
 
