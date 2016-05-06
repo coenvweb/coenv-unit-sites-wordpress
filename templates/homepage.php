@@ -102,25 +102,8 @@ echo '</div>';
     <div class="widget-area home-columns">
         <?php dynamic_sidebar( 'home-columns' ); ?>
     </div>
-    <hr />
 </div>
 <?php endif; ?>
-    
-    
-<div class="row events">
-    <div class="list columns large-12">
-        <a href="/news-stories/events" id="More Events"><h2>Hosted Climate Events</h2></a>
-        
-        <p>[content blocks]</p>
-
-    </div>      
-</div>
-<div class="row events">
-    <div class="list columns large-12">
-        <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
-    </div>      
-</div>
     
 <div class="row news">
 
@@ -207,6 +190,26 @@ $wp_query = new WP_Query( $home_args );
     </div>
 </div>  
 </div>
+</div>
+
+<?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
+<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
+<hr />
+    <div class="list columns large-12">
+        <h2>Hosted Events</h2>
+        <div class="widget-area home-columns">
+            <?php dynamic_sidebar( 'hosted-events' ); ?>
+        </div>
+    </div>
+    <hr />
+</div>
+<?php endif; ?>
+    
+<div class="row events">
+    <div class="list columns large-12">
+        <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+    </div>      
 </div>
 
 <a href="#" class="back-to-top">Back to Top</a>

@@ -9,6 +9,7 @@ function coenv_base_sidebar_widgets() {
   $before_widget  = '<div class="small-12 columns"><article id="%1$s" class="row widget %2$s">';
   $before_widget_two_columns  = '<div class="small-6 columns"><article id="%1$s" class="row widget %2$s">';
   $before_widget_three_columns  = '<div class="small-4 columns"><article id="%1$s" class="row widget %2$s">';
+  $before_widget_four_columns  = '<div class="small-3 columns"><article id="%1$s" class="row widget %2$s">';
   $before_title   = '<h4>';
   $after_title  = '</h4>';
   $after_widget = '</article></div> <!-- end #%1$s -->';
@@ -82,6 +83,15 @@ function coenv_base_sidebar_widgets() {
       'name' => __('Home / After Main Content 3-Columns', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
       'before_widget' => $before_widget_three_columns,
+      'after_widget' => $after_widget,
+      'before_title' => $before_title,
+      'after_title' => $after_title     
+  ));
+  register_sidebar(array(
+      'id' => 'hosted-events',
+      'name' => __('Home / Hosted events', 'foundationpress'),
+      'description' => __('Drag widgets to this container', 'foundationpress'),
+      'before_widget' => $before_widget_four_columns,
       'after_widget' => $after_widget,
       'before_title' => $before_title,
       'after_title' => $after_title     
