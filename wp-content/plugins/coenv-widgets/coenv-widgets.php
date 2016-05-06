@@ -8,7 +8,7 @@
 * Author URI: http://www.github.com/cbessee
 * License: GPL2
 
-Copyright 2012 Cole Bessee
+Copyright 2016 Cole Bessee - UW College of the Environment
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License,
@@ -25,7 +25,7 @@ class coenv_base_content extends WP_Widget {
     function __construct() {
         parent::__construct(
             'coenv_base_content', // Base ID
-            __('Static Content (COENV)', 'text_domain'), // Name
+            __('Content Widget', 'text_domain'), // Name
             array( 
                 'description' => __( 'Updateable, static content widets. Including title, content, image and link.', 'text_domain' ),
                 'classname' => 'coenv_static_widget',
@@ -96,7 +96,7 @@ class coenv_base_content extends WP_Widget {
                         }
 
                         if(!empty($instance['content'])) {
-                            echo "<p>".$instance['content']."</p>";
+                            echo apply_filters('the_content', $instance['content']);
                         }
 
                         if(!empty($instance['link']) && !empty($instance['linktext'])) {
@@ -129,7 +129,7 @@ class coenv_base_content extends WP_Widget {
                 echo '</div>';
             }
         }
-        $widget_error=null;
+        unset($widget_error);
 
         $title='';
         if(isset($instance['title'])) {
@@ -171,7 +171,7 @@ class coenv_base_content extends WP_Widget {
         </p>
         <p>
             <label for="<?php echo $this->get_field_name( 'link' ); ?>"><?php _e( 'Link URL:' ); ?></label>
-            <input class="widefat" id="<?php echo $this->get_field_id( 'link' ); ?>" name="<?php echo $this->get_field_name( 'link' ); ?>" type="text" value="<?php echo esc_attr( $link ); ?>" />
+            <input class="widefat" placeholder="http(s)://" id="<?php echo $this->get_field_id( 'link' ); ?>" name="<?php echo $this->get_field_name( 'link' ); ?>" type="text" value="<?php echo esc_attr( $link ); ?>" />
         </p>
         <p>
             <label for="<?php echo $this->get_field_name( 'linktext' ); ?>"><?php _e( 'Link Text:' ); ?></label>
@@ -201,7 +201,7 @@ class coenv_base_content extends WP_Widget {
   */
     public function update( $new_instance, $old_instance ) {
         global $widget_error;
-
+        $widget_error = '';
 
         $instance = array();
         if(!empty($new_instance['title'])) {
@@ -216,8 +216,11 @@ class coenv_base_content extends WP_Widget {
         if(!filter_var($new_instance['link'], FILTER_VALIDATE_URL) === false) {
             $instance['link'] = $new_instance['link'];
         } else {
-            $widget_error = new WP_Error;
-            $widget_error->add('invalid_link', 'Link must be a valid url');
+            $instance['link'] = "http://" + $new_instance['link'];
+            if(filter_var($instance['link'], FILTER_VALIDATE_URL) === false) {
+                $widget_error = new WP_Error;
+                $widget_error->add('invalid_link', 'Link must be a valid url');
+            }
         }
 
         $instance['linktext'] = $new_instance['linktext'];
