@@ -197,7 +197,9 @@ $wp_query = new WP_Query( $home_args );
 <div class="row events">
     <div class="list columns large-12">
         <a href="/news-stories/events" id="More Events"><h2>Hosted Climate Events</h2></a>
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc_hce.rss&posts_per_page=4'); ?>
+        
+        <p>[content blocks]</p>
+
     </div>      
 </div>
 <div class="row events">

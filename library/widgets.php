@@ -367,7 +367,8 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li data-equalizer-watch>
-                <?  $date = substr($event['date'], 0, -6);
+                <?php
+                $date = substr($event['date'], 0, -6);
                 $date = strtotime($date);
                 $date = date('l, M j, Y ', $date); ?>
                 <a href="<?php echo $event['url'] ?>">
@@ -387,7 +388,9 @@ class CoEnv_Widget_Events extends WP_Widget {
         <li><p class="title">No upcoming events.</p>
             <p class="small">Additional events can be found on the <a href="http://environment.washington.edu/alumni-and-community/calendar-events/" title="College of the Environment Calendar">College of the Environment Events Calendar</a>.</p></li>
 
-      <?php endif ?>
+      <?php endif;
+          unset ($events);
+          ?>
         
       </ul>
 

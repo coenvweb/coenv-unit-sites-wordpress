@@ -123,9 +123,11 @@ function coenv_base_get_ancestor($attr = 'ID') {
 			// if a page exists with the same slug, assume that's the parent page
 			$parent = get_page_by_path( $slug );
 		}
-
+        
 		// get ancestors of $parent
-		$ancestors = get_post_ancestors( $parent->ID );
+        if (isset($parent->ID)) {
+		  $ancestors = get_post_ancestors( $parent->ID );
+        }
 
 		// if ancestors is empty, just return $parent;
 		if ( empty( $ancestors ) ) {
