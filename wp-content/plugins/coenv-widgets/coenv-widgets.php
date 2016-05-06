@@ -73,7 +73,7 @@ class coenv_base_content extends WP_Widget {
 
         echo "<div class='solid-widget'>";
             echo "<div class='small-12 columns'>";
-                echo "<article class='row widget widget_custom_post_widget'>";
+                echo "<article class='widget widget_custom_post_widget'>";
         
                     if(!empty($instance['link'])) {
                         $target = $this->getLinkTarget($instance['link'], home_url());
