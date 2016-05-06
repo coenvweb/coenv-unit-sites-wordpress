@@ -93,7 +93,35 @@ echo '</div>';
 	</div><!-- .widget-area -->
 </div>
 <?php endif; ?>
+        &nbsp;
+        <hr />
 </div>
+    
+<?php if ( is_active_sidebar( 'home-columns' ) ) : ?>
+<div class="row programs" data-equalizer data-equalizer-mq="large-up">
+    <div class="widget-area home-columns">
+        <?php dynamic_sidebar( 'home-columns' ); ?>
+    </div>
+    <hr />
+</div>
+<?php endif; ?>
+    
+    
+<div class="row events">
+    <div class="list columns large-12">
+        <a href="/news-stories/events" id="More Events"><h2>Hosted Climate Events</h2></a>
+        
+        <p>[content blocks]</p>
+
+    </div>      
+</div>
+<div class="row events">
+    <div class="list columns large-12">
+        <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+    </div>      
+</div>
+    
 <div class="row news">
 
 <?php
@@ -173,41 +201,14 @@ $wp_query = new WP_Query( $home_args );
 	?>
     </div>
 <?php endif; ?>
-<div class="large-4 columns">
-<a class="twitter-timeline" href="https://twitter.com/UWPCC" data-widget-id="662389678868336640">Tweets by @UWPCC</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-</div>
+    <div class="large-4 columns">
+        <a class="twitter-timeline" href="https://twitter.com/UWPCC" data-widget-id="662389678868336640">Tweets by @UWPCC</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
 </div>  
-        <!--&tweets_cnt=3&tweet_theme=light&tweet_border=false&store_time=4&replies_excl=true&disp_scr_name=false&dataLang=en&timeRef=false&timeAgo=true&twitterIntents=false&twitterIntentsText=false&intentColor=#999&showAvatar=false&border_rad=false&slide_style=list-->
 </div>
 </div>
-    
-<div class="row programs" data-equalizer data-equalizer-mq="large-up">
-    <div class="columns large-4 minor" data-equalizer-watch>
-        <?php the_widget('custom_post_widget', 'custom_post_id=3068&show_featured_image=true&show_custom_post_title=true'); ?>
-    </div>
-    <div class="columns large-4 certificate" data-equalizer-watch>
-        <?php the_widget('custom_post_widget', 'custom_post_id=3070&show_featured_image=true&show_custom_post_title=true'); ?>
-    </div>
-    <div class="columns large-4 courses" data-equalizer-watch>
-        <?php the_widget('custom_post_widget', 'custom_post_id=3072&show_featured_image=true&show_custom_post_title=true'); ?>
-    </div>
-</div>
-    
-<div class="row events">
-    <div class="list columns large-12">
-        <a href="/news-stories/events" id="More Events"><h2>Hosted Climate Events</h2></a>
-        
-        <p>[content blocks]</p>
 
-    </div>      
-</div>
-<div class="row events">
-    <div class="list columns large-12">
-        <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
-    </div>      
-</div>
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
