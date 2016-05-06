@@ -8,10 +8,14 @@ Template Name: Courses Page
  */
 
 // Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if (isset($_GET['tax'])) {
+    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+}
+if (isset($_GET['term'])) {
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+}
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $current_quarters = get_field('quarter_to_display');
 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
@@ -30,34 +34,43 @@ if (empty($coenv_cat_1)) {
 	<div class="small-12 medium-8 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-            <?php if(isset($qtr_term_1->name)) { echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . $qtr_term_1->name . '</h4>'; } elseif(isset($qtr_term_1->name)) {echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . '</h4>';}?>
-            <?php the_content(); ?>
             
 		<div class="row filters">
 			<div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
 				<?php
-
+                
 $cats_args  = array(
-	'orderby' => 'none',
-	'order' => 'ASC',
+	'orderby' => 'id',
+	'order' => 'DESC',
 	'taxonomy' => 'course_quarter',
-    'hide_empty' => 0
+    'hide_empty' => 0,
+    'number' => 0,
+    'offset' => 0
 );
-$cats = get_categories($cats_args);
+$cats = get_terms($cats_args);
 	if ($cats) {
-        $i = 4;
         echo '<div>';
-		foreach($cats as $cat) { 
-            $year = substr( $cat->slug , -4);
-            if($i % 4 == 0) {echo '</div><div><p> Academic Year: ' . $year . ' - ' . ($year + 1) . '</p>';}
-			$selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
-			echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
-            $i++;
-            
+        $old_cats = [];
+        $i = -1;
+		foreach(array_reverse($cats) as $cat) { 
+            $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
+            if ($current_quarters[0] == $cat->term_id) {
+                $old_cat_selected = $old_cats[$i]->slug == $coenv_cat_term_1 ? ' active' : '';
+                echo '<a class="button' . $old_cat_selected . '" href="?tax=course_quarter&term=' . $old_cats[$i]->slug . '">' . $old_cats[$i]->name . '</a>';
+                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                $new_cats = true;
+            } elseif (isset($new_cats)){
+                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+            } else {
+                $old_cats[]= $cat;
+                $i++;
+            }
 		}
+        echo '</div>';
+        $GLOBALS['old_cats'] = $old_cats;
 	} 
+
                 // Category filter ?>
-			</div>
 		</div>
             </div>
 		<hr>
@@ -112,7 +125,7 @@ $cats = get_categories($cats_args);
             while ( have_rows('instructor(s)') ) : the_row();
             // display a sub field value
             if (get_sub_field('instructor_link')) {
-                    $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
+                    $instructors[] = '<a href="' . get_sub_field('instructor_link') . '">' . get_sub_field('instructor_name') . '</a> ';
                 } else {
                     $instructors[] = get_sub_field('instructor_name');
                 }

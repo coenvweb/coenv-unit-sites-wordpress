@@ -10,7 +10,7 @@
         while ( have_rows('instructor(s)') ) : the_row();
         // display a sub field value
         if (get_sub_field('instructor_link')) {
-                $instructors[] = '<a href="' . get_sub_field('instructor_link') . '>' . get_sub_field('instructor_name') . '</a> ';
+                $instructors[] = '<a href="' . get_sub_field('instructor_link') . '">' . get_sub_field('instructor_name') . '</a> ';
             } else {
                 $instructors[] = get_sub_field('instructor_name');
             }

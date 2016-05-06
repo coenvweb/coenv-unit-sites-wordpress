@@ -767,6 +767,102 @@ function register_coenv_widget_social() {
 
 add_action( 'widgets_init', 'register_coenv_widget_social' );
 
+
+/**
+ * Course Archive Widget
+ */
+
+class coenv_course_archive extends WP_Widget {
+ 
+  function __construct() {
+    $args = array(
+      'classname' => 'widget-course-archive',
+      'description' => __( 'Display archived course quarters', 'coenv' )
+    );
+ 
+    parent::__construct(
+      'course-archive', // base ID
+      'Course Archive Links', // name
+      $args
+    );
+  }
+ 
+  public function form( $instance ) {
+ 
+    if ( isset( $instance['title'] ) ) {
+      $title = $instance['title'];
+    } else {
+      $title = __( 'Course Archive', 'coenv' );
+    }
+ 
+    ?>
+      <p>
+        <label for="<?php echo $this->get_field_name( 'title' ) ?>"><?php _e( 'Title:' ) ?></label>
+        <input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ) ?>" name="<?php echo $this->get_field_name( 'title' ) ?>" value="<?php echo esc_attr( $title ) ?>" />
+      </p>
+    <?php
+  }
+ 
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = strip_tags( $new_instance['title'] );
+     
+    return $instance;
+  }
+ 
+  public function widget( $args, $instance ) {
+    extract( $args );
+    $title = apply_filters( 'widget_title', $instance['title'] );
+ 
+    echo $before_widget;
+    
+        if (!is_front_page()) {
+            echo $before_title . '<span>' . $title . '</span>' . $after_title;
+        }
+        if (isset($_GET['term'])) {
+            $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+            $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+        } else {
+            $coenv_cat_term_1 = null;
+        }
+        $old_cats = $GLOBALS['old_cats'];
+        $old_cats_ids = array();
+        foreach ($old_cats as $old_cat) {
+            $old_cats_ids[] = $old_cat->term_id;
+        }
+        $old_cats_ids = array_reverse($old_cats_ids);
+        $old_cats_ids = array_splice($old_cats_ids, 1);
+        $old_cats_ids = (implode(',',$old_cats_ids));
+
+        $cats_args  = array(
+            'orderby' => 'id',
+            'order' => 'DESC',
+            'taxonomy' => 'course_quarter',
+            'hide_empty' => 0,
+            'include' => $old_cats_ids,
+        );
+        $cats = get_terms($cats_args);
+            if ($cats) {
+                echo '<div>';
+                foreach($cats as $cat) { 
+                    $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
+                    echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                }
+                echo '</div>';
+            } 
+        ?>
+ 
+    <?php
+    echo $after_widget;
+  }
+}
+
+function register_coenv_course_archive() {
+    register_widget( 'coenv_course_archive' );
+}
+
+add_action( 'widgets_init', 'register_coenv_course_archive' );
+
 // unregister all default WP Widgets
 function unregister_default_wp_widgets() {
     unregister_widget('WP_Widget_Pages');
