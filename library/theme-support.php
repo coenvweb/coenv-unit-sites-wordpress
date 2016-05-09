@@ -156,15 +156,17 @@ function coenv_get_ancestor($attr = 'ID') {
         }
 
         // get ancestors of $parent
-        $ancestors = get_post_ancestors( $parent->ID );
+        if (isset($parent)) {
+            $ancestors = get_post_ancestors( $parent->ID );
 
-        // if ancestors is empty, just return $parent;
-        if ( empty( $ancestors ) ) {
-            return $parent->$attr;
+            // if ancestors is empty, just return $parent;
+            if ( empty( $ancestors ) ) {
+                return $parent->$attr;
+            }
+
+            $ancestor = get_post( array_pop( $ancestors ) );
+            return $ancestor->$attr;
         }
-
-        $ancestor = get_post( array_pop( $ancestors ) );
-        return $ancestor->$attr;
     }
 }
 
