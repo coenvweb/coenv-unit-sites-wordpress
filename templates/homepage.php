@@ -5,7 +5,7 @@ Template Name: Homepage
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 large-12 columns" role="main" id="mail-col">
+	<div class="small-12 large-12 columns" role="main" id="main-col">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>

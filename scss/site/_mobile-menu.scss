@@ -17,14 +17,13 @@
                 font-size: rem-calc(20)!important;
             }
         }
-        #s {
+        input {
             color: $white;
             background-color: transparent;
             height: rem-calc(43);
             width: 75%;
             @include placeholder {
-                color: $white;
-                @include encode_cb;
+                color: $white!important;
                 font-size: rem-calc(12);
                 padding: 0 0 0 rem-calc(3);
                 margin: 0;

@@ -224,6 +224,8 @@ function coenv_base_section_title($id) {
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     endif;
-        
-        echo $section_title;
+    
+        if (!is_search() && !is_404()) {
+            echo $section_title;
+        }
     }

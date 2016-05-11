@@ -16,7 +16,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-8 columns" role="main" id="main-col">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
