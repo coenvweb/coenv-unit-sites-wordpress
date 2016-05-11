@@ -29,7 +29,7 @@ if (is_single( '12808' )) { ?>
 	<p>At the request of the Miles-Karpov family, if you, or others you know, wish to make a gift in tribute to Ed Miles, please consider donating to:</p>
 	<ul class="widget_links">
 	<li><a class="button" title="Ed Miles Memorial Scholarship Fund" href="https://www.washington.edu/giving/make-a-gift?source_typ=3&source=MARENV" target="_blank">Ed Miles Memorial Scholarship Fund</a></li>
-	<li><a class="button" title="Climate Impacts Group Innovation Fund" href="https://cig.uw.edu/about/donate/" target="_">Climate Impacts Group Innovation Fund</a></li>
+	<li><a class="button" title="Climate Impacts Group Innovation Fund" href="https://www.washington.edu/giving/make-a-gift/?source_typ=3&source=ENVCIG" target="_">Climate Impacts Group Innovation Fund</a></li>
 	</ul>
 </div>
 </article>
