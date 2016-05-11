@@ -93,7 +93,7 @@ Template Name: Homepage
 								<?php echo $terms_str; ?>
 							</div>
 							<h3><a href="<?php echo $post_link_url; ?>" <?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h3>
-		            		<span class="show-for-medium-up"><?php echo the_advanced_excerpt('length=100&length_type=words&no_custom=1&allowed_tags=p,a'); ?></span>
+		            		<span class="show-for-medium-up"><?php echo the_advanced_excerpt('length=40&length_type=words&finish=word&no_custom=1&allowed_tags=p,a'); ?></span>
 		            		<div class="news-link show-for-medium-up"><?php echo $post_link; ?></div>
 
 		            	</div>
