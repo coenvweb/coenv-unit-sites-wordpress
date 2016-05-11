@@ -36,6 +36,8 @@
 			if ( is_page() && $post->post_parent ) { 
 			?>
 				<h1 class="article__title"><?php the_title() ?></h1>
+			<?php } elseif (is_single()) { ?>
+				<h1 class="article__title"><?php the_title() ?></h1>
 			<?php } ?>
 			<section class="article__content">
 			<?php the_content(); ?>
