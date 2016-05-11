@@ -35,7 +35,7 @@ if (empty($coenv_cat_1)) {
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-8 columns" role="main" id="main-col">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <?php if(isset($qtr_term_1->name)) { echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . $qtr_term_1->name . '</h4>'; } elseif(isset($qtr_term_1->name)) {echo '<h4>Upcoming Quarter: ' . $qtr_term_0->name . '</h4>';}?>
