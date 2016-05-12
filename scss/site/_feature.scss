@@ -72,6 +72,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0b0713', e
             height: 40%;
         }
 
+        @extend .uw-skew;
         @media #{$medium-up} {
             position: absolute;
             font-size: rem-calc(36);
@@ -87,7 +88,6 @@ background: -o-linear-gradient(left,  rgba(10,5,21,0.9) 0%,rgba(34,29,53,0.79) 5
 background: -ms-linear-gradient(left,  rgba(10,5,21,0.9) 0%,rgba(34,29,53,0.79) 50%,rgba(51,36,89,0.68) 100%); /* IE10+ */
 background: linear-gradient(to right,  rgba(10,5,21,0.9) 0%,rgba(34,29,53,0.79) 50%,rgba(51,36,89,0.68) 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e60a0515', endColorstr='#ad332459',GradientType=1 ); /* IE6-9 */
-            @extend .uw-skew;
         }		
         @media #{$large-up} {
             width: 30%;

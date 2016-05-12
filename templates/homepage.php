@@ -48,7 +48,7 @@ echo '<div class="feature">';
 echo '</div>';
     echo '<div class="feature-info-container light"></div>';
 	echo '<div class="feature-info-container medium-6 small-12 columns">';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+		echo '<div class="feature-info">';
 			echo '<div class="feature-content">';
 				echo '<div class="hero-white"><h2>' . get_the_title() . '</h2></div>';
 				echo '<p>' . $feature_excerpt . '</p>';
@@ -110,11 +110,11 @@ $wp_query = new WP_Query( $home_args );
         if (!empty($terms)) {
             $termlist = '';
             foreach ($terms as &$term) {
-                $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                $termlist .= '<a href="?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
             }
             $termlist = rtrim($termlist,', ');
             if (strpos($termlist,'uncategorized') == false)  {
-            echo '  | ' . $termlist;
+            echo '| ' . $termlist;
             }
         }
         echo '</div>';

@@ -38,7 +38,7 @@
         endif;
     echo $advancedExcerpt ?>">
     
-  <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
+  <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
       
       <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
@@ -218,9 +218,9 @@
           <div class="units show-for-large-up">
             <ul>
               <li><a href="http://coenv.uw.edu" title="UW College of the Environment">
-  <?php include("assets/img/college-of-the-environment.svg"); ?>
+  <?php include("assets/img/college-of-the-environment.svg"); ?><span class="visuallyhidden">College of the Environment</span>
                   </a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
             </ul>
           </div>
         </div>

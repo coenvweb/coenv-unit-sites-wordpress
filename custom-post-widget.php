@@ -10,13 +10,21 @@ $link_type = get_field( "link_type", $content_post -> ID );
 $link_type_internal = get_field( "link_page", $content_post -> ID );
 $link_position = get_field( "link_position", $content_post -> ID );
 $widget_title = apply_filters( 'widget_title', $content_post->post_title);
+$src = 0;
+$size = 0;
+if (isset($attachment)){
 $widget_img_attr = array(
 	'src'	=> $src,
 	'class'	=> "attachment-$size",
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
-);
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'large');
+);}else {
+$widget_img_attr = array(
+	'src'	=> $src,
+	'class'	=> "attachment-$size",
+    );
+}
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
@@ -28,7 +36,7 @@ if($rows) {
             $link_title =  $row['link_to_a_page_on_this_site'][0]['link_title_internal'];
             $link_url = get_permalink($row['link_to_a_page_on_this_site'][0]['select_page'][0]);
             $link_target = 'self';	
-            $buttons .= '<li><a class="button white" title="' . $link_title . '" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
+            $buttons .= '<li><a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
             if ( $first ) {
                 $first_link_title = $link_title;
                 $first_link_url = $link_url;
@@ -39,7 +47,7 @@ if($rows) {
             $link_title = $row['link_to_an_external_site'][0]['link_title'];
             $link_url = $row['link_to_an_external_site'][0]['link_url'];
             $link_target ='blank';
-            $buttons .= '<li><a class="button white"  title="' . $link_title . '" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
+            $buttons .= '<li><a class="button white" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a></li>';
             if ( $first ) {
                 $first_link_title = $link_title;
                 $first_link_url = $link_url;
@@ -61,34 +69,20 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image && $first_link_url ) {
+if ( $show_featured_image ) {
 	echo '<div class="widget_img">';
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
 	echo '</div>';
-} else {
-    if ( $show_featured_image ) {
-        echo '<div class="widget_img">';
-        echo $widget_img;
-        echo '</div>';
-    }
-}
+	}
 echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
+if (isset($link_position[0])) {
     echo $buttons;
 }
-if ( $show_custom_post_title && $first_link_url ) {
+if ( $show_custom_post_title ) {
 	echo $before_title;
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
 	echo $after_title;
-} else {
-    if ( $show_custom_post_title ) {
-        echo $before_title;
-        echo $widget_title;
-        echo $after_title;
-    }
 }
-
-
 echo $widget_copy;
 echo '</div>';
 if ( $link_position == null ) {

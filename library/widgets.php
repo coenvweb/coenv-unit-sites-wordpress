@@ -299,12 +299,19 @@ class CoEnv_Widget_Events extends WP_Widget {
 
   public function widget( $args, $instance ) {
     extract( $args );
-
-    $title = apply_filters( 'widget_title', $instance['title'] );
-    $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
-    $events_url = apply_filters( 'events_url', $instance['events_url'] );
-    $posts_per_page = (int) $instance['posts_per_page'];
-
+    
+    if (isset($instance['title'])) {
+        $title = apply_filters( 'widget_title', $instance['title'] );
+    }
+    if (isset($instance['feed_url'])) {
+        $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
+    }
+    if (isset($instance['events_url'])) {
+        $events_url = apply_filters( 'events_url', $instance['events_url'] );
+    }
+    if (isset($instance['posts_per_page'])) {
+        $posts_per_page = (int) $instance['posts_per_page'];
+    }
     if ( !isset( $feed_url ) || empty( $feed_url ) ) {
       return;
     }
@@ -332,13 +339,13 @@ class CoEnv_Widget_Events extends WP_Widget {
 
     ?>
       <?php echo $before_widget; ?>
-            <?php if ( $events_url != '' ) : ?>
+            <?php if (isset($events_url)) : ?>
                                    
             <a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
             <?php endif ?>
         
         
-            <?php if ( $title ) {
+            <?php if (isset($title)) {
                 echo $before_title;
                 echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
                 echo $after_title;
