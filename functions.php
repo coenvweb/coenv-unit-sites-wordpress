@@ -223,7 +223,8 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-		echo '<select name="select-category" class="select-category">';
+        echo '<label for="select-category">Select a category</label>';
+		echo '<select name="select-category" class="select-category" id="select-category">';
 		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
 		foreach($cats as $cat) { 
             if ($cat->slug == $tax_value) {
@@ -245,7 +246,8 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	$counter = 0;
 	$ref_month = '';
 	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
-	echo '<select name="select-category" class="select-category">';
+    echo '<label for="select-month" class="visuallyhidden">Select a month</label>';
+	echo '<select name="select-category" class="select-category" id="select-month>';
 	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
 	if( $monthly->have_posts() ) :
 		while( $monthly->have_posts() ) : $monthly->the_post();

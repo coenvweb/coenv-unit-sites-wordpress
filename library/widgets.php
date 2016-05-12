@@ -346,9 +346,7 @@ class CoEnv_Widget_Events extends WP_Widget {
         
         
             <?php if (isset($title)) {
-                echo $before_title;
                 echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
-                echo $after_title;
                 };
             ?>
 
@@ -453,8 +451,12 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
-          $blog_cat = $blog_cat->slug;
+          if (isset($_GET['term'])){
+              $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
+              $blog_cat = $blog_cat->slug;
+          } else {
+              $blog_cat = null;
+          }
      
           echo $args['before_widget'];
           
@@ -586,8 +588,12 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-         $coenv_year = (string) $_GET['coenv-year'];
-         $coenv_month = (string) $_GET['coenv-month'];
+         if (isset($_GET['coenv-year'])) {
+             $coenv_year = (string) $_GET['coenv-year'];
+             $coenv_month = (string) $_GET['coenv-month'];
+         } else {
+             $coenv_year = $coenv_month = null;
+         }
      
           echo $args['before_widget'];
           

@@ -8,7 +8,8 @@ function coenv_base_hierarchical_submenu($postid) {
     $top_post = $post;
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
-        $top_post = get_post(end($post->ancestors));
+        $post_ancestors = $post->ancestors;
+        $top_post = get_post(end($post_ancestors));
     }
     // Always start traversing from the top of the tree
     return coenv_base_hierarchical_submenu_get_children($top_post, $post);

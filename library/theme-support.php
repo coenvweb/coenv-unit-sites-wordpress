@@ -217,7 +217,9 @@ function coenv_base_section_title($id) {
 
     $coenv_post = get_post($id);
     //print_r($coenv_post);
-    $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
+    $post_parents = get_post_ancestors($id);
+    $post_parents = array_pop($post_parents);
+    $coenv_post_section = get_post($post_parents);
 
     if (coenv_base_post_parent($id)):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
