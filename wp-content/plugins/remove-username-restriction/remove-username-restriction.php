@@ -12,7 +12,7 @@ function remove_username_char_limit($result) {
     foreach ( $messages as $message ) {
 
       // Check if any message is the char limit message
-      if ( 0 == strcasecmp("Username must be at least 4 characters", $message)) {
+      if ( 0 == strcasecmp("Username must be at least 4 characters.", $message)) {
         // Unset whole 'user_name' error array if only 1 message exists
         // and that message is the char limit error
         if ( 1 == count($messages) ) {
