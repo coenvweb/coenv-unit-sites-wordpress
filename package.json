@@ -1,7 +1,7 @@
 {
-  "name": "coenv-wordpress-theme",
+  "name": "coenv-base",
   "version": "0.1.0",
-  "author": "Darin Reid / elegant contraption",
+  "author": "College Web Team",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
