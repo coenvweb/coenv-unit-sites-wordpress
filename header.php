@@ -56,7 +56,7 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
     ?>
-      <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
+      <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
   </head>
   <body <?php body_class(); ?>>
   

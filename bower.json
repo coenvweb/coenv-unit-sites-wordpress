@@ -13,5 +13,13 @@
     "jquery": "latest",
 	"jquery.cookie": "latest",
 	"jquery-placeholder": "latest"
+  },
+  "overrides": {
+    "modernizr": {
+      "main": "modernizr.js"
+    },
+    "nivo-lightbox": {
+      "main": "nivo-lightbox.js"
+    }
   }
 }
