@@ -120,10 +120,14 @@ class coenv_base_fac_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-         $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
+         if (isset($_GET['fac-cat'])) {
+            $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
+             $got_fac_cat = $_GET['fac-cat'];
+         } else {
+            $got_fac_cat = null;
+         }
          if (empty($coenv_cat_term_1)) {
-          $fac_cat = get_term_by( 'slug', (string) $_GET['fac-cat'], 'research_areas' );
-          $fac_cat = $fac_cat->slug;
+          $fac_cat = get_term_by( 'slug', (string) $got_fac_cat, 'research_areas' );
      
           echo $args['before_widget'];
           
@@ -302,11 +306,25 @@ class CoEnv_Widget_Events extends WP_Widget {
 
   public function widget( $args, $instance ) {
     extract( $args );
-
-    $title = apply_filters( 'widget_title', $instance['title'] );
-    $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
-    $events_url = apply_filters( 'events_url', $instance['events_url'] );
-    $posts_per_page = (int) $instance['posts_per_page'];
+      
+    if (isset($instance['title'])) {
+        $title = apply_filters( 'widget_title', $instance['title'] );
+    } else {
+        $title = null;
+    }
+    if (isset($instance['feed_url'])) {
+        $feed_url = apply_filters( 'feed_url', $instance['feed_url'] );
+    }
+    if (isset($instance['events_url'])) {
+        $events_url = apply_filters( 'events_url', $instance['events_url'] );
+    } else {
+        $events_url = null;
+    }
+    if (isset($instance['posts_per_page'])) {
+        $posts_per_page = (int) $instance['posts_per_page'];
+    } else {
+        $posts_per_page = 3;
+    }
 
     if ( !isset( $feed_url ) || empty( $feed_url ) ) {
       return;
@@ -452,8 +470,12 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
-          $blog_cat = $blog_cat->slug;
+          if (isset($_GET['term'])){
+              $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
+              $blog_cat = $blog_cat->slug;
+          } else {
+              $blog_cat = null;
+          }
      
           echo $args['before_widget'];
           
@@ -585,8 +607,13 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-         $coenv_year = (string) $_GET['coenv-year'];
-         $coenv_month = (string) $_GET['coenv-month'];
+         if (isset($_GET['coenv-year'])){
+              $coenv_year = (string) $_GET['coenv-year'];
+              $coenv_month = (string) $_GET['coenv-month'];
+          } else {
+              $coenv_year = $coenv_month = null;
+          }
+         
      
           echo $args['before_widget'];
           

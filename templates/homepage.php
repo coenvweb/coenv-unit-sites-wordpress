@@ -57,7 +57,7 @@ if($rows)
 						}
 					}
 echo '<a href="' . $link_url . '">';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+                echo '<div class="feature-info">';
 			echo '<div class="feature-content">';
 				echo '<h2 class="feature-title"><span class="feature-white">' . get_the_title() . '</span></h2></a>';
                 echo '<a class="button" href="' . $link_url . '">' . $link_title . '</a>';
@@ -133,6 +133,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
+            $post_link_target = '';
             $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
         }
         echo '<div class="featured-thumbnail">';

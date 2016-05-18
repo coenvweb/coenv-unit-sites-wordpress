@@ -20,7 +20,7 @@ if (!is_front_page()) {
             echo coenv_base_hierarchical_submenu($ancestor_post);
         }
         if ((!is_singular('post')) && (!is_page_template( 'templates/news.php' )) && (!is_singular('faculty'))) {
-            echo coenv_base_section_title($ancestor_post);
+            echo coenv_base_section_title($id);
             echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
         }
 	echo '</div>';

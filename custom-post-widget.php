@@ -11,12 +11,20 @@ $link_type_internal = get_field( "link_page", $content_post -> ID );
 $link_position = get_field( "link_position", $content_post -> ID );
 $image_placement = get_field( "image_placement", $content_post -> ID );
 $widget_title = apply_filters( 'widget_title', $content_post->post_title);
+$src = 0;
+$size = 0;
+if (isset($attachment)){
 $widget_img_attr = array(
 	'src'	=> $src,
 	'class'	=> "attachment-$size",
 	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
 	'title'	=> trim( strip_tags( $attachment->post_title ) ),
-);
+);}else {
+$widget_img_attr = array(
+	'src'	=> $src,
+	'class'	=> "attachment-$size",
+    );
+}
 $widget_img = get_the_post_thumbnail( $content_post -> ID, 'full');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
@@ -59,10 +67,13 @@ if($rows) {
 if ( $widget_img ) {
     echo '<div class="solid-widget">';
     $image = '<div class="widget_img"><a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a></div>';
-    if ( $image_placement[0] == 'outside' ) {
+    if (isset($image_placement[0]) && ( $image_placement[0] == 'outside' )) {
         echo $image;
     }
     $class = 'image';
+} else {
+    $class = '';
+    $image = '';
 }
 
 echo $before_widget;
@@ -82,7 +93,7 @@ if ( $show_featured_image && ( $image_placement == null ) ) {
 echo '</div>';
 
 echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
+if ( $link_position == 'title' ) {
     echo $buttons;
 }
 echo $widget_copy;

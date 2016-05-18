@@ -131,7 +131,7 @@
         
         i {
             &:before {
-                @extend .fi-arrow-left:before;
+                @extend .fi-arrow-left:before !optional;
                 content: "\f10a";
                 position: relative;
                 right: rem-calc(30);

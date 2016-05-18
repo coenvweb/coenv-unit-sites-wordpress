@@ -10,15 +10,27 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
  */
 
 // Dates
-$coenv_year = urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = urlencode(htmlentities($_GET['coenv-month']));
-$coenv_date = date('F Y',mktime(0,0,0,(int)$coenv_month+1,0,(int)$coenv_year));
+if(isset($_GET['coenv-year'])){
+$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
+$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+
+// Month needs an offset because php and WordPress calculate dates differently.
+$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+} else {
+    $coenv_year = $coenv_month = $coenv_date = null;
+}
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if(isset($_GET['tax'])){
+    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+}
+if(isset($_GET['term'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
+}
 ?>
 
 <?php get_header(); ?>
@@ -80,6 +92,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
+            $post_link_target = '';
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
 		?>

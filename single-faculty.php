@@ -14,13 +14,13 @@
             $faculty_website_url = $faculty_fields["website_url"];
             $faculty_scival_url  = $faculty_fields["scival_url"];
             $faculty_twitter_url = $faculty_fields["twitter_url"];
-            $faculty_advising = $faculty_fields["faculty_advising"];
+            isset($faculty_fields["faculty_advising"]) ? $faculty_advising = $faculty_fields["faculty_advising"] : '';
             $faculty_fname = $faculty_fields["first_name"];
             $faculty_lname = $faculty_fields["last_name"];
             $faculty_name = $faculty_fname . ' ' . $faculty_lname;
             $faculty_cv = $faculty_fields["curriculum_vitae"];
             $faculty_pubs = $faculty_fields["selected_publications"];
-            $faculty_img = get_the_post_thumbnail($page->ID, 'med');
+            $faculty_img = get_the_post_thumbnail($page[0], 'med');
             ?>
                 <div class="faculty-info right">
                         <?php echo $faculty_img; ?>

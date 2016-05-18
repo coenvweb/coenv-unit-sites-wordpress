@@ -16,7 +16,7 @@
 				<?php
                 $terms = wp_get_post_terms( get_the_ID(), 'category');
                 foreach ($terms as $term) {
-                    $termlist = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                    $termlist = '<a href="./news-stories/?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
                 }
                 $termlist = rtrim($termlist,', ');
                 if (strpos($termlist,'uncategorized') == false)  {

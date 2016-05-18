@@ -21,6 +21,17 @@
     } else {
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
+      <meta name="description" content="<?php
+    wp_reset_query();   
+    if (have_posts()) : while(have_posts()) the_post();
+        if (!is_front_page() ) {
+            $advancedExcerpt = strip_tags(get_the_excerpt());
+        } else {
+            $advancedExcerpt = 'Explore the diversity of marine life in the field, lab, and classroom.
+Focus your college education with our innovative academic programs.';
+        }
+        endif;
+    echo $advancedExcerpt ?>">
     
   <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
 
@@ -68,7 +79,6 @@
         $banner_class .= ' template-print';
         $post = get_queried_object();
             $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
-        $post_description = $advancedExcerpt;
         $post_link = get_permalink();
       if ( has_post_thumbnail( $post->ID ) ) {
         $thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );

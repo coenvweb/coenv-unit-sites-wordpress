@@ -8,10 +8,15 @@ Template Name: Faculty Index
  */
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['fac-cat']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+
+if(isset($_GET['fac-cat'])){
+    $coenv_cat_1 = urlencode(htmlentities($_GET['fac-cat']));
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
+    $coenv_cat_term_1_arr = $fac_cat = get_term_by('slug',$coenv_cat_term_1,'research_areas');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = $fac_cat = null;
+}
 ?>
 
 <?php get_header(); ?>
@@ -40,7 +45,7 @@ $query_args = array(
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
 	'taxonomy' => 'research_areas',
-	'term' => $fac_cat->slug,
+	'term' => isset($fac_cat->slug) ? $fac_cat->slug : '',
 	'meta_key' => 'last_name',
 	'orderby' => 'meta_value',
 	'order' => 'ASC',
