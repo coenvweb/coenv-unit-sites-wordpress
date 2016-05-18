@@ -245,8 +245,9 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	$counter = 0;
 	$ref_month = '';
 	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
-	echo '<select name="select-category" class="select-category">';
-	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
+    echo '<label for="select-month" class="visuallyhidden">Month Filter</label>';
+	echo '<select name="select-category" class="select-category" id="select-month">';
+	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Months</option>';
 	if( $monthly->have_posts() ) :
 		while( $monthly->have_posts() ) : $monthly->the_post();
 		    if( get_the_date('mY') != $ref_month ) {
