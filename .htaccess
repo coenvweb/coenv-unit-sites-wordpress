@@ -2,6 +2,11 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# BEGIN Shibboleth
+AuthType shibboleth
+Require shibboleth
+# END Shibboleth
+
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
 
@@ -27,7 +32,7 @@ RewriteRule ^(.*)$ http://envstudies.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} marinebiology.washington.edu [NC]
 RewriteRule ^(.*)$ http://marinebiology.uw.edu/$1 [R=301,NC,L]
-    
+
 RewriteCond %{HTTP_HOST} m9.uw.edu [NC]
 RewriteRule ^(.*)$ http://hazards.uw.edu/geology/m9 [R=301,NC,L]
 
@@ -69,8 +74,107 @@ RewriteCond %{HTTP_HOST} ^hazards.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://hazards.uw.edu/$1 [R,L]
 
+# SAFS Redirects
+RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
+RewriteRule .? - [S=84]
+RewriteRule ^info/about_us.html about/ [R=301,L]
+RewriteRule ^graduates/?$ students/about-graduate-program/ [R=301,L]
+RewriteRule ^info/contact.html about/contact-2/ [R=301,L]
+RewriteRule ^classes/?$ students/courses_student/ [R=301,L]
+RewriteRule ^graduates/admissions.html students/about-graduate-program/ [R=301,L]
+RewriteRule ^students/about-graduate-program/admissions.html students/about-graduate-program/ [R=301,L]
+RewriteRule ^info/find_us.html about/visitor-info/ [R=301,L]
+RewriteRule ^resources/people.html faculty-research/ [R=301,L]
+RewriteRule ^programs.html students/ [R=301,L]
+RewriteRule ^news.html news-events/ [R=301,L]
+RewriteRule ^resources/faculty.php faculty-research/ [R=301,L]
+RewriteRule ^resources/forms.html intranet/quicklinks/ [R=301,L]
+RewriteRule ^computing/index.html intranet/quicklinks/ [R=301,L]
+RewriteRule ^undergraduates/index.php students/about-undergraduate-program/ [R=301,L]
+RewriteRule ^graduates/index.html students/about-graduate-program/ [R=301,L]
+RewriteRule ^undergraduates/program/course.php students/courses_student/ [R=301,L]
+RewriteRule ^research/?$ faculty-research/research/ [R=301,L]
+RewriteRule ^research/publications/?$ faculty-research/research/ [R=301,L]
+RewriteRule ^teaching.html faculty-research/research/ [R=301,L]
+RewriteRule ^endowments/?$ alumni-community/endowments/ [R=301,L]
+RewriteRule ^alumni/giving.html alumni-community/giving/ [R=301,L]
+RewriteRule ^alumni/index.html alumni-community/ [R=301,L]
+RewriteRule ^faculty-research/research/alaska/?$ faculty-research/research/ [R=301,L]
+RewriteRule ^canderson/?$ faculty/chris-anderson/ [R=301,L]
+RewriteRule ^anderson/?$ faculty/james-anderson/ [R=301,L]
+RewriteRule ^beauchamp/?$ faculty/dave-beauchamp/ [R=301,L]
+RewriteRule ^branch/?$ faculty/trevor-branch/ [R=301,L]
+RewriteRule ^essington/?$ faculty/tim-essington/ [R=301,L]
+RewriteRule ^friedman/?$ faculty/carolyn-friedman/ [R=301,L]
+RewriteRule ^gallucci/?$ faculty/vincent-gallucci/ [R=301,L]
+RewriteRule ^grue/?$ faculty/christian-grue/ [R=301,L]
+RewriteRule ^hauser/?$ faculty/lorenz-hauser/ [R=301,L]
+RewriteRule ^hilborn/?$ faculty/ray-hilborn/ [R=301,L]
+RewriteRule ^gholt/?$ faculty/gordon-holtgrieve/ [R=301,L]
+RewriteRule ^hornefac/?$ faculty/john-horne/ [R=301,L]
+RewriteRule ^hunt/?$ faculty/george-hunt-jr/ [R=301,L]
+RewriteRule ^klaidre/?$ kristin-ladre/ [R=301,L]
+RewriteRule ^naish/?$ faculty/kerry-naish/ [R=301,L]
+RewriteRule ^olden/?$ faculty/julian-olden/ [R=301,L]
+RewriteRule ^parrish/?$ faculty/julia-parish/ [R=301,L]
+RewriteRule ^pietsch/?$ faculty/theodore-w-pietsch/ [R=301,L]
+RewriteRule ^punt/?$ faculty/andre-punt/ [R=301,L]
+RewriteRule ^tquinn/?$ faculty/thomas-quinn/ [R=301,L]
+RewriteRule ^Roberts/?$ faculty/steven-roberts/ [R=301,L]
+RewriteRule ^schindler/?$ faculty/daniel-schindler/ [R=301,L]
+RewriteRule ^sebens/?$ faculty/kenneth-sebens/ [R=301,L]
+RewriteRule ^jimseeb/?$ faculty/james-seeb/ [R=301,L]
+RewriteRule ^lisaseeb/?$ faculty/lisa-seeb/ [R=301,L]
+RewriteRule ^simenstad/?$ faculty/charles-simenstad/ [R=301,L]
+RewriteRule ^skalski/?$ faculty/john-skalski/ [R=301,L]
+RewriteRule ^summers/?$ faculty/adam-summers/ [R=301,L]
+RewriteRule ^vanblaricom/?$ faculty/glenn-vanblaricom/ [R=301,L]
+RewriteRule ^young/?$ faculty/graham-young/ [R=301,L]
+RewriteRule ^people/canderson/?$ faculty/chris-anderson/ [R=301,L]
+RewriteRule ^people/anderson/?$ faculty/james-anderson/ [R=301,L]
+RewriteRule ^people/beauchamp/?$ faculty/dave-beauchamp/ [R=301,L]
+RewriteRule ^people/branch/?$ faculty/trevor-branch/ [R=301,L]
+RewriteRule ^people/essington/?$ faculty/tim-essington/ [R=301,L]
+RewriteRule ^people/friedman/?$ faculty/carolyn-friedman/ [R=301,L]
+RewriteRule ^people/gallucci/?$ faculty/vincent-gallucci/ [R=301,L]
+RewriteRule ^people/grue/?$ faculty/christian-grue/ [R=301,L]
+RewriteRule ^people/hauser/?$ faculty/lorenz-hauser/ [R=301,L]
+RewriteRule ^people/hilborn/?$ faculty/ray-hilborn/ [R=301,L]
+RewriteRule ^people/gholt/?$ faculty/gordon-holtgrieve/ [R=301,L]
+RewriteRule ^people/hornefac/?$ faculty/john-horne/ [R=301,L]
+RewriteRule ^people/hunt/?$ faculty/george-hunt-jr/ [R=301,L]
+RewriteRule ^people/klaidre/?$ kristin-ladre/ [R=301,L]
+RewriteRule ^people/naish/?$ faculty/kerry-naish/ [R=301,L]
+RewriteRule ^people/olden/?$ faculty/julian-olden/ [R=301,L]
+RewriteRule ^people/parrish/?$ faculty/julia-parish/ [R=301,L]
+RewriteRule ^people/pietsch/?$ faculty/theodore-w-pietsch/ [R=301,L]
+RewriteRule ^people/punt/?$ faculty/andre-punt/ [R=301,L]
+RewriteRule ^people/tquinn/?$ faculty/thomas-quinn/ [R=301,L]
+RewriteRule ^people/Roberts/?$ faculty/steven-roberts/ [R=301,L]
+RewriteRule ^people/schindler/?$ faculty/daniel-schindler/ [R=301,L]
+RewriteRule ^people/sebens/?$ faculty/kenneth-sebens/ [R=301,L]
+RewriteRule ^people/jimseeb/?$ faculty/james-seeb/ [R=301,L]
+RewriteRule ^people/lisaseeb/?$ faculty/lisa-seeb/ [R=301,L]
+RewriteRule ^people/simenstad/?$ faculty/charles-simenstad/ [R=301,L]
+RewriteRule ^people/skalski/?$ faculty/john-skalski/ [R=301,L]
+RewriteRule ^people/summers/?$ faculty/adam-summers/ [R=301,L]
+RewriteRule ^people/vanblaricom/?$ faculty/glenn-vanblaricom/ [R=301,L]
+RewriteRule ^people/young/?$ faculty/graham-young/ [R=301,L]
+RewriteRule ^resources/faculty.php faculty-research/ [R=301,L]
 
+# CIG Redirects
+RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^pnwc/?$ learn/ [R=301,L]
 
+RewriteCond %{HTTP_HOST} !^beta.smea.uw\.edu [NC]
+RewriteRule .? - [S=2]
+# weird caching of old bug at launch
+# delete this soon
+RewriteRule ^about/news" about/news/ [R=301,L]
+RewriteRule ^currents/?$ about/student-blog/ [R=301,L]
+
+# WP rewrites
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
 
@@ -84,7 +188,9 @@ RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
 RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
 RewriteRule . index.php [L]
 
-
+# Allow shib requests through
+RewriteCond %{REQUEST_URI} ^/Shibboleth.sso($|/)
+RewriteRule . - [L]
 
 </IfModule>
 
@@ -143,107 +249,4 @@ BrowserMatch ^Mozilla/4 gzip-only-text/html
 BrowserMatch ^Mozilla/4\.0[678] no-gzip
 BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
-## gzip compression ##
-
-
-# weird caching of old bug at launch
-# delete this soon
-REDIRECT 301 /about/news" http://smea.uw.edu/about/news/
-Redirect 301 /resources/faculty.php /faculty-research/
-REDIRECT 301 /currents https://smea.uw.edu/about/student-blog/
-
-	
-# SAFS Redirects
-REDIRECT 301 /info/about_us.html /about/
-REDIRECT 301 /graduates/ /students/about-graduate-program/
-REDIRECT 301 /info/contact.html /about/contact-2/
-REDIRECT 301 /classes/ /students/courses_student/
-REDIRECT 301 /graduates/admissions.html /students/about-graduate-program/
-REDIRECT 301 /students/about-graduate-program/admissions.html /students/about-graduate-program/
-
-REDIRECT 301 /info/find_us.html /about/visitor-info/
-REDIRECT 301 /resources/people.html /faculty-research/
-REDIRECT 301 /programs.html /students/
-REDIRECT 301 /news.html /news-events/
-REDIRECT 301 /resources/faculty.php /faculty-research/
-REDIRECT 301 /resources/forms.html /intranet/quicklinks/
-REDIRECT 301 /computing/index.html /intranet/quicklinks/
-REDIRECT 301 /undergraduates/index.php /students/about-undergraduate-program/
-REDIRECT 301 /graduates/index.html /students/about-graduate-program/
-REDIRECT 301 /undergraduates/program/course.php /students/courses_student/
-REDIRECT 301 /research/ /faculty-research/research/
-REDIRECT 301 /research/publications/ /faculty-research/research/
-REDIRECT 301 /teaching.html /faculty-research/research/
-REDIRECT 301 /endowments/ /alumni-community/endowments/
-REDIRECT 301 /alumni/giving.html /alumni-community/giving/
-REDIRECT 301 /alumni/index.html /alumni-community/
-REDIRECT 301 /faculty-research/research/alaska/ /faculty-research/research/
-
-REDIRECT 301 /canderson/ /faculty/chris-anderson/
-REDIRECT 301 /anderson/ /faculty/james-anderson/
-REDIRECT 301 /beauchamp/ /faculty/dave-beauchamp/
-REDIRECT 301 /branch/ /faculty/trevor-branch/
-REDIRECT 301 /essington/ /faculty/tim-essington/
-REDIRECT 301 /friedman/ /faculty/carolyn-friedman/
-REDIRECT 301 /gallucci/ /faculty/vincent-gallucci/
-REDIRECT 301 /grue/ /faculty/christian-grue/
-REDIRECT 301 /hauser/ /faculty/lorenz-hauser/
-REDIRECT 301 /hilborn/ /faculty/ray-hilborn/
-REDIRECT 301 /gholt/ /faculty/gordon-holtgrieve/
-REDIRECT 301 /hornefac/ /faculty/john-horne/
-REDIRECT 301 /hunt/ /faculty/george-hunt-jr/
-REDIRECT 301 /klaidre/ /kristin-ladre/
-REDIRECT 301 /naish/ /faculty/kerry-naish/
-REDIRECT 301 /olden/ /faculty/julian-olden/
-REDIRECT 301 /parrish/ /faculty/julia-parish/
-REDIRECT 301 /pietsch/ /faculty/theodore-w-pietsch/
-REDIRECT 301 /punt/ /faculty/andre-punt/
-REDIRECT 301 /tquinn/ /faculty/thomas-quinn/
-REDIRECT 301 /Roberts/ /faculty/steven-roberts/
-REDIRECT 301 /schindler/ /faculty/daniel-schindler/
-REDIRECT 301 /sebens/ /faculty/kenneth-sebens/
-REDIRECT 301 /jimseeb/ /faculty/james-seeb/
-REDIRECT 301 /lisaseeb/ /faculty/lisa-seeb/
-REDIRECT 301 /simenstad/ /faculty/charles-simenstad/
-REDIRECT 301 /skalski/ /faculty/john-skalski/
-REDIRECT 301 /summers/ /faculty/adam-summers/
-REDIRECT 301 /vanblaricom/ /faculty/glenn-vanblaricom/
-REDIRECT 301 /young/ /faculty/graham-young/
-
-REDIRECT 301 /people/canderson/ /faculty/chris-anderson/
-REDIRECT 301 /people/anderson/ /faculty/james-anderson/
-REDIRECT 301 /people/beauchamp/ /faculty/dave-beauchamp/
-REDIRECT 301 /people/branch/ /faculty/trevor-branch/
-REDIRECT 301 /people/essington/ /faculty/tim-essington/
-REDIRECT 301 /people/friedman/ /faculty/carolyn-friedman/
-REDIRECT 301 /people/gallucci/ /faculty/vincent-gallucci/
-REDIRECT 301 /people/grue/ /faculty/christian-grue/
-REDIRECT 301 /people/hauser/ /faculty/lorenz-hauser/
-REDIRECT 301 /people/hilborn/ /faculty/ray-hilborn/
-REDIRECT 301 /people/gholt/ /faculty/gordon-holtgrieve/
-REDIRECT 301 /people/hornefac/ /faculty/john-horne/
-REDIRECT 301 /people/hunt/ /faculty/george-hunt-jr/
-REDIRECT 301 /people/klaidre/ /kristin-ladre/
-REDIRECT 301 /people/naish/ /faculty/kerry-naish/
-REDIRECT 301 /people/olden/ /faculty/julian-olden/
-REDIRECT 301 /people/parrish/ /faculty/julia-parish/
-REDIRECT 301 /people/pietsch/ /faculty/theodore-w-pietsch/
-REDIRECT 301 /people/punt/ /faculty/andre-punt/
-REDIRECT 301 /people/tquinn/ /faculty/thomas-quinn/
-REDIRECT 301 /people/Roberts/ /faculty/steven-roberts/
-REDIRECT 301 /people/schindler/ /faculty/daniel-schindler/
-REDIRECT 301 /people/sebens/ /faculty/kenneth-sebens/
-REDIRECT 301 /people/jimseeb/ /faculty/james-seeb/
-REDIRECT 301 /people/lisaseeb/ /faculty/lisa-seeb/
-REDIRECT 301 /people/simenstad/ /faculty/charles-simenstad/
-REDIRECT 301 /people/skalski/ /faculty/john-skalski/
-REDIRECT 301 /people/summers/ /faculty/adam-summers/
-REDIRECT 301 /people/vanblaricom/ /faculty/glenn-vanblaricom/
-REDIRECT 301 /people/young/ /faculty/graham-young/
-
-REDIRECT 301 /pnwc /learn
-
-
-
-
 
