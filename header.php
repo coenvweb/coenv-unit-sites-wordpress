@@ -207,8 +207,9 @@ Focus your college education with our innovative academic programs.';
                 <ul>
               <li><a href="http://environment.uw.edu" title="UW College of the Environment">
   <?php include("assets/img/college-of-the-environment.svg"); ?>
+                  <span class="visuallyhidden">College of the Environment</span>
                   </a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a><span class="visuallyhidden">University of Washington</span></li>
                 </ul>
           </div> 
         </li>          
@@ -239,6 +240,7 @@ Focus your college education with our innovative academic programs.';
                 <?php if (get_option('twitter')) { ?>
                     <li class="page_item"><a class="twitter social-menu" target="blank" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
                             <i class="fi-social-twitter"></i>
+                        <span class="visuallyhidden">Twitter</span>
                 </a></li><?php } ?>
                  <?php if (get_option('facebook')) { ?>
                     <li class="page_item"><a class="facebook social-menu" target="blank" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
@@ -249,10 +251,12 @@ Focus your college education with our innovative academic programs.';
 
                         c-61.734,0-89.567,27.179-89.567,79.231C204.067,174.566,204.067,184.692,204.067,184.692z"/>
                     </svg>
+                        <span class="visuallyhidden">Facebook</span>
                     </a></li><?php } ?>
                 <?php if (get_option('linkedin')) { ?>
                     <li class="page_item"><a class="linkedin social-menu" href="<?php echo get_option('linkedin'); ?>" title="Join us on LinkedIn">
                             <i class="fi-social-linkedin"></i>
+                        <span class="visuallyhidden">LinkedIn</span>
                     </a></li><?php } ?>
                     </div>
                     </ul>

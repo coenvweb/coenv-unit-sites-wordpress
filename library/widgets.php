@@ -11,6 +11,8 @@ function coenv_base_sidebar_widgets() {
   $before_widget_three_columns  = '<div class="small-4 columns"><article id="%1$s" class="widget %2$s">';
   $before_title   = '<h4>';
   $after_title  = '</h4>';
+  $ev_before_title   = '';
+  $ev_after_title  = '';
   $after_widget = '</article></div> <!-- end #%1$s -->';
 
   register_sidebar(array(
@@ -360,7 +362,7 @@ class CoEnv_Widget_Events extends WP_Widget {
 
         
         <?php if (!is_home()): ?>
-            <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a><h4><span><a href="<?php echo $events_url; ?>"><?php echo $title ?></a></span></h4>
+            <a href="<?php echo $events_url; ?>" class="more-events" title="View All Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?><span class="visuallyhidden">Events</span></a>
 
         <?php endif ?>
 

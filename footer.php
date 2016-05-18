@@ -20,14 +20,17 @@
                 <?php if (get_option('facebook')) { ?>
                     <a class="facebook button" target="blank" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
                         <i class="fi-social-facebook"></i>
+                        <span class="visuallyhidden">Facebook</span>
                     </a><?php } ?>
                 <?php if (get_option('twitter')) { ?>
                     <a class="twitter button" target="blank" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
                             <i class="fi-social-twitter"></i>
+                            <span class="visuallyhidden">Twitter</span>
                     </a><?php } ?>
                 <?php if (get_option('linkedin')) { ?>
                     <a class="linkedin button" target="blank" href="<?php echo get_option('linkedin'); ?>" title="Join us on LinkedIn">
                             <i class="fi-social-linkedin"></i>
+                            <span class="visuallyhidden">LinkedIn</span>
                     </a><?php } ?>
                 </div>
             </div>
@@ -62,8 +65,8 @@
     <div class="layout-container row">
 
         <div class="be-boundless">
-            <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?></a><br />
-            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?></a>
+            <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?><span class="visuallyhidden">University of Washington</span></a><br />
+            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?><span class="visuallyhidden">Be Boundless</span></a>
         </div>
 
         <div class="medium-6 columns">
