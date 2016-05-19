@@ -127,11 +127,11 @@ if(isset($_GET['term'])){
         $twitter = get_option('twitter');
         ?>
         <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
-        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?></a>
+        <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?><span class="visuallyhidden">Twitter</span></a>
         <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?></a>
+        <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?><span class="visuallyhidden">Facebook</span></a>
         <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20UW%20' . $site_name .':%20' . $shortlink . '>'; ?>
-        <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?></a>
+           <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?><span class="visuallyhidden">Email</span></a>
 		</div>
 		</div>
             
