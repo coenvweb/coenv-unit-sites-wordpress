@@ -110,7 +110,7 @@ Focus your college education with our innovative academic programs.';
                 s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
                 c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
-</svg></a>
+</svg><span class="visuallyhidden">Marine Biology</span></a>
     </div>
     <div class="middle tab-bar-section">
         <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
