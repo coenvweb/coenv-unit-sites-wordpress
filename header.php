@@ -45,10 +45,6 @@
     <meta name="msapplication-TileColor" content="#4b2e84">
     <meta name="msapplication-TileImage" content="<?php echo get_template_directory_uri() ?>/assets/img/ms-icon-144x144.png">
     <meta name="theme-color" content="#4b2e84">
-      
-    <!--<script type="text/javascript" src="//use.typekit.net/dyq8fxo.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>-->
-
   
     <?php wp_head(); ?>
       
