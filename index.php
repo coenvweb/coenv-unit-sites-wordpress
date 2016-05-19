@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-<div class="row">
+<div class="row" id="main-col">
 	<div class="section-title">News &amp; Events</div>
 	<div class="breadcrumbs"><?php bcn_display(); ?></div>
 	<div class="small-12 medium-8 columns" role="main">

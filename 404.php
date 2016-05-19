@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="main-col">
 	<div class="small-12 medium-8 columns 404" role="main" id="main-col">
 	
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">

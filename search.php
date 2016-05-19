@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="main-col">
 	<div class="small-12 medium-8 columns results" role="main" id="main-col">
 	
 	<?php if ( have_posts() ) : ?>
