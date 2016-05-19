@@ -56,10 +56,9 @@ if($rows)
                     $link_target = 'self';
 						}
 					}
-echo '<a href="' . $link_url . '">';
                 echo '<div class="feature-info">';
 			echo '<div class="feature-content">';
-				echo '<h2 class="feature-title"><span class="feature-white">' . get_the_title() . '</span></h2></a>';
+				echo '<a href="' . $link_url . '"><h2 class="feature-title"><span class="feature-white">' . get_the_title() . '</span></h2></a>';
                 echo '<a class="button" href="' . $link_url . '">' . $link_title . '</a>';
 
 			echo '</div><!-- .feature-content -->';
