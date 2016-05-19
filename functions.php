@@ -332,7 +332,7 @@ function rngs_login_url( $login_url, $redirect ) {
 
 // html encode emails to cut down on spam
 function remove_plaintext_email($emailAddress) {
-    $emailRegEx = '/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4})/i';
+    $emailRegEx = '/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4})/i';
     return preg_replace_callback($emailRegEx, "encodeEmail", $emailAddress);
 }
 function encodeEmail($result) {
