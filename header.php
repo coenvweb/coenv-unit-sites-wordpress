@@ -209,7 +209,7 @@ Focus your college education with our innovative academic programs.';
   <?php include("assets/img/college-of-the-environment.svg"); ?>
                   <span class="visuallyhidden">College of the Environment</span>
                   </a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?></a><span class="visuallyhidden">University of Washington</span></li>
+              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
                 </ul>
           </div> 
         </li>          
