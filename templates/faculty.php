@@ -8,10 +8,16 @@ Template Name: Faculty Index
  */
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if(isset($_GET['tax'])){
+    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+}
+if(isset($_GET['term'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
+}
 ?>
 
 <?php get_header(); ?>

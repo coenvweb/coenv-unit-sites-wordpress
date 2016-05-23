@@ -1,6 +1,5 @@
 {
   "name": "coenv-base",
-  "version": "1.0",
   "author": "College Web Team",
   "devDependencies": {
     "gulp": "^3.9.0",
