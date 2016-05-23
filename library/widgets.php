@@ -823,7 +823,9 @@ class coenv_course_archive extends WP_Widget {
             $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
             $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
         } else {
-            $coenv_cat_term_1 = null;
+            $current_quarters = get_field('quarter_to_display');
+            $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
+            $coenv_cat_term_1 = $qtr_term_0->slug;
         }
         $old_cats = $GLOBALS['old_cats'];
         $old_cats_ids = array();
@@ -834,22 +836,7 @@ class coenv_course_archive extends WP_Widget {
         $old_cats_ids = array_splice($old_cats_ids, 1);
         $old_cats_ids = (implode(',',$old_cats_ids));
 
-        $cats_args  = array(
-            'orderby' => 'id',
-            'order' => 'DESC',
-            'taxonomy' => 'course_quarter',
-            'hide_empty' => 0,
-            'include' => $old_cats_ids,
-        );
-        $cats = get_terms($cats_args);
-            if ($cats) {
-                echo '<div>';
-                foreach($cats as $cat) { 
-                    $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
-                    echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
-                }
-                echo '</div>';
-            } 
+        coenv_base_cat_filter('course_quarter',$coenv_cat_term_1)
         ?>
  
     <?php

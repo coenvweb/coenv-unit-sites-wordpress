@@ -13,5 +13,22 @@
     "jquery": "latest",
 	"jquery.cookie": "latest",
 	"jquery-placeholder": "latest"
+  },
+  "overrides": {
+    "modernizr": {
+      "main": "modernizr.js"
+    },
+    "nivo-lightbox": {
+      "main": "nivo-lightbox.js"
+    },
+    "masonry": {
+      "main": "./dist/masonry.pkgd.js"
+    },
+    "outlayer": {
+      "main": [
+        "item.js",
+        "outlayer.js"
+      ]
+    }
   }
 }
