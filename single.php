@@ -28,7 +28,7 @@
 		       		}
 				?>
 
-			<article class="blog-list-item post-<?php the_ID() ?> clearfix">
+			<article class="blog-list-item post-<?php the_ID() ?> clearfix" id="main-col">
         		<header class="article__header">
         			<div class="columns small-12 article-meta">
 	        			<p>

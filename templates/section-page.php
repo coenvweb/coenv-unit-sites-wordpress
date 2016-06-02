@@ -5,7 +5,7 @@ Template Name: Section Page
 ?>
 <?php get_header(); ?>
 <?php if( !empty( get_field( 'intro_text') ) ) { ?>
-<div class="full-intro">
+<div class="full-intro" id="main-col">
 	<div class="row">
 		<p><?php the_field( 'intro_text' ); ?></p>
 	</div>

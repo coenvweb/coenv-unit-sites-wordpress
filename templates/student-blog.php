@@ -20,7 +20,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 
 ?>
 <?php get_header(); ?>
-<div class="row page-content">
+<div class="row page-content" id="main-col">
 	<div class="columns" role="main">
 		<div class="article__content">
 		<div class="row filters">

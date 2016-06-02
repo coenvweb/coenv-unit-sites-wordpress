@@ -19,7 +19,7 @@ if( !empty( get_field( 'intro_text') ) ) {
 	</div>
 </div> <!-- // full-intro -->
 <?php } ?>
-<div class="row page-content">
+<div class="row page-content" id="main-col">
 	<div class="columns" role="main">
 			<?php while (have_posts()) : the_post(); ?>
 			<article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
