@@ -48,6 +48,9 @@ require_once('library/taxonomies.php');
 // Publications functions
 require_once('library/publications.php');
 
+// Shortcodes functions
+require_once('library/shortcodes.php');
+
 // Need to be sorted into includes
 
 
