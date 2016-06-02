@@ -17,7 +17,7 @@ $faculty_cv = $faculty_fields["curriculum_vitae"];
 $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 ?>
 
-<div class="row page-content">
+<div class="row page-content" id="main-col">
 
 
 

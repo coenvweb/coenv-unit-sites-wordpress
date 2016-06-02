@@ -5,7 +5,7 @@ Template Name: Student Blog
 ?>
 
 <?php get_header(); ?>
-<div class="row page-content">
+<div class="row page-content" id="main-col">
 	<div class="columns" role="main">
 		<div class="article__content">
 			<div class="blog clearfix">
