@@ -6,7 +6,7 @@
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>">
 			<div class="entry-content">
 				<div class="article__content">
-					<form role="search" method="get" class="search-form" action="http://fish.uw.edu/">
+					<form role="search" method="get" class="search-form" action="<?php echo home_url('/'); ?>">
 					  <div class="field-wrap">
 						<label for="s">Search Field</label>
 					    <input type="text" value="<?php echo get_search_query(); ?>" name="s" id="s" placeholder="Search this site">
