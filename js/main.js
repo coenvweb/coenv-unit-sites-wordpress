@@ -108,29 +108,25 @@ jQuery(function ($) {
     var JQTWEET = {
 
         // Set twitter hash/user, number of tweets & id/class to append tweets
-        // You need to clear tweet-date.txt before toggle between hash and user
-        // for multiple hashtags, you can separate the hashtag with OR, eg:
-        // hash: '%23jquery OR %23css'
         user: 'UWPCC',
         numTweets: 5,
         appendTo: '#twitter',
-        template: '<div class="item">{IMG}<div class="tweet-wrapper"><span class="text">{TEXT}</span>\
-                   <span class="time"><a href="{URL}" target="_blank">{AGO}</a></span>\
-                   by <span class="user">{USER}</span></div></div>',
+        template: '<div class=""><div class="tweet-wrapper"><div class="tweet-head">{PROF_IMG}<span class="username">{NAME}</span><span class="at_name">@{USER}</span></div>\
+                   <span class="content">{TEXT}</span><div class="media">{IMG}</div>\
+                   <span class="twitter-logo"><i class="fi-social-twitter"></i></span><span class="time"><a href="{URL}" target="_blank">{AGO}</a></span>\
+                   <span class="twitter-actions"><a href="{REPLY}"></a><a href="{RETWEET}"></a><a href="{FAVORITE}"></a></span></div></div>',
 
-        // core function of jqtweet
-        // https://dev.twitter.com/docs/using-search
         loadTweets: function() {
 
             var request;
 
-            // different JSON request {hash|user}
             request = {
               action: 'getUserTimeline',
               screen_name: JQTWEET.user,
               count: JQTWEET.numTweets,
               api: 'statuses/user_timeline'
             }
+
             $.ajax({
                 url: adminAjax.ajaxurl,
                 type: 'POST',
@@ -138,6 +134,7 @@ jQuery(function ($) {
                 data: request,
                 success: function(data, textStatus, xhr) {
                     if (data) {
+                        console.log(data);
 
                         var text, name, img;
 
@@ -145,6 +142,21 @@ jQuery(function ($) {
                           for (var i = 0; i < JQTWEET.numTweets; i++) {
                             img = '';
                             url = 'http://twitter.com/' + data[i].user.screen_name + '/status/' + data[i].id_str;
+                            if(data[i].retweeted_status) {
+                                user = data[i].retweeted_status.user.screen_name;
+                                name = data[i].retweeted_status.user.name;
+                                user_url = 'http://twitter.com/' + data[i].retweeted_status.user.screen_name;
+                                prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].retweeted_status.user.profile_image_url + '" /></a>';
+                            } else {
+                                user = data[i].user.screen_name;
+                                name = data[i].user.name;
+                                user_url = 'http://twitter.com/' + data[i].user.screen_name;
+                                prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].user.profile_image_url + '" /></a>';
+
+                            }
+                            reply = 'http://twitter.com/intent/tweet?lang=en&in_reply_to=' + data[i].id_str;
+                            retweet = 'http://twitter.com/intent/retweet?lang=en&tweet_id=' + data[i].id_str;
+                            favorite = 'http://twitter.com/intent/favorite?lang=en&tweet_id=' + data[i].id_str;
                             try {
                               if (data[i].entities['media']) {
                                 img = '<a href="' + url + '" target="_blank"><img src="' + data[i].entities['media'][0].media_url + '" /></a>';
@@ -153,12 +165,15 @@ jQuery(function ($) {
                               //no media
                             }
 
-                            console.log(url);
-
                             $(JQTWEET.appendTo).append( JQTWEET.template.replace('{TEXT}', JQTWEET.ify.clean(data[i].text) )
-                                .replace('{USER}', data[i].user.screen_name)
+                                .replace('{USER}', user)
+                                .replace('{NAME}', name)
+                                .replace('{PROF_IMG}', prof_img)
                                 .replace('{IMG}', img)
                                 .replace('{AGO}', JQTWEET.timeAgo(data[i].created_at) )
+                                .replace('{REPLY}', reply)
+                                .replace('{RETWEET}', retweet)
+                                .replace('{FAVORITE}', favorite)
                                 .replace('{URL}', url )
                                 );
                           }
@@ -204,7 +219,7 @@ jQuery(function ($) {
             }
 
             if (diff < minute) {
-                return Math.floor(diff / second) + " seconds ago";
+                return Math.floor(diff / second) + "s";
             }
 
             if (diff < minute * 2) {
@@ -212,7 +227,7 @@ jQuery(function ($) {
             }
 
             if (diff < hour) {
-                return Math.floor(diff / minute) + " minutes ago";
+                return Math.floor(diff / minute) + "m";
             }
 
             if (diff < hour * 2) {
@@ -220,7 +235,7 @@ jQuery(function ($) {
             }
      
             if (diff < day) {
-                return  Math.floor(diff / hour) + " hours ago";
+                return  Math.floor(diff / hour) + "h";
             }
      
             if (diff > day && diff < day * 2) {
@@ -228,11 +243,11 @@ jQuery(function ($) {
             }
      
             if (diff < day * 365) {
-                return Math.floor(diff / day) + " days ago";
+                return Math.floor(diff / day) + "d";
             }
 
             else {
-                return "over a year ago";
+                return "1y+";
             }
         }, // timeAgo()
 
@@ -269,7 +284,7 @@ jQuery(function ($) {
           },
 
           clean: function(tweet) {
-            return this.hash(this.at(this.list(this.link(tweet))));
+            return this.hash(this.at(this.list(this.link(tweet.replace(/^RT @\w*: /, "")))));
           }
         } // ify
     };
