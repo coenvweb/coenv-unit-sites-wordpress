@@ -33,6 +33,9 @@ require_once('library/theme-support.php');
 // Photo functions
 require_once('library/photos.php');
 
+// Twitter timeline
+require_once('library/twitter.php');
+
 // Setting fields for address, phone, social media
 require_once('library/admin-setting-fields.php');
 

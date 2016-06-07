@@ -5,78 +5,78 @@ Template Name: Homepage
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 large-12 columns" role="main">
-	
-	<?php do_action('foundationPress_before_content'); ?>
-	<?php dynamic_sidebar("before-content"); ?>
-		<?php
+    <div class="small-12 large-12 columns" role="main">
 
-		/**
-		 * Loop for homepage features.
-		 */
-		$feature_args = array(
-			'post_type'	=> 'features',
-			'post_status' => 'publish',
-			'posts_per_page' => 4,
-			'orderby' => 'menu_order',
-			);
-		$feature_query = new WP_Query( $feature_args ); ?>
-		<?php //if ($feature_query->have_posts()) { ?>
-		<div class="playpause"></div>
-			<div class="homepage-features">
-			<?php
-			# The Loop
-			while ( $feature_query->have_posts() ) :
-				$feature_query->the_post();
-			if (get_field('feature_add_links')) {
-				$feature_link_type = get_field('feature_link_type');
-				$feature_link_type_internal = get_field('feature_link_page');
-			}
-			if (get_field('feature_color')) {
-				$feature_color = get_field('feature_color');
-			}
-			if (get_field('feature_excerpt')) {
-				$feature_excerpt = get_field('feature_excerpt');
-			}
-			if (get_the_post_thumbnail()) {
-				$feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
-				$feature_caption = get_post(get_post_thumbnail_id());
-				$feature_caption = $feature_caption->post_excerpt;
-			}
-			$rows = get_field('feature_add_links');
-			
+    <?php do_action('foundationPress_before_content'); ?>
+    <?php dynamic_sidebar("before-content"); ?>
+        <?php
+
+        /**
+         * Loop for homepage features.
+         */
+        $feature_args = array(
+            'post_type' => 'features',
+            'post_status' => 'publish',
+            'posts_per_page' => 4,
+            'orderby' => 'menu_order',
+            );
+        $feature_query = new WP_Query( $feature_args ); ?>
+        <?php //if ($feature_query->have_posts()) { ?>
+        <div class="playpause"></div>
+            <div class="homepage-features">
+            <?php
+            # The Loop
+            while ( $feature_query->have_posts() ) :
+                $feature_query->the_post();
+            if (get_field('feature_add_links')) {
+                $feature_link_type = get_field('feature_link_type');
+                $feature_link_type_internal = get_field('feature_link_page');
+            }
+            if (get_field('feature_color')) {
+                $feature_color = get_field('feature_color');
+            }
+            if (get_field('feature_excerpt')) {
+                $feature_excerpt = get_field('feature_excerpt');
+            }
+            if (get_the_post_thumbnail()) {
+                $feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
+                $feature_caption = get_post(get_post_thumbnail_id());
+                $feature_caption = $feature_caption->post_excerpt;
+            }
+            $rows = get_field('feature_add_links');
+
 echo '<div class="feature">';
-	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+    echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 
-		echo '<div class="feature-info-container">';
-		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
-			echo '<div class="feature-content">';
-				echo '<h2>' . get_the_title() . '</h2>';
-				echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
-				if($rows)
-					{
-						foreach($rows as $row) {
-							if($row['feature_link_type'] == 'internal') {
-								$link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-								$link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-								$link_target = 'self';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} elseif ($row['feature_link_type'] == 'external') {
-								$link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-								$link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-								$link_target ='blank';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} 
-						}
-					}
+        echo '<div class="feature-info-container">';
+        echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
+        echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
+            echo '<div class="feature-content">';
+                echo '<h2>' . get_the_title() . '</h2>';
+                echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
+                if($rows)
+                    {
+                        foreach($rows as $row) {
+                            if($row['feature_link_type'] == 'internal') {
+                                $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
+                                $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
+                                $link_target = 'self';
+                                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+                            } elseif ($row['feature_link_type'] == 'external') {
+                                $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
+                                $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
+                                $link_target ='blank';
+                                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+                            } 
+                        }
+                    }
 
-			echo '</div><!-- .feature-content -->';
+            echo '</div><!-- .feature-content -->';
 
-		echo '</div><!-- .feature-info -->';
+        echo '</div><!-- .feature-info -->';
 
-	echo '</div><!-- .feature-info-container -->';
-	echo '</div>';
+    echo '</div><!-- .feature-info-container -->';
+    echo '</div>';
 
 
 echo '</div><!-- .feature -->';
@@ -85,12 +85,12 @@ wp_reset_postdata();
 echo '</div>';
 ?>
 </div>
-				
+                
 <?php if ( is_active_sidebar( 'home-content' ) ) : ?>
 <div class="large-12 columns programs">
-	<div class="widget-area home-content" role="complementary">
-		<?php dynamic_sidebar( 'home-content' ); ?>
-	</div><!-- .widget-area -->
+    <div class="widget-area home-content" role="complementary">
+        <?php dynamic_sidebar( 'home-content' ); ?>
+    </div><!-- .widget-area -->
 </div>
 <?php endif; ?>
         &nbsp;
@@ -136,57 +136,64 @@ else {
 }
 $wp_query = new WP_Query( $home_args );
 ?>
-	<?php if ($wp_query->have_posts()): ?>
-	<hr />
-	<div class="home-news-section clearfix">
+    <?php if ($wp_query->have_posts()): ?>
+    <hr />
+    <div class="home-news-section clearfix">
         <div class="columns large-8 left" style="margin-top: 0; padding-top: 0;">
         <h2 class="news-title">News</h2>
         <a class="button right" href="/pcc/about/news">More News</a>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
+        <?php
+        # The Loop
+        while ( $wp_query->have_posts() ) :
+        $wp_query->the_post();
+        if (get_field('story_link_url')) {
+            $post_link_url = get_field('story_link_url');
+            $post_link_target = ' target="_blank" ';
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
-        	$post_link_url = get_the_permalink();
+            $post_link_url = get_the_permalink();
             $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
         }
-			
-		echo '<div class="small-news">';
-		echo '<div class="post-meta">';
-		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-		// Get categories
+            
+        echo '<div class="small-news">';
+        echo '<div class="post-meta">';
+        echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+        // Get categories
         $more_terms = wp_get_post_terms(get_the_id(), 'category');
-		if (!empty($more_terms)) {
-			$more_terms_arr = array();
-			
-			foreach ($more_terms as &$term) {
-				if ($term->slug != 'uncategorized') {
-					$more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-				}
-			}
-			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+        if (!empty($more_terms)) {
+            $more_terms_arr = array();
+            
+            foreach ($more_terms as &$term) {
+                if ($term->slug != 'uncategorized') {
+                    $more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                }
+            }
+            $more_terms_str = ' / ' . implode(', ', $more_terms_arr);
 
-		} else {
-			$more_terms_str = '';
-		}
-		$more_terms = "";
-		echo $more_terms_str;
-		echo '</div>';
-		echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-		echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
-       	echo $post_link;
-	echo '</div>';
-	endwhile;
-	?>
+        } else {
+            $more_terms_str = '';
+        }
+        $more_terms = "";
+        echo $more_terms_str;
+        echo '</div>';
+        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
+        echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+        echo $post_link;
+    echo '</div>';
+    endwhile;
+    ?>
     </div>
 <?php endif; ?>
-    <div class="large-4 columns">
+    <div id="twitter" class="large-4 columns">
+
+        <?php
+            //auth with twitter API. Fetch last 4-5 tweets and generate html (maybe ajax?) 
+        ?>
+
+        <!-- 
         <a class="twitter-timeline" href="https://twitter.com/UWPCC" data-widget-id="662389678868336640">Tweets by @UWPCC</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        -->
     </div>
 </div>  
 </div>
