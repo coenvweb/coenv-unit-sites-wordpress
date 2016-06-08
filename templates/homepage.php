@@ -185,15 +185,10 @@ $wp_query = new WP_Query( $home_args );
     </div>
 <?php endif; ?>
     <div id="twitter" class="large-4 columns">
-        <h2 class="at_title">@UWPCC</div>
+        <h2 class="at_title"><span class="twitter-logo"><i class="fa fa-twitter"></i></span>@UWPCC</div>
         <?php
             //auth with twitter API. Fetch last 4-5 tweets and generate html (maybe ajax?) 
         ?>
-
-        <!-- 
-        <a class="twitter-timeline" href="https://twitter.com/UWPCC" data-widget-id="662389678868336640">Tweets by @UWPCC</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-        -->
     </div>
 </div>  
 </div>
