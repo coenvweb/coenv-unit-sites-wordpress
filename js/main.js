@@ -111,10 +111,14 @@ jQuery(function ($) {
         user: 'UWPCC',
         numTweets: 5,
         appendTo: '#twitter',
-        template: '<div class=""><div class="tweet-wrapper"><div class="tweet-head">{PROF_IMG}<span class="username">{NAME}</span><span class="at_name">@{USER}</span></div>\
+        template: '<div class="tweet"><div class="tweet-wrapper"><div class="tweet-head">{PROF_IMG}\
+                   <div class="names"><div class="username"><a href="{USER_URL}" target="_blank">{NAME}</a></div><div class="at_name"><a href="{USER_URL2}" target="_blank">@{USER}</a></div></div></div>\
                    <span class="content">{TEXT}</span><div class="media">{IMG}</div>\
-                   <span class="twitter-logo"><i class="fi-social-twitter"></i></span><span class="time"><a href="{URL}" target="_blank">{AGO}</a></span>\
-                   <span class="twitter-actions"><a href="{REPLY}"></a><a href="{RETWEET}"></a><a href="{FAVORITE}"></a></span></div></div>',
+                   <div class="tweet-footer"><div class="twitter-logo"><i class="fi-social-twitter"></i></div><div class="time"><a href="{URL}" target="_blank"> {AGO}</a></div>\
+                   <div class="twitter-actions"><a class="fa fa-reply" href="{REPLY}"></a>\
+                     <a class="fa fa-retweet" href="{RETWEET}"></a>\
+                     <a class="fa fa-star" href="{FAVORITE}"></a></div></div>\
+                     </div></div>',
 
         loadTweets: function() {
 
@@ -174,6 +178,8 @@ jQuery(function ($) {
                                 .replace('{REPLY}', reply)
                                 .replace('{RETWEET}', retweet)
                                 .replace('{FAVORITE}', favorite)
+                                .replace('{USER_URL}', user_url )
+                                .replace('{USER_URL2}', user_url )
                                 .replace('{URL}', url )
                                 );
                           }
@@ -215,31 +221,19 @@ jQuery(function ($) {
 
             if (diff < second * 2) {
                 // within 2 seconds
-                return "right now";
+                return "now";
             }
 
             if (diff < minute) {
                 return Math.floor(diff / second) + "s";
             }
 
-            if (diff < minute * 2) {
-                return "about 1 minute ago";
-            }
-
             if (diff < hour) {
                 return Math.floor(diff / minute) + "m";
             }
 
-            if (diff < hour * 2) {
-                return "about 1 hour ago";
-            }
-     
             if (diff < day) {
                 return  Math.floor(diff / hour) + "h";
-            }
-     
-            if (diff > day && diff < day * 2) {
-                return "yesterday";
             }
      
             if (diff < day * 365) {

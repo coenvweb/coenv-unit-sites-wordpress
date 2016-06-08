@@ -185,7 +185,7 @@ $wp_query = new WP_Query( $home_args );
     </div>
 <?php endif; ?>
     <div id="twitter" class="large-4 columns">
-
+        <h2 class="at_title">@UWPCC</div>
         <?php
             //auth with twitter API. Fetch last 4-5 tweets and generate html (maybe ajax?) 
         ?>
