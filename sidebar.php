@@ -52,8 +52,9 @@ if (is_single( '12808' )) { ?>
 	<h2>More on Ed</h2>
 	<p>For more information about Ed:</p>
 	<ul class="widget_links">
+	<li><a class="button" title="Seattle Times: Ed Miles, climate-change luminary, dies at 76" href="http://www.seattletimes.com/seattle-news/obituaries/climate-change-luminary-ed-miles-dies-at-76/" target="_blank">Seattle Times: Ed Miles, climate-change luminary, dies at 76</a></li>
 	<li><a class="button" title="Keynote Address, UW Science and Policy Summit, 2011 (video)" href="https://www.youtube.com/watch?v=Y1Aau0TGBwQ" target="_blank">Keynote Address, UW Science and Policy Summit, 2011 (video)</a></li>
-	<li><a class="button" title="Profile, Proceedings of the National Academy of Sciences, 2006" href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1750915/" target="_blank">Profile, Proceedings of the National Academy of Sciences, 2006</a></li>
+	<!--<li><a class="button" title="Profile, Proceedings of the National Academy of Sciences, 2006" href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1750915/" target="_blank">Profile, Proceedings of the National Academy of Sciences, 2006</a></li>-->
 	</ul>
 </div>
 </article>

@@ -59,7 +59,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		}
 		add_filter("posts_orderby", "order_by_multiple");
 		$wp_query = new WP_Query( $query_args );
-		remove_filter( 'posts_orderby', 'filter_query' );
+		remove_filter( 'posts_orderby', 'order_by_multiple' );
 
 
 		?>
