@@ -3,8 +3,8 @@ Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.0.1
-Tested up to: 4.4.2
-Stable tag: 3.0.5.4
+Tested up to: 4.5.2
+Stable tag: 3.0.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,15 @@ Usually this means that the clone operation did not complete successfully. The m
 2. All new Add-on manager
 
 == Changelog ==
+
+= 3.0.5.7 =
+* Added new feature to save default site template for re-use in cloning every time
+
+= 3.0.5.6 =
+* Update to prevent kint classes from causing fatal error when autoloaded by another plugin or tool
+
+= 3.0.5.5 =
+* Update to work around WP version changes that prevent site names with dashes in the wpmu_validate_blog_signup() check
 
 = 3.0.5.4 =
 * Fixed issue with latest version of WP where a test validation site name containing only numbers is no longer valid

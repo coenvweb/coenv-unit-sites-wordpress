@@ -207,12 +207,12 @@
 	line-height: 1em;
 	vertical-align: middle;
 	width: 80%;
-	float: right;
+	float: left;
 	color: #888;
 }
 
 #ns-cloner-section-select_source .ns-cloner-site-search-label {
-	width: 15%;
+	width: 100px;
 	float: left;
 	padding: 12px 12px 12px 0 !important;
 }
@@ -224,13 +224,13 @@
 	padding: 2px 6px !important;
 	font-style: italic;
 	width: 80%;
-	float: right;
+	float: left;
 	background: #f5f5f5;
 	margin-bottom: 12px;
 }
 
 #ns-cloner-section-select_source .ns-cloner-site-select-label {
-	width: 15%;
+	width: 100px;
 	float: left;
 	padding: 0 12px 0 0 !important
 }
@@ -239,6 +239,24 @@
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
 	outline: 0 !important;
+}
+
+#ns-cloner-section-select_source .ns-cloner-site-default-label {
+	width: 100px;
+	float: left;
+	padding: 0 12px 0 0 !important
+}
+
+#ns-cloner-section-select_source .ns-cloner-site-default {
+	height: 29px;
+	margin-top: -2px;
+	background: #f8f8f8;
+	padding: 6px 6px !important;
+	font-style: italic;
+	width: 30px;
+	float: left;
+	background: #f5f5f5;
+	margin-bottom: 12px;
 }
 
 .ns-cloner-multi-checkbox-wrapper {

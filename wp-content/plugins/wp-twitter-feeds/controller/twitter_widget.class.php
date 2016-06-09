@@ -1,4 +1,6 @@
-<?php class wptt_TwitterTweets extends WP_Widget{
+<?php 
+if ( ! defined( 'ABSPATH' ) ) exit; 
+class viwptf_TwitterTweets extends WP_Widget{
 
 		 /**
 	           * Widget IDs using Slider display
@@ -8,25 +10,25 @@
 		static $slider_ids = array();
 
 		function form($instance){
-		$defaults=$this->get_defaults();
+		$defaults=$this->viwptf_get_defaults();
 		$instance 			= wp_parse_args( (array) $instance, $defaults );
 		$widget_title 				= $instance['title'];
 		$name 				= $instance['name'];
 		$tweets_count 			= $instance['tweets_cnt'];
 		$accessTokenSecret 	= trim($instance['accessTokenSecret']);
 		$replies_excl 	= $instance['replies_excl'];
+	
 		$consumerSecret 	= trim($instance['consumerSecret']);
 		$accessToken 		= trim($instance['accessToken']);
 		$cache_transient 			= $instance['timeRef'];
 		$alter_ago_time 			= $instance['timeAgo'];
 		$twitterIntents 	= $instance['twitterIntents'];
-		//$dataShowCount 		= $instance['dataShowCount'];
 		$disp_screen_name = $instance['disp_scr_name'];
 		$timeto_store 			= $instance['store_time'];
 		$consumerKey 		= trim($instance['consumerKey']);
 		$intents_text = $instance['twitterIntentsText'];
 		$color_intents 		= $instance['intentColor'];
-                $slide_style		= $instance['slide_style'];
+      $slide_style		= $instance['slide_style'];
 		$showAvatar 		= $instance['showAvatar'];
 		$border_rad_avatar 		= $instance['border_rad'];
 		$tweet_border 		= $instance['tweet_border'];
@@ -34,10 +36,10 @@
 		if (!in_array('curl', get_loaded_extensions())) {
 			echo '<p style="background-color:pink;padding:10px;border:1px solid red;"><strong>cURL is not installed!</strong></p>';
 		}
-		include('widget_html.php');
-	}
-	function get_defaults()
-	{
+	  	include( plugin_dir_path( __FILE__ ) . 'widget_html.php');
+		}
+		function viwptf_get_defaults()
+		{
 		$data = array(
 				'title' 				=> 'Latest Tweets'
 				, 'name' 				=> ''
@@ -59,11 +61,11 @@
 				, 'intentColor'			=> "#999999"
 				, 'showAvatar'			=> false
 				, 'border_rad'		=> false
-                                , 'slide_style'               => 'list'
+            , 'slide_style'   => 'list'
 		);
 		return $data;
 	}
-	function wpltf_enqueue_js($hook) {
+	function viwptf_enqueue_js($hook) {
 		if( $hook != 'widgets.php' )
 			return;
 
@@ -77,11 +79,11 @@
 			wp_enqueue_style( 'farbtastic' );
 			wp_enqueue_script( 'farbtastic' );
 		}
-		//wp_enqueue_script('admin_js', plugins_url( '/js/admin_script.js' , dirname(__FILE__) ), array('jquery'));
+		wp_enqueue_script('admin_js', plugins_url( '/js/admin_script.js' , dirname(__FILE__) ), array('jquery'));
 		wp_enqueue_script('user_validate', plugins_url( '/js/validate.js' , dirname(__FILE__) ), array('jquery'));
 		
 	}
-	function sanitize_links($tweet) {
+	function viwptf_sanitize_links($tweet) {
 		if(isset($tweet->retweeted_status)) {
 			$rt_section = current(explode(":", $tweet->text));
 			$text = $rt_section.": ";
@@ -90,8 +92,8 @@
 			$text = $tweet->text;
 		}
 		$text = preg_replace('/((http)+(s)?:\/\/[^<>\s]+)/i', '<a href="$0" target="_blank" rel="nofollow">$0</a>', $text );
-		$text = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/$1" target="_blank" rel="nofollow">@$1</a>', $text );
-		$text = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="http://twitter.com/search?q=%23$1" target="_blank" rel="nofollow">$0</a>', $text );
+		$text = preg_replace('/[@]+([A-Za-z0-9-_]+)/', '<a href="https://twitter.com/$1" target="_blank" rel="nofollow">@$1</a>', $text );
+		$text = preg_replace('/[#]+([A-Za-z0-9-_]+)/', '<a href="https://twitter.com/search?q=%23$1" target="_blank" rel="nofollow">$0</a>', $text );
 		return $text;
 
 	}
@@ -102,13 +104,12 @@
 		$instance['name'] 				= strip_tags( $new_instance['name'] );
 		$instance['tweets_cnt'] 			= $new_instance['tweets_cnt'];
 		$instance['store_time'] 			= $new_instance['store_time'];
-		//$instance['dataShowCount']		= $new_instance['dataShowCount'];
 		$instance['disp_scr_name']	= $new_instance['disp_scr_name'];
 		$instance['timeAgo'] 			= $new_instance['timeAgo'];
 		$instance['twitterIntents'] 	= $new_instance['twitterIntents'];
 		$instance['twitterIntentsText'] = $new_instance['twitterIntentsText'];
 		$instance['intentColor']		= strip_tags( $new_instance['intentColor'] );
-                $instance['slide_style']		= $new_instance['slide_style'];
+      $instance['slide_style']		= $new_instance['slide_style'];
 		$instance['consumerKey'] 		= trim($new_instance['consumerKey']);
 		$instance['consumerSecret'] 	= trim($new_instance['consumerSecret']);
 		$instance['accessToken'] 		= trim($new_instance['accessToken']);
@@ -122,22 +123,21 @@
 		return $instance;
 	}
 	function __construct()  {
-		add_action('admin_enqueue_scripts', array(&$this, 'wpltf_enqueue_js'));
+		add_action('admin_enqueue_scripts', array(&$this, 'viwptf_enqueue_js'));
 		if(!is_admin())
-			add_action( 'wp_enqueue_scripts', array( &$this, 'wpltf_register_styles' ) );
-		$widget_data = array('classname' => 'wptt_TwitterTweets', 'description' => 'A easy widget which lets you add your latest tweets in just a few clicks on your website.' );
+			add_action( 'wp_enqueue_scripts', array( &$this, 'viwptf_register_styles' ) );
+		$widget_data = array('classname' => 'TwitterTweets', 'description' => 'A simple widget which lets you add your latest tweets in just a few clicks on your website.' );
 		parent::__construct('wptt_TwitterTweets', 'WP Twitter Feeds', $widget_data);
 	}
 	
-	function wpltf_register_styles() {
+	function viwptf_register_styles() {
 		if(!is_admin()){
-			wp_register_style( 'wptt_front', plugins_url( 'wp-twitter-feeds/css/admin_style.min.css' ) );
+			wp_register_style( 'wptt_front', plugins_url( '../css/admin_style.min.css' , __FILE__ ) );
 			wp_enqueue_style( 'wptt_front' );
 		}
 	}
 	function widget($args, $instance){
 		extract($args, EXTR_SKIP);
-	//	print_r($args);
 		echo $before_widget;
 		$this->widgetid=$args['widget_id'];
 		$wpltf_wdgt_title 				= empty($instance['title']) ? ' ' : apply_filters('widget_title', $instance['title']);
@@ -145,18 +145,18 @@
 		$wpltf_wdgt_consumerSecret 		= trim($instance['consumerSecret']);
 		$wpltf_wdgt_accessTokenSecret 	= trim($instance['accessTokenSecret']);
 		$widget_replies_excl 	= isset( $instance['replies_excl'] ) ? $instance['replies_excl'] : false;
+	 
 		$wpltf_wdgt_accessToken 		= trim($instance['accessToken']);
 		$wpltf_wdgt_tweets_cnt 			= $instance['tweets_cnt'];
 		$wpltf_wdgt_store_time 			= $instance['store_time'];
 		$wpltf_wdgt_consumerKey 		= trim($instance['consumerKey']);
-		//$wpltf_wdgt_dataShowCount 		= isset( $instance['dataShowCount'] ) ? $instance['dataShowCount'] : false;
 		$wpltf_wdgt_disp_scr_name 	= isset( $instance['disp_scr_name'] ) ? $instance['disp_scr_name'] : false;
 		$wpltf_wdgt_timeRef 			= isset( $instance['timeRef'] ) ? $instance['timeRef'] : false;
 		$wpltf_wdgt_timeAgo 			= isset( $instance['timeAgo'] ) ? $instance['timeAgo'] : false;
 		$wpltf_wdgt_twitterIntents 		= isset( $instance['twitterIntents'] ) ? $instance['twitterIntents'] : false;
 		$wpltf_wdgt_twitterIntentsText 	= isset( $instance['twitterIntentsText'] ) ? $instance['twitterIntentsText'] : false;
 		$wpltf_wdgt_intentColor			= $instance['intentColor'];
-                $wpltf_wdgt_slide_style			= isset( $instance['slide_style'] ) ? $instance['slide_style'] : 'list';
+      $wpltf_wdgt_slide_style			= isset( $instance['slide_style'] ) ? $instance['slide_style'] : 'list';
 		$wpltf_wdgt_showAvatar 			= isset( $instance['showAvatar'] ) ? $instance['showAvatar'] : false;
 		$wpltf_wdgt_border_rad 		= isset( $instance['border_rad'] ) ? $instance['border_rad'] : false;
 		$wpltf_wdgt_tewwt_border 		= isset( $instance['tweet_border'] ) ? $instance['tweet_border'] : 'false';
@@ -186,8 +186,18 @@
 ?>			
 
 <ul class="fetched_tweets <?php echo $class;?>">
-			<?php
+<?php 
+			/*
+			 * Uses:
+			 * Twitter API call:
+			 *     http://dev.twitter.com/doc/get/statuses/user_timeline
+			 * WP transient API ref.
+			 *		http://www.problogdesign.com/wordpress/use-the-transients-api-to-list-the-latest-commenter/
+			 * Plugin Development and Script enhancement
+			 *    http://www.planet-interactive.co.uk
+			 */
 			
+	
 			$tweets_count 			= $wpltf_wdgt_tweets_cnt; 		
 			$name 				= $wpltf_wdgt_name;			
 			$timeto_store 			= $wpltf_wdgt_store_time; 	
@@ -195,12 +205,12 @@
 			$accessToken 		= trim($wpltf_wdgt_accessToken);
 			$accessTokenSecret 	= trim($wpltf_wdgt_accessTokenSecret);
 			$replies_excl 	= $widget_replies_excl;
+ 
 			$consumerKey 		= trim($wpltf_wdgt_consumerKey);
-			//$dataShowCount 		= ($wpltf_wdgt_dataShowCount != "true") ? "false" : "true";
-			$disp_screen_name	= ($wpltf_wdgt_disp_scr_name != "true") ? "false" : "true";
+			 $disp_screen_name	= ($wpltf_wdgt_disp_scr_name != "true") ? "false" : "true";
 			$intents_text = $wpltf_wdgt_twitterIntentsText; 
 			$color_intents 		= $wpltf_wdgt_intentColor;
-                        $slide_style 		= $wpltf_wdgt_slide_style; 
+          $slide_style 		= $wpltf_wdgt_slide_style; 
 			$cache_transient 			= $wpltf_wdgt_timeRef;
 			$alter_ago_time 			= $wpltf_wdgt_timeAgo;
 			$twitterIntents		= $wpltf_wdgt_twitterIntents;
@@ -208,40 +218,42 @@
 			$border_rad_avatar 		= $wpltf_wdgt_border_rad;
 			$transName = 'list-tweets-'.$name; 
 			$backupName = $transName . '-backup'; 
-			if(false === ($tweets = get_transient($transName) ) ) :
-			require_once 'twitteroauth/twitteroauth.php';
-
-			$api_call = new TwitterOAuth(
+			 
+			if(false  === ($tweets = get_transient($transName) ) ) :
+ 			include( plugin_dir_path( __FILE__ ) . 'twitteroauth/twitteroauth.php');
+ 
+			$api_call = new viwptf_TwitterOAuth(
 				$consumerKey,   		
 				$consumerSecret,   
 				$accessToken,   	
 				$accessTokenSecret
 			);
 			$totalToFetch = ($replies_excl) ? max(50, $tweets_count * 3) : $tweets_count;
-			
+		 
 			$fetchedTweets = $api_call->get(
 				'statuses/user_timeline',
 				array(
 					'screen_name'     => $name,
 					'count'           => $totalToFetch,
-					'replies_excl' => $replies_excl
+					'exclude_replies' => $replies_excl
 				)
 			);
-			
+			 
 			if($api_call->http_code != 200) :
 				$tweets = get_option($backupName);
 
 			else :
 				$limitToDisplay = min($tweets_count, count($fetchedTweets));
-				
+			
 				for($i = 0; $i < $limitToDisplay; $i++) :
+			 
 					$tweet = $fetchedTweets[$i];
-			    	$name = $tweet->user->name;
+			  
 			    	$screen_name = $tweet->user->screen_name;
-			    	$permalink = 'http://twitter.com/'. $name .'/status/'. $tweet->id_str;
+			    	$permalink = 'https://twitter.com/'. $name .'/status/'. $tweet->id_str;
 			    	$tweet_id = $tweet->id_str;
 			    	$image = $tweet->user->profile_image_url;
-					$text = $this->sanitize_links($tweet);
+					$text = $this->viwptf_sanitize_links($tweet);
 			    	$time = $tweet->created_at;
 			    	$time = date_parse($time);
 			    	$uTime = mktime($time['hour'], $time['minute'], $time['second'], $time['month'], $time['day'], $time['year']);
@@ -256,14 +268,19 @@
 			    		'time' => $uTime,
 			    		'tweet_id' => $tweet_id
 			    		);
+			     
 				endfor;
 				set_transient($transName, $tweets, 60 * $timeto_store);
 				update_option($backupName, $tweets);
+				
 				endif;
+				
 			endif;	
-			if(!function_exists('twitter_time_diff'))
+			
+			if(!function_exists('wtf_twitter_time_diff'))
 			{
-				function twitter_time_diff( $from, $to = '' ) {
+				
+				function wtf_twitter_time_diff( $from, $to = '' ) {
 				    $diff = human_time_diff($from,$to);
 				    $replace = array(
 				        ' hour' => 'h',
@@ -278,8 +295,11 @@
 				    return strtr($diff,$replace);
 				}
 			}
+				
 			if($tweets) : ?>
-			    <?php foreach($tweets as $t) : ?>
+	
+			    <?php 	 foreach($tweets as $t) : ?>
+
 			        <li class="tweets_avatar">
 			        	<?php
 			        	echo '<div class="tweet_wrap"><div class="wdtf-user-card ltr">';
@@ -287,7 +307,6 @@
 			        			
 			        			echo '<img ';
 			        			echo 'width="45px" height="45px"';
-			        			 //echo 'src="'.$t['image'].'" alt="Tweet Avatar" class="';
 		        				echo 'src="' . str_replace('http://', '//', $t['image']) . '" alt="Tweet Avatar" class="'; 
 							echo ($border_rad_avatar) ? 'circular':'';
 			        			echo '"/>';
@@ -311,10 +330,11 @@
 			            <div class="times">
 			            <em>
 			            
-						<a href="http://www.twitter.com/<?php echo $screen_name; ?>" target="_blank" title="Follow <?php echo $name; ?> on Twitter [Opens new window]">
+						<a href="https://www.twitter.com/<?php echo $screen_name; ?>" target="_blank" title="Follow <?php echo $name; ?> on Twitter [Opens new window]">
 							<?php
 								if($cache_transient == "true"){
-									$timeDisplay = twitter_time_diff($t['time'], current_time('timestamp'));
+									$timeDisplay = wtf_twitter_time_diff($t['time'], current_time('timestamp'));
+ 
 								}else{
 									$timeDisplay = human_time_diff($t['time'], current_time('timestamp'));
 								}
@@ -355,9 +375,9 @@
 <div class="seperator_wpltf"></div>
 <?php }?>
       <ul class="tweet-actions " role="menu" >
-  <li><a href="http://twitter.com/intent/tweet?in_reply_to=<?php echo $t['tweet_id']; ?>" data-lang="en" class="in-reply-to" title="Reply" target="_blank"><span aria-hidden="true" data-icon="&#xf079;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
-  <li><a href="http://twitter.com/intent/retweet?tweet_id=<?php echo $t['tweet_id']; ?>" data-lang="en" class="retweet" title="Retweet" target="_blank"><span aria-hidden="true" data-icon="&#xf112;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
-  <li><a href="http://twitter.com/intent/favorite?tweet_id=<?php echo $t['tweet_id']; ?>" data-lang="en" class="favorite" title="Favorite" target="_blank"><span aria-hidden="true" data-icon="&#xf005;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
+  <li><a href="https://twitter.com/intent/tweet?in_reply_to=<?php echo $t['tweet_id']; ?>" data-lang="en" class="in-reply-to" title="Reply" target="_blank"><span aria-hidden="true" data-icon="&#xf079;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
+  <li><a href="https://twitter.com/intent/retweet?tweet_id=<?php echo $t['tweet_id']; ?>" data-lang="en" class="retweet" title="Retweet" target="_blank"><span aria-hidden="true" data-icon="&#xf112;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
+  <li><a href="https://twitter.com/intent/favorite?tweet_id=<?php echo $t['tweet_id']; ?>" data-lang="en" class="favorite" title="Favorite" target="_blank"><span aria-hidden="true" data-icon="&#xf005;" <?php echo ($color_intents) ? 'style="color:'.$color_intents.';"' :''; ?>></span></a></li>
 </ul>
     </div>
 						<?php } ?>
@@ -379,7 +399,7 @@
 wp_print_scripts('ticker_script');		
 		
  	}
-				add_action('wp_footer',array($this,'add_script_footer'));
+				add_action('wp_footer',array($this,'viwptf_add_script_footer'));
 			}
 
        
@@ -388,24 +408,15 @@ wp_print_scripts('ticker_script');
 		}
 		
 
-        /*
-	 * Outputs Slider Javascript
-	 * Shows a single tweet at a time, fading between them.
-	 */
-	public function twitter_slider_script() {
-	
-}
- function add_script_footer() { ?>	
-<?php //echo $this->widgetid; ?>
+ 
+ function viwptf_add_script_footer() { ?>	
+ 
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
 	 jQuery(".fetched_tweets").removeClass("light");			
 			
 			});	
-			
-			
-		
-		var height_li= jQuery(".fetched_tweets li").height();
+		 var height_li= jQuery(".fetched_tweets li").height();
 
 		height_li=height_li+15;
 		var nt_example1 = jQuery('.fetched_tweets').newsTicker({
@@ -415,9 +426,5 @@ wp_print_scripts('ticker_script');
 	   
 	});</script> <?php 
 	}
-
-
-
 }
-
 ?>

@@ -15,12 +15,14 @@ class ns_cloner_section_select_source extends ns_cloner_section {
 		<select name="source_id" class="ns-cloner-site-select">
 			<?php $sites = function_exists('wp_get_sites')? wp_get_sites(array('limit'=>9999)) : get_blog_list(0,'all'); ?>
 			<?php foreach( $sites as $site ): ?>
-			<option value="<?php echo $site['blog_id']; ?>">
+			<option value="<?php echo $site['blog_id']; ?>" <?php echo ( $site['blog_id'] == get_site_option('ns_cloner_default_template') ? 'selected' : '' ) ?> >
 				<?php $title = get_blog_details($site['blog_id'])->blogname; ?>
 				<?php $url = is_subdomain_install()? "$site[domain]" : "$site[domain]$site[path]"; ?>
 				<?php echo "$site[blog_id] - ".substr($title,0,30)." ($url)"; ?>
 		  <?php endforeach; ?>
 		</select>
+		<label class="ns-cloner-site-default-label">Save as default</label>
+		<input class="ns-cloner-site-default" type="checkbox" name="save_default_template" <?php echo ( get_site_option('ns_cloner_default_template') ? 'checked' : '' ) ?> />
 		<p class="description ns-cloner-clear"><?php _e( 'Pick an existing source site to clone. If you haven\'t already, now is a great time to set up a "template" site exactly the way you want the new clone site to start out (theme, plugins, settings, etc.).','ns-cloner' ); ?></p>
 		<?php
 		$this->close_section_box();

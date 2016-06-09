@@ -2,16 +2,16 @@
 /*
 Plugin Name: NS Cloner - Site Copier
 Plugin URI: http://neversettle.it
-Description: All new V3 of the amazing time saving Never Settle Cloner! NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out the add-ons for additional powerful features!
+Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out the add-ons for additional powerful features!
 Author: Never Settle
-Version: 3.0.5.4
+Version: 3.0.5.7
 Network: true
 Text Domain: ns-cloner
 Author URI: http://neversettle.it
 License: GPLv2 or later
 */
 /*
-Copyright 2012-2014 Never Settle (email : dev@neversettle.it)
+Copyright 2012-2016 Never Settle (email : dev@neversettle.it)
 
 This program is free software; you can redistribute it and/or 
 modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ define( 'NS_CLONER_LOG_FILE_URL', NS_CLONER_V3_PLUGIN_URL . 'logs/ns-cloner-summ
 define( 'NS_CLONER_LOG_FILE_DETAILED_URL', NS_CLONER_V3_PLUGIN_URL . 'logs/ns-cloner-' . date("Ymd-His", time()) . '.html' );
 
 // load Kint if no other plugins already have
-if ( !class_exists( 'Kint' ) ) {
+if ( !class_exists( 'Kint', FALSE ) ) {
 	require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/kint/Kint.class.php');
 }
 
@@ -75,7 +75,7 @@ class ns_cloner {
 	/**
 	 * Class Globals
 	 */
-	var $version = '3.0.5.4';
+	var $version = '3.0.5.7';
 	var $menu_slug = 'ns-cloner';
 	var $capability = 'manage_network_options';
 	var $global_tables = array(
@@ -158,8 +158,9 @@ class ns_cloner {
 		// register core pipeline steps
 		if( $this->current_clone_mode=='core' ){
 			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_create_site_step'), 100 );
-			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_clone_tables_step'), 200 );		
-			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_copy_files_step'), 300 );
+			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_save_settings_step'), 200 );
+			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_clone_tables_step'), 300 );		
+			add_filter( 'ns_cloner_pipeline_steps', array($this,'register_copy_files_step'), 400 );
 		}
 		// add main hook for addon registration
 		do_action( 'ns_cloner_construct', $this );
@@ -394,6 +395,17 @@ class ns_cloner {
 		}
 	}
 	
+	function save_settings(){
+		// TODO: Eventually move more of this to a Presets Add-on and let that define this clone step
+		if ( isset( $this->request['save_default_template'] ) ) {
+			$this->dlog( "Saving site option for default template ID: " . $this->request['source_id'] );
+			update_site_option( 'ns_cloner_default_template', $this->request['source_id'] );
+		} else {
+			$this->dlog( "Deleting site option for default template.");
+			delete_site_option( 'ns_cloner_default_template' );
+		}
+	}
+	
 	function clone_tables(){		
 		$this->dlog( 'ENTER ns_cloner::clone_tables' );
 		
@@ -594,6 +606,10 @@ class ns_cloner {
 	// Helpers for registering core cloner steps - can be used by addons to include core steps in new modes
 	function register_create_site_step( $steps ){
 		$steps["create_site"] = array($this,"create_site");
+		return $steps;
+	}
+	function register_save_settings_step( $steps ){
+		$steps["save_settings"] = array($this,"save_settings");
 		return $steps;
 	}	
 	function register_clone_tables_step( $steps ){
