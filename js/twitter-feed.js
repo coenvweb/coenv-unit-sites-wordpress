@@ -3,9 +3,9 @@ jQuery(function ($) {
 
         // Set twitter hash/user, number of tweets & id/class to append tweets
         user: 'UWPCC',
-        numTweets: 5,
+        numTweets: 6,
         appendTo: '#twitter',
-        template: '<div class="tweet"><div class="tweet-wrapper"><div class="tweet-head">{PROF_IMG}\
+        template: '<div class="tweet large-12 medium-6 small-12 columns"><div class="tweet-wrapper"><div class="tweet-head">{PROF_IMG}\
                    <div class="names"><div class="username"><a href="{USER_URL}" target="_blank">{NAME}</a></div><div class="at_name"><a href="{USER_URL2}" target="_blank">@{USER}</a></div></div></div>\
                    <span class="content">{TEXT}</span><div class="media">{IMG}</div>\
                    <div class="tweet-footer"><div class="timestamp"><span class="twitter-logo"><i class="fa fa-twitter"></i></span><a href="{URL}" target="_blank"> {AGO}</a></div>\
@@ -183,5 +183,4 @@ jQuery(function ($) {
         }
     });
 });
-
 

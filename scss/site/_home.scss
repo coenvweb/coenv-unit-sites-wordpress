@@ -45,7 +45,6 @@
         font-weight: 800;
         vertical-align: middle;
 
-
         .twitter-logo {
             font-size: 3em;
             margin-right: 0.5rem;
@@ -56,17 +55,21 @@
 
     .tweet {
 
-        margin: 1rem;
-        background-color: $white;
-        border: 0.75px solid $border;
+        margin: 0.75rem 0rem;
 
         &:first-of-type {
             margin-top: 0;
+        }
+
+        &:nth-of-type(3) {
+            clear: left;
         }
     }
 
     .tweet-wrapper {
         padding: 0.75rem;
+        background-color: $white;
+        border: 0.75px solid $border;
     }
 
     .tweet-head {
@@ -105,7 +108,7 @@
 
     .tweet-footer {
         overflow: hidden;
-        padding-top: 1rem;
+        padding-top: 0.75rem;
 
         a {
             color: $text-lt !important;
