@@ -4,7 +4,7 @@
  */
 
 $white: #fff;
-$W: #333;
+$W: #fff;
 $accent: #5f3e8d;
 $accent-purple: $accent;
 $accent-lt: lighten( $accent, 15% );
@@ -16,6 +16,11 @@ $accent-teal-lt: lighten( $accent-teal, 45% );
 $accent-hover: $accent-lt;
 $dark-widget: #888;
 $white-button: #ddd;
+
+/* UW Colors */
+
+$uw-purple: #4b2e83;
+$uw-metgold: #85754d;
 
 $text: #000;
 $text-md: #444;
