@@ -179,7 +179,7 @@
       </div>
   </div>
   
-        <div class="top-bar-container show-for-medium-up">
+        <div class="row top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
                 <div class="top-bar-section">
                     <ul id="menu-main-menu" class="top-bar-menu">

@@ -21,6 +21,7 @@
                 @include encode_cb;
                 background-color: #ffffff;
                 text-align: left;
+                text-transform: uppercase;
 
                 &:hover, &:focus {
                     color: $accent;
@@ -56,15 +57,15 @@
                 }
             }
 
-            & > .page_item_has_children {
+            & > li {
                 &:before {
                     display: block;
                     position: absolute;
-                    top: 8px;
+                    top: 15px;
                     left: 0;
                     bottom: 8px;
                     width: 1px;
-                    height: 30px;
+                    height: 15px;
                     background: #d7dee5;
                 }
 
@@ -73,32 +74,19 @@
                         content: "";
                     }
                 }
-                
-                &.page-item-55 > a {
-                    background-position-x: 99%;                        
-                }
-                
-                &.current_page_item.page-item-55 > a, &.page-item-55 > a:hover {
-                    background-position-x: 99%;
-                }
 
                 &.current_page_item > a, & > a:hover{
                         color: $accent;
                 }
-
+                
+                & > a {
+                    padding: 0 3rem;
+                }
                 
             }
-    
-            .has-dropdown > a {
-                padding-right: rem-calc(15)!important;
-                @media #{$medium-only} {
-                    padding-right: rem-calc(15)!important;
-                }
-                .has-dropdown > a {
-                }
-                &:after {
-                    content: none;
-                }
+
+            li {
+                position: relative;
             }
         }
     }
