@@ -4,16 +4,13 @@
 .button {
 	display: inline-block;
 	vertical-align: middle;
-	@include rem('padding', 0.25, 1);
-	@include sans;
-	@include font-size(12);
-	font-weight: 400;
-	background: $white-button;
+	@include rem('padding', 0.5, 1.5);
+	@include font-size(14);
+	font-weight: 800;
+	background: #4b2e84;
 	text-decoration: none;
-	color: $text;
-	//@include border-radius( $radius );
-	border-radius: $radius;
-	//min-height: rem-calc(28);
+    text-transform: uppercase;
+	color: $white;
 	
 	&:hover {
 		background: rgba(0,0,0,0.6);
@@ -33,6 +30,10 @@
     &.active {
         background: $accent;
         color: white;
+    }
+
+    &:after {
+
     }
 
 } // .button

@@ -61,8 +61,8 @@
             margin-top: 0;
         }
 
-        &:nth-of-type(3) {
-            clear: left;
+        &:nth-of-type(2n+3) {
+            clear: both;
         }
     }
 
