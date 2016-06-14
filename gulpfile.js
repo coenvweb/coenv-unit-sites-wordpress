@@ -36,7 +36,6 @@ gulp.task('main_js', function () {
             './js/share.js',
             './js/widget-media-upload.js',
             './js/wp-menufix.js',
-            './js/twitter-feed.js',
             './js/main.js'
          ])
     .pipe(sourcemaps.init())

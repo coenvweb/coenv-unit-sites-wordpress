@@ -6,6 +6,7 @@
 .article {
 	position: relative;
 	margin-bottom: rem-calc(36);
+    padding-left: 1.5rem;
 
 	@media print {
 		padding: 0;
@@ -15,23 +16,27 @@
 
 .article__header {
 
+	border-bottom: 1px solid $border;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+
 	.article__title {
 		margin-top: 0;
-		@include rem('padding-bottom', 1);
-		@include serif;
-		@include font-size(18);
-		@include line-height(30);
+		@include encode;
+		@include font-size(30);
+		@include line-height(32);
+        color: $uw-gold;
 		font-weight: 400;
-		border-bottom: 2px solid $border;
+        text-transform: uppercase;
 
 		@media #{$medium-up} {
-			@include font-size(36);
-			@include line-height(48);
+			@include font-size(38);
+			@include line-height(50);
 		}
 
 		a {
 			text-decoration: none;
-			color: $text;
+			color: $uw-gold;
 		}
 
 		br {
@@ -80,6 +85,16 @@
 .article__content {
     @extend .clearfix;
 
+    h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
     li {
     	line-height: 1.6;
     	margin-bottom: rem-calc(5px);
@@ -93,9 +108,22 @@
 	}
 
 	blockquote {
-		@include rem('margin', 1, 2);
+        border: none;
+        float: left;
+        display: block;
+        padding: 0rem !important;
+        margin-right: 1rem !important;
+        width: 50%;
 
-	} // blockquote
+        p {
+            @include encode;
+            color: $uw-purple !important;
+            text-align: left;
+            border-top: 1px solid $uw-purple;
+            padding: 1rem 0.25rem;
+        }
+
+    } //blockquote
 
 	// tables
 	table {
@@ -190,6 +218,7 @@
 	.wp-caption.alignright {
 		@include rem('margin', 0, 0, 1, 1);
 	}
+
 
 	// captions
 	.wp-caption {

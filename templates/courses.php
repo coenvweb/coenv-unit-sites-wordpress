@@ -31,49 +31,50 @@ if (empty($coenv_cat_1)) {
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main">
+    <?php get_sidebar(); ?>
+	<div class="small-12 medium-9 columns" role="main">
 		<div class="entry-content">
-		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
+        <header class="article__header">
+		    <h1 class="article__title"><?php the_title(); ?></h1>
             
-		<div class="row filters">
-			<div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
-				<?php
-                
-$cats_args  = array(
-	'orderby' => 'id',
-	'order' => 'DESC',
-	'taxonomy' => 'course_quarter',
-    'hide_empty' => 0,
-    'number' => 0,
-    'offset' => 0
-);
-$cats = get_terms($cats_args);
-	if ($cats) {
-        echo '<div>';
-        $old_cats = [];
-        $i = -1;
-		foreach(array_reverse($cats) as $cat) { 
-            $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
-            if ($current_quarters[0] == $cat->term_id) {
-                $old_cat_selected = $old_cats[$i]->slug == $coenv_cat_term_1 ? ' active' : '';
-                echo '<a class="button' . $old_cat_selected . '" href="?tax=course_quarter&term=' . $old_cats[$i]->slug . '">' . $old_cats[$i]->name . '</a>';
-                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
-                $new_cats = true;
-            } elseif (isset($new_cats)){
-                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
-            } else {
-                $old_cats[]= $cat;
-                $i++;
-            }
-		}
-        echo '</div>';
-        $GLOBALS['old_cats'] = $old_cats;
-	} 
-
-                // Category filter ?>
-		</div>
+            <div class="row filters">
+                <div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
+                    <?php
+                    
+                    $cats_args  = array(
+                        'orderby' => 'id',
+                        'order' => 'DESC',
+                        'taxonomy' => 'course_quarter',
+                        'hide_empty' => 0,
+                        'number' => 0,
+                        'offset' => 0
+                    );
+                    $cats = get_terms($cats_args);
+                    if ($cats) {
+                        echo '<div>';
+                        $old_cats = [];
+                        $i = -1;
+                        foreach(array_reverse($cats) as $cat) { 
+                            $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
+                            if ($current_quarters[0] == $cat->term_id) {
+                                $old_cat_selected = $old_cats[$i]->slug == $coenv_cat_term_1 ? ' active' : '';
+                                echo '<a class="button' . $old_cat_selected . '" href="?tax=course_quarter&term=' . $old_cats[$i]->slug . '">' . $old_cats[$i]->name . '</a>';
+                                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                                $new_cats = true;
+                            } elseif (isset($new_cats)){
+                                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                            } else {
+                                $old_cats[]= $cat;
+                                $i++;
+                            }
+                        }
+                        echo '</div>';
+                        $GLOBALS['old_cats'] = $old_cats;
+                    }
+                    // Category filter ?>
+                </div>
             </div>
-		<hr>
+        </header>
 		
 		<?php
 		/**
@@ -109,6 +110,7 @@ $cats = get_terms($cats_args);
 				</strong>
 				</div>
         </div>
+        <hr>
 
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
@@ -162,7 +164,6 @@ $cats = get_terms($cats_args);
 	</div>
     </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
-<?php get_sidebar(); ?>
 </div>
 </div>
 <?php get_footer(); ?>

@@ -1,15 +1,11 @@
 // General sidebar
 aside#sidebar {
-	margin-top: rem-calc(57);
 	padding-right: 1rem !important;
+    margin-top: 2rem;
 
 	.section-title {
-		@include encode_cb;
-		a {
-
-		font-size: rem-calc(22);
-
-		}
+		background-color: #f2f2f2;
+		border: 1px solid #ccc;
 	}
 
 	// Hide for mobile	
@@ -22,7 +18,6 @@ aside#sidebar {
 
 	// Second-level navigation
 	.coenv_base_subnav ul {
-		border-top: 1px solid #dddddd;
 		margin: 0  1rem rem-calc(30) 0;
 		padding: 0;
 		line-height: 10px;
@@ -30,18 +25,21 @@ aside#sidebar {
 		li {
 			background-color: #f2f2f2;
 			border-bottom: 1px solid #ccc;
-			padding: 0;
+			border-left: 1px solid #ccc;
+			border-right: 1px solid #ccc;
+			padding: 0.25rem 0;
 			margin: 0;
 			text-transform: uppercase;
 			font-size: 1rem;
 			a {
+
+		        @include encode;
+                font-weight: 600;
 				display: block;
 				line-height: 152%;
+                padding-left: 2rem;
 				&:not(.button) {
 					color: #000;
-				}
-				&:hover {
-					color: $accent;
 				}
 			}
 			ul {
@@ -50,7 +48,7 @@ aside#sidebar {
 					border: 0;
 
 					a {
-					padding-left: 2rem !important;
+					padding-left: 3rem !important;
 					}
 				}
 				&.side-nav {
@@ -63,6 +61,11 @@ aside#sidebar {
 	.widget {
 		margin-bottom: rem-calc(30);
 	}
+
+    h2 {
+        margin-top: 0;
+        line-height: 2rem;
+    }
 
 
 

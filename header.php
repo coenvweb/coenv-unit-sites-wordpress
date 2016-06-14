@@ -211,13 +211,9 @@
 ?>
     <?php if (($banner) && (!is_single())) {
             echo '<div class="page-row">';
-            echo '<div>';
+            echo '<div class="banner" style="background-image: url(' . $banner['url'] . ')">';
+            echo '</div>';
         }
-     ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini">';
-            echo '<div>';
-     }
      ?>
 
 </div>

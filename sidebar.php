@@ -1,16 +1,11 @@
-<!--
-	<?php //do_action('foundationPress_before_sidebar'); ?>
-	<?php //dynamic_sidebar("sidebar-widgets"); ?>
-	<?php //do_action('foundationPress_after_sidebar'); ?>
-</aside>-->
-<?php  
+<?php
 /**
  * The sidebar template
  *
  * Serves up sidebar widgets for individual top level pages
  */
 ?>
-<aside id="sidebar" class="small-12 medium-4 large-3 columns">
+<aside id="sidebar" class="small-12 medium-3 large-3 columns">
 <?php
 $menu_id = $GLOBALS['post']->ID;    
 if (is_singular('courses')) {
@@ -21,6 +16,7 @@ if (!is_front_page()) {
 		/*if ($GLOBALS['post']->post_parent) {
 			echo coenv_base_section_title($GLOBALS['post']->ID);
 		}*/
+        echo coenv_base_section_title($GLOBALS['post']->ID);
 		echo coenv_base_hierarchical_submenu($menu_id);
 	echo '</div>';
 }

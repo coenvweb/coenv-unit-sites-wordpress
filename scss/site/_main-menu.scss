@@ -11,12 +11,12 @@
         #menu-main-menu { 
             li a {
                 @media #{$large-up} {
-                    font-size: rem-calc(16);
+                    font-size: rem-calc(17);
                 }
                 @media #{$medium-only} {
                     background-image: none!important;
                 }
-                font-size: rem-calc(14);
+                font-size: rem-calc(16);
                 color: $text;
                 @include encode_cb;
                 background-color: #ffffff;
@@ -65,7 +65,7 @@
                     left: 0;
                     bottom: 8px;
                     width: 1px;
-                    height: 15px;
+                    height: 18px;
                     background: #d7dee5;
                 }
 
@@ -80,9 +80,15 @@
                 }
                 
                 & > a {
-                    padding: 0 3rem;
+                    padding: 0 4rem;
                 }
                 
+            }
+
+            .has-dropdown a {
+                &:after {
+                    content: '';
+                }
             }
 
             li {

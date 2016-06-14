@@ -1,10 +1,7 @@
 <?php get_header(); ?>
 <div class="row">
-	<?php //coenv_base_section_title($post->ID); ?>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-	<?php //endif; ?>
-	<div class="small-12 medium-8 columns" role="main">
+	<?php get_sidebar(); ?>
+	<div class="small-12 medium-9 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
@@ -31,6 +28,5 @@
 	<?php do_action('foundationPress_before_content'); ?>
 
 	</div>
-	<?php get_sidebar(); ?>
 </div>
 <?php get_footer(); ?>

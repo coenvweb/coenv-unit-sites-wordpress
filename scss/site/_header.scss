@@ -71,7 +71,7 @@
         font-weight: 500!important;
         font-size: rem-calc(18)!important;
         @media #{$large-up} {
-            font-size: rem-calc(23)!important;
+            font-size: rem-calc(20)!important;
         }
         float: left;
         margin: rem-calc(18);
@@ -81,9 +81,9 @@
     }
     #desktop-logo {
         fill: $white;
-        width: rem-calc(108);
-        height: rem-calc(71);
-        margin-right: rem-calc(10);
+        width: rem-calc(100);
+        height: rem-calc(68);
+        margin-right: rem-calc(20);
         vertical-align: middle;
         span {
             @extend .visuallyhidden;
@@ -108,22 +108,21 @@
         list-style: none;
     }
     .uw-name {
-        width: 150px;
-        height: 10px;
+        width: 170px;
+        height: 12px;
         fill: $white;
     }
     .college-name {
-        width: 207px;
-        height: 15px;
+        width: 225px;
+        height: 17px;
         fill: $white;
         border-bottom: 0.25px solid $border;
         padding-bottom: 0.25rem;
     }
     a {
-        padding-bottom: 0;
-    }
-    .college-name, .uw-name {
-        float: left;
+        .college-name, .uw-name {
+            float: left;
+        }
     }
 }
 
@@ -146,4 +145,10 @@
 }
 .breadcrumbs>* {
 	line-height: rem-calc(16);
+}
+
+.banner {
+    height: rem-calc(250);
+    background-repeat: no-repeat;
+    background-size: cover;
 }

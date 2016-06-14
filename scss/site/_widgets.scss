@@ -84,12 +84,11 @@ aside#sidebar div.columns {
 	// Content blocks
 	.widget_custom_post_widget {
 		.widget_content {
-			padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
-			h4 {
-				@include encode_cb;
-				font-size: rem-calc(22);
-				letter-spacing: .1rem;
-			}
+            h4 {
+                @include encode;
+                font-weight: 200;
+                padding: 1rem 0rem;
+            }
 			p {
 				margin-bottom: 0;
 			}
@@ -103,8 +102,6 @@ aside#sidebar div.columns {
 				width: 100%;
 				a {
 					
-
-					
 					letter-spacing: rem-calc(1);
 					margin: 0 0 rem-calc(6) 0;
 					padding: rem-calc(10);
@@ -117,40 +114,61 @@ aside#sidebar div.columns {
 			}
 		}
 	}
-	&:nth-child(odd) {
+	&:nth-child(even) {
 		.widget_custom_post_widget {
-			background-color: #f2f2f2;
+			background-color: $white;
 			.widget_content {
-				h4 a {
-					color:  #333;
-				}
+				h4 {
+					color:  $uw-purple;
+                    border-bottom: 1px solid $uw-purple;
+                    a {
+					    color:  $uw-purple;
+				    }
+                }
 			}
-			.widget_links {
-				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
-				.button {
-					background-color: #333;
-					color: $white;
-					text-align: left;
-				}
-			}
+            .button {
+                margin-top: 0.5rem;
+                margin-bottom: 0rem;
+                background-color: $uw-purple;
+                color: $white;
+                text-align: left;
+                a {
+                    color: $white;
+                    text-align: left;
+                }
+            }
+
+            .widget_links {
+                margin-top: 0rem;
+            }
 			
 		}
 	}
-	&:nth-child(even) {
+	&:nth-child(odd) {
 		.widget_custom_post_widget {
-			background-color: #f2f2f2;
+			background-color: $uw-purple;
+            border: 1px solid $black;
 		}
 		.widget_custom_post_widget .widget_content {
-
+			padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
+            color: $white;
+            h4 {
+                color: $white;
+                border-bottom: 1px solid $white;
+            }
+            p {
+                padding: 1rem 0rem;
+            }
 		}
 		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			padding-left: rem-calc(20);
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
-			background-repeat: no-repeat;
-			background-position: bottom center;
+            padding: 0rem;
+            a { 
+                padding: 0rem;
+                &:hover {
+                    background-color: inherit;
+                }
+            }
+
 		}
 		
 	}
