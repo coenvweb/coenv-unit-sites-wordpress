@@ -133,7 +133,7 @@ class coenv_base_content extends WP_Widget {
  */
     public function form( $instance ) {
 
-        if ( $instance['error'] ) {
+        if ( !empty($instance['error']) ) {
             echo '<div class="notice notice-error is-dismissible">';
             echo '<strong>ERROR</strong>: ';
             echo $instance['error'] . '<br/>';
