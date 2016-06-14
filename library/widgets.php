@@ -61,6 +61,11 @@ function coenv_base_sidebar_widgets() {
       'after_title' => $after_title   
   ));
   register_sidebar(array(
+      'id' => 'homepage-twitter',
+      'name' => __('Home / Twitter Sidebar', 'foundationpress'),
+      'description' => __('Drag widgets to this container', 'foundationpress')
+  ));
+  register_sidebar(array(
       'id' => 'after-content',
       'name' => __('Body / After content', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
@@ -68,7 +73,7 @@ function coenv_base_sidebar_widgets() {
       'after_widget' => $after_widget,
       'before_title' => $before_title,
       'after_title' => $after_title     
-  ));
+  )); 
   register_sidebar(array(
       'id' => 'home-content',
       'name' => __('Home / Main Content after Feature', 'foundationpress'),

@@ -5,7 +5,7 @@ Template Name: Homepage
 ?>
 <?php get_header(); ?>
 <div class="row">
-    <div class="small-12 large-12 columns" role="main">
+   <div class="small-12 large-12 columns" role="main">
 
     <?php do_action('foundationPress_before_content'); ?>
     <?php dynamic_sidebar("before-content"); ?>
@@ -139,7 +139,7 @@ $wp_query = new WP_Query( $home_args );
     <?php if ($wp_query->have_posts()): ?>
     <hr />
     <div class="home-news-section clearfix">
-        <div class="columns large-8 left" style="margin-top: 0; padding-top: 0;">
+        <div class="columns large-8 medium-8 left" style="margin-top: 0; padding-top: 0;">
         <h2 class="news-title">News</h2>
         <a class="button right" href="/pcc/about/news">More News</a>
         <?php
@@ -184,22 +184,11 @@ $wp_query = new WP_Query( $home_args );
     ?>
     </div>
 <?php endif; ?>
-    <div class="large-4 columns">
-        <div id="twitter" class="row">
-            <h2 class="at_title"><span class="twitter-logo"><i class="fa fa-twitter"></i></span>@UWPCC</div>
-            <script>
-                $(document).ready( function() {
-                    // start jqtweet!
-                    if(jQuery('#twitter').length) {
-                        JQTWEET.loadTweets('UWPCC', 6);
-                    }   
-                });
-            </script>
-            <?php
-                //auth with twitter API. Fetch last 4-5 tweets and generate html (maybe ajax?) 
-            ?>
-        </div>
+<?php if( is_active_sidebar('homepage-twitter') ) { ?>
+    <div class="large-4 medium-4 columns">
+        <?php dynamic_sidebar('homepage-twitter'); ?>
     </div>
+<?php } ?>
 </div>  
 </div>
 </div>
