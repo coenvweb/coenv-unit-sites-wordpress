@@ -187,6 +187,14 @@ $wp_query = new WP_Query( $home_args );
     <div class="large-4 columns">
         <div id="twitter" class="row">
             <h2 class="at_title"><span class="twitter-logo"><i class="fa fa-twitter"></i></span>@UWPCC</div>
+            <script>
+                $(document).ready( function() {
+                    // start jqtweet!
+                    if(jQuery('#twitter').length) {
+                        JQTWEET.loadTweets('UWPCC', 6);
+                    }   
+                });
+            </script>
             <?php
                 //auth with twitter API. Fetch last 4-5 tweets and generate html (maybe ajax?) 
             ?>

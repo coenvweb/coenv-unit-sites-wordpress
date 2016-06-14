@@ -182,12 +182,12 @@ function coenv_banner() {
     $banner = false;
 
     $ancestor_id = coenv_get_ancestor('ID');
-    
+
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
         $ancestor_id = 7;
     }
-    
+
     if ( has_post_thumbnail( $ancestor_id ) ) {
         $page_id = $ancestor_id;
     }
@@ -216,26 +216,23 @@ function coenv_banner() {
  */
 function coenv_base_section_title($id) {
 
-     $coenv_post = get_post($id);
-    //print_r($coenv_post);
+    $coenv_post = get_post($id);
     $section_ancestors = get_post_ancestors($id);
     $coenv_post_section = get_post(array_pop($section_ancestors));
 
-    if (coenv_base_post_parent($id)):
-        $section_title = '<div class="section-title"><a href="' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
-    elseif (!is_front_page()):
+    if (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     endif;
-    
+
     if ( is_singular( 'courses' )) { //change news pages' section titles
         unset ($section_title);
         $section_title = '<div class="columns large-12 section-title"><h2><a href="../../"><span>&larr; View All</span></a></h2></div>';
     }
-    
+
     // if ( is_page_template('templates/courses.php')) { //change news index' section titles
        // unset ($section_title);
         //$section_title = '<div class="columns large-12 section-title"><h1><a href="">Courses</a></h1></div>';
     //}
-        
-        echo $section_title;
-    }
+
+    echo $section_title;
+}
