@@ -351,7 +351,7 @@ $posted = array();
 				<?php
                     //if no events, then add a third news column
                     $events_xml = fetch_feed( 'https://www.trumba.com/calendars/sea_fish.rss?posts_per_page=4' );
-					if ( $events_xml->get_items() == false || $events_xml == '' ) { ?>
+					if ( count($events_xml->get_items()) < 3 ) { ?>
                         <div class="columns small-12 medium-4 news-column">
                         <?php
                         $home_col_3_args = array(
