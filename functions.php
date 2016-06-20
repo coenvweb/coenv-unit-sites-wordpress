@@ -285,6 +285,16 @@ function encodeEmail($result) {
 add_filter( 'the_content', 'remove_plaintext_email', 20 );
 add_filter( 'widget_text', 'remove_plaintext_email', 20 );
 
+//Set pub year meta value to value of pub year category for easier search sorting
+function setPubDate($post_id) {
+    $post = get_post($post_id);
+    if(strpos($post->post_type, 'publications') !== false) {
+        $year = get_the_terms($post_id, 'publication_year');
+        update_field('publication_year', $year[0]->name, $post_id);
+    }
+}
+add_action('save_post', 'setPubDate');
+
 
 /* 
  * Serve images over SSL, if enabled

@@ -44,7 +44,9 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			'post_type'	=> 'publications',
 			'post_status' => 'publish',
 			'posts_per_page' => 100,
-			'paged' => $paged
+			'paged' => $paged,
+            'meta_key' => 'publication_year',
+            'orderby' => array( 'meta_value_num' => 'DESC', 'post_title' => 'ASC' )
 		);
 
 		// Category filter
@@ -53,14 +55,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 
-		// Order by date (year), then title and strip italics from sort
-		function order_by_multiple( $orderby) {
-  			return "YEAR(post_date) DESC, REPLACE(post_title,'<i>','') ASC";
-		}
-		add_filter("posts_orderby", "order_by_multiple");
 		$wp_query = new WP_Query( $query_args );
-		remove_filter( 'posts_orderby', 'order_by_multiple' );
-
 
 		?>
 
