@@ -340,3 +340,7 @@ function encodeEmail($result) {
 }
 add_filter( 'the_content', 'remove_plaintext_email', 20 );
 add_filter( 'widget_text', 'remove_plaintext_email', 20 );
+
+if( function_exists('acf_add_options_page') ) {
+    acf_add_options_page();
+}
