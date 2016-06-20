@@ -61,6 +61,25 @@ $base-font-size: 20;
   line-height: ( $val / ( $base-font-size / 1 ) ) + rem;
 }
 
+/*  Media queries
+    ======================================================================== */
+
+@mixin min-width( $point ) {
+  @media ( min-width: $point + px ) { @content; }
+}
+
+@mixin max-width( $point ) {
+  @media ( max-width: $point + px ) { @content; }
+}
+
+@mixin min-height( $point ) {
+  @media ( min-height: $point + px ) { @content; }
+}
+
+@mixin max-height( $point ) {
+  @media ( max-height: $point + px ) { @content; }
+}
+
 /*  Placeholders
     ======================================================================== */
 

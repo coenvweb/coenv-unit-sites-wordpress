@@ -1,5 +1,16 @@
+.homepage-features {
+
+
+    h1 {
+        color: $uw-gold;
+        font-size: rem-calc(34);
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
 .feature {
-	color: $white;
+
+	color: $text;
 	
 	ul li {
 		list-style-type: none;
@@ -7,7 +18,7 @@
 	
 	.feature-image {
 		width: 100%;
-		padding-top: 40%;
+		padding-top: 30%;
 		max-height: rem-calc(350);
 		background-repeat: no-repeat;
 		background-size: cover;
@@ -15,52 +26,36 @@
 		position: relative;
 	}
 	
-	.feature-info-container {
-		
-		.feature-info {
-			background-color: $accent;
-			padding: rem-calc(16);
-			position: absolute;
-			right: 0;
-			bottom: 0;
-			width: 50%;
+    .feature-content {
+        padding: rem-calc(16);
 
-			@media #{$small-only} {
-				width: 50%;
+        @media #{$small-only} {
 
-				h2 {
-					font-size: rem-calc(14);
-				}
-				p.feature-excerpt {
-					font-size: rem-calc(12);
-				}
+            h2 {
+                font-size: rem-calc(14);
+            }
+            p.feature-excerpt {
+                font-size: rem-calc(12);
+            }
 
-
-			 }
-		}
-		
-		h2 {
-			
-			color: $white;
-			font-size: rem-calc(32);
-			margin: 0;
-		}
-		
-		
-		.button {
-			margin: 0 rem-calc(5) 0 0;
-		}
-		
-		.feature-image-caption {
-			font-size: rem-calc(10);
-			margin-right: rem-calc(16);
-		}
-		
-		p {
-			margin-bottom: rem-calc(10);
-		}
-		
-	}
+        }
+        
+        h2 {
+            font-size: rem-calc(22);
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .button {
+            margin: 0 rem-calc(5) 0 0;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            color: $text-lt;
+            letter-spacing: 0.5px;
+        }
+    }
 }
 
 .slick-slider {

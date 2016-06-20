@@ -4,11 +4,9 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
    <div class="small-12 large-12 columns" role="main">
 
     <?php do_action('foundationPress_before_content'); ?>
-    <?php dynamic_sidebar("before-content"); ?>
         <?php
 
         /**
@@ -22,8 +20,8 @@ Template Name: Homepage
             );
         $feature_query = new WP_Query( $feature_args ); ?>
         <?php //if ($feature_query->have_posts()) { ?>
-        <div class="playpause"></div>
-            <div class="homepage-features">
+            <div class="row homepage-features">
+                <h1>Climate Science, Collaboration, and Community</h1>
             <?php
             # The Loop
             while ( $feature_query->have_posts() ) :
@@ -45,12 +43,10 @@ Template Name: Homepage
             }
             $rows = get_field('feature_add_links');
 
-echo '<div class="feature">';
-    echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+        echo '<div class="feature">';
+            echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+            echo '</div>';
 
-        echo '<div class="feature-info-container">';
-        echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-        echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
             echo '<div class="feature-content">';
                 echo '<h2>' . get_the_title() . '</h2>';
                 echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
@@ -73,40 +69,42 @@ echo '<div class="feature">';
 
             echo '</div><!-- .feature-content -->';
 
-        echo '</div><!-- .feature-info -->';
-
-    echo '</div><!-- .feature-info-container -->';
-    echo '</div>';
-
-
-echo '</div><!-- .feature -->';
+        echo '</div><!-- .feature -->';
 endwhile;
 wp_reset_postdata();
+echo "<hr />";
 echo '</div>';
 ?>
 </div>
-                
-<?php if ( is_active_sidebar( 'home-content' ) ) : ?>
-<div class="large-12 columns programs">
-    <div class="widget-area home-content" role="complementary">
-        <?php dynamic_sidebar( 'home-content' ); ?>
-    </div><!-- .widget-area -->
-</div>
-<?php endif; ?>
-        &nbsp;
-        <hr />
-</div>
-    
 <?php if ( is_active_sidebar( 'home-columns' ) ) : ?>
 <div class="row programs" data-equalizer data-equalizer-mq="large-up">
     <div class="widget-area home-columns">
         <?php dynamic_sidebar( 'home-columns' ); ?>
     </div>
+    <hr />
 </div>
 <?php endif; ?>
     
-<div class="row news">
+<div class="fullwidth" style="height:150px; background-color:#85754d;">
+</div>
 
+<?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
+<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
+    <div class="list columns large-12">
+        <h2>Hosted Events</h2>
+        <hr />
+        <div class="widget-area home-columns">
+            <?php dynamic_sidebar( 'hosted-events' ); ?>
+        </div>
+    </div>
+    <hr />
+</div>
+<?php endif; ?>
+
+<div class="fullwidth" style="height:150px; background-color:#85754d;">
+</div>
+
+<div class="row news">
 <?php
 # News with featured news
 # Other News
@@ -132,16 +130,14 @@ else {
         'posts_per_page' => 1,
         'post_status' => 'publish',
     );
-   echo '<div class="home-news-section clearfix">';
 }
 $wp_query = new WP_Query( $home_args );
 ?>
     <?php if ($wp_query->have_posts()): ?>
-    <hr />
     <div class="home-news-section clearfix">
         <div class="columns large-8 medium-8 left" style="margin-top: 0; padding-top: 0;">
-        <h2 class="news-title">News</h2>
         <a class="button right" href="/pcc/about/news">More News</a>
+        <h2 class="news-title">News</h2>
         <?php
         # The Loop
         while ( $wp_query->have_posts() ) :
@@ -182,6 +178,10 @@ $wp_query = new WP_Query( $home_args );
     echo '</div>';
     endwhile;
     ?>
+    <hr/>
+    <a href="/events" id="more_events" class="right button" >More Events</a>
+    <a href="/events" ><h2>Events</h2></a>
+    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
     </div>
 <?php endif; ?>
 <?php if( is_active_sidebar('homepage-twitter') ) { ?>
@@ -193,30 +193,9 @@ $wp_query = new WP_Query( $home_args );
 </div>
 </div>
 
-<?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
-<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
-<hr />
-    <div class="list columns large-12">
-        <h2>Hosted Events</h2>
-        <div class="widget-area home-columns">
-            <?php dynamic_sidebar( 'hosted-events' ); ?>
-        </div>
-    </div>
-    <hr />
-</div>
-<?php endif; ?>
-    
-<div class="row events">
-    <div class="list columns large-12">
-        <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
-    </div>      
-</div>
-
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
-</div>
 </div>
 <?php get_footer(); ?>

@@ -5,7 +5,7 @@
  * Serves up sidebar widgets for individual top level pages
  */
 ?>
-<aside id="sidebar" class="small-12 medium-3 large-3 columns">
+<aside id="sidebar" class="show-for-medium-up medium-3 large-3 columns">
 <?php
 $menu_id = $GLOBALS['post']->ID;    
 if (is_singular('courses')) {

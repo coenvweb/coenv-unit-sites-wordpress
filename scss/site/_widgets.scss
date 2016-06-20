@@ -20,14 +20,13 @@
 
     .event-list {
         list-style: none;
-        margin: 0 -1rem;
+        margin: 0rem;
 
         li {
-            @include grid-column(3);
             .single-event {
                 display: block;
                 background-color: $bg-light;
-                border-top: 4px solid $accent;
+                border-bottom: 2px solid $accent;
                 color: $accent;
                 padding: 1rem 2rem;
                 height: 100%;
@@ -37,29 +36,21 @@
                 }
             }
 
+            i {
+                @extend .visuallyhidden;
+            }
+
             .date {
-                @include o_sans_bold;
-                padding-bottom: 1rem;
-                margin-bottom: .7rem;
-                font-size: .9rem;
+                @include encode;
                 margin-bottom: 0;
-                i {
-                    @extend .visuallyhidden;
-                }
-                &:after {
-                    content: "";
-                    position: relative;
-                    height: 4px;
-                    width: 40%;
-                    background-color: $accent;
-                    bottom: -.7rem;
-                    display: block;
-                    margin: 0 auto;
-                }
+                font-size: .9rem;
+                font-weight: 600;
             }
             .title {
-                font-size: 1.1rem!important;
+                @include uni;
+                font-size: 1.75rem!important;
                 margin-bottom: 0;
+                color: $text;
             }
         }
     }
