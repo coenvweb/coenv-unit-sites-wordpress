@@ -10,6 +10,10 @@ Require shibboleth
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
 
+# block super aggresive baidu spider
+RewriteCond %{HTTP_USER_AGENT} ^Baiduspider.* [NC]
+RewriteRule .* - [F]
+
 # Increasing limits for giant menus
 php_value max_input_vars 3000
 php_value suhosin.get.max_vars 3000
@@ -38,6 +42,9 @@ RewriteRule ^(.*)$ http://hazards.uw.edu/geology/m9 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} hazards.washington.edu [NC]
 RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
+RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
 # SSL on each domain
 
