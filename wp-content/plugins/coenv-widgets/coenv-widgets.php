@@ -74,56 +74,54 @@ class coenv_base_content extends WP_Widget {
         echo $args['before_widget'];
 
         echo "<div class='solid-widget'>";
-            echo "<div class='small-12 columns'>";
-                echo "<article class='widget widget_custom_post_widget'>";
-        
-                    if(!empty($instance['link'])) {
-                        $target = $this->getLinkTarget($instance['link'], home_url());
-                            echo "<a target='".$target."' href='".$instance['link']."'>";
-                    }
+            echo "<article class='widget widget_custom_post_widget'>";
+    
+                if(!empty($instance['link'])) {
+                    $target = $this->getLinkTarget($instance['link'], home_url());
+                        echo "<a target='".$target."' href='".$instance['link']."'>";
+                }
 
-                    if(!empty($instance['image'])) {
-                        echo "<div class='widget_img'>";
-                        echo "<img src='".$instance['image']."' alt='".get_post_meta($instance['imageID'], '_wp_attachment_image_alt', true)."' />";
-                        echo "</div>";
-                    }
-
-                    echo "<div class='widget_content'>";
-
-                    if (!empty($instance['title'])) { 
-                        echo $args['before_title'];
-
-                        if(!empty($instance['link'])) {
-                            echo apply_filters('widget_title', $instance['title']);
-                        } else {
-                            echo apply_filters('widget_title', $instance['title']);
-                        }
-
-                        echo $args['after_title'];
-                    }
-
-                    if(!empty($instance['link'])) {
-                        echo '</a>';
-                    }
-
-                    if(!empty($instance['content'])) {
-                        echo apply_filters('the_content', $instance['content']);
-                    }
-
-                   echo "<ul class='widget_links'>";
-                   if(!empty($instance['link']) && !empty($instance['linktext'])) {
-                        $target = $this->getLinkTarget($instance['link'], home_url());
-                        echo "<li><a class='button' target='".$target."' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
-                    }
-                    if(!empty($instance['link2']) && !empty($instance['linktext2'])) {
-                        $target = $this->getLinkTarget($instance['link2'], home_url());
-                        echo "<li><a class='button' target='".$target."' href='".$instance['link2']."'>".$instance['linktext2']."</a></li>";
-                    }
-                    echo "</ul>";
-
+                if(!empty($instance['image'])) {
+                    echo "<div class='widget_img'>";
+                    echo "<img src='".$instance['image']."' alt='".get_post_meta($instance['imageID'], '_wp_attachment_image_alt', true)."' />";
                     echo "</div>";
-                echo "</article>";
-            echo "</div>";
+                }
+
+                echo "<div class='widget_content'>";
+
+                if (!empty($instance['title'])) { 
+                    echo $args['before_title'];
+
+                    if(!empty($instance['link'])) {
+                        echo apply_filters('widget_title', $instance['title']);
+                    } else {
+                        echo apply_filters('widget_title', $instance['title']);
+                    }
+
+                    echo $args['after_title'];
+                }
+
+                if(!empty($instance['link'])) {
+                    echo '</a>';
+                }
+
+                if(!empty($instance['content'])) {
+                    echo apply_filters('the_content', $instance['content']);
+                }
+
+               echo "<ul class='widget_links'>";
+               if(!empty($instance['link']) && !empty($instance['linktext'])) {
+                    $target = $this->getLinkTarget($instance['link'], home_url());
+                    echo "<li><a class='button' target='".$target."' href='".$instance['link']."'>".$instance['linktext']."</a></li>";
+                }
+                if(!empty($instance['link2']) && !empty($instance['linktext2'])) {
+                    $target = $this->getLinkTarget($instance['link2'], home_url());
+                    echo "<li><a class='button' target='".$target."' href='".$instance['link2']."'>".$instance['linktext2']."</a></li>";
+                }
+                echo "</ul>";
+
+                echo "</div>";
+            echo "</article>";
         echo "</div>";
 
         echo $args['after_widget'];
@@ -135,7 +133,7 @@ class coenv_base_content extends WP_Widget {
  */
     public function form( $instance ) {
 
-        if ( $instance['error'] ) {
+        if ( !empty($instance['error']) ) {
             echo '<div class="notice notice-error is-dismissible">';
             echo '<strong>ERROR</strong>: ';
             echo $instance['error'] . '<br/>';
