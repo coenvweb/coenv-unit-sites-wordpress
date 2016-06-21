@@ -1,5 +1,6 @@
 jQuery(function ($) {
     $(document).ready(function() {
-        $('#acf-publication_year').hide();
+        $('div').find("[data-name='publication_year']").hide();
+        $('div').find("[data-field-name='publication_year']").hide();
     });
 });
