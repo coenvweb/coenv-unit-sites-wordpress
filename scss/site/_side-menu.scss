@@ -39,6 +39,8 @@ li.tweets_avatar {
 
     .tweet_data {
     	@include o_sans;
+        word-break: normal !important;
+        hyphens: none !important;
 
     	a {
     		color: $accent !important;
