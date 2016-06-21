@@ -293,6 +293,43 @@ function coenv_url_ssl($url)
 }
 add_filter('wp_get_attachment_url', 'coenv_url_ssl');
 
+/* 
+ * Redirect to homepage after password reset
+ */
+add_action( "password_reset", "rngs_password_reset", 10, 2 );
+
+/**
+ * Implement "password_reset" for RNGS
+ *
+ * After a password reset has been performed we want the Log in link to redirect the user to the home url.
+ * When we see this action being run we know that we should be filtering "login_url" to add the redirect the home page.
+ * We don't filter "login_url" any other time. 
+ *
+ * @param WP_User $user - the user object
+ * @param string $new_pass - the new password
+ *  
+ */
+function rngs_password_reset( $user, $new_pass ) {
+  add_filter( "login_url", "rngs_login_url", 10, 2 );
+}
+
+/**
+ *  Implement "login_url" filter for RNGS
+ *
+ * Redirect the user to the home page after logging in
+ *
+ * @TODO - make this an option field that controls where the logged in user goes
+ * @TODO - dependent upon role?
+ * 
+ * @param string $login_url - the original login_url which is not expected to include "redirect_to" or "reauth"
+ * @param string $redirect - expected to be null/blank
+ */
+function rngs_login_url( $login_url, $redirect ) {
+  $home_redirect = home_url();
+  $login_url = add_query_arg('redirect_to', urlencode( $home_redirect ), $login_url);
+  return( $login_url );
+} 
+
 // html encode emails to cut down on spam
 function remove_plaintext_email($emailAddress) {
     $emailRegEx = '/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4})/i';
