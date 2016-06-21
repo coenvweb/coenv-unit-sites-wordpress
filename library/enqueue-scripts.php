@@ -21,6 +21,12 @@ if (!function_exists('FoundationPress_scripts')) :
   add_action( 'wp_enqueue_scripts', 'FoundationPress_scripts' );
 endif;
 
+function admin_scripts() {
+    wp_register_script( 'adminjs', get_template_directory_uri() . '/js/admin.js', array('jquery'), '1.0.0', false );
+    wp_enqueue_script('adminjs');
+}
+add_action('admin_enqueue_scripts', 'admin_scripts');
+
 function kitchensink_scripts() {
   if ( is_page_template('kitchen-sink.php') ) {
 
