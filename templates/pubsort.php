@@ -6,9 +6,7 @@ Template Name: Publications Sort Migration
 $query_args = array(
     'post_type' => 'publications',
     'post_status' => 'publish',
-    'posts_per_page' => -1,
-    'meta_key' => 'publication_year',
-    'orderby' => array( 'meta_value_num' => 'DESC', 'post_title' => 'ASC' )
+    'posts_per_page' => -1
 );
 
 $wp_query = new WP_Query($query_args);
