@@ -72,7 +72,9 @@
                         <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout">Log Out</a>	
                     <?php 
                     } else {
-                        echo wp_login_url();
+                    ?>
+                        <a href="<?php echo wp_login_url(); ?>">Staff Login</a>
+                    <?php
                     }
                     ?>
                 </p>
