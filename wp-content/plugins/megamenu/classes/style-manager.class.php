@@ -54,7 +54,6 @@ final class Mega_Menu_Style_Manager {
             add_action( 'megamenu_after_delete_cache', array( $this, 'wpml_delete_cache') );
         }
 
-
     }
 
 
@@ -82,8 +81,8 @@ final class Mega_Menu_Style_Manager {
             'font_color'                                => '#666', // deprecated
             'font_family'                               => 'inherit', // deprecated
             'menu_item_align'                           => 'left',
-            'menu_item_background_from'                 => 'transparent',
-            'menu_item_background_to'                   => 'transparent',
+            'menu_item_background_from'                 => 'rgba(0,0,0,0)',
+            'menu_item_background_to'                   => 'rgba(0,0,0,0)',
             'menu_item_background_hover_from'           => '#333',
             'menu_item_background_hover_to'             => '#333',
             'menu_item_spacing'                         => '0px',
@@ -92,7 +91,7 @@ final class Mega_Menu_Style_Manager {
             'menu_item_link_height'                     => '40px',
             'menu_item_link_color'                      => '#ffffff',
             'menu_item_link_weight'                     => 'normal',
-            'menu_item_link_text_transform'             => 'normal',
+            'menu_item_link_text_transform'             => 'none',
             'menu_item_link_text_decoration'            => 'none',
             'menu_item_link_color_hover'                => '#ffffff',
             'menu_item_link_weight_hover'               => 'normal',
@@ -167,8 +166,8 @@ final class Mega_Menu_Style_Manager {
             'panel_second_level_font_weight_hover'      => 'panel_header_font_weight',
             'panel_second_level_text_decoration'        => 'panel_header_text_decoration',
             'panel_second_level_text_decoration_hover'  => 'panel_header_text_decoration',
-            'panel_second_level_background_hover_from'  => 'transparent',
-            'panel_second_level_background_hover_to'    => 'transparent',
+            'panel_second_level_background_hover_from'  => 'rgba(0,0,0,0)',
+            'panel_second_level_background_hover_to'    => 'rgba(0,0,0,0)',
             'panel_second_level_padding_left'           => '0px',
             'panel_second_level_padding_right'          => '0px',
             'panel_second_level_padding_top'            => '0px',
@@ -191,8 +190,8 @@ final class Mega_Menu_Style_Manager {
             'panel_third_level_font_weight_hover'       => 'normal',
             'panel_third_level_text_decoration'         => 'none',
             'panel_third_level_text_decoration_hover'   => 'none',
-            'panel_third_level_background_hover_from'   => 'transparent',
-            'panel_third_level_background_hover_to'     => 'transparent',
+            'panel_third_level_background_hover_from'   => 'rgba(0,0,0,0)',
+            'panel_third_level_background_hover_to'     => 'rgba(0,0,0,0)',
             'panel_third_level_padding_left'            => '0px',
             'panel_third_level_padding_right'           => '0px',
             'panel_third_level_padding_top'             => '0px',
@@ -232,7 +231,7 @@ final class Mega_Menu_Style_Manager {
             'flyout_link_color'                         => 'font_color',
             'flyout_link_color_hover'                   => 'font_color',
             'flyout_link_family'                        => 'font_family',
-            'flyout_link_text_transform'                => 'normal',
+            'flyout_link_text_transform'                => 'none',
             'responsive_breakpoint'                     => '600px',
             'responsive_text'                           => 'MENU', // deprecated
             'line_height'                               => '1.7',
@@ -244,22 +243,24 @@ final class Mega_Menu_Style_Manager {
             'shadow_spread'                             => '0px',
             'shadow_color'                              => 'rgba(0, 0, 0, 0.1)',
             'transitions'                               => 'off',
-            'resets'                                    => 'on',
+            'resets'                                    => 'off',
             'mobile_columns'                            => '2',
             'toggle_background_from'                    => 'container_background_from',
             'toggle_background_to'                      => 'container_background_to',
             'toggle_font_color'                         => 'menu_item_link_color', // deprecated
             'toggle_bar_height'                         => '40px',
             'mobile_menu_item_height'                   => '40px',
+            'mobile_background_from'                    => 'container_background_from',
+            'mobile_background_to'                      => 'container_background_to',
+            'disable_mobile_toggle'                     => 'off',
             'custom_css'                                => '
-#{$wrap} #{$menu} {
-    /** Custom styles should be added below this line **/
-}
+/** Push menu onto new line **/
 #{$wrap} {
     clear: both;
 }'
         );
     }
+
 
 
     /**
@@ -509,6 +510,19 @@ final class Mega_Menu_Style_Manager {
      */
     private function load_scss_file() {
 
+        /**
+         *  *** IMPORTANT NOTICE ***
+         *
+         * Allowing users to create their own versions of megamenu.scss was a poor design decision.
+         *
+         * The bundled SCSS file and the plugin code work in perfect harmony.
+         *
+         * When a user (or theme developer) creates their own copy of megamenu.scss it
+         * _will_ become outdated as the plugin is updated and the menu HTML changes.
+         *
+         * Instead of using a custom SCSS file, override only the absolutel minimum CSS in the
+         * Menu Theme > Custom Styling section.
+         */
         $scss  = file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'mixin.scss' );
         $scss .= file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'reset.scss' );
 
@@ -523,7 +537,11 @@ final class Mega_Menu_Style_Manager {
             if ( file_exists( $path ) ) {
 
                 $scss .= file_get_contents( $path );
-
+                //break;
+                //
+                // @todo: add a break here. This is a known bug but some users may be relying on it.
+                // Add warning message to plugin to alert users about not using custom megamenu.scss files
+                // then fix the bug in a later release.
             }
 
         }
@@ -590,7 +608,18 @@ final class Mega_Menu_Style_Manager {
         $vars['menu'] = "'$menu_selector'";
         $vars['menu_id'] = "'$menu_id'";
 
+        $settings = $this->get_menu_settings_for_location( $location );
+
+        if ( isset( $settings['effect_speed'] ) && intval( $settings['effect_speed'] ) > 0 ) {
+            $effect_speed = intval( $settings['effect_speed'] ) . 'ms';
+        } else {
+            $effect_speed = '200ms';
+        }
+
+        $vars['effect_speed'] = $effect_speed;
+
         foreach( $theme as $name => $value ) {
+
 
             if ( in_array( $name, array( 'arrow_up', 'arrow_down', 'arrow_left', 'arrow_right' ) ) ) {
 
@@ -740,8 +769,7 @@ final class Mega_Menu_Style_Manager {
                         ),
                         "out" => array(
                             "animate" => array("opacity" => "hide")
-                        ),
-                        "speed" => "fast"
+                        )
                     ),
                     "slide" => array(
                         "in" => array(
@@ -750,8 +778,7 @@ final class Mega_Menu_Style_Manager {
                         ),
                         "out" => array(
                             "animate" => array("height" => "hide")
-                        ),
-                        "speed" => "fast"
+                        )
                     )
                 ),
                 "timeout" => 300,
@@ -763,6 +790,20 @@ final class Mega_Menu_Style_Manager {
 
     }
 
+    /**
+     * Returns the menu settings for a specified location.
+     *
+     * @since 2.2
+     */
+    private function get_menu_settings_for_location( $location ) {
+
+        $settings = $this->settings;
+
+        $location_settings = isset( $settings[ $location ] ) ? $settings[ $location ] : array();
+
+        return $location_settings;
+
+    }
 
     /**
      * Enqueue the stylesheet held on the filesystem.

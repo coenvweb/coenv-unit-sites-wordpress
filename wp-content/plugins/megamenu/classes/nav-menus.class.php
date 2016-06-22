@@ -139,12 +139,6 @@ class Mega_Menu_Nav_Menus {
         if( 'nav-menus.php' != $hook )
             return;
 
-        // http://wordpress.org/plugins/image-widget/
-        if ( class_exists( 'Tribe_Image_Widget' ) ) {
-            $image_widget = new Tribe_Image_Widget;
-            $image_widget->admin_setup();
-        }
-
         // Compatibility fix for SlideDeck Pro
         wp_deregister_script('codemirror');
         wp_deregister_style('codemirror');
@@ -156,6 +150,14 @@ class Mega_Menu_Nav_Menus {
         // Compatibility fix for AGP Font Awesome Collection
         wp_deregister_script('colorbox-js');
         wp_deregister_style('colorbox-css');
+
+        // Compatibility fix for purple-xmls-google-product-feed-for-woocommerce
+        wp_deregister_script('cart-product-colorbox');
+        wp_deregister_style('cart-product-colorstyle');
+
+        // Compatibility fix for WordFence
+        wp_deregister_script('jquery.wfcolorbox');
+        wp_deregister_style('wordfence-colorbox-style');
 
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
@@ -359,9 +361,9 @@ class Mega_Menu_Nav_Menus {
                     <select name='megamenu_meta[<?php echo $location ?>][effect]'>
                     <?php
 
-                        $selected = isset( $settings[$location]['effect'] ) ? $settings[$location]['effect'] : 'disabled';
+                        $selected = isset( $settings[$location]['effect'] ) ? $settings[$location]['effect'] : 'fade_up';
 
-                        $options = apply_filters("megamenu_effects", array(
+                        $options = apply_filters("megamenu_transition_effects", array(
                             "disabled" => array(
                                 'label' => __("None", "megamenu"),
                                 'selected' => $selected == 'disabled',
@@ -370,14 +372,42 @@ class Mega_Menu_Nav_Menus {
                                 'label' => __("Fade", "megamenu"),
                                 'selected' => $selected == 'fade',
                             ),
+                            "fade_up" => array(
+                                'label' => __("Fade Up", "megamenu"),
+                                'selected' => $selected == 'fade_up' || $selected == 'fadeUp',
+                            ),
                             "slide" => array(
                                 'label' => __("Slide", "megamenu"),
                                 'selected' => $selected == 'slide',
+                            ),
+                            "slide_up" => array(
+                                'label' => __("Slide Up", "megamenu"),
+                                'selected' => $selected == 'slide_up',
                             )
                         ), $selected );
 
                         foreach ( $options as $key => $value ) {
                             ?><option value='<?php echo $key ?>' <?php selected( $value['selected'] ); ?>><?php echo $value['label'] ?></option><?php
+                        }
+
+                    ?>
+                    </select>
+
+                    <select name='megamenu_meta[<?php echo $location ?>][effect_speed]'>
+                    <?php
+
+                        $selected = isset( $settings[$location]['effect_speed'] ) ? $settings[$location]['effect_speed'] : '200';
+
+                        $options = apply_filters("megamenu_effect_speed", array(
+                            "600" => __("Slow", "megamenu"),
+                            "400" => __("Med", "megamenu"),
+                            "200" => __("Fast", "megamenu")
+                        ), $selected );
+
+                        ksort($options);
+
+                        foreach ( $options as $key => $value ) {
+                            ?><option value='<?php echo $key ?>' <?php selected( $key == $selected ); ?>><?php echo $value ?></option><?php
                         }
 
                     ?>

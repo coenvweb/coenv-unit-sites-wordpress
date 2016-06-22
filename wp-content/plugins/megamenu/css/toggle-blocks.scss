@@ -14,7 +14,7 @@
 
         @if type-of($id) == number {
 
-            #mega-toggle-block-#{$id}:before {
+            .mega-toggle-block-#{$id}:before {
                 content: $closed_icon;
                 font-family: 'dashicons';
                 font-size: 24px;
@@ -22,11 +22,11 @@
                 color: $icon_color;
             }
 
-            &.mega-menu-open #mega-toggle-block-#{$id}:before {
+            &.mega-menu-open .mega-toggle-block-#{$id}:before {
                 content: $open_icon;
             }
 
-            #mega-toggle-block-#{$id}:after {
+            .mega-toggle-block-#{$id}:after {
                 content: $closed_text;
                 color: $text_color;
                 float: left;
@@ -36,7 +36,7 @@
                 }
             }
 
-            &.mega-menu-open #mega-toggle-block-#{$id}:after {
+            &.mega-menu-open .mega-toggle-block-#{$id}:after {
                 content: $open_text;
             }
         }
@@ -52,7 +52,7 @@
 
         @if type-of($id) == number {
 
-            #mega-toggle-block-#{$id} {
+            .mega-toggle-block-#{$id} {
                 width: $width;
                 margin: 0;
             }

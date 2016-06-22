@@ -99,6 +99,7 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			$atts['class'] = '';
 			$atts['rel'] = ! empty( $item->xfn ) ? $item->xfn : '';
 
+
 			if ( $settings['disable_link'] != 'true') {
 				$atts['href'] = ! empty( $item->url ) ? $item->url : '';
 			}
@@ -115,11 +116,15 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 				$atts['class'] = 'mega-menu-link';
 			}
 
+			if ( $depth == 0 ) {
+				$atts['tabindex'] = "0";
+			}
+
 			$attributes = '';
 
 			foreach ( $atts as $attr => $value ) {
 
-				if ( ! empty( $value ) ) {
+				if ( strlen( $value ) ) {
 					$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
 					$attributes .= ' ' . $attr . '="' . $value . '"';
 				}

@@ -78,41 +78,27 @@
 
                         // bind save button action
                         content.find('form').on("submit", function (e) {
-
                             start_saving();
-
                             e.preventDefault();
-
                             var data = $(this).serialize();
-
                             $.post(ajaxurl, data, function (submit_response) {
-
                                 end_saving();
-
                                 panel.log(submit_response);
                             });
 
                         });
 
                         if (idx == 'menu_icon') {
-
                             var form = content.find('form');
 
                             // bind save button action
                             form.on("change", function (e) {
-
                                 start_saving();
-
                                 e.preventDefault();
-
                                 $("input", form).not(e.target).removeAttr('checked');
-
                                 var data = $(this).serialize();
-
                                 $.post(ajaxurl, data, function (submit_response) {
-
                                     end_saving();
-
                                     panel.log(submit_response);
                                 });
 
@@ -144,12 +130,8 @@
                                     _wpnonce: megamenu.nonce
                                 };
 
-
-
                                 $.post(ajaxurl, postdata, function (select_response) {
-
                                     end_saving();
-
                                     panel.log(select_response);
                                 });
 
@@ -173,9 +155,7 @@
                                 };
 
                                 $.post(ajaxurl, postdata, function (select_response) {
-
                                     end_saving();
-
                                     panel.log(select_response);
                                 });
 
@@ -212,6 +192,7 @@
                                 forcePlaceholderSize: true,
                                 items : '.widget:not(.sub_menu)',
                                 placeholder: "drop-area",
+                                handle: ".widget-top",
                                 start: function (event, ui) {
                                     $(".widget").removeClass("open");
                                     ui.item.data('start_pos', ui.item.index());
@@ -248,26 +229,16 @@
                                     };
 
                                     $.post(ajaxurl, postdata, function (response) {
-
                                         $(".no_widgets").hide();
-
                                         var widget = $(response.data);
-
                                         var number_of_columns = content.find('#mm_number_of_columns').val();
-
                                         widget.find(".widget-total-cols").html(number_of_columns);
-
                                         add_events_to_widget(widget);
-
                                         $("#widgets").append(widget);
-
                                         widget_area.trigger("reorder_widgets");
-
                                         end_saving();
-
                                         // reset the dropdown
                                         selector.val('disabled');
-
                                     });
 
                                 }
@@ -295,13 +266,41 @@
                         }
 
                         tabs_container.append(tab);
+
+                        $(".mm_tab_horizontal", content).on('click', function() {
+                            var tab = $(this);
+                            var tab_id = $(this).attr('rel');
+
+                            // reset search
+                            $(".filter_icons").val("");
+                            $(".icon_selector > div").show();
+
+                            tab.addClass('active');
+                            tab.siblings().removeClass('active');
+                            tab.parent().siblings().not('h4').not('input').hide();
+                            tab.parent().siblings("." + tab_id).show();
+                        });
+
+                        $(".filter_icons", content).on('keyup', function() {
+                            var string = $(".filter_icons").val();
+
+                            var all = $(".icon_selector:visible div input");
+
+                            var filtered = all.filter(function() {
+                              return $(this).attr('id').indexOf(string) > -1;
+                            });
+
+                            filtered.parent().show();
+                            var others = all.not(filtered);
+                            others.parent().hide();
+                        });
+
                         content_container.append(content);
                     });
 
                     $('#cboxLoadedContent').addClass('depth-' + panel.settings.menu_item_depth).append(header_container).append(tabs_container).append(content_container);
                     $('#cboxLoadedContent').css({'width': '100%', 'height': '100%', 'display':'block'});
                     $('#cboxLoadedContent').trigger('megamenu_content_loaded');
-
                 }
             });
 
@@ -490,6 +489,8 @@
                             bstw( widget ).deactivate().activate();
                         }
 
+                        $( document ).trigger( 'widget-added', widget);
+
                     });
 
                 } else {
@@ -516,7 +517,7 @@
 jQuery(function ($) {
     "use strict";
 
-    $(".megamenu_launch").live("click", function (e) {
+    $(".menu").on("click", ".megamenu_launch", function (e) {
         e.preventDefault();
 
         $(this).megaMenu();
@@ -579,16 +580,6 @@ jQuery(function ($) {
                                 });
 
         $('.item-title', menu_item).append(button);
-    });
-
-    $(".mm_tabs li").live('click', function() {
-        var tab = $(this);
-        var tab_id = $(this).attr('rel');
-
-        tab.addClass('active');
-        tab.siblings().removeClass('active');
-        tab.parent().siblings().not('h4').hide();
-        tab.parent().siblings("." + tab_id).show();
     });
 
     // AJAX Save MMM Settings

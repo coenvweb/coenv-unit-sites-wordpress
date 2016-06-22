@@ -73,8 +73,7 @@
 .megamenu_outer_wrap .megamenu_right h3.first {
 	margin-top: 0;
 }
-.mega-menu_page_maxmegamenu_tools .menu_settings h3,
-.toplevel_page_maxmegamenu .menu_settings h3 {
+body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
     border-bottom: 1px solid #CAC4C4;
     padding: 0 0 10px 0;
 }
@@ -233,6 +232,7 @@
 
 .megamenu_outer_wrap .megamenu_right .menu_settings table textarea,
 .megamenu_outer_wrap .megamenu_right .menu_settings table input[type=text],
+.megamenu_outer_wrap .megamenu_right .menu_settings table input[type=number],
 .megamenu_outer_wrap .megamenu_right .menu_settings table select {
 	font-size: 0.9em;
 	height: 28px;

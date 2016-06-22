@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.maxmegamenu.com
  * Description: Mega Menu for WordPress.
- * Version:     2.1.5
+ * Version:     2.2.1
  * Author:      Tom Hemsley
  * Author URI:  https://www.maxmegamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.1.5';
+    public $version = '2.2.1';
 
 
     /**
@@ -63,6 +63,9 @@ final class Mega_Menu {
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'apply_classes_to_menu_items' ), 7, 2 );
 
         add_filter( 'megamenu_nav_menu_css_class', array( $this, 'prefix_menu_classes' ) );
+
+        // plugin compatibility
+        add_filter( 'conditional_menus_theme_location', array( $this, 'conditional_menus_restore_theme_location'), 10, 3 );
         add_filter( 'black_studio_tinymce_enable_pages' , array($this, 'megamenu_blackstudio_tinymce' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts'), 11 );
@@ -76,12 +79,10 @@ final class Mega_Menu {
         add_shortcode( 'maxmegamenu', array( $this, 'register_shortcode' ) );
 
         if ( is_admin() ) {
-
             new Mega_Menu_Nav_Menus();
             new Mega_Menu_Widget_Manager();
             new Mega_Menu_Menu_Item_Manager();
             new Mega_Menu_Settings();
-
         }
 
         if ( class_exists( 'Mega_Menu_Toggle_Blocks' ) ) {
@@ -103,12 +104,21 @@ final class Mega_Menu {
 
         wp_enqueue_style( 'maxmegamenu-global', MEGAMENU_BASE_URL . 'css/admin/global.css', array(), MEGAMENU_VERSION );
 
-        if ( 'nav-menus.php' == $hook ) {
-            do_action("megamenu_nav_menus_scripts", $hook );
-        }
+        if ( ! wp_script_is('mega-menu') ) {
 
-        if ( strpos( $hook, 'maxmegamenu' ) !== false ) {
-            do_action("megamenu_admin_scripts", $hook );
+            if ( 'nav-menus.php' == $hook ) {
+                // load widget scripts and styles first to allow us to dequeue conflicting colorbox scripts from other plugins
+                do_action( 'sidebar_admin_setup' );
+                do_action( 'admin_enqueue_scripts', 'widgets.php' );
+                do_action( 'admin_print_styles-widgets.php' );
+
+                do_action("megamenu_nav_menus_scripts", $hook );
+            }
+
+            if ( strpos( $hook, 'maxmegamenu' ) !== false ) {
+                do_action("megamenu_admin_scripts", $hook );
+            }
+
         }
 
     }
@@ -370,7 +380,7 @@ final class Mega_Menu {
 
         $content = apply_filters( "megamenu_toggle_bar_content", $content, $nav_menu, $args, $theme_id );
 
-        $replace = $find . '<div class="mega-menu-toggle">' . $content . '</div>';
+        $replace = $find . '<div class="mega-menu-toggle" tabindex="0">' . $content . '</div>';
 
         return str_replace( $find, $replace, $nav_menu );
 
@@ -702,17 +712,39 @@ final class Mega_Menu {
             $menu_theme = mmm_get_theme_for_location( $current_theme_location );
             $menu_settings = $settings[ $current_theme_location ];
 
+            $effect = isset( $menu_settings['effect'] ) ? $menu_settings['effect'] : 'disabled';
+
+            // convert Pro JS based effect to CSS3 effect
+            if ( $effect == 'fadeUp' ) {
+                $effect = 'fade_up';
+            }
+
+            // as set on the main settings page
+            $vertical_behaviour = isset( $settings['mobile_behaviour'] ) ? $settings['mobile_behaviour'] : 'standard';
+
+            if ( isset( $menu_settings['mobile_behaviour'] ) ) {
+                $vertical_behaviour = $menu_settings['mobile_behaviour'];
+            }
+
+            // as set on the main settings page
+            $second_click = isset( $settings['second_click'] ) ? $settings['second_click'] : 'close';
+
+            if ( isset( $menu_settings['second_click'] ) ) {
+                $second_click = $menu_settings['second_click'];
+            }
+
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
                 "id" => '%1$s',
                 "class" => '%2$s mega-no-js',
                 "data-event" => isset( $menu_settings['event'] ) ? $menu_settings['event'] : 'hover',
-                "data-effect" => isset( $menu_settings['effect'] ) ? $menu_settings['effect'] : 'disabled',
+                "data-effect" => $effect,
+                "data-effect-speed" => isset( $menu_settings['effect_speed'] ) ? $menu_settings['effect_speed'] : '200',
                 "data-panel-width" => preg_match('/^\d/', $menu_theme['panel_width']) !== 1 ? $menu_theme['panel_width'] : '',
                 "data-panel-inner-width" => substr( $menu_theme['panel_inner_width'], -1 ) !== '%' ? $menu_theme['panel_inner_width'] : '',
-                "data-second-click" => isset( $settings['second_click'] ) ? $settings['second_click'] : 'close',
+                "data-second-click" => $second_click,
                 "data-document-click" => 'collapse',
                 "data-reverse-mobile-items" => 'true',
-                "data-vertical-behaviour" => isset( $settings['mobile_behaviour'] ) ? $settings['mobile_behaviour'] : 'standard',
+                "data-vertical-behaviour" => $vertical_behaviour,
                 "data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] )
             ), $menu_id, $menu_settings, $settings, $current_theme_location );
 
@@ -784,6 +816,7 @@ final class Mega_Menu {
         $css = get_transient("megamenu_css");
 
         if ( $css && version_compare( $this->version, $css_version, '!=' ) ) :
+
         ?>
         <div class="updated">
             <?php
@@ -816,6 +849,14 @@ final class Mega_Menu {
         return $wp_version >= 3.8;
     }
 
+    /**
+     * Add compatibility for conditional menus plugin
+     *
+     * @since 2.2
+     */
+    public function conditional_menus_restore_theme_location( $location, $new_args, $old_args ) {
+        return $old_args['theme_location'];
+    }
 
 }
 

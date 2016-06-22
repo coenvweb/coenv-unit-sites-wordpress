@@ -66,7 +66,7 @@ jQuery(function($) {
 
 
     // Delete block
-    $( ".block-settings a.mega-delete").live('click', function(e) {
+    $( ".block-settings").on('click', 'a.mega-delete', function(e) {
         e.preventDefault();
         $(this).parent(".block-settings").parent(".block").remove();
         reindex_blocks();
@@ -74,7 +74,7 @@ jQuery(function($) {
 
 
     // Show/hide block settings
-    $( ".block-title span").live('click', function() {
+    $( ".block-title").on('click', 'span', function() {
         var settings = $(this).parent().parent().find(".block-settings");
         $(".block").removeClass('mega-open');
 

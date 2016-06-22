@@ -406,40 +406,27 @@ class Mega_Menu_Menu_Item_Manager {
                 'title' => __("Dashicons", "megamenu"),
                 'active' => ! isset( $menu_item_meta['icon'] ) || ( isset( $menu_item_meta['icon'] ) && substr( $menu_item_meta['icon'], 0, strlen("dash") ) === "dash" || $menu_item_meta['icon'] == 'disabled' ),
                 'content' => $this->dashicon_selector()
-            ),
-            'fontawesome' => array(
-                'title' => __("Font Awesome", "megamenu"),
-                'active' => false,
-                'content' => str_replace( "{link}", "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Get access to over 400 Font Awesome Icons with {link}", "megamenu") )
-            ),
-            'genericons' => array(
-                'title' => __("Genericons", "megamenu"),
-                'active' => false,
-                'content' => str_replace( "{link}", "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Choose from over 100 genericons with {link}", "megamenu") )
-            ),
-            'custom' => array(
-                'title' => __("Custom Icon", "megamenu"),
-                'active' => false,
-                'content' => str_replace( "{link}", "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Select icons from your media library with {link}", "megamenu") )
-            ),
+            )
         );
 
         $icon_tabs = apply_filters( "megamenu_icon_tabs", $icon_tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
 
-        $return = '    <h4 class="first">' . __("Menu Item Icon", "megamenu") . '</h4>';
+        $return = "<h4 class='first'>" . __("Menu Item Icon", "megamenu") . "</h4>";
         $return .= "<ul class='mm_tabs horizontal'>";
 
         foreach ( $icon_tabs as $id => $icon_tab ) {
 
             $active = $icon_tab['active'] || count( $icon_tabs ) === 1 ? "active" : "";
 
-            $return .= "<li rel='mm_tab_{$id}' class='{$active}'>";
+            $return .= "<li rel='mm_tab_{$id}' class='mm_tab_horizontal {$active}'>";
             $return .= esc_html( $icon_tab['title'] );
             $return .= "</li>";
 
         }
 
         $return .= "</ul>";
+
+        $return .= "<input type='text' class='filter_icons' placeholder='" . __("Search", "megamenu") . "' /><div class='clear'></div>";
 
         foreach ($icon_tabs as $id => $icon_tab) {
 

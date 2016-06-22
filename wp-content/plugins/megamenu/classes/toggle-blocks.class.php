@@ -126,7 +126,23 @@ class Mega_Menu_Toggle_Blocks {
                     $align = "mega-toggle-block-left";
                 }
 
-                $blocks_html .= "<div class='mega-toggle-block {$class} {$align}' id='mega-toggle-block-{$block_id}'>";
+                // @todo remove ID once MMM Pro has been updated to use classes
+                $id = apply_filters('megamenu_toggle_block_id', 'mega-toggle-block-' . $block_id);
+
+                $attributes = apply_filters('megamenu_toggle_block_attributes', array(
+                    "class" => "mega-toggle-block {$class} {$align} mega-toggle-block-{$block_id}",
+                    "id" => "mega-toggle-block-{$block_id}"
+                ), $block, $content, $nav_menu, $args, $theme_id);
+
+
+
+                $blocks_html .= "<div";
+
+                foreach ( $attributes as $attribute => $val ) {
+                    $blocks_html .= " " . $attribute . "='" . esc_attr( $val ) . "'";
+                }
+
+                $blocks_html .= ">";
                 $blocks_html .= apply_filters("megamenu_output_public_toggle_block_{$block['type']}", "", $block);
                 $blocks_html .= "</div>";
             }

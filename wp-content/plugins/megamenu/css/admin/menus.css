@@ -6,7 +6,6 @@
 	user-select: none;
 }
 
-
 #cboxClose {
 	text-indent: 0;
 	background: none;
@@ -25,7 +24,7 @@
 	color: #0074a2;
 }
 
-#cboxContent .mm_tabs.horizontal li {
+#cboxContent .mm_tabs li.mm_tab_horizontal {
 	float: left;
 	margin-right: 10px;
 	cursor: pointer;
@@ -35,16 +34,22 @@
 	transition: all 0.05s linear;
 }
 
-#cboxContent .mm_tabs.horizontal li:hover,
-#cboxContent .mm_tabs.horizontal li.active {
+#cboxContent .mm_tabs li.mm_tab_horizontal:hover,
+#cboxContent .mm_tabs li.mm_tab_horizontal.active {
 	background: #2ea2cc;
 	color: white;
 }
 
 #cboxContent .mm_tabs.horizontal {
-	width: 100%;
+	width: 85%;
 	float: left;
 	margin-top: 0;
+}
+#cboxContent .filter_icons {
+	width: 14%;
+	float: right;
+	margin-top: 0;
+	font-size: 0.9em;
 }
 
 #cboxContent .mm_header_container {
@@ -118,7 +123,8 @@
 	width: 80%;
 	overflow: auto;
 	box-sizing: border-box;
-
+	/* fix content disappearing */
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 #cboxContent .mega_menu #widgets .no_widgets {
@@ -223,6 +229,7 @@
 	border: 1px solid #999;
 	padding: 0 10px;
 	background: white;
+	overflow: hidden;
 }
 
 #cboxContent .mega_menu .widget.open .widget-top {
@@ -243,14 +250,9 @@
 	box-shadow: 0 1px 1px rgba(0,0,0,.04);
 	margin-top: -1px;
 	background: white;
-	min-width: 240px;
-	border: 1px solid #999;
+	min-width: 340px;
+	border: 1px solid #555;
 	box-sizing: border-box;
-}
-
-
-#cboxContent .mega_menu .widget-title {
-	display: inline-block;
 }
 
 #cboxContent .mega_menu .widget-title h4 {
@@ -260,9 +262,9 @@
 	overflow: hidden;
 	white-space: nowrap;
 	border-bottom: 0;
-	font-size: 1em;
+	font-size: 12px;
 	text-overflow: ellipsis;
-	line-height: 40px;
+	line-height: 42px;
 }
 
 #cboxContent .mega_menu .widget[data-type='menu_item'] .widget-title h4:before {
@@ -331,14 +333,15 @@
 
 #cboxContent .mega_menu .widget-title-action {
 	padding: 0;
-	float: right;
     position: relative;
-    opacity: 0.6;
     font-weight: normal;
-}
-
-#cboxContent .mega_menu .widget:hover .widget-title-action {
+	position: absolute;
+    right: 1px;
+    background: white;
+    border-right: 7px solid white;
+    padding-left: 10px;
     opacity: 1;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 9%, rgba(255,255,255,1) 100%);
 }
 
 #cboxContent .mega_menu .widget-title-action a {
@@ -547,87 +550,15 @@
 	max-width: 700px;
 }
 
-#cboxContent .mega_menu #widgets[data-columns='2'] .widget[data-columns='1'] h4 {
-	max-width: 280px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='3'] .widget[data-columns='1'] h4 {
-	max-width: 165px;
-}
-#cboxContent .mega_menu #widgets[data-columns='3'] .widget[data-columns='2'] h4 {
-	max-width: 430px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='4'] .widget[data-columns='1'] h4 {
-	max-width: 105px;
-}
-#cboxContent .mega_menu #widgets[data-columns='4'] .widget[data-columns='2'] h4 {
-	max-width: 280px;
-}
-#cboxContent .mega_menu #widgets[data-columns='4'] .widget[data-columns='3'] h4 {
-	max-width: 500px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='5'] .widget[data-columns='1'] h4 {
-	max-width: 65px;
-}
-#cboxContent .mega_menu #widgets[data-columns='5'] .widget[data-columns='2'] h4 {
-	max-width: 220px;
-}
-#cboxContent .mega_menu #widgets[data-columns='5'] .widget[data-columns='3'] h4 {
-	max-width: 380px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='6'] .widget[data-columns='1'] h4 {
-	max-width: 40px;
-}
-#cboxContent .mega_menu #widgets[data-columns='6'] .widget[data-columns='2'] h4 {
-	max-width: 170px;
-}
-#cboxContent .mega_menu #widgets[data-columns='6'] .widget[data-columns='3'] h4 {
-	max-width: 300px;
-}
-#cboxContent .mega_menu #widgets[data-columns='6'] .widget[data-columns='4'] h4 {
-	max-width: 430px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='7'] .widget[data-columns='1'] h4 {
-	max-width: 24px;
-}
-#cboxContent .mega_menu #widgets[data-columns='7'] .widget[data-columns='2'] h4 {
-	max-width: 130px;
-}
-#cboxContent .mega_menu #widgets[data-columns='7'] .widget[data-columns='3'] h4 {
-	max-width: 240px;
-}
-#cboxContent .mega_menu #widgets[data-columns='7'] .widget[data-columns='4'] h4 {
-	max-width: 350px;
-}
-#cboxContent .mega_menu #widgets[data-columns='7'] .widget[data-columns='5'] h4 {
-	max-width: 480px;
-}
-
-#cboxContent .mega_menu #widgets[data-columns='8'] .widget[data-columns='1'] h4 {
-	max-width: 8px;
-}
-#cboxContent .mega_menu #widgets[data-columns='8'] .widget[data-columns='2'] h4 {
-	max-width: 100px;
-}
-#cboxContent .mega_menu #widgets[data-columns='8'] .widget[data-columns='3'] h4 {
-	max-width: 200px;
-}
-#cboxContent .mega_menu #widgets[data-columns='8'] .widget[data-columns='4'] h4 {
-	max-width: 300px;
-}
-#cboxContent .mega_menu #widgets[data-columns='8'] .widget[data-columns='5'] h4 {
-	max-width: 400px;
-}
 
 
 #cboxContent .mega_menu .widget textarea {
 	max-height: 100px;
 }
 
+#cboxContent .menu_icon .icon_selector {
+	clear: both;
+}
 #cboxContent .menu_icon .icon_selector > div {
 	float: left;
 	padding: 0 19px 19px 0;
@@ -711,8 +642,13 @@
 #cboxContent table td.mega-value {
 	font-size: 12px;
 }
-#cboxContent table td.mega-value select {
+#cboxContent table td.mega-value select,
+#cboxContent table td.mega-value textarea,
+#cboxContent table td.mega-value input[type=text],
+#cboxContent table td.mega-value input[type=number] {
 	font-size: 0.9em;
+	height: 28px;
+	line-height: 28px;
 }
 #cboxContent table td.mega-name .mega-description,
 #cboxContent table td.mega-value .mega-description {
@@ -758,34 +694,16 @@
 	opacity: 0.3;
 
 }
+ /** TRIBE IMAGE WIDGET **/
+#cboxContent img {
+	height: auto;
+	max-width: 100%;
+}
 
 
 /**
  * NAV MENUS
  */
- /** TRIBE IMAGE WIDGET **/
-.uploader input.button {
-	width: 100%;
-	height: 34px;
-	line-height: 33px;
-	margin-top: 15px;
-}
-.tribe_preview .aligncenter {
-	display: block;
-	margin-left: auto !important;
-	margin-right: auto !important;
-}
-.tribe_preview {
-	overflow: hidden;
-	max-height: 300px;
-}
-.tribe_preview img {
-	margin: 10px 0;
-	height: auto;
-	max-width: 100%;
-}
-/** END TRIBE IMAGE WIDGET **/
-
 .megamenu_enabled .mm_launch {
 	background: #2ea2cc;
 	border-color: #0074a2;

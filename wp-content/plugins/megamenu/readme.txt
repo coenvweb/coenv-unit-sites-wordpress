@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 2.1.5
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,35 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.2.1 =
+
+* Fix: Self closing div tag in toggle blocks
+* Fix: Mobile Menu Background / Conflict with MaxButtons
+
+= 2.2 =
+
+* New feature: CSS3 dropdown animations
+* New feature: Animation speed setting
+* New Feature: Accessibility (allow tab navigation of menus)
+* Improvement: Load widgets.php scripts on nav-menus.php page to improve widget compatibility
+* Improvement: Remove upgrade nags from icons tab
+* Improvement: Add search to icons
+* Improvement: Preselect last edited theme in theme editor
+* Improvement: Only allow widget titles to be dragged in menu builder
+* Improvement: Add 'Mobile menu background' and 'Disable mobile toggle' settings to theme editor
+* Fix: Move toggle block IDs to classes to avoid validation errors
+* Fix: Replace deprecated jQuery 'live' function calls with 'on'
+* Fix: select2.png 404 in admin
+* Fix: Reinstate icon margin on sub menu items when parent item has 'Hide text' enabled
+* Fix: Active menu item border color
+* Fix: Third level menu item visibility when JS is disabled
+* Fix: Compatibility with Conditional Menus
+* Fix: Compatibility with WordFence
+* Fix: Compatibility with Image Widget Deluxe
+* Fix: Widget titles wrapping onto two lines in mega menu builder
+* Fix: Admin elements disappearing randomly in webkit browsers
+* Change: Reset Widget Styling theme option - default changed from 'On' to 'Off'
 
 = 2.1.5 [13/04/2016] =
 
