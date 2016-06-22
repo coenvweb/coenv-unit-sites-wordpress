@@ -72,11 +72,7 @@
                         <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout">Log Out</a>	
                     <?php 
                     } else {
-                        $login_url = str_replace('http://', 'https://',get_permalink());
-                        printf( '<a href="%s">%s</a>', 
-                        wp_login_url( $login_url ),
-                        __( 'Staff Login' )
-                        );
+                        echo wp_login_url();
                     }
                     ?>
                 </p>
