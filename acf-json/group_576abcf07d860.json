@@ -1,0 +1,357 @@
+{
+    "key": "group_576abcf07d860",
+    "title": "Faculty",
+    "fields": [
+        {
+            "key": "field_5408a8b6ab81a",
+            "label": "Last name",
+            "name": "last_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "none",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_5408a8d0ab81b",
+            "label": "First name",
+            "name": "first_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "none",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_5408a8e7ab81c",
+            "label": "Email address",
+            "name": "email_address",
+            "type": "email",
+            "instructions": "e.g., someone@uw.edu",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_5408a90bab81d",
+            "label": "Phone number(s)",
+            "name": "phone_number",
+            "type": "repeater",
+            "instructions": "Please enter up to 3 phone numbers for this faculty member. The first number will be shown in faculty lists. e.g., (206) 999-9999.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "row_min": 1,
+            "row_limit": 3,
+            "layout": "table",
+            "button_label": "Add Row",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_5408a93eab81e",
+                    "label": "Number",
+                    "name": "number",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "formatting": "none",
+                    "maxlength": "",
+                    "readonly": 0,
+                    "disabled": 0
+                }
+            ]
+        },
+        {
+            "key": "field_5408aa208c0fc",
+            "label": "Job title(s)",
+            "name": "job_titles",
+            "type": "repeater",
+            "instructions": "Please enter up to 3 additional job titles for this faculty member.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "row_min": 1,
+            "row_limit": 3,
+            "layout": "row",
+            "button_label": "Add Row",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_5408aa498c0fd",
+                    "label": "Title",
+                    "name": "job_title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "formatting": "html",
+                    "maxlength": "",
+                    "readonly": 0,
+                    "disabled": 0
+                }
+            ]
+        },
+        {
+            "key": "field_5408aaf087385",
+            "label": "Locations",
+            "name": "locations",
+            "type": "repeater",
+            "instructions": "Please enter up to 3 locations for this faculty member, including both building and room number.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "row_min": 1,
+            "row_limit": 3,
+            "layout": "table",
+            "button_label": "Add Row",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_5408ab1987386",
+                    "label": "building",
+                    "name": "building",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "RTB": "Benjamin Hall Interdisciplinary Research Building (RTB)",
+                        "BLD": "Bloedel Hall (BLD)",
+                        "FSH": "Fishery Sciences (FSH)",
+                        "FTR": "Fisheries Teaching and Research Building (FTR)",
+                        "FHL": "Friday Harbor Labs",
+                        "KIN": "Kincaid Hall (KIN)",
+                        "MAR": "Marine Studies Building (MAR)",
+                        "MSB": "Marine Sciences Building (MSB)",
+                        "OTHER": "Other (add details below)"
+                    },
+                    "default_value": [],
+                    "allow_null": 1,
+                    "multiple": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "disabled": 0,
+                    "readonly": 0
+                },
+                {
+                    "key": "field_5408abcd87387",
+                    "label": "Room number",
+                    "name": "room_number",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "formatting": "html",
+                    "maxlength": "",
+                    "readonly": 0,
+                    "disabled": 0
+                }
+            ]
+        },
+        {
+            "key": "field_5408ac103a7bd",
+            "label": "Website URL",
+            "name": "website_url",
+            "type": "text",
+            "instructions": "Please enter the url of the faculty member's primary website. e.g., http:\/\/depts.washington.edu\/facultyname.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "none",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_5408ad3c0ff63",
+            "label": "SciVal URL",
+            "name": "scival_url",
+            "type": "text",
+            "instructions": "Enter the full url of the faculty member's SciVal page. e.g., http:\/\/www.experts.scival.com\/uwashington\/expert.asp?n=First+M.+Last&u_id=999).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "none",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_5408ad5d0ff64",
+            "label": "Twitter URL",
+            "name": "twitter_url",
+            "type": "text",
+            "instructions": "Enter the full url of the faculty member's Twitter page. e.g., http:\/\/twitter.com\/faculty_id.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "formatting": "none",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_540f7f7d6faac",
+            "label": "Curriculum Vitae (CV)",
+            "name": "curriculum_vitae",
+            "type": "file",
+            "instructions": "Upload the faculty member's CV in PDF format.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "library": "uploadedTo",
+            "return_format": "url",
+            "min_size": 0,
+            "max_size": 0,
+            "mime_types": ""
+        },
+        {
+            "key": "field_540e1e84f4b03",
+            "label": "Selected publications",
+            "name": "selected_publications",
+            "type": "wysiwyg",
+            "instructions": "Please enter up to 10 publications. Use an un-ordered list and italicize journal names. When adding links, please link the title of the article.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "toolbar": "full",
+            "media_upload": 0,
+            "tabs": "all"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "faculty"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "seamless",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1466641397
+}
