@@ -17,12 +17,11 @@ Template Name: Homepage
 		$feature_args = array(
 			'post_type'	=> 'features',
 			'post_status' => 'publish',
-			'posts_per_page' => 4,
+			'posts_per_page' => 1,
 			'orderby' => 'menu_order',
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
-		<div class="playpause"></div>
 			<div class="homepage-features">
 			<?php
 			# The Loop
