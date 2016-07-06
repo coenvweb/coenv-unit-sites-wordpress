@@ -46,6 +46,9 @@ RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^botanicgardens.uw.edu [NC]
+RewriteRule ^(.*)$ http://depts.washington.edu/uwbg/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
