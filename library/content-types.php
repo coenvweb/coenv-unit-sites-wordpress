@@ -6,21 +6,21 @@
  */
 
 function coenv_base_post_types_init() {
-  register_post_type( 'faculty',
+  register_post_type( 'members',
     array(
       'labels' => array(    
-      'name' => __( 'Faculty' ),
-      'singular_name' => __( 'Faculty' ),
-      'add_new_item' => __( 'Add Faculty'),
-      'edit_item' => __( 'Edit Faculty Member'),
-      'new_item' => __( 'New Faculty'),
+      'name' => __( 'Members' ),
+      'singular_name' => __( 'Members' ),
+      'add_new_item' => __( 'Add Members'),
+      'edit_item' => __( 'Edit Members Member'),
+      'new_item' => __( 'New Members'),
       ),
     //'hierarchical' => true,
     'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    //'rewrite' => array('slug' => 'faculty'),
+    //'rewrite' => array('slug' => 'members'),
     'menu_icon' => 'dashicons-id',
     )
 
@@ -59,11 +59,11 @@ define( 'NEWS_PARENT_ID', '142' );
  
  
 /**
- * save faculty parent
+ * save Members parent
  *
  * @author  Joe Sexton <joe@webtipblog.com>
  */
-function coenv_base_fac_parent( $data, $postarr ) {
+function coenv_base_mem_parent( $data, $postarr ) {
     global $post;
  
  
@@ -72,13 +72,13 @@ function coenv_base_fac_parent( $data, $postarr ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
         return $data;
  
-    if ( $post->post_type == "faculty" ){
-        $data['post_parent'] = FACULTY_PAGE_PARENT_ID;
+    if ( $post->post_type == "members" ){
+        $data['post_parent'] = MEMBERS_PAGE_PARENT_ID;
     }
  
     return $data;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_fac_parent', FACULTY_PAGE_PARENT_ID, 2  );
+add_action( 'wp_insert_post_data', 'coenv_base_mem_parent', MEMBERS_PAGE_PARENT_ID, 2  );
 
 function coenv_base_news_parent( $data, $postarr ) {
     global $post;
