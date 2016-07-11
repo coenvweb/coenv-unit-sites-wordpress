@@ -6,15 +6,13 @@
 function coenv_base_hierarchical_submenu($postid) {
     $post = get_post($postid);
     $top_post = $post;
-    if ( $post->post_type == 'post' ) {
-        $index_page = get_page_by_path('news-and-events');
-        $ancestors = get_post_ancestors( $index_page->ID );
-        $post = get_post( array_pop( $ancestors ) );
+    if ( $post->post_type == 'post' ) { 
+        $index_page = get_page_by_path('about/news');
+        $post = $index_page;
     }
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
-        $post_ancestors = $post->ancestors;
-        $top_post = get_post(end($post_ancestors));
+        $top_post = get_post(end($post->ancestors));
     }
     // Always start traversing from the top of the tree
     return coenv_base_hierarchical_submenu_get_children($top_post, $post);
@@ -22,6 +20,7 @@ function coenv_base_hierarchical_submenu($postid) {
 
 function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
     $menu = '';
+    $exclude = implode(',',coenv_base_menu_exclude());
     // Get all immediate children of this page
     $args = array(
         'sort_order' => 'ASC',
@@ -31,8 +30,9 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page) {
         'parent' => $post->ID,
         'offset' => 0,
         'post_type' => 'page',
-        'post_status' => 'publish'
-    ); 
+        'post_status' => 'publish',
+        'exclude' => $exclude
+    );
     $children = get_pages($args);
     if ($children) {
         // Include a title here if needed

@@ -11,11 +11,11 @@ $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
 
 // Dates
 if(isset($_GET['coenv-year'])){
-$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+    $coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
+    $coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
 
-// Month needs an offset because php and WordPress calculate dates differently.
-$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    // Month needs an offset because php and WordPress calculate dates differently.
+    $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
 } else {
     $coenv_year = $coenv_month = $coenv_date = null;
 }
@@ -97,7 +97,7 @@ if(isset($_GET['term'])){
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
         delete_post_thumbnail( get_the_ID() );
         echo '<div class="blog clearfix">';
-		get_template_part( 'partials/partial', 'story' );
+		get_template_part( 'partials/partial', 'article' );
         ?>
 		</div>
 	<?php endwhile; ?>
