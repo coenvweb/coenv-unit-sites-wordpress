@@ -21,15 +21,9 @@ li.type-member {
 			@include rem('font-size', 1.25);
 			font-weight: bold;
 			line-height: 1;
-			@include rem('margin-bottom',.5);
-			@include rem('padding',0);
+            margin-bottom: 0.5rem;
+            padding: 0;
 		}
-
-		.member-website {
-            margin-bottom: 0;
-            width: auto;
-		}
-
 
 	}
 
