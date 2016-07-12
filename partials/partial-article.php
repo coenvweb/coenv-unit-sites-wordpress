@@ -30,7 +30,7 @@
 	</header>
 
 	<section class="article__content">
-		<?php the_content() ?>
+		<?php the_advanced_excerpt('length=30&finish=sentence') ?>
 	</section>
     <?php remove_filter( 'the_title', 'wptexturize' );
     remove_filter( 'the_excerpt', 'wptexturize' ); ?>

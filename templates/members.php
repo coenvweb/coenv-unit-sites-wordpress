@@ -18,8 +18,8 @@ if(isset($wp_query->query_vars['research_areas'])) {
 		<div class="entry-content">
 		<div class="row filters">
 		    <h1 class="large-6 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				<?php member_research_filter('research_areas', $research_areas); // Category filter ?>
+			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
+				<?php coenv_base_cat_filter('research_areas', $research_areas); // Category filter ?>
 			</div>
 		</div>
 		<?php

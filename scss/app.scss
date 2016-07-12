@@ -122,8 +122,8 @@ div.news {
 	margin-bottom: 4rem;
 }
 .panel {
-	float:left;
 	width: 100%;
+    overflow: hidden;
 	p:first-child {
 		float:left;
 		width: 75%;
