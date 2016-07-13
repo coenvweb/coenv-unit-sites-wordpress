@@ -89,7 +89,7 @@
             "key": "field_5408a90bab81d",
             "label": "Phone number",
             "name": "phone_number",
-            "type": "number",
+            "type": "text",
             "instructions": "Please enter up to 3 phone numbers for this faculty member. The first number will be shown in faculty lists. e.g., (206) 999-9999.",
             "required": 0,
             "conditional_logic": 0,
@@ -102,9 +102,7 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "min": "",
-            "max": "",
-            "step": "",
+            "maxlength": "",
             "readonly": 0,
             "disabled": 0
         },
@@ -172,5 +170,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1467996295
+    "modified": 1468445648
 }
