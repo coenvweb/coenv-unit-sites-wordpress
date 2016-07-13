@@ -11,12 +11,7 @@ $journal_cover = get_field('journal_cover', 'option');
 ?>
 <?php get_header(); ?>
 <div class="row">
-    <?php //coenv_base_section_title($post->ID); ?>
-    <?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-    <!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
-    <?php //endif; ?>
     <div class="small-12 medium-8 columns" role="main" id="main-col">
-    <?php do_action('foundationPress_before_content'); ?>
     <?php dynamic_sidebar("before-content"); ?>
     <?php while (have_posts()) : the_post(); ?>
         <article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
@@ -35,8 +30,6 @@ $journal_cover = get_field('journal_cover', 'option');
         </div><!-- #after-content -->
     <?php endif; ?>
     <a href="#" class="back-to-top">Back to Top</a>
-    <?php do_action('foundationPress_before_content'); ?>
-
     </div>
     <aside id="sidebar" class="small-12 medium-4 large-3 columns">
         <div class="widget journal-info">
