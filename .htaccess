@@ -2,10 +2,6 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# BEGIN Shibboleth
-AuthType shibboleth
-Require shibboleth
-# END Shibboleth
 
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
