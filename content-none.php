@@ -12,14 +12,9 @@
 </header>
 
 <div class="page-content">
-	<?php if ( is_home() && current_user_can( 'publish_posts' ) ) : ?>
+	<?php if ( is_search() ) : ?>
 
-	<p><?php printf( __( 'Ready to publish your first post? <a href="%1$s">Get started here</a>.', 'FoundationPress' ), admin_url( 'post-new.php' ) ); ?></p>
-
-	<?php elseif ( is_search() ) : ?>
-
-	<p><?php _e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'FoundationPress' ); ?></p>
-	<?php get_search_form(); ?>
+	<p><?php _e( 'Sorry, but there are no results for your search terms. Please try again with some different keywords.', 'FoundationPress' ); ?></p>
 
 	<?php else : ?>
 
