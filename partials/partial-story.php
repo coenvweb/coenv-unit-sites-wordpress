@@ -11,7 +11,7 @@ if (get_field('story_link_url')) {
 
 <article class="story featured-story" id="story-<?php the_ID() ?>">
 
-    <?php if ( has_post_thumbnail() ) : ?>
+    <?php if ( has_post_thumbnail() && is_sticky() ) : ?>
         <div class="featured-thumbnail">
             <a href="<?php echo $post_link_url ?>" class="img" <?php if(isset($post_link_target)) {echo $post_link_target;} ?>>
                 <?php the_post_thumbnail( 'large' ); ?>
@@ -38,22 +38,6 @@ if (get_field('story_link_url')) {
             $terms = "";
         ?>
         <?php echo $terms_str; ?>
-        <?php if (is_page_template('templates/homepage.php') !== true) : ?>
-        <div class="blog-meta clearfix sharer small-6 columns right">
-            <?php
-                $title = rawurlencode(get_the_title());
-                $shortlink = rawurlencode(wp_get_shortlink());
-                $site_name = rawurlencode(get_bloginfo('name'));
-                $twitter = get_option('twitter');
-            ?>
-            <a href=<?php echo 'http://twitter.com/home?status=' . $title . '%20' . $shortlink . '%20from%20' . $twitter . ' target="_blank">' ?>
-            <?php get_template_part('assets/img/icons/inline', 'twitter-circle.svg'); ?><span class="visuallyhidden">Twitter Share</span></a>
-            <a href=<?php echo 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' . $shortlink . '&p[images][0]=&p[title]=' . $title . '%20from%20' . $site_name .'" target="_blank">'; ?>
-            <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?><span class="visuallyhidden">Facebook Share</span></a>
-            <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20the%20' . $site_name .':%20' . $shortlink . '>'; ?>
-            <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?><span class="visuallyhidden">Email Share</span></a>
-		</div>
-        <?php endif ?>
     </div>
 
     <div class="content">
