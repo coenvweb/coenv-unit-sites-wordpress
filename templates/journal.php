@@ -58,18 +58,16 @@ $journal_cover = get_field('journal_cover', 'option');
                     // Build an array of all the items, starting with element 0 (first element).
                     $rss_items = $rss->get_items( 0, $maxitems );
                 }
-
                 ?>
                 <ul class="article-list">
                     <?php if ( $maxitems == 0 ) : ?>
                         <li>There are currently no recent articles.</li>
                     <?php else : ?>
                         <?php // Loop through each feed item and display each item as a hyperlink. ?>
-                        <?php foreach ( $rss_items as $item ) : 
-                        ?>
+                        <?php foreach ( $rss_items as $item ) : ?>
                             <li>
                                 <a href="<?php echo esc_url( $item->get_permalink() ); ?>">
-                                    <?php echo esc_html( $item->get_title() ); ?> (<?php echo $item->get_date('j F Y'); ?>)
+                                    <?php echo esc_html( $item->get_title() ); ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
