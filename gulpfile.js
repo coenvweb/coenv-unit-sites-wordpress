@@ -57,16 +57,18 @@ gulp.task('main_js', function () {
 
 gulp.task('sass', function () {
   return gulp
-    .src('./scss/app.scss')
+    .src('scss/app.scss')
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(sourcemaps.write({includeContent: false, sourceRoot: '.'}))
+    .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(autoprefixer({
         browsers: ['last 4 versions'],
         cascade: false
     }))
     .pipe(cssmin())
-    .pipe(sourcemaps.write('./css/maps'))
     .pipe(rename('app.css'))
+    .pipe(sourcemaps.write('./maps', {includeContent: false, sourceRoot: '../scss'}))
     .pipe(gulp.dest('./css'))
     .pipe(livereload());
   ;
