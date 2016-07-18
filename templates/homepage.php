@@ -95,25 +95,30 @@ $journal_cover = get_field('journal_cover', 'option');
 $journal_link = get_field('latest_issue_link', 'option');
 
 ?>
-    <div class="large-6 columns home-journal">
-        <h2 class="journal-title">Quaternary Research: An Interdisciplinary Journal</h2>
-        <ul class="journal-meta">
-            <li class="journal-date"><span class="meta-label">Published: </span><?php echo $journal_date; ?></li>
-            <li class="journal-volume"><span class="meta-label">Volume: </span><?php echo $journal_volume; ?></li>
-            <li class="journal-issue"><span class="meta-label">Issue: </span><?php echo $journal_issue; ?></li>
-        </ul>
+    <div class="large-6 columns">
+        <div class="home-journal">
+            <h2 class="journal-title">Quaternary Research: An Interdisciplinary Journal</h2>
+            <ul class="journal-meta">
+                <li class="journal-date"><span class="meta-label">Published: </span><?php echo $journal_date; ?></li>
+                <li class="journal-volume"><span class="meta-label">Volume: </span><?php echo $journal_volume; ?></li>
+                <li class="journal-issue"><span class="meta-label">Issue: </span><?php echo $journal_issue; ?></li>
+            </ul>
 
-        <div class="journal-cover">
-            <img class="" src="<?php echo $journal_cover['url']; ?>" alt="<?php echo $journal_cover['alt']; ?>" />
+            <div class="journal-cover">
+                <img class="" src="<?php echo $journal_cover['url']; ?>" alt="<?php echo $journal_cover['alt']; ?>" />
+            </div>
+
+            <p class="journal-desc"><?php echo $journal_desc; ?></p>
+
+            <div class="journal-links">
+                <a class="button" href="<?php echo $journal_link; ?>">View the Journal Publication Site</a>
+                <a class="button" href="<?php echo home_url() . '/journal/'; ?>">Learn More</a>
+            </div>
+
         </div>
-
-        <p class="journal-desc"><?php echo $journal_desc; ?></p>
-
-        <div class="journal-links">
-            <a class="button" href="<?php echo $journal_link; ?>">View the Journal Publication Site</a>
-            <a class="button" href="<?php echo home_url() . '/journal/'; ?>">Learn More</a>
+        <div class="events">
+            <?php dynamic_sidebar('home-events'); ?>
         </div>
-
     </div>
 
 <?php
@@ -132,9 +137,7 @@ $wp_query = new WP_Query( $home_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="home-news-section large-6 columns">
-        <div class="events">
-            <?php dynamic_sidebar('home-events'); ?>
-        </div>
+        
 		<h2 style="margin-top: 0; padding-top: 0;">News</h2>
 		<?php
 		# The Loop
