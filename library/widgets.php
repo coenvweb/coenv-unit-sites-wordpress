@@ -68,6 +68,15 @@ function coenv_base_sidebar_widgets() {
       'before_title' => $before_title,
       'after_title' => $after_title     
   ));
+  register_sidebar(array(
+      'id' => 'home-events',
+      'name' => __('Home / Events', 'foundationpress'),
+      'description' => __('Drag widgets to this container', 'foundationpress'),
+      'before_widget' => $before_widget,
+      'after_widget' => $after_widget,
+      'before_title' => $before_title,
+      'after_title' => $after_title
+  )); 
 
 }
 

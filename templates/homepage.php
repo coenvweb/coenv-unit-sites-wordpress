@@ -133,8 +133,7 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="home-news-section large-6 columns">
         <div class="events">
-		    <h2 style="margin-top: 0; padding-top: 0;">Events</h2>
-            <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/coenveventscalendar.rss&posts_per_page=3'); ?>
+            <?php dynamic_sidebar('home-events'); ?>
         </div>
 		<h2 style="margin-top: 0; padding-top: 0;">News</h2>
 		<?php

@@ -47,6 +47,18 @@
 
     }
 
+    .widget-events {
+        h4 {
+            font-size: rem-calc(37);
+            font-weight: 400;
+            @include uni();
+
+            a{
+                color: $black;
+            }
+        }
+    }
+
     .home-journal {
         .journal-meta {
             list-style-type: none;
