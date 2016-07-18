@@ -3,34 +3,32 @@
 Template Name: News
 */
 
-$url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
-
 /*
  * Query variables
  */
 
 // Dates
-if(isset($_GET['coenv-year'])){
-$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+if(isset($wp_query->query_vars['coenv-year'])) {
+    $coenv_year = (int) urlencode(htmlentities($wp_query->query_vars['coenv-year']));
+    $coenv_month = (int) urlencode(htmlentities($wp_query->query_vars['coenv-month']));
 
-// Month needs an offset because php and WordPress calculate dates differently.
-$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    // Month needs an offset because php and WordPress calculate dates differently.
+    $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    $filtered = true;
 } else {
     $coenv_year = $coenv_month = $coenv_date = null;
 }
 
 //Categories
-if(isset($_GET['tax'])){
-    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-}
-if(isset($_GET['term'])){
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+if(isset($wp_query->query_vars['category'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['category']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'category');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
 } else {
     $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
+
 ?>
 
 
@@ -40,10 +38,10 @@ if(isset($_GET['term'])){
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="<?php the_permalink(); ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="<?php the_permalink(); ?>" data-cat="blog_category">
 				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
@@ -80,13 +78,13 @@ if(isset($_GET['term'])){
 		<?php if ($coenv_cat_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php
@@ -110,7 +108,7 @@ if(isset($_GET['term'])){
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your crtieria did not match any posts. <a href="<?php echo the_permalink() ?>">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>

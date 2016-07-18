@@ -51,6 +51,9 @@ require_once('library/taxonomies.php');
 // Publications functions
 require_once('library/publications.php');
 
+// Rewrite functions
+require_once('library/rewrites.php');
+
 // Need to be sorted into includes
 
 
@@ -234,12 +237,12 @@ $cats = get_categories($cats_args);
 	if ($cats) {
         echo '<label for="select-category">Select a ' . $tax_str . '</label>';
 		echo '<select name="select-category" class="select-category" id="select-category">';
-		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+		echo '<option class="level-0" value="' . get_the_permalink() . '">All ' . $tax_str . '</option>';
 		foreach($cats as $cat) { 
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;
 			echo $tax_value;
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+			echo '<option value="' . $tax . '/' . $cat->slug . '/"' . $selected . '>' . $cat->name . '</option>';
 		}
 		echo '</select>';
 	}
@@ -253,7 +256,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	$ref_month = '';
 	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
 	echo '<select name="select-category" class="select-category">';
-	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
+	echo '<option value="' . get_the_permalink() . '">All Dates</option>';
 	if( $monthly->have_posts() ) :
 		while( $monthly->have_posts() ) : $monthly->the_post();
 		    if( get_the_date('mY') != $ref_month ) {
@@ -265,7 +268,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 		    	} else {
 		    		$selected = '';
 		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+		    	echo '<option value="coenv-year/' . $year_num . '/coenv-month/' . $month_num  . '/"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
 		       // echo "\n".get_the_date('F Y');
 		        $ref_month = get_the_date('mY');
 		        $counter = 0;
