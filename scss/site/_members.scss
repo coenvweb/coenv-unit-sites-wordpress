@@ -17,8 +17,12 @@ li.type-member {
 
         .member-titles {
             list-style-type: none;
-            padding: 0;
+            padding-bottom: 0.25rem;
+            padding-left: 0;
             margin: 0;
+
+            li {
+            }
         }
 
 
