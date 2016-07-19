@@ -186,6 +186,16 @@ RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
 RewriteRule .? - [S=1]
 RewriteRule ^pnwc/?$ learn/ [R=301,L]
 
+# Weird old fish redirect for AA
+RewriteCond %{HTTP_HOST} !^www.fish.washington\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^undergraduates/?$ students/about-undergraduate-program/ [R=301,L]
+
+# Env Studies Redirects
+RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^major/?$ undergraduate-students/prospective-students-undergrad/ [R=301,L]
+
 RewriteCond %{HTTP_HOST} !^beta.smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
 # weird caching of old bug at launch
