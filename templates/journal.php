@@ -47,10 +47,10 @@ $journal_cover = get_field('journal_cover', 'option');
 
         </div>
 
-        <div class="widget journal-articles">
+        <!-- <div class="widget journal-articles">
             <h3>Recent Articles</h3>
             <?php
-                $rss = fetch_feed('http://rss.sciencedirect.com/publication/science/00335894');
+                //$rss = fetch_feed('http://rss.sciencedirect.com/publication/science/00335894');
                 if(!is_wp_error($rss)) {
                     // Figure out how many total items there are, but limit it to 5. 
                     $maxitems = $rss->get_item_quantity( 15 ); 
@@ -74,7 +74,7 @@ $journal_cover = get_field('journal_cover', 'option');
                     <?php endif; ?>
 
                 </ul>
-        </div>
+        </div> -->
         <?php
         $ancestor_id = coenv_base_get_ancestor('ID');
         if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
