@@ -1,15 +1,15 @@
 <?php
 
 /* 
- * Return faculty taxonomy terms from research areas.
+ * Return member taxonomy terms from research areas.
  */
 function coenv_base_mem_terms($id) {
-	$mem_terms = wp_get_post_terms( $id, 'research_areas' );
+	$mem_terms = wp_get_post_terms( $id, 'research-areas' );
 	if ($mem_terms) {
 		echo '<ul class="mem-terms inline-list">';
 		foreach ($mem_terms as $term) {
 
-			echo '<li><a class="button" href="/people/members/research_areas/' . $term->slug . '">' . $term->name . '</a></li>';
+			echo '<li><a class="button" href="/people/members/research-areas/' . $term->slug . '">' . $term->name . '</a></li>';
 		}
 		echo '</ul>';
 	}

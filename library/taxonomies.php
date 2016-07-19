@@ -31,7 +31,7 @@ function mem_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'research_areas', array( 'members' ), $ra_args );
+	register_taxonomy( 'research-areas', array( 'members' ), $ra_args );
 
 }
 

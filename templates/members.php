@@ -7,8 +7,8 @@ Template Name: Members Index
  * Query variables
  */
 
-if(isset($wp_query->query_vars['research_areas'])) {
-    $research_areas = urldecode($wp_query->query_vars['research_areas']);
+if(isset($wp_query->query_vars['research-areas'])) {
+    $research_areas = urldecode($wp_query->query_vars['research-areas']);
 }
 ?>
 
@@ -19,7 +19,7 @@ if(isset($wp_query->query_vars['research_areas'])) {
 		<div class="row filters">
 		    <h1 class="large-6 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('research_areas', $research_areas); // Category filter ?>
+				<?php coenv_base_cat_filter('research-areas', $research_areas); // Category filter ?>
 			</div>
 		</div>
 		<?php
@@ -39,7 +39,7 @@ if(isset($wp_query->query_vars['research_areas'])) {
 
         if($research_areas) {
             $query_args['tax_query'][] = array(
-                'taxonomy' => 'research_areas',
+                'taxonomy' => 'research-areas',
                 'field' => 'slug',
                 'terms' => $research_areas,
             );
@@ -50,7 +50,7 @@ if(isset($wp_query->query_vars['research_areas'])) {
 		?>
 		<?php if ($wp_query->have_posts()):
         if($research_areas) {
-            $term = get_term_by('slug', $research_areas, 'research_areas');
+            $term = get_term_by('slug', $research_areas, 'research-areas');
 
         ?>
 		<div class="panel">
