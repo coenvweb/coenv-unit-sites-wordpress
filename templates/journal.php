@@ -47,34 +47,6 @@ $journal_cover = get_field('journal_cover', 'option');
 
         </div>
 
-        <!-- <div class="widget journal-articles">
-            <h3>Recent Articles</h3>
-            <?php
-                //$rss = fetch_feed('http://rss.sciencedirect.com/publication/science/00335894');
-                if(!is_wp_error($rss)) {
-                    // Figure out how many total items there are, but limit it to 5. 
-                    $maxitems = $rss->get_item_quantity( 15 ); 
-
-                    // Build an array of all the items, starting with element 0 (first element).
-                    $rss_items = $rss->get_items( 0, $maxitems );
-                }
-                ?>
-                <ul class="article-list">
-                    <?php if ( $maxitems == 0 ) : ?>
-                        <li>There are currently no recent articles.</li>
-                    <?php else : ?>
-                        <?php // Loop through each feed item and display each item as a hyperlink. ?>
-                        <?php foreach ( $rss_items as $item ) : ?>
-                            <li>
-                                <a href="<?php echo esc_url( $item->get_permalink() ); ?>">
-                                    <?php echo esc_html( $item->get_title() ); ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
-                </ul>
-        </div> -->
         <?php
         $ancestor_id = coenv_base_get_ancestor('ID');
         if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
