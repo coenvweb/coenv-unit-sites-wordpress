@@ -30,12 +30,18 @@ $member_name = get_the_title();
                 <?php } ?>
             </div>
         </div>
+        <ul class="member-titles">
         <?php
         if( have_rows('job_titles') ) {
             while ( have_rows('job_titles') ) : the_row();
-                the_sub_field('job_title');
+                echo "<li>";
+                    the_sub_field('job_title');
+                echo "</li>";
             endwhile;
         }
+        ?>
+        </ul>
+        <?php
         if( $member_department ) { ?>
             <div class="member-department"><?php echo $member_department ?></div>
         <?php } ?>
