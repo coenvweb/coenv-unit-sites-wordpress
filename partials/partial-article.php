@@ -40,8 +40,17 @@
     </header>
 
     <section class="article__content">
-        <?php the_advanced_excerpt('length=30&finish=sentence') ?>
-        <?php echo $post_link; ?>
+        <?php
+        if(is_single()) {
+            the_content();
+            if($post_link_target) {
+                echo $post_link;
+            }
+        } else {
+             the_advanced_excerpt('length=30&finish=sentence');
+             echo $post_link;
+        }
+        ?>
     </section>
     <?php remove_filter( 'the_title', 'wptexturize' );
     remove_filter( 'the_excerpt', 'wptexturize' ); ?>
