@@ -1,4 +1,25 @@
 .home {
+
+    .nav-bar-divider {
+        &:before {
+            position: absolute;
+            content: url('../assets/img/pcc_section_div.svg');
+            top: -1%;
+            width: 6rem;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            @media #{$small-only} {
+                top: -2%;
+                width: 5.5rem;
+            }
+            
+        }
+
+
+    }
+
     // Homepage Widgets
     .widget_coenv_base_index_dates ul {
         margin-left: 1rem;
@@ -208,11 +229,12 @@
             border-bottom: 1px solid $border;
             padding-bottom: 1.5rem;
             margin-bottom: 1rem;
-            i {
+            img {
+                stroke: $uw-gold;
+                width: 2.5rem;
                 margin-right: 1rem;
-                &:before {
-                    color: $uw-gold;
-                    font-size: 2.5rem;
+                @media #{$small-only} {
+                    width: 1.5rem;
                 }
             }
         }
@@ -261,5 +283,3 @@
     }
 
 }
-
-

@@ -1,13 +1,18 @@
 .homepage-features {
     h1 {
+        @include uni;
         color: $uw-gold;
         text-align: center;
-        margin-bottom: 1rem;
-        @media #{$medium-up} {
-            font-size: rem-calc(34);
+        margin: 2rem 0rem;
+        font-weight: 800;
+        @media #{$large-up} {
+            font-size: rem-calc(48);
+        }
+        @media #{$medium-only} {
+            font-size: rem-calc(36);
         }
         @media #{$small-only} {
-            font-size: rem-calc(24);
+            font-size: rem-calc(28);
         }
     }
 }
@@ -20,6 +25,7 @@
 	}
 	
 	.feature-image {
+        position: relative;
 		width: 100%;
 		padding-top: 30%;
 		background-repeat: no-repeat;
@@ -35,21 +41,51 @@
         @media #{$small-only} {
             height: rem-calc(125);
         }
+
+        &:before {
+            content: url('../assets/img/pcc_section_div.svg');
+            position: absolute;
+            width: 6rem;
+            top: -3%;
+            left:0;
+            right:0;
+            margin-left:auto;
+            margin-right: auto;
+            
+            @media #{$small-only} {
+                width: 5rem;
+                top: -8%;
+            }
+
+        }
+
+        &:after {
+            content: url('../assets/img/pcc_section_div_flat.svg');
+            position: absolute;
+            width: 13rem;
+            top: 97%;
+            left: -0.25rem;
+
+            @media #{$medium-only} {
+                width: 10rem;
+                top: 96%;
+            }
+            @media #{$small-only} {
+                width: 8rem;
+                top: 93%;
+            }
+
+        }
 	}
 	
     .feature-content {
-        padding: rem-calc(16);
 
         h2 {
             @include uni;
             font-weight: 600;
-            font-size: rem-calc(32);
+            font-size: rem-calc(38);
             margin-top: 0.5rem;
             margin-bottom: 0.25rem;
-        }
-
-        .button {
-            margin: 0 rem-calc(35) 0 0;
         }
 
         p {
@@ -57,15 +93,15 @@
             margin-bottom: 1.5rem;
             color: $text;
             letter-spacing: 0.5px;
-            font-size: rem-calc(18);
+            font-size: rem-calc(20);
         }
 
         @media #{$small-only} {
             h2 {
-                font-size: rem-calc(18);
+                font-size: rem-calc(22);
             }
             p.feature-excerpt {
-                font-size: rem-calc(12);
+                font-size: rem-calc(14);
             }
         }
     }

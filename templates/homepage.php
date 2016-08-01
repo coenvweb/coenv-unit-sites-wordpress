@@ -5,6 +5,8 @@ Template Name: Homepage
 ?>
 <?php get_header(); ?>
 <div class="fullwidth hero-area">
+    <div class="nav-bar-divider section-div">
+    </div>
     <?php do_action('foundationPress_before_content'); ?>
         <?php
 
@@ -43,7 +45,7 @@ Template Name: Homepage
                 $rows = get_field('feature_add_links');
 
                 echo '<div class="feature large-12 columns">';
-                    echo '<div class="large-12 columns feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+                    echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
                     echo '</div>';
 
                     echo '<div class="feature-content">';
@@ -187,8 +189,10 @@ $wp_query = new WP_Query( $home_args );
 <?php endif; ?>    
 <div class="row climate-calendar">
     <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
-    <a href="/events" ><h2 class="events-title"><i class="fa fa-calendar"></i>Climate Calendar</h2></a>
-    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+    <a href="/events" ><h2 class="events-title"><img class="calendar" src="<?php echo get_template_directory_uri() ?>/assets/img/Calendar_icon.svg" />Climate Calendar</h2></a>
+    <div class="large-12 columns">
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+    </div>
 </div>
 </div>
 </div>
