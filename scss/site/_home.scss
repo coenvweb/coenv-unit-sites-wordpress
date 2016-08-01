@@ -120,6 +120,8 @@
 
     .programs {
         padding-top: 1.5rem;
+        border-bottom: 2px solid $border;
+        margin-bottom: 1.5rem;
 
         .solid-widget {
             position: relative;
@@ -160,6 +162,7 @@
             width: 100%;
             text-align: center;
             font-size: 2.75rem;
+            top: 38%;
 
             &:after {
                 content: "";
@@ -186,22 +189,15 @@
 
         }
 
-        @media #{$large-up} {
-           h4 {
-                top: 38%;
-            }
-        }
-
         @media #{$medium-only} {
            h4 {
-                top: 40%;
                 font-size: 1.5rem;
             }
         }
 
         @media #{$small-only} {
            h4 {
-                top: 35%;
+                font-size: 2.25rem;
             } 
         }
     }

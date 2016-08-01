@@ -24,11 +24,11 @@
 	<g>
 		<path fill="none" stroke="#BFB6B6" stroke-miterlimit="10" d="M14.344,15.224"/>
 		<g opacity="0.5">
-			<line fill="none" stroke="#FFFFFF" stroke-width="0.25" stroke-miterlimit="10" x1="11.742" y1="-2.036" x2="3.72" y2="28.007"/>
+			<line fill="none" stroke="#BFB6B6" stroke-width="0.25" stroke-miterlimit="10" x1="11.742" y1="-2.036" x2="3.72" y2="28.007"/>
 			
-				<line fill="none" stroke="#FFFFFF" stroke-width="0.25" stroke-miterlimit="10" x1="14.863" y1="13.188" x2="10.92" y2="28.007"/>
+				<line fill="none" stroke="#BFB6B6" stroke-width="0.25" stroke-miterlimit="10" x1="14.863" y1="13.188" x2="10.92" y2="28.007"/>
 			
-				<line fill="none" stroke="#FFFFFF" stroke-width="0.25" stroke-miterlimit="10" x1="-0.319" y1="16.212" x2="4.542" y2="-2.036"/>
+				<line fill="none" stroke="#BFB6B6" stroke-width="0.25" stroke-miterlimit="10" x1="-0.319" y1="16.212" x2="4.542" y2="-2.036"/>
 		</g>
 	</g>
 </g>
