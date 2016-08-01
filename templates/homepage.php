@@ -51,7 +51,6 @@ Template Name: Homepage
                     echo '<div class="feature-content">';
                         echo '<h2>' . get_the_title() . '</h2>';
                         echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
-                        
 
                     echo '</div><!-- .feature-content -->';
 
@@ -72,25 +71,29 @@ Template Name: Homepage
     </div>
 </div>
 <?php endif; ?>
-<div class="row">
+<div class="row teaser-buttons">
 <?php if($rows) {
     foreach($rows as $row) {
+        echo '<div class="small-12 medium-6 columns">';
         if($row['feature_link_type'] == 'internal') {
             $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
             $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
             $link_target = 'self';
-            echo '<a class="small-12 medium-6 columns button full_button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+            echo '<a href="' . $link_url . '" target="_' . $link_target . '"><div class="home_button">' . $link_title . '</div></a>';
         } elseif ($row['feature_link_type'] == 'external') {
             $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
             $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
             $link_target ='blank';
-            echo '<a class="full_button button small-12 medium-6 columns" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+            echo '<a href="' . $link_url . '" target="_' . $link_target . '"><div class="home_button"> ' . $link_title . '</div></a>';
         } 
+        echo '</div>';
     }
 }
 ?>
 </div>
 <div class="fullwidth camp-divider divider">
+    <div class="row">
+    </div>
 </div>
 <div class="row news">
 <?php
@@ -175,7 +178,9 @@ $wp_query = new WP_Query( $home_args );
 <?php } ?>
 </div>  
 </div>  
-<div class="fullwidth divider cave-divider" style="height:150px; background-color:#85754d;">
+<div class="fullwidth divider cave-divider">
+    <div class="row">
+    </div>
 </div>
 <?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
 <div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">

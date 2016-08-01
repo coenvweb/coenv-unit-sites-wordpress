@@ -71,6 +71,37 @@
         background-size: cover;
         background-position: center 57%;
 
+        .row {
+            position: relative;
+            @media #{$small-only} {
+                min-height: 10rem;
+            }
+            @media #{$medium-only} {
+                min-height: 13rem;
+            }
+            @media #{$large-up} {
+                min-height: 20rem;
+            }
+            &:after {
+                content: url('../assets/img/pcc_section_div_flat.svg');
+                position: absolute;
+                width: 13rem;
+                top: 96%;
+                left: -0.25rem;
+                z-index: 100;
+
+                @media #{$medium-only} {
+                    width: 10rem;
+                    top: 96%;
+                }
+                @media #{$small-only} {
+                    width: 8rem;
+                    top: 93%;
+                }
+
+            }
+        }
+
         @media #{$small-only} {
             min-height: 10rem;
         }
@@ -79,6 +110,31 @@
         }
         @media #{$large-up} {
             min-height: 20rem;
+        }
+    }
+
+    .teaser-buttons {
+
+        .home_button {
+            text-transform: uppercase;
+            color: $white;
+            display: block;
+            padding: 3rem;
+            background: url('../assets/img/');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-bottom: 1rem;
+            font-size: rem-calc(28);
+            @media #{$small-only} {
+                font-size: rem-calc(18);
+            }
+            &:after {
+                float: right;
+                display: block;
+                width: 8%;
+                content: url('../assets/img/pcc_buttonArrow.svg');
+            }
         }
     }
 
@@ -251,7 +307,6 @@
             .post-meta {
 
                 @include encode_cb;
-                font-weight: 400 !important;
                 time {
                     padding-right: 0.5rem;
                 }

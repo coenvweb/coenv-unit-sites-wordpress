@@ -3,14 +3,24 @@
 
 .button {
 	display: inline-block;
-	vertical-align: middle;
-	@include rem('padding', 0.5, 1.5);
+	@include rem('padding', 0.5, 0.5);
 	@include font-size(14);
 	font-weight: 800;
-	background: #4b2e84;
+	background: $uw-purple;
 	text-decoration: none;
     text-transform: uppercase;
+    text-align: left;
 	color: $white;
+    border: 1px solid $border;
+
+    &:after {
+        float: right;
+        display: block;
+        content: url('../assets/img/pcc_buttonArrow.svg');
+        width: 1rem;
+        padding-left: 2rem;
+        dominant-baseline: central;
+    }
 	
 	&:hover {
 		background: rgba(0,0,0,0.6);
@@ -32,8 +42,9 @@
         color: white;
     }
 
+}
+
+span.button, .full_button {
     &:after {
-
     }
-
-} // .button
+}
