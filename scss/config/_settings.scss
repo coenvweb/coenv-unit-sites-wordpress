@@ -41,7 +41,7 @@ $row-width: 1200px;
 // We use these to control various global styles
 // $body-bg: #fff;
 $body-font-color: $text;
-$body-font-family: "encode-sans-normal", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$body-font-family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
 // $body-font-weight: normal;
 // $body-font-style: normal;
 
@@ -171,7 +171,7 @@ $global-radius: $radius;
 // $hr-border-width: 1px;
 // $hr-border-style: solid;
 // $hr-border-color: #ddd;
-// $hr-margin: rem-calc(20);
+ $hr-margin: rem-calc(0);
 
 // We use these to style lists
 // $list-style-position: outside;

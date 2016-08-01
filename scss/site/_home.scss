@@ -1,6 +1,5 @@
-// Homepage Widgets
-
 .home {
+    // Homepage Widgets
     .widget_coenv_base_index_dates ul {
         margin-left: 1rem;
     }
@@ -20,6 +19,48 @@
         }
     }    
 
+    .hero-area {
+        position: relative;
+        display: block;
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -15%;
+            width: 115%;
+            height: 100%;
+            z-index: -1;
+            background: url('../assets/img/pcc_mapBG.svg');
+            opacity: 0.25;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+
+    .cave-divider {
+        background: url('../assets/img/ice_cave_juno_icefield.JPG');
+    }
+
+    .camp-divider {
+        background: url('../assets/img/P8240141.JPG');
+    }
+
+    .divider {
+        background-size: cover;
+        background-position: center 57%;
+
+        @media #{$small-only} {
+            min-height: 10rem;
+        }
+        @media #{$medium-only} {
+            min-height: 13rem;
+        }
+        @media #{$large-up} {
+            min-height: 20rem;
+        }
+    }
+
     .home-news-section {
         padding-top: 2rem;
 
@@ -32,52 +73,181 @@
             display: block;
         }
         :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
+            margin-bottom: rem-calc(30);	
         }
 
     }
 
+    .hosted-events {
+        .solid-widget {
+            position: relative;
+            width: 100%;
+            p {
+                margin-bottom: 0.25rem;
+            }
+            .widget_img {
+                height: 100%;
+                text-align: center;
+                img {
+                    height: 100%;
+                    max-height: 240px;
+                }
+            }
+
+            .widget_links {
+                float: none;
+                margin-left: 0;
+
+                .button {
+                    background: none;
+                    color: $uw-purple;
+                    border: none;
+                    text-transform: none;
+                    padding: 0;
+                    margin: 0;
+                    &:hover {
+                        color: $uw-purple;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .slash {
+        background: url('../assets/img/RainAngle-2685.svg');
+    }
+
     .programs {
+        padding-top: 1.5rem;
 
         .solid-widget {
             position: relative;
             width: 100%;
+            padding-bottom: 75%;
+            margin-bottom: 2.25rem;
+            .widget_img {
+                height: 100%;
+                &:before {
+                    background: rgba(0, 0, 0, 0.5);
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    transition: all .3s linear;
+                }
+                img {
+                    height: 100%;
+                }
+            }
         }
 
-        img {
-            height: 100%;
+        article {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
         }
 
-       @media #{$large-up} {
+        h4 {
+            @include uni;
+            position: absolute;
+            color: $white;
+            width: 100%;
+            text-align: center;
+            font-size: 2.75rem;
+
+            &:after {
+                content: "";
+                position: relative;
+                height: 1px;
+                width: 50%;
+                background-color: white;
+                bottom: -1.25rem;
+                display: block;
+                margin: 0 auto;
+            }
+
+            &:before {
+                content: "";
+                position: relative;
+                height: 8px;
+                width: 25%;
+                background-color: white;
+                top: -1.25rem;
+                display: block;
+                margin: 0 auto;
+                transform: skewX(-15deg);
+            }
+
+        }
+
+        @media #{$large-up} {
            h4 {
-                position: absolute;
-                top: 50%;
-                color: $white;
-                text-align: center;
-                width: 100%;
+                top: 38%;
             }
         }
 
         @media #{$medium-only} {
            h4 {
-                position: absolute;
                 top: 40%;
-                color: $white;
-                text-align: center;
-                width: 100%;
                 font-size: 1.5rem;
             }
         }
 
         @media #{$small-only} {
            h4 {
-                position: absolute;
                 top: 35%;
-                color: $white;
-                text-align: center;
-                width: 100%;
-                font-size: 2rem;
             } 
+        }
+    }
+
+    .home-news-section, .climate-calendar {
+
+        .events-title, .news-title {
+            border-bottom: 1px solid $border;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            i {
+                margin-right: 1rem;
+                &:before {
+                    color: $uw-gold;
+                    font-size: 2.5rem;
+                }
+            }
+        }
+
+        .more-events, .more-news {
+            float: right;
+            @media #{$medium-up} {
+                margin-top: 0.5rem;
+            }
+        }
+
+        .small-news {
+            border-bottom: 1px solid $border;
+            .post-meta {
+
+                @include encode_cb;
+                font-weight: 400 !important;
+                time {
+                    padding-right: 0.5rem;
+                }
+
+                a {
+                    &:first-of-type {
+                        padding-left: 0.5rem;
+                    }
+                }
+
+            }
+            p {
+                color: $text-lt;
+            }
         }
     }
 
@@ -93,6 +263,7 @@
             margin: 1rem 2rem;
         }
     }
+
 }
 
 

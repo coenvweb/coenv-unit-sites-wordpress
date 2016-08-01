@@ -9,17 +9,22 @@
     .tab-bar-section {
         padding-left: rem-calc(30);
         margin: auto;
+
+        a { 
+            color: #fff;
+        }
     }
 
     
     h1 {
         color: $white!important;
         margin-top: rem-calc(15);
-        font-size: rem-calc(28)!important;
+        font-size: rem-calc(32)!important;
         text-align: left;
         @media #{$small-up} {
-            font-size: rem-calc(12)!important;
-            line-height: rem-calc(14);
+            text-align: center;
+            font-size: rem-calc(14)!important;
+            line-height: rem-calc(22);
         }
     }
     .right-small, .left-small {
@@ -39,7 +44,7 @@
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+        box-shadow: 0 0px 0 1px #fff,0 7px 0 1px #fff,0 14px 0 1px #fff;
     }
 
 }
@@ -69,9 +74,9 @@
         @include encode_cb;
         text-transform: uppercase;
         font-weight: 500!important;
-        font-size: rem-calc(18)!important;
+        font-size: rem-calc(20)!important;
         @media #{$large-up} {
-            font-size: rem-calc(20)!important;
+            font-size: rem-calc(24)!important;
         }
         float: left;
         margin: rem-calc(18);

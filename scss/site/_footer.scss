@@ -148,6 +148,7 @@
 			.button {
 				background: #666;
 				padding: rem-calc(3.5) rem-calc(9);
+                border: none;
 
 				i {
 					@include font-size(16);

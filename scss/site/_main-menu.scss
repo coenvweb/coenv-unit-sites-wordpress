@@ -81,6 +81,9 @@
                 
                 & > a {
                     padding: 0 4rem;
+                    @media #{$medium-only} {
+                        padding: 0 2rem;
+                    }
                 }
                 
             }

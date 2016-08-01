@@ -4,14 +4,14 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-   <div class="small-12 large-12 columns" role="main">
-
+<div class="fullwidth hero-area">
     <?php do_action('foundationPress_before_content'); ?>
         <?php
 
         /**
          * Loop for homepage features.
          */
+        $rows = array();
         $feature_args = array(
             'post_type' => 'features',
             'post_status' => 'publish',
@@ -19,91 +19,77 @@ Template Name: Homepage
             'orderby' => 'menu_order',
             );
         $feature_query = new WP_Query( $feature_args ); ?>
-        <?php //if ($feature_query->have_posts()) { ?>
-            <div class="row homepage-features">
-                <h1>Climate Science, Collaboration, and Community</h1>
+        <div class="row homepage-features">
+            <h1>Climate Science, Collaboration, and Community</h1>
             <?php
             # The Loop
             while ( $feature_query->have_posts() ) :
                 $feature_query->the_post();
-            if (get_field('feature_add_links')) {
-                $feature_link_type = get_field('feature_link_type');
-                $feature_link_type_internal = get_field('feature_link_page');
-            }
-            if (get_field('feature_color')) {
-                $feature_color = get_field('feature_color');
-            }
-            if (get_field('feature_excerpt')) {
-                $feature_excerpt = get_field('feature_excerpt');
-            }
-            if (get_the_post_thumbnail()) {
-                $feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
-                $feature_caption = get_post(get_post_thumbnail_id());
-                $feature_caption = $feature_caption->post_excerpt;
-            }
-            $rows = get_field('feature_add_links');
+                if (get_field('feature_add_links')) {
+                    $feature_link_type = get_field('feature_link_type');
+                    $feature_link_type_internal = get_field('feature_link_page');
+                }
+                if (get_field('feature_color')) {
+                    $feature_color = get_field('feature_color');
+                }
+                if (get_field('feature_excerpt')) {
+                    $feature_excerpt = get_field('feature_excerpt');
+                }
+                if (get_the_post_thumbnail()) {
+                    $feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
+                    $feature_caption = get_post(get_post_thumbnail_id());
+                    $feature_caption = $feature_caption->post_excerpt;
+                }
+                $rows = get_field('feature_add_links');
 
-        echo '<div class="feature">';
-            echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
-            echo '</div>';
+                echo '<div class="feature large-12 columns">';
+                    echo '<div class="large-12 columns feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+                    echo '</div>';
 
-            echo '<div class="feature-content">';
-                echo '<h2>' . get_the_title() . '</h2>';
-                echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
-                if($rows)
-                    {
-                        foreach($rows as $row) {
-                            if($row['feature_link_type'] == 'internal') {
-                                $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-                                $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-                                $link_target = 'self';
-                                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-                            } elseif ($row['feature_link_type'] == 'external') {
-                                $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-                                $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-                                $link_target ='blank';
-                                echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-                            } 
-                        }
-                    }
+                    echo '<div class="feature-content">';
+                        echo '<h2>' . get_the_title() . '</h2>';
+                        echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
+                        
 
-            echo '</div><!-- .feature-content -->';
+                    echo '</div><!-- .feature-content -->';
 
-        echo '</div><!-- .feature -->';
-endwhile;
-wp_reset_postdata();
-echo "<hr />";
-echo '</div>';
+                    echo "<hr />";
+                echo '</div><!-- .feature -->';
+            endwhile;
+            wp_reset_postdata();
+        echo '</div>';
 ?>
 </div>
 <?php if ( is_active_sidebar( 'home-columns' ) ) : ?>
-<div class="row programs" data-equalizer data-equalizer-mq="large-up">
-    <div class="widget-area home-columns">
-        <?php dynamic_sidebar( 'home-columns' ); ?>
-    </div>
-    <hr />
-</div>
-<?php endif; ?>
-    
-<div class="fullwidth" style="height:150px; background-color:#85754d;">
-</div>
-
-<?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
-<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
-    <div class="list columns large-12">
-        <h2>Hosted Events</h2>
-        <hr />
+<div class="fullwidth slash">
+    <div class="row programs" data-equalizer data-equalizer-mq="large-up">
         <div class="widget-area home-columns">
-            <?php dynamic_sidebar( 'hosted-events' ); ?>
+            <?php dynamic_sidebar( 'home-columns' ); ?>
         </div>
+        <hr />
     </div>
-    <hr />
 </div>
 <?php endif; ?>
-
-<div class="fullwidth" style="height:150px; background-color:#85754d;">
+<div class="row">
+<?php if($rows) {
+    foreach($rows as $row) {
+        if($row['feature_link_type'] == 'internal') {
+            $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
+            $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
+            $link_target = 'self';
+            echo '<a class="small-12 medium-6 columns button full_button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+        } elseif ($row['feature_link_type'] == 'external') {
+            $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
+            $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
+            $link_target ='blank';
+            echo '<a class="full_button button small-12 medium-6 columns" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
+        } 
+    }
+}
+?>
 </div>
-
+<div class="fullwidth camp-divider divider">
+</div>
 <div class="row news">
 <?php
 # News with featured news
@@ -114,12 +100,12 @@ if ($sticky > 2) {
 } else {
     $sticky = 1;
 }
-if(!empty($featured)) {
+if(!empty($sticky)) {
     $home_args = array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        'posts_per_page' => 1 - $sticky,
-        'post__not_in' => $featured,
+        'posts_per_page' => 3,
+        'post__not_in' => get_option('sticky_posts'),
         'orderby' => 'date',
         'order' => 'DESC'
     );
@@ -127,7 +113,7 @@ if(!empty($featured)) {
 else {
     $home_args = array(
         'post_type' => 'post',
-        'posts_per_page' => 1,
+        'posts_per_page' => 3,
         'post_status' => 'publish',
     );
 }
@@ -136,8 +122,8 @@ $wp_query = new WP_Query( $home_args );
     <?php if ($wp_query->have_posts()): ?>
     <div class="home-news-section clearfix">
         <div class="columns large-8 medium-8 left" style="margin-top: 0; padding-top: 0;">
-        <a class="button right" href="/pcc/about/news">More News</a>
-        <h2 class="news-title">News</h2>
+        <a class="more-news button full_button" href="/pcc/about/news">More News</a>
+        <h2 class="news-title"><i class="fa fa-newspaper-o"></i>News</h2>
         <?php
         # The Loop
         while ( $wp_query->have_posts() ) :
@@ -150,7 +136,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link_url = get_the_permalink();
             $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
         }
-            
+
         echo '<div class="small-news">';
         echo '<div class="post-meta">';
         echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
@@ -158,13 +144,13 @@ $wp_query = new WP_Query( $home_args );
         $more_terms = wp_get_post_terms(get_the_id(), 'category');
         if (!empty($more_terms)) {
             $more_terms_arr = array();
-            
+
             foreach ($more_terms as &$term) {
                 if ($term->slug != 'uncategorized') {
                     $more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
                 }
             }
-            $more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+            $more_terms_str = ' | ' . implode(', ', $more_terms_arr);
 
         } else {
             $more_terms_str = '';
@@ -178,10 +164,6 @@ $wp_query = new WP_Query( $home_args );
     echo '</div>';
     endwhile;
     ?>
-    <hr/>
-    <a href="/events" id="more_events" class="right button" >More Events</a>
-    <a href="/events" ><h2>Events</h2></a>
-    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
     </div>
 <?php endif; ?>
 <?php if( is_active_sidebar('homepage-twitter') ) { ?>
@@ -190,6 +172,24 @@ $wp_query = new WP_Query( $home_args );
     </div>
 <?php } ?>
 </div>  
+</div>  
+<div class="fullwidth divider cave-divider" style="height:150px; background-color:#85754d;">
+</div>
+<?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
+<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
+    <div class="list columns large-12">
+        <h2>Hosted Events</h2>
+    </div>
+    <div class="widget-area home-columns">
+        <?php dynamic_sidebar( 'hosted-events' ); ?>
+    </div>
+</div>
+<?php endif; ?>    
+<div class="row climate-calendar">
+    <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
+    <a href="/events" ><h2 class="events-title"><i class="fa fa-calendar"></i>Climate Calendar</h2></a>
+    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+</div>
 </div>
 </div>
 
@@ -197,5 +197,4 @@ $wp_query = new WP_Query( $home_args );
 <?php do_action('foundationPress_after_content'); ?>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
-</div>
 <?php get_footer(); ?>
