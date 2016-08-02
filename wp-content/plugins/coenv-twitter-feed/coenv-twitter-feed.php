@@ -132,6 +132,7 @@ class Coenv_Twitter extends WP_Widget {
                         }
                     });
                 </script>
+                <a class="button" href="https://twitter.com/<?=$instance['user']?>">Read More Tweets</a>
             </div>
 
         <?php
