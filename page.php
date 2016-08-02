@@ -1,7 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<?php get_sidebar(); ?>
-	<div class="small-12 medium-9 large-9 columns" role="main">
+	<div class="small-12 medium-push-4 large-push-3 medium-8 large-9 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
@@ -28,5 +27,6 @@
 	<?php do_action('foundationPress_before_content'); ?>
 
 	</div>
+	<?php get_sidebar(); ?>
 </div>
 <?php get_footer(); ?>

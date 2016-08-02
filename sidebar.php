@@ -5,14 +5,14 @@
  * Serves up sidebar widgets for individual top level pages
  */
 ?>
-<aside id="sidebar" class="show-for-medium-up medium-3 large-3 columns">
+<aside id="sidebar" class="small-12 medium-pull-8 large-pull-9 medium-4 large-3 columns">
 <?php
 $menu_id = $GLOBALS['post']->ID;    
 if (is_singular('courses')) {
     $menu_id = 2989;
 }
 if (!is_front_page()) {
-	echo '<div class="coenv_base_subnav">';
+	echo '<div class="coenv_base_subnav show-for-medium-up">';
 		/*if ($GLOBALS['post']->post_parent) {
 			echo coenv_base_section_title($GLOBALS['post']->ID);
 		}*/

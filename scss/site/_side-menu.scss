@@ -6,6 +6,18 @@ aside#sidebar {
 	.section-title {
 		background-color: #f2f2f2;
 		border: 1px solid #ccc;
+        a {
+            vertical-align: middle;
+            &:before {
+                content: "\f169";
+                font-family: "foundation-icons";
+                font-size: 2rem;
+                line-height: 1rem;
+                margin-right: 1rem;
+                color: $uw-gold;
+                vertical-align: -20%;
+            }
+        }
 	}
 
 	// Hide for mobile	
@@ -27,28 +39,35 @@ aside#sidebar {
 			border-bottom: 1px solid #ccc;
 			border-left: 1px solid #ccc;
 			border-right: 1px solid #ccc;
-			padding: 0.25rem 0;
 			margin: 0;
 			text-transform: uppercase;
-			font-size: 1rem;
+            font-size: 0.9rem;
+            @media #{$large-up} {
+			    font-size: 1.25rem;
+            }
 			a {
-
 		        @include encode;
-                font-weight: 600;
+			    padding: 0.5rem 0;
+                font-weight: 800;
 				display: block;
 				line-height: 152%;
                 padding-left: 2rem;
-				&:not(.button) {
+                color: $uw-purple;
+				&:not(.active) {
 					color: #000;
 				}
+
 			}
 			ul {
 				margin-bottom: 0;
 				li {
-					border: 0;
+					border-top: 1px solid #ccc;
+                    border-bottom: none;
+                    border-left: none;
+                    border-right: none;
 
 					a {
-					padding-left: 3rem !important;
+				    	padding-left: 3rem !important;
 					}
 				}
 				&.side-nav {
@@ -66,11 +85,5 @@ aside#sidebar {
         margin-top: 0;
         line-height: 2rem;
     }
-
-
-
-
-
-
 }
 
