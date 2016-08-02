@@ -6,7 +6,7 @@
 
 function coenv_base_sidebar_widgets() {
 
-  $before_widget  = '<div class="small-12 columns">';
+  $before_widget  = '<div class="small-12 collapse">';
   $before_widget_two_columns  = '<div class="small-6 columns">';
   $before_widget_three_columns  = '<div class="medium-4 columns">';
   $before_widget_four_columns  = '<div class="small-3 columns">';
@@ -372,7 +372,7 @@ class CoEnv_Widget_Events extends WP_Widget {
         <?php foreach ( $events as $key => $event ) : ?>
 
 
-            <li data-equalizer-watch>
+            <li class="" data-equalizer-watch>
                 <?php
                 $date = substr($event['date'], 0, -6);
                 $date = strtotime($date);

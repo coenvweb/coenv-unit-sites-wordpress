@@ -185,9 +185,8 @@ $wp_query = new WP_Query( $home_args );
 <?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
 <div class="fullwidth slash">
     <div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
-        <div class="list columns large-12">
-            <h2>Hosted Events</h2>
-        </div>
+        <h2>Program on Climate Change Events</h2>
+        <hr>
         <div class="widget-area home-columns">
             <?php dynamic_sidebar( 'hosted-events' ); ?>
         </div>
@@ -196,10 +195,8 @@ $wp_query = new WP_Query( $home_args );
 <?php endif; ?>    
 <div class="row climate-calendar">
     <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
-    <a href="/events" ><h2 class="events-title"><img class="calendar" src="<?php echo get_template_directory_uri() ?>/assets/img/Calendar_icon.svg" />Climate Calendar</h2></a>
-    <div class="large-12 columns">
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
-    </div>
+    <a href="/events" ><h2 class="events-title"><div class="calendar"></div>Climate Calendar</h2></a>
+    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
 </div>
 </div>
 </div>
