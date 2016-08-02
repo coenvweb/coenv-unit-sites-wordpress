@@ -156,6 +156,8 @@
     }
 
     .hosted-events {
+        border-bottom: 1px solid $border;
+        margin-bottom: 1rem;
         .solid-widget {
             position: relative;
             width: 100%;

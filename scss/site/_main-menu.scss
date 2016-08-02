@@ -9,9 +9,15 @@
         display: inline-block;
         
         #menu-main-menu { 
+
+            .first-sub {
+                right: 0px;
+                left: auto;
+            }
+
             li a {
                 @media #{$large-up} {
-                    font-size: rem-calc(17);
+                    font-size: rem-calc(16);
                 }
                 @media #{$medium-only} {
                     background-image: none!important;
@@ -26,8 +32,8 @@
                 &:hover, &:focus {
                     color: $accent;
                 }
-                
             }
+
             li.current_page_parent {
                 & > a {
                     color: $accent;
@@ -37,27 +43,44 @@
                 }
                 & .current_page_item > a {
                     background-color: $bg-light;
+                    color: $accent;
                     border-top: 1px solid #dddddd;
                     border-bottom: 1px solid #dddddd;
                 }
             }
-        
+
             .dropdown {
+                border-top: 4px solid $uw-purple;
+                width: auto;
                 @include shadow;
-    
+
                 a {
-                    @include encode();
-                    font-size: rem-calc(14);
+                    @include encode;
+                    font-size: rem-calc(13);
+                    line-height: 3rem;
                     text-transform: none;
                     background-color: #f6f5f7;
                     border-bottom: 1px solid #fff;
                     &:hover{
                         background-color: $bg-lighter;
                     }
+
+                    @media #{$medium-only} {
+                        font-size: rem-calc(12);
+                        line-height: 2.25rem;
+                    }
+                }
+
+                &:not(.first-sub) {
+                    left: auto;
+                    right: 100%;
                 }
             }
 
             & > li {
+                text-align: right;
+                right: 0px;
+                left: auto;
                 &:before {
                     display: block;
                     position: absolute;
@@ -76,7 +99,7 @@
                 }
 
                 &.current_page_item > a, & > a:hover{
-                        color: $accent;
+                    color: $accent;
                 }
                 
                 & > a {
@@ -91,6 +114,7 @@
             .has-dropdown a {
                 &:after {
                     content: '';
+                    width: 0px;
                 }
             }
 

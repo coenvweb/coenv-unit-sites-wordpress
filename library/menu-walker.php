@@ -46,9 +46,13 @@ class top_bar_walker extends Walker_Nav_Menu {
 class top_bar_new_walker extends Walker_Page {
 
     function start_lvl( &$output, $depth = 0, $args = array() ) {
-        $output .= "\n<ul class=\"sub-menu dropdown\">\n";
+        if($depth == 0) {
+            $output .= "\n<ul class=\"sub-menu dropdown first-sub\">\n";
+        } else {
+            $output .= "\n<ul class=\"sub-menu dropdown\">\n";
+        }
     }
-    
+
 }
 
 

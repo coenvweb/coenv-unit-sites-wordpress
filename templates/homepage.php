@@ -5,7 +5,7 @@ Template Name: Homepage
 ?>
 <?php get_header(); ?>
 <div class="fullwidth hero-area">
-    <div class="nav-bar-divider section-div">
+    <div class="nav-bar-divider section-div show-for-medium-up">
     </div>
     <?php do_action('foundationPress_before_content'); ?>
         <?php
@@ -183,12 +183,14 @@ $wp_query = new WP_Query( $home_args );
     </div>
 </div>
 <?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
-<div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
-    <div class="list columns large-12">
-        <h2>Hosted Events</h2>
-    </div>
-    <div class="widget-area home-columns">
-        <?php dynamic_sidebar( 'hosted-events' ); ?>
+<div class="fullwidth slash">
+    <div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
+        <div class="list columns large-12">
+            <h2>Hosted Events</h2>
+        </div>
+        <div class="widget-area home-columns">
+            <?php dynamic_sidebar( 'hosted-events' ); ?>
+        </div>
     </div>
 </div>
 <?php endif; ?>    
@@ -196,7 +198,7 @@ $wp_query = new WP_Query( $home_args );
     <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
     <a href="/events" ><h2 class="events-title"><img class="calendar" src="<?php echo get_template_directory_uri() ?>/assets/img/Calendar_icon.svg" />Climate Calendar</h2></a>
     <div class="large-12 columns">
-        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=4'); ?>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
     </div>
 </div>
 </div>
