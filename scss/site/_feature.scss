@@ -1,10 +1,9 @@
 .homepage-features {
     h1 {
-        @include uni;
+        @include uni-reg;
         color: $uw-gold;
         text-align: center;
         margin: 2rem 0rem;
-        font-weight: 800;
         @media #{$large-up} {
             font-size: rem-calc(48);
         }
@@ -81,8 +80,7 @@
     .feature-content {
 
         h2 {
-            @include uni;
-            font-weight: 600;
+            @include uni-reg;
             font-size: rem-calc(38);
             margin-top: 0.5rem;
             margin-bottom: 0.25rem;
@@ -98,10 +96,10 @@
 
         @media #{$small-only} {
             h2 {
-                font-size: rem-calc(22);
+                font-size: rem-calc(28);
             }
             p.feature-excerpt {
-                font-size: rem-calc(14);
+                font-size: rem-calc(16);
             }
         }
     }

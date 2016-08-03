@@ -9,7 +9,7 @@ function coenv_base_sidebar_widgets() {
   $before_widget  = '<div class="small-12 collapse">';
   $before_widget_two_columns  = '<div class="small-6 columns">';
   $before_widget_three_columns  = '<div class="medium-4 columns">';
-  $before_widget_four_columns  = '<div class="small-3 columns">';
+  $before_widget_four_columns  = '<div class="medium-3 small-6 columns">';
   $before_title   = '<h4>';
   $after_title  = '</h4>';
   $after_widget = '</div> <!-- end #%1$s -->';

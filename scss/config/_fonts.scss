@@ -23,6 +23,14 @@
 }
 
 @font-face {
+    font-family: 'uni-sans';
+    src: url('../assets/fonts/fontfabric_-_unisansregular.otf');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
     font-family: 'uni-sans-light';
     src: url('../assets/fonts/fontfabric_-_unisanslight-webfont.eot');
     src: url('../assets/fonts/fontfabric_-_unisanslight-webfont.eot?#iefix') format('embedded-opentype'),
@@ -100,6 +108,12 @@
 
 @mixin uni() {
     font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
+}
+
+@mixin uni_reg() {
+    font-family: "uni-sans", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
     letter-spacing: .5px;
 }

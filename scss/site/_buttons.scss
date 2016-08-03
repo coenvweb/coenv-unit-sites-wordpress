@@ -1,50 +1,51 @@
 /*	Module: button
 		======================================================================== */
+.inner-wrap {
+    .button {
+        display: inline-block;
+        @include rem('padding', 0.5, 0.5);
+        @include font-size(14);
+        font-weight: 800;
+        background: $uw-purple;
+        text-decoration: none;
+        text-transform: uppercase;
+        text-align: left;
+        color: $white;
+        border: 1px solid $border;
 
-.button {
-	display: inline-block;
-	@include rem('padding', 0.5, 0.5);
-	@include font-size(14);
-	font-weight: 800;
-	background: $uw-purple;
-	text-decoration: none;
-    text-transform: uppercase;
-    text-align: left;
-	color: $white;
-    border: 1px solid $border;
+        &:after {
+            float: right;
+            display: block;
+            content: url('../assets/img/pcc_buttonArrow.svg');
+            width: 1rem;
+            padding-left: 2rem;
+            dominant-baseline: central;
+        }
+        
+        &:hover {
+            background: rgba(0,0,0,0.6);
+            color: #fff !important;
+        }
+        
+        .dark {
+            background: $bg-dk;
+            color: $white;
+            
+            &:hover {
+                background: $white-button;
+                color: $text;
+            }
+        }
+        
+        &.active {
+            background: $accent;
+            color: white;
+        }
 
-    &:after {
-        float: right;
-        display: block;
-        content: url('../assets/img/pcc_buttonArrow.svg');
-        width: 1rem;
-        padding-left: 2rem;
-        dominant-baseline: central;
     }
-	
-	&:hover {
-		background: rgba(0,0,0,0.6);
-		color: #fff !important;
-	}
-	
-	.dark {
-		background: $bg-dk;
-		color: $white;
-		
-		&:hover {
-			background: $white-button;
-			color: $text;
-		}
-	}
-    
-    &.active {
-        background: $accent;
-        color: white;
-    }
 
-}
-
-span.button, .full_button {
-    &:after {
+    span.button, .full_button {
+        &:after {
+        }
     }
 }

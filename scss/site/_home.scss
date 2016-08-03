@@ -1,11 +1,11 @@
 .home {
 
     h2 {
-        @include uni;
-        font-weight: bold;
+        @include uni_reg;
         margin-bottom: 1rem;
-        @media #{$large-only} {
-            font-size: 3rem;
+        font-size: 2.25rem;
+        @media #{$large-up} {
+            font-size: 3.5rem;
         }
     }
 
@@ -167,24 +167,47 @@
         border-bottom: 1px solid $border;
         padding-top: 1.5rem;
 
-         
         .widget-area {
+            @media #{$small-only} {
+                > div:nth-child(odd) {
+                    clear: both;
+                }
+            }
             margin-top: 2rem;
 
             .solid-widget {
                 position: relative;
-                width: 100%;
+                @media #{$small-only} {
+                    margin-bottom: 1rem;
+                }
                 p {
                     margin-bottom: 0.25rem;
                 }
                 .widget_img {
-                    height: 100%;
-                    text-align: center;
+                    position: relative;
+                    width: 100%;
+                    padding-bottom: 100%;
                     img {
+                        position: absolute;
+                        width: 100%;
                         height: 100%;
-                        max-height: 240px;
+                        object-fit: cover;
                     }
                 }
+
+                h4 {
+                    @media #{$small-only} {
+                        font-size: rem-calc(18);
+                    }
+                }
+
+                p {
+                    @media #{$small-only} {
+                        font-size: rem-calc(11);
+                    }
+                    font-weight: 800;
+                }
+
 
                 .widget_links {
                     float: none;
@@ -198,10 +221,11 @@
                         padding: 0;
                         margin: 0;
                         &:hover {
-                            color: $uw-purple;
+                            color: $uw-purple !important;
                         }
                     }
                 }
+
             }
         }
     }
@@ -220,6 +244,9 @@
             width: 100%;
             padding-bottom: 75%;
             margin-bottom: 2.25rem;
+            @media #{$small-only} {
+                margin-bottom: 1.5rem;
+            }
             .widget_img {
                 height: 100%;
                 &:before {
@@ -298,6 +325,16 @@
         
         margin-top: 1rem;
 
+        .news-title {
+            &:before {
+                display: inline-block;
+                float: left;
+                width: 2.5rem;
+                content: url('../assets/img/News_icon.svg');
+                margin-right: 1rem;
+            }
+        }
+
         .events-title {
             &:before {
                 display: inline-block;
@@ -308,45 +345,52 @@
             }
         }
 
-        .events-title, .news-title {
+        .home-section-title {
+            overflow: hidden;
             border-bottom: 1px solid $border;
-            padding-bottom: 1.5rem;
             margin-bottom: 1rem;
 
-        }
+            .events-title, .news-title {
+                white-space: nowrap;
+                @media #{$medium-up} {
+                    float: left;
+                    margin-top: 0.5rem;
+                }
 
-        .more-events, .more-news {
-            float: right;
-            @media #{$medium-up} {
-                margin-top: 0.5rem;
             }
+
+            .more-events, .more-news {
+                @media #{$medium-up} {
+                    float: right;
+                    margin-top: 0.5rem;
+                }
+            }
+
         }
 
         .small-news {
             border-bottom: 1px solid $border;
             .post-meta {
+                font-weight: bold;
+                letter-spacing: 0.5px;
 
-                @include encode_cb;
                 time {
-                    padding-right: 0.5rem;
+                    @include uni-reg;
                 }
 
                 a {
+                    @include uni_reg;
                     &:first-of-type {
-                        padding-left: 0.5rem;
                     }
                 }
 
             }
-            p {
-                color: $text-lt;
-            }
         }
 
         .event-list {
+            @include uni_reg;
             display: flex;
             margin-bottom: 0.5rem;
-            
             @media #{$small-only} {
                 flex-direction: column;
             }

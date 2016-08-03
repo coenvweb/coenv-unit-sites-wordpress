@@ -127,8 +127,10 @@ $wp_query = new WP_Query( $home_args );
     <?php if ($wp_query->have_posts()): ?>
     <div class="home-news-section clearfix">
         <div class="columns large-8 medium-8 left" style="margin-top: 0; padding-top: 0;">
-        <a class="more-news button full_button" href="/pcc/about/news">More News</a>
-        <h2 class="news-title"><i class="fa fa-newspaper-o"></i>News</h2>
+        <div class="home-section-title">
+            <h2 class="news-title">News</h2>
+            <a class="more-news button full_button" href="/pcc/about/news">More News</a>
+        </div>
         <?php
         # The Loop
         while ( $wp_query->have_posts() ) :
@@ -164,7 +166,7 @@ $wp_query = new WP_Query( $home_args );
         echo $more_terms_str;
         echo '</div>';
         echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-        echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+        echo '<p>' . the_advanced_excerpt('length=30&finish=sentence&') . '</p>';
         echo $post_link;
     echo '</div>';
     endwhile;
@@ -185,18 +187,24 @@ $wp_query = new WP_Query( $home_args );
 <?php if ( is_active_sidebar( 'hosted-events' ) ) : ?>
 <div class="fullwidth slash">
     <div class="row hosted-events" data-equalizer data-equalizer-mq="large-up">
-        <h2>Program on Climate Change Events</h2>
-        <hr>
-        <div class="widget-area home-columns">
-            <?php dynamic_sidebar( 'hosted-events' ); ?>
+        <div class="columns">
+            <h2>Program on Climate Change Events</h2>
+            <hr>
+            <div class="widget-area home-columns">
+                <?php dynamic_sidebar( 'hosted-events' ); ?>
+            </div>
         </div>
     </div>
 </div>
 <?php endif; ?>    
 <div class="row climate-calendar">
-    <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
-    <a href="/events" ><h2 class="events-title"><div class="calendar"></div>Climate Calendar</h2></a>
-    <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
+    <div class="columns">
+        <div class="home-section-title">
+            <h2 class="events-title"><div class="calendar"></div>Climate Calendar</h2>
+            <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
+        </div>
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_pcc.rss&posts_per_page=3'); ?>
+    </div>
 </div>
 </div>
 </div>
