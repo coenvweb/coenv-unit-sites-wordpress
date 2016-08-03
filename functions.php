@@ -234,7 +234,7 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-        if ($tax = 'course_quarter') {echo '<label for="select-cat">Select a quarter:</label>';} else {echo '<label for="select-cat">Select a category:</label>';};
+        if ($tax == 'course_quarter') {echo '<label for="select-cat">Select a quarter:</label>';};
 		echo '<select name="select-category" class="select-category" id="select-cat">';
         if ($tax != 'course_quarter') {
 		  echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';

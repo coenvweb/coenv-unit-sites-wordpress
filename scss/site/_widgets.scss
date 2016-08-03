@@ -69,42 +69,41 @@
 
 
 // Sidebar Widgets
-aside#sidebar div.columns {
+aside#sidebar div {
 
-	
 	// Content blocks
-	.widget_custom_post_widget {
-		.widget_content {
-            h4 {
-                @include encode;
-                font-weight: 200;
-                padding: 1rem 0rem;
+
+    .widget_content {
+        h4 {
+            @include uni;
+            font-weight: 600;
+            padding: 1rem 0rem;
+        }
+        p {
+            @include encode;
+            margin-bottom: 0;
+        }
+        span.button a {
+            color: $white;
+        }
+    }
+    .widget_links {
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-top: rem-calc(15);
+        li {
+            display: inline;
+            a {
+                letter-spacing: rem-calc(1);
+                margin: 0 0 rem-calc(6) 0;
+                padding: rem-calc(10);
+                text-align: left;
             }
-			p {
-				margin-bottom: 0;
-			}
-		}
-		.widget_links {
-			margin-bottom: 0;
-			margin-left: 0;
-			margin-top: rem-calc(15);
-			li {
-				display: inline;
-				width: 100%;
-				a {
-					
-					letter-spacing: rem-calc(1);
-					margin: 0 0 rem-calc(6) 0;
-					padding: rem-calc(10);
-					text-align: left;
-					width: 100%;
-				}
-				.button {
-					text-transform: uppercase;
-				}
-			}
-		}
-	}
+            .button {
+                text-transform: uppercase;
+            }
+        }
+    }
 	&:nth-child(even) {
 		.widget_custom_post_widget {
 			background-color: $white;

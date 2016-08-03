@@ -23,7 +23,7 @@
         text-align: left;
         @media #{$small-up} {
             text-align: center;
-            font-size: rem-calc(14)!important;
+            font-size: rem-calc(12)!important;
             line-height: rem-calc(22);
         }
     }
