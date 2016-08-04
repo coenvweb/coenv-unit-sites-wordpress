@@ -37,7 +37,7 @@ if (empty($coenv_cat_1)) {
 		    <h1 class="article__title"><?php the_title(); ?></h1>
             
             <div class="row filters">
-                <div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
+                <div class="large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
                     <?php
 
                     $cats_args  = array(
@@ -50,7 +50,7 @@ if (empty($coenv_cat_1)) {
                     );
                     $cats = get_terms($cats_args);
                     if ($cats) {
-                        echo '<div>';
+                        echo '<div class="show-for-medium-up">';
                         $old_cats = [];
                         $i = -1;
                         foreach(array_reverse($cats) as $cat) { 
@@ -70,6 +70,9 @@ if (empty($coenv_cat_1)) {
                         echo '</div>';
                         $GLOBALS['old_cats'] = $old_cats;
                     }
+                    echo '<div class="course-wrap show-for-small-only">';
+                        coenv_base_cat_filter('course_quarter', $coenv_cat_term_1);
+                    echo '</div>';
                     // Category filter ?>
                 </div>
             </div>
@@ -114,8 +117,10 @@ if (empty($coenv_cat_1)) {
 		$wp_query->the_post();
         $terms = wp_get_post_terms($post->ID, 'course_quarter' );
         $categories = wp_get_post_terms($post->ID, 'course_category');
-        foreach($categories as $category) {
-            $course_categories[] = $category->name;
+        if($categories) {
+            foreach($categories as $category) {
+                $course_categories[] = $category->name;
+            }
         }
         $quarter_name = get_field('quarter');
         $course_year = substr( $terms[0]->slug , -4);

@@ -109,6 +109,15 @@ body {
     user-select: none;
 }
 
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url('../assets/img/pcc_dropdownArrow.svg') no-repeat !important;
+    background-size: 1rem 1rem !important;
+    background-position: 98% center;
+}
+
 @media print {
     * {
         background: transparent !important;
