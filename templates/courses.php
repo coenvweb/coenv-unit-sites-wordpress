@@ -31,8 +31,7 @@ if (empty($coenv_cat_1)) {
 ?>
 <?php get_header(); ?>
 <div class="row">
-    <?php get_sidebar(); ?>
-	<div class="small-12 medium-9 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
 		<div class="entry-content">
         <header class="article__header">
 		    <h1 class="article__title"><?php the_title(); ?></h1>
@@ -40,7 +39,7 @@ if (empty($coenv_cat_1)) {
             <div class="row filters">
                 <div class=" large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
                     <?php
-                    
+
                     $cats_args  = array(
                         'orderby' => 'id',
                         'order' => 'DESC',
@@ -102,16 +101,10 @@ if (empty($coenv_cat_1)) {
 
 		<?php if ($coenv_cat_1 == 'course_quarter'): ?>
 		<div class="panel">
-			<div class="left">
 				<?php echo $wp_query->found_posts; ?>
 				courses offered in 
-				<strong>
 				<?php echo $coenv_cat_term_1_val; ?>
-				</strong>
-				</div>
         </div>
-        <hr>
-
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
         <ul class="courses">
@@ -119,7 +112,11 @@ if (empty($coenv_cat_1)) {
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-        $terms = wp_get_post_terms($post->ID, 'course_quarter' ); 
+        $terms = wp_get_post_terms($post->ID, 'course_quarter' );
+        $categories = wp_get_post_terms($post->ID, 'course_category');
+        foreach($categories as $category) {
+            $course_categories[] = $category->name;
+        }
         $quarter_name = get_field('quarter');
         $course_year = substr( $terms[0]->slug , -4);
         if( have_rows('instructor(s)') ) {
@@ -136,14 +133,15 @@ if (empty($coenv_cat_1)) {
         }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<h5>' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . '</h5>';
+        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . (isset($course_categories) ? ' | ' . implode(', ', $course_categories) : '') . '</span>';
+        unset($course_categories);
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
             
         if (isset($instructors)) {
-            echo '<p>Credits: ' . get_field('number_of_credits') . ' | Instructor(s): ' . $instructors . '</p>';
+            echo '<p class="credits-instructor">Credits: ' . get_field('number_of_credits') . ' | Instructor(s): ' . $instructors . '</p>';
             unset ($instructors);
         } else {
-            echo '<p>Credits: ' . get_field('number_of_credits');
+            echo '<p class="credits-instructor">Credits: ' . get_field('number_of_credits');
         }
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         echo '</li>';
@@ -164,6 +162,7 @@ if (empty($coenv_cat_1)) {
 	</div>
     </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+    <?php get_sidebar(); ?>
 </div>
 </div>
 <?php get_footer(); ?>

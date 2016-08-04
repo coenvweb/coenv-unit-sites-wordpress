@@ -1,15 +1,81 @@
 .page-template-courses {
+    .entry-content {
+        margin-left: 1rem;
+    }
     .filters {
         padding-top: 1rem;
     }
     .courses {
+        @include uni_reg;
+        margin: 1rem 0 3rem 0;
+        border-bottom: 1px solid $border;
         li {
+            position: relative;
+            border-top: 1px solid $border;
+            padding-top: 1.5rem;
             list-style: none;
+            &:before {
+                position: absolute;
+                content: url('../assets/img/pcc_section_div_flat_grey.svg');
+                width: 8rem;
+                top: -3px;
+                left: -3px;
+            }
+            .acro_quarter, .credits_instructor {
+                @include encode_cb;
+                font-size: rem-calc(16);
+                font-weight: bold;
+            }
+
         }
     }
 
     .panel {
         background-color: $white;
         color: $uw-purple;
+        float: none;
+        padding-left: 0;
+        font-weight: bold;
+    }
+
+}
+
+.course {
+    .course_title {
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .course_details {
+        .course_acro {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid $border;
+            .fulfillments {
+                @media #{$large-up} {
+                    float: right;
+                }
+                display: block;
+                color: $uw-purple;
+            }
+        }
+        .course_meta {
+            @include encode;
+            margin-left: 0rem;
+            list-style-type: none;
+            font-size: 1.1rem;
+            .meta_label {
+                font-weight: bold;
+            }
+            li {
+                display: inline-block;
+                &:not(:last-child) {
+                    &:after {
+                        content: "|";
+                        margin: 0rem 0.5rem;
+                    }
+                }
+            }
+        }
     }
 }
+

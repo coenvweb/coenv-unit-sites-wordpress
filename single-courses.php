@@ -1,7 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="columns large-12 section-title"><h2><a href="../../">Courses</a></h2></div>
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-push-4 large-push-3 medium-8 large-9 columns" role="main">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 			<?php do_action('foundationPress_post_before_entry_content'); ?>
@@ -25,7 +24,7 @@
 					<?php dynamic_sidebar( 'after-content' ); ?>
 				</div><!-- #after-content -->
 			<?php endif; ?>
-		</article>	
+		</article>
 	<?php do_action('foundationPress_after_content'); ?>
 
 	</div>
