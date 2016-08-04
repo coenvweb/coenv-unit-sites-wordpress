@@ -73,20 +73,21 @@ Template Name: Homepage
 <?php endif; ?>
 <div class="row teaser-buttons">
 <?php if($rows) {
+    $counter = 0;
     foreach($rows as $row) {
         echo '<div class="small-12 medium-6 columns">';
-        if($row['feature_link_type'] == 'internal') {
-            $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-            $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-            $link_target = 'self';
-            echo '<a href="' . $link_url . '" target="_' . $link_target . '"><div class="home_button">' . $link_title . '</div></a>';
-        } elseif ($row['feature_link_type'] == 'external') {
-            $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-            $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-            $link_target ='blank';
-            echo '<a href="' . $link_url . '" target="_' . $link_target . '"><div class="home_button"> ' . $link_title . '</div></a>';
-        } 
+            if($row['feature_link_type'] == 'internal') {
+                $link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
+                $link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
+                $link_target = 'self';
+            } elseif ($row['feature_link_type'] == 'external') {
+                $link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
+                $link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
+                $link_target ='blank';
+            }
+            echo '<a href="' . $link_url . '" target="_' . $link_target . '"><div class="'. ($counter ? 'community' : 'learn') .' home_button"> ' . $link_title . '</div></a>';
         echo '</div>';
+        $counter++;
     }
 }
 ?>

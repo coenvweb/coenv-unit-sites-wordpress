@@ -122,13 +122,23 @@
     }
 
     .teaser-buttons {
+        margin-top: 1rem;
+        margin-bottom: 2rem; 
+        
+        .learn {
+            background: url('../assets/img/learn_more_button.png');
+        }
+
+        .community {
+            background: url('../assets/img/community_button.png');
+        }
 
         .home_button {
+
             text-transform: uppercase;
             color: $white;
             display: block;
             padding: 3rem;
-            background: url('../assets/img/');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -370,6 +380,9 @@
 
         .small-news {
             border-bottom: 1px solid $border;
+            h4 {
+                margin-bottom: 1.5rem;
+            }
             .post-meta {
                 font-weight: bold;
                 letter-spacing: 0.5px;

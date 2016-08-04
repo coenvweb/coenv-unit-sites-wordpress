@@ -78,6 +78,7 @@
 	}
 	
     .feature-content {
+        padding-top: 1rem;
 
         h2 {
             @include uni-reg;
@@ -90,8 +91,8 @@
             @include encode;
             margin-bottom: 1.5rem;
             color: $text;
-            letter-spacing: 0.5px;
-            font-size: rem-calc(20);
+            letter-spacing: 1px;
+            font-size: rem-calc(24);
         }
 
         @media #{$small-only} {
