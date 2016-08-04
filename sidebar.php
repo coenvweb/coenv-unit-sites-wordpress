@@ -9,7 +9,7 @@
 <?php
 $menu_id = $GLOBALS['post']->ID;    
 if (is_singular('courses')) {
-    $menu_id = 2989;
+    $menu_id = 3473;
 }
 if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav show-for-medium-up">';

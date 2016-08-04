@@ -183,6 +183,10 @@ function coenv_banner() {
 
     $ancestor_id = coenv_get_ancestor('ID');
 
+    if ( is_singular( 'courses' )) { //change news pages' section titles
+        unset ($ancestor_id);
+        $ancestor_id = 2989;
+    }
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
         $ancestor_id = 7;
@@ -226,7 +230,7 @@ function coenv_base_section_title($id) {
 
     if ( is_singular( 'courses' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="../../"><span>&larr; View All</span></a></h2></div>';
+        $section_title = '<div class="columns large-12 section-title"><h2><a href="/education">Education</a></h2></div>';
     }
 
     // if ( is_page_template('templates/courses.php')) { //change news index' section titles
