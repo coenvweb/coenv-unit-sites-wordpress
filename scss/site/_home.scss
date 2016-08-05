@@ -233,6 +233,12 @@
                         &:hover {
                             color: $uw-purple !important;
                         }
+                        &:after {
+                            display: none;
+                        }
+                        &:before {
+                            display: none;
+                        }
                     }
                 }
 
@@ -452,7 +458,7 @@
     }
     .read_tweets {
         width: 100%;
-        text-align: center;
+        text-align: center !important;
     }
 
 }
