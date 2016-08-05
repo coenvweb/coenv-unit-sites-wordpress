@@ -3,33 +3,42 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.7.6
+Version: 2.7.8
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
 Text Domain: custom-taxonomy-order-ne
 Domain Path: /lang/
 
-Copyright 2013-2016   Marcel Pol   (email: marcel@timelord.nl)
+/*
+	Copyright 2011 - 2011  Drew Gourley
+	Copyright 2013 - 2016  Marcel Pol   (email: marcel@timelord.nl)
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 
+/* TODO:
+ * - Find a proper fix for tree of terms/subterms and ordering.
+ * - Add pagination, just like next_post_link().
+ * - 3.0: Switch to term_meta.
+ */
+
+
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.7.6');
+define('CUSTOMTAXORDER_VER', '2.7.8');
 
 
 function customtaxorder_register_settings() {
@@ -182,6 +191,18 @@ function customtaxorder_update_order() {
 
 
 /*
+ * Flush object cache when order is changed in taxonomy ordering plugin.
+ *
+ * Since 2.7.8
+ *
+ */
+function customtaxorder_flush_cache() {
+	wp_cache_flush();
+}
+add_action( 'customtaxorder_update_order', 'customtaxorder_flush_cache' );
+
+
+/*
  * customtaxorder_sub_query
  * Function to give an option for the list of sub-taxonomies
  */
@@ -204,11 +225,16 @@ function customtaxorder_sub_query( $terms, $tax ) {
 function customtaxorder_apply_order_filter($orderby, $args) {
 	global $customtaxorder_settings;
 	$options = $customtaxorder_settings;
+
 	if ( isset( $args['taxonomy'] ) ) {
 		$taxonomy = $args['taxonomy'];
 	} else {
 		$taxonomy = 'category';
 	}
+	if ( is_array( $taxonomy ) ) {
+		$taxonomy = $taxonomy[0];
+	}
+
 	if ( !isset ( $options[$taxonomy] ) ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
 	}
@@ -334,16 +360,12 @@ function customtaxorder_about() {
 
 				<h2 class="widget-top"><?php _e('Review this plugin.', 'custom-taxonomy-order-ne'); ?></h2>
 				<p><?php _e('If this plugin has any value to you, then please leave a review at', 'custom-taxonomy-order-ne'); ?>
-					<a href="https://wordpress.org/support/view/plugin-reviews/custom-taxonomy-order-ne" target="_blank" title="<?php esc_attr_e('The plugin page at wordpress.org.', 'custom-taxonomy-order-ne'); ?>">
+					<a href="https://wordpress.org/support/view/plugin-reviews/custom-taxonomy-order-ne?rate=5#postform" target="_blank" title="<?php esc_attr_e('The plugin page at wordpress.org.', 'custom-taxonomy-order-ne'); ?>">
 						<?php _e('the plugin page at wordpress.org', 'custom-taxonomy-order-ne'); ?></a>.
 				</p>
 
-				<h2 class="widget-top"><?php _e('Donate to the EFF.', 'custom-taxonomy-order-ne'); ?></h2>
-				<p><?php _e('The Electronic Frontier Foundation is one of the few organisations that wants to keep the internet a free place.', 'custom-taxonomy-order-ne'); ?></p>
-				<p><a href="https://supporters.eff.org/donate" target="_blank" title="<?php esc_attr_e('Please donate to the EFF.', 'custom-taxonomy-order-ne'); ?>"><?php _e('Please donate to the EFF.', 'custom-taxonomy-order-ne'); ?></a></p>
-
 				<h2 class="widget-top"><?php _e('Donate to the maintainer.', 'custom-taxonomy-order-ne'); ?></h2>
-				<p><?php _e('If you rather want to donate to the maintainer of the plugin, you can donate through PayPal.', 'custom-taxonomy-order-ne'); ?></p>
+				<p><?php _e('If you want to donate to the maintainer of the plugin, you can donate through PayPal.', 'custom-taxonomy-order-ne'); ?></p>
 				<p><?php _e('Donate through', 'custom-taxonomy-order-ne'); ?> <a href="https://www.paypal.com" target="_blank" title="<?php esc_attr_e('Donate to the maintainer.', 'custom-taxonomy-order-ne'); ?>"><?php _e('PayPal', 'custom-taxonomy-order-ne'); ?></a>
 					<?php _e('to', 'custom-taxonomy-order-ne'); ?> marcel@timelord.nl.
 				</p>

@@ -74,7 +74,10 @@ jQuery(function($) {
 
 
     // Show/hide block settings
-    $( ".block-title").on('click', 'span', function() {
+    $( '.mega-toggle_blocks').on('click', '.block-title span', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
         var settings = $(this).parent().parent().find(".block-settings");
         $(".block").removeClass('mega-open');
 

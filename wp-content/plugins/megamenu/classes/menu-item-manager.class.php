@@ -204,12 +204,19 @@ class Mega_Menu_Menu_Item_Manager {
 
 		$all_widgets = $widget_manager->get_available_widgets();
 
-        $return = "<label for='mm_enable_mega_menu'>" . __("Sub menu display mode", "megamenu") . "</label>";
-        $return .= "<select id='mm_enable_mega_menu' name='settings[type]'>";
-        $return .= "    <option value='flyout'>" . __("Flyout Menu", "megamenu") . "</option>";
-        $return .= "    <option id='megamenu' value='megamenu' " . selected( $menu_item_meta['type'], 'megamenu', false ) . ">" . __("Mega Menu", "megamenu") . "</option>";
-        $return .= "</select>";
+        $submenu_options = apply_filters("megamenu_submenu_options", array(
+            'flyout' => __("Flyout Menu", "megamenu"),
+            'megamenu' => __("Mega Menu", "megamenu")
+        ), $menu_item_meta);
 
+        $return = "<label for='mm_enable_mega_menu'>" . __("Sub menu display mode", "megamenu") . "</label>";
+
+        $return .= "<select id='mm_enable_mega_menu' name='settings[type]'>";
+
+        foreach ( $submenu_options as $type => $label ) {
+            $return .= "<option id='{$type}' value='{$type}' " . selected( $menu_item_meta['type'], $type, false ) . ">{$label}</option>";
+        }
+        $return .= "</select>";
 
         $return .= "<select id='mm_number_of_columns' name='settings[panel_columns]'>";
         $return .= "    <option value='1' " . selected( $menu_item_meta['panel_columns'], 1, false ) . ">1 " . __("column", "megamenu") . "</option>";

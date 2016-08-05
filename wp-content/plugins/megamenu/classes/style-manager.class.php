@@ -61,7 +61,7 @@ final class Mega_Menu_Style_Manager {
      *
      */
     public function get_default_theme() {
-        return array(
+        return apply_filters("megamenu_default_theme", array(
             'title'                                     => __("Default", "megamenu"),
             'container_background_from'                 => '#222',
             'container_background_to'                   => '#222',
@@ -258,7 +258,7 @@ final class Mega_Menu_Style_Manager {
 #{$wrap} {
     clear: both;
 }'
-        );
+        ) );
     }
 
 
@@ -486,7 +486,10 @@ final class Mega_Menu_Style_Manager {
         $dir = trailingslashit( $upload_dir['basedir'] ) . 'maxmegamenu/';
 
         WP_Filesystem( false, $upload_dir['basedir'], true );
-        $wp_filesystem->mkdir( $dir );
+
+        if( ! $wp_filesystem->is_dir( $dir ) ) {
+            $wp_filesystem->mkdir( $dir );
+        }
 
         if ( ! $wp_filesystem->put_contents( $dir . $filename, $css ) ) {
             // File write failed.

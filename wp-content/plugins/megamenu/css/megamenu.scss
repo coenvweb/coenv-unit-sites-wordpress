@@ -366,16 +366,12 @@
             }
 
             @for $of from 1 through 8 {
-
                 @for $cols from 1 through $of {
-
-                    > li.mega-menu-columns-#{$cols}-of-#{$of} {
+                    li.mega-menu-columns-#{$cols}-of-#{$of} {
                         width: (100% / $of) * $cols;
                     }
-
                 }
             }
-
 
             > li.mega-menu-item ul.mega-sub-menu {
                 clear: both;
@@ -730,6 +726,7 @@
         -khtml-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
+        outline: none;
 
         @include mobile {
             display: block;

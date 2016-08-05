@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.maxmegamenu.com
  * Description: Mega Menu for WordPress.
- * Version:     2.2.1
+ * Version:     2.2.2
  * Author:      Tom Hemsley
  * Author URI:  https://www.maxmegamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.2.1';
+    public $version = '2.2.2';
 
 
     /**
@@ -112,11 +112,11 @@ final class Mega_Menu {
                 do_action( 'admin_enqueue_scripts', 'widgets.php' );
                 do_action( 'admin_print_styles-widgets.php' );
 
-                do_action("megamenu_nav_menus_scripts", $hook );
+                do_action( 'megamenu_nav_menus_scripts', $hook );
             }
 
             if ( strpos( $hook, 'maxmegamenu' ) !== false ) {
-                do_action("megamenu_admin_scripts", $hook );
+                do_action( 'megamenu_admin_scripts', $hook );
             }
 
         }
@@ -281,8 +281,7 @@ final class Mega_Menu {
             'mega_menu_settings'          => MEGAMENU_PATH . 'classes/settings.class.php',
             'mega_menu_widget'            => MEGAMENU_PATH . 'classes/widget.class.php',
             'mega_menu_toggle_blocks'     => MEGAMENU_PATH . 'classes/toggle-blocks.class.php',
-            'scssc'                       => MEGAMENU_PATH . 'classes/scssc.inc.php',
-
+            'scssc'                       => MEGAMENU_PATH . 'classes/scssc.inc.php'
         );
 
     }
@@ -410,7 +409,7 @@ final class Mega_Menu {
         foreach ( $items as $item ) {
 
             // only look for widgets on top level items
-            if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'megamenu' ) {
+            if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'megamenu' || $item->depth === 1 && $item->parent_submenu_type == 'tabbed' ) {
 
                 $panel_widgets = $widget_manager->get_widgets_for_menu_id( $item->ID, $args->menu );
 
@@ -430,18 +429,18 @@ final class Mega_Menu {
                         ) );
 
                         $menu_item = array(
-                            'type'              => 'widget',
-                            'in_megamenu'       => true,
-                            'title'             => $widget['id'],
-                            'content'           => $widget_manager->show_widget( $widget['id'] ),
-                            'menu_item_parent'  => $item->ID,
-                            'db_id'             => 0, // This menu item does not have any childen
-                            'ID'                => $widget['id'],
-                            'menu_order'        => $next_order - $total_widgets_in_menu + $widget_position,
-                            'megamenu_order'    => $widget['order'],
-                            'megamenu_settings' => $widget_settings,
-                            'depth'             => 1,
-                            'classes'           => array(
+                            'type'                  => 'widget',
+                            'parent_submenu_type'   => 'megamenu',
+                            'title'                 => $widget['id'],
+                            'content'               => $widget_manager->show_widget( $widget['id'] ),
+                            'menu_item_parent'      => $item->ID,
+                            'db_id'                 => 0, // This menu item does not have any childen
+                            'ID'                    => $widget['id'],
+                            'menu_order'            => $next_order - $total_widgets_in_menu + $widget_position,
+                            'megamenu_order'        => $widget['order'],
+                            'megamenu_settings'     => $widget_settings,
+                            'depth'                 => 1,
+                            'classes'               => array(
                                 "menu-item",
                                 "menu-item-type-widget",
                                 "menu-widget-class-" . $widget_manager->get_widget_class( $widget['id'] )
@@ -516,8 +515,8 @@ final class Mega_Menu {
      * @return array
      */
     public function setup_menu_items( $items, $args ) {
-
         // apply depth
+        // @todo work out a better way to do this. Suggestions welcome..!
         $parents = array();
 
         foreach ( $items as $key => $item ) {
@@ -535,29 +534,24 @@ final class Mega_Menu {
             }
         }
 
+
         // apply saved metadata to each menu item
         foreach ( $items as $item ) {
-
             $saved_settings = array_filter( (array) get_post_meta( $item->ID, '_megamenu', true ) );
 
             $item->megamenu_settings = array_merge( Mega_Menu_Nav_Menus::get_menu_item_defaults(), $saved_settings );
             $item->megamenu_order = isset( $item->megamenu_settings['mega_menu_order'][$item->menu_item_parent] ) ? $item->megamenu_settings['mega_menu_order'][$item->menu_item_parent] : 0;
-            $item->in_megamenu = false;
+            $item->parent_submenu_type = 'flyout';
             $item->menu_order = $item->menu_order * 1000;
 
-            // add in_megamenu
+            // add parent mega menu type
             if ( $item->depth == 1 ) {
-
                 $parent_settings = array_filter( (array) get_post_meta( $item->menu_item_parent, '_megamenu', true ) );
 
-                if ( isset( $parent_settings['type'] ) && $parent_settings['type'] == 'megamenu' ) {
-
-                    $item->in_megamenu = true;
-
+                if ( isset( $parent_settings['type'] ) ) {
+                    $item->parent_submenu_type = $parent_settings['type'];
                 }
-
             }
-
         }
 
         return $items;
@@ -579,7 +573,7 @@ final class Mega_Menu {
         // reorder menu items within mega menus based on internal ordering
         foreach ( $items as $item ) {
             // items ordered with 'forced' ordering
-            if ( $item->in_megamenu && isset( $item->megamenu_order ) && $item->megamenu_order !== 0 ) {
+            if ( $item->parent_submenu_type == 'megamenu' && isset( $item->megamenu_order ) && $item->megamenu_order !== 0 ) {
                 $parent_post = get_post( $item->menu_item_parent );
                 $item->menu_order = $parent_post->menu_order * 1000 + $item->megamenu_order;
             }
@@ -645,7 +639,7 @@ final class Mega_Menu {
             }
 
             // add column classes for second level menu items displayed in mega menus
-            if ( $item->in_megamenu === true ) {
+            if ( $item->parent_submenu_type == 'megamenu' ) {
 
                 $parent_settings = array_filter( (array) get_post_meta( $item->menu_item_parent, '_megamenu', true ) );
                 $parent_settings = array_merge( Mega_Menu_Nav_Menus::get_menu_item_defaults(), $parent_settings );

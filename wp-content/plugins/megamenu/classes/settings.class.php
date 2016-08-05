@@ -261,13 +261,17 @@ class Mega_Menu_Settings {
 
         check_admin_referer( 'megamenu_save_settings' );
 
-        $submitted_settings = apply_filters( "megamenu_submitted_settings", $_POST['settings'] );
+        if ( isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ) {
 
-        $existing_settings = get_option( 'megamenu_settings' );
+            $submitted_settings = apply_filters( "megamenu_submitted_settings", $_POST['settings'] );
 
-        $new_settings = array_merge( (array)$existing_settings, $submitted_settings );
+            $existing_settings = get_option( 'megamenu_settings' );
 
-        update_option( 'megamenu_settings', $new_settings );
+            $new_settings = array_merge( (array)$existing_settings, $submitted_settings );
+
+            update_option( 'megamenu_settings', $new_settings );
+
+        }
 
         // update location description
         if ( isset( $_POST['location'] ) && is_array( $_POST['location'] ) ) {
@@ -684,11 +688,7 @@ class Mega_Menu_Settings {
 
                 <?php do_action( "megamenu_general_settings", $saved_settings ); ?>
 
-                <?php
-
-                    submit_button();
-
-                ?>
+                <?php submit_button(); ?>
             </form>
         </div>
 
@@ -738,14 +738,14 @@ class Mega_Menu_Settings {
                     <tr>
                         <td class='mega-name'>
                             <?php _e("Registered Menu Locations", "megamenu"); ?>
-                            <div class='mega-description'><?php _e("An overview of the menu locations supported by your theme. You can enable Max Mega Menu and adjust the settings for a specific menu location by going to Appearance > Menus."); ?></div>
+                            <div class='mega-description'><?php _e("This is an overview of the menu locations supported by your theme. You can enable Max Mega Menu and adjust the settings for a specific menu location by going to Appearance > Menus."); ?></div>
                         </td>
                         <td class='mega-value'>
                             <p>
                                 <?php
                                     $none = __("Your theme does not natively support menus, but you can add a new menu location using Max Mega Menu and display the menu using the Max Mega Menu widget or shortcode.", "megamenu");
-                                    $one = __("Your theme supports one menu.", "megamenu");
-                                    $some = __("Your theme supports {number} menus.", "megamenu");
+                                    $one = __("Your theme supports one menu location.", "megamenu");
+                                    $some = __("Your theme supports {number} menu locations.", "megamenu");
 
                                     if ( ! count($locations)) {
                                         echo $none;
@@ -781,16 +781,12 @@ class Mega_Menu_Settings {
 
                                             <?php
 
+                                                if ($menu_id) {
                                                     echo "<div class='mega-assigned-menu'>";
-                                                        echo __("Menu", "megamenu") . ": ";
-
-                                                        if ($menu_id) {
-                                                            echo "<a href='" . admin_url("nav-menus.php?action=edit&menu={$menu_id}") . "'>" . $this->get_menu_name_for_location( $location ) . "</a>";
-                                                        } else {
-                                                            echo "<a href='" . admin_url('nav-menus.php?action=locations') . "'>" . __("Assign a menu", "megamenu") . "</a>";
-                                                        }
-
+                                                    echo "<a href='" . admin_url("nav-menus.php?action=edit&menu={$menu_id}") . "'>" . $this->get_menu_name_for_location( $location ) . "</a>";
                                                     echo "</div>";
+                                                }
+
                                             ?>
 
                                         </h4>
@@ -859,7 +855,11 @@ class Mega_Menu_Settings {
                                                         wp_nonce_url( admin_url("admin-post.php"), 'megamenu_delete_menu_location' )
                                                     ) );
 
-                                                    echo "<a class='confirm mega-delete button button-secondary' href='{$delete_location_url}'>" . __("Delete location") . "</a>";
+                                                    echo '<div class="megamenu_submit"><div class="mega_left">';
+                                                    submit_button();
+                                                    echo '</div><div class="mega_right">';
+                                                    echo "<a class='confirm mega-delete' href='{$delete_location_url}'>" . __("Delete location") . "</a>";
+                                                    echo '</div></div>';
 
                                                 }
 
@@ -875,21 +875,27 @@ class Mega_Menu_Settings {
 
                                 echo "</div>";
 
-                                $add_location_url = esc_url( add_query_arg(
-                                    array(
-                                        'action'=>'megamenu_add_menu_location'
-                                    ),
-                                    wp_nonce_url( admin_url("admin-post.php"), 'megamenu_add_menu_location' )
-                                ) );
-                                echo "<br /><p><a class='button button-secondary' href='{$add_location_url}'>" . __("Add another menu location") . "</a></p>";
-                            }?>
+
+                            }
+
+                            $add_location_url = esc_url( add_query_arg(
+                                array(
+                                    'action'=>'megamenu_add_menu_location'
+                                ),
+                                wp_nonce_url( admin_url("admin-post.php"), 'megamenu_add_menu_location' )
+                            ) );
+
+                            echo "<br /><p><a class='button button-secondary' href='{$add_location_url}'>" . __("Add another menu location") . "</a></p>";
+
+                            ?>
 
                         </td>
                     </tr>
                 </table>
 
-
                 <?php do_action( "megamenu_menu_locations", $saved_settings ); ?>
+
+
             </form>
         </div>
 

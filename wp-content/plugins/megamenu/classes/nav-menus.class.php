@@ -159,6 +159,13 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_script('jquery.wfcolorbox');
         wp_deregister_style('wordfence-colorbox-style');
 
+        // Compatibility fix for Profit Builder
+        wp_deregister_script('color-box-min');
+        wp_deregister_script('color-box');
+        wp_deregister_style('color-box-css');
+
+
+
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
 

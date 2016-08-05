@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 2.2
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,15 +40,16 @@ Documentation & Demo: https://www.maxmegamenu.com
 ####Pro Features:
 
 > * Sticky Menu
-> * WooCommerce cart total in menu
-> * Easy Digital Downloads cart total in menu
 > * Vertical Menus
-> * FontAwesome Icons
+> * Accordion Menus
+> * FontAwesome, Genericon & Custom Icons
 > * Custom Item Styling
+> * Menu Logo
+> * Search box
+> * WooCommerce & EDD support
 > * Google Fonts
-> * Genericon Icons
-> * Custom Icons (from Media Library)
 > * Roles & Restrictions
+> * Search, icon and logo mobile toggle blocks
 > * Automatic updates
 > * Priority Support
 >
@@ -61,6 +62,10 @@ Translations:
 * French (thanks to Pierre_02)
 
 == Frequently Asked Questions ==
+
+Troubleshooting:
+
+https://www.maxmegamenu.com/documentation/troubleshooting/
 
 Getting started:
 
@@ -91,6 +96,14 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.2.2 [21/07/2016] =
+
+* Fix: Save button missing from menu locations
+* Fix: Compatibility with 'Profit Builder' plugin
+* Fix: Remove outline from mobile toggle
+* Fix: Make mobile toggle blocks editable as soon as they're added to the toggle block designer
+* Change: Refactor detection of mega menu type submenus
 
 = 2.2.1 =
 

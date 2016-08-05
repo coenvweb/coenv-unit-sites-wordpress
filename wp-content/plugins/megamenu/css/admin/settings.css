@@ -473,6 +473,27 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 	border: 1px solid #dfdfdf;
 }
 
+/*
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .mega-general {
+    border-left: 5px solid #03A9F4;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .mega-menu_bar {
+    border-left: 5px solid #009688;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .mega-mega_panels {
+    border-left: 5px solid #FFA000;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .mega-flyout_menus {
+    border-left: 5px solid #4CAF50;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .mega-mobile_menu {
+    border-left: 5px solid #C2185B;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container .accordion-section.mega-custom_styling {
+    border-left: 5px solid #607D8B;
+}
+*/
+
 .megamenu_outer_wrap .megamenu_right .menu_settings .accordion-container  .accordion-section-content {
 	padding-left: 10px;
 	padding-right: 10px;

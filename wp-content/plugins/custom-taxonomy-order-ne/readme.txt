@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
-Tested up to: 4.5
-Stable tag: 2.7.6
+Tested up to: 4.6
+Stable tag: 2.7.8
 License: GPLv2 or later
 
 
@@ -34,7 +34,7 @@ It is a continuation (or fork) of Custom Taxonomy Order, which has been disconti
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Order posts from the 'Term Order' menu in the admin
 4. Optionally set whether or not to have queries of the selected taxonomy be sorted by this order automatically.
-5. Optionally set `'orderby' => 'term_order', 'order => 'ASC'` to manually sort queries by this order.
+5. Optionally set `'orderby' => 'term_order', 'order' => 'ASC'` to manually sort queries by this order.
 6. Enjoy!
 
 == Upgrade Notice ==
@@ -55,8 +55,14 @@ with the public parameter set to true (default).
 
 = How do I sort the terms when using a custom query? =
 
-You can apply the sorting for the taxonomy by using:
+When you use default functions like get_terms or get_categories, this should not be needed.
+
+If you do need to, you can apply the sorting for the taxonomy by using:
 	'orderby' => 'term_order'.
+
+= I use get_term_children but the terms do not get sorted =
+
+This function only fetches the ID's of the terms, so it is impossible to sort them by term_order. If you do need the sort_order, use a function like get_terms with the 'child_of' parameter. That will fetch an array of WP_Term objects that can be sorted.
 
 = I have a custom taxonomy that uses the Tag Cloud functionality, but it doesn't sort like it should. =
 
@@ -127,6 +133,16 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.7.8 =
+* 2016-07-26
+* Flush object cache when order is changed in taxonomy ordering plugin (props James Bonham).
+
+= 2.7.7 =
+* 2016-07-24
+* Fix PHP warnings.
+* Remove ru_RU translation, it is at 100% in GlotPress.
+* Update Donate text.
 
 = 2.7.6 =
 * 2016-03-01
