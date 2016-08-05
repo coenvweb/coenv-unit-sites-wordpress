@@ -3,8 +3,8 @@
 RewriteEngine On
 
 # Begin Shibboleth
-AuthType shibboleth
-Require shibboleth
+# AuthType shibboleth
+# Require shibboleth
 # End Shibboleth
 
 
@@ -95,7 +95,7 @@ RewriteRule ^fridayharborlabs/?(.*)$ https://dev.fhl.uw.edu/$1 [R,L]
 
 # SAFS Redirects
 RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
-RewriteRule .? - [S=85]
+RewriteRule .? - [S=84]
 RewriteRule ^info/about_us.html about/ [R=301,L]
 RewriteRule ^graduates/?$ students/about-graduate-program/ [R=301,L]
 RewriteRule ^info/contact.html about/contact-2/ [R=301,L]
@@ -109,7 +109,6 @@ RewriteRule ^news.html news-events/ [R=301,L]
 RewriteRule ^resources/faculty.php faculty-research/ [R=301,L]
 RewriteRule ^resources/forms.html intranet/quicklinks/ [R=301,L]
 RewriteRule ^computing/index.html intranet/quicklinks/ [R=301,L]
-RewriteRule ^undergraduates/?$ students/about-undergraduate-program/ [R=301,L]
 RewriteRule ^undergraduates/index.php students/about-undergraduate-program/ [R=301,L]
 RewriteRule ^graduates/index.html students/about-graduate-program/ [R=301,L]
 RewriteRule ^undergraduates/program/course.php students/courses_student/ [R=301,L]
@@ -186,12 +185,6 @@ RewriteRule ^resources/faculty.php faculty-research/ [R=301,L]
 RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
 RewriteRule .? - [S=1]
 RewriteRule ^pnwc/?$ learn/ [R=301,L]
-
-
-# Env Studies Redirects
-RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
-RewriteRule .? - [S=1]
-RewriteRule ^major/?$ undergraduate-students/prospective-students-undergrad/ [R=301,L]
 
 RewriteCond %{HTTP_HOST} !^beta.smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
