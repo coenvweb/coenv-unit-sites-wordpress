@@ -213,9 +213,9 @@
             echo '<div class="page-row">';
             echo '<div class="banner" style="background-image: url(' . $banner['url'] . ')">';
             echo '</div>';
+            echo '</div>';
         }
      ?>
 
-</div>
 <?php endif; ?>
 <?php do_action('foundationPress_after_header'); ?>

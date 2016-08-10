@@ -392,6 +392,7 @@
             .post-meta {
                 letter-spacing: 0.5px;
                 @include encode;
+                font-size: rem-calc(14);
 
                 a {
                     @include uni_reg;
