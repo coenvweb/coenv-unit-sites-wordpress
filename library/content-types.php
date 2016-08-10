@@ -57,9 +57,9 @@ function hide_editor() {
 } 
 
 define( 'FACULTY_PAGE_PARENT_ID', '31' );
-define( 'BLOG_PAGE_PARENT_ID', '2674' );
+define( 'BLOG_PAGE_PARENT_ID', '3031' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
-define( 'NEWS_PARENT_ID', '142' );
+define( 'NEWS_PARENT_ID', '3031' );
  
  
 /**

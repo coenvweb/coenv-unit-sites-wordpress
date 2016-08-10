@@ -1,0 +1,30 @@
+.page-template-news, .archive {
+    .article {
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid $border;
+
+        .article__header {
+            padding-bottom: 0.75rem;
+            margin-bottom: 0rem;
+            border: none;
+
+            .article__meta {
+                .post-info {
+                    text-transform: none;
+                    letter-spacing: 0rem;
+                    font-size: rem-calc(14);
+                    padding-bottom: 0.25rem;
+                    font-weight: normal;
+                }
+            }
+        }
+
+        .article__content {
+            p {
+                color: $text-md;
+                font-size: rem-calc(16);
+            }
+        }
+    }
+} //aggregate news page

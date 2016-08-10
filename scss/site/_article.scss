@@ -5,8 +5,7 @@
 
 .article {
 	position: relative;
-	margin-bottom: rem-calc(36);
-    padding-left: 1.5rem;
+	margin-bottom: rem-calc(18);
 
 	@media print {
 		padding: 0;
@@ -45,7 +44,6 @@
 		@include encode;
         @include font-size(18);
         @include line-height(22);
-        font-weight: 600;
         color: $black;
 
         @media #{$medium-up} {
@@ -66,38 +64,19 @@
     padding-bottom: 1rem;
     margin-bottom: 1rem;
 
-
-	
 	.article__meta {
+        margin-bottom: 0.25rem;
+
 		.post-info {
-			text-transform:uppercase;
-			letter-spacing:.1em;
-			font-weight:600;
-			color:$black;
-			vertical-align: middle;
-			text-decoration:none;
-			@include font-size(11);
-		}
-		
-		a:hover {
-		    color: #8458BE!important;
-		}
+            text-transform: none;
+            letter-spacing: 0rem;
+            font-size: rem-calc(14);
+            padding-bottom: 0.25rem;
+            font-weight: normal; 
+        }
 
-		.article__categories {
-			display: inline-block;
-
-			ul {
-				display: inline-block;
-				margin: 0;
-				padding: 0;
-				list-style: none;
-			}
-
-			li {
-				display: inline-block;
-
-			} //li
-
+        .article__categories {
+            display: inline-block;
 		} // .article__categories
 
 	} // .article__meta
@@ -106,6 +85,10 @@
 
 .article__content {
     @extend .clearfix;
+
+    p {
+        font-size: rem-calc(16);
+    }
 
     h3 {
         margin-top: 0;

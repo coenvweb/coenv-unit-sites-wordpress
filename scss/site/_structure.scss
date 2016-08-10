@@ -48,7 +48,13 @@ figcaption {
     background-color: rgba(135, 135, 135, 0.50);
 }
 
-
+.panel {
+    background-color: $white;
+    color: $uw-purple;
+    float: none !important;
+    padding-left: 0;
+    font-weight: bold;
+}
 
 
 

@@ -4,6 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
+<div class="container">
 <div class="fullwidth hero-area">
     <div class="nav-bar-divider section-div show-for-medium-up">
     </div>
@@ -155,7 +156,7 @@ $wp_query = new WP_Query( $home_args );
 
             foreach ($more_terms as &$term) {
                 if ($term->slug != 'uncategorized') {
-                    $more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                    $more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
                 }
             }
             $more_terms_str = ' | ' . implode(', ', $more_terms_arr);
@@ -212,6 +213,7 @@ $wp_query = new WP_Query( $home_args );
 
 <a href="#" class="back-to-top">Back to Top</a>
 <?php do_action('foundationPress_after_content'); ?>
+</div>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
 <?php get_footer(); ?>

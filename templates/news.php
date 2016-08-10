@@ -36,7 +36,7 @@ if(isset($_GET['term'])){
 
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-push-3 medium-9 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
@@ -94,7 +94,6 @@ if(isset($_GET['term'])){
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'category');
         delete_post_thumbnail( get_the_ID() );
         echo '<div class="blog clearfix">';
 		get_template_part( 'partials/partial', 'story' );
@@ -124,5 +123,6 @@ if(isset($_GET['term'])){
 	</div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
+</div>
 </div>
 <?php get_footer(); ?>

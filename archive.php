@@ -1,14 +1,13 @@
 <?php get_header(); ?>
 <div class="row">
-	<?php the_breadcrumb(); ?>
 <!-- Row for main content area -->
-	<div class="small-12 large-8 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
 	
 	<?php if ( have_posts() ) : ?>
 	
 		<?php /* Start the Loop */ ?>
 		<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'content', get_post_format() ); ?>
+			<?php get_template_part( 'partials/partial', 'story' ); ?>
 		<?php endwhile; ?>
 		
 		<?php else : ?>
@@ -26,5 +25,6 @@
 
 	</div>
 	<?php get_sidebar(); ?>
+    </div>	
 </div>	
 <?php get_footer(); ?>

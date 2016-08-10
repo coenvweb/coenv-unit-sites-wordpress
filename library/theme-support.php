@@ -228,9 +228,14 @@ function coenv_base_section_title($id) {
         $section_title = '<div class="section-title"><h2><a href="' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     endif;
 
+    if ( is_singular( 'post' )) { //change news pages' section titles
+        unset ($section_title);
+        $section_title = '<div class="section-title"><h2><a href="/about">About</a></h2></div>';
+    }
+
     if ( is_singular( 'courses' )) { //change news pages' section titles
         unset ($section_title);
-        $section_title = '<div class="columns large-12 section-title"><h2><a href="/education">Education</a></h2></div>';
+        $section_title = '<div class="section-title"><h2><a href="/education">Education</a></h2></div>';
     }
 
     // if ( is_page_template('templates/courses.php')) { //change news index' section titles

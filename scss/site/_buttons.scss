@@ -1,11 +1,11 @@
 /*	Module: button
 		======================================================================== */
-.inner-wrap {
+.container {
     .button {
         display: inline-block;
         position: relative;
         padding: 0.5rem 4rem 0.5rem 1rem;
-        @include font-size(12);
+        @include font-size(14);
         font-weight: 800;
         background-color: $uw-purple;
         text-decoration: none;
@@ -19,7 +19,7 @@
             content: url('../assets/img/pcc_buttonArrow.svg');
             position: absolute;
             width: 1rem;
-            top: 0.6rem;
+            top: 30%;
             right: 0.75rem;
 
         }

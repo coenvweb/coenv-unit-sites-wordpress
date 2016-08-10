@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 <div class="row">
 	<div class="section-title">News &amp; Events</div>
-	<div class="small-12 medium-8 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
 		<h1 class="article__title">News</h1>
 		<?php dynamic_sidebar("before-content"); ?>
 

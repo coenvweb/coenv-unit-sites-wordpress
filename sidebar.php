@@ -8,6 +8,9 @@
 <aside id="sidebar" class="small-12 medium-pull-8 large-pull-9 medium-4 large-3 columns">
 <?php
 $menu_id = $GLOBALS['post']->ID;    
+if (is_singular('post')) {
+    $menu_id = 3031;
+}
 if (is_singular('courses')) {
     $menu_id = 3473;
 }

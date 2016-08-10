@@ -390,12 +390,8 @@
                 margin-bottom: 1.5rem;
             }
             .post-meta {
-                font-weight: bold;
                 letter-spacing: 0.5px;
-
-                time {
-                    @include uni-reg;
-                }
+                @include encode;
 
                 a {
                     @include uni_reg;
@@ -403,6 +399,10 @@
                     }
                 }
 
+            }
+            p {
+                color: $text-md;
+                font-size: rem-calc(16);
             }
         }
 

@@ -110,6 +110,8 @@ body {
 }
 
 select {
+    @include encode_cb;
+    font-size: rem-calc(16);
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
