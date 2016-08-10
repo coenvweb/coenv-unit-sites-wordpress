@@ -87,7 +87,7 @@ class coenv_base_content extends WP_Widget {
                     echo "</div>";
                 }
 
-                echo "<div class='widget_content'>";
+                echo "<div class='widget_area'>";
 
                 if (!empty($instance['title'])) { 
                     echo $args['before_title'];
