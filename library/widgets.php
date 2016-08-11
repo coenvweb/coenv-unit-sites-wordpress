@@ -352,11 +352,7 @@ class CoEnv_Widget_Events extends WP_Widget {
 
     ?>
       <?php echo $before_widget; ?>
-            <?php if ( $events_url != '' ) : ?>
-                                   
-            <a href="<?php echo $events_url; ?>" class="button right" title="View All Events">More</a>
-            <?php endif ?>
-        
+         <div class="widget-events">
         
             <?php if ( $title ) {
                 echo $before_title;
@@ -399,6 +395,7 @@ class CoEnv_Widget_Events extends WP_Widget {
           ?>
         
       </ul>
+      </div>
 
       <?php echo $after_widget ?>
     
@@ -491,7 +488,7 @@ class coenv_base_blog_cats extends WP_Widget {
                     if ($cats) {
                          echo '<ul class="blog-cats inline-list">';
                          if ($blog_cat) {
-                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
+                         echo '<li><a class="cats unchecked" href="/about/news/">All News</a></li>';
                          }
                          foreach($cats as $cat) { 
                              $slug = $cat->slug;
@@ -503,7 +500,7 @@ class coenv_base_blog_cats extends WP_Widget {
                              
                              if ($slug !== 'uncategorized') {
                              
-                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
+                                 echo '<li><a class="cats ' . $check . '" href="/about/news/?tax=category&term=' . $cat->slug . '">';
                                  echo $cat->name;
                                  echo '</a></li>';
                              }
@@ -813,7 +810,7 @@ class coenv_course_archive extends WP_Widget {
     echo $before_widget;
     
         if (!is_front_page()) {
-            echo $before_title . '<span>' . $title . '</span>' . $after_title;
+            echo $before_title . '<span class="course_archive">' . $title . '</span>' . $after_title;
         }
         if (isset($_GET['term'])) {
             $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));

@@ -1,3 +1,21 @@
+.course_archive {
+    @include uni_reg;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid $black;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    &:after {
+        position: absolute;
+        content: url('../assets/img/pcc_section_div_flat.svg');
+        top: 1.5rem;
+        width: 7rem;
+        left: -1px;
+        @media #{$small-only} {
+            top: 1.4rem;
+        }
+    }
+}
 .page-template-courses {
     .entry-content {
         margin-left: 1rem;

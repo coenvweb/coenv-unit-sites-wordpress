@@ -234,16 +234,22 @@ $cats_args  = array(
 );
 $cats = get_categories($cats_args);
 	if ($cats) {
-        if ($tax == 'course_quarter') {echo '<label for="select-cat">Select a quarter:</label>';};
+        if ($tax == 'course_quarter') {
+            echo '<label for="select-cat">Select a quarter:</label>';
+            echo '<div class="" data-url="">';
+        };
 		echo '<select name="select-category" class="select-category" id="select-cat">';
         if ($tax != 'course_quarter') {
 		  echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
         }
-		foreach($cats as $cat) { 
+		foreach($cats as $cat) {
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
 		}
 		echo '</select>';
+        if ($tax == 'course_quarter') {
+            echo '</div>';
+        }
 	}
 }
 

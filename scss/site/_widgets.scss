@@ -7,19 +7,14 @@
         height: 4rem;
     }
     h4 {
-        @extend .section-title;
         text-transform: none;
         font-size: rem-calc(24)!important;
         line-height: 2rem!important;
         padding-bottom: .5rem;
-        a {
-            color: $accent-blue!important;
-            font-weight: 400!important;
-        }
     }
 
     .event-list {
-        list-style: none;
+        list-style-type: none;
         margin: 0rem;
 
         li {
@@ -72,19 +67,33 @@
 aside#sidebar div {
 
 	// Content blocks
-
     .widget_content {
+        margin-bottom: 2rem;
         h4 {
-            @include uni;
-            font-weight: 600;
+            position: relative;
+            @include uni_reg;
+            color: $uw-purple;
             padding: 1rem 0rem;
+            border-bottom: 1px solid $uw-purple;
+            margin-bottom: 2rem;
+            line-height: 1.5rem;
+            &:after {
+                position: absolute;
+                content: url('../assets/img/pcc_section_div_flat_purple.svg');
+                top: 92%;
+                width: 7rem;
+                left: 0rem;
+            }
         }
         p {
             @include encode;
-            margin-bottom: 0;
+            margin-bottom: 0.5rem;
         }
-        span.button a {
-            color: $white;
+        span.button {
+            margin-bottom: 0rem;
+            a {
+                color: $white;
+            }
         }
     }
     .widget_links {
@@ -96,72 +105,57 @@ aside#sidebar div {
             a {
                 letter-spacing: rem-calc(1);
                 margin: 0 0 rem-calc(6) 0;
-                padding: rem-calc(10);
                 text-align: left;
             }
             .button {
                 text-transform: uppercase;
+                padding-left: 0rem;
+                &:before, &:after {
+                    display: none;
+                }
             }
         }
     }
-	&:nth-child(even) {
-		.widget_custom_post_widget {
-			background-color: $white;
-			.widget_content {
-				h4 {
-					color:  $uw-purple;
-                    border-bottom: 1px solid $uw-purple;
-                    a {
-					    color:  $uw-purple;
-				    }
+
+    .widget_custom_post_widget {
+        margin-bottom: 2rem;
+        background-color: $uw-purple;
+        .widget_area {
+            position: relative;
+            color: $white;
+            padding: 0rem 1rem;
+            a {
+                h4 {
+                    @include uni_reg;
+                    padding: 1rem 0rem;
+                    color:  $white;
+                    border-bottom: 1px solid $white;
                 }
-			}
-            .button {
-                margin-top: 0.5rem;
-                margin-bottom: 0rem;
-                background-color: $uw-purple;
+            }
+            &:before {
+                position: absolute;
+                content: url('../assets/img/pcc_section_div_flat.svg');
+                top: -1rem;
+                width: 5rem;
+                left: 1rem;
+            }
+        }
+        .button {
+            margin-top: 0.5rem;
+            margin-bottom: 0rem;
+            background-color: $uw-purple;
+            color: $white;
+            text-align: left;
+            a {
                 color: $white;
                 text-align: left;
-                a {
-                    color: $white;
-                    text-align: left;
-                }
             }
+        }
 
-            .widget_links {
-                margin-top: 0rem;
-            }
-			
-		}
-	}
-	&:nth-child(odd) {
-		.widget_custom_post_widget {
-			background-color: $uw-purple;
-            border: 1px solid $black;
-		}
-		.widget_custom_post_widget .widget_content {
-			padding: 0 rem-calc(20) rem-calc(5) rem-calc(20);
-            color: $white;
-            h4 {
-                color: $white;
-                border-bottom: 1px solid $white;
-            }
-            p {
-                padding: 1rem 0rem;
-            }
-		}
-		.widget_custom_post_widget .widget_links {
-            padding: 0rem;
-            a { 
-                padding: 0rem;
-                &:hover {
-                    background-color: inherit;
-                }
-            }
-
-		}
-		
-	}
+        .widget_links {
+            margin-top: 0.5rem;
+        }
+    }
 }
 
 // After Content Widgets
@@ -210,14 +204,12 @@ aside#sidebar div {
 				display: inline;
 				width: 100%;
 				a {
-					
 					width: auto;
 					&:first-child {
         				margin-left: rem-calc(10);
 					}
 					letter-spacing: rem-calc(1);
 					margin: 0 0 rem-calc(6) 0;
-					padding: rem-calc(10);
 					text-align: left;
 				}
 				.button {
