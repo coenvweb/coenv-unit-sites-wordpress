@@ -159,102 +159,55 @@ aside#sidebar div {
 }
 
 // After Content Widgets
-#after-content div.columns {
-
-
-	.widget_links {
-
-	}
-	.widget_links li a {
-
-	}
-	
-	.widget_custom_post_widget {
-		border-top: 4px solid #333;
-		margin-bottom: rem-calc(20);
-		padding: rem-calc(20);
-		.widget_img {
-			float: left;
-			margin-right: 5%;
-			padding: 0;
-			width: 30%;
-		}	
-		.widget_content {
-			float: left;
-			margin-bottom: 0;
-			
-			width: 65%;
-			h4 {
-				@include encode_cb;
-				font-size: rem-calc(22);
-				letter-spacing: .1rem;
-			}
-			p {
-				margin-bottom: 0;
-			}
-		}
-		.widget_links {
-			float: right;
-			margin-bottom: 0;
-			margin-left: 0;
-			margin-top: rem-calc(5);
-			text-align: right;
-			width: 65%;
-			li {
-				display: inline;
-				width: 100%;
-				a {
-					width: auto;
-					&:first-child {
-        				margin-left: rem-calc(10);
-					}
-					letter-spacing: rem-calc(1);
-					margin: 0 0 rem-calc(6) 0;
-					text-align: left;
-				}
-				.button {
-					text-transform: uppercase;
-				}
-			}
-		}
-	}
-	&:nth-child(odd) {
-		.widget_custom_post_widget {
-			background-color: #f2f2f2;
-			.widget_content {
-				h4 a {
-					color:  #333;
-				}
-			}
-			.widget_links {
-				padding: 0 rem-calc(20) rem-calc(25) rem-calc(20);
-				.button {
-					background-color: #333;
-					color: $white;
-					text-align: left;
-				}
-			}
-			
-		}
-	}
-	&:nth-child(even) {
-		.widget_custom_post_widget {
-			background-color: #f2f2f2;
-		}
-		.widget_custom_post_widget .widget_content {
-
-		}
-		.widget_custom_post_widget .widget_links {
-			padding-top: 0;
-			padding-right: rem-calc(20);
-			padding-bottom: rem-calc(25);
-			padding-left: rem-calc(20);
-			background-image: url("/wp-content/themes/coenv-cig/assets/img/side-nav-bottom-tile.png");
-			background-repeat: no-repeat;
-			background-position: bottom center;
-		}
-		
-	}
+#after-content {
+    position:relative;
+    background-color: $bg-light;
+    border: 1px solid $border;
+    margin-bottom: rem-calc(20);
+    padding: rem-calc(30);
+    overflow: hidden;
+    &:before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -15%;
+        width: 125%;
+        height: 125%;
+        background: url('../assets/img/pcc_mapBG.svg');
+        opacity: 0.15;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .widget_content {
+        margin-bottom: 0.5rem;
+        h4 {
+            @include uni_reg;
+            font-size: rem-calc(22);
+            letter-spacing: .1rem;
+            border-bottom: 1px solid $black;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            a {
+                color: $black;
+            }
+        }
+        p {
+            margin-bottom: 0;
+        }
+    }
+    .widget_links {
+        list-style-type: none;
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-top: rem-calc(5);
+        li {
+            margin-bottom: 0.5rem;
+            a {
+                margin-bottom: 0;
+            }
+        }
+    }
 }
 
 #twitter {
