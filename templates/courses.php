@@ -140,12 +140,14 @@ if (empty($coenv_cat_1)) {
         <?php
         echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term='. $terms[0]->slug . '">' . $quarter_name . ' ' . $course_year . '</a>' . (isset($course_categories) ? ' | ' : '');
         $counter = 0;
-        foreach($course_categories as $category) {
-            if($counter > 0) {
-                echo ", ";
+        if($course_categories) {
+            foreach($course_categories as $category) {
+                if($counter > 0) {
+                    echo ", ";
+                }
+                echo $category->name;
+                $counter++;
             }
-            echo $category->name;
-            $counter++;
         }
         echo '</span>';
         unset($course_categories);
