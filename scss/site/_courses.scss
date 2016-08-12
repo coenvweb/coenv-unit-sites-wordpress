@@ -63,31 +63,21 @@
                 @include encode;
                 font-size: rem-calc(15);
             }
-
         }
     }
 }
 
 .course {
     .course_title {
-        padding-bottom: 1rem;
-        margin-bottom: 1rem;
+    }
+
+    .course_acro {
+        font-size: 1.5rem;
     }
 
     .course_details {
-        .course_acro {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid $border;
-            .fulfillments {
-                @media #{$large-up} {
-                    float: right;
-                }
-                display: block;
-                color: $uw-purple;
-            }
-        }
         .course_meta {
-            @include encode_cb;
+            @include encode;
             margin-left: 0rem;
             list-style-type: none;
             font-size: 1.1rem;
@@ -98,8 +88,8 @@
                 display: inline-block;
                 &:not(:last-child) {
                     &:after {
-                        content: "|";
-                        margin: 0rem 0.5rem;
+                        content: " | ";
+                        padding: 0rem 0.5rem;
                     }
                 }
             }

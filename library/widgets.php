@@ -453,7 +453,7 @@ class coenv_base_blog_cats extends WP_Widget {
      function __construct() {
           parent::__construct(
                'coenv_base_blog_cats', // Base ID
-               __('Blog category filter (COENV)', 'text_domain'), // Name
+               __('News/Blog category filter (COENV)', 'text_domain'), // Name
                array( 'description' => __( 'Allows filtering of blog posts base on blog category', 'text_domain' ), ) // Args
           );
      }
@@ -765,7 +765,7 @@ class CoEnv_Widget_Social extends WP_Widget {
         
     <ul>
         <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"><span>Facebook</span></i></li></a><?php } ?>
-        <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span>Twitter</span></i></li></a><?php } ?>
+        <?php if (get_option('twitter')) { ?><a href="https://twitter.com/<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span>Twitter</span></i></li></a><?php } ?>
         <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span>YouTube</span></i></li></a><?php } ?>
         <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span>LinkedIn</span></i></li></a><?php } ?>
         <?php if (get_option('email_newsletter')) { ?><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><li><i class="fi-at-sign"><span>Email Newsletter</span></i></li></a><?php } ?>
@@ -830,33 +830,35 @@ class coenv_course_archive extends WP_Widget {
     extract( $args );
     $title = apply_filters( 'widget_title', $instance['title'] );
  
-    echo $before_widget;
-    
-        if (!is_front_page()) {
-            echo '<h4 class="course_archive">' . $title . '</h4>';
-        }
-        if (isset($_GET['term'])) {
-            $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-            $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-        } else {
-            $current_quarters = get_field('quarter_to_display');
-            $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
-            $coenv_cat_term_1 = $qtr_term_0->slug;
-        }
-        $old_cats = $GLOBALS['old_cats'];
-        $old_cats_ids = array();
-        foreach ($old_cats as $old_cat) {
-            $old_cats_ids[] = $old_cat->term_id;
-        }
-        $old_cats_ids = array_reverse($old_cats_ids);
-        $old_cats_ids = array_splice($old_cats_ids, 1);
-        $old_cats_ids = (implode(',',$old_cats_ids));
+    echo "<div class='show-for-medium-up'>";
+        echo $before_widget;
+        
+            if (!is_front_page()) {
+                echo '<h4 class="course_archive">' . $title . '</h4>';
+            }
+            if (isset($_GET['term'])) {
+                $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
+                $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+            } else {
+                $current_quarters = get_field('quarter_to_display');
+                $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
+                $coenv_cat_term_1 = $qtr_term_0->slug;
+            }
+            $old_cats = $GLOBALS['old_cats'];
+            $old_cats_ids = array();
+            foreach ($old_cats as $old_cat) {
+                $old_cats_ids[] = $old_cat->term_id;
+            }
+            $old_cats_ids = array_reverse($old_cats_ids);
+            $old_cats_ids = array_splice($old_cats_ids, 1);
+            $old_cats_ids = (implode(',',$old_cats_ids));
 
-        coenv_base_cat_filter('course_quarter',$coenv_cat_term_1)
-        ?>
- 
-    <?php
-    echo $after_widget;
+            coenv_base_cat_filter('course_quarter',$coenv_cat_term_1)
+            ?>
+     
+        <?php
+        echo $after_widget;
+    echo "</div>";
   }
 }
 

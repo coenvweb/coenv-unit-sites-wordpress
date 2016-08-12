@@ -7,14 +7,11 @@
     }
     $quarter =  $terms[0]->name;
     $rows = get_field('instructor(s)');
+    echo '<div class="course_acro">';
+        echo get_field('course_acronym') . ' | ' . $quarter;
+    echo '</div>'; 
     echo '<h1 class="course_title">' . get_the_title() . '</h1>';
     echo '<div class="course_details">';
-        echo '<h2 class="course_acro">';
-            echo get_field('course_acronym') . ' | ' . $quarter;
-            if($course_categories) {
-                echo '<span class="fulfillments">' . implode(', ', $course_categories) . '</span>';
-            }
-        echo '</h2>';
         echo '<ul class="course_meta">';
             if( have_rows('instructor(s)') ) {
                 // loop through the rows of data
@@ -31,6 +28,9 @@
             echo '<li><span class="meta_label">Credits:</span> ' . get_field('number_of_credits') . '</li>';
             echo '<li><span class="meta_label">Meeting times:</span> ' . get_field('class_meeting_times') . '</li>';
             echo '<li><span class="meta_label">Location:</span> ' . get_field('location') . '</li>';
+            if($course_categories) {
+                echo '<li><span class="fulfillments">' . implode(', ', $course_categories) . '</span></li>';
+            }
         echo '</ul>';
     echo '</div>';
     echo '<div class="course-description">';

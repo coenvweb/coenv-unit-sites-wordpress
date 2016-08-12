@@ -119,7 +119,7 @@ if (empty($coenv_cat_1)) {
         $categories = wp_get_post_terms($post->ID, 'course_category');
         if($categories) {
             foreach($categories as $category) {
-                $course_categories[] = $category->name;
+                $course_categories[] = $category;
             }
         }
         $quarter_name = get_field('quarter');
@@ -138,7 +138,16 @@ if (empty($coenv_cat_1)) {
         }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | ' . $quarter_name . ' ' . $course_year . (isset($course_categories) ? ' | ' . implode(', ', $course_categories) : '') . '</span>';
+        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term='. $terms[0]->slug . '">' . $quarter_name . ' ' . $course_year . '</a>' . (isset($course_categories) ? ' | ' : '');
+        $counter = 0;
+        foreach($course_categories as $category) {
+            if($counter > 0) {
+                echo ", ";
+            }
+            echo $category->name;
+            $counter++;
+        }
+        echo '</span>';
         unset($course_categories);
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
             

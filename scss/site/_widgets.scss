@@ -72,7 +72,7 @@ aside#sidebar div {
             content: url('../assets/img/pcc_section_div_flat_purple.svg');
             top: 75%;
             width: 7rem;
-            left: 0rem;
+            left: -3px;
         }
     }
     p {
@@ -92,6 +92,9 @@ aside#sidebar div {
         li {
             a {
                 color: $black;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
     }

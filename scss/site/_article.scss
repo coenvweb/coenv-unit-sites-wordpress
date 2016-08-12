@@ -1,6 +1,6 @@
 
 /*	Module: article
-    
+
     ======================================================================== */
 
 .article {
@@ -118,6 +118,7 @@ blockquote {
     display: block;
     padding: 0rem !important;
     margin-right: 1.5rem !important;
+    position: relative;
     width: 45%;
 
     p {
@@ -135,6 +136,14 @@ blockquote {
         font-weight: normal;
         font-size: 2rem;
         color: $uw-purple;
+    }
+    
+    &:after {
+        content: url('../assets/img/pcc_section_div_flat_purple.svg');
+        position: absolute;
+        top: 2.8rem;
+        left: -2px;
+        width: 7rem;
     }
 
 } //blockquote
