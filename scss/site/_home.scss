@@ -407,10 +407,13 @@
             }
         }
 
-        .event-list {
+       .event-list {
             @include uni_reg;
             display: flex;
+            list-style-type: none;
             margin-bottom: 0.5rem;
+            margin-left: 0rem;
+            text-align: center;
             @media #{$small-only} {
                 flex-direction: column;
             }
@@ -418,7 +421,11 @@
 
             li{
                 flex: 1;
+                margin: 0rem 0.25rem;
                 padding: 1rem;
+                background-color: $bg-light;
+                border-bottom: 2px solid $accent;
+                margin-bottom: 0.5rem;
                 position: relative;
                 justify-content: center;
                 resize: vertical;
@@ -428,16 +435,32 @@
                         font-size: 1rem;
                     }
                 }
+                i {
+                    @extend .visuallyhidden;
+                }
+
+                .date {
+                    @include encode;
+                    margin-bottom: 0;
+                    font-size: .9rem;
+                    font-weight: 600;
+                }
+                .title {
+                    @include uni;
+                    font-size: 1.75rem!important;
+                    margin-bottom: 0;
+                    color: $text;
+                }
                 &:before {
                     position: absolute;
                     content: url('../assets/img/pcc_section_div_purple.svg');
                     width: 5rem;
-                    top: 3px;
+                    top: -0.75rem;
                     left: 0;
                     right: 0;
                     margin: auto;
                 }
-            }
+            } 
         }
 
 

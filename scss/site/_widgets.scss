@@ -1,59 +1,3 @@
-// Events Widget
-
-.widget-events {
-    text-align: center;
-    svg {
-        width: 4rem;
-        height: 4rem;
-    }
-    h4 {
-        text-transform: none;
-        font-size: rem-calc(24)!important;
-        line-height: 2rem!important;
-        padding-bottom: .5rem;
-    }
-
-    .event-list {
-        list-style-type: none;
-        margin: 0rem;
-
-        li {
-            .single-event {
-                display: block;
-                background-color: $bg-light;
-                border-bottom: 2px solid $accent;
-                color: $accent;
-                padding: 1rem 2rem;
-                height: 100%;
-                margin-bottom: 1rem;
-                a {
-                    color: $accent;
-                }
-            }
-
-            i {
-                @extend .visuallyhidden;
-            }
-
-            .date {
-                @include encode;
-                margin-bottom: 0;
-                font-size: .9rem;
-                font-weight: 600;
-            }
-            .title {
-                @include uni;
-                font-size: 1.75rem!important;
-                margin-bottom: 0;
-                color: $text;
-            }
-        }
-    }
-    .button {
-        margin-top: 1rem;
-    }
-}
-
 // Social Widget
 
 .widget-social {
@@ -63,36 +7,91 @@
 }
 
 
+
 // Sidebar Widgets
 aside#sidebar div {
 
-	// Content blocks
-    .widget_content {
-        margin-bottom: 2rem;
-        h4 {
+    //Events Widget in Sidebar
+    .event-list {
+        @include uni_reg;
+        display: flex;
+        list-style-type: none;
+        margin-bottom: 0.5rem;
+        margin-left: 0rem;
+        text-align: center;
+        flex-direction: column;
+
+
+        li{
+            flex: 1;
+            margin: 0.5rem 0rem;
+            padding: 0.5rem;
+            background-color: $bg-light;
+            border-bottom: 2px solid $accent;
+            margin-bottom: 0.5rem;
             position: relative;
-            @include uni_reg;
-            color: $uw-purple;
-            padding: 1rem 0rem;
-            border-bottom: 1px solid $uw-purple;
-            margin-bottom: 2rem;
-            line-height: 1.5rem;
-            &:after {
+            i {
+                @extend .visuallyhidden;
+            }
+            .date {
+                @include encode;
+                margin: 0.5rem 0rem;
+                font-size: .9rem;
+            }
+            .title {
+                @include uni_reg;
+                font-size: 1.1rem;
+                margin-bottom: 0;
+                color: $text;
+            }
+            &:before {
                 position: absolute;
-                content: url('../assets/img/pcc_section_div_flat_purple.svg');
-                top: 92%;
-                width: 7rem;
-                left: 0rem;
+                content: url('../assets/img/pcc_section_div_purple.svg');
+                width: 5rem;
+                top: -0.75rem;
+                left: 0;
+                right: 0;
+                margin: auto;
             }
         }
-        p {
-            @include encode;
-            margin-bottom: 0.5rem;
+    }
+
+	// Content blocks
+    margin-bottom: 2rem;
+    h4 {
+        position: relative;
+        @include uni_reg;
+        color: $uw-purple;
+        padding: 0.5rem 0rem;
+        border-bottom: 1px solid $uw-purple;
+        margin-bottom: 2rem;
+        line-height: 2.5rem;
+        vertical-align: top;
+        &:after {
+            position: absolute;
+            content: url('../assets/img/pcc_section_div_flat_purple.svg');
+            top: 75%;
+            width: 7rem;
+            left: 0rem;
         }
-        span.button {
-            margin-bottom: 0rem;
+    }
+    p {
+        @include encode;
+        margin-bottom: 0.5rem;
+    }
+    span.button {
+        margin-bottom: 0rem;
+        a {
+            color: $white;
+        }
+    }
+    ul {
+        font-size: rem-calc(16);
+        list-style-type: none;
+        margin-left: 0;
+        li {
             a {
-                color: $white;
+                color: $black;
             }
         }
     }
@@ -117,26 +116,34 @@ aside#sidebar div {
         }
     }
 
+    //custom contet widgets
     .widget_custom_post_widget {
         margin-bottom: 2rem;
+        border: 1px solid $black;
         background-color: $uw-purple;
         .widget_area {
             position: relative;
             color: $white;
             padding: 0rem 1rem;
+            margin-bottom: 0.5rem;
             a {
                 h4 {
                     @include uni_reg;
-                    padding: 1rem 0rem;
+                    padding: 1.5rem 0rem;
                     color:  $white;
+                    margin-bottom: 1rem;
                     border-bottom: 1px solid $white;
+                    line-height: 1rem;
+                    &:after {
+                        display: none;
+                    }
                 }
             }
             &:before {
                 position: absolute;
                 content: url('../assets/img/pcc_section_div_flat.svg');
                 top: -1rem;
-                width: 5rem;
+                width: 6rem;
                 left: 1rem;
             }
         }
@@ -154,6 +161,9 @@ aside#sidebar div {
 
         .widget_links {
             margin-top: 0.5rem;
+        }
+        .widget_img {
+            margin-bottom: 0;
         }
     }
 }

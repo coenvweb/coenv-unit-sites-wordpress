@@ -73,61 +73,61 @@ add_image_size( 'sm_sq', '120', '120', true );
  * - array
  */
 function coenv_base_get_ancestor($attr = 'ID') {
-	
-	$post = get_queried_object();
+    
+    $post = get_queried_object();
 
-	// test for search
-	if ( is_search() ) {
-		return false;
-	}
+    // test for search
+    if ( is_search() ) {
+        return false;
+    }
 
-	if ( ($post->post_type == 'post' || is_archive() || is_search())) {
+    if ( ($post->post_type == 'post' || is_archive() || is_search())) {
 
-		$page_for_posts = get_option( 'page_for_posts' );
+        $page_for_posts = get_option( 'page_for_posts' );
 
-		if ( $page_for_posts == 0 ) {
-			return false;
-		}
+        if ( $page_for_posts == 0 ) {
+            return false;
+        }
 
-		$ancestor = get_post( $page_for_posts );
-		return $ancestor->$attr;
-	}
+        $ancestor = get_post( $page_for_posts );
+        return $ancestor->$attr;
+    }
 
-	// test for pages
-	if ( $post->post_type == 'page' ) {
+    // test for pages
+    if ( $post->post_type == 'page' ) {
 
-		// test for top-level pages
-		if ( $post->post_parent == 0 ) {
-			return $post->$attr;
-		}
+        // test for top-level pages
+        if ( $post->post_parent == 0 ) {
+            return $post->$attr;
+        }
 
-		// must be a child page
-		$ancestors = get_post_ancestors( $post->ID );
-		$ancestor = get_post( array_pop( $ancestors ) );
-		return $ancestor->$attr;
-	}
+        // must be a child page
+        $ancestors = get_post_ancestors( $post->ID );
+        $ancestor = get_post( array_pop( $ancestors ) );
+        return $ancestor->$attr;
+    }
 
-	// test for custom post types
-	$custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
-	if ( !empty( $custom_post_types ) && array_key_exists( $post->post_type, $custom_post_types ) ) {
+    // test for custom post types
+    $custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
+    if ( !empty( $custom_post_types ) && array_key_exists( $post->post_type, $custom_post_types ) ) {
 
-		// is parent_page slug defined?
-		if ( isset( $custom_post_types[ $post->post_type ]->parent_page ) ) {
+        // is parent_page slug defined?
+        if ( isset( $custom_post_types[ $post->post_type ]->parent_page ) ) {
 
-			// parent_page slug is defined.
-			$parent = get_page_by_path( $custom_post_types[ $post->post_type ]->parent_page );
+            // parent_page slug is defined.
+            $parent = get_page_by_path( $custom_post_types[ $post->post_type ]->parent_page );
 
-		} else {
+        } else {
 
-			// parent_page slug is not defined
-			// find custom slug
-			$slug = $custom_post_types[ $post->post_type ]->rewrite[ 'slug' ];
+            // parent_page slug is not defined
+            // find custom slug
+            $slug = $custom_post_types[ $post->post_type ]->rewrite[ 'slug' ];
 
-			// if a page exists with the same slug, assume that's the parent page
-			$parent = get_page_by_path( $slug );
-		}
+            // if a page exists with the same slug, assume that's the parent page
+            $parent = get_page_by_path( $slug );
+        }
         
-		// get ancestors of $parent
+        // get ancestors of $parent
         if (isset($parent)) {
             $ancestors = get_post_ancestors( $parent->ID );
 
@@ -139,17 +139,17 @@ function coenv_base_get_ancestor($attr = 'ID') {
             $ancestor = get_post( array_pop( $ancestors ) );
             return $ancestor->$attr;
         }
-	}
+    }
 }
 
 // page/post ids to exclude from the main menu
 function coenv_base_menu_exclude() {
 // args
 $args = array(
-	'numberposts' => -1,
-	'posts_per_page'=> -1,
-	'post_type' => 'page',
-	'meta_key'=>'menu_visibility',
+    'numberposts' => -1,
+    'posts_per_page'=> -1,
+    'post_type' => 'page',
+    'meta_key'=>'menu_visibility',
     'meta_value'=> 'not-visible',
     'meta_compare'=>'='
 );
@@ -160,9 +160,9 @@ $nav_query = new WP_Query( $args );
 
 
 if( $nav_query->have_posts() ):
-	while ( $nav_query->have_posts() ) : $nav_query->the_post();
-		$nav_exclude[] = get_the_ID();
-	endwhile;
+    while ( $nav_query->have_posts() ) : $nav_query->the_post();
+        $nav_exclude[] = get_the_ID();
+    endwhile;
 endif;
 
 wp_reset_query();
@@ -178,29 +178,29 @@ wp_reset_query();
 add_filter( 'acf/fields/wysiwyg/toolbars' , 'coenv_base_acf_toolbar'  );
 function coenv_base_acf_toolbar( $toolbars ) {
 
-	if( ($key = array_search('underline' , $toolbars['Basic' ][1])) !== false ) {
-	    unset( $toolbars['Basic' ][1][$key] );
-	}
-	if( ($key = array_search('underline' , $toolbars['Full' ][2])) !== false ) {
-	    unset( $toolbars['Full' ][2][$key] );
-	}
+    if( ($key = array_search('underline' , $toolbars['Basic' ][1])) !== false ) {
+        unset( $toolbars['Basic' ][1][$key] );
+    }
+    if( ($key = array_search('underline' , $toolbars['Full' ][2])) !== false ) {
+        unset( $toolbars['Full' ][2][$key] );
+    }
 
-	// return $toolbars - IMPORTANT!
-	return $toolbars;
+    // return $toolbars - IMPORTANT!
+    return $toolbars;
 }
 
 /* 
  * Return blog taxonomy terms.
  */
 function coenv_base_blog_terms($id) {
-	$blog_terms = wp_get_post_terms( $id, 'student_blog' );
-	if ($blog_terms) {
-		echo '<ul class="blog-terms inline-list">';
-		foreach ($blog_terms as $term) {
-			echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $term->slug . '">' . $term->name . '</a></li>';
-		}
-		echo '</ul>';
-	}
+    $blog_terms = wp_get_post_terms( $id, 'student_blog' );
+    if ($blog_terms) {
+        echo '<ul class="blog-terms inline-list">';
+        foreach ($blog_terms as $term) {
+            echo '<li><a class="button" href="/students/student-blog/?blog-cat=' . $term->slug . '">' . $term->name . '</a></li>';
+        }
+        echo '</ul>';
+    }
 }
 add_filter('shortcode_atts_gallery','overwrite_gallery_atts_wpse_95965',10,3);
 function overwrite_gallery_atts_wpse_95965($out, $pairs, $atts){
@@ -228,61 +228,61 @@ $tax_obj = get_taxonomy($tax);
 $tax_str = $tax_obj->labels->name;
 
 $cats_args  = array(
-	'orderby' => 'name',
-	'order' => 'ASC',
-	'taxonomy' => $tax
+    'orderby' => 'name',
+    'order' => 'ASC',
+    'taxonomy' => $tax
 );
 $cats = get_categories($cats_args);
-	if ($cats) {
+    if ($cats) {
         if ($tax == 'course_quarter') {
             echo '<label for="select-cat">Select a quarter:</label>';
             echo '<div class="" data-url="">';
         };
-		echo '<select name="select-category" class="select-category" id="select-cat">';
+        echo '<select name="select-category" class="select-category" id="select-cat">';
         if ($tax != 'course_quarter') {
-		  echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+          echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
         }
-		foreach($cats as $cat) {
-			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
-		}
-		echo '</select>';
+        foreach($cats as $cat) {
+            $selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+            echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+        }
+        echo '</select>';
         if ($tax == 'course_quarter') {
             echo '</div>';
         }
-	}
+    }
 }
 
 /* 
  * Date filters for WPQuery templates (blog, publications, faculty, etc.)
  */
 function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
-	$counter = 0;
-	$ref_month = '';
-	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
-	echo '<select name="select-category" class="select-category">';
-	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
-	if( $monthly->have_posts() ) :
-		while( $monthly->have_posts() ) : $monthly->the_post();
-		    if( get_the_date('mY') != $ref_month ) {
-		    	$month_num = get_the_date('m');
-		    	$month_str = get_the_date('F');
-		    	$year_num = get_the_date('Y');
-		    	if ($year_num == $coenv_year && $month_num == $coenv_month) {
-		    	 $selected = ' selected="selected"';
-		    	} else {
-		    		$selected = '';
-		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
-		       // echo "\n".get_the_date('F Y');
-		        $ref_month = get_the_date('mY');
-		        $counter = 0;
-		    }
-		endwhile; 
-	endif;
-	echo '</select>';
-	wp_reset_postdata();
-	wp_reset_query();
+    $counter = 0;
+    $ref_month = '';
+    $monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'   => $post_type));
+    echo '<select name="select-category" class="select-category">';
+    echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
+    if( $monthly->have_posts() ) :
+        while( $monthly->have_posts() ) : $monthly->the_post();
+            if( get_the_date('mY') != $ref_month ) {
+                $month_num = get_the_date('m');
+                $month_str = get_the_date('F');
+                $year_num = get_the_date('Y');
+                if ($year_num == $coenv_year && $month_num == $coenv_month) {
+                 $selected = ' selected="selected"';
+                } else {
+                    $selected = '';
+                }
+                echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+               // echo "\n".get_the_date('F Y');
+                $ref_month = get_the_date('mY');
+                $counter = 0;
+            }
+        endwhile; 
+    endif;
+    echo '</select>';
+    wp_reset_postdata();
+    wp_reset_query();
 }
 /* 
  * Serve images over SSL, if enabled

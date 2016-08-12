@@ -11,6 +11,7 @@
         top: 1.5rem;
         width: 7rem;
         left: -1px;
+        z-index: -1;
         @media #{$small-only} {
             top: 1.4rem;
         }

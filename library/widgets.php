@@ -353,12 +353,12 @@ class CoEnv_Widget_Events extends WP_Widget {
     ?>
       <?php echo $before_widget; ?>
          <div class="widget-events">
-        
+
             <?php if ( $title ) {
                 echo $before_title;
-                echo '<h4><span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span></h4>';
+                echo '<span><a href="' . $events_url . '" title="View More Events">' . $title . '</a></span>';
                 echo $after_title;
-                };
+                }
             ?>
 
       <ul class="event-list">
@@ -479,34 +479,34 @@ class coenv_base_blog_cats extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'category'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                         echo '<ul class="blog-cats inline-list">';
-                         if ($blog_cat) {
-                         echo '<li><a class="cats unchecked" href="/about/news/">All News</a></li>';
-                         }
-                         foreach($cats as $cat) { 
-                             $slug = $cat->slug;
-                             if ($slug == $blog_cat) {
-                                 $check = 'checked';
-                             } else {
-                                 $check = 'unchecked';
-                             }
-                             
-                             if ($slug !== 'uncategorized') {
-                             
-                                 echo '<li><a class="cats ' . $check . '" href="/about/news/?tax=category&term=' . $cat->slug . '">';
-                                 echo $cat->name;
-                                 echo '</a></li>';
-                             }
-                         }
-                         echo '</ul>';
-                    }
+            $cats_args  = array(
+              'orderby' => 'name',
+              'order' => 'ASC',
+              'taxonomy' => 'category'
+              );
+            $cats = get_categories($cats_args);
+            if ($cats) {
+                 echo '<ul class="blog-cats inline-list">';
+                 if ($blog_cat) {
+                 echo '<li><a class="cats unchecked" href="/about/news/">All News</a></li>';
+                 }
+                 foreach($cats as $cat) { 
+                     $slug = $cat->slug;
+                     if ($slug == $blog_cat) {
+                         $check = 'active';
+                     } else {
+                         $check = '';
+                     }
+
+                     if ($slug !== 'uncategorized') {
+
+                         echo '<li><a class="cats ' . $check . '" href="/about/news/?tax=category&term=' . $cat->slug . '">';
+                         echo $cat->name;
+                         echo '</a></li>';
+                     }
+                 }
+                 echo '</ul>';
+            }
           echo $args['after_widget'];
      }
 
@@ -601,7 +601,14 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-     
+          if(isset($_GET['coenv-year'])){
+            $coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
+            $coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+            // Month needs an offset because php and WordPress calculate dates differently.
+            $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+          } else {
+              $coenv_year = $coenv_month = $coenv_date = null;
+          }
           echo $args['before_widget'];
           
           if ( ! empty( $instance['title'] ) ) {
@@ -611,15 +618,31 @@ class coenv_base_index_dates extends WP_Widget {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
 
-          echo '<ul>';
-          echo '<li><a href="#">November 2014</a></li>';
-          echo '<li><a href="#">October 2014</a></li>';
-          echo '<li><a href="#">September 2014</a></li>';
-          echo '<li><a href="#">August 2014</a></li>';
-          echo '<li><a href="#">July 2014</a></li>';
-          echo '<li><a href="#">June 2014</a></li>';
-          echo '<li><a href="#">May 2014</a></li>';
-          echo '</ul>';
+            $counter = 0;
+            $ref_month = ''; 
+            $monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'   => $post_type));
+            echo '<ul class="select-category">';
+            if( $monthly->have_posts() ) : 
+                while( $monthly->have_posts() ) : $monthly->the_post();
+                    if( get_the_date('mY') != $ref_month ) { 
+                        $month_num = get_the_date('m');
+                        $month_str = get_the_date('F');
+                        $year_num = get_the_date('Y');
+                        if ($year_num == $coenv_year && $month_num == $coenv_month) {
+                         $selected = ' selected="selected"';
+                        } else {
+                            $selected = ''; 
+                        }
+                        echo '<li><a href="about/news/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</a></li>';
+                       // echo "\n".get_the_date('F Y');
+                        $ref_month = get_the_date('mY');
+                        $counter = 0;
+                    }   
+                endwhile;
+            endif;
+            echo '</select>';
+            wp_reset_postdata();
+            wp_reset_query();
 
           echo $args['after_widget'];
      }
@@ -741,12 +764,12 @@ class CoEnv_Widget_Social extends WP_Widget {
         ?>
         
     <ul>
-        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"><span class="visuallyhidden">Facebook</span></i></li></a><?php } ?>
-        <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span class="visuallyhidden">Twitter</span></i></li></a><?php } ?>
-        <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span class="visuallyhidden">YouTube</span></i></li></a><?php } ?>
-        <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span class="visuallyhidden">LinkedIn</span></i></li></a><?php } ?>
-        <?php if (get_option('email_newsletter')) { ?><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><li><i class="fi-at-sign"><span class="visuallyhidden">Email Newsletter</span></i></li></a><?php } ?>
-        <a href="<?php echo get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"><span class="visuallyhidden">RSS</span></i></li></a>
+        <?php if (get_option('facebook')) { ?><a href="<?php echo get_option('facebook'); ?>" title="Become a fan of <?php bloginfo('name'); ?> on Facebook" target="_blank" rel="nofollow"><li><i class="fi-social-facebook"><span>Facebook</span></i></li></a><?php } ?>
+        <?php if (get_option('twitter')) { ?><a href="<?php echo get_option('twitter'); ?>" title="Follow <?php bloginfo('name'); ?> on Twitter" target="_blank" rel="nofollow"><li><i class="fi-social-twitter"><span>Twitter</span></i></li></a><?php } ?>
+        <?php if (get_option('youtube')) { ?><a href="<?php echo get_option('youtube'); ?>" title="<?php bloginfo('name'); ?> YouTube Channel" target="_blank" rel="nofollow"><li><i class="fi-social-youtube"><span>YouTube</span></i></li></a><?php } ?>
+        <?php if (get_option('linkedin')) { ?><a href="<?php echo get_option('linkedin'); ?>" title="<?php bloginfo('name'); ?> LinkedIn Group" target="_blank" rel="nofollow"><li><i class="fi-social-linkedin"><span>LinkedIn</span></i></li></a><?php } ?>
+        <?php if (get_option('email_newsletter')) { ?><a href="<?php echo get_option('email_newsletter'); ?>" title="Subscribe to the <?php bloginfo('name'); ?>'s Email Newsletter" target="_blank" rel="nofollow"><li><i class="fi-at-sign"><span>Email Newsletter</span></i></li></a><?php } ?>
+        <a href="<?php echo get_bloginfo('url').'/feeds'; ?>" title="<?php bloginfo('name'); ?> RSS Feeds"><li><i class="fi-rss"><span>RSS</span></i></li></a>
       </ul>
  
     <?php
@@ -810,7 +833,7 @@ class coenv_course_archive extends WP_Widget {
     echo $before_widget;
     
         if (!is_front_page()) {
-            echo $before_title . '<span class="course_archive">' . $title . '</span>' . $after_title;
+            echo '<h4 class="course_archive">' . $title . '</h4>';
         }
         if (isset($_GET['term'])) {
             $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));

@@ -1,11 +1,12 @@
 // General sidebar
 aside#sidebar {
-	padding-right: 1rem !important;
+    padding-right: 1rem !important;
     margin-top: 2rem;
 
-	.section-title {
-		background-color: #f2f2f2;
-		border: 1px solid #ccc;
+    .section-title {
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        margin-bottom: 0 !important;
         a {
             @include uni;
             font-size: 2rem;
@@ -21,42 +22,42 @@ aside#sidebar {
                 vertical-align: -20%;
             }
         }
-	}
+    }
 
-	// Hide for mobile	
-	.coenv_base_subnav,
-	&.section-title {
-		@media #{$small-only} {
-			display:none;
-		}
-	}
+    // Hide for mobile  
+    .coenv_base_subnav,
+    &.section-title {
+        @media #{$small-only} {
+            display:none;
+        }
+    }
 
-	// Second-level navigation
-	.coenv_base_subnav ul {
-		margin: 0  1rem rem-calc(30) 0;
-		padding: 0;
-		line-height: 10px;
-		width: 100%;
-		li {
-			background-color: #f2f2f2;
-			border-bottom: 1px solid #ccc;
-			border-left: 1px solid #ccc;
-			border-right: 1px solid #ccc;
-			margin: 0;
-			text-transform: uppercase;
+    // Second-level navigation
+    .coenv_base_subnav ul {
+        margin: 0  1rem rem-calc(30) 0;
+        padding: 0;
+        line-height: 10px;
+        width: 100%;
+        li {
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            margin: 0;
+            text-transform: uppercase;
             font-size: 0.9rem;
             @media #{$large-up} {
-			    font-size: 1.25rem;
+                font-size: 1.25rem;
             }
-			a {
-		        @include encode;
+            a {
+                @include encode;
                 position: relative;
-			    padding: 0.5rem 1rem 0.5rem 2rem;
+                padding: 0.5rem 1rem 0.5rem 2rem;
                 font-weight: 800;
                 display: block;
-				line-height: 2rem;
-				color: #000;
-			}
+                line-height: 2rem;
+                color: #000;
+            }
             .active {
                 color: $uw-purple;
                 &:before {
@@ -70,32 +71,31 @@ aside#sidebar {
                     width: 4rem;
                 }
             }
-			ul {
-				margin-bottom: 0;
-				li {
-					border-top: 1px solid #ccc;
+            ul {
+                margin-bottom: 0;
+                li {
+                    border-top: 1px solid #ccc;
                     border-bottom: none;
                     border-left: none;
                     border-right: none;
 
-					a {
-				    	padding-left: 3rem !important;
-					}
-				}
-				&.side-nav {
-					padding-top: 0;
-					background-image: none;
-				}
-			}
-		}
-	}
-	.widget {
-		margin-bottom: rem-calc(30);
-	}
+                    a {
+                        padding-left: 3rem !important;
+                    }
+                }
+                &.side-nav {
+                    padding-top: 0;
+                    background-image: none;
+                }
+            }
+        }
+    }
+    .widget {
+        margin-bottom: rem-calc(30);
+    }
 
     h2 {
         margin-top: 0.5rem;
         line-height: 2rem;
     }
 }
-
