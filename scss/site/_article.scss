@@ -130,19 +130,17 @@ margin-bottom: 1rem;
         }
 
         &:before {
-            content: "\f10d";
-            font-family: "FontAwesome";
-            font-style: normal;
-            font-weight: normal;
-            font-size: 2rem;
-            color: $uw-purple;
+            content: url('../assets/img/pcc_quote.svg');
+            width: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
         }
 
         &:after {
             content: url('../assets/img/pcc_section_div_flat_purple.svg');
             position: absolute;
-            top: 2.8rem;
-            left: -2px;
+            top: 1.9rem;
+            left: 0;
             width: 7rem;
         }
 
