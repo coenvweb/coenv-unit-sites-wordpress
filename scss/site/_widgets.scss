@@ -59,20 +59,19 @@ aside#sidebar div {
 	// Content blocks
     margin-bottom: 2rem;
     h4 {
-        position: relative;
         @include uni_reg;
         color: $uw-purple;
         padding: 0.5rem 0rem;
-        border-bottom: 1px solid $uw-purple;
         margin-bottom: 2rem;
         line-height: 2.5rem;
-        vertical-align: top;
         &:after {
-            position: absolute;
-            content: url('../assets/img/pcc_section_div_flat_purple.svg');
-            top: 75%;
-            width: 7rem;
-            left: -3px;
+            content: '';
+            height: 0.75rem;
+            width: 100%;
+            display: block;
+            background: url('../assets/img/pcc_widget_div.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
         }
     }
     p {
