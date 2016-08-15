@@ -58,10 +58,10 @@ aside#sidebar {
                 line-height: 2rem;
                 color: #000;
             }
-            .active {
+            a.active {
                 color: $uw-purple;
                 &:before {
-                    content: url('../assets/img/pcc_section_div_flat_purple.svg');
+                    content: url('../assets/img/pcc_section_div_flat_black.svg');
                     position: absolute;
                     top: -15px;
                     @media #{$medium-only} {
@@ -81,6 +81,11 @@ aside#sidebar {
 
                     a {
                         padding-left: 3rem !important;
+                    }
+                    a.active {
+                        &:before {
+                            display: none;
+                        }
                     }
                 }
                 &.side-nav {
