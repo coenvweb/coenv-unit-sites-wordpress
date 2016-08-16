@@ -23,7 +23,7 @@ GNU General Public License for more details.
 add_action('wp_enqueue_scripts', 'twitter_scripts');
 
 function twitter_scripts() {
-    wp_register_script( 'twitter-feed', plugins_url('coenv-twitter-feed/twitter-feed.js', dirname(__FILE__) ), array('jquery'), '1.0.0', false );
+    wp_register_script( 'twitter-feed', plugins_url('coenv-twitter-feed/twitter-feed.js', dirname(__FILE__) ), array('jquery'), '1.0.0', true );
 
     wp_enqueue_script('twitter-feed');
 }
