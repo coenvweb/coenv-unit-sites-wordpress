@@ -21,7 +21,7 @@
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
     
-  <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
+  <script async src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
 
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
