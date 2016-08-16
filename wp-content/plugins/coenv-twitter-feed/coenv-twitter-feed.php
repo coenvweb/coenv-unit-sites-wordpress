@@ -125,12 +125,12 @@ class Coenv_Twitter extends WP_Widget {
             <div id="twitter">
                 <h2 class="at_title"><span class="twitter-logo"><i class="fa fa-twitter"></i></span>@<?=$instance['user']?></h2>
                 <script>
-                    $(document).ready( function() {
+                    window.onload = function() {
                         // start jqtweet!
                         if(jQuery('#twitter').length) {
                             JQTWEET.loadTweets('<?=$instance['user']?>', <?=$instance['count']?>);
                         }
-                    });
+                    }
                 </script>
             </div>
             <a class="read_tweets button" href="https://twitter.com/<?=$instance['user']?>">Read More Tweets</a>
