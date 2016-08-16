@@ -245,6 +245,7 @@ ExpiresDefault "access plus 7 days"
 # Compress HTML, CSS, JavaScript, Text, XML and fonts
 <IfModule mod_mime.c>
 Addtype font/truetype .ttf
+Addtype font/opentype .otf
 </IfModule>
 
 AddOutputFilterByType DEFLATE application/javascript
@@ -275,4 +276,3 @@ BrowserMatch ^Mozilla/4 gzip-only-text/html
 BrowserMatch ^Mozilla/4\.0[678] no-gzip
 BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
-
