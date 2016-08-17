@@ -246,12 +246,14 @@ ExpiresDefault "access plus 7 days"
 <IfModule mod_mime.c>
 Addtype font/truetype .ttf
 Addtype font/opentype .otf
+AddType application/x-font-woff .woff
 </IfModule>
 
 AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/rss+xml
 AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
 AddOutputFilterByType DEFLATE application/x-font
+AddOutputFilterByType DEFLATE application/x-font-woff
 AddOutputFilterByType DEFLATE application/x-font-opentype
 AddOutputFilterByType DEFLATE application/x-font-otf
 AddOutputFilterByType DEFLATE application/x-font-truetype
