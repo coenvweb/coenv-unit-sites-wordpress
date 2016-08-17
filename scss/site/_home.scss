@@ -140,17 +140,28 @@
             display: block;
             padding: 3rem;
             background-size: cover;
-            background-position: center;
+            background-position: 90% center;
             background-repeat: no-repeat;
             margin-bottom: 1rem;
             font-size: rem-calc(28);
-            @media #{$small-only} {
+            @media #{$medium-only} {
+                font-size: rem-calc(20);
+                padding: 2.25rem;
+            }
+            @Media #{$small-only} {
                 font-size: rem-calc(18);
+                padding: 2rem;
             }
             &:after {
                 float: right;
                 display: block;
                 width: 8%;
+                @media #{$medium-only} {
+                    width: 7%;
+                }
+                @media #{$small-only} {
+                    width: 6%;
+                }
                 content: url('../assets/img/pcc_buttonArrow.svg');
             }
         }

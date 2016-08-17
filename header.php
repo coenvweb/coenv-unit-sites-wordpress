@@ -21,7 +21,6 @@
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
     
-  <script async src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
 
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
@@ -45,6 +44,7 @@
     <meta name="msapplication-TileColor" content="#4b2e84">
     <meta name="msapplication-TileImage" content="<?php echo get_template_directory_uri() ?>/assets/img/ms-icon-144x144.png">
     <meta name="theme-color" content="#4b2e84">
+    <script async src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
   
     <?php wp_head(); ?>
       
