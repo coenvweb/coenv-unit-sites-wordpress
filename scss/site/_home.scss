@@ -127,10 +127,18 @@
         
         .learn {
             background: url('../assets/img/learn_more_button.png');
+            padding-left: 30% !important;
+            @media #{$medium-only} {
+                padding-left: 25% !important;
+            }
         }
 
         .community {
+            padding-left: 20% !important;
             background: url('../assets/img/community_button.png');
+            @media #{$medium-only} {
+                padding-left: 12% !important;
+            }
         }
 
         .home_button {
@@ -138,19 +146,21 @@
             text-transform: uppercase;
             color: $white;
             display: block;
-            padding: 3rem;
+            padding: 4rem 3rem;
             background-size: cover;
             background-position: 90% center;
             background-repeat: no-repeat;
             margin-bottom: 1rem;
-            font-size: rem-calc(28);
+            font-size: rem-calc(24);
+            font-weight: bold;
+            letter-spacing: 0.5px;
             @media #{$medium-only} {
-                font-size: rem-calc(20);
-                padding: 2.25rem;
+                font-size: rem-calc(18);
+                padding: 3rem 2.5rem;
             }
             @Media #{$small-only} {
-                font-size: rem-calc(18);
-                padding: 2rem;
+                font-size: rem-calc(16);
+                padding: 2.5rem 2rem;
             }
             &:after {
                 float: right;
