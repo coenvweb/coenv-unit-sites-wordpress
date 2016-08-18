@@ -85,6 +85,13 @@ margin-bottom: 1rem;
 
 .article__content {
     @extend .clearfix;
+    
+    h2, h3, h4, h5, h6 {
+        a {
+            color: $black;
+            text-decoration: underline;
+        }
+    }
 
     p {
         font-size: rem-calc(16);
@@ -96,6 +103,7 @@ margin-bottom: 1rem;
     }
 
     h2 {
+        @include rem('font-size', 2);
         margin-top: 0;
         margin-bottom: 1rem;
     }
