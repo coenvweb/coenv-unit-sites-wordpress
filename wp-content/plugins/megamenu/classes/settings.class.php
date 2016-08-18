@@ -1570,6 +1570,19 @@ class Mega_Menu_Settings {
                         'menu_bar' => array(
                             'title' => __( "Menu Bar", "megamenu" ),
                             'settings' => array(
+                                'menu_item_height' => array(
+                                    'priority' => 05,
+                                    'title' => __( "Menu Height", "megamenu" ),
+                                    'description' => __( "Define the height of each top level menu item link. This value plus the Menu Padding (top and bottom) settings define the overall height of the menu bar.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'menu_item_link_height',
+                                            'validation' => 'px'
+                                        )
+                                    )
+                                ),
                                 'menu_background' => array(
                                     'priority' => 10,
                                     'title' => __( "Menu Background", "megamenu" ),
@@ -1579,6 +1592,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "From", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'container_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
                                         ),
                                         array(
                                             'title' => __( "To", "megamenu" ),
@@ -1678,6 +1696,11 @@ class Mega_Menu_Settings {
                                             'key' => 'menu_item_background_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'menu_item_background_to'
@@ -1695,6 +1718,11 @@ class Mega_Menu_Settings {
                                             'key' => 'menu_item_background_hover_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'menu_item_background_hover_to'
@@ -1710,19 +1738,6 @@ class Mega_Menu_Settings {
                                             'title' => __( "", "megamenu" ),
                                             'type' => 'freetext',
                                             'key' => 'menu_item_spacing',
-                                            'validation' => 'px'
-                                        )
-                                    )
-                                ),
-                                'menu_item_height' => array(
-                                    'priority' => 90,
-                                    'title' => __( "Menu Item Height", "megamenu" ),
-                                    'description' => __( "Define the height of each top level menu item. This value, plus the container top and bottom padding values define the overall height of the menu bar.", "megamenu" ),
-                                    'settings' => array(
-                                        array(
-                                            'title' => __( "", "megamenu" ),
-                                            'type' => 'freetext',
-                                            'key' => 'menu_item_link_height',
                                             'validation' => 'px'
                                         )
                                     )
@@ -1762,6 +1777,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "Decoration", "megamenu" ),
                                             'type' => 'decoration',
                                             'key' => 'menu_item_link_text_decoration'
+                                        ),
+                                        array(
+                                            'title' => __( "Align", "megamenu" ),
+                                            'type' => 'align',
+                                            'key' => 'menu_item_link_text_align'
                                         ),
                                     )
                                 ),
@@ -1948,6 +1968,11 @@ class Mega_Menu_Settings {
                                             'key' => 'panel_background_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'panel_background_to'
@@ -2075,8 +2100,8 @@ class Mega_Menu_Settings {
                                 ),
                                 'widget_padding' => array(
                                     'priority' => 60,
-                                    'title' => __( "Widget Padding", "megamenu" ),
-                                    'description' => __( "Use this to define the spacing between each widget in the panel.", "megamenu" ),
+                                    'title' => __( "Item Padding", "megamenu" ),
+                                    'description' => __( "Use this to define the spacing between each widget / set of menu items within the panel.", "megamenu" ),
                                     'settings' => array(
                                         array(
                                             'title' => __( "Top", "megamenu" ),
@@ -2104,9 +2129,14 @@ class Mega_Menu_Settings {
                                         )
                                     )
                                 ),
+                                'mega_menu_widgets' => array(
+                                    'priority' => 65,
+                                    'title' => __( "Widgets", "megamenu" ),
+                                    'description' => '',
+                                ),
                                 'widget_heading_font' => array(
                                     'priority' => 70,
-                                    'title' => __( "Widget Heading Font", "megamenu" ),
+                                    'title' => __( "Heading Font", "megamenu" ),
                                     'description' => __( "Set the font to use Widget headers in the mega menu. Tip: set this to the same style as the Second Level Menu Item Header font to keep your styling consistent.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2142,32 +2172,9 @@ class Mega_Menu_Settings {
                                         ),
                                     )
                                 ),
-                                'widget_content_font' => array(
-                                    'priority' => 80,
-                                    'title' => __( "Widget Content Font", "megamenu" ),
-                                    'description' => __( "Set the font to use for panel contents.", "megamenu" ),
-                                    'settings' => array(
-                                        array(
-                                            'title' => __( "Color", "megamenu" ),
-                                            'type' => 'color',
-                                            'key' => 'panel_font_color'
-                                        ),
-                                        array(
-                                            'title' => __( "Size", "megamenu" ),
-                                            'type' => 'freetext',
-                                            'key' => 'panel_font_size',
-                                            'validation' => 'px'
-                                        ),
-                                        array(
-                                            'title' => __( "Family", "megamenu" ),
-                                            'type' => 'font',
-                                            'key' => 'panel_font_family'
-                                        )
-                                    )
-                                ),
                                 'widget_heading_padding' => array(
                                     'priority' => 90,
-                                    'title' => __( "Widget Heading Padding", "megamenu" ),
+                                    'title' => __( "Heading Padding", "megamenu" ),
                                     'description' => __( "Set the padding for the widget headings.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2198,7 +2205,7 @@ class Mega_Menu_Settings {
                                 ),
                                 'widget_heading_margin' => array(
                                     'priority' => 100,
-                                    'title' => __( "Widget Heading Margin", "megamenu" ),
+                                    'title' => __( "Heading Margin", "megamenu" ),
                                     'description' => __( "Set the margin for the widget headings.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2229,7 +2236,7 @@ class Mega_Menu_Settings {
                                 ),
                                 'widget_header_border' => array(
                                     'priority' => 110,
-                                    'title' => __( "Widget Header Border", "megamenu" ),
+                                    'title' => __( "Header Border", "megamenu" ),
                                     'description' => __( "Set the border for the widget headings.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -2260,6 +2267,29 @@ class Mega_Menu_Settings {
                                             'type' => 'freetext',
                                             'key' => 'panel_header_border_left',
                                             'validation' => 'px'
+                                        )
+                                    )
+                                ),
+                                'widget_content_font' => array(
+                                    'priority' => 115,
+                                    'title' => __( "Content Font", "megamenu" ),
+                                    'description' => __( "Set the font to use for panel contents.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'panel_font_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'panel_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Family", "megamenu" ),
+                                            'type' => 'font',
+                                            'key' => 'panel_font_family'
                                         )
                                     )
                                 ),
@@ -2337,6 +2367,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "From", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'panel_second_level_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
                                         ),
                                         array(
                                             'title' => __( "To", "megamenu" ),
@@ -2519,6 +2554,11 @@ class Mega_Menu_Settings {
                                             'key' => 'panel_third_level_background_hover_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'panel_third_level_background_hover_to'
@@ -2570,6 +2610,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "From", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'flyout_menu_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
                                         ),
                                         array(
                                             'title' => __( "To", "megamenu" ),
@@ -2702,6 +2747,11 @@ class Mega_Menu_Settings {
                                             'key' => 'flyout_background_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'flyout_background_to'
@@ -2717,6 +2767,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "From", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'flyout_background_hover_from'
+                                        ),
+                                        array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
                                         ),
                                         array(
                                             'title' => __( "To", "megamenu" ),
@@ -2884,6 +2939,11 @@ class Mega_Menu_Settings {
                                             'key' => 'toggle_background_from'
                                         ),
                                         array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
+                                        ),
+                                        array(
                                             'title' => __( "To", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'toggle_background_to'
@@ -2948,6 +3008,11 @@ class Mega_Menu_Settings {
                                             'title' => __( "From", "megamenu" ),
                                             'type' => 'color',
                                             'key' => 'mobile_background_from'
+                                        ),
+                                        array(
+                                            'title' => __( "Copy", "megamenu" ),
+                                            'type' => 'copy_color',
+                                            'key' => 'copy_color'
                                         ),
                                         array(
                                             'title' => __( "To", "megamenu" ),
@@ -3053,6 +3118,9 @@ class Mega_Menu_Settings {
                                             break;
                                         case "mobile_columns":
                                             $this->print_theme_mobile_columns_option( $setting['key'] );
+                                            break;
+                                        case "copy_color":
+                                            $this->print_theme_copy_color_option( $setting['key'] );
                                             break;
                                         default:
                                             do_action("megamenu_print_theme_option_{$setting['type']}", $setting['key'], $this->id );
@@ -3168,6 +3236,23 @@ class Mega_Menu_Settings {
                 <option value='center' <?php selected( $value, 'center' ); ?>><?php _e("Center", "megamenu") ?></option>
                 <option value='right' <?php selected( $value, 'right' ); ?>><?php _e("Right", "megamenu") ?></option>
             </select>
+
+        <?php
+    }
+
+
+    /**
+     * Print a copy icon
+     *
+     * @since 2.2.3
+     * @param string $key
+     * @param string $value
+     */
+    public function print_theme_copy_color_option( $key ) {
+
+        ?>
+
+            <span class='dashicons dashicons-arrow-right-alt'></span>
 
         <?php
     }

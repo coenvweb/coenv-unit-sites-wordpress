@@ -2,7 +2,7 @@
 /******************************
  * Plugin Name: WP Ultimate CSV Importer
  * Description: A plugin that helps to import the data's from a CSV file.
- * Version: 3.11.0
+ * Version: 3.11.1
  * Author: smackcoders.com
  * Text Domain: wp-ultimate-csv-importer
  * Domain Path: /languages

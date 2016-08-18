@@ -83,14 +83,14 @@
 
         plugin.hideAllPanels = function() {
             $('.mega-toggle-on > a', $menu).each(function() {
-                plugin.hidePanel($(this), true);
+                plugin.hidePanel($(this), false);
             });
         };
 
 
         plugin.hideSiblingPanels = function(anchor, immediate) {
             // all open children of open siblings
-            anchor.parent().siblings().find('.mega-toggle-on').andSelf().children('a').each(function() {
+            anchor.parent().siblings().find('.mega-toggle-on').addBack().children('a').each(function() {
                 plugin.hidePanel($(this), immediate);
             });
         }
@@ -177,7 +177,7 @@
 
                 if (effect.animate) {
                     anchor.siblings('.mega-sub-menu').animate(effect.animate, speed, 'swing', function() {
-                        $(this).css('visiblity', 'visible');
+                        $(this).css('display', '');
                     });
                 }
             }
@@ -283,9 +283,9 @@
                 if (keyCode == tab_key) {
                     $menu.addClass('mega-keyboard-navigation');
 
-                    if ( active_link.parent().hasClass('mega-menu-item-has-children') && ( ! active_link.parents('.mega-menu-megamenu').length || active_link.parent().parent().hasClass('mega-menu') ) ) {
+                    if ( active_link.parent().hasClass('mega-menu-item-has-children') ) {
                         // menu item with sub menu
-                        plugin.showPanel($(e.target));
+                        plugin.showPanel(active_link);
                     } else if ( active_link.parent().parent().hasClass('mega-menu') ) {
                         // top level item with no children
                         plugin.hideAllPanels();

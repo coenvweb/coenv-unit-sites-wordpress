@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.5
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,17 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.2.3 [15/08/2016] =
+
+* Fix: Mega sub menus not correctly closed on mobile when effect is set to Fade
+* Fix: Cursor styling for disabled links
+* Fix: Apply animation to closing sub menus
+* Fix: Bring megamenu button forward on nav-menus page
+* Fix: Replace deprecated jQuery 'addSelf' with 'andBack'
+* Improvement: Theme Editor usability. Add color pallete to color picker. Add Copy Color option
+* Improvement: Only prompt for SCSS compilation when current CSS is outdated
+* Change: Indicate whether style.css file was generated from core or custom version of megamenu.scss
 
 = 2.2.2 [21/07/2016] =
 

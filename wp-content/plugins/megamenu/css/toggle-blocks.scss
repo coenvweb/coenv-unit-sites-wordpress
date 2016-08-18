@@ -1,6 +1,5 @@
 #{$wrap} .mega-menu-toggle {
 
-    /** Menu Toggle Blocks **/
     @each $item in $menu_toggle_blocks {
         $id: nth($item, 1);
         $align: nth($item, 2);
@@ -43,7 +42,6 @@
 
     }
 
-    /** Spacer Toggle Blocks **/
     @each $item in $spacer_toggle_blocks {
 
         $id: nth($item, 1);

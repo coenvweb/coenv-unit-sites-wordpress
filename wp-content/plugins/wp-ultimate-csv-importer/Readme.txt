@@ -4,8 +4,8 @@ Donate link: http://www.smackcoders.com/donate.html
 Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, import inline images
 Requires at least: 4.0 
 Tested up to: 4.5.3
-Stable tag: 3.11.0
-Version: 3.11.0
+Stable tag: 3.11.1
+Version: 3.11.1
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 License: GPLv2 or later
@@ -94,6 +94,8 @@ This will solve your issue or get support from hosting if you didn’t have suff
 For more FAQ, you can refer [here](https://www.smackcoders.com/wordpress-products-faq.html).
 
 == Changelog ==
+= 3.11.1 =
+* Fixed: Browse button disappears in 3.11.0 https://wordpress.org/support/topic/browse-button-disappears-in-3110
 = 3.11.0 =
 * Added: Compatibility for WordPress 4.5.3.
 * Added: menu_order field Import for Custom Post Type.

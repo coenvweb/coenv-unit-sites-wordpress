@@ -77,6 +77,7 @@
         }
 
         a.mega-menu-link {
+            cursor: pointer;
             display: inline;
 
             @if $transitions == 'on' {
@@ -85,6 +86,10 @@
                 -o-transition: background 200ms linear, color 200ms linear;
                 transition: background 200ms linear, color 200ms linear;
             }
+        }
+
+        li.mega-disable-link > a.mega-menu-link {
+            cursor: default;
         }
 
         &.mega-keyboard-navigation + .mega-menu-toggle.mega-menu-open,
@@ -184,10 +189,6 @@
 
         li.mega-menu-item a[class^='dashicons']:before {
             font-family: dashicons;
-        }
-
-        li.mega-disable-link > a.mega-menu-link {
-            cursor: default;
         }
 
         li.mega-menu-item a.mega-menu-link:before {
@@ -296,7 +297,7 @@
                 font-weight: $menu_item_link_weight;
                 height: $menu_item_link_height;
                 vertical-align: baseline;
-                text-align: left;
+                text-align: $menu_item_link_text_align;
                 width: auto;
                 display: block;
                 color: $menu_item_link_color;
@@ -306,7 +307,6 @@
                 @include border-radius($menu_item_link_border_radius_top_left, $menu_item_link_border_radius_top_right, $menu_item_link_border_radius_bottom_right, $menu_item_link_border_radius_bottom_left);
                 font-family: $menu_item_link_font;
                 font-size: $menu_item_link_font_size;
-                cursor: pointer;
             }
 
             @include mobile {
@@ -365,10 +365,12 @@
                 width: 100% !important;
             }
 
-            @for $of from 1 through 8 {
-                @for $cols from 1 through $of {
-                    li.mega-menu-columns-#{$cols}-of-#{$of} {
-                        width: (100% / $of) * $cols;
+            @include desktop {
+                @for $of from 1 through 8 {
+                    @for $cols from 1 through $of {
+                        li.mega-menu-columns-#{$cols}-of-#{$of} {
+                            width: (100% / $of) * $cols;
+                        }
                     }
                 }
             }
@@ -711,7 +713,6 @@
 
     }
 
-    // responsive toggle hamburger
     .mega-menu-toggle {
         display: none;
         z-index: 1;

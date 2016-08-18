@@ -93,6 +93,7 @@ final class Mega_Menu_Style_Manager {
             'menu_item_link_weight'                     => 'normal',
             'menu_item_link_text_transform'             => 'none',
             'menu_item_link_text_decoration'            => 'none',
+            'menu_item_link_text_align'                 => 'left',
             'menu_item_link_color_hover'                => '#ffffff',
             'menu_item_link_weight_hover'               => 'normal',
             'menu_item_link_text_decoration_hover'      => 'none',
@@ -436,27 +437,28 @@ final class Mega_Menu_Style_Manager {
         $css = "";
 
         foreach ( $this->settings as $location => $settings ) {
-
             if ( isset( $settings['enabled'] ) && has_nav_menu( $location ) ) {
-
                 $theme = $this->get_theme_settings_for_location( $location );
                 $menu_id = $this->get_menu_id_for_location( $location );
-
                 $compiled_css = $this->generate_css_for_location( $location, $theme, $menu_id );
 
                 if ( ! is_wp_error( $compiled_css ) ) {
-
                     $css .= $compiled_css;
-
                 }
-
             }
-
         }
 
         if ( strlen( $css ) ) {
 
-            $css .= "/** " . date('l jS \of F Y h:i:s A') . " **/";
+            $scss_location = 'core';
+
+            foreach ( $this->get_possible_scss_file_locations() as $path ) {
+                if ( file_exists($path) && $path !== $this->get_default_scss_file_location() ) {
+                    $scss_location = 'custom';
+                }
+            }
+
+            $css = "/** " . date('l jS \of F Y h:i:s A') . " ({$scss_location}) **/\n\n" . $css;
 
             $this->set_cached_css( $css );
 
@@ -505,6 +507,31 @@ final class Mega_Menu_Style_Manager {
 
 
     /**
+     * Return an array of all the possible file path locations for the SCSS file
+     * @since 2.2.3
+     * @return array
+     */
+    private function get_possible_scss_file_locations() {
+        return apply_filters( "megamenu_scss_locations", array(
+            trailingslashit( get_stylesheet_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // child theme
+            trailingslashit( get_template_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // parent theme
+            $this->get_default_scss_file_location()
+        ));
+    }
+
+
+    /**
+     * Return the default SCSS file path
+     *
+     * @since 2.2.3
+     * @return string
+     */
+    private function get_default_scss_file_location() {
+        return MEGAMENU_PATH . trailingslashit('css') . 'megamenu.scss';
+    }
+
+
+    /**
      * Return the path to the megamenu.scss file, look for custom files before
      * loading the core version.
      *
@@ -529,11 +556,7 @@ final class Mega_Menu_Style_Manager {
         $scss  = file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'mixin.scss' );
         $scss .= file_get_contents( MEGAMENU_PATH . trailingslashit('css') . 'reset.scss' );
 
-        $locations = apply_filters( "megamenu_scss_locations", array(
-            trailingslashit( get_stylesheet_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // child theme
-            trailingslashit( get_template_directory() ) . trailingslashit("megamenu") . 'megamenu.scss', // parent theme
-            MEGAMENU_PATH . trailingslashit('css') . 'megamenu.scss' // default
-        ));
+        $locations = $this->get_possible_scss_file_locations();
 
         foreach ( $locations as $path ) {
 
@@ -552,6 +575,7 @@ final class Mega_Menu_Style_Manager {
         return apply_filters( "megamenu_load_scss_file_contents", $scss);
 
     }
+
 
     /**
      * Compiles raw SCSS into CSS for a particular menu location.
@@ -765,15 +789,6 @@ final class Mega_Menu_Style_Manager {
         $params = apply_filters("megamenu_javascript_localisation",
             array(
                 "effect" => array(
-                    "fade" => array(
-                        "in" => array(
-                            "animate" => array("opacity" => "show"),
-                            "css" => array("display" => "none")
-                        ),
-                        "out" => array(
-                            "animate" => array("opacity" => "hide")
-                        )
-                    ),
                     "slide" => array(
                         "in" => array(
                             "animate" => array("height" => "show"),

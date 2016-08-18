@@ -211,6 +211,8 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 	line-height: 20px;
 	width: 100%;
 }
+
+
 .megamenu_outer_wrap .megamenu_right .menu_settings td.mega-value .mega-info:before {
 	font: 400 20px/1 dashicons;
 	content: "\f348";
@@ -320,6 +322,25 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 }
 .mega-menu_page_maxmegamenu_theme_editor .select2-results li {
     float: left;
+}
+
+.megamenu_outer_wrap .select2-container-sm .select2-choice > .select2-chosen i,
+.mega-menu_page_maxmegamenu_theme_editor .select2-result-label i {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 1;
+    font-family: dashicons;
+    text-decoration: inherit;
+    font-weight: normal;
+    font-style: normal;
+    vertical-align: top;
+    text-align: center;
+    -webkit-transition: color .1s ease-in 0;
+    transition: color .1s ease-in 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 .megamenu_outer_wrap .select2-container-sm .select2-choice {
     padding: 0 5px 0 5px;
@@ -450,6 +471,17 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 	display: block;
 	margin: 0 0 2px 1px;
 }
+.megamenu_outer_wrap .megamenu_right .menu_settings table label.mega-copy_color {
+    margin-right: 3px;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table label.mega-copy_color span.mega-short-desc {
+    visibility: hidden;
+}
+.megamenu_outer_wrap .megamenu_right .menu_settings table label.mega-copy_color span.dashicons {
+    opacity: 0.5;
+    margin-top: 6px;
+    font-size: 16px;
+}
 .megamenu_outer_wrap .megamenu_right .menu_settings table .wide input[type=text] {
 	width: 300px;
 }
@@ -545,6 +577,11 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 	float: left;
 }
 
+.mega-menu_page_maxmegamenu_theme_editor .sp-palette-container {
+    width: 40px;
+}
+
+
 .megamenu_outer_wrap .mm-picker-container .sp-replacer .sp-preview {
 	border: 0;
 	height: 26px;
@@ -566,7 +603,6 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
 	box-shadow: 0 1px 0 rgba(0,0,0,.08);
 	border: 1px solid #ccc;
 	font-size: 0.9em;
-	margin-right: 10px;
 	float: left;
 }
 

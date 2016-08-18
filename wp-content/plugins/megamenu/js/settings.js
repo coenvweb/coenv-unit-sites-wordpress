@@ -30,6 +30,10 @@ jQuery(function ($) {
         showInput: true,
         showAlpha: true,
         clickoutFiresChange: true,
+        showSelectionPalette: true,
+        showPalette: true,
+        palette: [ ],
+        localStorageKey: "maxmegamenu.themeeditor",
         change: function(color) {
             if (color.getAlpha() === 0) {
                 $(this).siblings('div.chosen-color').html('transparent');
@@ -38,6 +42,14 @@ jQuery(function ($) {
             }
         }
     });
+
+    $(".mega-copy_color span").live('click', function() {
+        var from = $(this).parent().parent().children(":first").find("input");
+        var to = $(this).parent().parent().children(":last").find("input");
+
+        $(to).spectrum("set", from.val());
+        to.siblings('div.chosen-color').html(from.siblings('div.chosen-color').html());
+    })
 
     $(".confirm").on("click", function() {
         return confirm(megamenu_settings.confirm);
@@ -63,10 +75,10 @@ jQuery(function ($) {
       dropdownCssClass: 'tpx-select2-drop',
       minimumResultsForSearch: -1,
       formatResult: function(icon) {
-        return '<i class="dashicons ' + $(icon.element).attr('data-class') + '"></i>';
+        return '<i class="' + $(icon.element).attr('data-class') + '"></i>';
       },
       formatSelection: function (icon) {
-        return '<i class="dashicons ' + $(icon.element).attr('data-class') + '"></i>';
+        return '<i class="' + $(icon.element).attr('data-class') + '"></i>';
         }
     });
 
