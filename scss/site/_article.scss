@@ -42,13 +42,13 @@ h1 {
 //aggregate news titles
 h2 {
     @include encode;
-    @include font-size(18);
-    @include line-height(22);
+    @include font-size(20);
+    @include line-height(24);
     color: $black;
 
     @media #{$medium-up} {
-        @include font-size(24);
-        @include line-height(28);
+        @include font-size(26);
+        @include line-height(30);
     }
     
     a {
@@ -61,22 +61,23 @@ h2 {
 .article__header {
 
 border-bottom: 1px solid $border;
-padding-bottom: 1rem;
+padding-bottom: 0.5rem;
 margin-bottom: 1rem;
 
 .article__meta {
     margin-bottom: 0.25rem;
 
     .post-info {
+        @include uni_reg;
         text-transform: none;
-        letter-spacing: 0rem;
-        font-size: rem-calc(14);
-        padding-bottom: 0.25rem;
-        font-weight: normal; 
+        letter-spacing: 0.5px;
+        font-size: rem-calc(15);
+        font-weight: 600; 
     }
 
     .article__categories {
         display: inline-block;
+        margin-left: 0.25rem;
     } // .article__categories
 
 } // .article__meta
