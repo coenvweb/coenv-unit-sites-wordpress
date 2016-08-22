@@ -66,11 +66,11 @@ aside#sidebar div {
         line-height: 2.5rem;
         &:after {
             content: '';
-            height: 0.75rem;
+            height: 1rem;
             width: 100%;
             display: block;
             background: url('../assets/img/pcc_widget_div.svg');
-            background-size: cover;
+            background-size: 100% 100%;
             background-repeat: no-repeat;
         }
     }
