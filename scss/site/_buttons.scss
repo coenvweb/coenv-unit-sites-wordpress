@@ -12,7 +12,7 @@
         text-transform: uppercase;
         text-align: left;
         color: $white;
-        border-bottom: 1px solid $uw-purple;
+        border-bottom: 2px solid $uw-purple;
         overflow: hidden;
 
         &:after {
@@ -43,6 +43,9 @@
         &:hover {
             background: rgba(0,0,0,0.6);
             color: #fff;
+            &:before {
+                background-color: $uw-purple;
+            }
         }
         
         .dark {
