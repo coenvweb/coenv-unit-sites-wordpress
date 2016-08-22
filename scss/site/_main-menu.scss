@@ -4,10 +4,10 @@
     border-bottom: #d7dee5 1px solid;
     min-height: rem-calc(60);
     padding-top: rem-calc(8);
-    
+
     .top-bar-section {
         display: inline-block;
-        
+
         #menu-main-menu { 
 
             .first-sub {
@@ -103,9 +103,9 @@
                 }
                 
                 & > a {
-                    padding: 0 4rem;
+                    padding: 0 5.5rem;
                     @media #{$medium-only} {
-                        padding: 0 2rem;
+                        padding: 0 2.5rem;
                     }
                 }
                 
