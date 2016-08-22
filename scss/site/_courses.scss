@@ -19,9 +19,6 @@
     }
 }
 .page-template-courses {
-    .entry-content {
-        margin-left: 1rem;
-    }
     .filters {
         padding-top: 1rem;
         .button {
@@ -33,7 +30,7 @@
                 background-color: #cccccc;
             }
             &:hover {
-                color: $black;
+                color: $black !important;
             }
         }
         .active {
