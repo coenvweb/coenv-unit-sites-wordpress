@@ -80,11 +80,18 @@ aside#sidebar {
                     border-right: none;
 
                     a {
-                        padding-left: 3rem !important;
+                        padding-left: 2.5rem !important;
                     }
                     a.active {
                         &:before {
                             display: none;
+                        }
+                    }
+                    ul {
+                        li {
+                            a {
+                                padding-left: 3rem !important;
+                            }
                         }
                     }
                 }
