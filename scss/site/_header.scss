@@ -18,13 +18,13 @@
     
     h1 {
         color: $white!important;
-        margin-top: rem-calc(15);
+        margin-top: rem-calc(10);
         font-size: rem-calc(32)!important;
         text-align: left;
         @media #{$small-up} {
             text-align: center;
-            font-size: rem-calc(12)!important;
-            line-height: rem-calc(22);
+            font-size: rem-calc(16)!important;
+            line-height: rem-calc(26);
         }
     }
     .right-small, .left-small {
@@ -89,6 +89,7 @@
         width: rem-calc(100);
         height: rem-calc(68);
         margin-right: rem-calc(20);
+        margin-bottom: -1px;
         vertical-align: middle;
         span {
             @extend .visuallyhidden;
@@ -113,8 +114,8 @@
         list-style: none;
     }
     .uw-name {
-        width: 170px;
-        height: 12px;
+        width: 225px;
+        height: 17px;
         fill: $white;
     }
     .college-name {
