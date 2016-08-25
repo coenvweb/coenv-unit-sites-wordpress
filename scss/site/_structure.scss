@@ -49,13 +49,16 @@ figcaption {
 }
 
 .panel {
-    background-color: $white;
-    color: $uw-purple;
+    background-color: $bg-light;
+    color: $black;
     float: none !important;
+    overflow: hidden;
     margin-top: 1rem;
     padding-left: 0;
+    font-size: 1.1rem;
+    a {
+        color: $black;
+
+    }
 }
-
-
-
 

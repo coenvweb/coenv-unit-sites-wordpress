@@ -125,7 +125,6 @@ div.news {
 	margin-bottom: 4rem;
 }
 .panel {
-	float:left;
 	width: 100%;
 	p:first-child {
 		float:left;
@@ -137,9 +136,10 @@ div.news {
 		text-align: right;
 	}
 	.button {
-	margin-bottom: 0;
-	padding: .5rem;
+        margin-bottom: 0;
+        padding: .5rem;
 	}
+    margin-bottom: 0rem;
 }
 p span.intro {
 	font-size: 1.4rem;
