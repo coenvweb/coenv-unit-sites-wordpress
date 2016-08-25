@@ -45,16 +45,13 @@ aside#sidebar {
             border-right: 1px solid #ccc;
             margin: 0;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            @media #{$large-up} {
-                font-size: 1.25rem;
-            }
+            font-size: 1.25rem;
             a {
                 @include encode;
                 position: relative;
-                padding: 0.5rem 1rem 0.5rem 2rem;
+                padding: 1rem 1rem 1rem 2rem;
                 display: block;
-                line-height: 2rem;
+                line-height: 1.5rem;
                 color: #000;
             }
             a.active {
@@ -62,10 +59,7 @@ aside#sidebar {
                 &:before {
                     content: url('../assets/img/pcc_section_div_flat_black.svg');
                     position: absolute;
-                    top: -15px;
-                    @media #{$medium-only} {
-                        top: -13px;
-                    }
+                    top: -13px;
                     left: 2rem;
                     width: 4rem;
                 }
@@ -78,6 +72,7 @@ aside#sidebar {
                     border-bottom: none;
                     border-left: none;
                     border-right: none;
+                    font-size: 1.1rem;
 
                     a {
                         padding-left: 2.5rem !important;
@@ -90,7 +85,7 @@ aside#sidebar {
                     ul {
                         li {
                             text-transform: none;
-                            font-size: 1rem;
+                            font-size: 0.95rem;
                             a {
                                 padding-left: 3rem !important;
                             }
