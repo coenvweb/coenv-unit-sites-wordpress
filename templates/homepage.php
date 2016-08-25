@@ -23,7 +23,7 @@ Template Name: Homepage
             );
         $feature_query = new WP_Query( $feature_args ); ?>
         <div class="row homepage-features">
-            <h1>Climate Science, Collaboration, and Community</h1>
+            <h1 class="columns">Climate Science, Collaboration, and Community</h1>
             <?php
             # The Loop
             while ( $feature_query->have_posts() ) :

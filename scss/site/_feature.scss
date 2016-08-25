@@ -9,9 +9,11 @@
         }
         @media #{$medium-only} {
             font-size: rem-calc(36);
+            line-height: 2.25rem;
         }
         @media #{$small-only} {
             font-size: rem-calc(28);
+            line-height: 1.75rem;
         }
     }
 }
