@@ -152,7 +152,6 @@
             background-repeat: no-repeat;
             margin-bottom: 1rem;
             font-size: rem-calc(24);
-            font-weight: bold;
             letter-spacing: 0.5px;
             @media #{$medium-only} {
                 font-size: rem-calc(18);
@@ -236,7 +235,6 @@
                     @media #{$small-only} {
                         font-size: rem-calc(11);
                     }
-                    font-weight: 800;
                 }
 
 
@@ -414,7 +412,6 @@
                 letter-spacing: 0.5px;
                 @include uni_reg;
                 font-size: rem-calc(15);
-                font-weight: bold;
 
             }
             p {
@@ -459,7 +456,6 @@
                     @include encode;
                     margin-bottom: 0;
                     font-size: .9rem;
-                    font-weight: 600;
                 }
                 .title {
                     @include uni;
