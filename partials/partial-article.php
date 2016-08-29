@@ -21,8 +21,9 @@
                             }
                         }
                     ?>
+                    |
                     <div class="article__categories">
-                        | <?php echo implode(', ', $more_terms_arr) ?>
+                        <?php echo implode(', ', $more_terms_arr) ?>
                     </div>
                 </div>
             </div>

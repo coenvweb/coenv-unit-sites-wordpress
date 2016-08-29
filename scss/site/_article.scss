@@ -61,7 +61,7 @@ h2 {
 
 border-bottom: 1px solid $border;
 padding-bottom: 0.5rem;
-margin-bottom: 1rem;
+margin-bottom: 1.5rem;
 
 .article__meta {
     margin-bottom: 0.25rem;
@@ -70,12 +70,15 @@ margin-bottom: 1rem;
         @include uni_reg;
         text-transform: none;
         letter-spacing: 0.5px;
-        font-size: rem-calc(15);
+        font-size: rem-calc(16);
+        time {
+            margin-right: 0.5rem;
+        }
     }
 
     .article__categories {
         display: inline-block;
-        margin-left: 0.25rem;
+        margin-left: 0.5rem;
     } // .article__categories
 
 } // .article__meta
@@ -86,6 +89,7 @@ margin-bottom: 1rem;
     @extend .clearfix;
     
     h2, h3, h4, h5, h6 {
+        @include uni_reg;
         a {
             color: $black;
             text-decoration: underline;
