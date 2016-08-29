@@ -52,6 +52,9 @@
         position: relative;
         display: block;
         &:after {
+            @media #{$small-only} {
+                display: none;
+            }
             content: "";
             position: absolute;
             top: 0;
@@ -271,7 +274,6 @@
 
     .programs {
         padding-top: 1.5rem;
-        border-bottom: 2px solid $border;
         margin-bottom: 1.5rem;
 
         .solid-widget {

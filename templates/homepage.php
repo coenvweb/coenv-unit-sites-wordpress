@@ -68,7 +68,6 @@ Template Name: Homepage
         <div class="widget-area home-columns">
             <?php dynamic_sidebar( 'home-columns' ); ?>
         </div>
-        <hr />
     </div>
 </div>
 <?php endif; ?>
