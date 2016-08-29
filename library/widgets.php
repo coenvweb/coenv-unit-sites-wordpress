@@ -836,9 +836,9 @@ class coenv_course_archive extends WP_Widget {
             if (!is_front_page()) {
                 echo '<h4 class="course_archive">' . $title . '</h4>';
             }
-            if (isset($_GET['term'])) {
-                $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-                $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
+            if (get_query_var('course_quarter')) {
+                $coenv_cat_1 = 'course_quarter';
+                $coenv_cat_term_1 = get_query_var('course_quarter');
             } else {
                 $current_quarters = get_field('quarter_to_display');
                 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
@@ -855,7 +855,7 @@ class coenv_course_archive extends WP_Widget {
 
             coenv_base_cat_filter('course_quarter',$coenv_cat_term_1)
             ?>
-     
+
         <?php
         echo $after_widget;
     echo "</div>";

@@ -78,6 +78,9 @@ aside#sidebar div {
         @include encode;
         margin-bottom: 0.5rem;
     }
+    p, ul, ol {
+        font-size: rem-calc(16);
+    }
     span.button {
         margin-bottom: 0rem;
         a {

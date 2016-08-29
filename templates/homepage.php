@@ -155,7 +155,7 @@ $wp_query = new WP_Query( $home_args );
 
             foreach ($more_terms as &$term) {
                 if ($term->slug != 'uncategorized') {
-                    $more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                    $more_terms_arr[] = '<a href="/about/news/category/' . $term->slug . '">' . $term->name . '</a>';
                 }
             }
             $more_terms_str = ' | ' . implode(', ', $more_terms_arr);

@@ -46,7 +46,7 @@
         ul {
             list-style: none;	
         }
-    }    
+    }
 
     .hero-area {
         position: relative;
@@ -275,6 +275,7 @@
     .programs {
         padding-top: 1.5rem;
         margin-bottom: 1.5rem;
+        border-bottom: 1px solid $border;
 
         .solid-widget {
             position: relative;

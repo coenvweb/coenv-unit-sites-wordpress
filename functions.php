@@ -51,6 +51,9 @@ require_once('library/publications.php');
 // Shortcodes functions
 require_once('library/shortcodes.php');
 
+// Pretty links for custom content types
+require_once('library/rewrites.php');
+
 // Need to be sorted into includes
 
 
@@ -236,15 +239,15 @@ $cats = get_categories($cats_args);
     if ($cats) {
         if ($tax == 'course_quarter') {
             echo '<label for="select-cat">Select a quarter:</label>';
-            echo '<div class="" data-url="">';
+            echo '<div class="" data-url="'.get_the_permalink().'">';
         };
         echo '<select name="select-category" class="select-category" id="select-cat">';
         if ($tax != 'course_quarter') {
-          echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
+          echo '<option class="level-0" value="">All ' . $tax_str . '</option>';
         }
         foreach($cats as $cat) {
             $selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
-            echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+            echo '<option value="' . $tax . '/' . $cat->slug . '/"' . $selected . '>' . $cat->name . '</option>';
         }
         echo '</select>';
         if ($tax == 'course_quarter') {
@@ -261,7 +264,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
     $ref_month = '';
     $monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'   => $post_type));
     echo '<select name="select-category" class="select-category">';
-    echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
+    echo '<option value="">All Dates</option>';
     if( $monthly->have_posts() ) :
         while( $monthly->have_posts() ) : $monthly->the_post();
             if( get_the_date('mY') != $ref_month ) {
@@ -273,7 +276,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
                 } else {
                     $selected = '';
                 }
-                echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+                echo '<option value="coenv-year/' . $year_num . '/coenv-month/' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
                // echo "\n".get_the_date('F Y');
                 $ref_month = get_the_date('mY');
                 $counter = 0;

@@ -6,16 +6,17 @@ Template Name: Courses Page
 /*
  * Query variables
  */
-
 // Categories
-if (isset($_GET['tax'])) {
-    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-}
-if (isset($_GET['term'])) {
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+if(isset($wp_query->query_vars['course_quarter'])){
+    $coenv_cat_1 = 'course_quarter';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['course_quarter']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'course_quarter');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
+
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $current_quarters = get_field('quarter_to_display');
 $qtr_term_0 = get_term_by('id', $current_quarters[0], 'course_quarter');
@@ -28,6 +29,9 @@ if (empty($coenv_cat_1)) {
     $coenv_cat_term_1_arr = $qtr_term_0;
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 }
+
+$courses_page = get_post(COURSES_PARENT_ID);
+
 ?>
 <?php get_header(); ?>
 <div class="row">
@@ -37,7 +41,7 @@ if (empty($coenv_cat_1)) {
 		    <h1 class="article__title"><?php the_title(); ?></h1>
             
             <div class="row filters">
-                <div class="large-12 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="course_quarter">
+                <div class="large-12 columns" data-url="<?php the_permalink() ?>" data-cat="course_quarter">
                     <?php
 
                     $cats_args  = array(
@@ -49,6 +53,7 @@ if (empty($coenv_cat_1)) {
                         'offset' => 0
                     );
                     $cats = get_terms($cats_args);
+                    $perma = get_the_permalink();
                     if ($cats) {
                         echo '<div class="show-for-medium-up">';
                         $old_cats = [];
@@ -57,11 +62,11 @@ if (empty($coenv_cat_1)) {
                             $selected = $cat->slug == $coenv_cat_term_1 ? ' active' : '';
                             if ($current_quarters[0] == $cat->term_id) {
                                 $old_cat_selected = $old_cats[$i]->slug == $coenv_cat_term_1 ? ' active' : '';
-                                echo '<a class="button' . $old_cat_selected . '" href="?tax=course_quarter&term=' . $old_cats[$i]->slug . '">' . $old_cats[$i]->name . '</a>';
-                                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                                echo '<a class="button' . $old_cat_selected . '" href="'.$perma.'course_quarter/' . $old_cats[$i]->slug . '/">' . $old_cats[$i]->name . '</a>';
+                                echo '<a class="button' . $selected . '" href="'.$perma.'course_quarter/' . $cat->slug . '/">' . $cat->name . '</a>';
                                 $new_cats = true;
                             } elseif (isset($new_cats)){
-                                echo '<a class="button' . $selected . '" href="?tax=course_quarter&term=' . $cat->slug . '">' . $cat->name . '</a>';
+                                echo '<a class="button' . $selected . '" href="'.$perma.'course_quarter/' . $cat->slug . '/">' . $cat->name . '</a>';
                             } else {
                                 $old_cats[]= $cat;
                                 $i++;
@@ -86,7 +91,7 @@ if (empty($coenv_cat_1)) {
 		$query_args = array(
 			'post_type'	=> 'courses',
 			'post_status' => 'publish',
-			'posts_per_page' => -1,   
+			'posts_per_page' => -1,
             'meta_key' => 'course_acronym',
             'orderby' => 'meta_value',
             'order' => 'ASC',
@@ -95,7 +100,7 @@ if (empty($coenv_cat_1)) {
 
 		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
-			$query_args['taxonomy'] = $coenv_cat_1;
+			$query_args['taxonomy'] = 'course_quarter';
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 
@@ -138,7 +143,7 @@ if (empty($coenv_cat_1)) {
         }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | <a href="?tax=course_quarter&term='. $terms[0]->slug . '">' . $quarter_name . ' ' . $course_year . '</a>' . (isset($course_categories) ? ' | ' : '');
+        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | <a href="">' . $quarter_name . ' ' . $course_year . '</a>' . (isset($course_categories) ? ' | ' : '');
         $counter = 0;
         if($course_categories) {
             foreach($course_categories as $category) {

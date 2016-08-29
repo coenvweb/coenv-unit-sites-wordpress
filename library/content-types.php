@@ -38,7 +38,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    'rewrite' => array('slug' => 'education/quarterly-climate-courses/courses', 'with_front' => false),
+    'rewrite' => array('slug' => 'education/quarterly-climate-courses', 'with_front' => false),
   'menu_icon' => 'dashicons-welcome-learn-more',
     )
   );
@@ -56,10 +56,8 @@ function hide_editor() {
 
 } 
 
-define( 'FACULTY_PAGE_PARENT_ID', '31' );
-define( 'BLOG_PAGE_PARENT_ID', '3031' );
-define( 'DATASET_PAGE_PARENT_ID', '104' );
 define( 'NEWS_PARENT_ID', '3031' );
+define( 'COURSE_PARENT_ID', '3473' );
  
  
 /**
