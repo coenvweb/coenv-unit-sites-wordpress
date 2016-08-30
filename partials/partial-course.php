@@ -43,8 +43,8 @@
             }
         echo '</ul>';
     echo '</div>';
+    echo '<h2 class="course_head">Course Description</h2>';
     echo '<div class="course-description">';
-        echo '<h2 class="course_head">Course Description</h2>';
         echo get_field('course_description');
         if (get_field('course_website') ) {
             echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';

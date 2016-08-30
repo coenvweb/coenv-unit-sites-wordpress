@@ -18,6 +18,7 @@
         }
     }
 }
+
 .page-template-courses {
     .filters {
         padding-top: 1rem;
@@ -81,6 +82,7 @@
     }
 
     .course-description {
+        padding-top: 0.5rem;
         p, ul, ol {
             font-size: rem-calc(16);
         }
@@ -99,22 +101,21 @@
             @include encode;
             margin-left: 0rem;
             padding: 0.5rem;
+            padding-top: 0.75rem;
             list-style-type: none;
             li {
-                font-size: 1.1rem;
+                display: table;
                 margin-bottom: 0.5rem;
                 clear: both;
                 overflow: hidden;
                 .meta_label {
                     display: inline-block;
                     margin-right: 1rem;
+                    margin-left: 1rem;
+                    width: 8.5rem;
                     @media #{$small-only} {
-                        font-size: 1rem;
-                        width: 34%;
+                        margin-left: 0.5rem;
                         margin-right: 0.5rem;
-                    }
-                    @media #{$medium-up} {
-                        width: 25%;
                     }
                     height: 100%;
                     float: left;
@@ -126,12 +127,8 @@
                     height: 100%;
                     float: left;
                     text-align: left;
-                    @media #{$small-only} {
-                        width: 55%;
-                    }
                 }
             }
         }
     }
 }
-
