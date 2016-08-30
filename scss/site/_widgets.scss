@@ -200,8 +200,9 @@ aside#sidebar div {
                 color: $black;
             }
         }
-        p {
+        p, ul, ol {
             margin-bottom: 0;
+            font-size: rem-calc(16);
         }
     }
     .widget_links {
