@@ -143,7 +143,7 @@ $courses_page = get_post(COURSES_PARENT_ID);
         }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<span class="acro-quarter">' . get_field('course_acronym') . ' | <a href="">' . $quarter_name . ' ' . $course_year . '</a>' . (isset($course_categories) ? ' | ' : '');
+        echo '<span class="acro-quarter"><p>' . get_field('course_acronym') . '</p> | <p><a href="">' . $quarter_name . ' ' . $course_year . '</a></p> <p>' . (isset($course_categories) ? '   |   ' : '');
         $counter = 0;
         if($course_categories) {
             foreach($course_categories as $category) {
@@ -154,16 +154,17 @@ $courses_page = get_post(COURSES_PARENT_ID);
                 $counter++;
             }
         }
-        echo '</span>';
+        echo '</p></span>';
         unset($course_categories);
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
-            
-        if (isset($instructors)) {
-            echo '<p class="credits-instructor">Credits: ' . get_field('number_of_credits') . ' | Instructor(s): ' . $instructors . '</p>';
-            unset ($instructors);
-        } else {
-            echo '<p class="credits-instructor">Credits: ' . get_field('number_of_credits');
-        }
+        echo '<div class="course_meta">';
+            echo '<p class="credits">Credits: ' . get_field('number_of_credits') . '</p>';
+            echo " | ";
+            if (isset($instructors)) {
+                echo '<p class="instructor">Instructor(s): ' . $instructors . '</p>';
+                unset ($instructors);
+            }
+        echo '</div>';
         echo '<div class="course-link"><a class="button" href="' . get_the_permalink() .'">See Details</a></div>';
         echo '</li>';
 		endwhile;

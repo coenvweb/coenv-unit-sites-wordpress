@@ -55,7 +55,7 @@
                 @include shadow;
 
                 a {
-                    @include encode;
+                    @include encode_med;
                     font-size: rem-calc(13);
                     line-height: 3rem;
                     text-transform: none;

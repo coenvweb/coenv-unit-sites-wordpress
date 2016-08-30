@@ -24,8 +24,6 @@
                 width: 5.5rem;
             }
         }
-
-
     }
 
     // Homepage Widgets
@@ -412,9 +410,9 @@
                 margin-bottom: 1.5rem;
             }
             .post-meta {
-                letter-spacing: 0.5px;
-                @include uni_reg;
-                font-size: rem-calc(16);
+                @include encode_med;
+                font-size: rem-calc(15);
+                margin-bottom: 0.5rem;
                 time {
                     margin-right: 0.75rem;
                 }

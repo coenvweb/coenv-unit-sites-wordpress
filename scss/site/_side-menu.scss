@@ -47,7 +47,7 @@ aside#sidebar {
             text-transform: uppercase;
             font-size: 1.25rem;
             a {
-                @include encode;
+                @include encode_med;
                 position: relative;
                 padding: 1rem 1rem 1rem 2rem;
                 display: block;
