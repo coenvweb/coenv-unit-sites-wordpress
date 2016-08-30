@@ -151,6 +151,7 @@ $wp_query = new WP_Query( $home_args );
         // Get categories
         $more_terms = wp_get_post_terms(get_the_id(), 'category');
         if (!empty($more_terms)) {
+            echo "|";
             $more_terms_arr = array();
 
             foreach ($more_terms as &$term) {
@@ -158,13 +159,13 @@ $wp_query = new WP_Query( $home_args );
                     $more_terms_arr[] = '<a href="/about/news/category/' . $term->slug . '">' . $term->name . '</a>';
                 }
             }
-            $more_terms_str = ' | ' . implode(', ', $more_terms_arr);
+            $more_terms_str = implode(', ', $more_terms_arr);
 
         } else {
             $more_terms_str = '';
         }
         $more_terms = "";
-        echo $more_terms_str;
+        echo '<div class="post_cat">'.$more_terms_str.'</div>';
         echo '</div>';
         echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
         echo '<p>' . the_advanced_excerpt('length=30&finish=sentence&') . '</p>';

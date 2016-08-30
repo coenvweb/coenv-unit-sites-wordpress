@@ -414,7 +414,14 @@
             .post-meta {
                 letter-spacing: 0.5px;
                 @include uni_reg;
-                font-size: rem-calc(15);
+                font-size: rem-calc(16);
+                time {
+                    margin-right: 0.75rem;
+                }
+                .post_cat {
+                    display: inline;
+                    margin-left: 0.75rem;
+                }
 
             }
             p {
