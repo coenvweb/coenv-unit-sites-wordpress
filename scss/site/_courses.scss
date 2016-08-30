@@ -77,24 +77,57 @@
 
 .course {
     .course_title {
+        padding-bottom: 0.5rem;
     }
 
-    .course_acro {
-        font-size: 1.5rem;
+    .course-description {
+        p, ul, ol {
+            font-size: rem-calc(16);
+        }
+    }
+
+    h2.course_head {
+        border-bottom: 1px solid $black;
+        margin-bottom: 0;
+        padding-bottom: 0.5rem;
     }
 
     .course_details {
+
         .course_meta {
+            background-color: $bg-light;
             @include encode;
             margin-left: 0rem;
+            padding: 0.5rem;
             list-style-type: none;
-            font-size: 1.1rem;
             li {
-                display: inline-block;
-                &:not(:last-child) {
-                    &:after {
-                        content: " | ";
-                        padding: 0rem 0.5rem;
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+                clear: both;
+                overflow: hidden;
+                .meta_label {
+                    display: inline-block;
+                    margin-right: 1rem;
+                    @media #{$small-only} {
+                        font-size: 1rem;
+                        width: 34%;
+                        margin-right: 0.5rem;
+                    }
+                    @media #{$medium-up} {
+                        width: 25%;
+                    }
+                    height: 100%;
+                    float: left;
+                    text-align: right;
+                    @include encode_med;
+                }
+                .meta_info {
+                    display: inline-block;
+                    height: 100%;
+                    float: left;
+                    text-align: left;
+                    @media #{$small-only} {
+                        width: 55%;
                     }
                 }
             }

@@ -7,12 +7,13 @@
     }
     $quarter =  $terms[0]->name;
     $rows = get_field('instructor(s)');
-    echo '<div class="course_acro">';
-        echo get_field('course_acronym') . ' | ' . $quarter;
-    echo '</div>'; 
     echo '<h1 class="course_title">' . get_the_title() . '</h1>';
     echo '<div class="course_details">';
+        echo '<h2 class="course_head">Course Details</h2>';
         echo '<ul class="course_meta">';
+            if(get_field('course_acronym')) {
+                echo '<li><span class="meta_label">Acronym</span> <span class="meta_info">' . get_field('course_acronym') . '</span></li>';
+            }
             if( have_rows('instructor(s)') ) {
                 // loop through the rows of data
                 while ( have_rows('instructor(s)') ) : the_row();
@@ -23,17 +24,27 @@
                         $instructors[] = get_sub_field('instructor_name');
                     }
                 endwhile;
-                echo '<li><span class="meta_label">Instructor(s):</span> ' . implode(', ',$instructors) . '</li>';
+                echo '<li><span class="meta_label">Instructor(s)</span> <span class="meta_info">' . implode(', ',$instructors) . '</span></li>';
             }
-            echo '<li><span class="meta_label">Credits:</span> ' . get_field('number_of_credits') . '</li>';
-            echo '<li><span class="meta_label">Meeting times:</span> ' . get_field('class_meeting_times') . '</li>';
-            echo '<li><span class="meta_label">Location:</span> ' . get_field('location') . '</li>';
+            if($quarter) {
+                echo '<li><span class="meta_label">Quarter</span> <span class="meta_info">' . $quarter . '</span></li>';
+            }
+            if(get_field('number_of_credits')) {
+                echo '<li><span class="meta_label">Credits</span> <span class="meta_info">' . get_field('number_of_credits') . '</span></li>';
+            }
+            if(get_field('class_meeting_times')) {
+                echo '<li><span class="meta_label">Meeting Times</span> <span class="meta_info">' . get_field('class_meeting_times') . '</span></li>';
+            }
+            if(get_field('location')) {
+                echo '<li><span class="meta_label">Location</span> <span class="meta_info">' . get_field('location') . '</span></li>';
+            }
             if($course_categories) {
-                echo '<li><span class="fulfillments">' . implode(', ', $course_categories) . '</span></li>';
+                echo '<li><span class="meta_label">Fullfills</span> <span class="meta_info">' . implode(', ', $course_categories) . '</span></li>';
             }
         echo '</ul>';
     echo '</div>';
     echo '<div class="course-description">';
+        echo '<h2 class="course_head">Course Description</h2>';
         echo get_field('course_description');
         if (get_field('course_website') ) {
             echo '<div class="course-link"><a class="button" href="' . get_field('course_website') .'" target="_blank">View course website</a></div>';

@@ -159,8 +159,8 @@ $courses_page = get_post(COURSES_PARENT_ID);
 		echo '<a href="' . get_the_permalink() . '"><h4>' . get_the_title() . '</h4></a>';
         echo '<div class="course_meta">';
             echo '<p class="credits">Credits: ' . get_field('number_of_credits') . '</p>';
-            echo " | ";
             if (isset($instructors)) {
+                echo " | ";
                 echo '<p class="instructor">Instructor(s): ' . $instructors . '</p>';
                 unset ($instructors);
             }

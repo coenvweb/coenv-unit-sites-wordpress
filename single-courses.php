@@ -15,10 +15,6 @@
 
 			<?php endif ?>
 			</div>
-			<footer>
-				<?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
-				<p><?php the_tags(); ?></p>
-			</footer>
 			<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 				<div id="after-content" class="after-content widget-area" role="complementary">
 					<?php dynamic_sidebar( 'after-content' ); ?>
