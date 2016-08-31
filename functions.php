@@ -240,7 +240,9 @@ $cats = get_categories($cats_args);
         if ($tax == 'course_quarter') {
             echo '<label for="select-category">Select a quarter:</label>';
             echo '<div class="" data-url="'.get_the_permalink().'">';
-        };
+        } else {
+            echo '<label for="select-category">Select a category:</label>';
+        }
         echo '<select name="select-category" class="select-category" id="select-category">';
         if ($tax != 'course_quarter') {
           echo '<option class="level-0" value="">All ' . $tax_str . '</option>';
