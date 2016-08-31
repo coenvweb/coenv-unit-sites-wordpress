@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 columns" role="main">
+	<div class="small-12 columns" role="main" id="main-col">
 	
     <?php if ( have_posts() ) : ?>
         <div class="search-filter">

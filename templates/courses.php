@@ -35,7 +35,7 @@ $courses_page = get_post(COURSES_PARENT_ID);
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main" id="main-col">
 		<div class="entry-content">
         <header class="article__header">
 		    <h1 class="article__title"><?php the_title(); ?></h1>

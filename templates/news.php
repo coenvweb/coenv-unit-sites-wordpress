@@ -32,7 +32,7 @@ if(isset($wp_query->query_vars['category'])){
 
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main">
+	<div class="small-12 medium-push-4 medium-8 large-push-3 large-9 columns" role="main" id="main-col">
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">

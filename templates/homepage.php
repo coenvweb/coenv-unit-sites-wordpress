@@ -4,7 +4,7 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="container">
+<div class="container" id="main-col">
 <div class="fullwidth hero-area">
     <div class="nav-bar-divider section-div show-for-medium-up">
     </div>
