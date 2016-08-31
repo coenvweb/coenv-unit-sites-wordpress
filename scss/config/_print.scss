@@ -9,31 +9,115 @@
     .profiles {
         page-break-inside: avoid;
     }
-    
-    .top-bar-menu {
-        display: inline-flex!important;
-    }
-    
+
     .title-row {
         zoom: 85%;
     }
-    
+
     .widget_img {
         max-width: 300px;
     }
-    
+
     div, p, a, .button {
         margin: 0;
+        &:before {
+            display: none;
+        }
+        &:after {
+            display: none;
+        }
     }
-    
-    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters {
+
+    .container {
+        .fullwidth {
+            .row {
+                &:before {
+                    display: none;
+                }
+                &:after {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .home {
+        .programs {
+            .medium-4 {
+                width: 33%;
+                h4 {
+                    color: $white !important;
+                }
+                .widget {
+                    background-color: $bg-dk !important;
+                }
+                .widget_img {
+                    img {
+                        display: none;
+                    }
+                    max-width: 600px;
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+        .teaser-buttons {
+            .small-12 {
+                width: 50% !important;
+                .home_button {
+                    border: 3px solid $uw-purple;
+                }
+            }
+        }
+        .hosted-events {
+            .small-6 {
+                width: 24%;
+            }
+            .widget_img {
+                max-width: 600px;
+            }
+        }
+
+        .widget-events {
+            .event-list {
+                display: block;
+                li {
+                    width: 100% !important;
+                    border: none !important;
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .more-events, .more-news {
+            float: right;
+        }
+
+        .tweet {
+            .media {
+                display: none;
+            }
+        }
+
+    }
+
+    .button {
+        border-bottom: none !important;
+        &:before {
+            display: none !important;
+        }
+    }
+
+    .feature-image, .site-footer, .share, .tab-bar, .side-nav, #sidebar .widget-side, .page-row.mini, .pagination, .filters, .pagination, .section-title, .name, .purple-wedges, .top-bar-menu {
         display: none!important;
     }
-    
+
     .title-row, .post-meta, .unit-contact, .uw-footer, .section-title, .gallery-icon, .wp-caption, .widget_img, .news-meta, .faculty-list-item, .faculty-info, .fac-cats, .fac-terms, .blog-meta, .blog-cats {
         a[href]:after {
             content: none!important;
         }
     }
-               
 }

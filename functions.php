@@ -238,10 +238,10 @@ $cats_args  = array(
 $cats = get_categories($cats_args);
     if ($cats) {
         if ($tax == 'course_quarter') {
-            echo '<label for="select-category">Select a quarter:</label>';
+            echo '<label class="visuallyhidden" for="select-category">Select a quarter:</label>';
             echo '<div class="" data-url="'.get_the_permalink().'">';
         } else {
-            echo '<label for="select-category">Select a category:</label>';
+            echo '<label class="visuallyhidden" for="select-category">Select a category:</label>';
         }
         echo '<select name="select-category" class="select-category" id="select-category">';
         if ($tax != 'course_quarter') {
