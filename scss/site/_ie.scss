@@ -1,3 +1,6 @@
-_:-ms-fullscreen, :root .event-list {
-    display: none;
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .event-list {
+        width: 50%;
+    }
 }
+
