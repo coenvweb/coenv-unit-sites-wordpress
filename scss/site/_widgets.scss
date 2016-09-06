@@ -21,7 +21,7 @@ aside#sidebar div {
         text-align: center;
         flex-direction: column;
         li{
-            flex: auto;
+            flex: 0 1 auto;
             margin: 0.5rem 0rem;
             padding: 0.5rem;
             background-color: $bg-light;
