@@ -1,13 +1,3 @@
-_:-ms-fullscreen, :root .home {
-    .event-list {
-        display: none;
-    }
-}
-
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .ie10{
-        .event-list {
-            width: 50%;
-        }
-    }
+_:-ms-fullscreen, :root .event-list {
+    display: none;
 }
