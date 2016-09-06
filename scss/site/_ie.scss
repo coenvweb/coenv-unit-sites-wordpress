@@ -1,6 +1,29 @@
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    .event-list {
-        width: 50%;
+    .home {
+        //svg afters in homepage dividers
+        .divider {
+            .row {
+                &:after {
+                    width: 8rem;
+                }
+            }
+        }
+
+        //svg after for feature img
+        .feature {
+            .feature-image {
+                &:after {
+                    left: -0.275rem;
+                }
+            }
+        }
+
+
+
     }
+}
+
+_:-ms-lang(x), .event-list {
+    width: 50%;
 }
 
