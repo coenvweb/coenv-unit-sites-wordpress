@@ -25,7 +25,8 @@
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
       
-    <!--[if !IE]><!--><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" /><!--<![endif]-->
+    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
+    <!--[if IE]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/ie.css" /><![endif]-->
       
     <link rel="apple-touch-icon" sizes="57x57" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-60x60.png">
