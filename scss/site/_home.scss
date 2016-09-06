@@ -91,11 +91,11 @@
             @media #{$large-up} {
                 min-height: 20rem;
             }
-            &:after {
+            &:before {
                 content: url('../assets/img/pcc_section_div_flat.svg');
                 position: absolute;
                 width: 12rem;
-                top: 95%;
+                top: 96%;
                 left: -0.25rem;
                 z-index: 100;
 
