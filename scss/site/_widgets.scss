@@ -29,6 +29,7 @@ aside#sidebar div {
             background-color: $bg-light;
             border-bottom: 2px solid $accent;
             margin-bottom: 0.5rem;
+            overflow: hidden;
             position: relative;
             i {
                 @extend .visuallyhidden;
