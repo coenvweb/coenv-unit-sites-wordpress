@@ -2,8 +2,8 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.5
-Stable tag: 2.2.2
+Tested up to: 4.6
+Stable tag: 2.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,10 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.2.3.1 [23/08/2016] =
+
+* Fix: JavaScript fix for themes/plugins that force WordPress to load outdated versions of jQuery (CherryFramework)
 
 = 2.2.3 [15/08/2016] =
 

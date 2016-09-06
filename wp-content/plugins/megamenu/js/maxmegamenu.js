@@ -71,6 +71,7 @@
 
         };
 
+
         var add_animating_class = function(element) {
             var timeout = plugin.settings.effect_speed + parseInt(megamenu.timeout, 10);
 
@@ -81,6 +82,7 @@
             }, timeout );
         }
 
+
         plugin.hideAllPanels = function() {
             $('.mega-toggle-on > a', $menu).each(function() {
                 plugin.hidePanel($(this), false);
@@ -89,17 +91,23 @@
 
 
         plugin.hideSiblingPanels = function(anchor, immediate) {
-            // all open children of open siblings
-            anchor.parent().siblings().find('.mega-toggle-on').addBack().children('a').each(function() {
-                plugin.hidePanel($(this), immediate);
-            });
+            // jQuery 1.7.2 compatibility for themes/plugins that load old versions of jQuery
+            if ( $.fn.addBack !== undefined ) {
+                // all open children of open siblings
+                anchor.parent().siblings().find('.mega-toggle-on').addBack().children('a').each(function() {
+                    plugin.hidePanel($(this), immediate);
+                });
+            } else {
+                // all open children of open siblings
+                anchor.parent().siblings().find('.mega-toggle-on').andSelf().children('a').each(function() {
+                    plugin.hidePanel($(this), immediate);
+                });
+            }
         }
-
 
         plugin.isDesktopView = function() {
             return $(window).width() > plugin.settings.breakpoint;
         }
-
 
         plugin.hideOpenSiblings = function() {
             // desktops, horizontal
@@ -116,7 +124,6 @@
                 return 'animated';
             }
         }
-
 
         plugin.showPanel = function(anchor) {
 
@@ -185,7 +192,6 @@
             anchor.parent().addClass('mega-toggle-on').triggerHandler("open_panel");
         };
 
-
         var openOnClick = function() {
             // hide menu when clicked away from
             $(document).on('click touchstart', function(event) {
@@ -221,7 +227,6 @@
             });
         };
 
-
         var openOnHover = function() {
 
             $('li.mega-menu-item-has-children', menu).not('li.mega-menu-megamenu li.mega-menu-item-has-children', menu).hoverIntent({
@@ -256,7 +261,6 @@
             }
 
         }
-
 
         plugin.keyboard_navigation = function() {
             var tab_key = 9;
@@ -298,7 +302,6 @@
             });
         }
 
-
         plugin.init = function() {
             plugin.settings = $.extend({}, defaults, options);
 
@@ -337,7 +340,6 @@
         plugin.init();
 
     };
-
 
     $.fn.maxmegamenu = function(options) {
         return this.each(function() {
