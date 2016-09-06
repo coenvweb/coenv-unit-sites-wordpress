@@ -20,10 +20,8 @@ aside#sidebar div {
         margin-left: 0rem;
         text-align: center;
         flex-direction: column;
-
-
         li{
-            flex: 1 0 auto !important;
+            flex: auto;
             margin: 0.5rem 0rem;
             padding: 0.5rem;
             background-color: $bg-light;
