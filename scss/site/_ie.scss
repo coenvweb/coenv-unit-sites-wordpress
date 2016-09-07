@@ -36,12 +36,15 @@
             }
         }
     }
-
-    .coenv_base_subnav ul {
-        li {
-            a.active {
-                &:before {
-                    top: -175%;
+    aside#sidebar {
+        .coenv_base_subnav {
+            ul {
+                li {
+                    a.active {
+                        &:before {
+                            top: -175% !important;
+                        }
+                    }
                 }
             }
         }
@@ -51,7 +54,11 @@
         .courses {
             li {
                 &:before {
-                    top: -30%;
+                    top: -37%;
+                    left: 0px;
+                    @media #{$small-only} {
+                        top: -38%;
+                    }
                 }
             }
         }
