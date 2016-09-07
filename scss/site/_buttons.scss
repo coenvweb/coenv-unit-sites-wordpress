@@ -16,7 +16,10 @@
         overflow: hidden;
 
         &:after {
-            content: url('../assets/img/pcc_buttonArrow.svg');
+            font-family: 'foundation-icons';
+            font-size: rem-calc(14);
+            content: "\f10b";
+            color: $uw-gold;
             position: absolute;
             width: 1rem;
             top: 30%;

@@ -19,10 +19,15 @@
         }
     }
 
-    .container {
-        .button {
-            &:after {
-                top: -175%;
+    .no-webgl {
+        .home {
+           .home_button {
+                &:before {
+                    margin-top: -4rem;
+                    @media #{$small-only} {
+                        margin-top: -4.5rem;
+                    }
+                }
             }
         }
     }
