@@ -18,17 +18,25 @@
             }
         }
     }
+}
 
-    .no-webgl {
-        .home {
-           .home_button {
-                &:before {
-                    margin-top: -4rem;
-                    @media #{$small-only} {
-                        margin-top: -4.5rem;
-                    }
+.no-webgl {
+    .home {
+       .home_button {
+            &:before {
+                margin-top: -4rem;
+                @media #{$small-only} {
+                    margin-top: -4.5rem;
                 }
             }
         }
     }
+    .container {
+        .button {
+            &:after {
+                top: -175%;
+            }
+        }
+    }
+
 }
