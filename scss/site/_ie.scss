@@ -57,5 +57,11 @@
             }
         }
     }
+    
+    .read_tweets {
+        &:after {
+            top: 30% !important;
+        }
+    }
 
 }

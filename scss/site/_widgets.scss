@@ -122,8 +122,13 @@ aside#sidebar div {
             }
             &:before {
                 position: absolute;
-                content: url('../assets/img/pcc_section_div_flat.svg');
-                top: -1rem;
+                content: ' ';
+                height: 0.75rem;
+                background-color: $uw-gold;
+                -ms-transform: skewX(-15deg);
+                -webkit-transform: skewX(-15deg);
+                transform: skewX(-15deg);
+                top: -0.5rem;
                 width: 6rem;
                 left: 1rem;
             }
