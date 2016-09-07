@@ -4,12 +4,40 @@
 * Admin class
 */
 
-class Widvis_Admin extends WidVis_Base {
-    
+class WidVis_Admin {
+
+	/**
+	 * @var string
+	 */
+	protected $version;
+	/**
+	 * @var string
+	 */
+	protected $url;
+	/**
+	 * @var string
+	 */
+	protected $textdomain;
+	/**
+	 * @var string
+	 */
+	protected $slug;
+	/**
+	 * @var WidVis_View
+	 */
+	protected $view;
     protected $pages_list;
     protected $categories_list;
-    
-	public function bootstrap() {
+
+	public function __construct($version, $url, $textdomain, $slug, $view){
+		$this->version = $version;
+		$this->url = $url;
+		$this->textdomain = $textdomain;
+		$this->slug = $slug;
+		$this->view = $view;
+	}
+
+	public function run() {
 		
 		// Add all hooks and filters
 		if(is_admin()){
@@ -32,25 +60,24 @@ class Widvis_Admin extends WidVis_Base {
     */
     public function settings_link( $links, $file ) {
 
-        if ( $this->plugin['slug'] == $file ) {
-            $links[] = '<a href="' . admin_url( 'widgets.php' ) . '">' . __( 'Widgets', $this->plugin['textdomain'] ) . '</a>';
+        if ( $this->slug == $file ) {
+            $links[] = '<a href="' . admin_url( 'widgets.php' ) . '">' . __( 'Widgets', $this->textdomain ) . '</a>';
         }
 
         return $links;
     }
-	
+
     /*
 	* Add our custom CSS
 	**/
     public function register_admin_scripts(){
-		wp_enqueue_style( 'widvis-css', $this->plugin['url'].'css/admin.css', array(), $this->plugin['version'] );
+		wp_enqueue_style( 'widvis-css', $this->url.'css/admin.css', array(), $this->version );
 	}
 	
 	/*
 	* Insert admin form in widgets
 	**/
 	public function in_widget_form( $widget, $return, $instance ){
-	
 		$widvis_conditions = array(
 			'action'=>'',
 			'rules'=>array(
@@ -85,10 +112,10 @@ class Widvis_Admin extends WidVis_Base {
 		$vars['pages_list'] = $this->pages_list;
 		$vars['categories_list'] = $this->categories_list;
 		
-		$vars['textdomain'] = $this->plugin['textdomain'];
+		$vars['textdomain'] = $this->textdomain;
 		
-		$this->plugin['view']->render( 'widget-admin.php', $vars );
-		
+		$this->view->render( 'widget-admin.php', $vars );
+
 	}
 	
 	/*
@@ -128,7 +155,7 @@ class Widvis_Admin extends WidVis_Base {
 	* @return bool True or false
 	**/
 	function is_widget_visible( $widget_settings ){
-		global $post, $wp_query;
+		global $post;
 		
 		$action = '';
 		$rules = array();
@@ -212,21 +239,21 @@ class Widvis_Admin extends WidVis_Base {
 				
 			}
 		}
-		
+
 		// Tag
 		if(isset($rules['tag'])){
 			if( in_array('all', $rules['tag']) ){
-				if(is_singular()){ 
+				if(is_tag()){
 					$result = true;
 				}
 			} else {
 				foreach($rules['tag'] as $tag_id){
-					if(is_singular() and has_tag($tag_id) ){ // Check if its a post with this tag
+					if(is_tag($tag_id)){ // Check if its in a tag archive under this tag
 						$result = true;
 						break;
 					}
 				}
-				
+
 			}
 		}
 		
@@ -336,11 +363,10 @@ class Widvis_Admin extends WidVis_Base {
 		$pages = get_pages( $args );
 		
 		if($pages){
-			$list=array();
 			foreach($pages as $page){
 				$holder = (array) $page; // Cast as array
 				if(empty($holder['post_title'])){
-					$holder['post_title'] = __('(No Title)', $this->plugin['textdomain']);
+					$holder['post_title'] = __('(No Title)', $this->textdomain);
 				}
 				$holder['level'] = $level;
 				$flattened_list[] = $holder;
@@ -369,11 +395,10 @@ class Widvis_Admin extends WidVis_Base {
 		$categories = get_categories( $args );
 		
 		if($categories){
-			$list=array();
 			foreach($categories as $category){
 				$holder = (array) $category; // Cast as array
 				if(empty($holder['name'])){
-					$holder['name'] = __('(No Title)', $this->plugin['textdomain']);
+					$holder['name'] = __('(No Title)', $this->textdomain);
 				}
 				$holder['level'] = $level;
 				$flattened_list[] = $holder;
@@ -404,7 +429,7 @@ class Widvis_Admin extends WidVis_Base {
 	* Check if element is in array and return string for use in checkboxes
 	*
 	* @param array $array The haystack.
-	* @param variant $check The needle in the haystack.
+	* @param mixed $check The needle in the haystack.
 	* @param bool $echo On true 'checked="checked"' is echoed, on false it is returned.
 	* @return string The string 'checked="checked"'.
 	*/
@@ -425,7 +450,7 @@ class Widvis_Admin extends WidVis_Base {
 	* Check if element is in array and return string for use in selectboxes
 	*
 	* @param array $array The haystack.
-	* @param variant $check The needle in the haystack.
+	* @param mixed $check The needle in the haystack.
 	* @param bool $echo On true 'selected="selected"' is echoed, on false it is returned.
 	* @return string The string 'selected="selected"'.
 	*/

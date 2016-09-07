@@ -80,12 +80,12 @@
 			<div class="widvis-title"><?php _e('Tags', $textdomain); ?></div>
 			<div class="widvis-body">
 				<p>
-					<input type="checkbox" <?php $widvis->in_array_checked($instance['widvis_conditions']['rules']['tag'], $author->ID) ?> id="<?php echo $widget->get_field_id('widvis_tag_all'); ?>" name="<?php echo $widget->get_field_name('widvis_conditions'); ?>[rules][tag][]" value="all" />
+					<input type="checkbox" <?php $widvis->in_array_checked($instance['widvis_conditions']['rules']['tag'], 'all') ?> id="<?php echo $widget->get_field_id('widvis_tag_all'); ?>" name="<?php echo $widget->get_field_name('widvis_conditions'); ?>[rules][tag][]" value="all" />
 					<label for="<?php echo $widget->get_field_id('widvis_tag_all'); ?>"><?php _e('All Tags', $textdomain); ?></label>
 				</p>
 				<?php foreach($tags as $i=>$tag):?>
 					<p>
-						<input type="checkbox" <?php $widvis->in_array_checked($instance['widvis_conditions']['rules']['tag'], $author->ID) ?> id="<?php echo $widget->get_field_id('widvis_tag_'.$i); ?>" name="<?php echo $widget->get_field_name('widvis_conditions'); ?>[rules][tag][]" value="<?php echo esc_attr($tag->term_id); ?>" />
+						<input type="checkbox" <?php $widvis->in_array_checked($instance['widvis_conditions']['rules']['tag'], $tag->term_id) ?> id="<?php echo $widget->get_field_id('widvis_tag_'.$i); ?>" name="<?php echo $widget->get_field_name('widvis_conditions'); ?>[rules][tag][]" value="<?php echo esc_attr($tag->term_id); ?>" />
 						<label for="<?php echo $widget->get_field_id('widvis_tag_'.$i); ?>"><?php echo esc_attr($tag->name); ?></label>
 					</p>
 				<?php endforeach; ?>
