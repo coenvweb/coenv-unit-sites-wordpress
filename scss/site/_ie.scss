@@ -36,19 +36,6 @@
             }
         }
     }
-    aside#sidebar {
-        .coenv_base_subnav {
-            ul {
-                li {
-                    a.active {
-                        &:before {
-                            top: -175% !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     .page-template-courses {
         .courses {

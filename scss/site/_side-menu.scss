@@ -58,11 +58,16 @@ aside#sidebar {
             a.active {
                 color: $uw-purple;
                 &:before {
-                    content: url('../assets/img/pcc_section_div_flat_black.svg');
+                    content: ' ';
                     position: absolute;
-                    top: -13px;
+                    background-color: $black;
+                    height: 0.5rem;
+                    top: 0px;
                     left: 2rem;
                     width: 4rem;
+                    -ms-transform: skewX(-15deg);
+                    -webkit-transform: skewX(-15deg);
+                    transform: skewX(-15deg);
                 }
             }
             ul {
