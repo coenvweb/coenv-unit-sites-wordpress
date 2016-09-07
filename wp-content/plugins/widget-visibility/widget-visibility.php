@@ -55,7 +55,7 @@ function widvis_service_plugin_headers(){
 }
 
 function widvis_service_plugin_version($plugin){
-    $object = $plugin['plugin_headers']['version'];
+    $object = $plugin['plugin_headers'];
     return $object;
 }
 
