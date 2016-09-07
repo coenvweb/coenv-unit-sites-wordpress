@@ -18,6 +18,11 @@
             }
         }
     }
+    .course_archive {
+        &:after {
+            top: 79%;
+        }
+    }
 }
 
 .no-webgl {
@@ -27,6 +32,26 @@
                 margin-top: -4rem;
                 @media #{$small-only} {
                     margin-top: -4.5rem;
+                }
+            }
+        }
+    }
+
+    .coenv_base_subnav ul {
+        li {
+            a.active {
+                &:before {
+                    top: -175%;
+                }
+            }
+        }
+    }
+
+    .page-template-courses {
+        .courses {
+            li {
+                &:before {
+                    top: -175%;
                 }
             }
         }

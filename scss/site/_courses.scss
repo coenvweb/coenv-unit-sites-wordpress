@@ -5,16 +5,19 @@
     display: inline-block;
     position: relative;
     width: 100%;
+    h4 {
+        margin-bottom: 2rem;
+    }
     &:after {
         position: absolute;
         content: url('../assets/img/pcc_section_div_flat.svg') !important;
         background: none !important;
-        top: 2.05rem;
+        top: 85%;
         width: 7rem !important;
         left: -1px;
         z-index: 100;
         @media #{$small-only} {
-            top: 1.4rem;
+            top: 30%;
         }
     }
 }
