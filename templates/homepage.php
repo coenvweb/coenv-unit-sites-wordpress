@@ -129,6 +129,7 @@ $wp_query = new WP_Query( $home_args );
     <div class="home-news-section clearfix">
         <div class="columns large-8 medium-8 left" style="margin-top: 0; padding-top: 0;">
         <div class="home-section-title">
+            <img src="<?= get_template_directory_uri() . '/assets/img/News_icon.svg' ?>" alt="Newspaper Icon"/>
             <h2 class="news-title">News</h2>
             <a class="more-news button full_button" href="/pcc/about/news">More News</a>
         </div>
@@ -202,6 +203,7 @@ $wp_query = new WP_Query( $home_args );
 <div class="row climate-calendar">
     <div class="columns">
         <div class="home-section-title">
+            <img src="<?= get_template_directory_uri() . '/assets/img/Calendar_icon.svg' ?>" alt="Calendar Icon"/>
             <h2 class="events-title"><div class="calendar"></div>Climate Calendar</h2>
             <a href="/events" id="more_events" class="more-events button full_button" >More Events</a>
         </div>

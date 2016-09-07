@@ -12,11 +12,16 @@
     .nav-bar-divider {
         &:before {
             position: absolute;
-            content: url('../assets/img/pcc_section_div.svg');
-            top: -1%;
+            content: ' ';
+            top: -0.375rem;
             width: 6rem;
+            height: 0.75rem;
             margin-left: auto;
             margin-right: auto;
+            background-color: $uw-gold;
+            -ms-transform: skewX(-15deg);
+            -webkit-transform: skewX(-15deg);
+            transform: skewX(-15deg);
             left: 0;
             right: 0;
             @media #{$small-only} {
@@ -92,20 +97,25 @@
                 min-height: 20rem;
             }
             &:before {
-                content: url('../assets/img/pcc_section_div_flat.svg');
+                content: ' ';
+                background-color: $uw-gold;
+                height: 1.5rem;
                 position: absolute;
                 width: 12rem;
-                top: 96%;
+                bottom: -0.75rem;
                 left: -0.25rem;
                 z-index: 100;
-
+                transform-origin: bottom left;
+                -ms-transform: skew(-15deg, 0deg);
+                -webkit-transform: skew(-15deg, 0deg);
+                transform: skew(-15deg, 0deg);
                 @media #{$medium-only} {
                     width: 10rem;
-                    top: 96%;
                 }
                 @media #{$small-only} {
-                    width: 8rem;
-                    top: 93%;
+                    width: 10rem;
+                    height: 1.25rem;
+                    bottom: -0.675rem;
                 }
 
             }
@@ -164,7 +174,7 @@
             }
             &:after {
                 float: right;
-                display: block;
+                display: inline-block;
                 width: 8%;
                 @media #{$medium-only} {
                     width: 7%;
@@ -361,30 +371,22 @@
         
         margin-top: 1rem;
 
-        .news-title {
-            &:before {
-                display: inline-block;
-                float: left;
-                width: 2.5rem;
-                content: url('../assets/img/News_icon.svg');
-                margin-right: 1rem;
-            }
-        }
-
-        .events-title {
-            &:before {
-                display: inline-block;
-                float: left;
-                width: 2.25rem;
-                content: url('../assets/img/Calendar_icon.svg');
-                margin-right: 1rem;
-            }
-        }
-
         .home-section-title {
             overflow: hidden;
             border-bottom: 1px solid $border;
             margin-bottom: 1rem;
+
+            img {
+                width: 3rem;
+                float: left;
+                margin-right: 1rem;
+                @media #{$medium-only} {
+                    margin-top: 0.5rem;
+                }
+                @media #{$large-up} {
+                    margin-top: 1.25rem;
+                }
+            }
 
             .events-title, .news-title {
                 white-space: nowrap;
@@ -477,9 +479,14 @@
                 }
                 &:before {
                     position: absolute;
-                    content: url('../assets/img/pcc_section_div_purple.svg');
+                    content: '';
+                    background-color: $uw-purple;
+                    -ms-transform: skewX(-15deg);
+                    -webkit-transform: skewX(-15deg);
+                    transform: skewX(-15deg);
                     width: 5rem;
-                    top: -0.75rem;
+                    height: 0.5rem;
+                    top: -0.25rem;
                     left: 0;
                     right: 0;
                     margin: auto;

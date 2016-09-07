@@ -44,9 +44,14 @@ aside#sidebar div {
             }
             &:before {
                 position: absolute;
-                content: url('../assets/img/pcc_section_div_purple.svg');
+                content: ' ';
+                background-color: $uw-purple;
+                -ms-transform: skewX(-15deg);
+                -webkit-transform: skewX(-15deg);
+                transform: skewX(-15deg);
                 width: 5rem;
-                top: -0.75rem;
+                height: 0.5rem;
+                top: -0.25rem;
                 left: 0;
                 right: 0;
                 margin: auto;
