@@ -51,10 +51,7 @@
         .courses {
             li {
                 &:before {
-                    top: -1%;
-                    @media #{$small-only} {
-                        top: -50%;
-                    }
+                    top: -30%;
                 }
             }
         }
