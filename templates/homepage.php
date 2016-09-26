@@ -409,7 +409,7 @@ $posted = array();
                         <?php } ?>
                         </div>
                     <?php } else { ?>
-					<section class="events clearfix">
+					<section class="events medium-3 small-12 columns">
 						<header>
 							<h3><a href="/news-events/events/">Events</a></h3>
 						</header>
