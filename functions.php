@@ -312,3 +312,11 @@ function encodeEmail($result) {
 }
 add_filter( 'the_content', 'remove_plaintext_email', 20 );
 add_filter( 'widget_text', 'remove_plaintext_email', 20 );
+
+function my_mime_types($mime_types){
+    //Adjust the $mime_types, which is an associative array where the key is extension and value is mime type.
+    $mime_types['kml'] = 'application/vnd.google-earth.kml+xml';
+    $mime_types['kmz'] = 'application/vnd.google-earth.kmz';
+    return $mime_types;
+}
+add_filter('upload_mimes', 'my_mime_types', 1, 1);
