@@ -3,36 +3,35 @@
 Template Name: News
 */
 
-$url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
-
 /*
  * Query variables
  */
 
-// Dates
-if(isset($_GET['coenv-year'])){
-$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+// keep track of whether or not this is the index page
+$filtered = false;
 
-// Month needs an offset because php and WordPress calculate dates differently.
-$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+// Dates
+if(isset($wp_query->query_vars['coenv-year'])) {
+    $coenv_year = (int) urlencode(htmlentities($wp_query->query_vars['coenv-year']));
+    $coenv_month = (int) urlencode(htmlentities($wp_query->query_vars['coenv-month']));
+
+    // Month needs an offset because php and WordPress calculate dates differently.
+    $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    $filtered = true;
 } else {
     $coenv_year = $coenv_month = $coenv_date = null;
 }
 
 //Categories
-if(isset($_GET['tax'])){
-    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-}
-if(isset($_GET['term'])){
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+if(isset($wp_query->query_vars['category'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['category']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'category');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
 } else {
     $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
 ?>
-
 
 <?php get_header(); ?>
 <div class="row">
@@ -40,64 +39,136 @@ if(isset($_GET['term'])){
 		<div class="entry-content">
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
+			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
 				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 		 	</div>
 		</div>
 		<hr>
 		<?php
-		/**
-		  * Blog loop
-		  */
 		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $query_args = array(
-			'post_type'	=> 'post',
+        $sticky = get_option('sticky_posts');
+
+        /**
+         * Featured (Sticky) post
+         */
+
+        if($paged <= 1 && $filtered == false) {
+        $featured_args = array(
 			'post_status' => 'publish',
-			'posts_per_page' => 10,
+			'posts_per_page' => 1,
+            'post_type' => 'post',
+            'post__in' => $sticky
+        );
+        $featured_query = new WP_Query($featured_args);
+            if($featured_query->have_posts()) {
+                while($featured_query->have_posts()) { 
+                    $featured_query->the_post();
+                ?>
+                    <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>> 
+                        <?php
+                        if (get_field('story_link_url')) {
+                            $post_link_url = get_field('story_link_url');
+                            $post_link_target = ' target="_blank" ';
+                            $post_link = '<p><a class="button full_button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                        } else {
+                            $post_link_url = get_the_permalink();
+                            $post_link = '<a class="button full_button" href="' . $post_link_url . '">Read more</a>';
+                        }   
+                        if(has_post_thumbnail()) {
+                            $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumb' );
+                            $alt = get_post_meta(get_post_thumbnail_id( get_the_ID() ), '_wp_attachment_image_alt', true);
+                            echo '<div class="featured-thumbnail">';
+                                echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+                                    echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
+                                echo '</a>';
+                            echo '</div>';
+                        }   
+                        ?>  
+
+                        <header class="article__header">
+                            <div class="article__meta">
+                                <div class="post-info">
+                                    <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time>
+                                    <?php $categories = get_the_category_list(' ') ?>
+                                    <?php if ( $categories ) : ?>
+                                        <div class="article__categories">
+                                            | <?php echo $categories ?>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            </div>
+                            <h1 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h1>
+
+                        </header>
+
+                        <section class="article__content">
+                            <?php the_advanced_excerpt('length=30&finish=sentence') ?>
+                            <?php echo $post_link; ?>
+                        </section>
+                        <?php remove_filter( 'the_title', 'wptexturize' );
+                        remove_filter( 'the_excerpt', 'wptexturize' ); ?>
+
+                    </article>
+                <?php
+                }
+            }
+        }
+		/**
+		  * News loop
+		  */
+        $query_args = array(
+            'post_type' => 'post',
+			'post_status' => 'publish',
+			'posts_per_page' => 3,
+            'post__not_in' => $sticky,
             'ignore_sticky_posts' => 1,
 			'paged' => $paged
 		);
+
 		// Category filter
-		if($coenv_cat_1 && $coenv_cat_term_1) :
-			$query_args['taxonomy'] = $coenv_cat_1;
+		if($coenv_cat_term_1) :
+			$query_args['taxonomy'] = 'category';
 			$query_args['term'] = $coenv_cat_term_1;
+            unset($query_args['post__not_in']); // if filtering, we want to let sticky posts in
 		endif;
 
 		// Date filters
 		if ($coenv_year) {
 			$query_args['year'] = $coenv_year;
-		} 
+            unset($query_args['post__not_in']);
+		}
 		if($coenv_month) {
 			$query_args['monthnum'] = $coenv_month;
+            unset($query_args['post__not_in']);
 		}
+
 		$wp_query = new WP_Query( $query_args );
+        ?>
+
+		<?php if ($wp_query->have_posts()):
 		?>
-		<?php if ($wp_query->have_posts()): 
-		?>
-		<?php if ($coenv_cat_1): // Category filter ?>
+		<?php if ($coenv_cat_term_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if($coenv_year && $coenv_month): // Date filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
+			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
-        delete_post_thumbnail( get_the_ID() );
         echo '<div class="blog clearfix">';
-		get_template_part( 'partials/partial', 'story' );
+		get_template_part( 'partials/partial', 'article' );
         ?>
 		</div>
 	<?php endwhile; ?>
@@ -110,7 +181,7 @@ if(isset($_GET['term'])){
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your crtieria did not match any posts. <a href="/about/news">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>

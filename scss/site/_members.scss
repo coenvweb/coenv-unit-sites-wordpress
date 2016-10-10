@@ -1,0 +1,129 @@
+li.type-member {
+    list-style-type: none;
+    @include rem('font-size', 1);
+
+	.member-info {
+		padding-bottom: rem-calc(10px);
+
+		p {
+			margin: 0;
+			padding: rem-calc(10px);
+		}
+
+
+        .member-contact {
+            display: inline;
+        }
+
+        .member-titles {
+            list-style-type: none;
+            padding-bottom: 0.25rem;
+            padding-left: 0;
+            margin: 0;
+
+            li {
+            }
+        }
+
+
+		.member-name {
+            display: inline;
+			@include rem('font-size', 1.25);
+			font-weight: bold;
+			line-height: 1;
+            margin-bottom: 0.5rem;
+            padding: 0;
+		}
+
+	}
+
+    .article__categories {
+        padding-bottom: rem-calc(10px);
+        margin-bottom: 0rem;
+
+        ul.mem-terms {
+            li {
+                margin-left: 0rem;
+                margin-right: 1rem;
+            }
+        }
+        
+    }
+
+} // end li.type-member
+
+.member-list-teach h2:first-child {
+	margin-top: 0;
+}
+
+.member-list-research .member-list {
+	display:table;
+	width: 100%;
+}
+
+.member-list-research .member-list .member-list-item {
+	display:table-row;
+
+	.member-name h3 {
+		font-weight: normal;
+		font-size: 1rem;
+		@include sans;
+	}
+
+	&.even {
+		background-color: #ddd;
+	}
+}
+.member-list-research .member-list .member-list-item div,
+.member-list-adjunct .member-list .member-list-item div,
+.member-list-emeritus .member-list .member-list-item div {
+	display:table-cell;
+    width:25%;
+}
+.member-list-emeritus {
+	margin-bottom: rem-calc(153px);
+}
+.page-id-80 h2 {
+	@include font-size(24);	
+}
+
+#sidebar .widget {
+	line-height: 1.6;
+	margin-bottom: 1rem;
+}
+.article__categories {
+	margin-bottom: 1rem;
+}
+.article__categories h2 {
+	@include rem('font-size', 1);
+	line-height: 1;
+	@include sans;
+	padding: 0;
+	margin: 0 0 .5rem 0;
+}
+
+ul.fac-cats,
+ul.fac-terms {
+
+	padding: 0;
+	margin-left:0;
+
+	li {
+		display: inline;
+		margin: 0 .5rem .5rem 0;
+		padding: 0;
+
+	}
+}
+
+.member-website a.button {
+	@include rem('font-size', 1);
+	margin: 1rem 0 0 0;
+	width: 100%;
+}
+#coenv_base_fac_cats-2 ul li {
+	margin-right: .5rem;
+}
+
+
+

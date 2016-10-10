@@ -26,14 +26,61 @@
     
 
     .home-news-section {
-        .featured-thumbnail {
-            max-height: rem-calc(350);
-            margin-bottom: rem-calc(10);
-            overflow: hidden;
+        .featured-news {
+            .featured-content {
+            }
+
+            .featured-thumbnail {
+                .feature-img {
+                    
+                }
+            }
         }
-        :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
+        .home-news {
+            .post-meta {
+                padding: 0.5rem 0;
+                border-bottom: 2px solid $border;
+            }
+
+            margin-bottom: rem-calc(10);
         }
 
+    }
+
+    .widget-events {
+        h4 {
+            font-size: rem-calc(37);
+            font-weight: 400;
+            @include uni();
+
+            a{
+                color: $black;
+            }
+        }
+    }
+
+    .home-journal {
+        .journal-meta {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                display: inline;
+                margin-right: 0.25rem;
+            }
+            
+            .meta-label {
+                font-size: 1rem;
+            }
+        }
+
+        .journal-links {
+            
+        }
+
+        .journal-cover {
+            float: right;
+        }
     }
 }

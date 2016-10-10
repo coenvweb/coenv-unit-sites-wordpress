@@ -1,20 +1,23 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main" id="main-col">
+	<div class="large-12 columns" role="main" id="main-col">
 	
-		<?php do_action('foundationPress_before_content'); ?>
 	
 		<h2><?php _e('Search Results for', 'FoundationPress'); ?> "<?php echo get_search_query(); ?>"</h2>
+
+        <?php get_search_form(); ?>
 	
 	<?php if ( have_posts() ) : ?>
 	
 		<?php while ( have_posts() ) : the_post(); ?>
-			<?php get_template_part( 'content', get_post_format() ); ?>
+			<?php get_template_part( 'partials/partial', 'search-result' ); ?>
 		<?php endwhile; ?>
 		
-		<?php else : ?>
-			<?php get_template_part( 'content', 'none' ); ?>
-		
+	<?php else : ?>
+
+        <?php //TODO: generic no content line? ?>
+        <?php get_template_part( 'content', 'none' ); ?>
+
 	<?php endif;?>
 	
 	<?php do_action('foundationPress_before_pagination'); ?>
@@ -27,9 +30,6 @@
 		</nav>
 	<?php } ?>
 
-	<?php do_action('foundationPress_after_content'); ?>
-
 	</div>
-	<?php get_sidebar(); ?>
 </div>
 <?php get_footer(); ?>

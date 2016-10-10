@@ -33,7 +33,7 @@
 
 
 /* College Customizations */
-@import "site/faculty";
+@import "site/members";
 @import "site/lists";
 
 /* Print styles */
@@ -122,8 +122,8 @@ div.news {
 	margin-bottom: 4rem;
 }
 .panel {
-	float:left;
 	width: 100%;
+    overflow: hidden;
 	p:first-child {
 		float:left;
 		width: 75%;
@@ -144,4 +144,12 @@ p span.intro {
 // Move to plugin?
 html .mceContentBody {
 	padding: 2rem !important;
+}
+
+.alignright {
+    float: right;
+}
+
+.alignleft {
+    float: left;
 }

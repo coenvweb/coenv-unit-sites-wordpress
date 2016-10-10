@@ -1,6 +1,6 @@
 {
     "key": "group_576abd01eee71",
-    "title": "Faculty",
+    "title": "Members",
     "fields": [
         {
             "key": "field_5408a8b6ab81a",
@@ -43,11 +43,11 @@
             "append": ""
         },
         {
-            "key": "field_5408a90bab81d",
-            "label": "Phone number(s)",
-            "name": "phone_number",
+            "key": "field_5408aa208c0fc",
+            "label": "Title(s)",
+            "name": "job_titles",
             "type": "repeater",
-            "instructions": "Please enter up to 3 phone numbers for this faculty member. The first number will be shown in faculty lists. e.g., (206) 999-9999.",
+            "instructions": "Please enter up to 3 additional titles for this faculty member.",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -55,58 +55,11 @@
                 "class": "",
                 "id": ""
             },
-            "row_min": 1,
-            "row_limit": 3,
-            "layout": "table",
-            "button_label": "Add Row",
-            "min": 0,
-            "max": 0,
             "collapsed": "",
-            "sub_fields": [
-                {
-                    "key": "field_5408a93eab81e",
-                    "label": "Number",
-                    "name": "number",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "formatting": "none",
-                    "maxlength": "",
-                    "readonly": 0,
-                    "disabled": 0
-                }
-            ]
-        },
-        {
-            "key": "field_5408aa208c0fc",
-            "label": "Job title(s)",
-            "name": "job_titles",
-            "type": "repeater",
-            "instructions": "Please enter up to 3 additional job titles for this faculty member.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "row_min": 1,
-            "row_limit": 3,
+            "min": "",
+            "max": 3,
             "layout": "row",
             "button_label": "Add Row",
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
             "sub_fields": [
                 {
                     "key": "field_5408aa498c0fd",
@@ -133,6 +86,27 @@
             ]
         },
         {
+            "key": "field_5408a90bab81d",
+            "label": "Phone number",
+            "name": "phone_number",
+            "type": "text",
+            "instructions": "Please enter up to 3 phone numbers for this faculty member. The first number will be shown in faculty lists. e.g., (206) 999-9999.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
             "key": "field_5408ac103a7bd",
             "label": "Website URL",
             "name": "website_url",
@@ -155,12 +129,12 @@
             "disabled": 0
         },
         {
-            "key": "field_5408ad3c0ff63",
-            "label": "SciVal URL",
-            "name": "scival_url",
+            "key": "field_577eadb3046d8",
+            "label": "Home Department",
+            "name": "home_department",
             "type": "text",
-            "instructions": "Enter the full url of the faculty member's SciVal page. e.g., http:\/\/www.experts.scival.com\/uwashington\/expert.asp?n=First+M.+Last&u_id=999).",
-            "required": 0,
+            "instructions": "",
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -171,69 +145,9 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "formatting": "none",
             "maxlength": "",
             "readonly": 0,
             "disabled": 0
-        },
-        {
-            "key": "field_5408ad5d0ff64",
-            "label": "Twitter URL",
-            "name": "twitter_url",
-            "type": "text",
-            "instructions": "Enter the full url of the faculty member's Twitter page. e.g., http:\/\/twitter.com\/faculty_id.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "formatting": "none",
-            "maxlength": "",
-            "readonly": 0,
-            "disabled": 0
-        },
-        {
-            "key": "field_540f7f7d6faac",
-            "label": "Curriculum Vitae (CV)",
-            "name": "curriculum_vitae",
-            "type": "file",
-            "instructions": "Upload the faculty member's CV in PDF format.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "library": "uploadedTo",
-            "return_format": "url",
-            "min_size": 0,
-            "max_size": 0,
-            "mime_types": ""
-        },
-        {
-            "key": "field_540e1e84f4b03",
-            "label": "Selected publications",
-            "name": "selected_publications",
-            "type": "wysiwyg",
-            "instructions": "Please enter up to 10 publications. Use an un-ordered list and italicize journal names. When adding links, please link the title of the article.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "toolbar": "full",
-            "media_upload": 0,
-            "tabs": "all"
         }
     ],
     "location": [
@@ -241,7 +155,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "faculty"
+                "value": "members"
             }
         ]
     ],
@@ -250,8 +164,11 @@
     "style": "seamless",
     "label_placement": "top",
     "instruction_placement": "label",
-    "hide_on_screen": "",
+    "hide_on_screen": [
+        "the_content",
+        "featured_image"
+    ],
     "active": 1,
     "description": "",
-    "modified": 1467319761
+    "modified": 1468445648
 }
