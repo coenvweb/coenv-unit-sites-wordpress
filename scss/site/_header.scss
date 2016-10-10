@@ -154,8 +154,11 @@
 }
 
 .banner {
-    height: rem-calc(250);
+    height: rem-calc(275);
+    @media #{$small-only} {
+        height: rem-calc(200);
+    }
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
+    background-position: center 42%;
 }

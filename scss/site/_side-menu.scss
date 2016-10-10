@@ -57,11 +57,12 @@ aside#sidebar {
             }
             a.active {
                 color: $uw-purple;
+                padding-top: 1.5rem;
                 &:before {
                     content: ' ';
                     position: absolute;
                     background-color: $black;
-                    height: 0.5rem;
+                    height: 0.6rem;
                     top: 0px;
                     left: 2rem;
                     width: 4rem;
