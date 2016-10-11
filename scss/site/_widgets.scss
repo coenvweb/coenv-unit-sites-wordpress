@@ -65,10 +65,10 @@ aside#sidebar div {
         @include uni_reg;
         color: $uw-purple;
         padding: 0.5rem 0rem;
-        margin-bottom: 1rem;
         line-height: 1.5rem;
         &:after {
             content: '';
+            margin-top: 1rem;
             height: 1rem;
             width: 100%;
             display: block;
@@ -86,12 +86,15 @@ aside#sidebar div {
     }
     span.button {
         margin-bottom: 0rem;
+        font-size: rem-calc(12);
+        letter-spacing: 0.5px;
         a {
             color: $white;
         }
     }
     
     .widget_links {
+        font-size: rem-calc(12);
         list-style-type: none;
         margin-left: 0;
     }

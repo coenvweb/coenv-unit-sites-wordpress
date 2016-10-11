@@ -168,19 +168,17 @@
                 font-size: rem-calc(18);
                 padding: 3rem 2.5rem;
             }
-            @Media #{$small-only} {
+            @media #{$small-only} {
                 font-size: rem-calc(16);
                 padding: 2.5rem 2rem;
+                text-align: left;
             }
             &:before {
                 float: right;
                 display: inline-block;
-                width: 8%;
-                @media #{$medium-only} {
-                    width: 7%;
-                }
+                width: 2rem;
                 @media #{$small-only} {
-                    width: 6%;
+                    width: 1.5rem;
                 }
                 content: url('../assets/img/pcc_buttonArrow.svg');
             }
