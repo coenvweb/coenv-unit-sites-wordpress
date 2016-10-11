@@ -8,15 +8,6 @@
                 }
             }
         }
-
-        //svg after for feature img
-        .feature {
-            .feature-image {
-                &:after {
-                    left: -0.275rem;
-                }
-            }
-        }
     }
     .course_archive {
         &:after {
@@ -57,7 +48,7 @@
             }
         }
     }
-    
+
     .read_tweets {
         &:after {
             top: 30% !important;
