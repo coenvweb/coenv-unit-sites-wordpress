@@ -1,6 +1,6 @@
 .course_archive {
     @include uni_reg;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     border-bottom: 1px solid $black;
     display: inline-block;
     position: relative;
@@ -13,6 +13,7 @@
         content: url('../assets/img/pcc_section_div_flat.svg') !important;
         background: none !important;
         top: 85%;
+        margin-top: 0rem !important;
         width: 7rem !important;
         left: -1px;
         z-index: 100;
