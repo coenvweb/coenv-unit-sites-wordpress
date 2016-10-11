@@ -39,6 +39,16 @@ aside#sidebar {
         padding: 0;
         line-height: 10px;
         width: 100%;
+        li.active {
+           position: relative;
+           &:before {
+                content: url('../assets/img/pcc_section_div_flat_black.svg');
+                position: absolute;
+                top: -0.4rem;
+                left: 2rem;
+                width: 5rem;
+            }
+        }
         li {
             background-color: #f2f2f2;
             border-bottom: 1px solid #ccc;
@@ -58,21 +68,15 @@ aside#sidebar {
             a.active {
                 color: $uw-purple;
                 padding-top: 1.5rem;
-                &:before {
-                    content: ' ';
-                    position: absolute;
-                    background-color: $black;
-                    height: 0.6rem;
-                    top: 0px;
-                    left: 2rem;
-                    width: 4rem;
-                    -ms-transform: skewX(-15deg);
-                    -webkit-transform: skewX(-15deg);
-                    transform: skewX(-15deg);
-                }
+            
             }
             ul {
                 margin-bottom: 0;
+                li.active {
+                    &:before {
+                        display: none;
+                    }
+                }
                 li {
                     text-transform: none;
                     border-top: 1px solid #ccc;
@@ -85,6 +89,7 @@ aside#sidebar {
                         padding-left: 2.5rem !important;
                     }
                     a.active {
+                        padding-top: 1rem !important;
                         &:before {
                             display: none;
                         }
