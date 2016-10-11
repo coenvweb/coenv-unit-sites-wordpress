@@ -239,21 +239,34 @@
                     position: relative;
                     width: 100%;
                     padding-bottom: 100%;
+                    
                     img {
                         position: absolute;
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
+                        opacity: 1;
+                        transition: opacity .25s ease-in-out;
+                        -moz-transition: opacity .25s ease-in-out;
+                        -webkit-transition: opacity .25s ease-in-out;
+                        &:hover {
+                            opacity: 0.75;
+                        }
                     }
                 }
 
                 h4 {
+                    color: $text-dk;
                     @media #{$small-only} {
                         font-size: rem-calc(18);
+                    }
+                    &:hover {
+                        color: $black;
                     }
                 }
 
                 p {
+                    color: $text-dk;
                     @media #{$small-only} {
                         font-size: rem-calc(11);
                     }
@@ -476,6 +489,9 @@
                 padding: 1rem;
                 background-color: $bg-light;
                 border-bottom: 2px solid $uw-purple;
+                &:hover {
+                    background-color: $bg-md;
+                }
                 position: relative;
                 justify-content: center;
                 resize: vertical;
