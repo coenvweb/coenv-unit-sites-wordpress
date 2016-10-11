@@ -137,7 +137,7 @@ $wp_query = new WP_Query( $home_args );
         # The Loop
         while ( $wp_query->have_posts() ) :
         $wp_query->the_post();
-        if (get_field('story_link_url')) {
+        if (get_field('story_link_url') && get_field('story_source_name')) {
             $post_link_url = get_field('story_link_url');
             $post_link_target = ' target="_blank" ';
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';

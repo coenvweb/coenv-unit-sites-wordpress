@@ -85,6 +85,7 @@ aside#sidebar {
                         padding-left: 2.5rem !important;
                     }
                     a.active {
+                        padding-top: 1rem !important;
                         &:before {
                             display: none;
                         }

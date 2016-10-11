@@ -57,7 +57,7 @@
         <?php if(has_post_thumbnail()) { ?>
 		<div class="coenv-thumb"><a style="float: right;" href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'small' ) ?></a></div>
         <?php } ?>
-		<?php if ( get_field('story_link_url') ): ?>
+		<?php if ( get_field('story_link_url') && get_field('story_source_name') ): ?>
 			<?php $trimmed_content = breezer_addDivToImage(get_the_content()); ?>
 			<?php $trimmed_content = strip_tags($trimmed_content,'<a>'); ?>
 			<?php $trimmed_content = strip_shortcodes ($trimmed_content); ?>
