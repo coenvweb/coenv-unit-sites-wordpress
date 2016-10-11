@@ -64,9 +64,8 @@
         &:after {
             content: url('../assets/img/pcc_section_div_flat.svg');
             position: absolute;
-            width: 13rem;
+            width: 175px;
             top: 97%;
-            left: -0.2rem;
 
             @media #{$medium-only} {
                 width: 10rem;
