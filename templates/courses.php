@@ -143,7 +143,7 @@ $courses_page = get_post(COURSES_PARENT_ID);
         }?>
 		<li class="course-list-item post-<?php the_ID() ?>">
         <?php
-        echo '<span class="acro-quarter"><p>' . get_field('course_acronym') . '</p> | <p><a href="">' . $quarter_name . ' ' . $course_year . '</a></p> <p>' . (isset($course_categories) ? '   |   ' : '');
+        echo '<span class="acro-quarter"><p>' . get_field('course_acronym') . '</p> | <p><a href="">' . $quarter_name . ' ' . $course_year . '</a></p>' . (isset($course_categories) ? '   |   ' : '') . '<p>';
         $counter = 0;
         if($course_categories) {
             foreach($course_categories as $category) {
