@@ -175,9 +175,17 @@
 }
 
 .banner {
-    height: rem-calc(275);
-    @media #{$small-only} {
+    @media #{$large-up} {
+        height: rem-calc(275);
+    }
+    @media #{$xxlarge-up} {
+        height: rem-calc(300);
+    }
+    @media #{$medium-only} {
         height: rem-calc(200);
+    }
+    @media #{$small-only} {
+        height: rem-calc(175);
     }
     background-repeat: no-repeat;
     background-size: cover;
