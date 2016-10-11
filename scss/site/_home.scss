@@ -135,7 +135,7 @@
     .teaser-buttons {
         margin-top: 1rem;
         margin-bottom: 2rem; 
-        
+
         .learn {
             background: url('../assets/img/learn_more_button.png');
             padding-left: 30% !important;
@@ -164,6 +164,10 @@
             margin-bottom: 1rem;
             font-size: rem-calc(24);
             letter-spacing: 0.5px;
+            opacity: 1;
+            transition: opacity .25s ease-in-out;
+            -moz-transition: opacity .25s ease-in-out;
+            -webkit-transition: opacity .25s ease-in-out;
             @media #{$medium-only} {
                 font-size: rem-calc(18);
                 padding: 3rem 2.5rem;
@@ -172,6 +176,9 @@
                 font-size: rem-calc(16);
                 padding: 2.5rem 2rem;
                 text-align: left;
+            }
+            &:hover {
+                opacity: 0.75;
             }
             &:before {
                 float: right;
@@ -288,8 +295,15 @@
             width: 100%;
             padding-bottom: 75%;
             margin-bottom: 2.25rem;
+            opacity: 1;
+            transition: opacity .25s ease-in-out;
+            -moz-transition: opacity .25s ease-in-out;
+            -webkit-transition: opacity .25s ease-in-out;
             @media #{$small-only} {
                 margin-bottom: 1.5rem;
+            }
+            &:hover {
+                opacity: 0.75;
             }
             .widget_img {
                 height: 100%;
