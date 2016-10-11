@@ -142,11 +142,11 @@ function fb_mce_before_init( $settings ) {
             'block' => 'span',
             'classes' => 'intro'
         ),
-        array(
+       array(
             'title' => 'Button',
             'block' => 'span',
             'classes' => 'button'
-        ),
+        ), 
         array(
             'title' => 'Heading 2',
             'block' => 'h2',
@@ -158,7 +158,12 @@ function fb_mce_before_init( $settings ) {
         array(
             'title' => 'Heading 4',
             'block' => 'h4'
-        )
+        ),
+        array(
+            'title' => 'Small',
+            'block' => 'span',
+            'classes' => 'small'
+        ),
     );
 
     $settings['style_formats'] = json_encode( $style_formats );

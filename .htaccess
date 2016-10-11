@@ -47,9 +47,6 @@ RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
-RewriteCond %{HTTP_HOST} ^botanicgardens.uw.edu [NC]
-RewriteRule ^(.*)$ http://depts.washington.edu/uwbg/$1 [R=301,NC,L]
-
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -92,6 +89,10 @@ RewriteRule ^pcc/?(.*)$ https://dev.pcc.uw.edu/$1 [R,L]
 RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^fridayharborlabs/?(.*)$ https://dev.fhl.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^botanicgardens.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
 
 # SAFS Redirects
 RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
@@ -187,6 +188,38 @@ RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
 RewriteRule .? - [S=1]
 RewriteRule ^pnwc/?$ learn/ [R=301,L]
 
+# Botanicgardens Redirects
+RewriteCond %{HTTP_HOST} !^botanicgardens.uw\.edu [NC]
+RewriteRule .? - [S=29]
+RewriteRule ^gardens/wpa.shtml https://botanicgardens.uw.edu/washington-park-arboretum/ [R=301,L]
+RewriteRule ^visit_hours.shtml https://botanicgardens.uw.edu/washington-park-arboretum/visit/ [R=301,L]
+RewriteRule ^visit/directions.shtml https://botanicgardens.uw.edu/directions/ [R=301,L]
+RewriteRule ^visit/cuh.php https://botanicgardens.uw.edu/center-for-urban-horticulture/ [R=301,L]
+RewriteRule ^visit/rentals.shtml https://botanicgardens.uw.edu/about/facility-rentals/ [R=301,L]
+RewriteRule ^visit/rentals/wpa_rentals.shtml https://botanicgardens.uw.edu/washington-park-arboretum/visit/venue-rental/ [R=301,L]
+RewriteRule ^visit/rentals/cuh_rentals.shtml https://botanicgardens.uw.edu/center-for-urban-horticulture/visit/venue-rental/ [R=301,L]
+RewriteRule ^visit/calendar.shtml https://botanicgardens.uw.edu/events/ [R=301,L]
+RewriteRule ^education/Youth/nature_preschool.shtml https://botanicgardens.uw.edu/education/youth-family/fiddleheads-forest-school/ [R=301,L]
+RewriteRule ^visit/tours.shtml https://botanicgardens.uw.edu/tours/ [R=301,L]
+RewriteRule ^about/contact.shtml https://botanicgardens.uw.edu/about/contact-us/ [R=301,L]
+RewriteRule ^education/Youth/summer.shtml https://botanicgardens.uw.edu/education/youth-family/summer-camp/ [R=301,L]
+RewriteRule ^research/ubna.shtml https://botanicgardens.uw.edu/center-for-urban-horticulture/visit/union-bay-natural-area/ [R=301,L]
+RewriteRule ^gardens/wpa/collections.php https://botanicgardens.uw.edu/washington-park-arboretum/plants/core-collections/ [R=301,L]
+RewriteRule ^education/Youth/parent.shtml https://botanicgardens.uw.edu/education/youth-family/parent-child-nature-classes/ [R=301,L]
+RewriteRule ^education/classes.php https://botanicgardens.uw.edu/education/adults/classes-workshops/ [R=301,L]
+RewriteRule ^gardens/wpa/witt_winter.shtml https://botanicgardens.uw.edu/washington-park-arboretum/gardens/joseph-a-witt-winter-garden/ [R=301,L]
+RewriteRule ^rarecare/rareplants.shtml https://botanicgardens.uw.edu/science-conservation/rarecare/info/rareplants/ [R=301,L]
+RewriteRule ^education/prohort.php https://botanicgardens.uw.edu/education/adults/professional-continuing-education/ [R=301,L]
+RewriteRule ^education.php https://botanicgardens.uw.edu/education/ [R=301,L]
+RewriteRule ^rarecare/ssvolunteer.shtml https://botanicgardens.uw.edu/science-conservation/rarecare/volunteer/ [R=301,L]
+RewriteRule ^rarecare/index.shtml https://botanicgardens.uw.edu/science-conservation/rarecare/ [R=301,L]
+RewriteRule ^rarecare/?$ https://botanicgardens.uw.edu/science-conservation/rarecare/ [L,R=301]
+RewriteRule ^rentals/?$ https://botanicgardens.uw.edu/about/rental-space/ [L,R=301]
+RewriteRule ^youth/?$ https://botanicgardens.uw.edu/education/youth-family/ [L,R=301]
+RewriteRule ^arboretum/?$ https://botanicgardens.uw.edu/washington-park-arboretum/ [L,R=301]
+RewriteRule ^cuh/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/ [L,R=301]
+RewriteRule ^herbarium/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/visit/otis-douglas-hyde-herbarium/ [L,R=301]
+RewriteRule ^ren/?$ https://botanicgardens.uw.edu/science-conservation/restoration-ecology-network/ [L,R=301]
 
 # Env Studies Redirects
 RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
