@@ -120,6 +120,10 @@ class Mega_Menu_Settings {
 
         }
 
+        if ( is_numeric( $submitted_settings['responsive_breakpoint'] ) ) {
+            $submitted_settings['responsive_breakpoint'] = $submitted_settings['responsive_breakpoint'] . "px";
+        }
+
         if ( isset( $submitted_settings['toggle_blocks'] ) ) {
             unset( $submitted_settings['toggle_blocks'] );
         }
@@ -264,7 +268,6 @@ class Mega_Menu_Settings {
         if ( isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ) {
 
             $submitted_settings = apply_filters( "megamenu_submitted_settings", $_POST['settings'] );
-
             $existing_settings = get_option( 'megamenu_settings' );
 
             $new_settings = array_merge( (array)$existing_settings, $submitted_settings );
@@ -620,7 +623,8 @@ class Mega_Menu_Settings {
         $css = isset( $saved_settings['css'] ) ? $saved_settings['css'] : 'fs';
         $mobile_second_click = isset( $saved_settings['second_click'] ) ? $saved_settings['second_click'] : 'close';
         $mobile_behaviour = isset( $saved_settings['mobile_behaviour'] ) ? $saved_settings['mobile_behaviour'] : 'standard';
-
+        $descriptions = isset( $saved_settings['descriptions'] ) ? $saved_settings['descriptions'] : 'disabled';
+        $locations = get_registered_nav_menus();
 
         ?>
 
@@ -682,6 +686,48 @@ class Mega_Menu_Settings {
                                 <div class='head' style='display: <?php echo $css == 'head' ? 'block' : 'none' ?>'><?php _e("CSS will be loaded from the cache in a &lt;style&gt; tag in the &lt;head&gt; of the page.", "megamenu"); ?></div>
                                 <div class='disabled' style='display: <?php echo $css == 'disabled' ? 'block' : 'none' ?>'><?php _e("CSS will not be output, you must enqueue the CSS for the menu manually.", "megamenu"); ?></div>
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='mega-name'>
+                            <?php _e("Menu Item Descriptions", "megamenu"); ?>
+                            <div class='mega-description'>
+                                <?php _e("", "megamenu"); ?>
+                            </div>
+                        </td>
+                        <td class='mega-value'>
+                            <select name='settings[descriptions]'>
+                                <option value='disabled' <?php echo selected( $descriptions == 'disabled'); ?>><?php _e("Disabled", "megamenu"); ?></option>
+                                <option value='enabled' <?php echo selected( $descriptions == 'enabled'); ?>><?php _e("Enabled", "megamenu"); ?></option>
+                            <select>
+                            <div class='mega-description'>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='mega-name'>
+                            <?php _e("Active Menu Instances", "megamenu"); ?>
+                            <div class='mega-description'>
+                                <?php _e("Some themes will output a menu location multiple times on the same page. For example, your theme may output a menu location once for the main menu, then again for the mobile menu. This setting can be used to make sure Max Mega Menu is only applied to one of those instances.", "megamenu"); ?>
+                            </div>
+                        </td>
+                        <td class='mega-value mega-instances'>
+                            <?php if (count($locations)): ?>
+                                <table>
+                                    <tr>
+                                        <th><?php _e("Menu Location", "megamenu"); ?></th><th><?php _e("Active Instance", "megamenu"); ?></th>
+                                    </tr>
+                                    <?php foreach( $locations as $location => $description ): ?>
+                                        <?php if (max_mega_menu_is_enabled($location)): ?>
+                                            <?php $active_instance = isset($saved_settings['instances'][$location]) ? $saved_settings['instances'][$location] : 0; ?>
+                                            <tr>
+                                                <td><?php echo $description; ?></td><td><input type='text' name='settings[instances][<?php echo $location ?>]' value='<?php echo $active_instance; ?>' /></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </table>
+                                <div class='mega-description'><?php _e("0: Apply to all instances. 1: Apply to first instance", "megamenu"); ?></div>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 </table>
@@ -1103,14 +1149,20 @@ class Mega_Menu_Settings {
 
         $header_links = apply_filters( "megamenu_header_links", array(
             'homepage' => array(
-                'url' => 'https://www.maxmegamenu.com/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Homepage", "megamenu"),
                 'class' => ''
             ),
             'documentation' => array(
-                'url' => 'https://www.maxmegamenu.com/documentation/getting-started/installation/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/documentation/installation/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'text' => __("Documentation", "megamenu"),
+                'target' => '_mmmpro',
+                'class' => ''
+            ),
+            'troubleshooting' => array(
+                'url' => 'https://www.maxmegamenu.com/articles/troubleshooting/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
+                'text' => __("Troubleshooting", "megamenu"),
                 'target' => '_mmmpro',
                 'class' => ''
             )
@@ -1118,7 +1170,7 @@ class Mega_Menu_Settings {
 
         if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
             $header_links['pro'] = array(
-                'url' => 'https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro',
+                'url' => 'https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Upgrade to Pro - $19", "megamenu"),
                 'class' => 'mega-highlight'
@@ -1131,7 +1183,7 @@ class Mega_Menu_Settings {
                 'text' => __("Core version", "megamenu")
             ),
             'pro' => array(
-                'version' => "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
+                'version' => "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
                 'text' => __("Pro extension", "megamenu")
             )
         ) );
@@ -3140,7 +3192,7 @@ class Mega_Menu_Settings {
                                 foreach ( $group['settings'] as $setting_id => $setting ) {
                                     if ( isset( $setting['validation'] ) ) {
 
-                                        echo "<div class='mega-validation-message mega-validation-message-{$setting['key']}'>";
+                                        echo "<div class='mega-validation-message mega-validation-message-mega-{$setting['key']}'>";
 
                                         if ( $setting['validation'] == 'int' ) {
                                             $message = __("Enter a whole number (e.g. 1, 5, 100, 999)");

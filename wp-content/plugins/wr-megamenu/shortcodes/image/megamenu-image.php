@@ -260,10 +260,10 @@ class WR_Megamenu_Image extends WR_Megamenu_Shortcode_Element
 			$target = '';
 
 			if ( $image_effect == 'yes' AND ! isset( $_POST['action'] ) ) {
-				$data           = getimagesize( $image_file );
-				$width          = $data[0];
-				$height         = $data[1];
-				$html_elemments = "<img src='" . WR_Megamenu_Helpers_Functions::path( 'assets/3rd-party' ) . '/jquery-lazyload/grey.gif' . "' data-original='{$image_file}' width='{$width}' height='{$height}' {$alt_text} {$class_img}/>";
+				$width  = ! empty( $attachment['sizes'][ $image_size ]['width'] ) ? "width='" . absint( $attachment['sizes'][ $image_size ]['width'] ) . "'" : 100 ;
+				$height = ! empty( $attachment['sizes'][ $image_size ]['height'] ) ? "height='" . absint( $attachment['sizes'][ $image_size ]['height'] ) . "'" : 100 ;
+				
+				$html_elemments = "<img src='" . WR_Megamenu_Helpers_Functions::path( 'assets/3rd-party' ) . '/jquery-lazyload/grey.gif' . "' data-original='{$image_file}' {$width} {$height} {$alt_text} {$class_img}/>";
 			}
 
 			if ( $open_in ) {

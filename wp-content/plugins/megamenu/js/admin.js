@@ -517,6 +517,7 @@
 jQuery(function ($) {
     "use strict";
 
+
     $(".menu").on("click", ".megamenu_launch", function (e) {
         e.preventDefault();
 
@@ -598,6 +599,20 @@ jQuery(function ($) {
             nonce: megamenu.nonce
         }, function (response) {
             $(".mega_menu_meta_box .spinner").css('visibility', 'hidden');
+        });
+    });
+
+});
+
+jQuery(document).on('megamenu_content_loaded', function() {
+    jQuery('.hide-pro-nags').on('click', function(e) {
+        e.preventDefault();
+
+        jQuery.post(ajaxurl, {
+            action: "mm_hide_nags",
+            nonce: megamenu.nonce
+        }, function (response) {
+            jQuery('.hide-pro-nags').html(response);
         });
     });
 });

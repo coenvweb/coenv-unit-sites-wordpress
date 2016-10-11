@@ -5,10 +5,10 @@
 
 
 function customtaxorder() {
-	global $customtaxorder_settings, $sitepress;
+	global $sitepress;
 
 	customtaxorder_update_settings();
-	$options = $customtaxorder_settings;
+	$options = customtaxorder_get_settings();
 	$settings = ''; // The input and text for the taxonomy that's shown
 	$parent_ID = 0;
 

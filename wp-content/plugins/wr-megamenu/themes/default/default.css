@@ -26,7 +26,7 @@
 }
 
 @media screen and (min-width: 783px) {
-    .wr-megamenu-container ul.wr-mega-menu ul.sub-menu li:hover a { 
+    .wr-megamenu-container ul.wr-mega-menu ul.sub-menu li:hover > a { 
         color: #41a62a;
     }
 }
@@ -43,7 +43,7 @@
 .wr-megamenu-container .current_page_ancestor > a,
 .wr-megamenu-container .current-menu-item > a,
 .wr-megamenu-container .current-menu-ancestor > a {
-    color: #55d737;
+    color: #3686ff;
     font-weight: 900;
 }
 .wr-megamenu-inner {

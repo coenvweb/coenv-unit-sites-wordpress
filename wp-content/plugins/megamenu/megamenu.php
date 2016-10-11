@@ -3,12 +3,12 @@
 /*
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.maxmegamenu.com
- * Description: Mega Menu for WordPress.
- * Version:     2.2.3.1
+ * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
+ * Version:     2.3
  * Author:      Tom Hemsley
  * Author URI:  https://www.maxmegamenu.com
  * License:     GPL-2.0+
- * Copyright:   2015 Tom Hemsley (https://www.maxmegamenu.com)
+ * Copyright:   2016 Tom Hemsley (https://www.maxmegamenu.com)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,13 +26,13 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.2.3.1';
+    public $version = '2.3';
 
 
     /**
      * @var string
      */
-    public $scss_last_updated = '2.2.2';
+    public $scss_last_updated = '2.3';
 
 
     /**
@@ -67,6 +67,8 @@ final class Mega_Menu {
         add_filter( 'megamenu_nav_menu_objects_before', array( $this, 'setup_menu_items' ), 5, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'reorder_menu_items_within_megamenus' ), 6, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'apply_classes_to_menu_items' ), 7, 2 );
+        add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'set_descriptions_if_enabled' ), 8, 2 );
+        add_filter( 'body_class', array($this, 'add_megamenu_body_classes'), 10, 1);
 
         add_filter( 'megamenu_nav_menu_css_class', array( $this, 'prefix_menu_classes' ) );
 
@@ -75,11 +77,6 @@ final class Mega_Menu {
         add_filter( 'black_studio_tinymce_enable_pages' , array($this, 'megamenu_blackstudio_tinymce' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts'), 11 );
-
-        // add 'go pro' link to plugin options
-        $plugin = plugin_basename( __FILE__ );
-
-        add_filter( "plugin_action_links_{$plugin}", array( $this, 'upgrade_to_pro_link' ) );
 
         add_shortcode( 'maxmenu', array( $this, 'register_shortcode' ) );
         add_shortcode( 'maxmegamenu', array( $this, 'register_shortcode' ) );
@@ -98,6 +95,28 @@ final class Mega_Menu {
         $mega_menu_style_manager = new Mega_Menu_Style_Manager();
         $mega_menu_style_manager->setup_actions();
 
+    }
+
+
+    /**
+     * Add a body class for each active mega menu location.
+     *
+     * @since 2.3
+     * @param array $classes
+     * @return array
+     */
+    public function add_megamenu_body_classes( $classes ) {
+        $locations = get_nav_menu_locations();
+
+        if ( count( $locations ) ) {
+            foreach ( $locations as $location => $id ) {
+                if ( has_nav_menu( $location ) && max_mega_menu_is_enabled( $location ) ) {
+                    $classes[] = 'mega-menu-' . str_replace( "_", "-", $location );
+                }
+            }
+        }
+
+        return $classes;
     }
 
 
@@ -148,22 +167,6 @@ final class Mega_Menu {
             }
 
         }
-
-    }
-
-
-    /**
-     * Add go pro link on plugin page
-     *
-     * @since 1.8.3
-     */
-    public function upgrade_to_pro_link( $links ) {
-
-        if ( function_exists( 'is_plugin_active' ) && ! is_plugin_active( 'megamenu-pro/megamenu-pro.php' ) ) {
-            $links[] = '<a href="https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro" target="_blank"><b>' . __( "Go Pro", "megamenu" ) . '</b></a>';
-        }
-
-        return $links;
 
     }
 
@@ -278,7 +281,7 @@ final class Mega_Menu {
      */
     private function plugin_classes() {
 
-        return array(
+        $classes = array(
             'mega_menu_walker'            => MEGAMENU_PATH . 'classes/walker.class.php',
             'mega_menu_widget_manager'    => MEGAMENU_PATH . 'classes/widget-manager.class.php',
             'mega_menu_menu_item_manager' => MEGAMENU_PATH . 'classes/menu-item-manager.class.php',
@@ -290,6 +293,7 @@ final class Mega_Menu {
             'scssc'                       => MEGAMENU_PATH . 'classes/scssc.inc.php'
         );
 
+        return $classes;
     }
 
 
@@ -358,6 +362,22 @@ final class Mega_Menu {
         foreach ( $classes as $class ) {
             $return[] = 'mega-' . $class;
         }
+
+
+        /*
+         * @todo: Add a setting to enable/disable this.
+         *        Suddendly adding 'new' classes to menu items could screw up menu styling for some users
+        // add in custom classes, sans 'mega-' prefix
+        foreach ( $classes as $class ) {
+
+            // custom classes are added before the 'menu-item' class
+            if ( $class == 'menu-item' ) {
+                break;
+            }
+
+            $return[] = $class;
+        }
+        */
 
         return $return;
     }
@@ -597,6 +617,34 @@ final class Mega_Menu {
     }
 
 
+
+    /**
+     * If descriptions are enabled, create a new 'mega_description' property.
+     * This is for backwards compatibility for users who have used filters
+     * to display descriptions
+     *
+     * @since 2.3
+     * @param array $items
+     * @param array $args
+     * @return array
+     */
+    public function set_descriptions_if_enabled( $items, $args ) {
+
+        $settings = get_option( 'megamenu_settings' );
+
+        $descriptions = isset( $settings['descriptions'] ) ? $settings['descriptions'] : 'disabled';
+
+        if ($descriptions == 'enabled') {
+            foreach ( $items as $item ) {
+                if (  property_exists( $item, 'description' ) && strlen( $item->description )  ) {
+                    $item->mega_description = $item->description;
+                }
+            }
+        }
+
+        return $items;
+    }
+
     /**
      * Apply column and clear classes to menu items (inc. widgets)
      *
@@ -692,8 +740,22 @@ final class Mega_Menu {
      */
     public function modify_nav_menu_args( $args ) {
 
+        if ( ! isset( $args['theme_location'] ) ) {
+            return $args;
+        }
+
+        // internal filter
+        do_action('megamenu_instance_counter_' . $args['theme_location']);
+
+        $num_times_called = did_action('megamenu_instance_counter_' . $args['theme_location']);
+
         $settings = get_option( 'megamenu_settings' );
         $current_theme_location = $args['theme_location'];
+        $active_instance = isset( $settings['instances'][$current_theme_location] ) ? $settings['instances'][$current_theme_location] : 0;
+
+        if ( $active_instance != 0 && $active_instance != $num_times_called ) {
+            return $args;
+        }
 
         $locations = get_nav_menu_locations();
 
@@ -733,17 +795,28 @@ final class Mega_Menu {
                 $second_click = $menu_settings['second_click'];
             }
 
+            $event = 'hover_intent';
+
+            if ( isset( $menu_settings['event'] ) ) {
+                if ( $menu_settings['event'] == 'hover' ) {
+                    $event = 'hover_intent';
+                } elseif ( $menu_settings['event'] == 'hover_' ) {
+                    $event = 'hover';
+                } else {
+                    $event = $menu_settings['event'];
+                }
+            }
+
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
                 "id" => '%1$s',
                 "class" => '%2$s mega-no-js',
-                "data-event" => isset( $menu_settings['event'] ) ? $menu_settings['event'] : 'hover',
+                "data-event" => $event,
                 "data-effect" => $effect,
                 "data-effect-speed" => isset( $menu_settings['effect_speed'] ) ? $menu_settings['effect_speed'] : '200',
                 "data-panel-width" => preg_match('/^\d/', $menu_theme['panel_width']) !== 1 ? $menu_theme['panel_width'] : '',
                 "data-panel-inner-width" => substr( $menu_theme['panel_inner_width'], -1 ) !== '%' ? $menu_theme['panel_inner_width'] : '',
                 "data-second-click" => $second_click,
                 "data-document-click" => 'collapse',
-                "data-reverse-mobile-items" => 'true',
                 "data-vertical-behaviour" => $vertical_behaviour,
                 "data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] )
             ), $menu_id, $menu_settings, $settings, $current_theme_location );

@@ -2,7 +2,7 @@
 // ****** This file will be overwritten each time the plugin is updated *******
 //
 // This file is a major component of Max Mega Menu. The styling below works in
-// perfect harmony with the current version of the menu HTML. The menu HTML
+// perfect harmony with the current version of the plugin. The menu HTML
 // will change as features are added to the plugin. Likewise, this CSS will be
 // updated as new features are added to Max Mega Menu.
 //
@@ -86,10 +86,32 @@
                 -o-transition: background 200ms linear, color 200ms linear;
                 transition: background 200ms linear, color 200ms linear;
             }
+
+            .mega-description-group {
+                vertical-align: middle;
+                display: inline-block;
+
+                .mega-menu-title,
+                .mega-menu-description {
+                    line-height: 1.5;
+                    display: block;
+                }
+
+                .mega-menu-description {
+                    font-style: italic;
+                    font-size: 0.8em;
+                    text-transform: none;
+                    font-weight: normal;
+                }
+            }
         }
 
         li.mega-disable-link > a.mega-menu-link {
             cursor: default;
+        }
+
+        li.mega-menu-item-has-children.mega-disable-link > a.mega-menu-link {
+            cursor: pointer;
         }
 
         &.mega-keyboard-navigation + .mega-menu-toggle.mega-menu-open,
@@ -113,17 +135,13 @@
             opacity: 1;
         }
 
-        li.mega-menu-item.mega-animating > ul.mega-sub-menu {
-            visibility: visible;
-        }
-
         &[data-effect="fade"] {
 
             li.mega-menu-item > ul.mega-sub-menu {
                 opacity: 0;
                 transition-duration: $effect_speed;
                 transition-timing-function: ease-in;
-                transition-property: opacity;
+                transition-property: opacity, visibility;
             }
 
             &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
@@ -143,7 +161,7 @@
                 margin-top: 10px;
                 transition-duration: $effect_speed;
                 transition-timing-function: ease-in;
-                transition-property: opacity, margin-top;
+                transition-property: opacity, margin-top, visibility;
             }
 
             &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
@@ -163,7 +181,7 @@
                 margin-top: 10px;
                 transition-duration: $effect_speed;
                 transition-timing-function: ease-in;
-                transition-property: margin-top;
+                transition-property: margin-top, visibility;
             }
 
             &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
@@ -185,6 +203,7 @@
 
         li.mega-menu-item.mega-menu-megamenu ul.mega-sub-menu ul.mega-sub-menu {
             visibility: inherit;
+            opacity: 1;
         }
 
         li.mega-menu-item a[class^='dashicons']:before {
@@ -243,6 +262,7 @@
             margin: 0 $menu_item_spacing 0 0;
             display: inline-block;
             height: auto;
+            vertical-align: middle;
 
             @if $menu_item_divider == 'on' {
                 border-left: 1px solid $menu_item_divider_color;
@@ -257,7 +277,10 @@
 
             &.mega-item-align-right {
                 float: right;
-                margin: 0 0 0 $menu_item_spacing;
+
+                @include desktop {
+                    margin: 0 0 0 $menu_item_spacing;
+                }
             }
 
             &.mega-toggle-on > a.mega-menu-link,
@@ -273,7 +296,8 @@
             @if $menu_item_highlight_current == 'on' {
 
                 &.mega-current-menu-item,
-                &.mega-current-menu-ancestor {
+                &.mega-current-menu-ancestor,
+                &.mega-current-page-ancestor {
                     > a.mega-menu-link {
                         @include background($menu_item_background_hover_from, $menu_item_background_hover_to);
                         color: $menu_item_link_color_hover;
@@ -309,6 +333,20 @@
                 font-size: $menu_item_link_font_size;
             }
 
+            // support for multi line links
+            &.mega-multi-line > a.mega-menu-link {
+                @include desktop {
+                    line-height: inherit;
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+                @include mobile {
+                   br {
+                       display: none;
+                   }
+                }
+            }
+
             @include mobile {
                 display: list-item;
                 margin: 0;
@@ -333,7 +371,6 @@
         }
 
         // sub menu items (megamenu)
-
         > li.mega-menu-megamenu > ul.mega-sub-menu {
             z-index: $z_index;
             @include border-radius($panel_border_radius_top_left, $panel_border_radius_top_right, $panel_border_radius_bottom_right, $panel_border_radius_bottom_left);
@@ -362,7 +399,7 @@
             @include mobile {
                 float: left;
                 position: static;
-                width: 100% !important;
+                width: 100%;
             }
 
             @include desktop {
@@ -373,6 +410,10 @@
                         }
                     }
                 }
+            }
+
+            .mega-description-group .mega-menu-description {
+                margin: 5px 0;
             }
 
             > li.mega-menu-item ul.mega-sub-menu {
@@ -401,7 +442,7 @@
                     clear: left;
                 }
 
-                /* Widget titles */
+                // Widget titles
                 h4.mega-block-title {
                     color: $panel_header_color;
                     font-family: $panel_header_font;
@@ -419,7 +460,7 @@
                     border-bottom: $panel_header_border_bottom solid $panel_header_border_color;
                 }
 
-                /* Second level menu item */
+                // Second level menu items
                 > a.mega-menu-link {
                     color: $panel_second_level_font_color;
                     font-family: $panel_second_level_font;
@@ -437,7 +478,7 @@
                     border-bottom: $panel_second_level_border_bottom solid $panel_second_level_border_color;
                 }
 
-                /* Second level menu item hover */
+                // Second level menu item hover
                 > a.mega-menu-link:hover,
                 > a.mega-menu-link:focus {
                     color: $panel_second_level_font_color_hover;
@@ -446,7 +487,7 @@
                     @include background($panel_second_level_background_hover_from, $panel_second_level_background_hover_to);
                 }
 
-                /* Third level menu item */
+                // Third level menu items
                 li.mega-menu-item > a.mega-menu-link {
                     color: $panel_third_level_font_color;
                     font-family: $panel_third_level_font;
@@ -460,7 +501,7 @@
                     display: block;
                 }
 
-                /* Third level menu item hover */
+                // Third level menu items hover
                 li.mega-menu-item > a.mega-menu-link:hover,
                 li.mega-menu-item > a.mega-menu-link:focus {
                     color: $panel_third_level_font_color_hover;
@@ -492,8 +533,7 @@
             }
         }
 
-        // sub menu items (flyout)
-
+        // Sub menu items (flyout)
         > li.mega-menu-flyout ul.mega-sub-menu {
             z-index: $z_index;
             position: absolute;
@@ -512,7 +552,7 @@
             @include mobile {
                 float: left;
                 position: static;
-                width: 100% !important;
+                width: 100%;
                 padding: 0;
                 border: 0;
             }
@@ -547,7 +587,7 @@
                     vertical-align: baseline;
                 }
 
-                &:first-child a.mega-menu-link {
+                &:first-child > a.mega-menu-link {
                     border-top-left-radius: $flyout_border_radius_top_left;
                     border-top-right-radius: $flyout_border_radius_top_right;
 
@@ -557,7 +597,7 @@
                     }
                 }
 
-                &:last-child a.mega-menu-link {
+                &:last-child > a.mega-menu-link {
                     border-bottom-right-radius: $flyout_border_radius_bottom_right;
                     border-bottom-left-radius: $flyout_border_radius_bottom_left;
 
@@ -595,7 +635,7 @@
             }
         }
 
-        // arrows
+        // Arrows
         li.mega-menu-flyout.mega-menu-item-has-children,
         li.mega-menu-flyout li.mega-menu-item-has-children,
         > li.mega-menu-item-has-children {
@@ -631,7 +671,7 @@
             }
         }
 
-        // arrows
+        // Hide arrows
         li.mega-menu-flyout.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after,
         li.mega-menu-flyout li.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after,
         > li.mega-menu-item-has-children.mega-hide-arrow > a.mega-menu-link:after {
@@ -649,6 +689,7 @@
             }
         }
 
+        // Right aligned flyout menus
         li.mega-menu-flyout.mega-align-bottom-right {
 
             li.mega-menu-item a.mega-menu-link {
@@ -686,7 +727,7 @@
             }
         }
 
-        // polylang Language Switcher
+        // PolyLang Language Switcher
         li[class^='mega-lang-item'] > a.mega-menu-link > img {
             display: inline;
         }

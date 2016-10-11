@@ -316,6 +316,12 @@ class WR_Megamenu_Shortcode_Element extends WR_Megamenu_Shortcode_Abstract {
 		if ( ! empty ($arr_params['div_margin_bottom'] ) ) {
 			$styles[] = 'margin-bottom:' . intval( $arr_params['div_margin_bottom'] ) . 'px';
 		}
+		if ( ! empty ( $arr_params['div_margin_left'] ) ) {
+			$styles[] = 'margin-left:' . intval( $arr_params['div_margin_left'] ) . 'px';
+		}
+		if ( ! empty ($arr_params['div_margin_right'] ) ) {
+			$styles[] = 'margin-right:' . intval( $arr_params['div_margin_right'] ) . 'px';
+		}
 		$style = count( $styles ) ? implode( '; ', $styles ) : '';
 		if ( ! empty( $style ) || ! empty( $custom_style ) ){
 			$style = "style='$style $custom_style'";

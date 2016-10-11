@@ -116,6 +116,11 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 				$atts['class'] = 'mega-menu-link';
 			}
 
+			// required for Surface/Win10/Edge
+			if ( in_array('menu-item-has-children', $classes ) ) {
+				$atts['aria-haspopup'] = "true";
+			}
+
 			if ( $depth == 0 ) {
 				$atts['tabindex'] = "0";
 			}
@@ -136,7 +141,9 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 
 			if ( $settings['hide_text'] == 'true' ) {
 				/** This filter is documented in wp-includes/post-template.php */
-			} else {
+			} else if ( property_exists( $item, 'mega_description' ) && strlen( $item->mega_description ) ) {
+		        $item_output .= '<span class="mega-description-group"><span class="mega-menu-title">' . $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after . '</span><span class="mega-menu-description">' . $item->description . '</span></span>';
+		    } else {
 				$item_output .= $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after;
 			}
 

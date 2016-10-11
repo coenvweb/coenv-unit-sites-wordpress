@@ -21,7 +21,7 @@ class WR_Megamenu_Helpers_Html_Select_Media extends WR_Megamenu_Helpers_Html {
 		$label = parent::get_label( $element );
 		$_filter_type = isset( $element['filter_type'] ) ? $element['filter_type'] : 'image';
 		$output = '<div class="input-append row-fluid input-group">
-							<input type="text" class="' . $element['class'] . '" value="' . $element['std'] . '" id="' . $element['id'] . '">
+							<input disabled="disabled" type="text" class="' . $element['class'] . '" value="' . $element['std'] . '" id="' . $element['id'] . '">
 							<span class="input-group-addon select-media btn btn-default" filter_type="' . $_filter_type . '" id="' . $element['id'] . '_button">...</span>
 							<span class="input-group-addon select-media-remove btn btn-default"><i class="icon-remove"></i></span>
 						</div>';

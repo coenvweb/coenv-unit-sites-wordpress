@@ -100,7 +100,13 @@ if ( empty ( $elements ) || empty ( $elements['element'] ) ) {
 		echo balanceTags( WR_Megamenu_Shortcode_Element::el_button( $extra_, $config ) );
 	}
 					?>
-				</ul>				
+				</ul>
+
+				<p class="new-product">
+					<?php echo _e( 'Check new product', WR_MEGAMENU_TEXTDOMAIN ); ?>
+					 - <a href="http://nitro.woorockets.com/?utm_source=MegaMenu&utm_medium=BuilderGUI&utm_campaign=CrossPromoPlugins" target="_blank">Nitro</a>
+				</p>
+
 			</div>
 	</div>
 

@@ -406,7 +406,13 @@ if ( ! class_exists( 'WR_Megamenu_Row' ) ) {
 			$extra_class  = ltrim( $extra_class, ' ' );
 			$extra_id     = ! empty ( $atts['id_wrapper'] ) ? ' ' . esc_attr( $atts['id_wrapper'] ) : '';
 			$extra_id     = ! empty ( $extra_id ) ? "id='" . ltrim( $extra_id, ' ' ) . "'" : '';
-			return $custom_script . "<div class='jsn-bootstrap3'>" . "<div $extra_id class='row $extra_class' $style>" . WR_Megamenu_Helpers_Shortcode::remove_autop( $content ) . '</div>' . '</div>';
+
+			$content = WR_Megamenu_Helpers_Shortcode::remove_autop( $content );
+
+			// Check empty
+			$content = ( $content != '' ) ? ( $custom_script . "<div class='jsn-bootstrap3'>" . "<div $extra_id class='row $extra_class' $style>" . $content . '</div></div>' ) : '';
+
+			return $content;
 		}
 
 	}

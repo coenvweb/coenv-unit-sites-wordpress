@@ -90,6 +90,11 @@ jQuery(function ($) {
         select.next().children('.' + selected).show();
     });
 
+    // validate inputs once the user moves to the next setting
+    $( window ).scroll(function() {
+        $('.theme_editor input:focus').blur();
+    });
+
     $('form.theme_editor label[data-validation]').each(function() {
         var label = $(this);
         var validation = label.attr('data-validation');

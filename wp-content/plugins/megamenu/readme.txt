@@ -3,15 +3,15 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.6
-Stable tag: 2.2.3
+Stable tag: 2.2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
+An easy to use mega menu plugin. Written the WordPress way.
 
 == Description ==
 
-WordPress Mega Menu Plugin. Create widgetized mega menus using the built in visual mega menu builder.
+Max Mega Menu will automatically convert your existing menu or menus into a mega menu. You can then add any WordPress widget to your menu, restyle your menu using the theme editor and change the menu behaviour using the built in settings. Max Mega Menu is a complete menu management plugin, perfect for taking control of your existing menu and turning it into a user-friendly, accessible and touch ready menu with just a few clicks.
 
 https://www.youtube.com/watch?v=44dJwP1AXT8
 
@@ -19,21 +19,29 @@ Documentation & Demo: https://www.maxmegamenu.com
 
 ###Features:
 
-* Drag & drop Mega Menu builder
+* Builds upon the standard WordPress menus system
+* Supports multiple menu locations each with their own configuration
+* Drag and Drop Mega Menu builder
 * Display WordPress Widgets in your menu
-* Built in theme editor with 100+ customisation options
-* Supports Flyout (traditional) or Mega Menu sub-menu styles
-* Hover Intent or click event to open menus
-* Fade or Slide transitions
+* Customise the styling of your menus using a built in theme editor
+* Supports Flyout (traditional) or Mega Menu sub menu styles
+* Hover, Hover Intent or Click event to open sub menus
+* Fade, Fade Up, Slide Up or Slide sub menu transitions
 * Add icons to menu items
-* 'Hide Text' and 'Disable Link' options per menu item
+* Menu item options including Hide Text, Disable Link, Hide on Mobile etc
 * Align menu items to the left or right of the menu bar
 * Align sub menus to left or right of parent menu item
-* Supports multiple menus each with their own configuration
+
+Max Mega Menu is developed with a focus on code quality, performance and usability.
+
+* The only mega menu plugin with zero "!important", block or inline CSS styles
+* Menus are styled using a single, static CSS file
+* Less than 2kb JavaScript (when gzipped)
 * Responsive, Touch & Retina Ready
-* Tested in all modern browsers
+* Built with accessibity in mind - keyboard navigation supported
+* Extensively tested in all modern desktop and mobile browsers
 * Clean code with a low memory footprint
-* Valid CSS3 with no !important or inline CSS styles
+* Filters and actions where you need them
 * In depth documentation
 * Basic Support
 
@@ -65,17 +73,15 @@ Translations:
 
 Troubleshooting:
 
-https://www.maxmegamenu.com/documentation/troubleshooting/
+https://www.maxmegamenu.com/articles/troubleshooting/
 
 Getting started:
 
-https://www.maxmegamenu.com/documentation/getting-started/installation/
+https://www.maxmegamenu.com/documentation/installation/
 
-Not working with your theme?
-Mobile menu not working?
-Multiple mobile menu toggle icons?
+Not working with your theme? Mobile menu not working? Multiple mobile menu toggle icons?
 
-https://www.maxmegamenu.com/documentation/faqs/removing-residual-styling/
+https://www.maxmegamenu.com/documentation/removing-residual-styling/
 
 == Installation ==
 
@@ -83,7 +89,7 @@ https://www.maxmegamenu.com/documentation/faqs/removing-residual-styling/
 1. Search for "Max Mega Menu"
 1. Click "Install"
 
-https://www.maxmegamenu.com/documentation/getting-started/installation/
+https://www.maxmegamenu.com/documentation/installation/
 
 == Screenshots ==
 
@@ -96,6 +102,26 @@ See https://www.maxmegamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.3 =
+
+* New Feature: "Hover" event added (options are now Hover Intent, Hover or Click)
+* New Feature: Menu Item Description support added
+* New Feature: Add "Active Menu Instance" setting to allow mega menu to only be applied to an individual instance of a wp_nav_menu call (rather than all of them)
+* Fix: Hover not working on some devices with touch screens. This has been tested for Hover, Hover Intent and Click on:
+Mac FireFox/Safari/Chrome, Windows Edge/IE9/IE10/IE11/FireFox/Chrome, iPhone, iPad Chrome/Safari, Andoid Default/Chrome. If you have problems with touch or hover, please post in the support forums detailing exactly which Operating System, Browser and Event you are using so that I can reproduce the issue here.
+* Fix: Mobile menu now always switches to click, even on desktops
+* Fix: Responsive Breakpoint validation
+* Fix: Swiping background on touch devices hides sub menus
+* Fix: Remove margin from right aligned menu items on mobile
+* Fix: Apply hover styling to current-page-ancestor
+* Fix: Fix WPML cache clearing when CSS Output is set to Output in head
+* Fix: Allow single quotes in theme editor custom CSS
+* Fix: Allow single quotes in Menu Toggle toggle block text
+* Fix: Improve theme editor settings validation
+* Change: Remove permanent 'Go Pro' nag from Plugins page.
+* Change: Add "mega-menu-location" body class when MMM is enabled for a location to pave the way for automatic theme integration
+* Improvement: Add ".mega-multi-line" CSS to aid display of menu items with br tags in title
 
 = 2.2.3.1 [23/08/2016] =
 

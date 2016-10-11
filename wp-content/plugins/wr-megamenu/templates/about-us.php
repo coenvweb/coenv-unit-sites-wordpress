@@ -38,7 +38,7 @@
 
 		<div id="wr-header">
 			<a class="wr-logoheader" target="_blank" href="http://www.woorockets.com/?utm_source=MegaMenu%20About&utm_medium=top%20logo&utm_campaign=Cross%20Promo%20Plugins"><img src="<?php echo WR_MEGAMENU_ROOT_URL . 'assets/woorockets/images/about-us/logo-header.png'; ?>" alt="woorockets.com" /></a>
-			<p><?php printf(__('Thank you for installing WR Mega Menu from WooRockets Team! We are making new hi-quality themes and plugins for you ;) Follow us on <a href="%s" target="_blank" >Twitter</a> or <a href="%s" target="_blank" >Subscribe</a> to our email list and be the first to get updated.', WR_MEGAMENU_TEXTDOMAIN ) , 'http://bit.ly/wr-freebie-twitter', 'http://www.woorockets.com/?utm_source=MegaMenu%20Setting&utm_medium=banner-link&utm_campaign=Cross%20Promo%20Plugins#subscribe'); ?></p>
+			<p><?php printf(__('Thank you for installing WR Mega Menu! Don\'t forget to check out our <a href="%s">brand new theme Nitro</a>.', WR_MEGAMENU_TEXTDOMAIN ) , 'http://nitro.woorockets.com/?utm_source=MegaMenu&utm_medium=Topbar&utm_campaign=CrossPromoPlugins' ); ?></p>
 			<span id="close-header" class="dashicons dashicons-no"></span>
 		</div>
 
@@ -78,6 +78,14 @@
 				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 			</div>
 		</div>
+	</div>
+
+	<div id="wr-promo-ab">
+		<div class="logo-slogan">
+			<img src="http://www.woorockets.com/images/nitro-logo-white.png" />
+			<p><?php _e( 'Universal WooCommerce Theme from ecommerce experts', WR_MEGAMENU_TEXTDOMAIN ); ?></p>
+		</div>
+		<p class="btn-premium"><a href="http://www.woorockets.com/themes/?utm_source=MegaMenu&utm_medium=About&utm_campaign=Cross%20Promo%20Banner" target="_blank"><?php _e( 'Explore Now', WR_MEGAMENU_TEXTDOMAIN ); ?></a></p>
 	</div>
 
 	<div id="email-features">
@@ -159,18 +167,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<div id="wr-promo-ab">
-			<h3>Premium<br>
-			WooCommerce Themes</h3>
-			<ul>
-				<li><span><img src="<?php echo WR_MEGAMENU_ROOT_URL; ?>assets/woorockets/images/about-us/excellent-icon.png"></span>Excellent designs</li>
-				<li><span><img src="<?php echo WR_MEGAMENU_ROOT_URL; ?>assets/woorockets/images/about-us/unlimited-icon.png"></span>Unlimited customization ability</li>
-				<li><span><img src="<?php echo WR_MEGAMENU_ROOT_URL; ?>assets/woorockets/images/about-us/additional-icon.png"></span>Additional eCommerce features</li>
-			</ul>
-			<p class="btn-premium"><a href="http://www.woorockets.com/themes/?utm_source=MegaMenu&utm_medium=About&utm_campaign=Cross%20Promo%20Banner" target="_blank"><strong>View the collection now</strong><br>
-			<span>And learn how our themes can boost your business!</span></a></p>
 	</div>
 
 	<div id="wr-logo">

@@ -47,6 +47,7 @@ class Mega_Menu_Nav_Menus {
         add_action( 'admin_init', array( $this, 'register_nav_meta_box' ), 9 );
         add_action( 'megamenu_nav_menus_scripts', array( $this, 'enqueue_menu_page_scripts' ), 9 );
         add_action( 'wp_ajax_mm_save_settings', array($this, 'save') );
+        add_action( 'wp_ajax_mm_hide_nags', array($this, 'set_nag_transient') );
         add_filter( 'hidden_meta_boxes', array( $this, 'show_mega_menu_metabox' ) );
 
         if ( function_exists( 'siteorigin_panels_admin_enqueue_scripts' ) ) {
@@ -207,6 +208,20 @@ class Mega_Menu_Nav_Menus {
 
     }
 
+    /**
+     * Set a transient to note the time at which the 'Hide go pro nag' link was clicked
+     *
+     * @since 2.2.3.2
+     */
+    public function set_nag_transient() {
+
+        check_ajax_referer( 'megamenu_edit', 'nonce' );
+
+        set_transient('megamenu_nag', time() );
+
+        wp_die(__("No problem! This tab will be hidden for the next 90 days.", "megamenu"));
+
+    }
 
     /**
      * Save the mega menu settings (submitted from Menus Page Meta Box)
@@ -357,7 +372,8 @@ class Mega_Menu_Nav_Menus {
                 <td><?php _e("Event", "megamenu") ?></td>
                 <td>
                     <select name='megamenu_meta[<?php echo $location ?>][event]'>
-                        <option value='hover' <?php selected( isset( $settings[$location]['event'] ) && $settings[$location]['event'] == 'hover'); ?>><?php _e("Hover", "megamenu"); ?></option>
+                        <option value='hover' <?php selected( isset( $settings[$location]['event'] ) && $settings[$location]['event'] == 'hover'); ?>><?php _e("Hover Intent", "megamenu"); ?></option>
+                        <option value='hover_' <?php selected( isset( $settings[$location]['event'] ) && $settings[$location]['event'] == 'hover_'); ?>><?php _e("Hover", "megamenu"); ?></option>
                         <option value='click' <?php selected( isset( $settings[$location]['event'] ) && $settings[$location]['event'] == 'click'); ?>><?php _e("Click", "megamenu"); ?></option>
                     </select>
                 </td>

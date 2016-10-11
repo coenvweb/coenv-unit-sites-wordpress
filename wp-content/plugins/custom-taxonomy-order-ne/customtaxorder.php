@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.7.8
+Version: 2.8.1
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -31,14 +31,12 @@ Domain Path: /lang/
 
 
 /* TODO:
- * - Find a proper fix for tree of terms/subterms and ordering.
  * - Add pagination, just like next_post_link().
- * - 3.0: Switch to term_meta.
  */
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.7.8');
+define('CUSTOMTAXORDER_VER', '2.8.1');
 
 
 function customtaxorder_register_settings() {
@@ -48,12 +46,33 @@ add_action('admin_init', 'customtaxorder_register_settings');
 
 
 function customtaxorder_update_settings() {
-	global $customtaxorder_settings, $customtaxorder_defaults;
-	if ( isset($customtaxorder_settings['update']) ) {
-		echo '<div class="updated fade notice is-dismissible" id="message"><p>' . __('Custom Taxonomy Order NE settings', 'custom-taxonomy-order-ne') . ' ' . $customtaxorder_settings['update'] . '</p></div>';
-		unset($customtaxorder_settings['update']);
-		update_option('customtaxorder_settings', $customtaxorder_settings);
+	$options = customtaxorder_get_settings();
+	if ( isset($options['update']) ) {
+		echo '<div class="updated fade notice is-dismissible" id="message"><p>' . __('Custom Taxonomy Order NE settings', 'custom-taxonomy-order-ne') . ' ' . $options['update'] . '</p></div>';
+		unset($options['update']);
+		update_option('customtaxorder_settings', $options);
 	}
+}
+
+
+/*
+ * $customtaxorder_settings is an array with key: $taxonomy->name and value: setting (0, 1, 2).
+ */
+function customtaxorder_get_settings() {
+	$customtaxorder_defaults = array('category' => 0);
+
+	$args = array( 'public' => true, '_builtin' => false );
+	$output = 'objects';
+	$taxonomies = get_taxonomies( $args, $output );
+	foreach ( $taxonomies as $taxonomy ) {
+		$customtaxorder_defaults[$taxonomy->name] = 0;
+	}
+
+	$customtaxorder_defaults = apply_filters( 'customtaxorder_defaults', $customtaxorder_defaults );
+	$customtaxorder_settings = get_option( 'customtaxorder_settings' );
+	$customtaxorder_settings = wp_parse_args( $customtaxorder_settings, $customtaxorder_defaults );
+
+	return $customtaxorder_settings;
 }
 
 
@@ -138,9 +157,9 @@ add_action('admin_print_scripts', 'customtaxorder_js_libs');
  * Sorting the query with get_terms() doesn't allow sorting with term_order
  */
 function customtax_cmp( $a, $b ) {
-	if ( $a->term_order ==  $b->term_order ) {
+	if ( (float) $a->term_order == (float) $b->term_order ) {
 		return 0;
-	} else if ( $a->term_order < $b->term_order ) {
+	} else if ( (float) $a->term_order < (float) $b->term_order ) {
 		return -1;
 	} else {
 		return 1;
@@ -221,23 +240,27 @@ function customtaxorder_sub_query( $terms, $tax ) {
 /*
  * customtaxorder_apply_order_filter
  * Function to sort the standard WordPress Queries.
+ *
+ * @return string t.orderby
+ *
  */
-function customtaxorder_apply_order_filter($orderby, $args) {
-	global $customtaxorder_settings;
-	$options = $customtaxorder_settings;
+function customtaxorder_apply_order_filter( $orderby, $args ) {
+	$options = customtaxorder_get_settings();
 
+	$taxonomy = 'category';
 	if ( isset( $args['taxonomy'] ) ) {
-		$taxonomy = $args['taxonomy'];
-	} else {
-		$taxonomy = 'category';
-	}
-	if ( is_array( $taxonomy ) ) {
-		$taxonomy = $taxonomy[0];
+		if ( is_string( $args['taxonomy'] ) && ! empty( $args['taxonomy'] ) ) {
+			$taxonomy = $args['taxonomy'];
+		} else if ( is_array( $args['taxonomy'] ) && ! empty( $args['taxonomy'] ) ) {
+			// Bug: if $args[$taxonomy] is an array with tax->names it will return the orderby for the first tax.
+			$taxonomy = array_shift( $args['taxonomy'] );
+		}
 	}
 
-	if ( !isset ( $options[$taxonomy] ) ) {
-		$options[$taxonomy] = 0; // default if not set in options yet
+	if ( ! isset( $options[$taxonomy] ) ) {
+		$options[$taxonomy] = 0; // Default if it was not set in options yet.
 	}
+
 	if ( $args['orderby'] == 'term_order' ) {
 		return 't.term_order';
 	} elseif ( $args['orderby'] == 'name' ) {
@@ -263,8 +286,7 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
  *
  */
 function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
-	global $customtaxorder_settings;
-	$options = $customtaxorder_settings;
+	$options = customtaxorder_get_settings();
 
 	if ( empty($terms) || ! is_array($terms) ) {
 		return $terms; // only work with an array of terms
@@ -290,6 +312,20 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 				// post_tag = default tags
 				// product_tag = woocommerce product tags
 				return $terms;
+			}
+		}
+		// Sort children after the ancestor, by using a float with "ancestor.child".
+		foreach ($terms as $term) {
+			if ( ! $term->parent == 0 ) {
+				$parents = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
+				if ( is_array($parents) && !empty($parents) ) {
+					$ancestor_ID = array_pop( $parents );
+					$ancestor_term = get_term($ancestor_ID);
+					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
+						$float = floatval($term->term_order) + 10000;
+						$term->term_order = floatval( strval($ancestor_term->term_order) . '.' . strval($float) );
+					}
+				}
 			}
 		}
 		usort($terms, 'customtax_cmp');
@@ -329,9 +365,8 @@ add_filter('acf/format_value_for_api', 'customtaxorder_wp_get_object_terms_order
  * Filter to sort the categories according to term_order
  *
  */
-function customtaxorder_order_categories($categories) {
-	global $customtaxorder_settings;
-	$options = $customtaxorder_settings;
+function customtaxorder_order_categories( $categories ) {
+	$options = customtaxorder_get_settings();
 	if ( !isset ( $options['category'] ) ) {
 		$options['category'] = 0; // default if not set in options yet
 	}
@@ -391,29 +426,12 @@ add_filter( 'plugin_action_links', 'customtaxorder_links', 10, 2 );
 
 
 /*
- * customtaxorder_initialize
- * Function called at initialisation.
- * - Loads language files
- * - set defaults
- * - get settings
+ * Load language files.
  */
-function customtaxorder_initialize() {
-	global $customtaxorder_settings, $customtaxorder_defaults;
-
+function customtaxorder_load_lang() {
 	load_plugin_textdomain('custom-taxonomy-order-ne', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
-
-	$customtaxorder_defaults = array('category' => 0);
-	$args = array( 'public' => true, '_builtin' => false );
-	$output = 'objects';
-	$taxonomies = get_taxonomies( $args, $output );
-	foreach ( $taxonomies as $taxonomy ) {
-		$customtaxorder_defaults[$taxonomy->name] = 0;
-	}
-	$customtaxorder_defaults = apply_filters('customtaxorder_defaults', $customtaxorder_defaults);
-	$customtaxorder_settings = get_option('customtaxorder_settings');
-	$customtaxorder_settings = wp_parse_args($customtaxorder_settings, $customtaxorder_defaults);
 }
-add_action('plugins_loaded', 'customtaxorder_initialize');
+add_action('plugins_loaded', 'customtaxorder_load_lang');
 
 
 /*
@@ -455,4 +473,3 @@ add_action( 'wpmu_new_blog', 'customtaxorder_activate_new_site' );
 include('page-customtaxorder.php');
 // Include functions for sorting taxonomies
 include('taxonomies.php');
-

@@ -317,6 +317,15 @@
     width: 100%;
 }
 
+#wr-add-element .new-product {
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+}
+#wr-add-element .new-product a {
+    color: #428bca;
+}
+
 .ui-dialog {
     z-index: 100000 !important;
 }

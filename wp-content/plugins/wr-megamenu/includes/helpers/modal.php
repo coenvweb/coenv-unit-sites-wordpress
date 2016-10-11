@@ -358,16 +358,22 @@ class WR_Megamenu_Helpers_Modal
 	 * @return mixed|string|void
 	 */
 	public static function get_footer() {
-		$footer = '<div class="jsn-bootstrap3 wr-megamenu-footer">
-				<hr />
-				<div class="pull-left">
-					<div>
-						Powered by 
-						<a target="_blank" href="http://www.woorockets.com/?utm_source=MegaMenu%20Backend&utm_medium=Text&utm_campaign=Powered%20By">' . __( 'WooRockets.com', WR_MEGAMENU_TEXTDOMAIN ) . '</a> | <a target="_blank" href="http://www.woorockets.com/docs/wr-megamenu-user-manual/?utm_source=MegaMenu%20Backend&utm_medium=Text&utm_campaign=Powered%20By">' . __( 'Documentation', WR_MEGAMENU_TEXTDOMAIN ) . '</a>
-					</div>
+		$footer = '
+		<div class="jsn-bootstrap3 wr-megamenu-footer">
+			<hr />
+			<div class="pull-left">
+				<div>
+					' . __( 'Check new product', WR_MEGAMENU_TEXTDOMAIN ) . ' - <a href="http://nitro.woorockets.com/?utm_source=MegaMenu&utm_medium=BuilderGUI&utm_campaign=CrossPromoPlugins" target="_blank">Nitro</a>
 				</div>
-				<div class="clearbreak"></div>
-			</div>';
+			</div>
+			<div class="pull-right">
+				<div>
+					' . __( 'Powered by', WR_MEGAMENU_TEXTDOMAIN ) . '
+					<a href="http://www.woorockets.com/?utm_source=MegaMenu&utm_medium=BuilderGUI&utm_campaign=PoweredBy" target="_blank">WooRockets.com</a>
+				</div>
+			</div>
+			<div class="clearbreak"></div>
+		</div>';
 		
 		return apply_filters( 'wr_megamenu_modal_footer', $footer );
 	}

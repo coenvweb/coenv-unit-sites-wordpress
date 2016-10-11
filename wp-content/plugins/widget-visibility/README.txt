@@ -63,6 +63,9 @@ GPLv2 or later - http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.3.1 - 2016-09-08 =
+* Fix "Illegal string offset" warning
+
 = 1.3.0 - 2016-09-07 =
 * Tag options now works
 * Refactor with better DI container and services

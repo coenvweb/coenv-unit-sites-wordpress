@@ -77,7 +77,13 @@ if ( ! class_exists( 'WR_Megamenu_Column' ) ) {
 			$span    = intval( substr( $span, 4 ) );
 			$span_sm = intval( $span * 3 / 2 );
 			$class   = "col-md-$span col-sm-$span_sm";
-			return '<div class="' . $class . '" ' . $style . '>' . WR_Megamenu_Helpers_Shortcode::remove_autop( $content ) . '</div>';
+
+			$content = WR_Megamenu_Helpers_Shortcode::remove_autop( $content );
+
+			// Check empty
+			$content = ( $content != '' ) ? ( '<div class="' . $class . '" ' . $style . '>' . $content . '</div>' ) : '';
+
+			return $content;
 		}
 
 	}

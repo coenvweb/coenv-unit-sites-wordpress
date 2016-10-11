@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
 Tested up to: 4.6
-Stable tag: 2.7.8
+Stable tag: 2.8.1
 License: GPLv2 or later
 
 
@@ -83,7 +83,7 @@ If it is a custom taxonomy, you can also use a filter:
 = I'm using the_tags function, but it doesn't sort as it should. =
 
 There is a bug with the the_tags function, where it will sort according to the setting for categories.
-And yes, that is strange :).
+This happens in the 'customtaxorder_apply_order_filter' function where the $args has two taxonomies but only one orderby can be returned.
 
 = What capabilities are needed? =
 
@@ -133,6 +133,15 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.8.1 =
+* 2016-10-06
+* Sort children with a float as ancestor.child when set to term_order.
+
+= 2.8.0 =
+* 2016-10-04
+* Remove global var, add function customtaxorder_get_settings().
+* Fix PHP notices in customtaxorder_apply_order_filter.
 
 = 2.7.8 =
 * 2016-07-26

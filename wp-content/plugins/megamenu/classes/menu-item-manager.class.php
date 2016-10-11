@@ -34,8 +34,131 @@ class Mega_Menu_Menu_Item_Manager {
         add_filter( 'megamenu_tabs', array( $this, 'add_mega_menu_tab'), 10, 5 );
         add_filter( 'megamenu_tabs', array( $this, 'add_general_settings_tab'), 10, 5 );
         add_filter( 'megamenu_tabs', array( $this, 'add_icon_tab'), 10, 5 );
+        //add_filter( 'megamenu_tabs', array( $this, 'add_custom_styling_tab'), 10, 5 );
+        //add_filter( 'megamenu_tabs', array( $this, 'add_roles_tab'), 10, 5 );
+        //add_filter( 'megamenu_tabs', array( $this, 'add_replacements_tab'), 10, 5 );
 
 	}
+
+    /**
+     * Return the HTML to display in the 'Styling' tab
+     *
+     * @since 1.7
+     * @return array
+     */
+    public function add_custom_styling_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
+
+        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
+            return $tabs;
+        }
+
+        $return = '<h4 class="first">' . __("Custom Item Styling", "megamenu") . '</h4>';
+        $return .= "<p class='tab-description'>" . __("Customize the styling of this menu item only.", "megamenu_pro") . "</p>";
+        $return .= "<p class='tab-description'>" . __("Set custom sub menu widths, font colors, font size, icon styling, sub menu background images and lots more.", "megamenu_pro") . "</p>";
+
+        $return .= $this->get_pro_upgrade_text();
+
+        $tabs['pro_custom_styling'] = array(
+            'title' => __('Styling', 'megamenu'),
+            'content' => $return
+        );
+
+        return $tabs;
+
+    }
+
+    /**
+     * Return the HTML to display in the 'Roles' tab
+     *
+     * @since 2.2.3.2
+     * @return array
+     */
+    public function add_roles_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
+
+        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
+            return $tabs;
+        }
+
+        $return = '<h4 class="first">' . __("Roles & Restrictions", "megamenu") . '</h4>';
+        $return .= "<p class='tab-description'>" . __("Restrict the display of this menu item to users with a specific role, or by logged in status.", "megamenu_pro") . "</p>";
+        $return .= $this->get_pro_upgrade_text();
+
+        $tabs['pro_roles'] = array(
+            'title' => __('Roles', 'megamenu'),
+            'content' => $return
+        );
+
+        return $tabs;
+
+    }
+
+
+    /**
+     * Return the HTML to display in the 'Replacements' tab
+     *
+     * @since 2.2.3.2
+     * @return array
+     */
+    public function add_replacements_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
+
+        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
+            return $tabs;
+        }
+
+        $return  = '<h4 class="first">' . __("Replacements", "megamenu") . '</h4>';
+        $return .= '<p class="tab-description">' . __("Replace this menu item with something else: a logo, a search box, WooCommerce cart total, Easy Digital Downloads cart total, custom HTML or a shortcode", "megamenu_pro") . "</p>";
+        $return .= $this->get_pro_upgrade_text();
+
+
+        $tabs['pro_replacements'] = array(
+            'title' => __('Replacements', 'megamenu'),
+            'content' => $return
+        );
+
+        return $tabs;
+
+    }
+
+
+    /**
+     * Return the text for displaying go pro nag
+     *
+     * @since 2.2.3.2
+     * @return string
+     */
+    private function get_pro_upgrade_text() {
+
+        $return  = '<div class="in-pro">';
+        $return .= "<p>This functionality is available in <a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=lightbox&amp;utm_campaign=pro' target='_blank'>Max Mega Menu Pro</a><span class='dashicons dashicons-migrate'></span></p>";
+        $return .= '<p><a class="hide-pro-nags">Hide this notice for 90 days</a></p>';
+        $return .= '</div>';
+
+        return $return;
+
+    }
+
+
+    /**
+     * Returns true if nags have been hidden within the past 90 days
+     * (I really wish I did not have to put in nags, but development and support is entirely funded
+     * by upgrades)
+     *
+     * @since 2.2.3.2
+     * @return bool
+     */
+    private function nags_are_hidden() {
+        $transient = get_transient('megamenu_nag');
+
+        if ( ! $transient ) {
+            return false;
+        }
+
+        if ( strtotime("+90 days", $transient) > time() ) {
+            return true;
+        }
+
+        return false;
+    }
 
 
     /**
@@ -187,7 +310,7 @@ class Mega_Menu_Menu_Item_Manager {
 	 * Return the HTML to display in the 'Mega Menu' tab
      *
      * @since 1.7
-     * @return string
+     * @return array
 	 */
 	public function add_mega_menu_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
 
@@ -282,7 +405,7 @@ class Mega_Menu_Menu_Item_Manager {
 	 * Return the HTML to display in the 'General Settings' tab
      *
      * @since 1.7
-     * @return string
+     * @return array
 	 */
 	public function add_general_settings_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
 
@@ -404,7 +527,7 @@ class Mega_Menu_Menu_Item_Manager {
 	 * Return the HTML to display in the 'menu icon' tab
      *
      * @since 1.7
-     * @return string
+     * @return array
 	 */
 	public function add_icon_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
 
@@ -413,6 +536,21 @@ class Mega_Menu_Menu_Item_Manager {
                 'title' => __("Dashicons", "megamenu"),
                 'active' => ! isset( $menu_item_meta['icon'] ) || ( isset( $menu_item_meta['icon'] ) && substr( $menu_item_meta['icon'], 0, strlen("dash") ) === "dash" || $menu_item_meta['icon'] == 'disabled' ),
                 'content' => $this->dashicon_selector()
+            ),
+            'fontawesome' => array(
+                'title' => __("Font Awesome", "megamenu"),
+                'active' => false,
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Get access to over 400 Font Awesome Icons with {link}", "megamenu") )
+            ),
+            'genericons' => array(
+                'title' => __("Genericons", "megamenu"),
+                'active' => false,
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Choose from over 100 genericons with {link}", "megamenu") )
+            ),
+            'custom' => array(
+                'title' => __("Custom Icon", "megamenu"),
+                'active' => false,
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Select icons from your media library with {link}", "megamenu") )
             )
         );
 
@@ -463,6 +601,7 @@ class Mega_Menu_Menu_Item_Manager {
      * Return the form to select a dashicon
      *
      * @since 1.5.2
+     * @return string
      */
     private function dashicon_selector() {
 

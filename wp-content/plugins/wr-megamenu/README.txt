@@ -11,6 +11,17 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WR Mega Menu is a Powerful, Responsive, and User-Oriented WordPress menu plugin with a Dedicated, Intuitive menu builder. 
 
 == Description ==
+
+> Big Announcement for Sep 2016!
+
+> We’ve took into account your feedback and released a brand new version WR PageBuilder is compatible with latest version WordPress and latest plugins.
+
+> Another news is finally… we’ve released Nitro - Universal WooCommerce themes with great eCommerce features and 12 specific demo niches including fashion, shoes, sports gears, kids fashion, electronics, and much more. Moreover, we’ll be releasing 3 new niche demos for every month. 
+
+> Check now at <a href="http://nitro.woorockets.com">http://nitro.woorockets.com</a>
+
+> <i>Published by 8 Sep.</i>
+
 WR Mega Menu is a Powerful, Responsive, and User-Oriented WordPress menu plugin with a Dedicated, Intuitive menu builder. It gives you a complete control at designing and customizing your menu exactly the way you want.
 
 <b>See demo:</b> <a href="http://demo.woorockets.com/plugins/wr-megamenu/">http://demo.woorockets.com/plugins/wr-megamenu</a>
@@ -103,3 +114,6 @@ For further information, product details, help and tutorials, please visit our w
 
 = 1.1.3 =
  * Fix compability on Wordpress 4.3
+
+= 1.1.4 =
+ * Fixed mass major bugs

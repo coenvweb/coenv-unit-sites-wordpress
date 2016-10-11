@@ -23,9 +23,7 @@ final class Mega_Menu_Style_Manager {
      * @since 1.0
      */
     public function __construct() {
-
         $this->settings = get_option( "megamenu_settings" );
-
     }
 
 
@@ -35,11 +33,9 @@ final class Mega_Menu_Style_Manager {
      * @since 1.0
      */
     public function setup_actions() {
-
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 999 );
         add_action( 'wp_head', array( $this, 'head_css' ), 9999 );
-
         add_action( 'megamenu_delete_cache', array( $this, 'delete_cache' ) );
         add_action( 'after_switch_theme', array( $this, 'delete_cache') );
 
@@ -53,12 +49,11 @@ final class Mega_Menu_Style_Manager {
             add_filter( 'megamenu_css_filename', array( $this, 'wpml_css_filename') );
             add_action( 'megamenu_after_delete_cache', array( $this, 'wpml_delete_cache') );
         }
-
     }
 
 
     /**
-     *
+     * Return the default menu theme
      */
     public function get_default_theme() {
         return apply_filters("megamenu_default_theme", array(
@@ -263,7 +258,6 @@ final class Mega_Menu_Style_Manager {
     }
 
 
-
     /**
      *
      * @since 1.0
@@ -387,11 +381,12 @@ final class Mega_Menu_Style_Manager {
 
     /**
      *
+     *
      * @since 1.3.1
      */
     private function is_debug_mode() {
 
-        return ( defined( 'MEGAMENU_DEBUG' ) && MEGAMENU_DEBUG === true ) || isset( $_GET['nocache'] );
+        return ( defined( 'MEGAMENU_DEBUG' ) && MEGAMENU_DEBUG === true ) || ( current_user_can('edit_theme_options') && isset( $_GET['nocache'] ) );
 
     }
 
@@ -702,7 +697,7 @@ final class Mega_Menu_Style_Manager {
 
         $scss .= $this->load_scss_file();
 
-        $scss .= stripslashes( html_entity_decode( $theme['custom_css'] ) );
+        $scss .= stripslashes( html_entity_decode( $theme['custom_css'], ENT_QUOTES ) );
 
         return apply_filters( "megamenu_scss", $scss, $location, $theme, $menu_id );
 
@@ -784,21 +779,13 @@ final class Mega_Menu_Style_Manager {
     public function enqueue_scripts() {
 
         wp_enqueue_script( 'hoverIntent' );
-        wp_enqueue_script( 'megamenu', MEGAMENU_BASE_URL . "js/maxmegamenu.js", array('jquery', 'hoverIntent'), MEGAMENU_VERSION, true );
+
+        $js_path = MEGAMENU_BASE_URL . "js/maxmegamenu.js";
+
+        wp_enqueue_script( 'megamenu', $js_path, array('jquery', 'hoverIntent'), MEGAMENU_VERSION, true );
 
         $params = apply_filters("megamenu_javascript_localisation",
             array(
-                "effect" => array(
-                    "slide" => array(
-                        "in" => array(
-                            "animate" => array("height" => "show"),
-                            "css" => array("display" => "none")
-                        ),
-                        "out" => array(
-                            "animate" => array("height" => "hide")
-                        )
-                    )
-                ),
                 "timeout" => 300,
                 "interval" => 100
             )
@@ -1033,7 +1020,7 @@ final class Mega_Menu_Style_Manager {
         $languages = icl_get_languages('skip_missing=N');
 
         foreach ( $languages as $language ) {
-            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . $language['language_code'] ) );
+            delete_transient( 'megamenu_css_' . $language['language_code'] );
         }
 
     }

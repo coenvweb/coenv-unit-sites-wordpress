@@ -2,8 +2,8 @@
 /*
 Plugin Name: WR MegaMenu
 Plugin URI: http://woorockets.com
-Description: WR MegaMenu
-Version: 1.1.3
+Description: This is a Powerful, Responsive, and User-Oriented WordPress menu plugin with a Dedicated, Intuitive menu builder. It gives you a complete control at designing and customizing your menu exactly the way you want. Check new product - <a href="http://nitro.woorockets.com/?utm_source=Megamenu&utm_medium=PluginDescription&utm_campaign=CrossPromoPlugins">Nitro</a>.
+Version: 1.1.4
 Author: WooRockets
 Author URI: http://woorockets.com
 License: GNU/GPL v2 or later http://www.gnu.org/licenses/gpl-2.0.html

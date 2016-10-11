@@ -134,7 +134,17 @@ class Mega_Menu_Toggle_Blocks {
                     "id" => "mega-toggle-block-{$block_id}"
                 ), $block, $content, $nav_menu, $args, $theme_id);
 
-
+                /**
+                 *
+                 * function remove_ids_from_toggle_blocks($attributes, $block, $content, $nav_menu, $args, $theme_id) {
+                 *    if (isset($attributes['id'])) {
+                 *        unset($attributes['id']);
+                 *    }
+                 *    return $attributes;
+                 * }
+                 * add_filter('megamenu_toggle_block_attributes', 'remove_ids_from_toggle_blocks');
+                 *
+                 */
 
                 $blocks_html .= "<div";
 
@@ -428,6 +438,13 @@ class Mega_Menu_Toggle_Blocks {
             <?php foreach( $block_types as $block_id => $block_name ) : ?>
                 <option value='<?php echo $block_id; ?>'><?php echo $block_name ?></option>
             <?php endforeach; ?>
+
+            <?php if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ): ?>
+                <option disabled="disabled">Search (Pro)</option>
+                <option disabled="disabled">Logo (Pro)</option>
+                <option disabled="disabled">Icon (Pro)</option>
+                <option disabled="disabled">HTML (Pro)</option>
+            <?php endif; ?>
         </select>
 
         <div class='toggle-bar-designer'>
@@ -557,10 +574,10 @@ class Mega_Menu_Toggle_Blocks {
                 <input type='hidden' class='type' name='toggle_blocks[<?php echo $block_id; ?>][type]' value='menu_toggle' />
                 <input type='hidden' class='align' name='toggle_blocks[<?php echo $block_id; ?>][align]' value='<?php echo $settings['align'] ?>'>
                 <label>
-                    <?php _e("Closed Text", "megamenu") ?><input type='text' class='closed_text' name='toggle_blocks[<?php echo $block_id; ?>][closed_text]' value='<?php echo $settings['closed_text'] ?>' />
+                    <?php _e("Closed Text", "megamenu") ?><input type='text' class='closed_text' name='toggle_blocks[<?php echo $block_id; ?>][closed_text]' value='<?php echo stripslashes( esc_attr( $settings['closed_text'] ) ) ?>' />
                 </label>
                 <label>
-                    <?php _e("Open Text", "megamenu") ?><input type='text' class='open_text' name='toggle_blocks[<?php echo $block_id; ?>][open_text]' value='<?php echo $settings['open_text'] ?>' />
+                    <?php _e("Open Text", "megamenu") ?><input type='text' class='open_text' name='toggle_blocks[<?php echo $block_id; ?>][open_text]' value='<?php echo stripslashes( esc_attr( $settings['open_text']  ) ) ?>' />
                 </label>
                 <label>
                     <?php _e("Closed Icon", "megamenu") ?>

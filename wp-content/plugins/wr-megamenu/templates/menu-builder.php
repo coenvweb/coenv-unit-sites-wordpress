@@ -458,13 +458,13 @@ if ( count( $files ) ) {
 					$theme_default_options = array(
 
 						'menu-bar-font' => 'inherit',
-						'menu-bar-bg_value' => '#000',
-						'menu-bar-bg' => '#000',
+						'menu-bar-bg_value' => '#eaeaea',
+						'menu-bar-bg' => '#eaeaea',
 						'menu-bar-font_type' => 'Standard Font',
 						'menu-bar-font_face' => 'Arial',
 						'menu-bar-font_size' => '10',
 						'menu-bar-font_weight' => 'bold',
-						'menu-bar-menu_color' => '#fff',
+						'menu-bar-menu_color' => '#333',
 						'menu-bar-menu_layout' => 'horizontal',
 						'menu-bar-on_hover' => '#1cba70',
 						'menu-bar-stick_menu' => 'no',
@@ -642,7 +642,7 @@ foreach ( $styling_fields[ $tid ] as $field ) {
 										.menu-item a {
 											padding:10px 25px;
 											display: block;
-											color:#fff !important;
+											color:#333 !important;
 										}
 										.menu-item:hover a,
 										.menu-item:focus a {

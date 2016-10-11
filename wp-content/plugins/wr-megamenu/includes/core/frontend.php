@@ -17,6 +17,8 @@ class WR_Megamenu_Core_Frontend {
 	private $settings = null;
 
 	private $echo = null;
+
+	private $list_id_profile_rendered = array();
 	
 	/**
 	 * Mega a menu in a location if mapped
@@ -36,6 +38,12 @@ class WR_Megamenu_Core_Frontend {
 	 */
 	function get_args( $args ) {
 		$this->profile_id = WR_Megamenu_Helpers_Functions::get_profile_by_location( $args['theme_location'] );
+
+		if( in_array( $this->profile_id , $this->list_id_profile_rendered ) ) {
+			return $args;
+		} else {
+			$this->list_id_profile_rendered[] = $this->profile_id;
+		}
 
 		if ( $this->profile_id ) {
 
