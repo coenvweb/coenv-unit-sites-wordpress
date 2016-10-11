@@ -35,7 +35,11 @@
                 background-color: #cccccc;
             }
             &:hover {
-                color: $black !important;
+                background-color: $uw-purple;
+                color: $white;
+                &:before {
+                    background-color: $accent;
+                }
             }
         }
         .active {
@@ -73,6 +77,11 @@
                         margin-left: 0.5rem;
                     }
                     margin-right: 0.5rem;
+                }
+                a {
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
                 margin-bottom: 1rem;
             }

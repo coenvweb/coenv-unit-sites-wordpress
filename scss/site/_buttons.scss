@@ -43,6 +43,7 @@
         &:hover {
             background: rgba(0,0,0,0.6);
             color: #fff;
+            text-decoration: none !important;
             &:before {
                 background-color: $uw-purple;
             }

@@ -14,74 +14,62 @@ margin-bottom: rem-calc(18);
 } // .article
 
 .entry-content {
-//single page titles
-h1 {
-    color: $uw-gold;
-    text-transform: uppercase;
-    margin-top: 0;
-    @include encode;
-    @include font-size(30);
-    @include line-height(32);
-
-    @media #{$medium-up} {
-        @include font-size(38);
-        @include line-height(50);
-    }
-
-    a {
-        text-decoration: none;
+    //single page titles
+    h1 {
         color: $uw-gold;
-    }
-
-    br {
-        display: none;
-    }
-}
-
-//aggregate news titles
-h2 {
-    @include encode;
-    @include font-size(20);
-    @include line-height(24);
-    color: $black;
-
-    @media #{$medium-up} {
-        @include font-size(28);
+        text-transform: uppercase;
+        margin-top: 0;
+        @include encode;
+        @include font-size(30);
         @include line-height(32);
+
+        @media #{$medium-up} {
+            @include font-size(38);
+            @include line-height(50);
+        }
+
+        a {
+            text-decoration: none;
+            color: $uw-gold;
+        }
+
+        br {
+            display: none;
+        }
     }
-    
-    a {
-        color: $black;
-        text-decoration: none;
-    }
-}
+
 }
 
 .article__header {
 
-border-bottom: 1px solid $border;
-padding-bottom: 0.5rem;
-margin-bottom: 1.5rem;
+    border-bottom: 1px solid $border;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
 
-.article__meta {
-    margin-bottom: 0.5rem;
+    .article__meta {
+        margin-bottom: 0.5rem;
 
-    .post-info {
-        @include encode_med;
-        text-transform: none;
-        letter-spacing: 0.5px;
-        font-size: rem-calc(15);
-        time {
-            margin-right: 0.5rem;
+        .post-info {
+            @include encode_med;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            font-size: rem-calc(15);
+            time {
+                margin-right: 0.5rem;
+            }
         }
-    }
 
-    .article__categories {
-        display: inline-block;
-        margin-left: 0.5rem;
-    } // .article__categories
+        .article__categories {
+            display: inline-block;
+            margin-left: 0.5rem;
+            a {
+                &:hover {
+                    color: $accent;
+                }
+            }
+        } // .article__categories
 
-} // .article__meta
+    } // .article__meta
 
 } // .article__header
 
@@ -92,6 +80,13 @@ margin-bottom: 1.5rem;
         @include uni_reg;
         a {
             color: $black;
+        }
+    }
+
+    a {
+        &:hover {
+            text-decoration: underline;
+            text-decoration-color: $uw-purple;
         }
     }
 

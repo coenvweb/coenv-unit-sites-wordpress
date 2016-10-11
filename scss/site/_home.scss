@@ -206,6 +206,12 @@
         :not(:last-child) .small-news {
             margin-bottom: rem-calc(30);	
         }
+        h4 {
+            color: $text-dk;
+            &:hover {
+                color: $black;
+            }
+        }
 
     }
 
@@ -433,6 +439,11 @@
                 .post_cat {
                     display: inline;
                     margin-left: 0.75rem;
+                    a {
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
                 }
 
             }
@@ -464,7 +475,7 @@
                 margin: 1rem 0.5rem;
                 padding: 1rem;
                 background-color: $bg-light;
-                border-bottom: 2px solid $accent;
+                border-bottom: 2px solid $uw-purple;
                 position: relative;
                 justify-content: center;
                 resize: vertical;

@@ -30,20 +30,20 @@
                 text-transform: uppercase;
 
                 &:hover, &:focus {
-                    color: $accent;
+                    color: $uw-purple;
                 }
             }
 
             li.current_page_parent {
                 & > a {
-                    color: $accent;
+                    color: $uw-purple;
                     &:hover {
                         color: $accent;
                     }
                 }
                 & .current_page_item > a {
                     background-color: $bg-light;
-                    color: $accent;
+                    color: $uw-purple;
                     border-top: 1px solid #dddddd;
                     border-bottom: 1px solid #dddddd;
                 }
@@ -99,7 +99,7 @@
                 }
 
                 &.current_page_item > a, & > a:hover{
-                    color: $accent;
+                    color: $uw-purple;
                 }
                 
                 & > a {
