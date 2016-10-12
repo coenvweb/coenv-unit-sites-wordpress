@@ -6,8 +6,6 @@
     }
 }
 
-
-
 // Sidebar Widgets
 aside#sidebar div {
 
@@ -181,20 +179,10 @@ aside#sidebar div {
     border: 1px solid $border;
     margin-bottom: rem-calc(20);
     padding: rem-calc(30);
-    overflow: hidden;
-    &:before{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -15%;
-        width: 125%;
-        height: 125%;
-        background: url('../assets/img/pcc_mapBG.svg');
-        opacity: 0.15;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
+    background: rgba(100,100,101,0.07) url('../assets/img/pcc_mapBG_transparent.svg');
+    background-size: 1000px;
+    background-position: center;
+    background-repeat: no-repeat;
     div.collapse {
         margin-bottom: 2rem;
     }
