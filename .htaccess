@@ -213,7 +213,7 @@ RewriteRule ^education/prohort.php https://botanicgardens.uw.edu/education/adult
 RewriteRule ^education.php https://botanicgardens.uw.edu/education/ [R=301,L]
 RewriteRule ^rarecare/ssvolunteer.shtml https://botanicgardens.uw.edu/science-conservation/rarecare/volunteer/ [R=301,L]
 RewriteRule ^rarecare/index.shtml https://botanicgardens.uw.edu/science-conservation/rarecare/ [R=301,L]
-RewriteRule ^rarecare/?$ https://botanicgardens.uw.edu/science-conservation/rarecare/ [L,R=301]
+RewriteRule ^rarecare/?.*$ https://botanicgardens.uw.edu/science-conservation/rarecare/ [L,R=301]
 RewriteRule ^rentals/?$ https://botanicgardens.uw.edu/about/rental-space/ [L,R=301]
 RewriteRule ^youth/?$ https://botanicgardens.uw.edu/education/youth-family/ [L,R=301]
 RewriteRule ^arboretum/?$ https://botanicgardens.uw.edu/washington-park-arboretum/ [L,R=301]
