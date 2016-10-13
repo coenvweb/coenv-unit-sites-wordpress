@@ -171,7 +171,7 @@ if(isset($_GET['term'])){
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/research/publications">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your criteria did not match any posts. <a href="<?php echo $url_current; ?>">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
