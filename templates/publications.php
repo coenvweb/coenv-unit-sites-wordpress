@@ -206,7 +206,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any publications. <a href="/research/publications">Return to all publications &raquo;</a></p>
+  	<p>We're sorry. Your criteria did not match any publications. <a href="/research/publications">Return to all publications &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
