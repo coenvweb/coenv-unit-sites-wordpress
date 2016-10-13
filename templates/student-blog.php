@@ -130,7 +130,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 	<?php } ?>
 	</div>
   	<?php } else { ?>
-  	<p class="no-results">We're sorry. Your crtieria did not match any posts. <a href="/news-events/student-services-blog/">Return to all posts</a></p>
+  	<p class="no-results">We're sorry. Your criteria did not match any posts. <a href="/news-events/student-services-blog/">Return to all posts</a></p>
 	<?php } ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) { ?>
