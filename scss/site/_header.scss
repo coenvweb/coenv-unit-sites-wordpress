@@ -337,3 +337,22 @@ margin-bottom: 0;
 .page-template-default .section-row {
     height: 166px;
 }
+
+//uw alert closer
+
+#uwalert-alert-message {
+   display: none;
+    &.please-unhide {
+        display: block!important;
+    }
+}
+
+div#closer {
+    position: relative;
+    float: right;
+    cursor: pointer;
+    background: rgba(0,0,0,.3);
+    &:hover {
+        background: rgba(0,0,0,.15);
+    }
+}

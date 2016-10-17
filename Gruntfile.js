@@ -53,6 +53,7 @@ module.exports = function(grunt) {
           'js/masonry-packaged.js',
 		      'js/share.js',
 		      'js/main.js',
+            './js/alert-closer.js',
           'js/wp-menufix.js',
           
         ],
