@@ -276,3 +276,23 @@
     margin-bottom: 1rem;
     border-bottom: 1px solid $border;
 }
+
+//uw alert closer
+
+#uwalert-alert-message {
+   display: none;
+    &.please-unhide {
+        display: block!important;
+    }
+}
+
+div#closer {
+    position: relative;
+    float: right;
+    cursor: pointer;
+    background: rgba(0,0,0,.3);
+    &:hover {
+        background: rgba(0,0,0,.15);
+    }
+}
+

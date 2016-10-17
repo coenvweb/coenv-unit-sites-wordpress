@@ -63,6 +63,7 @@ module.exports = function(grunt) {
 		      'js/slick.js/slick/slick.min.js',
 		      'js/share.js',
 		      'js/main.js',
+            './js/alert-closer.js',
           'js/wp-menufix.js',
         ],
 
