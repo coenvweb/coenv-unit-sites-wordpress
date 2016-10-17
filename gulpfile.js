@@ -41,6 +41,7 @@ gulp.task('main_js', function () {
             './js/init-foundation.js',
             './js/kitchen-sink.js',
             './js/share.js',
+            './js/alert-closer.js',
             './js/widget-media-upload.js',
             './js/wp-menufix.js',
             './js/main.js',

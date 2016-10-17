@@ -160,3 +160,18 @@
 .breadcrumbs>* {
 	line-height: rem-calc(16);
 }
+
+//uw alert closer
+
+#uwalert-alert-message {
+   display: none;
+    &.please-unhide {
+        display: block!important;
+    }
+}
+
+div#closer {
+    position: relative;
+    float: right;
+    cursor: pointer;
+}
