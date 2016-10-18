@@ -319,7 +319,17 @@ class CoEnv_Widget_Events extends WP_Widget {
     // get cached XML from WP transient API
     $events_xml = get_transient( 'trumba_events_xml' );
     if ( $events_xml === false || $events_xml === '' ) {
-      $events_xml = file_get_contents( $feed_url );
+        $ctx = stream_context_create(array('http'=>
+            array(
+                'timeout' => 3,  //1200 Seconds is 20 Minutes
+            )
+        ));
+
+        if ($events_xml = file_get_contents( $feed_url, false, $ctx )) {
+
+        } else {
+            return;
+        };
       set_transient( 'trumba_events_xml', $events_xml, 1 * MINUTE_IN_SECONDS );
     }
     
