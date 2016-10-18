@@ -260,7 +260,7 @@ class CoEnv_Widget_Events extends WP_Widget {
             )
         ));
 
-        if ($events_xml = file_get_contents( $feed_url, false, $ctx ) {
+        if ($events_xml = file_get_contents( $feed_url, false, $ctx )) {
 
         } else {
             return;
