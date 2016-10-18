@@ -130,7 +130,7 @@ $wp_query = new WP_Query( $home_args );
     <div class="events">
     <a class="button right" href="/about/news-events/events"><div class="button-background"><p>Learn More »</p></div></a>
 	<h4>Events</h4>
-	<?php the_widget('CoEnv_Widget_Events', 'feed_url=http://www.trumba.com/calendars/sea_envir.rss&posts_per_page=3'); ?>
+	<?php the_widget('CoEnv_Widget_Events', 'feed_url=https://www.trumba.com/calendars/sea_envir.rss&posts_per_page=3'); ?>
     </div>
 </div>
 </div>
