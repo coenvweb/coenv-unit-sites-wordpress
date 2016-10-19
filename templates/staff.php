@@ -1,27 +1,19 @@
 <?php
 /*
-Template Name: Members Index
+Template Name: Staff Index
 */
 
 /*
  * Query variables
  */
 
-if(isset($wp_query->query_vars['research-areas'])) {
-    $research_areas = urldecode($wp_query->query_vars['research-areas']);
-}
 ?>
 
 <?php get_header(); ?>
 <div class="row">
 	<div class="small-12 medium-8 columns" role="main" id="main-col">
 		<div class="entry-content">
-		<div class="row filters">
-		    <h1 class="large-6 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('research-areas', $research_areas); // Category filter ?>
-			</div>
-		</div>
+		    <h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<?php
 		/**
 		  * Blog loop
@@ -31,11 +23,11 @@ if(isset($wp_query->query_vars['research-areas'])) {
 			'post_type'	=> 'members',
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
-			'meta_query' => array(
+            'meta_query' => array(
                 'relation' => 'AND',
                 'staff_clause' => array(
                     'key' => 'staff_member',
-                    'value' => '"member"',
+                    'value' => '"staff"',
                     'compare' => 'LIKE',
                 ),
                 'name_clause' => array(
@@ -48,35 +40,16 @@ if(isset($wp_query->query_vars['research-areas'])) {
             ),
 			'paged' => $paged,
 		);
-
-        if($research_areas) {
-            $query_args['tax_query'][] = array(
-                'taxonomy' => 'research-areas',
-                'field' => 'slug',
-                'terms' => $research_areas,
-            );
-        }
 		
-
 		$wp_query = new WP_Query( $query_args );
 		?>
+        <hr>
 		<?php if ($wp_query->have_posts()):
-        if($research_areas) {
-            $term = get_term_by('slug', $research_areas, 'research-areas');
-
-        ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> working in <strong><?php echo $term->name; ?></strong></div>
-		</div>
-		<?php
-        }
-        ?>
-		<hr>
-        <?php
+        
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		    $wp_query->the_post();
-		    get_template_part( 'partials/partial', 'member' );
+		    get_template_part( 'partials/partial', 'staff' );
         ?>
 	<?php endwhile; ?>
   	<?php else: ?>

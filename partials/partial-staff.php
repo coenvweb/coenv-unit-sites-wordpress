@@ -31,7 +31,7 @@ $member_photo = get_the_post_thumbnail();
                 <?php } ?>
             </div>
         </div>
-		<div class="member-photo">
+        <div class="member-photo">
             <?php
                 if($member_photo) {
                     echo $member_photo;
@@ -40,6 +40,8 @@ $member_photo = get_the_post_thumbnail();
                 }
             ?>
         </div>
+    </div>
+    <div class="member-info large-8 columns">
         <ul class="member-titles">
         <?php
         if( have_rows('job_titles') ) {
@@ -55,10 +57,9 @@ $member_photo = get_the_post_thumbnail();
         if( $member_department ) { ?>
             <div class="member-department"><?php echo $member_department ?></div>
         <?php } ?>
-    </div>
-    <div class="article__categories large-8 columns">
-        <p>Research Areas</p>
-        <?php coenv_base_mem_terms($post->ID); ?>
+        <div class="staff-desc">
+            <?php the_content(); ?>
+        </div>
     </div>
     <?php
     /* Still needed? */

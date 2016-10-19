@@ -10,11 +10,6 @@ li.type-member {
 			padding: rem-calc(10px);
 		}
 
-
-        .member-contact {
-            display: inline;
-        }
-
         .member-titles {
             list-style-type: none;
             padding-bottom: 0.25rem;
@@ -25,14 +20,29 @@ li.type-member {
             }
         }
 
+        .member-photo {
+            max-width: 10rem;
+            float: left;
+            margin-right: 1rem;
+        }
 
-		.member-name {
-            display: inline;
-			@include rem('font-size', 1.25);
-			font-weight: bold;
-			line-height: 1;
-            margin-bottom: 0.5rem;
-            padding: 0;
+
+        .member-line {
+            padding-bottom: 0.5rem;
+            overflow: hidden;
+            .member-contact {
+                display: inline;
+            }
+            .member-name {
+                display: inline;
+                @include rem('font-size', 1.25);
+                font-weight: bold;
+                line-height: 1;
+                float: left;
+                margin-bottom: 0rem;
+                margin-right: 0.5rem;
+                padding: 0;
+            }
 		}
 
 	}
