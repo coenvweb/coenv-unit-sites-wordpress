@@ -80,7 +80,7 @@ if(isset($wp_query->query_vars['research-areas'])) {
         ?>
 	<?php endwhile; ?>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any qrc members.</p>
+  	<p>We're sorry. Your criteria did not match any qrc members.</p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>

@@ -45,6 +45,23 @@ $journal_cover = get_field('journal_cover', 'option');
                 <li class="journal-issue"><span class="meta-label">Issue: </span><?php echo $journal_issue; ?></li>
             </ul>
 
+            <div class="journal-articles">
+            <?php
+                if( have_rows('journal_articles', 'options') ) {
+
+                    echo '<h3>Recent Journal Articles</h3>';
+                    echo '<ul class="article-list">';
+                        while ( have_rows('journal_articles', 'options') ) : the_row();
+
+                            $title = get_sub_field('article_title');
+                            $link = get_sub_field('article_link');
+                            echo '<a href="'.$link.'"><li>'.$title.'</li></a>';
+
+                        endwhile;
+                    echo '</ul>';
+                }
+            ?>
+            </div>
         </div>
 
         <?php
