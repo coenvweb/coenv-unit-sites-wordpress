@@ -108,7 +108,7 @@ if(isset($wp_query->query_vars['category'])){
 	<?php } ?>
 	</div>
   	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="<?php echo the_permalink() ?>">Return to all posts &raquo;</a></p>
+  	<p>We're sorry. Your criteria did not match any posts. <a href="<?php echo the_permalink() ?>">Return to all posts &raquo;</a></p>
 	<?php endif; ?>
 	  </div>		
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>

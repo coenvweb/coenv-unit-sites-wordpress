@@ -41,6 +41,7 @@ gulp.task('main_js', function () {
             './js/init-foundation.js',
             './js/kitchen-sink.js',
             './js/share.js',
+            './js/alert-closer.js',
             './js/widget-media-upload.js',
             './js/wp-menufix.js',
             './js/main.js',
@@ -57,16 +58,18 @@ gulp.task('main_js', function () {
 
 gulp.task('sass', function () {
   return gulp
-    .src('./scss/app.scss')
+    .src('scss/app.scss')
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(sourcemaps.write({includeContent: false, sourceRoot: '.'}))
+    .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(autoprefixer({
         browsers: ['last 4 versions'],
         cascade: false
     }))
     .pipe(cssmin())
-    .pipe(sourcemaps.write('./css/maps'))
     .pipe(rename('app.css'))
+    .pipe(sourcemaps.write('./maps', {includeContent: false, sourceRoot: '../scss'}))
     .pipe(gulp.dest('./css'))
     .pipe(livereload());
   ;
@@ -76,6 +79,7 @@ gulp.task('watch', function () {
     livereload.listen();
     gulp.watch('**/*.{html,php}', livereload.reload);
     gulp.watch('scss/**/*.scss', ['sass']);
+    gulp.watch(['./js/*.js', '!./js/app.js'], ['js']);
 ;
 });
 

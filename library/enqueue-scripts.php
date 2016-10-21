@@ -6,11 +6,9 @@ if (!function_exists('FoundationPress_scripts')) :
     // deregister the jquery version bundled with wordpress
     wp_deregister_script( 'jquery' );
 
-    // register scripts
-    wp_register_script( 'foundation', get_template_directory_uri() . '/js/app.js', array(), '1.0.0', true );
-
+    wp_register_script( 'jquery', get_template_directory_uri() . '/js/app.js', array(), '1.0.0', true );
     // enqueue scripts
-    wp_enqueue_script('foundation');
+    wp_enqueue_script('jquery'); //trick for accordion plugin
 
   }
 
