@@ -204,7 +204,7 @@
 
             .be-boundless {
                 text-align: center;
-                height: 150px;
+                height: 190px;
                 padding: rem-calc(32) 0;
 
                 img:first-of-type {
@@ -217,6 +217,11 @@
 
                 .be-boundless-svg-whole {
                     width: 200px;
+                }
+
+                .boundless-logo {
+                    width: 375px;
+                    margin: 1.75rem 0;
                 }
             }
             
