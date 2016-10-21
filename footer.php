@@ -50,7 +50,7 @@
                         <li><a target="_blank" href="http://jisao.washington.edu/">Joint Institute for the Study of the Atmosphere and Ocean</a></li>
                         <li><a target="_blank" href="http://www.uwpcc.washington.edu/">Program on Climate Change</a></li>
                         <li><a target="_blank" href="http://depts.washington.edu/qrc/">Quaternary Research Center</a></li>
-                        <li><a target="_blank" href="https://botanicgardens.uw.edu/">UW Botanic Gardens</a></li>
+                        <li><a target="_blank" href="http://botanicgardens.uw.edu/">UW Botanic Gardens</a></li>
                         <li><a target="_blank" href="http://www.waspacegrant.org/">Washington NASA Space Grant</a></li>
                         <li><a target="_blank" href="http://wsg.washington.edu/">Washington Sea Grant</a></li>
                     </ul>
@@ -65,7 +65,7 @@
 
         <div class="be-boundless">
             <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?><span class="visuallyhidden">University of Washington</span></a><br />
-            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?><span class="visuallyhidden">Be Boundless</span></a>
+            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><img class="boundless-logo" src="<?= get_template_directory_uri() ?>/assets/img/boundless_logo.png" alt="Be Boundless - For Washington For The World" /><span class="visuallyhidden">Be Boundless</span></a>
         </div>
 
         <div class="medium-6 columns">
