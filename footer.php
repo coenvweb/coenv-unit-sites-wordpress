@@ -77,7 +77,7 @@
 
         <div class="be-boundless">
             <a href="http://washington.edu/" rel="home" title="University of Washington" target="_blank"><?php include('assets/img/university-of-washington.svg'); ?></a><br />
-            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><?php include('assets/img/be-boundless-gold.svg'); ?></a>
+            <a href="http://www.washington.edu/boundless/" rel="home" title="University of Washington - Be Boundless" target="_blank"><img class="boundless-logo" src="<?= get_template_directory_uri() ?>/assets/img/boundless_logo.png" alt="Be Boundless - For Washington For The World" /><span class="visuallyhidden">Be Boundless</span></a>
         </div>
 
         <div class="medium-6 columns">
