@@ -56,6 +56,7 @@ function hide_editor() {
 }
 
 define( 'NEWS_PARENT_ID', '142' );
+define( 'MEMBERS_PAGE_PARENT_ID', '3214' );
  
  
 /**
