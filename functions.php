@@ -291,3 +291,23 @@ function coenv_url_ssl($url)
   return $url;
 }
 add_filter('wp_get_attachment_url', 'coenv_url_ssl');
+
+wp_mail('cbessee@uw.edu', 'test', 'test');
+
+function set_mail_html_content_type() {
+    return 'text/html';
+}
+
+
+$to = 'cbessee@uw.edu';
+$subject = 'New Comment Ready for Moderation on: ';
+$message = '<p>A new comment on the post is waiting for your approval.</p>';
+$message .= '<br><p>Author: </p>';
+$message .= '<p>Email: </p>';
+$message .= '<p>URL: </p>';
+$message .= '<p>Comment: </p>';
+$message .= '<br><p>Visit the moderation panel to manage: <a href="https://botanicgardens.uw.edu/wp-admin/edit-comments.php?comment_status">https://botanicgardens.uw.edu/wp-admin/edit-comments.php?comment_status</a></p>';
+
+add_filter( 'wp_mail_content_type', 'set_mail_html_content_type' );
+wp_mail( $to, $subject, $message );
+remove_filter( 'wp_mail_content_type', 'set_mail_html_content_type' );
