@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
 Tested up to: 4.6
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 
 
@@ -133,6 +133,10 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.8.2 =
+* 2016-10-19
+* Only skip one sort for tags on frontend, not admin.
 
 = 2.8.1 =
 * 2016-10-06

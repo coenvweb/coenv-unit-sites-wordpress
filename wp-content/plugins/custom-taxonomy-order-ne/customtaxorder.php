@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.8.1
+Version: 2.8.2
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -36,7 +36,7 @@ Domain Path: /lang/
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.8.1');
+define('CUSTOMTAXORDER_VER', '2.8.2');
 
 
 function customtaxorder_register_settings() {
@@ -304,16 +304,18 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
 	}
 	if ( $options[$taxonomy] == 1 && !isset($_GET['orderby']) ) {
-		if (current_filter() == 'get_terms' ) {
+
+		// no filtering so the test in wp_generate_tag_cloud() works out right for us
+		// filtering will happen in the tag_cloud_sort filter sometime later
+		// post_tag = default tags
+		// product_tag = woocommerce product tags
+		if (current_filter() == 'get_terms'  && !is_admin() ) {
 			$customtaxorder_exclude_taxonomies = array('post_tag', 'product_tag');
 			if ( in_array($taxonomy, apply_filters( 'customtaxorder_exclude_taxonomies', $customtaxorder_exclude_taxonomies )) ) {
-				// no filtering so the test in wp_generate_tag_cloud() works out right for us
-				// filtering will happen in the tag_cloud_sort filter sometime later
-				// post_tag = default tags
-				// product_tag = woocommerce product tags
 				return $terms;
 			}
 		}
+
 		// Sort children after the ancestor, by using a float with "ancestor.child".
 		foreach ($terms as $term) {
 			if ( ! $term->parent == 0 ) {
@@ -328,6 +330,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 				}
 			}
 		}
+
 		usort($terms, 'customtax_cmp');
 		return $terms;
 	}
