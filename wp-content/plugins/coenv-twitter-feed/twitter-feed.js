@@ -35,23 +35,23 @@ JQTWEET = {
                       // append tweets into page
                       for (var i = 0; i < numTweets; i++) {
                         img = '';
-                        url = 'http://twitter.com/' + data[i].user.screen_name + '/status/' + data[i].id_str;
+                        url = 'https://twitter.com/' + data[i].user.screen_name + '/status/' + data[i].id_str;
                         if(data[i].retweeted_status) {
                             user = data[i].retweeted_status.user.screen_name;
                             name = data[i].retweeted_status.user.name;
-                            user_url = 'http://twitter.com/' + data[i].retweeted_status.user.screen_name;
-                            prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].retweeted_status.user.profile_image_url + '" /></a>';
+                            user_url = 'https://twitter.com/' + data[i].retweeted_status.user.screen_name;
+                            prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].retweeted_status.user.profile_image_url_https + '" /></a>';
                             text = data[i].retweeted_status.text;
                         } else {
                             user = data[i].user.screen_name;
                             name = data[i].user.name;
-                            user_url = 'http://twitter.com/' + data[i].user.screen_name;
-                            prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].user.profile_image_url + '" /></a>';
+                            user_url = 'https://twitter.com/' + data[i].user.screen_name;
+                            prof_img = '<a href="' + user_url + '" target="_blank"><img src="' + data[i].user.profile_image_url_https + '" /></a>';
                             text = data[i].text;
                         }
-                        reply = 'http://twitter.com/intent/tweet?lang=en&in_reply_to=' + data[i].id_str;
-                        retweet = 'http://twitter.com/intent/retweet?lang=en&tweet_id=' + data[i].id_str;
-                        favorite = 'http://twitter.com/intent/favorite?lang=en&tweet_id=' + data[i].id_str;
+                        reply = 'https://twitter.com/intent/tweet?lang=en&in_reply_to=' + data[i].id_str;
+                        retweet = 'https://twitter.com/intent/retweet?lang=en&tweet_id=' + data[i].id_str;
+                        favorite = 'https://twitter.com/intent/favorite?lang=en&tweet_id=' + data[i].id_str;
                         try {
                           if (data[i].entities['media']) {
                             img = '<a href="' + url + '" target="_blank"><img src="' + data[i].entities['media'][0].media_url + '" /></a>';
