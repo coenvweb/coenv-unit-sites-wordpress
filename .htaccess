@@ -44,6 +44,12 @@ RewriteRule ^(.*)$ http://hazards.uw.edu/geology/m9 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} hazards.washington.edu [NC]
 RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} uwpcc.washington.edu [NC]
+RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} www.uwpcc.washington.edu [NC]
+RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
+
 RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
@@ -89,6 +95,10 @@ RewriteRule ^pcc/?(.*)$ https://dev.pcc.uw.edu/$1 [R,L]
 RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^fridayharborlabs/?(.*)$ https://dev.fhl.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^pcc.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://pcc.uw.edu/$1 [R,L]
 
 RewriteCond %{HTTP_HOST} ^botanicgardens.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
