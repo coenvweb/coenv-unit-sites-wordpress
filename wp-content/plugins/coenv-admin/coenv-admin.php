@@ -233,37 +233,36 @@ if( function_exists('acf_set_options_page_capability') )
 }
 
 //override new user notification function with custom email
-if ( !function_exists( 'wp_new_user_notification' ) ) { 
-    function wp_new_user_notification( $user_id, $plaintext_pass = '' ) { 
-        // set content type to html
-        add_filter( 'wp_mail_content_type', 'wpmail_content_type' );
+add_filter('wpmu_signnup_user_notification', 'wp_new_user_noticiation');
+function wp_new_user_notification( $user_id, $plaintext_pass = '' ) { 
+    // set content type to html
+    add_filter( 'wp_mail_content_type', 'wpmail_content_type' );
 
-        // user
-        $user = new WP_User( $user_id );
-        $userEmail = stripslashes( $user->user_email );
-        $siteUrl = get_home_url();
-        $loginUrl = wp_login_url();
-        $logoUrl = plugin_dir_url( __FILE__ ).'collegeLogo.png';
+    // user
+    $user = new WP_User( $user_id );
+    $userEmail = stripslashes( $user->user_email );
+    $siteUrl = get_home_url();
+    $loginUrl = wp_login_url();
+    $logoUrl = plugin_dir_url( __FILE__ ).'collegeLogo.png';
 
-        $subject = 'Welcome to the College of the Environment Web Framework';
-        $headers = 'From: College of the Environment Web Team <coenvweb@uw.edu>';
+    $subject = 'Welcome to the College of the Environment Web Framework';
+    $headers = 'From: College of the Environment Web Team <coenvweb@uw.edu>';
 
-        // admin email
-        $message  = "A new user has been created"."\r\n\r\n";
-        $message .= 'Email: '.$userEmail."\r\n";
-        $message .= 'Site: '.$siteUrl."\r\n";
-        @wp_mail( get_option( 'admin_email' ), 'environment.uw.edu New User Notification', $message, $headers );
+    // admin email
+    $message  = "A new user has been created"."\r\n\r\n";
+    $message .= 'Email: '.$userEmail."\r\n";
+    $message .= 'Site: '.$siteUrl."\r\n";
+    @wp_mail( get_option( 'admin_email' ), 'environment.uw.edu New User Notification', $message, $headers );
 
-        ob_start();
-        include plugin_dir_path( __FILE__ ).'/email_welcome.php';
-        $message = ob_get_contents();
-        ob_end_clean();
+    ob_start();
+    include plugin_dir_path( __FILE__ ).'/email_welcome.php';
+    $message = ob_get_contents();
+    ob_end_clean();
 
-        @wp_mail( $userEmail, $subject, $message, $headers );
+    @wp_mail( $userEmail, $subject, $message, $headers );
 
-        // remove html content type
-        remove_filter ( 'wp_mail_content_type', 'wpmail_content_type' );
-    }
+    // remove html content type
+    remove_filter ( 'wp_mail_content_type', 'wpmail_content_type' );
 }
 
 /**
