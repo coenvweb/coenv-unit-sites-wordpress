@@ -9,7 +9,7 @@ function coenv_base_fac_terms($id) {
 		echo '<ul class="fac-cats inline-list">';
 		foreach ($fac_terms as $term) {
 
-			echo '<li><a href="/faculty-research/?tax=research_areas&term=' . $term->slug . '">' . $term->name . '</a></li>';
+			echo '<li><a href="/faculty-research/research_areas/' . $term->slug . '/">' . $term->name . '</a></li>';
 		}
 		echo '</ul>';
 	}

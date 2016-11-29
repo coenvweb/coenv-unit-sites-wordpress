@@ -3,11 +3,17 @@
 Template Name: Faculty Index
 */
 
-// Categories
-$coenv_cat_1 = urlencode( htmlentities( $_GET['tax'] ) );
-$coenv_cat_term_1 = urlencode( htmlentities( $_GET['term'] ) );
-$coenv_cat_term_1_arr = get_term_by( 'slug',$coenv_cat_term_1,$coenv_cat_1 );
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+$filtered=false;
+
+//research areas
+if(isset($wp_query->query_vars['research_areas'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['research_areas']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
+}
 
 get_header();
 
@@ -33,7 +39,7 @@ if( !empty( get_field( 'intro_text') ) ) {
 			<?php endwhile;?>
 		<div id="filter" class="row filters show-for-small-only">
 			<h2 class="large-12 columns left">Filter By Research Area</h2>
-			<div class="large-6 columns left" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="category">
+			<div class="large-6 columns left" data-url="<?php the_permalink() ?>" data-cat="category">
 				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
 			</div>
 		</div>
@@ -51,7 +57,7 @@ if( !empty( get_field( 'intro_text') ) ) {
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'taxonomy' => 'research_areas',
-			'term' => $fac_cat->slug,
+			'term' => $coenv_cat_term_1,
 			'meta_key' => 'last_name',
 			'orderby' => 'meta_value',
 			'order' => 'ASC',
@@ -65,8 +71,8 @@ if( !empty( get_field( 'intro_text') ) ) {
 		);
 
 		// Category filter
-		if($coenv_cat_1 && $coenv_cat_term_1) :
-			$query_args['taxonomy'] = $coenv_cat_1;
+		if($coenv_cat_term_1) :
+			$query_args['taxonomy'] = 'research_areas';
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 		$wp_query = new WP_Query( $query_args );
@@ -74,7 +80,7 @@ if( !empty( get_field( 'intro_text') ) ) {
 		?>
 
 		<?php if ($wp_query->have_posts()): ?>
-		<?php if ($coenv_cat_1): // Category filter ?>
+		<?php if ($coenv_cat_term_1): // Category filter ?>
 			<div class="panel clearfix">
 				<div class="left columns small-10"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
 				<div class="right columns small-2"><a href="/faculty-research/#filter">All Faculty &raquo;</a></div>
