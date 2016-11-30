@@ -3,6 +3,9 @@
     <div class="footer-row">
     <div class="row">
         <div class="medium-6 columns">
+			<div class="site-footer__header">
+				<h2 class="show-for-small-only" id="logo"><a href="http://coenv.washington.edu/" rel="home" title="UW College of the Environment"><img alt="College of the Environment Logo" src="<?php bloginfo('template_directory'); ?>/assets/img/uw-footer.svg" width="350" ></a></h2>
+			</div>
             <div class="site-footer__header">
                 <h2><?php bloginfo('name') ?></h2>
             </div>
