@@ -20,132 +20,145 @@ get_header();
 if( !empty( get_field( 'intro_text') ) ) {
 ?>
 <div class="full-intro">
-	<div class="row">
-		<p><?php the_field( 'intro_text' ); ?></p>
-	</div>
+    <div class="row">
+        <p><?php the_field( 'intro_text' ); ?></p>
+    </div>
 </div> <!-- // full-intro -->
 <?php } ?>
 <div class="row page-content" id="main-col">
-	<div class="columns" role="main">
-			<?php while (have_posts()) : the_post(); ?>
-			<article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
-				<?php do_action('foundationPress_page_before_entry_content'); ?>
-				<?php get_template_part( 'partials/partial', 'article' ); ?>
-				<footer>
-					<?php wp_link_pages( array( 'before' => '<nav id="page-nav"><p>' . __( 'Pages:', 'FoundationPress' ), 'after' => '</p></nav>' ) ); ?>
-					<p><?php the_tags(); ?></p>
-				</footer>
-			</article>
-			<?php endwhile;?>
-		<div id="filter" class="row filters show-for-small-only">
-			<h2 class="large-12 columns left">Filter By Research Area</h2>
-			<div class="large-6 columns left" data-url="<?php the_permalink() ?>" data-cat="category">
-				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
-			</div>
-		</div>
-		<?php
+    <div class="columns" role="main">
+            <?php while (have_posts()) : the_post(); ?>
+            <article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
+                <?php do_action('foundationPress_page_before_entry_content'); ?>
+                <?php get_template_part( 'partials/partial', 'article' ); ?>
+                <footer>
+                    <?php wp_link_pages( array( 'before' => '<nav id="page-nav"><p>' . __( 'Pages:', 'FoundationPress' ), 'after' => '</p></nav>' ) ); ?>
+                    <p><?php the_tags(); ?></p>
+                </footer>
+            </article>
+            <?php endwhile;?>
+        <div id="filter" class="row filters show-for-small-only">
+            <h2 class="large-12 columns left">Filter By Research Area</h2>
+            <div class="large-6 columns left">
+                <?php
+					$cats_args  = array(
+					  'orderby' => 'name',
+					  'order' => 'ASC',
+					  'taxonomy' => 'research_areas'
+					  );
+					$cats = get_categories($cats_args);
+					if ($cats) {
+						echo '<select class="fac_filter">';
+						echo '<option class="" value="faculty-list-item">All Research Areas</option>';
+						foreach($cats as $cat) {
+							  echo '<option value="'.$cat->slug.'" class="">' . $cat->name . '</option>';
+						}
+						 echo '</select>';
+					}
+                ?>
+            </div>
+        </div>
+        <?php
 
-		// Setup WP_QUERY
-		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-		$temp = $wp_query;
-		$wp_query = null;
-		$wp_query = new WP_Query();
-		$wp_query->query;
+        // Setup WP_QUERY
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $temp = $wp_query;
+        $wp_query = null;
+        $wp_query = new WP_Query();
+        $wp_query->query;
 
-		$query_args = array(
-			'post_type'	=> 'faculty',
-			'post_status' => 'publish',
-			'posts_per_page' => -1,
-			'taxonomy' => 'research_areas',
-			'term' => $coenv_cat_term_1,
-			'meta_key' => 'last_name',
-			'orderby' => 'meta_value',
-			'order' => 'ASC',
-			'paged' => $paged,
-			'meta_query' => array(
-				array(
-					'key'     => 'last_name',
-					'compare' => 'IN',
-				),
-			),
-		);
+        $query_args = array(
+            'post_type' => 'faculty',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'taxonomy' => 'research_areas',
+            'term' => $coenv_cat_term_1,
+            'meta_key' => 'last_name',
+            'orderby' => 'meta_value',
+            'order' => 'ASC',
+            'paged' => $paged,
+            'meta_query' => array(
+                array(
+                    'key'     => 'last_name',
+                    'compare' => 'IN',
+                ),
+            ),
+        );
 
-		// Category filter
-		if($coenv_cat_term_1) :
-			$query_args['taxonomy'] = 'research_areas';
-			$query_args['term'] = $coenv_cat_term_1;
-		endif;
-		$wp_query = new WP_Query( $query_args );
+        // Category filter
+        if($coenv_cat_term_1) :
+            $query_args['taxonomy'] = 'research_areas';
+            $query_args['term'] = $coenv_cat_term_1;
+        endif;
+        $wp_query = new WP_Query( $query_args );
 
-		?>
-
-		<?php if ($wp_query->have_posts()): ?>
-		<?php if ($coenv_cat_term_1): // Category filter ?>
-			<div class="panel clearfix">
-				<div class="left columns small-10"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-				<div class="right columns small-2"><a href="/faculty-research/#filter">All Faculty &raquo;</a></div>
-			</div>
-		<?php endif; ?>
+        ?>
+        <div class="fac_content">
+        <?php if ($wp_query->have_posts()): ?>
 
 
+        <ul class="faculty-list-teach clearfix small-block-grid-3 medium-block-grid-4 large-block-grid-5">
 
+    
+        <?php
+        # The Loop
+        while ( $wp_query->have_posts() ) :
+        $wp_query->the_post();
+        $faculty_thumb = get_the_post_thumbnail( get_the_ID(),'faculty_sm' );
+        $faculty_link = get_the_permalink();
+        $faculty_phone_rows = get_field( 'phone_number' );
+        $faculty_email = str_replace( 'u.washington.edu','uw.edu',get_field( 'email_address' ) );
+        $first_faculty_phone_row = $faculty_phone_rows[0];
+        $first_faculty_phone = $first_faculty_phone_row['number' ];
+        $faculty_title_rows = get_field( 'job_titles' );
+        $first_faculty_title_row = $faculty_title_rows[0];
+        $first_faculty_title = $first_faculty_title_row['job_title'];
+        $faculty_img_src = wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) );
+        $faculty_areas = get_the_terms($post->ID, 'research_areas');
+        $term_list = '';
+        foreach($faculty_areas as $area) {
+            $term_list .= $area->slug . ' ';
+        }
+        if ( !$faculty_img_src ) {
+            $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
+        }
+        echo '<li class="faculty-list-item '.$term_list.'">';
+            echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
+            echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
+        echo '</li>';
+        endwhile;
+        ?>
+        </ul>
+        </div>
+        <ul class="widget-area after-content">
+            <?php dynamic_sidebar( "after-content" ); ?>
+        </ul>
 
-		<ul class="faculty-list-teach clearfix small-block-grid-3 medium-block-grid-4 large-block-grid-5">
-
-	
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		$faculty_thumb = get_the_post_thumbnail( get_the_ID(),'faculty_sm' );
-		$faculty_link = get_the_permalink();
-		$faculty_phone_rows = get_field( 'phone_number' );
-		$faculty_email = str_replace( 'u.washington.edu','uw.edu',get_field( 'email_address' ) );
-		$first_faculty_phone_row = $faculty_phone_rows[0];
-		$first_faculty_phone = $first_faculty_phone_row['number' ];
-		$faculty_title_rows = get_field( 'job_titles' );
-		$first_faculty_title_row = $faculty_title_rows[0];
-		$first_faculty_title = $first_faculty_title_row['job_title'];
-		$faculty_img_src = wp_get_attachment_url( get_post_thumbnail_id( $post->ID ) );
-		if ( !$faculty_img_src ) {
-			$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
-		}
-		echo '<li class="faculty-list-item">';
-			echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
-			echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '</li>';
-		endwhile;
-		?>
-  		</ul>
-  		<ul class="widget-area after-content">
-			<?php dynamic_sidebar( "after-content" ); ?>
-		</ul>
-
-	<?php endif; ?>
+    <?php endif; ?>
     </div>
 
-	<aside id="sidebar" class="columns show-for-medium-up">
-	<?php
-	if (!is_front_page()) {
-		echo '<div class="coenv_base_subnav">';
-		echo '<div class="section-title">';
-		echo coenv_base_section_title($GLOBALS['post']->ID);
-		echo '</div>';
-		echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
-		echo '</div>';
-		
-	}
-	?>
-	<?php the_widget('coenv_base_fac_cats', 'title=Research Area'); ?>
-	<?php dynamic_sidebar('sidebar-widgets'); ?>
-	<?php
-	$ancestor_id = coenv_base_get_ancestor('ID');
-	if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
-		dynamic_sidebar( $ancestor_id );
-	endif;
-	?>
-	</aside>
-	</div>
-	    <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+    <aside id="sidebar" class="columns show-for-medium-up">
+    <?php
+    if (!is_front_page()) {
+        echo '<div class="coenv_base_subnav">';
+        echo '<div class="section-title">';
+        echo coenv_base_section_title($GLOBALS['post']->ID);
+        echo '</div>';
+        echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
+        echo '</div>';
+        
+    }
+    ?>
+    <?php the_widget('coenv_base_fac_cats', 'title=Research Area'); ?>
+    <?php dynamic_sidebar('sidebar-widgets'); ?>
+    <?php
+    $ancestor_id = coenv_base_get_ancestor('ID');
+    if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
+        dynamic_sidebar( $ancestor_id );
+    endif;
+    ?>
+    </aside>
+    </div>
+        <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
 
 <?php get_footer(); ?>

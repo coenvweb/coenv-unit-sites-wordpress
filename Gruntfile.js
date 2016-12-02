@@ -48,6 +48,7 @@ module.exports = function(grunt) {
         src: [
           'js/foundation/js/foundation.min.js',
           'js/init-foundation.js',
+          'js/isotope2.js',
 		      'js/nivo-lightbox/nivo-lightbox.min.js',
 		      'js/slick.js/slick/slick.min.js',
           'js/masonry-packaged.js',

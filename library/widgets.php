@@ -140,12 +140,10 @@ class coenv_base_fac_cats extends WP_Widget {
                     $cats = get_categories($cats_args);
                     if ($cats) {
                          echo '<ul class="cats">';
-                         if ($fac_cat):
-                              echo '<li><a href="/faculty-research/">All Research Areas</a></li>';
-                         endif;
+                            echo '<li class="'.($fac_cat_1 ? '' : 'active').' fac_cat" data-cat="faculty-list-item">All Research Areas</li>';
                          foreach($cats as $cat) { 
                               $selected = ($cat->slug == $fac_cat ? 'active' : '');
-                              echo '<li class="'.$selected.'"><a href="/faculty-research/research_areas/' . $cat->slug . '/#filter">' . $cat->name . '</a></li>';
+                              echo '<li data-cat="'.$cat->slug.'" class="'.$selected.' fac_cat">' . $cat->name . '</li>';
                          }
                          echo '</ul>';
                     }
