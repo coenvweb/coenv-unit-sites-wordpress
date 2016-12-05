@@ -117,7 +117,7 @@ $page_link = get_the_permalink();
         ?>
 	<?php endwhile; ?>
   	<?php else: ?>
-  	    <p>We're sorry. Your criteria did not match any QRC member projects.</p>
+  	    <p>We're sorry. Your criteria did not match any QRC funded projects.</p>
 	<?php endif; ?>
         </ul>
 	</div>		
