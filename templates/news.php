@@ -35,20 +35,20 @@ if(isset($wp_query->query_vars['category'])){
 
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main" id="main-col">
-		<div class="entry-content">
-		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-		<div class="row filters">
-			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
-				<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
-			</div>
-			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
-				<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
-		 	</div>
-		</div>
-		<hr>
-		<?php
-		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+    <div class="small-12 medium-8 columns" role="main" id="main-col">
+        <div class="entry-content">
+        <h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
+        <div class="row filters">
+            <div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
+                <?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
+            </div>
+            <div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
+                <?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
+            </div>
+        </div>
+        <hr>
+        <?php
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         $sticky = get_option('sticky_posts');
 
         /**
@@ -57,8 +57,8 @@ if(isset($wp_query->query_vars['category'])){
 
         if($paged <= 1 && $filtered == false) {
         $featured_args = array(
-			'post_status' => 'publish',
-			'posts_per_page' => 1,
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
             'post_type' => 'post',
             'post__in' => $sticky
         );
@@ -116,83 +116,83 @@ if(isset($wp_query->query_vars['category'])){
                 }
             }
         }
-		/**
-		  * News loop
-		  */
+        /**
+          * News loop
+          */
         $query_args = array(
             'post_type' => 'post',
-			'post_status' => 'publish',
-			'posts_per_page' => 3,
+            'post_status' => 'publish',
+            'posts_per_page' => 3,
             'post__not_in' => $sticky,
             'ignore_sticky_posts' => 1,
-			'paged' => $paged
-		);
+            'paged' => $paged
+        );
 
-		// Category filter
-		if($coenv_cat_term_1) :
-			$query_args['taxonomy'] = 'category';
-			$query_args['term'] = $coenv_cat_term_1;
+        // Category filter
+        if($coenv_cat_term_1) :
+            $query_args['taxonomy'] = 'category';
+            $query_args['term'] = $coenv_cat_term_1;
             unset($query_args['post__not_in']); // if filtering, we want to let sticky posts in
-		endif;
+        endif;
 
-		// Date filters
-		if ($coenv_year) {
-			$query_args['year'] = $coenv_year;
+        // Date filters
+        if ($coenv_year) {
+            $query_args['year'] = $coenv_year;
             unset($query_args['post__not_in']);
-		}
-		if($coenv_month) {
-			$query_args['monthnum'] = $coenv_month;
+        }
+        if($coenv_month) {
+            $query_args['monthnum'] = $coenv_month;
             unset($query_args['post__not_in']);
-		}
+        }
 
-		$wp_query = new WP_Query( $query_args );
+        $wp_query = new WP_Query( $query_args );
         ?>
 
-		<?php if ($wp_query->have_posts()):
-		?>
-		<?php if ($coenv_cat_term_1): // Category filter ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
-		</div>
-		<?php endif; ?>
-		<?php if($coenv_year && $coenv_month): // Date filter ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
-		</div>
-		<?php endif; ?>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		$terms = wp_get_post_terms( get_the_ID(), 'category');
+        <?php if ($wp_query->have_posts()):
+        ?>
+        <?php if ($coenv_cat_term_1): // Category filter ?>
+        <div class="panel">
+            <div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+        </div>
+        <?php endif; ?>
+        <?php if($coenv_year && $coenv_month): // Date filter ?>
+        <div class="panel">
+            <div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
+            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+        </div>
+        <?php endif; ?>
+        <?php
+        # The Loop
+        while ( $wp_query->have_posts() ) :
+        $wp_query->the_post();
+        $terms = wp_get_post_terms( get_the_ID(), 'category');
         echo '<div class="blog clearfix">';
-		get_template_part( 'partials/partial', 'article' );
+        get_template_part( 'partials/partial', 'article' );
         ?>
-		</div>
-	<?php endwhile; ?>
-	<div class="pager">
-	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
-		<nav id="post-nav">
-			<div class="post-previous"><?php //next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
-			<div class="post-next"><?php //previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
-		</nav>
-	<?php } ?>
-	</div>
-  	<?php else: ?>
-  	<p>We're sorry. Your crtieria did not match any posts. <a href="/about/news">Return to all posts &raquo;</a></p>
-	<?php endif; ?>
-	  </div>		
-	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-	<?php endif; ?>
-	<a href="#" class="back-to-top">Back to Top</a>
-	<?php do_action('foundationPress_after_content'); ?>
-	</div>
+        </div>
+    <?php endwhile; ?>
+    <div class="pager">
+    <?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
+        <nav id="post-nav">
+            <div class="post-previous"><?php //next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
+            <div class="post-next"><?php //previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
+        </nav>
+    <?php } ?>
+    </div>
+    <?php else: ?>
+    <p>We're sorry. Your crtieria did not match any posts. <a href="/about/news">Return to all posts &raquo;</a></p>
+    <?php endif; ?>
+      </div>        
+    <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+    <?php do_action('foundationPress_after_content'); ?>
+    <ul class="widget-area after-content">
+    <?php dynamic_sidebar("after-content"); ?>
+    </ul>
+    <?php endif; ?>
+    <a href="#" class="back-to-top">Back to Top</a>
+    <?php do_action('foundationPress_after_content'); ?>
+    </div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
 </div>

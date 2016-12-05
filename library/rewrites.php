@@ -55,7 +55,9 @@ function generate_cpt_rewrite_rules( $post_type, $index_path, $query_vars = arra
 function add_cpt_rewrites($wp_rewrite) {
     $a_rules = generate_cpt_rewrite_rules('post', 'about/news', array('coenv-year', 'coenv-month'));
     $b_rules = generate_cpt_rewrite_rules('members', 'people/members');
-    $wp_rewrite->rules = $a_rules + $b_rules + $wp_rewrite->rules;
+    $c_rules = generate_cpt_rewrite_rules('member_projects', 'research/qrc-funded-projects/currently-funded-qrc-projects', array('project-search'));
+    $d_rules = generate_cpt_rewrite_rules('member_projects', 'research/qrc-funded-projects/previously-funded-qrc-projects', array('project-search'));
+    $wp_rewrite->rules = $a_rules + $b_rules + $c_rules + $d_rules + $wp_rewrite->rules;
 }
 add_action('generate_rewrite_rules', 'add_cpt_rewrites');
 
@@ -64,6 +66,8 @@ function add_query_vars() {
     add_rewrite_tag('%coenv-month%', '(.+?)/');
     add_rewrite_tag('%coenv-year%', '(.+?)/');
     add_rewrite_tag('%category%', '(.+?)/');
+    add_rewrite_tag('%project-category%', '(.+?)/');
+    add_rewrite_tag('%project-search%', '(.+?)/');
 }
 add_action('init', 'add_query_vars');
 

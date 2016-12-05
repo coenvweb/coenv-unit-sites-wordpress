@@ -25,6 +25,23 @@ function coenv_base_post_types_init() {
     )
 
   );
+  register_post_type( 'member_projects',
+    array(
+      'labels' => array(    
+      'name' => __( 'Member Projects' ),
+      'singular_name' => __( 'Member Project' ),
+      'add_new_item' => __( 'Add Member Project'),
+      'edit_item' => __( 'Edit Member Project'),
+      'new_item' => __( 'New Member Project'),
+    ),
+    'supports' => array( 'title', 'editor', 'revisions' ),
+    'public' => true,
+    'has_archive' => false,
+    'show_ui' => true,
+    'rewrite' => array('slug' => 'member-projects', 'with_front' => false),
+    'menu_icon' => 'dashicons-clipboard',
+    )
+  );
   register_post_type( 'features',
     array(
       'labels' => array(    
@@ -42,7 +59,8 @@ function coenv_base_post_types_init() {
     'rewrite' => array('slug' => 'features'),
   'menu_icon' => 'dashicons-slides',
     )
-  );
+  ); 
+
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
