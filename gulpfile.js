@@ -49,7 +49,6 @@ gulp.task('main_js', function () {
     .pipe(sourcemaps.init())
     .pipe(concat('main.js'))
     .pipe(sourcemaps.write())
-    .pipe(uglify())
     .pipe(rename('app.js'))
     .pipe(gulp.dest('./js/'))
     .pipe(livereload());
@@ -77,6 +76,7 @@ gulp.task('watch', function () {
     livereload.listen();
     gulp.watch('**/*.{html,php}', livereload.reload);
     gulp.watch('scss/**/*.scss', ['sass']);
+    gulp.watch('js/**/*.js', ['main_js']);
 ;
 });
 

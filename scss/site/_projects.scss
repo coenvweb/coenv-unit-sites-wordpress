@@ -2,8 +2,50 @@
 
     .projects-list {
         list-style-type: none;
+        margin-left: 0px;
         li {
-            
+            .collapse {
+                width: 0px;
+                height: 0px;
+                overflow: hidden;
+            }
+            .proj-expand {
+                text-align: center;
+                vertical-align: bottom;
+                cursor: pointer;
+                margin-top: 0.75rem;
+                &.active {
+                    i {
+                        &:before {
+                            content: "\f176";
+                        }
+                    }
+                }
+            }
+            .pi-list {
+                list-style-type: none;
+                margin-left: 0px;
+                margin-bottom: 0.5rem;
+                display: inline-block;
+                li {
+                    display: inline-block;
+                    &:not(:first-child) {
+                        &:before {
+                            content: "|";
+                            margin: 0rem 0.2rem;
+                        }
+                    }
+                }
+            }
+        }
+        .proj-terms {
+            margin-bottom: 0.5rem;
+            li {
+                margin: 0.25rem;
+                &:first-child {
+                    margin-left: 0px;
+                }
+            }
         }
     }
 

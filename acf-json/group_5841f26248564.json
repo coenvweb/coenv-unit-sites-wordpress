@@ -24,7 +24,7 @@
             "key": "field_5841f2955043e",
             "label": "Project PI",
             "name": "project_pi",
-            "type": "text",
+            "type": "repeater",
             "instructions": "Name of the PI on this project",
             "required": 0,
             "conditional_logic": 0,
@@ -33,11 +33,70 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": "",
-            "maxlength": ""
+            "collapsed": "",
+            "min": 1,
+            "max": "",
+            "layout": "table",
+            "button_label": "Add Row",
+            "sub_fields": [
+                {
+                    "key": "field_584af11252955",
+                    "label": "PI Last Name",
+                    "name": "pi_last_name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_584af12852956",
+                    "label": "PI First Name",
+                    "name": "pi_first_name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_584af13352957",
+                    "label": "PI Type",
+                    "name": "pi_type",
+                    "type": "text",
+                    "instructions": "Faculty, student, other?",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                }
+            ]
         },
         {
             "key": "field_5845aca6e7966",
@@ -88,5 +147,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1480961292
+    "modified": 1481306496
 }

@@ -60,7 +60,12 @@ $page_link = get_the_permalink();
             $meta_query[] = array(
                 'relation' => 'OR',
                 array (
-                    'key' => 'project_pi',
+                    'key' => 'project_pi_%_pi_first_name',
+                    'value' => $project_search,
+                    'compare' => 'LIKE',
+                ),
+                array (
+                    'key' => 'project_pi_%_pi_last_name',
                     'value' => $project_search,
                     'compare' => 'LIKE',
                 ),
@@ -78,6 +83,9 @@ $page_link = get_the_permalink();
 			'posts_per_page' => -1,
 			'paged' => $paged,
             'meta_query' => $meta_query,
+            'meta_key' => 'project_pi_0_pi_last_name',
+            'orderby' => 'meta_value',
+            'order' => 'ASC'
 		);
 
         if($project_categories) {

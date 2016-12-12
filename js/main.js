@@ -38,6 +38,11 @@ jQuery(function ($) {
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
+
+    $(".proj-expand").on('click', function() {
+        $(this).toggleClass('active');
+        $(this).siblings('.project-description').toggleClass('collapse', 600);
+    });
 });
 
 

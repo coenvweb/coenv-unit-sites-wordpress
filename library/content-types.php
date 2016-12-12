@@ -133,3 +133,56 @@ function coenv_base_custom_field_excerpt($field_name) {
   return apply_filters('the_excerpt', $text);
 }
 
+function project_columns($columns)
+{
+	$columns = array(
+		'cb'		=> '<input type="checkbox" />',
+		'title'		=> 'Title',
+		'pis'	    => 'PI(s)',
+		'project-category'	=>	'Project Categories',
+		'date'		=>	'Date',
+	);
+	return $columns;
+}
+
+function project_custom_columns($column)
+{
+	global $post;
+	if($column == 'pis') {
+		if(have_rows('project_pi')) {
+			$count = 0;
+			while(have_rows('project_pi')) : the_row();
+				if($count > 0) {
+					echo ', ';
+				}
+				echo the_sub_field('pi_first_name');
+				echo " ";
+				echo the_sub_field('pi_last_name');
+				$count ++;
+			endwhile;
+		}
+	}
+	if($column == 'project-category') {
+		$terms = get_the_terms( $post->ID, 'project-category' );
+
+		/* If terms were found. */
+		if ( !empty( $terms ) ) {
+
+			$out = array();
+
+			/* Loop through each term, linking to the 'edit posts' page for the specific term. */
+			foreach ( $terms as $term ) {
+				$out[] = sprintf( '<a href="%s">%s</a>',
+					esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'project-category' => $term->slug ), 'edit.php' ) ),
+					esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'project-category', 'display' ) )
+				);
+			}
+
+			/* Join the terms, separating them with a comma. */
+			echo join( ', ', $out );
+		}
+	}
+}
+
+add_action("manage_member_projects_posts_custom_column", "project_custom_columns");
+add_filter("manage_edit-member_projects_columns", "project_columns");
