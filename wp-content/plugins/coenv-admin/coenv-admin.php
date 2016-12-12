@@ -223,6 +223,29 @@ function tinymce_clear_buttons_before_init( $init ) {
 add_filter('tiny_mce_before_init', 'tinymce_clear_buttons_before_init');
 
 /**
+*  Remove buttons from TinyMCE
+*/ 
+function coenv_admin_tinymce_buttons_remove_1( $buttons ) {  
+ 	
+ 	$remove = array('formatselect', 'wp_adv');
+	return array_diff($buttons,$remove);
+}
+add_filter('mce_buttons', 'coenv_admin_tinymce_buttons_remove_1');
+function coenv_admin_tinymce_buttons_remove_2( $buttons ) {  
+ 	
+ 	$remove = array('underline','alignjustify','forecolor');
+	return array_diff($buttons,$remove);
+}
+add_filter('mce_buttons_2', 'coenv_admin_tinymce_buttons_remove_2');
+ 
+// Keep the "kitchen sink" open
+function changeMceDefaults($in) {
+    $in[ 'wordpress_adv_hidden' ] = FALSE;
+    return $in;
+}
+add_filter( 'tiny_mce_before_init', 'changeMceDefaults' );
+
+/**
  * Add an ACF options capability
  * 
  */
@@ -231,7 +254,5 @@ if( function_exists('acf_set_options_page_capability') )
 {
     acf_set_options_page_capability( 'manage_options' );
 }
-
-
 
 
