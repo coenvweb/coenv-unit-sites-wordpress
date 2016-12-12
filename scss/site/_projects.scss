@@ -3,8 +3,11 @@
     .projects-list {
         list-style-type: none;
         margin-left: 0px;
-        li {
-            .collapse {
+        .type-project {
+            margin: 1rem 0rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ccc;
+            .slideout {
                 width: 0px;
                 height: 0px;
                 overflow: hidden;

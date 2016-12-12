@@ -41,7 +41,7 @@ jQuery(function ($) {
 
     $(".proj-expand").on('click', function() {
         $(this).toggleClass('active');
-        $(this).siblings('.project-description').toggleClass('collapse', 600);
+        $(this).siblings('.project-description').toggleClass('slideout', 600);
     });
 });
 

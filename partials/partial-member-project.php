@@ -6,8 +6,8 @@
 $PIarr = get_field('project_pi');
 
 ?>
-<li id="post-<?php the_ID() ?>" class="type-project row">
-    <h2 class="small-11 columns project-title"><?php the_title(); ?></h2>
+<li id="post-<?php the_ID() ?>" class="type-project row collapse">
+    <h3 class="small-11 columns project-title"><?php the_title(); ?></h3>
     <div class="proj-expand small-1 columns">
         <i class="fi-plus"></i>
     </div>
@@ -29,7 +29,7 @@ $PIarr = get_field('project_pi');
     <div class="small-12 large-6 columns">
         <?php echo coenv_base_proj_terms($post->ID, $page_link); ?>
     </div>
-    <div class="project-description small-12 columns collapse">
+    <div class="project-description small-12 columns slideout">
         <?php echo get_field('project_description'); ?>
     </div>
 </li>
