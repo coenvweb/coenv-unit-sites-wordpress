@@ -584,7 +584,6 @@ class CoEnv_Widget_Events extends WP_Widget {
     }
 
     $events = array_slice( $events, 0, $posts_per_page );
-
     ?>
       <?php echo $before_widget; ?>
             <?php //if ( $events_url != '' ) : ?>

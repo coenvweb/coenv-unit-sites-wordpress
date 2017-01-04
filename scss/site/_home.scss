@@ -531,12 +531,7 @@ width: 30px;
 
 
      @media #{$medium-up} {
-      float: left;
-     
-     
      width: 100%;
-      
-
     }
 
 
@@ -546,6 +541,9 @@ width: 30px;
        margin-bottom: 20px;
        padding-bottom: 20px;
        background-repeat: no-repeat;
+       @media #{$small-only} {
+        padding-bottom: 5px;
+       }
        
 
        @media #{$medium-up} {
