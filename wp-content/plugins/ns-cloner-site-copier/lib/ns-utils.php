@@ -13,9 +13,16 @@ require_once (dirname(__FILE__).'/ns-log-utils.php');
 function ns_set_search_replace_sequence( &$search, &$replace, &$regex_search, &$regex_replace, $logfile=false ){
 	$fix_insertion_index = 1;
 	// Sort string replacements by order longest to shortest to prevent a situation like 
-	// Source Site w/ url="neversettle.it",uploaddir="/neversettle.it/wp-content/uploads" and Target Site w/url="blog.neversettle.it",uploaddir="/neversettle.it/wp-content/uploads/sites/2"
-	// resulting in target uploaddir being "/blog.neversettle.it/wp-content/uploads" when url replacement is applied before uploaddir replacement
-	$search_replace = array_unique( array_combine( $search, $replace ) );
+	// Source Site w/ url="neversettle.it",uploaddir="/neversettle.it/wp-content/uploads" and 
+	// Target Site w/url="blog.neversettle.it",uploaddir="/neversettle.it/wp-content/uploads/sites/2"
+	// resulting in target uploaddir being "/blog.neversettle.it/wp-content/uploads" when 
+	// url replacement is applied before uploaddir replacement
+	// ---
+	// Removing array_unique() which causes problems with two different keys mapped to the same value
+	// and the second replacement never occurs
+	// --- 
+	//$search_replace = array_unique( array_combine( $search, $replace ) );
+	$search_replace = array_combine( $search, $replace );
 	uksort( $search_replace, create_function('$a,$b','return strlen($b)-strlen($a);') );
 	$search = $new_search = array_keys( $search_replace );
 	$replace = $new_replace = array_values( $search_replace );

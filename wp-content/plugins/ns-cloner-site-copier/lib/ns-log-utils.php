@@ -1,6 +1,7 @@
 <?php
 
-if ( !class_exists( 'Kint' ) ) {
+// load Kint if no other plugins already have
+if ( !class_exists( 'Kint' ) && !class_exists( 'kintParser' )) {
 	require_once (dirname(__FILE__).'/kint/Kint.class.php');
 }
 

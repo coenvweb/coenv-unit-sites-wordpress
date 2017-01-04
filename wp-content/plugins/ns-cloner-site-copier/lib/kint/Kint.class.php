@@ -7,7 +7,7 @@
 define( 'KINT_DIR', dirname( __FILE__ ) . '/' );
 require KINT_DIR . 'config.default.php';
 
-if ( !class_exists( 'kintParser', FALSE ) ) {
+if ( !class_exists( 'kintParser' ) ) {
 	require KINT_DIR . 'parsers/parser.class.php';
 }
 

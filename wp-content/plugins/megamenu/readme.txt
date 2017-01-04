@@ -2,8 +2,8 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.6
-Stable tag: 2.2.3.1
+Tested up to: 4.7
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Max Mega Menu will automatically convert your existing menu or menus into a mega
 
 https://www.youtube.com/watch?v=44dJwP1AXT8
 
-Documentation & Demo: https://www.maxmegamenu.com
+Documentation & Demo: https://www.megamenu.com
 
 ###Features:
 
@@ -61,7 +61,7 @@ Max Mega Menu is developed with a focus on code quality, performance and usabili
 > * Automatic updates
 > * Priority Support
 >
-> Find out more: https://www.maxmegamenu.com/upgrade/
+> Find out more: https://www.megamenu.com/upgrade/
 
 Translations:
 
@@ -73,15 +73,15 @@ Translations:
 
 Troubleshooting:
 
-https://www.maxmegamenu.com/articles/troubleshooting/
+https://www.megamenu.com/articles/troubleshooting/
 
 Getting started:
 
-https://www.maxmegamenu.com/documentation/installation/
+https://www.megamenu.com/documentation/installation/
 
 Not working with your theme? Mobile menu not working? Multiple mobile menu toggle icons?
 
-https://www.maxmegamenu.com/documentation/removing-residual-styling/
+https://www.megamenu.com/documentation/removing-residual-styling/
 
 == Installation ==
 
@@ -89,11 +89,11 @@ https://www.maxmegamenu.com/documentation/removing-residual-styling/
 1. Search for "Max Mega Menu"
 1. Click "Install"
 
-https://www.maxmegamenu.com/documentation/installation/
+https://www.megamenu.com/documentation/installation/
 
 == Screenshots ==
 
-See https://www.maxmegamenu.com for more screenshots
+See https://www.megamenu.com for more screenshots
 
 1. New menu changes
 2. Drag and Drop widget editor for each menu item
@@ -103,7 +103,37 @@ See https://www.maxmegamenu.com for more screenshots
 
 == Changelog ==
 
-= 2.3 =
+= 2.3.3 [29/12/16] =
+
+* Fix: Compatibility with WPML Language switcher
+* Fix: Remove max height from CSS Editor
+
+= 2.3.2 [23/12/16] =
+
+* Fix: Theme changes not being applied when PolyLang used in conjunction with the "Output in <head>" option
+* Fix: JavaScript error when a dynamic width has been used for the sub menu, but the matching element does not exist on the page
+
+= 2.3.1 [21/12/16]=
+
+* Improvement: Theme Editor switched to tabbed interface
+* Improvement: Theme Editor now uses AJAX save so you don't lose your place in the theme editor
+* Improvement: Allow Custom CSS editor to increase in size
+* Improvement: Test theme CSS compilation before saving
+* Improvement: Add support for 9 columns
+* New: Option to stop MMM from unbinding JavaScript events from the menu
+* New: Option to stop MMM from prefixing custom CSS classes with 'mega-'
+* New: Add automatic integration for Twenty Seventeen
+* New: Add automatic integration for Zerif and Zerif Pro
+* New: Add force left menu item alignment option
+* New: Add support for "no-headers" custom CSS class
+* Fix: Mobile sub menu width when resizing screen and using Dynamic sub menu widths
+* Fix: Issue where click events are unbound from all menus on page
+* Fix: "Disable link" styling when link is within a mega menu
+* Fix: Stop sub menus reappearing on hover
+* Fix: Account for scrollbars when determining sub menu width
+* Fix: Conflict with Maps Builder plugin
+
+= 2.3 [11/10/16] =
 
 * New Feature: "Hover" event added (options are now Hover Intent, Hover or Click)
 * New Feature: Menu Item Description support added

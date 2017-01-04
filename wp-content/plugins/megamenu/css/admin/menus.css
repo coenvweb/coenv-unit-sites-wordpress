@@ -145,11 +145,16 @@
     margin-top: -5px;
 }
 
+#cboxContent p.submit {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
 #cboxContent .mm_tab_container {
     width: 20%;
     float: left;
     position: relative;
-    height: 424px;
+    height: 454px;
     background: white;
 	-webkit-box-shadow: inset -10px 0px 7px -12px rgba(0,0,0,0.2);
 	-moz-box-shadow: inset -10px 0px 7px -12px rgba(0,0,0,0.2);
@@ -159,7 +164,7 @@
 #cboxContent .mm_content_container {
     padding: 20px;
     float: right;
-	height: 424px;
+	height: 454px;
 	width: 80%;
 	overflow: auto;
 	box-sizing: border-box;
@@ -459,6 +464,9 @@
 	width: 100%;
 }
 
+#cboxContent .mega_menu .widget[data-columns='1'] .widget-contract {
+	display: none;
+}
 
 #cboxContent .mega_menu #widgets[data-columns='1'] .widget[data-columns='1'] {
 	width: 100%;
@@ -586,6 +594,36 @@
 }
 
 
+
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='1'] {
+	width: 11.11%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='2'] {
+	width: 22.22%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='3'] {
+	width: 33.33%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='4'] {
+	width: 44.44%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='5'] {
+	width: 55.55%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='6'] {
+	width: 66.66%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='7'] {
+	width: 77.77%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='8'] {
+	width: 88.88%;
+}
+#cboxContent .mega_menu #widgets[data-columns='9'] .widget[data-columns='9'] {
+	width: 100%;
+}
+
+
 #cboxContent .mega_menu #widgets .widget h4 {
 	max-width: 700px;
 }
@@ -604,6 +642,7 @@
 	padding: 0 19px 19px 0;
 	width: 24px;
 	height: 24px;
+	box-sizing: initial; /* fix conflict with maps builder plugin */
 }
 
 #cboxContent .menu_icon .icon_selector label {
@@ -662,6 +701,10 @@
 #cboxContent table td {
 	padding-bottom: 10px;
 }
+
+#cboxContent .general_settings table td {
+	padding-bottom: 5px;
+}
 #cboxContent h4.first {
 	margin: 0em 0 0.7em 0;
 }
@@ -695,6 +738,13 @@
 	font-size: 0.9em;
 	color: #999;
 	line-height: 1.5em;
+}
+#cboxContent table .mega-menu-item-align td.mega-value select,
+#cboxContent table .mega-sub-menu-align td.mega-value select,
+#cboxContent table .mega-menu-item-align td.mega-value .mega-description,
+#cboxContent table .mega-sub-menu-align td.mega-value .mega-description {
+	float: left;
+	margin-right: 10px;
 }
 
 #cboxContent table td.mega-value .mega-description {
@@ -747,6 +797,16 @@
 .megamenu_enabled .mm_launch {
 	background: #2ea2cc;
 	border-color: #0074a2;
+}
+.megamenu_enabled .mm_prefix {
+	display: block;
+	font-size: 0.9em;
+	border-left: 3px solid orange;
+    padding-left: 10px;
+    margin-top: 3px;
+}
+.mm_prefix {
+	display: none;
 }
 .mm_launch {
 	margin-left: 10px;

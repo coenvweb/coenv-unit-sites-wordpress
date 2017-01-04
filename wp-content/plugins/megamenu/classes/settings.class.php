@@ -37,6 +37,7 @@ class Mega_Menu_Settings {
      */
     public function __construct() {
 
+        add_action( 'wp_ajax_megamenu_save_theme', array( $this, 'ajax_save_theme' ) );
         add_action( 'admin_post_megamenu_save_theme', array( $this, 'save_theme') );
         add_action( 'admin_post_megamenu_add_theme', array( $this, 'create_theme') );
         add_action( 'admin_post_megamenu_delete_theme', array( $this, 'delete_theme') );
@@ -83,12 +84,69 @@ class Mega_Menu_Settings {
 
     }
 
+
+    /**
+     *
+     * @since 2.4.1
+     */
+    public function ajax_save_theme() {
+
+        check_ajax_referer( 'megamenu_save_theme' );
+
+        $style_manager = new Mega_Menu_Style_Manager();
+
+        $test = $style_manager->test_theme_compilation( $this->get_prepared_theme_for_saving() );
+
+        if ( is_wp_error( $test ) ) {
+            wp_send_json_error( $test->get_error_message() );
+        } else {
+            $this->save_theme(true);
+            wp_send_json_success( "Saved" );
+        }
+
+        wp_die();
+
+    }
+
+
+    /**
+     *
+     * @since 2.4.1
+     */
+    public function get_prepared_theme_for_saving() {
+
+        $submitted_settings = $_POST['settings'];
+
+        if ( isset( $_POST['checkboxes'] ) ) {
+            foreach ( $_POST['checkboxes'] as $checkbox => $value ) {
+                if ( isset( $submitted_settings[ $checkbox ] ) ) {
+                    $submitted_settings[ $checkbox ] = 'on';
+                } else {
+                    $submitted_settings[ $checkbox ] = 'off';
+                }
+            }
+        }
+
+        if ( is_numeric( $submitted_settings['responsive_breakpoint'] ) ) {
+            $submitted_settings['responsive_breakpoint'] = $submitted_settings['responsive_breakpoint'] . "px";
+        }
+
+        if ( isset( $submitted_settings['toggle_blocks'] ) ) {
+            unset( $submitted_settings['toggle_blocks'] );
+        }
+
+        $theme = array_map( 'esc_attr', $submitted_settings );
+
+        return $theme;
+
+    }
+
     /**
      * Save changes to an exiting theme.
      *
      * @since 1.0
      */
-    public function save_theme() {
+    public function save_theme($is_ajax = false) {
 
         check_admin_referer( 'megamenu_save_theme' );
 
@@ -100,44 +158,22 @@ class Mega_Menu_Settings {
             unset( $saved_themes[ $theme ] );
         }
 
-        $submitted_settings = $_POST['settings'];
+        $prepared_theme = $this->get_prepared_theme_for_saving();
 
-        if ( isset( $_POST['checkboxes'] ) ) {
-
-            foreach ( $_POST['checkboxes'] as $checkbox => $value ) {
-
-                if ( isset( $submitted_settings[ $checkbox ] ) ) {
-
-                    $submitted_settings[ $checkbox ] = 'on';
-
-                } else {
-
-                    $submitted_settings[ $checkbox ] = 'off';
-
-                }
-
-            }
-
-        }
-
-        if ( is_numeric( $submitted_settings['responsive_breakpoint'] ) ) {
-            $submitted_settings['responsive_breakpoint'] = $submitted_settings['responsive_breakpoint'] . "px";
-        }
-
-        if ( isset( $submitted_settings['toggle_blocks'] ) ) {
-            unset( $submitted_settings['toggle_blocks'] );
-        }
-
-        $saved_themes[ $theme ] = array_map( 'esc_attr', $submitted_settings );
+        $saved_themes[ $theme ] = $prepared_theme;
 
         update_site_option( "megamenu_themes", $saved_themes );
         update_site_option( "megamenu_themes_last_updated", $theme );
 
         do_action("megamenu_after_theme_save");
-
         do_action("megamenu_delete_cache");
 
-        $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$theme}&saved=true" ) );
+        if ( ! $is_ajax ) {
+            $this->redirect( admin_url( "admin.php?page=maxmegamenu_theme_editor&theme={$theme}&saved=true" ) );
+            return;
+        }
+
+        return $prepared_theme;
 
     }
 
@@ -450,7 +486,8 @@ class Mega_Menu_Settings {
 
         $new_theme_id = "custom_theme_" . $next_id;
 
-        $new_theme = $this->themes['default'];
+        $style_manager = new Mega_Menu_Style_Manager();
+        $new_theme = $style_manager->get_default_theme();
 
         $new_theme['title'] = "Custom {$next_id}";
 
@@ -624,6 +661,9 @@ class Mega_Menu_Settings {
         $mobile_second_click = isset( $saved_settings['second_click'] ) ? $saved_settings['second_click'] : 'close';
         $mobile_behaviour = isset( $saved_settings['mobile_behaviour'] ) ? $saved_settings['mobile_behaviour'] : 'standard';
         $descriptions = isset( $saved_settings['descriptions'] ) ? $saved_settings['descriptions'] : 'disabled';
+        $unbind = isset( $saved_settings['unbind'] ) ? $saved_settings['unbind'] : 'enabled';
+        $prefix = isset( $saved_settings['prefix'] ) ? $saved_settings['prefix'] : 'enabled';
+
         $locations = get_registered_nav_menus();
 
         ?>
@@ -692,13 +732,45 @@ class Mega_Menu_Settings {
                         <td class='mega-name'>
                             <?php _e("Menu Item Descriptions", "megamenu"); ?>
                             <div class='mega-description'>
-                                <?php _e("", "megamenu"); ?>
+                                <?php _e("Enable output of menu item descriptions", "megamenu"); ?>
                             </div>
                         </td>
                         <td class='mega-value'>
                             <select name='settings[descriptions]'>
                                 <option value='disabled' <?php echo selected( $descriptions == 'disabled'); ?>><?php _e("Disabled", "megamenu"); ?></option>
                                 <option value='enabled' <?php echo selected( $descriptions == 'enabled'); ?>><?php _e("Enabled", "megamenu"); ?></option>
+                            <select>
+                            <div class='mega-description'>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='mega-name'>
+                            <?php _e("Unbind JavaScript Events", "megamenu"); ?>
+                            <div class='mega-description'>
+                                <?php _e("To avoid conflicts with theme menu systems, JavaScript events which have been added to menu items will be removed by default.", "megamenu"); ?>
+                            </div>
+                        </td>
+                        <td class='mega-value'>
+                            <select name='settings[unbind]'>
+                                <option value='disabled' <?php echo selected( $unbind == 'disabled'); ?>><?php _e("No", "megamenu"); ?></option>
+                                <option value='enabled' <?php echo selected( $unbind == 'enabled'); ?>><?php _e("Yes", "megamenu"); ?></option>
+                            <select>
+                            <div class='mega-description'>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='mega-name'>
+                            <?php _e("Prefix Menu Item Classes", "megamenu"); ?>
+                            <div class='mega-description'>
+                                <?php _e("Prefix custom menu item classes with 'mega-'?", "megamenu"); ?>
+                            </div>
+                        </td>
+                        <td class='mega-value'>
+                            <select name='settings[prefix]'>
+                                <option value='disabled' <?php echo selected( $prefix == 'disabled'); ?>><?php _e("No", "megamenu"); ?></option>
+                                <option value='enabled' <?php echo selected( $prefix == 'enabled'); ?>><?php _e("Yes", "megamenu"); ?></option>
                             <select>
                             <div class='mega-description'>
                             </div>
@@ -1149,19 +1221,19 @@ class Mega_Menu_Settings {
 
         $header_links = apply_filters( "megamenu_header_links", array(
             'homepage' => array(
-                'url' => 'https://www.maxmegamenu.com/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
+                'url' => 'https://www.megamenu.com/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Homepage", "megamenu"),
                 'class' => ''
             ),
             'documentation' => array(
-                'url' => 'https://www.maxmegamenu.com/documentation/installation/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
+                'url' => 'https://www.megamenu.com/documentation/installation/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'text' => __("Documentation", "megamenu"),
                 'target' => '_mmmpro',
                 'class' => ''
             ),
             'troubleshooting' => array(
-                'url' => 'https://www.maxmegamenu.com/articles/troubleshooting/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
+                'url' => 'https://www.megamenu.com/articles/troubleshooting/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'text' => __("Troubleshooting", "megamenu"),
                 'target' => '_mmmpro',
                 'class' => ''
@@ -1170,7 +1242,7 @@ class Mega_Menu_Settings {
 
         if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
             $header_links['pro'] = array(
-                'url' => 'https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
+                'url' => 'https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
                 'text' => __("Upgrade to Pro - $19", "megamenu"),
                 'class' => 'mega-highlight'
@@ -1183,7 +1255,7 @@ class Mega_Menu_Settings {
                 'text' => __("Core version", "megamenu")
             ),
             'pro' => array(
-                'version' => "<a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
+                'version' => "<a href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro' target='_mmmpro'>not installed</a>",
                 'text' => __("Pro extension", "megamenu")
             )
         ) );
@@ -1290,28 +1362,7 @@ class Mega_Menu_Settings {
 
         $style_manager = new Mega_Menu_Style_Manager();
 
-        $menu_id = 0;
-
-        $menus = get_registered_nav_menus();
-
-        if ( count( $menus ) ) {
-
-            $locations = get_nav_menu_locations();
-
-            foreach ($menus as $location => $description ) {
-
-                if ( isset( $locations[ $location ] ) ) {
-
-                    $menu_id = $locations[ $location ];
-                    continue;
-
-                }
-
-            }
-
-        }
-
-        $test = $style_manager->generate_css_for_location( 'test', $this->active_theme, $menu_id );
+        $test = $style_manager->test_theme_compilation( $this->active_theme );
 
         if ( is_wp_error( $test ) ) {
             echo "<p class='fail'>" . $test->get_error_message() . "</p>";
@@ -1486,7 +1537,7 @@ class Mega_Menu_Settings {
                     $settings = apply_filters( 'megamenu_theme_editor_settings', array(
 
                         'general' => array(
-                            'title' => __( "General Theme Settings", "megamenu" ),
+                            'title' => __( "General Settings", "megamenu" ),
                             'settings' => array(
                                 'title' => array(
                                     'priority' => 10,
@@ -3106,14 +3157,29 @@ class Mega_Menu_Settings {
                         )
                     ) );
 
-                    echo "<div class='accordion-container'>";
-                    echo "<ul class='outer-border'>";
+                    echo "<h2 class='nav-tab-wrapper'>";
+
+                    $is_first = true;
 
                     foreach ( $settings as $section_id => $section ) {
 
-                        echo "    <li class='control-section accordion-section open mega-{$section_id}'>";
-                        echo "        <h4 class='accordion-section-title hndle'>".$section['title'] . "</h4>";
-                        echo "        <div class='accordion-section-content '>";
+                        if ($is_first) {
+                            $active = 'nav-tab-active ';
+                            $is_first = false;
+                        } else {
+                            $active = '';
+                        }
+
+                        echo "<a class='mega-tab nav-tab {$active}' data-tab='mega-tab-content-{$section_id}'>".$section['title'] . "</a>";
+
+                    }
+
+                    echo "</h2>";
+
+
+                    foreach ( $settings as $section_id => $section ) {
+
+                        echo "        <div class='mega-tab-content mega-tab-content-{$section_id}'>";
                         echo "            <table class='{$section_id}'>";
 
                         // order the fields by priority
@@ -3227,17 +3293,14 @@ class Mega_Menu_Settings {
 
                         echo "</table>";
                         echo "</div>";
-                        echo "</li>";
-
                     }
 
                 ?>
-                    </ul>
-                </div>
+
 
                 <div class='megamenu_submit'>
                     <div class='mega_left'>
-                        <?php submit_button(); ?>
+                        <?php submit_button(); ?><span class='spinner'></span>
                     </div>
                     <div class='mega_right'>
                         <?php if ( $this->string_contains( $this->id, array("custom") ) ) : ?>
@@ -3654,7 +3717,8 @@ class Mega_Menu_Settings {
 
         wp_localize_script( 'mega-menu-theme-editor', 'megamenu_settings',
             array(
-                'confirm' => __("Are you sure?", "megamenu")
+                'confirm' => __("Are you sure?", "megamenu"),
+                "theme_save_error" => __("Error saving theme, please try refreshing the page", "megamenu")
             )
         );
 

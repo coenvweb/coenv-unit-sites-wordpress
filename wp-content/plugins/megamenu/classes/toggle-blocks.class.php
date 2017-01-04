@@ -496,7 +496,12 @@ class Mega_Menu_Toggle_Blocks {
                 </div>
 
             </div>
+
+
         </div>
+
+        <p class='mega-info'><?php _e("Click on a block to edit it, or drag and drop it to resposition the block within the toggle bar", "megamenu"); ?></p>
+
 
         <?php
     }
@@ -568,7 +573,7 @@ class Mega_Menu_Toggle_Blocks {
         ?>
 
         <div class='block'>
-            <div class='block-title'><span title='<?php _e("Menu Toggle", "megamenu"); ?>' class="dashicons dashicons-menu"></span></div>
+            <div class='block-title'><?php _e("MENU", "megamenu"); ?> <span title='<?php _e("Menu Toggle", "megamenu"); ?>' class="dashicons dashicons-menu"></span></div>
             <div class='block-settings'>
                 <h3><?php _e("Menu Toggle Settings", "megamenu") ?></h3>
                 <input type='hidden' class='type' name='toggle_blocks[<?php echo $block_id; ?>][type]' value='menu_toggle' />

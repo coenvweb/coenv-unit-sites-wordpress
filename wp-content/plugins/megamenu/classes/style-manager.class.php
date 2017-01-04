@@ -444,7 +444,6 @@ final class Mega_Menu_Style_Manager {
         }
 
         if ( strlen( $css ) ) {
-
             $scss_location = 'core';
 
             foreach ( $this->get_possible_scss_file_locations() as $path ) {
@@ -454,6 +453,8 @@ final class Mega_Menu_Style_Manager {
             }
 
             $css = "/** " . date('l jS \of F Y h:i:s A') . " ({$scss_location}) **/\n\n" . $css;
+
+            $css = apply_filters( "megamenu_compiled_css", $css );
 
             $this->set_cached_css( $css );
 
@@ -571,6 +572,25 @@ final class Mega_Menu_Style_Manager {
 
     }
 
+    public function test_theme_compilation($theme) {
+        $menu_id = 0;
+
+        $menus = get_registered_nav_menus();
+
+        if ( count( $menus ) ) {
+            $locations = get_nav_menu_locations();
+
+            foreach ($menus as $location => $description ) {
+                if ( isset( $locations[ $location ] ) ) {
+                    $menu_id = $locations[ $location ];
+                    continue;
+                }
+            }
+        }
+
+        return $this->generate_css_for_location( 'test', $theme, $menu_id );
+
+    }
 
     /**
      * Compiles raw SCSS into CSS for a particular menu location.
@@ -628,6 +648,7 @@ final class Mega_Menu_Style_Manager {
 
         $vars['wrap'] = "'$wrap_selector'";
         $vars['menu'] = "'$menu_selector'";
+        $vars['location'] = "'$sanitized_location'";
         $vars['menu_id'] = "'$menu_id'";
 
         $settings = $this->get_menu_settings_for_location( $location );
@@ -792,7 +813,6 @@ final class Mega_Menu_Style_Manager {
         );
 
         wp_localize_script( 'megamenu', 'megamenu', $params );
-
     }
 
     /**
@@ -967,7 +987,7 @@ final class Mega_Menu_Style_Manager {
         global $polylang;
 
         foreach ( $polylang->model->get_languages_list() as $term ) {
-            delete_transient( apply_filters( 'megamenu_css_transient_key', 'megamenu_css_' . strtolower( $term->locale ) ) );
+            delete_transient( 'megamenu_css_' . $term->locale );
         }
     }
 
@@ -983,7 +1003,7 @@ final class Mega_Menu_Style_Manager {
         $locale = strtolower( pll_current_language('locale') );
 
         if ( strlen( $locale ) ) {
-            $key .= $locale;
+            $key = $key . "_" . $locale;
         }
 
         return $key;

@@ -11,6 +11,7 @@ jQuery(function ($) {
             tabMode: 'indent',
             lineNumbers: true,
             lineWrapping: true,
+            viewportMargin: Infinity,
             onChange: function(cm) {
                 cm.save();
             }
@@ -82,6 +83,48 @@ jQuery(function ($) {
         }
     });
 
+
+
+    $('.mega-tab-content').each(function() {
+        if (!$(this).hasClass('mega-tab-content-general')) {
+            $(this).hide();
+        }
+    });
+
+    $('.mega-tab').on("click", function() {
+        var selected_tab = $(this);
+        selected_tab.siblings().removeClass('nav-tab-active');
+        selected_tab.addClass('nav-tab-active');
+        var content_to_show = $(this).attr('data-tab');
+        $('.mega-tab-content').hide();
+        $('.' + content_to_show).show();
+    });
+
+    $(".theme_editor").on("submit", function(e) {
+        e.preventDefault();
+        $(".theme_result_message").remove();
+        $(".spinner").css('visibility', 'visible').css('display', 'block');
+        $("input#submit").attr('disabled', 'disabled');
+        var data = $(this).serialize();
+
+        $.post(ajaxurl, data, function (message) {
+            $(".spinner").css('display', 'none');
+            $("input#submit").removeAttr('disabled');
+            if (message.success !== true) {
+                var error = $("<p>").addClass('fail theme_result_message').html(message.data);
+                $('.megamenu_submit').after(error);
+            } else {
+                var success = $("<p>").addClass('success theme_result_message');
+                var icon = $("<span>").addClass('dashicons dashicons-yes');
+                $('.megamenu_submit .mega_left').append(success.html(icon).append(message.data));
+            }
+
+        }).fail(function() {
+            alert( megamenu.theme_save_error );
+        });
+    }).on("change", function(e) {
+        $(".theme_result_message").css('visibility', 'hidden');
+    });;
 
     $('select#mega_css').on("change", function() {
         var select = $(this);

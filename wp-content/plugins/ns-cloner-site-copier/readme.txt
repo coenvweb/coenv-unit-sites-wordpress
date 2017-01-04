@@ -3,12 +3,12 @@ Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.0.1
-Tested up to: 4.5.2
-Stable tag: 3.0.5.7
+Tested up to: 4.7
+Stable tag: 3.0.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The NS Cloner saves multisite admins and developers TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
+NS Cloner saves multisite admins and developers TONS of time by cloning existing sites to new sites in the same network within a few seconds.
 
 == Description ==
 
@@ -91,6 +91,12 @@ Usually this means that the clone operation did not complete successfully. The m
 2. All new Add-on manager
 
 == Changelog ==
+
+= 3.0.5.9 =
+* Updated PHP 7 compatibility to use proper global variable variable emulation
+
+= 3.0.5.8 =
+* Fixed bug with search and replace preventing multiple replacements in rare cases where the search is different but the replace value is the same. 
 
 = 3.0.5.7 =
 * Added new feature to save default site template for re-use in cloning every time

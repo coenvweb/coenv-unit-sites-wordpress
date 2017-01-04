@@ -1,18 +1,18 @@
 <?php
 /******************************
  * Plugin Name: WP Ultimate CSV Importer
- * Description: A plugin that helps to import the data's from a CSV file.
- * Version: 3.11.1
- * Author: smackcoders.com
+ * Description: Seamlessly create posts, custom posts, pages, media, SEO and more from your CSV data with ease.
+ * Version: 5.0.3
+ * Author: smackcoders
  * Text Domain: wp-ultimate-csv-importer
  * Domain Path: /languages
- * Plugin URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html
- * Author URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html
+ * Plugin URI: https://goo.gl/kKWPui
+ * Author URI: https://goo.gl/kKWPui
  */
 
 /*********************************************************************************
  * WP Ultimate CSV Importer is a Tool for importing CSV for the Wordpress
- * plugin developed by Smackcoder. Copyright (C) 2014 Smackcoders.
+ * plugin developed by Smackcoders. Copyright (C) 2016 Smackcoders.
  *
  * WP Ultimate CSV Importer is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License version 3
@@ -43,261 +43,282 @@
  * WP Ultimate CSV Importer copyright notice. If the display of the logo is
  * not reasonably feasible for technical reasons, the Appropriate Legal
  * Notices must display the words
- * "Copyright Smackcoders. 2014. All rights reserved".
+ * "Copyright Smackcoders. 2016. All rights reserved".
  ********************************************************************************/
-
 if ( ! defined( 'ABSPATH' ) )
 	exit; // Exit if accessed directly
 
-$get_debug_mode = get_option('wpcsvfreesettings');
-$debug_md = isset($get_debug_mode['debug_mode']) ? $get_debug_mode['debug_mode'] : '';
-if($debug_md != 'enable_debug'){
-	error_reporting(0);
-	ini_set('display_errors', 'Off');
-}
+if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
+	/**
+	 * Main WPUltimateCSVImporter Class.
+	 *
+	 * @class WPUltimateCSVImporter Class
+	 * @version     5.0
+	 */
+	class SM_WPUltimateCSVImporter {
 
-@ob_start();
-add_action('init', 'SM_StartSession', 1);
-add_action('wp_logout', 'SM_EndSession');
-add_action('wp_login', 'SM_EndSession');
-/**
- * To Start Session
- */
-function SM_StartSession() {
-	if (!session_id()) {
-		session_start();
-	}
-}
-/**
- * To Destroy session
- */
-function SM_EndSession() {
-	session_destroy();
-}
-if ( empty( $GLOBALS['wp_rewrite'] ) )
-	$GLOBALS['wp_rewrite'] = new WP_Rewrite();
+		public $version = '5.0.3';
 
-$upload_dir = wp_upload_dir();
-define('WP_CONST_ULTIMATE_CSV_IMP_URL', 'http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html');
-define('WP_CONST_ULTIMATE_CSV_IMP_NAME', 'WP Ultimate CSV Importer');
-define('WP_CONST_ULTIMATE_CSV_IMP_SLUG', 'wp-ultimate-csv-importer');
-define('WP_CONST_ULTIMATE_CSV_IMP_SETTINGS', 'WP Ultimate CSV Importer');
-define('WP_CONST_ULTIMATE_CSV_IMP_VERSION', '3.11.0');
-define('WP_CONST_ULTIMATE_CSV_IMP_DIR', WP_PLUGIN_URL . '/' . WP_CONST_ULTIMATE_CSV_IMP_SLUG . '/');
-define('WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY', plugin_dir_path(__FILE__));
-define('WP_CSVIMP_PLUGIN_BASE', WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY);
-define('WP_CONST_ULTIMATE_CSV_IMP_EXPORT_DIR', $upload_dir['basedir'] . '/ultimate_exporter/');
-define('WP_CONST_ULTIMATE_CSV_IMP_EXPORT_URL', $upload_dir['baseurl'] . '/ultimate_exporter/');
+		/**
+		 * The single instance of the class.
+		 *
+		 * @var $_instance
+		 * @since 5.0
+		 */
+		protected static $_instance = null;
 
-if (!class_exists('SkinnyControllerWPCsvFree')) {
-	require_once('lib/skinnymvc/controller/SkinnyController.php');
-}
+		/**
+		 * Main WPUltimateCSVImporter Instance.
+		 *
+		 * Ensures only one instance of WPUltimateCSVImporter is loaded or can be loaded.
+		 *
+		 * @since 5.0
+		 * @static
+		 * @see WC()
+		 * @return SM_WPUltimateCSVImporter - Main instance.
+		 */
+		public static function instance() {
+			if ( is_null( self::$_instance ) ) {
+				self::$_instance = new self();
+			}
+			return self::$_instance;
+		}
 
-add_action('plugins_loaded','load_lang_files');
+		/**
+		 * SM_WPUltimateCSVImporter Constructor.
+		 */
+		public function __construct() {
+			include_once ( 'includes/class-uci-install.php' );
+			include_once ( 'uninstall.php' );
 
-function load_lang_files(){
-	$csv_importer_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
-	load_plugin_textdomain( 'wp-ultimate-csv-importer', false, $csv_importer_dir);
-}
-require_once('plugins/class.inlineimages.php');
-require_once('plugins/class.classifyfields.php');
-require_once('includes/WPImporter_includes_helper.php');
-require_once('includes/SmackCSVParser.php');
-# Activation & Deactivation 
-register_activation_hook(__FILE__, array('WPImporter_includes_helper', 'activate'));
-register_deactivation_hook(__FILE__, array('WPImporter_includes_helper', 'deactivate'));
+			do_action( 'wp_ultimate_csv_importer_loaded' );
+			add_filter( 'plugin_row_meta', array('SmackUCIInstall', 'plugin_row_meta'), 10, 2 );
 
-function action_csv_imp_admin_menu() {
-	if(!function_exists('wp_get_current_user')) {
-		include(ABSPATH . "wp-includes/pluggable.php");
-	}
-	$HelperObj = new WPImporter_includes_helper();
-	if(is_multisite()) {
-		if ( current_user_can( 'administrator' ) ) {
-			add_menu_page(WP_CONST_ULTIMATE_CSV_IMP_SETTINGS, WP_CONST_ULTIMATE_CSV_IMP_NAME, 'manage_options', __FILE__, array('WPImporter_includes_helper', 'output_fd_page'), WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/icon.png");
-		} else if ( current_user_can( 'author' ) || current_user_can( 'editor' ) ) {
-			$settings = $HelperObj->getSettings();
-			if(isset($settings['enable_plugin_access_for_author']) && $settings['enable_plugin_access_for_author'] == 'enable_plugin_access_for_author') {
-				add_menu_page(WP_CONST_ULTIMATE_CSV_IMP_SETTINGS, WP_CONST_ULTIMATE_CSV_IMP_NAME, '2', __FILE__, array('WPImporter_includes_helper', 'output_fd_page'), WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/icon.png");
+			if ( ! function_exists( 'is_plugin_active' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+			if ( is_plugin_active('wp-ultimate-csv-importer/index.php') ) {
+				// add plugin upgrade notification
+				if(get_option('ULTIMATE_CSV_IMP_VERSION') <= 5.0)
+					add_action( 'admin_notices', array('SmackUCIInstall', 'important_upgrade_notice') );
+
+				add_action( 'admin_notices', array( 'SmackUCIInstall', 'wp_ultimate_csv_importer_notice' ) );
+			}
+
+			add_action('in_plugin_update_message-wp-ultimate-csv-importer/index.php', array('SmackUCIInstall', 'showUpgradeNotification'), 10, 2);
+
+			add_filter('cron_schedules', array('SmackUCIInstall', 'cron_schedules'));
+			$this->define_constants();
+			$this->includes();
+			$this->init_hooks();
+		}
+
+		/**
+		 * Hook into actions and filters.
+		 * @since  5.0
+		 */
+		private function init_hooks() {
+			register_activation_hook( __FILE__, array( 'SmackUCIInstall', 'install' ) );
+			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
+			add_action('wp_dashboard_setup', array($this,'uci_pro_add_dashboard_widgets'));
+			add_action('smack_uci_email_scheduler', array('SmackUCIEmailScheduler', 'send_login_credentials_to_users'));
+			add_action('smack_uci_image_scheduler', array('SmackUCIMediaScheduler', 'populateFeatureImages'));
+			register_deactivation_hook( __FILE__, array( 'SmackUCIUnInstall', 'uninstall' ) );
+		}
+
+		/**
+		 * Define SmackUCI Constants.
+		 */
+		public function define_constants() {
+			$upload_dir = wp_upload_dir();
+			$this->define( 'SM_UCI_PLUGIN_FILE', __FILE__ );
+			$this->define( 'SM_UCI_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+			$this->define( 'SM_UCI_VERSION', $this->version );
+			$this->define( 'SM_UCI_DELIMITER', ',' );
+			$this->define( 'SM_UCI_PRO_DIR', plugin_dir_path(__FILE__));
+			$this->define( 'SM_UCI_PRO_URL', plugins_url().'/wp-ultimate-csv-importer');
+			$this->define( 'SM_UCI_LOG_DIR', $upload_dir['basedir'] . '/smack_uci_uploads/import_logs/' );
+			$this->define( 'SM_UCI_DEFAULT_UPLOADS_DIR', $upload_dir['basedir'] );
+			$this->define( 'SM_UCI_DEFAULT_UPLOADS_URL', $upload_dir['baseurl'] );
+			$this->define( 'SM_UCI_FILE_MANAGING_DIR', $upload_dir['basedir'] . '/smack_uci_uploads/' );
+			$this->define( 'SM_UCI_IMPORT_DIR', $upload_dir['basedir'] . '/smack_uci_uploads/imports' );
+			$this->define( 'SM_UCI_IMPORT_URL', $upload_dir['baseurl'] . '/smack_uci_uploads/imports' );
+			$this->define( 'SM_UCI_EXPORT_DIR', $upload_dir['basedir'] . '/smack_uci_uploads/exports/' );
+			$this->define( 'SM_UCI_EXPORT_URL', $upload_dir['baseurl'] . '/smack_uci_uploads/exports/' );
+			$this->define( 'SM_UCI_ZIP_FILES_DIR', $upload_dir['basedir'] . '/smack_uci_uploads/zip_files/' );
+			$this->define( 'SM_UCI_INLINE_IMAGE_DIR', $upload_dir['basedir'] . '/smack_inline_images/' );
+			$this->define( 'SM_UCI_SCREENS_DATA',$upload_dir['basedir'].'/smack_uci_uploads/screens_data');
+			$this->define( 'SM_UCI_SESSION_CACHE_GROUP', 'smack_uci_session_id' );
+			$this->define( 'SM_UCI_SETTINGS', 'Ultimate CSV Importer Free' );
+			$this->define( 'SM_UCI_NAME', 'Ultimate CSV Importer Free' );
+			$this->define( 'SM_UCI_SLUG', 'wp-ultimate-csv-importer' );
+			$this->define( 'SM_UCI_DEBUG_LOG', $upload_dir['basedir'] . '/wp-ultimate-csv-importer.log');
+		}
+
+		/**
+		 * Define constant if not already set.
+		 *
+		 * @param  string $name
+		 * @param  string|bool $value
+		 */
+		public function define( $name, $value ) {
+			if ( ! defined( $name ) ) {
+				define( $name, $value );
 			}
 		}
-	}
-	else {
-		if ( current_user_can( 'administrator' ) ) {
-			add_menu_page(WP_CONST_ULTIMATE_CSV_IMP_SETTINGS, WP_CONST_ULTIMATE_CSV_IMP_NAME, 'manage_options', __FILE__, array('WPImporter_includes_helper', 'output_fd_page'), WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/icon.png");
-		}
-		else if ( current_user_can( 'author' ) || current_user_can( 'editor' ) ) {
-			$settings = $HelperObj->getSettings();
-			if(isset($settings['enable_plugin_access_for_author']) && $settings['enable_plugin_access_for_author'] == 'enable_plugin_access_for_author') {
-				add_menu_page(WP_CONST_ULTIMATE_CSV_IMP_SETTINGS, WP_CONST_ULTIMATE_CSV_IMP_NAME, '2', __FILE__, array('WPImporter_includes_helper', 'output_fd_page'), WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/icon.png");
+
+		/**
+		 * Include required core files used in admin and on the frontend.
+		 */
+		public function includes() {
+			include_once ( 'includes/class-uci-helper.php' );
+			include_once ( 'libs/parsers/SmackCSVParser.php' );
+			include_once ( 'includes/class-uci-admin-ajax.php' );
+			include_once ( 'includes/class-uci-event-logging.php' );
+			include_once ( 'admin/class-uci-admin.php' );
+			include_once ( 'includes/class-uci-email-scheduler.php' );
+			include_once ( 'includes/class-uci-media-scheduler.php' );
+			#SmackUCIMediaScheduler::populateFeatureImages();
+			# Register / Enqueue the plugin scripts & style
+			$uciPages = array('sm-uci-dashboard', 'sm-uci-import', 'sm-uci-managers', 'sm-uci-export', 'sm-uci-settings', 'sm-uci-support');
+			if (isset($_REQUEST['page']) && in_array(sanitize_text_field($_REQUEST['page']), $uciPages)) {
+				wp_enqueue_style( 'ultimate-css', plugins_url( 'assets/css/ultimate-importer.css', __FILE__ ) );
+				wp_enqueue_style( 'boot.css', plugins_url( 'assets/css/bootstrap.css', __FILE__ ) );
+				wp_enqueue_style( 'Icomoon Icons', plugins_url( 'assets/css/icomoon.css', __FILE__ ) );
+				wp_enqueue_style( 'Animate CSS', plugins_url( 'assets/css/animate.css', __FILE__ ) );
+				wp_enqueue_style( 'jquery-fileupload.css', plugins_url( 'assets/css/jquery.fileupload.css', __FILE__ ) );
+				wp_enqueue_style( 'jquery-style', plugins_url( 'assets/css/jquery-ui.css', __FILE__ ) );
+				wp_enqueue_style('icheck', plugins_url('assets/css/icheck/green.css', __FILE__));
+				wp_enqueue_script( 'icheck-js', plugins_url( 'assets/js/icheck.min.js', __FILE__ ) );
+				wp_enqueue_script( 'file-download-js', plugins_url( 'assets/js/jquery.fileDownload.js', __FILE__ ) );
+				wp_register_script( 'ultimate-importer-js', plugins_url( 'assets/js/ultimate-importer.js', __FILE__ ) );
+				wp_enqueue_script( 'jquery' );
+				wp_enqueue_script( 'ultimate-importer-js' );
+				wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'assets/js/bootstrap-datepicker.js', __FILE__ ) );
+				wp_enqueue_script( 'bootstrap-datepicker-js' );
+				wp_enqueue_style( 'bootstrap-datepicker-css', plugins_url('assets/css/bootstrap-datepicker.css', __FILE__ ) );
+				wp_enqueue_script( 'jquery-ui-dialog' );
+				wp_enqueue_script( 'file-tree', plugins_url( 'assets/js/jqueryfiletree.js', __FILE__ ) );
+				wp_enqueue_style( 'file-tree-css', plugins_url( 'assets/css/jqueryfiletree.css', __FILE__ ) );
+				wp_localize_script( 'ultimate-importer-js', 'uci_importer', array(
+					'adminurl' => admin_url(),
+					'siteurl'  => site_url(),
+					'requestpage' => $_REQUEST['page'],
+					'db_orphanedMsg' => __('no of Orphaned Post/Page meta has been removed.', 'wp-ultimate-csv-importer'),
+					'db_tagMsg' => __('no of Unassigned tags has been removed.', 'wp-ultimate-csv-importer'),
+					'db_revisionMsg' => __('no of Post/Page revisions has been removed.', 'wp-ultimate-csv-importer'),
+					'db_draftMSg' => __('no of Auto drafted Post/Page has been removed.', 'wp-ultimate-csv-importer'),
+					'db_trashMsg' => __('no of Post/Page in trash has been removed.', 'wp-ultimate-csv-importer'),
+					'db_spamMsg' => __('no of Spam comments has been removed.', 'wp-ultimate-csv-importer'),
+					'db_commentTrashMsg' => __('no of Comments in trash has been removed.', 'wp-ultimate-csv-importer'),
+					'db_unapprovedMsg' => __('no of Unapproved comments has been removed.', 'wp-ultimate-csv-importer'),
+					'db_pingbackMsg' => __('no of Pingback comments has been removed.', 'wp-ultimate-csv-importer'),
+					'db_trackbackMsg' => __('no of Trackback comments has been removed.', 'wp-ultimate-csv-importer'),
+				) );
+				// WaitMe CSS & JS for blur the page and show the progressing loader
+				wp_enqueue_style('waitme-css', plugins_url('assets/css/waitMe.css', __FILE__));
+				wp_enqueue_style('sweet-alert-css', plugins_url('assets/css/sweetalert.css', __FILE__));
+				wp_enqueue_style('custom-style', plugins_url('assets/css/custom-style.css', __FILE__));
+				//new files include
+				wp_enqueue_style('custom-new-style', plugins_url('assets/css/custom-new-style.css', __FILE__));
+                wp_enqueue_style( 'bootstrap-select-css', plugins_url( 'assets/css/bootstrap-select.css', __FILE__ ));
+                wp_register_script('bootstrap-js', plugins_url('assets/js/bootstrap.js', __FILE__));
+				wp_enqueue_script('bootstrap-js');
+                wp_register_script('bootstrap-select-js', plugins_url('assets/js/bootstrap-select.js', __FILE__));
+				wp_enqueue_script('bootstrap-select-js');
+                //new files include close
+				wp_register_script('waitme-js', plugins_url('assets/js/waitMe.js', __FILE__));
+				wp_enqueue_script('waitme-js');
+				// Sweet Alert Js
+				wp_register_script('sweet-alert-js', plugins_url('assets/js/sweetalert-dev.js', __FILE__));
+				wp_enqueue_script('sweet-alert-js');
+				//MODAL POP UP JS
+				wp_enqueue_script('pop-up',plugins_url('assets/js/modal.js',__FILE__));
+				// Morris chart CSS & JS for dashboard
+				if(isset($_REQUEST['page']) && sanitize_text_field($_REQUEST['page']) == 'sm-uci-dashboard') {
+					wp_enqueue_script( 'chart-utils-js', plugins_url('assets/js/chart-js/utils.js', __FILE__) );
+					wp_enqueue_script( 'uci-dashboard', plugins_url('assets/js/chart-js/Chart.bundle.js', __FILE__) );
+					wp_enqueue_script( 'uci-dashboard-chart', plugins_url( 'assets/js/chart-js/dashchart.js', __FILE__ ) );
+				}
 			}
-		} /*else if ( current_user_can( 'administrator' ) ) {
-			add_menu_page(WP_CONST_ULTIMATE_CSV_IMP_SETTINGS, WP_CONST_ULTIMATE_CSV_IMP_NAME, 'manage_options', __FILE__, array('WPImporter_includes_helper', 'output_fd_page'), WP_CONST_ULTIMATE_CSV_IMP_DIR . "images/icon.png");
-		}*/
+		}
+
+		/**
+		 * Init SM_WPUltimateCSVImporterPro when WordPress Initialises.
+		 */
+		public function init() {
+			if(is_admin()) :
+				// Init action.
+				do_action( 'uci_init' );
+				if(is_admin()) {
+					#$this->includes();
+					SmackUCIAdminAjax::smuci_ajax_events();
+					# Removed: De-Register the media sizes
+				}
+			endif;
+		}
+
+		public function uci_pro_add_dashboard_widgets(){
+			wp_enqueue_script( 'chart-utils-js', plugins_url('assets/js/chart-js/utils.js', __FILE__) );
+			wp_enqueue_script( 'uci-wp-dash-chart-js', plugins_url('assets/js/chart-js/Chart.bundle.js', __FILE__) );
+			wp_enqueue_script( 'uci-dashboard-chart-widget', plugins_url( 'assets/js/chart-js/dashchart-widget.js', __FILE__ ) );
+			// Add widget on WordPress Dashboard
+			wp_add_dashboard_widget('uci_pro_dashboard_linechart', 'Ultimate-CSV-Importer-Pro-Activity', array('SmackUCIAdmin', 'LineChart'),$screen = get_current_screen(), 'advanced', 'high');
+			wp_add_dashboard_widget('uci_pro_dashboard_piechart', 'Ultimate-CSV-Importer-Pro-Statistics', array('SmackUCIAdmin', 'PieChart'),$screen = get_current_screen() , 'advanced', 'high' );
+		}
+
+		/**
+		 * Get the plugin url.
+		 * @return string
+		 */
+		public function plugin_url() {
+			return untrailingslashit( plugins_url( '/', __FILE__ ) );
+		}
+
+		/**
+		 * Get the plugin path.
+		 * @return string
+		 */
+		public function plugin_path() {
+			return untrailingslashit( plugin_dir_path( __FILE__ ) );
+		}
+
+		/**
+		 * Get Ajax URL.
+		 * @return string
+		 */
+		public function ajax_url() {
+			return admin_url( 'admin-ajax.php', 'relative' );
+		}
+
+		/**
+		 * Email Class.
+		 * @return SM_UCI_Emails
+		 */
+		public function mailer() {
+			return SM_UCI_Emails::instance();
+		}
 	}
-}
-add_action("admin_menu" , "action_csv_imp_admin_menu");
+endif;
 
-function action_csv_imp_admin_init() {
-	if (isset($_REQUEST['page']) && (sanitize_text_field($_REQUEST['page']) == 'wp-ultimate-csv-importer/index.php' || sanitize_text_field($_REQUEST['page']) == 'page')) {
 
-		// Code for use the global wordpress functons in javascript
-		wp_enqueue_script('jquery');
-		wp_register_script('ultimate-importer-js', plugins_url('js/ultimate-importer-free.js', __FILE__));
-		wp_enqueue_script('ultimate-importer-js');
-		wp_enqueue_script('jquery-ui-datepicker');
-		wp_enqueue_style('jquery-style', plugins_url('css/jquery-ui.css', __FILE__));
-		wp_enqueue_style('style', plugins_url('css/style.css', __FILE__));
-		wp_enqueue_style('bootstrap-css', plugins_url('css/bootstrap.css', __FILE__));
-		wp_enqueue_style('ultimate-importer-css', plugins_url('css/main.css', __FILE__));
-		wp_enqueue_style('morris-css', plugins_url('css/morris.css', __FILE__));
-		wp_enqueue_style('ultimate_importer_font_awesome', plugins_url('css/font-awesome.css', __FILE__));
-		// For chart js
-		wp_enqueue_script('dropdown', plugins_url('js/dropdown.js', __FILE__));
-		wp_enqueue_script('raphael-min-js', plugins_url('js/raphael-min.js', __FILE__));
-		wp_enqueue_script('morris-min-js', plugins_url('js/morris.min.js', __FILE__));
-		wp_enqueue_script('data', plugins_url('js/dashchart.js', __FILE__));
-		wp_register_script('bootstrap-collapse', plugins_url('js/bootstrap-collapse.js', __FILE__));
-		wp_enqueue_script('bootstrap-collapse');
-		wp_localize_script('ultimate-importer-js', 'wp_ultimate_translate_importer', translate_reqString());
-		// WaitMe CSS & JS for blur the page and show the progressing loader
-		wp_enqueue_style('waitme-css', plugins_url('css/waitMe.css', __FILE__));
-		wp_register_script('waitme-js', plugins_url('js/waitMe.js', __FILE__));
-		wp_enqueue_script('waitme-js');
-	}
+add_action('plugins_loaded','SmackCSVImporterLoadLanguages');
+function SmackCSVImporterLoadLanguages(){
+	$wp_csv_importer_lang_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+	load_plugin_textdomain( SM_UCI_SLUG , false, $wp_csv_importer_lang_dir );
 }
 
-add_action('admin_init', 'action_csv_imp_admin_init');
-
-function translate_reqString(){
-	$HelperObj = new WPImporter_includes_helper();
-	$wp_ultimate_msg = array(
-			'dashboard_msg' => __('NO LOGS YET NOW.','wp-ultimate-csv-importer'),
-			'emptytemplate' => __('Template name is empty','wp-ultimate-csv-importer'),
-			'exist_template' => __('Template Name already exists','wp-ultimate-csv-importer'),
-			'error_msg' => __('Error: ','wp-ultimate-csv-importer'),
-			'mandatory_msg' => __(' - Mandatory fields. Please map the fields to proceed.','wp-ultimate-csv-importer'),
-			'generalmsg' => __(' should be mapped.','wp-ultimate-csv-importer'),
-			'reqfd_role' => __('role','wp-ultimate-csv-importer'),
-			'validatefile' => __('File must be .zip!','wp-ultimate-csv-importer'),
-			'reqfdmsg' => __('Fill all mandatory fields.','wp-ultimate-csv-importer'),
-			'import_progress' => __('Your Import Is In Progress...','wp-ultimate-csv-importer'),
-			'terminateImport' => __('Import process has been terminated.','wp-ultimate-csv-importer'),
-			'continueImport' => __(' Import process has been continued.','wp-ultimate-csv-importer'),
-			'ultimatepromsg' => __(' Feature is available only for PRO!.','wp-ultimate-csv-importer'),
-			'validate_recordnum' => __('Please enter numeric characters only','wp-ultimate-csv-importer'),
-			'validate_exportmsg' => __('Please choose one module to export the records!','wp-ultimate-csv-importer'),
-			'customlist' => __('Please choose anyone of Custompost Lists'),
-			'customtaxonomy' => __('Please choose anyone of Customtaxonomy Lists'),
-			'fileformatmsg' => __('Un Supported File Format','wp-ultimate-csv-importer'),
-			'secure_key' => $HelperObj->create_nonce_key()
-	);
-	return $wp_ultimate_msg;
-}
-// Move Pages above Media
-function smackcsvfree_change_menu_order( $menu_order ) {
-	return array(
-			'index.php',
-			'edit.php',
-			'edit.php?post_type=page',
-			'upload.php',
-			'wp-ultimate-csv-importer/index.php',
-	);
-}
-add_filter( 'custom_menu_order', '__return_true' );
-add_filter( 'menu_order', 'smackcsvfree_change_menu_order' );
-
-function firstultimatecsvchart() {
-	require_once("modules/dashboard/actions/chartone.php");
-	die();
-}
-
-add_action('wp_ajax_firstultimatecsvchart', 'firstultimatecsvchart');
-
-function uploadfilehandle() {
-	check_ajax_referer( 'smack_nonce', 'secure_key' );
-	require_once("lib/jquery-plugins/uploader.php");
-	die();
-}
-add_action('wp_ajax_uploadfilehandle','uploadfilehandle');
-
-function secondultimatecsvchart() {
-	require_once("modules/dashboard/actions/chartone.php");
-	die();
-}
-
-add_action('wp_ajax_secondultimatecsvchart', 'secondultimatecsvchart');
-
-function thirdchart() {
-	require_once("modules/dashboard/actions/chartone.php");
-	die();
-}
-
-add_action('wp_ajax_thirdchart', 'thirdchart');
-
-
-function roundchart() {
-	global $wpdb;
-	ob_flush();
-	$myObj = new WPImporter_includes_helper();
-	$content = "<form name='piechart'> <div id ='ultimatecsv_pieStats' style='height:250px;'>";
-	$myObj->piechart();
-	$content .= "</div></form>";
-	echo $content;
-}
-
-function linetwoStats() {
-	global $wpdb;
-	ob_flush();
-	$myObj = new WPImporter_includes_helper();
-	$content = "<form name='piechart'> <div id ='ultimatecsv_lineStats' style='height:250px'>";
-	$myObj->getStatsWithDate();
-	$content .= "</div></form>";
-	echo $content;
-}
-
-
-function wpcsvimporter_add_dashboard_widgets() {
-	wp_enqueue_script('dashultimatecsvchart', plugins_url('js/dashchart-widget.js', __FILE__));
-	wp_enqueue_style('morris-css', plugins_url('css/morris.css', __FILE__));
-	wp_enqueue_script('raphael-min-js', plugins_url('js/raphael-min.js', __FILE__));
-	wp_enqueue_script('morris-min-js', plugins_url('js/morris.min.js', __FILE__));
-	wp_add_dashboard_widget('wpcsvimporter_dashboard_piehart', 'Ultimate-CSV-Importer-Statistics', 'roundchart',$screen = get_current_screen() , 'advanced' ,'high' );
-	wp_add_dashboard_widget('wpcsvimporter_dashboard_linechart', 'Ultimate-CSV-Importer-Activity', 'linetwoStats',$screen = get_current_screen(),'advanced','high');
-}
-
-add_action('wp_dashboard_setup', 'wpcsvimporter_add_dashboard_widgets');
 
 /**
- * To Process the Import
- */
-function importByRequest() {
-	require_once("templates/import.php");
-	die;
-}
-add_action('wp_ajax_importByRequest', 'importByRequest');
-
-/**
+ * Main instance of WPUltimateCSVImporterPro.
  *
- */
-function parseDataToExport() {
-	require_once(WP_CONST_ULTIMATE_CSV_IMP_DIRECTORY . "modules/export/templates/export.php");
-	die;
-}
-add_action('wp_ajax_parseDataToExport','parseDataToExport');
-
-/* function export_submit(){
-	require_once("modules/export/templates/export.php");
-	die;
-}
-add_action('wp_ajax_export_file','export_submit'); */
-
-/**
+ * Returns the main instance of WC to prevent the need to use globals.
  *
+ * @since  5.0
+ * @return WPUltimateCSVImporterPro
  */
-function addcorecustomfd(){
-	check_ajax_referer( 'smack_nonce', 'secure_key' );
-	require_once("templates/Addcustomfields.php");
-	die;
+function SmackUCI() {
+	return SM_WPUltimateCSVImporter::instance();
 }
-add_action('wp_ajax_addcorecustomfd','addcorecustomfd');
+// Global for backwards compatibility.
+$GLOBALS['wp_ultimate_csv_importer'] = SmackUCI();

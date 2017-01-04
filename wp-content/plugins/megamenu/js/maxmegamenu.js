@@ -18,14 +18,12 @@
             second_click: $menu.attr("data-second-click"),
             vertical_behaviour: $menu.attr("data-vertical-behaviour"),
             document_click: $menu.attr("data-document-click"),
-            breakpoint: $menu.attr("data-breakpoint")
+            breakpoint: $menu.attr("data-breakpoint"),
+            unbind_events: $menu.attr("data-unbind")
         };
 
         plugin.settings = {};
 
-        /**
-         * Hides a single panel (sub menu)
-         */
         plugin.hidePanel = function(anchor, immediate) {
             if (!immediate && plugin.settings.effect == 'slide' ) {
                 anchor.siblings(".mega-sub-menu").animate({"height":"hide"}, plugin.settings.effect_speed, function() {
@@ -42,51 +40,48 @@
             }
 
             anchor.parent().removeClass("mega-toggle-on").triggerHandler("close_panel");
+            plugin.addAnimatingClass(anchor.parent());
         };
 
-        /**
-         * Hide all open sub menus
-         */
+        plugin.addAnimatingClass = function(element) {
+            if (plugin.settings.effect === "disabled") {
+                return;
+            }
+
+            $(".mega-animating").removeClass("mega-animating");
+
+            var timeout = plugin.settings.effect_speed + parseInt(megamenu.timeout, 10);
+
+            element.addClass("mega-animating");
+
+            setTimeout(function() {
+               element.removeClass("mega-animating");
+            }, timeout );
+        };
+
         plugin.hideAllPanels = function() {
             $(".mega-toggle-on > a.mega-menu-link", $menu).each(function() {
                 plugin.hidePanel($(this), false);
             });
         };
 
-        /**
-         * For flyout menus: Hide open sub menus at the same level as the sub menu that"s being opened
-         */
         plugin.hideSiblingPanels = function(anchor, immediate) {
-            // jQuery 1.7.2 compatibility for themes/plugins that load old versions of jQuery
-            if ($.fn.addBack !== undefined) {
-                anchor.parent().siblings().find(".mega-toggle-on").addBack().children("a").each(function() { // all open children of open siblings
-                    plugin.hidePanel($(this), immediate);
-                });
-            } else {
-                anchor.parent().siblings().find(".mega-toggle-on").andSelf().children("a").each(function() { // all open children of open siblings
-                    plugin.hidePanel($(this), immediate);
-                });
-            }
+            anchor.parent().parent().find(".mega-toggle-on").children("a.mega-menu-link").each(function() { // all open children of open siblings
+                plugin.hidePanel($(this), immediate);
+            });
         };
 
-        /**
-         * Returns true if the browser width is wider than the Responsive Breakpoint (set in Menu Theme Editor)
-         */
         plugin.isDesktopView = function() {
-            return $(window).width() >= plugin.settings.breakpoint;
+            return Math.max(window.outerWidth, $(window).width()) >= plugin.settings.breakpoint; // account for scrollbars
         };
 
-        /**
-         *
-         */
         plugin.isMobileView = function() {
             return !plugin.isDesktopView();
         };
 
-        /**
-         * Display a single panel. Also handles closing of panels that are currently open and need to be closed.
-         */
         plugin.showPanel = function(anchor) {
+            $(".mega-animating").removeClass("mega-animating");
+
             if (plugin.isMobileView() && anchor.parent().hasClass("mega-hide-sub-menu-on-mobile")) {
                 return;
             }
@@ -99,19 +94,38 @@
                 plugin.hideSiblingPanels(anchor, false);
             }
 
-            // apply dynamic width and sub menu position
-            if (anchor.parent().hasClass("mega-menu-megamenu") && $(plugin.settings.panel_width).length) {
-                var submenu_offset = $menu.offset();
-                var target_offset = $(plugin.settings.panel_width).offset();
+            plugin.calculateDynamicSubmenuWidths(anchor);
 
-                anchor.siblings(".mega-sub-menu").css({
-                    width: $(plugin.settings.panel_width).outerWidth(),
-                    left: (target_offset.left - submenu_offset.left) + "px"
-                });
+            // apply jQuery transition (only if the effect is set to "slide", other transitions are CSS based)
+            if ( plugin.settings.effect == "slide" ) {
+                anchor.siblings(".mega-sub-menu").css("display", "none").animate({'height':'show'}, plugin.settings.effect_speed);
+            }
+
+            anchor.parent().addClass("mega-toggle-on").triggerHandler("open_panel");
+        };
+
+        plugin.calculateDynamicSubmenuWidths = function(anchor) {
+
+            // apply dynamic width and sub menu position
+            if (anchor.parent().hasClass("mega-menu-megamenu") && plugin.settings.panel_width && $(plugin.settings.panel_width).length > 0) {
+                if (plugin.isDesktopView()) {
+                    var submenu_offset = $menu.offset();
+                    var target_offset = $(plugin.settings.panel_width).offset();
+
+                    anchor.siblings(".mega-sub-menu").css({
+                        width: $(plugin.settings.panel_width).outerWidth(),
+                        left: (target_offset.left - submenu_offset.left) + "px"
+                    });
+                } else {
+                    anchor.siblings(".mega-sub-menu").css({
+                        width: "",
+                        left: ""
+                    });
+                }
             }
 
             // apply inner width to sub menu by adding padding to the left and right of the mega menu
-            if (anchor.parent().hasClass("mega-menu-megamenu") && plugin.settings.panel_inner_width && plugin.settings.panel_inner_width.length > 0) {
+            if (anchor.parent().hasClass("mega-menu-megamenu") && plugin.settings.panel_inner_width && $(plugin.settings.panel_inner_width).length > 0) {
                 var target_width = 0;
 
                 if ($(plugin.settings.panel_inner_width).length) {
@@ -124,25 +138,20 @@
 
                 var submenu_width = parseInt(anchor.siblings(".mega-sub-menu").innerWidth(), 10);
 
-                if (target_width > 0 && target_width < submenu_width) {
+                if (plugin.isDesktopView() && target_width > 0 && target_width < submenu_width) {
                     anchor.siblings(".mega-sub-menu").css({
                         "paddingLeft": (submenu_width - target_width) / 2 + "px",
                         "paddingRight": (submenu_width - target_width) / 2 + "px"
                     });
+                } else {
+                    anchor.siblings(".mega-sub-menu").css({
+                        "paddingLeft": "",
+                        "paddingRight": ""
+                    });
                 }
             }
+        }
 
-            // apply jQuery transition (only if the effect is set to "slide", other transitions are CSS based)
-            if ( plugin.settings.effect == "slide" ) {
-                anchor.siblings(".mega-sub-menu").css("display", "none").animate({'height':'show'}, plugin.settings.effect_speed);
-            }
-
-            anchor.parent().addClass("mega-toggle-on").triggerHandler("open_panel");
-        };
-
-        /**
-         * Open sub menus on click
-         */
         var bindClickEvents = function() {
             var dragging = false;
 
@@ -158,9 +167,15 @@
                 dragging = false;
             });
 
-            var items_with_submenus = $("li.mega-menu-megamenu.mega-menu-item-has-children > a.mega-menu-link, li.mega-menu-flyout.mega-menu-item-has-children > a.mega-menu-link, li.mega-menu-flyout li.mega-menu-item-has-children > a.mega-menu-link", menu);
+            var items_with_submenus = $("li.mega-menu-megamenu.mega-menu-item-has-children > a.mega-menu-link, li.mega-menu-flyout.mega-menu-item-has-children > a.mega-menu-link, li.mega-menu-tabbed > ul.mega-sub-menu > li.mega-menu-item-has-children > a.mega-menu-link, li.mega-menu-flyout li.mega-menu-item-has-children > a.mega-menu-link", menu);
 
             items_with_submenus.on("click.megamenu touchend.megamenu", function(e) {
+
+                if ($(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed")) {
+                    e.preventDefault();
+                    return;
+                }
+
                 if (dragging) {
                     return;
                 }
@@ -168,8 +183,7 @@
                     return; // allow all clicks on parent items when sub menu is hidden on mobile
                 }
 
-                // check for second click
-                if (plugin.settings.second_click === "go" || $(this).parent().hasClass("mega-click-click-go")) {
+                if (plugin.settings.second_click === "go" || $(this).parent().hasClass("mega-click-click-go")) { // check for second click
                     if (!$(this).parent().hasClass("mega-toggle-on")) {
                         e.preventDefault();
                         plugin.showPanel($(this));
@@ -186,35 +200,33 @@
             });
         };
 
-        /**
-         * Open sub menus on hover
-         */
         var bindHoverEvents = function() {
-            $("li.mega-menu-item-has-children", menu).not("li.mega-menu-megamenu li.mega-menu-item-has-children", menu).on({
+            $("li.mega-menu-item-has-children", menu).not("li.mega-menu-megamenu:not(.mega-menu-tabbed) li.mega-menu-item-has-children", menu).on({
                 mouseenter: function() {
                     plugin.unbindClickEvents();
-                    plugin.showPanel($(this).children("a"));
+                    if (! $(this).hasClass("mega-toggle-on")) {
+                        plugin.showPanel($(this).children("a.mega-menu-link"));
+                    }
                 },
                 mouseleave: function() {
-                    if ($(this).hasClass("mega-toggle-on")) {
-                        plugin.hidePanel($(this).children("a"), false);
+                    if ($(this).hasClass("mega-toggle-on") && ! $(this).parent().parent().hasClass("mega-menu-tabbed")) {
+                        plugin.hidePanel($(this).children("a.mega-menu-link"), false);
                     }
                 }
             });
         };
 
-        /**
-         * Open sub menus on hoverIntent
-         */
         var bindHoverIntentEvents = function() {
-            $("li.mega-menu-item-has-children", menu).not("li.mega-menu-megamenu li.mega-menu-item-has-children", menu).hoverIntent({
+            $("li.mega-menu-item-has-children", menu).not("li.mega-menu-megamenu:not(.mega-menu-tabbed) li.mega-menu-item-has-children", menu).hoverIntent({
                 over: function () {
                     plugin.unbindClickEvents();
-                    plugin.showPanel($(this).children("a"));
+                    if (! $(this).hasClass("mega-toggle-on")) {
+                        plugin.showPanel($(this).children("a.mega-menu-link"));
+                    }
                 },
                 out: function () {
-                    if ($(this).hasClass("mega-toggle-on")) {
-                        plugin.hidePanel($(this).children("a"), false);
+                    if ($(this).hasClass("mega-toggle-on") && ! $(this).parent().parent().hasClass("mega-menu-tabbed")) {
+                        plugin.hidePanel($(this).children("a.mega-menu-link"), false);
                     }
                 },
                 timeout: megamenu.timeout,
@@ -222,16 +234,10 @@
             });
         };
 
-        /**
-         *
-         */
         plugin.unbindClickEvents = function() {
-            $("a.mega-menu-link").off("click.megamenu touchend.megamenu");
+            $("a.mega-menu-link", menu).off("click.megamenu touchend.megamenu");
         };
 
-        /**
-         * Handle keyboard navigation of the menu. Highlight focused items.
-         */
         plugin.keyboardNavigation = function() {
             var tab_key = 9;
             var escape_key = 27;
@@ -270,17 +276,10 @@
             });
         };
 
-        /**
-         * Remove all events from mega menu
-         */
         plugin.unbindAllEvents = function() {
             $("ul.mega-sub-menu, li.mega-menu-item, a.mega-menu-link", menu).off().unbind();
         };
 
-        /**
-         * Bind events to the menu items to allow it to be opened on click, hover or hover intent.
-         * The event will always be "click" if the current view is "mobile"
-         */
         plugin.bindMegaMenuEvents = function() {
             if (plugin.isDesktopView() && plugin.settings.event === "hover_intent") {
                 bindHoverIntentEvents();
@@ -293,10 +292,6 @@
             bindClickEvents(); // always bind click events for touch screen devices
         };
 
-        /**
-         * Monitor the width of the browser so we can tell when the browser has been resized to the point
-         * where the mobile menu is displayed, and vice versa
-         */
         plugin.monitorView = function() {
             if (plugin.isDesktopView()) {
                 $menu.data("view", "desktop");
@@ -312,9 +307,6 @@
             });
         };
 
-        /**
-         * Monitor the width of the browser and call functions when menu switches between desktop and mobile view
-         */
         plugin.checkWidth = function() {
             if ( plugin.isMobileView() && $menu.data("view") === "desktop" ) {
                 $menu.data("view", "mobile");
@@ -325,36 +317,30 @@
                 $menu.data("view", "desktop");
                 plugin.switchToDesktop();
             }
+
+            if ( plugin.isDesktopView() ) {
+                plugin.calculateDynamicSubmenuWidths($("li.mega-menu-megamenu.mega-toggle-on > a.mega-menu-link", $menu));
+            }
         };
 
-        /**
-         * Reverse right aligned menu items so that they appear in the same order on mobile as they do on desktop
-         */
         plugin.reverseRightAlignedItems = function() {
             $menu.append($menu.children("li.mega-item-align-right").get().reverse());
         };
 
-        /**
-         * Called when the menu view loads in mobile, or switches from desktop to mobile
-         */
         plugin.switchToMobile = function() {
             plugin.unbindAllEvents();
             plugin.bindMegaMenuEvents();
             plugin.reverseRightAlignedItems();
+            plugin.hideAllPanels();
         };
 
-        /**
-         * Called when the menu view switches from mobile to desktop
-         */
         plugin.switchToDesktop = function() {
             plugin.unbindAllEvents();
             plugin.bindMegaMenuEvents();
             plugin.reverseRightAlignedItems();
+            plugin.hideAllPanels();
         };
 
-        /**
-         * Initialise the mega menu
-         */
         plugin.init = function() {
             $menu.triggerHandler("before_mega_menu_init");
             plugin.settings = $.extend({}, defaults, options);
@@ -367,7 +353,10 @@
                 }
             });
 
-            plugin.unbindAllEvents();
+            if (plugin.settings.unbind_events == 'true') {
+                plugin.unbindAllEvents();
+            }
+
             plugin.bindMegaMenuEvents();
             plugin.monitorView();
             plugin.keyboardNavigation();

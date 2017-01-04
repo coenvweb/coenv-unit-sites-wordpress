@@ -4,7 +4,7 @@ Plugin Name: NS Cloner - Site Copier
 Plugin URI: http://neversettle.it
 Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out the add-ons for additional powerful features!
 Author: Never Settle
-Version: 3.0.5.7
+Version: 3.0.5.9
 Network: true
 Text Domain: ns-cloner
 Author URI: http://neversettle.it
@@ -48,10 +48,10 @@ define( 'NS_CLONER_LOG_FILE_DETAILED', NS_CLONER_V3_PLUGIN_DIR . 'logs/ns-cloner
 define( 'NS_CLONER_LOG_FILE_URL', NS_CLONER_V3_PLUGIN_URL . 'logs/ns-cloner-summary.log' );
 define( 'NS_CLONER_LOG_FILE_DETAILED_URL', NS_CLONER_V3_PLUGIN_URL . 'logs/ns-cloner-' . date("Ymd-His", time()) . '.html' );
 
-// load Kint if no other plugins already have
-if ( !class_exists( 'Kint', FALSE ) ) {
-	require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/kint/Kint.class.php');
-}
+// since we have mixed autoload and no autoload, we have to disable here, or class_exists will return false even through its true 
+//if ( !class_exists( 'Kint', FALSE ) && !class_exists( 'kintParser', FALSE )) {
+//	require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/kint/Kint.class.php');
+//}
 
 require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/ns-utils.php');
 require_once(NS_CLONER_V3_PLUGIN_DIR.'/lib/ns-log-utils.php');
@@ -75,7 +75,7 @@ class ns_cloner {
 	/**
 	 * Class Globals
 	 */
-	var $version = '3.0.5.7';
+	var $version = '3.0.5.9';
 	var $menu_slug = 'ns-cloner';
 	var $capability = 'manage_network_options';
 	var $global_tables = array(
@@ -973,7 +973,8 @@ class ns_cloner {
 			$section_path = "{$path}sections/{$section_filename}";
 			require_once($section_path);
 			if( class_exists($section_classname) ){
-				global $$section_classname;
+				// use PHP 7 compatible format for global variable variable emulation
+				global ${$section_classname};
 				$$section_classname = new $section_classname( $this );
 			}
 		}
@@ -990,7 +991,8 @@ class ns_cloner {
 		foreach( $external_sections_supported as $section ){
 			$section_with_underscores = str_replace('-','_',$section);
 			$section_classname = "ns_cloner_section_{$section_with_underscores}";
-			global $$section_classname;
+			// use PHP 7 compatible format for global variable variable emulation
+			global ${$section_classname};
 			if( !empty($$section_classname) ){
 				array_push( $$section_classname->modes_supported, $slug );
 			}

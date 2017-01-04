@@ -33,8 +33,8 @@
                 scrolling: true,
                 fixed: true,
                 top: '10%',
-                initialHeight: '472',
-                maxHeight: '500'
+                initialHeight: '502',
+                maxHeight: '530'
             });
 
             $.ajax({
@@ -581,7 +581,15 @@ jQuery(function ($) {
                                 });
 
         $('.item-title', menu_item).append(button);
+
+        if (megamenu.css_prefix === "true") {
+            var custom_css_classes = menu_item.find('.edit-menu-item-classes');
+            var css_prefix = $("<span>").addClass("mm_prefix").html(megamenu.css_prefix_message);
+            custom_css_classes.after(css_prefix);
+        }
+
     });
+
 
     // AJAX Save MMM Settings
     $(".max-mega-menu-save").on('click', function(e) {
@@ -614,5 +622,12 @@ jQuery(document).on('megamenu_content_loaded', function() {
         }, function (response) {
             jQuery('.hide-pro-nags').html(response);
         });
+    });
+
+    jQuery('select#mega-item-align').on("change", function() {
+        var select = jQuery(this);
+        var selected = jQuery(this).val();
+        select.next().children().hide();
+        select.next().children('.' + selected).show();
     });
 });

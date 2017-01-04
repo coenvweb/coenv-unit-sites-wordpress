@@ -129,7 +129,7 @@ class Mega_Menu_Menu_Item_Manager {
     private function get_pro_upgrade_text() {
 
         $return  = '<div class="in-pro">';
-        $return .= "<p>This functionality is available in <a href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=lightbox&amp;utm_campaign=pro' target='_blank'>Max Mega Menu Pro</a><span class='dashicons dashicons-migrate'></span></p>";
+        $return .= "<p>This functionality is available in <a href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=lightbox&amp;utm_campaign=pro' target='_blank'>Max Mega Menu Pro</a><span class='dashicons dashicons-migrate'></span></p>";
         $return .= '<p><a class="hide-pro-nags">Hide this notice for 90 days</a></p>';
         $return .= '</div>';
 
@@ -350,6 +350,7 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= "    <option value='6' " . selected( $menu_item_meta['panel_columns'], 6, false ) . ">6 " . __("columns", "megamenu") . "</option>";
         $return .= "    <option value='7' " . selected( $menu_item_meta['panel_columns'], 7, false ) . ">7 " . __("columns", "megamenu") . "</option>";
         $return .= "    <option value='8' " . selected( $menu_item_meta['panel_columns'], 8, false ) . ">8 " . __("columns", "megamenu") . "</option>";
+        $return .= "    <option value='9' " . selected( $menu_item_meta['panel_columns'], 9, false ) . ">9 " . __("columns", "megamenu") . "</option>";
         $return .= "</select>";
 
         $return .= "<select id='mm_widget_selector'>";
@@ -456,19 +457,29 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= '                <input type="checkbox" name="settings[hide_on_desktop]" value="true" ' . checked( $menu_item_meta['hide_on_desktop'], 'true', false ) . ' />';
         $return .= '            </td>';
         $return .= '        </tr>';
-        $return .= '        <tr>';
+        $return .= '        <tr class="mega-menu-item-align">';
         $return .= '            <td class="mega-name">';
         $return .=                  __("Menu Item Align", "megamenu");
         $return .= '            </td>';
         $return .= '            <td class="mega-value">';
 
         if ( $menu_item_depth == 0 ) {
-            $return .= '            <select name="settings[item_align]">';
-            $return .= '                <option value="left" ' . selected( $menu_item_meta['item_align'], 'left', false ) . '>' . __("Left", "megamenu") . '</option>';
+
+            $item_align = $menu_item_meta['item_align'];
+
+            $float_left_display = $item_align == 'float-left' ? 'block' : 'none';
+            $left_display = $item_align == 'left' ? 'block' : 'none';
+            $right_display = $item_align == 'right' ? 'block' : 'none';
+
+            $return .= '            <select id="mega-item-align" name="settings[item_align]">';
+            $return .= '                <option value="float-left" ' . selected( $menu_item_meta['item_align'], 'float-left', false ) . '>' . __("Left", "megamenu") . '</option>';
+            $return .= '                <option value="left" ' . selected( $menu_item_meta['item_align'], 'left', false ) . '>' . __("Default", "megamenu") . '</option>';
             $return .= '                <option value="right" ' . selected( $menu_item_meta['item_align'], 'right', false ) . '>' . __("Right", "megamenu") . '</option>';
             $return .= '            </select>';
             $return .= '            <div class="mega-description">';
-            $return .=                  __("Right aligned items will appear in reverse order on the right hand side of the menu bar", "megamenu");
+            $return .= "                    <div class='float-left' style='display:{$float_left_display}'></div>";
+            $return .= "                    <div class='left' style='display:{$left_display}'>" . __("Item will be aligned based on the 'Menu Items Align' option set in the Theme Editor", "megamenu") . "</div>";
+            $return .= "                    <div class='right' style='display:{$right_display}'>" . __("Right aligned items will appear in reverse order on the right hand side of the menu bar", "megamenu") . "</div>";
             $return .= '            </div>';
         } else {
             $return .= '<em>' . __("Option only available for top level menu items", "megamenu") . '</em>';
@@ -476,12 +487,15 @@ class Mega_Menu_Menu_Item_Manager {
 
         $return .= '            </td>';
         $return .= '        </tr>';
+
+        $return .= apply_filters("megamenu_after_menu_item_settings", "",  $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
+
     	$return .= '    </table>';
 
         $return .= '    <h4>' . __("Sub Menu Settings", "megamenu") . '</h4>';
 
         $return .= '    <table>';
-        $return .= '        <tr>';
+        $return .= '        <tr class="mega-sub-menu-align">';
         $return .= '            <td class="mega-name">';
         $return .=                  __("Sub Menu Align", "megamenu");
         $return .= '            </td>';
@@ -509,7 +523,12 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= '                <input type="checkbox" name="settings[hide_sub_menu_on_mobile]" value="true" ' . checked( $menu_item_meta['hide_sub_menu_on_mobile'], 'true', false ) . ' />';
         $return .= '            </td>';
         $return .= '        </tr>';
+
+        $return .= apply_filters("megamenu_after_menu_item_submenu_settings", "",  $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
+
         $return .= '    </table>';
+
+
         $return .=     get_submit_button();
         $return .= '</form>';
 
@@ -540,17 +559,17 @@ class Mega_Menu_Menu_Item_Manager {
             'fontawesome' => array(
                 'title' => __("Font Awesome", "megamenu"),
                 'active' => false,
-                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Get access to over 400 Font Awesome Icons with {link}", "megamenu") )
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Get access to over 400 Font Awesome Icons with {link}", "megamenu") )
             ),
             'genericons' => array(
                 'title' => __("Genericons", "megamenu"),
                 'active' => false,
-                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Choose from over 100 genericons with {link}", "megamenu") )
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Choose from over 100 genericons with {link}", "megamenu") )
             ),
             'custom' => array(
                 'title' => __("Custom Icon", "megamenu"),
                 'active' => false,
-                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.maxmegamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Select icons from your media library with {link}", "megamenu") )
+                'content' => str_replace( "{link}", "<a target='_blank' href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=icon&amp;utm_campaign=pro'>" . __("Max Mega Menu Pro", "megamenu") . "</a>", __("Select icons from your media library with {link}", "megamenu") )
             )
         );
 

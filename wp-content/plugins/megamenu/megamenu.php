@@ -2,13 +2,13 @@
 
 /*
  * Plugin Name: Max Mega Menu
- * Plugin URI:  https://www.maxmegamenu.com
+ * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.3
+ * Version:     2.3.3
  * Author:      Tom Hemsley
- * Author URI:  https://www.maxmegamenu.com
+ * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
- * Copyright:   2016 Tom Hemsley (https://www.maxmegamenu.com)
+ * Copyright:   2016 Tom Hemsley (https://www.megamenu.com)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,13 +26,13 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.3';
+    public $version = '2.3.3';
 
 
     /**
      * @var string
      */
-    public $scss_last_updated = '2.3';
+    public $scss_last_updated = '2.3.1';
 
 
     /**
@@ -326,6 +326,16 @@ final class Mega_Menu {
 
         }
 
+
+        switch(get_template()) {
+            case "twentyseventeen":
+                require_once( MEGAMENU_PATH . 'integration/twentyseventeen/functions.php' );
+                break;
+            case "zerif":
+            case "zerif-pro":
+                require_once( MEGAMENU_PATH . 'integration/zerif/functions.php' );
+                break;
+        }
     }
 
 
@@ -363,21 +373,22 @@ final class Mega_Menu {
             $return[] = 'mega-' . $class;
         }
 
+        $settings = get_option( 'megamenu_settings' );
 
-        /*
-         * @todo: Add a setting to enable/disable this.
-         *        Suddendly adding 'new' classes to menu items could screw up menu styling for some users
-        // add in custom classes, sans 'mega-' prefix
-        foreach ( $classes as $class ) {
+        $prefix = isset( $settings['prefix'] ) ? $settings['prefix'] : 'enabled';
 
-            // custom classes are added before the 'menu-item' class
-            if ( $class == 'menu-item' ) {
-                break;
+        if ( $prefix === 'disabled' ) {
+            // add in custom classes, sans 'mega-' prefix
+            foreach ( $classes as $class ) {
+
+                // custom classes are added before the 'menu-item' class
+                if ( $class == 'menu-item' ) {
+                    break;
+                }
+
+                $return[] = $class;
             }
-
-            $return[] = $class;
         }
-        */
 
         return $return;
     }
@@ -523,7 +534,9 @@ final class Mega_Menu {
                 $get_next_parent = true;
             }
 
-            $rolling_last_menu_order = $item->menu_order;
+            if ( isset( $item->menu_order ) ) {
+                $rolling_last_menu_order = $item->menu_order;
+            }
         }
 
         // there isn't a next top level menu item
@@ -568,7 +581,10 @@ final class Mega_Menu {
             $item->megamenu_settings = array_merge( Mega_Menu_Nav_Menus::get_menu_item_defaults(), $saved_settings );
             $item->megamenu_order = isset( $item->megamenu_settings['mega_menu_order'][$item->menu_item_parent] ) ? $item->megamenu_settings['mega_menu_order'][$item->menu_item_parent] : 0;
             $item->parent_submenu_type = 'flyout';
-            $item->menu_order = $item->menu_order * 1000;
+
+            if ( isset( $item->menu_order ) ) {
+                $item->menu_order = $item->menu_order * 1000;
+            }
 
             // add parent mega menu type
             if ( $item->depth == 1 ) {
@@ -593,8 +609,8 @@ final class Mega_Menu {
      * @return array
      */
     public function reorder_menu_items_within_megamenus( $items, $args ) {
-
         $new_items = array();
+        $wpml_lang_items = array();
 
         // reorder menu items within mega menus based on internal ordering
         foreach ( $items as $item ) {
@@ -603,16 +619,20 @@ final class Mega_Menu {
                 $parent_post = get_post( $item->menu_item_parent );
                 $item->menu_order = $parent_post->menu_order * 1000 + $item->megamenu_order;
             }
-
         }
 
         foreach ( $items as $item ) {
-            $new_items[ $item->menu_order ] = $item;
+            if ( in_array( 'wpml-ls-item', $item->classes ) ) {
+                $item->classes[] = 'menu-flyout';
+                $wpml_lang_items[] = $item;
+            } else {
+                $new_items[ $item->menu_order ] = $item;
+            }
         }
 
         ksort( $new_items );
 
-        return $new_items;
+        return array_merge( $new_items, $wpml_lang_items );
 
     }
 
@@ -638,6 +658,7 @@ final class Mega_Menu {
             foreach ( $items as $item ) {
                 if (  property_exists( $item, 'description' ) && strlen( $item->description )  ) {
                     $item->mega_description = $item->description;
+                    $item->classes[] = 'has-description';
                 }
             }
         }
@@ -666,6 +687,11 @@ final class Mega_Menu {
 
             if ( $item->megamenu_settings['hide_arrow'] == 'true' ) {
                 $item->classes[] = 'hide-arrow';
+            }
+
+
+            if ( $item->megamenu_settings['icon'] != 'disabled' ) {
+                $item->classes[] = 'has-icon';
             }
 
             if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth === 0 ) {
@@ -795,6 +821,12 @@ final class Mega_Menu {
                 $second_click = $menu_settings['second_click'];
             }
 
+            $unbind = isset( $settings['unbind'] ) ? $settings['unbind'] : 'enabled';
+
+            if ( isset( $menu_settings['unbind'] ) ) {
+                $unbind = $menu_settings['unbind'];
+            }
+
             $event = 'hover_intent';
 
             if ( isset( $menu_settings['event'] ) ) {
@@ -807,6 +839,7 @@ final class Mega_Menu {
                 }
             }
 
+
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
                 "id" => '%1$s',
                 "class" => '%2$s mega-no-js',
@@ -818,7 +851,8 @@ final class Mega_Menu {
                 "data-second-click" => $second_click,
                 "data-document-click" => 'collapse',
                 "data-vertical-behaviour" => $vertical_behaviour,
-                "data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] )
+                "data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] ),
+                "data-unbind" => $unbind === "disabled" ? "false" : "true"
             ), $menu_id, $menu_settings, $settings, $current_theme_location );
 
             $attributes = "";
@@ -832,7 +866,7 @@ final class Mega_Menu {
             $sanitized_location = str_replace( apply_filters("megamenu_location_replacements", array("-", " ") ), "-", $current_theme_location );
 
             $defaults = array(
-                'menu'            => $menu_id,
+                'menu'            => wp_get_nav_menu_object( $menu_id ),
                 'container'       => 'div',
                 'container_class' => 'mega-menu-wrap',
                 'container_id'    => 'mega-menu-wrap-' . $sanitized_location,

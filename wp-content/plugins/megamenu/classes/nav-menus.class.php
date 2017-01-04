@@ -166,7 +166,6 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_style('color-box-css');
 
 
-
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
 
@@ -179,6 +178,10 @@ class Mega_Menu_Nav_Menus {
 
         wp_enqueue_script( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/jquery.colorbox-min.js', array( 'jquery' ), MEGAMENU_VERSION );
 
+        $settings = get_option( 'megamenu_settings' );
+
+        $prefix = isset( $settings['prefix'] ) ? $settings['prefix'] : 'true';
+
         wp_localize_script( 'mega-menu', 'megamenu',
             array(
                 'debug_launched' => __("Launched for Menu ID", "megamenu"),
@@ -187,7 +190,9 @@ class Mega_Menu_Nav_Menus {
                 'is_disabled_error' => __("Please enable Max Mega Menu using the settings on the left of this page.", "megamenu"),
                 'saving' => __("Saving", "megamenu"),
                 'nonce' => wp_create_nonce('megamenu_edit'),
-                'nonce_check_failed' => __("Oops. Something went wrong. Please reload the page.", "megamenu")
+                'nonce_check_failed' => __("Oops. Something went wrong. Please reload the page.", "megamenu"),
+                'css_prefix' => $prefix,
+                'css_prefix_message' => __("Custom CSS Classes will be prefixed with 'mega-'", "megamenu")
             )
         );
 
@@ -294,7 +299,7 @@ class Mega_Menu_Nav_Menus {
 
         if ( ! count( $theme_locations ) ) {
 
-            $link = '<a href="https://www.maxmegamenu.com/documentation/getting-started/max-mega-menu-widget/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro" target="_blank">' . __("here", "megamenu") . '</a>';
+            $link = '<a href="https://www.megamenu.com/documentation/widget/?utm_source=free&amp;utm_medium=link&amp;utm_campaign=pro" target="_blank">' . __("here", "megamenu") . '</a>';
 
             echo "<p>" . __("This theme does not register any menu locations.", "megamenu") . "</p>";
             echo "<p>" . __("You will need to create a new menu location and use the Max Mega Menu widget or shortcode to display the menu on your site.", "megamenu") . "</p>";

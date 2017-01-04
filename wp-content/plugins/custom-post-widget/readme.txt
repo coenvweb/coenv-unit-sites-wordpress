@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 4.0
-Tested up to: 4.4.1
-Stable tag: 2.8.5
+Tested up to: 4.7
+Stable tag: 2.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ To add content to a widget, drag it to the required position in the sidebar and 
 
 **Includes the following translations:**
 
-* Czech (cs_CZ) by [Martin Kucera](http://jsemweb.cz/) 
+* Czech (cs_CZ) by [Martin Kucera](http://jsemweb.cz/)
 * Dutch (nl_NL) by [Johan van der Wijk](http://vanderwijk.nl)
 * French (fr_FR) by [Alexandre Simard](http://brocheafoin.biz/)
 * German (de_DE) by [Caspar H&uuml;binger](http://glueckpress.com/)
@@ -35,7 +35,7 @@ To add content to a widget, drag it to the required position in the sidebar and 
 * Italian (it_IT) by [Ercicion](http://ercicion.altervista.org/blog/)
 * Polish (pl_PL) by [Kuba Skublicki](https://www.linkedin.com/in/kubecki)
 * Portuguese (pt_BR) by [Ronaldo Chevalier](http://www.hostmeta.com.br/)
-* Russian (ru_RU) by [Vitaliy Kaplya](http://www.dasayt.com/) 
+* Russian (ru_RU) by [Vitaliy Kaplya](http://www.dasayt.com/)
 * Swedish (sv_SE) by [Andreas Larsson](http://krokedil.se)
 
 More translations are very welcome!
@@ -77,9 +77,9 @@ This plugin has built-in support for the featured image functionality on the edi
 
 If your social media sharing plugin adds buttons to the widget areas you could check the 'Do not apply content filters' checkbox. Note that when this is done, WordPress will also stop adding paragraph tags to your text, so use this setting with caution. It is much better to ask the developer of the social media sharing buttons plugin to correctly use the content filters (see http://pippinsplugins.com/playing-nice-with-the-content-filter/ for more information on this). If you are embedding your content block with the shortcode, add the following: `suppress_content_filters="yes"`
 
-= The title and featured image are not displayed when using the shortcode =
+= The featured image is not displayed when using the shortcode =
 
-Currently the shortcode function only outputs the post content of the content block, future support for displaying the title and/or the attached featured image is being considered.
+Currently the shortcode function only outputs the post content and title of the content block, future support for displaying the attached featured image is being considered.
 
 = I have a feature request =
 
@@ -88,14 +88,13 @@ These new features are on the to-do list:
 
 * Display the content block featured image when using the shortcode
 * Front-end editing of the content blocks
-* Display shortcode on content block edit screen and/or overview page similar to Contact Form 7
 * Visual Composer integration
 
 = How can I make advanced changes to the widget layout? =
 
 You can create your own widget template and upload this to your theme folder. See [this support topic](http://wordpress.org/support/topic/patch-custom-widget-frontends?replies=1) for more information about this feature.
 
-= Can I make the post type public?  = 
+= Can I make the post type public?  =
 
 You can make the post type public by adding the following code to your theme's functions.php file:
 `function filter_content_block_init() {
@@ -131,6 +130,9 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 2.9 =
+Removed the admin notice, added donation link to plugin overview page. Shortcodes are now displayed on the content block edit screen, thanks to [Remkus](https://forsite.media/) for suggesting this feature.
 
 = 2.8.5 =
 Fix for minor compatibility issue when using the Slider Revolution plugin
