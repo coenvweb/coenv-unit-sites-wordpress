@@ -184,22 +184,13 @@ li {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-
-	a {
-		@include o_sans_bold;
-		border: solid 4px #82cfcc;
-		color: #000;
-		margin-bottom: rem-calc(5);
-		margin-right: rem-calc(5);
-		padding: 5px 10px;
-		text-transform: uppercase;
-
-
-
-	}
-
-
-
+    @include o_sans_bold;
+    border: solid 4px #82cfcc;
+    color: #000;
+    margin-bottom: rem-calc(5);
+    margin-right: rem-calc(5);
+    padding: 5px 10px;
+    text-transform: uppercase;
 }
 
 

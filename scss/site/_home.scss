@@ -268,22 +268,7 @@ width: 30px;
 }
 
 
-
-.full-news-events .columns.news-column {
-  @media #{$small-only} {
-    padding-left: 0;
-    padding-right: 0;
-  }
 }
-
-
-
-}
-
-
-
-
-
 
 // Homepage Widgets
 
@@ -377,24 +362,10 @@ width: 30px;
 
 
 .full-news-events .columns {
-  padding-right: 0;
-
-
-
-
-
-  &:nth-child(3n) {
+  &:nth-child(2n) {
     padding-right: rem-calc(15);
-
-
   }
 }
-
-
-
-
-
-
 
 .full-news-events {
   border-bottom: solid 12px $teal;
@@ -465,13 +436,6 @@ width: 30px;
       right: 0;
       top: 0;
     }
-
-
-
-
-
-
-
   }
   .small-news,
   .featured-news {
@@ -526,7 +490,6 @@ width: 30px;
       background-size: 60px 5px;
       font-size: rem-calc(25);
       padding: 16px 20px 0 20px;
-      text-transform: uppercase;
     }
     @media #{$medium-only} {
 
@@ -554,7 +517,6 @@ width: 30px;
     background-color: #fff;
     
     margin: 0 0 15px 0;
-    padding: 0;
 
     @media #{$medium-up} {
 
@@ -569,12 +531,7 @@ width: 30px;
 
 
      @media #{$medium-up} {
-      float: left;
-     
-     
      width: 100%;
-      
-
     }
 
 
@@ -584,6 +541,9 @@ width: 30px;
        margin-bottom: 20px;
        padding-bottom: 20px;
        background-repeat: no-repeat;
+       @media #{$small-only} {
+        padding-bottom: 5px;
+       }
        
 
        @media #{$medium-up} {
@@ -838,18 +798,16 @@ width: 30px;
       padding-right: 0;
     }
 
-    &:hover {
 
-      @media #{$medium-up} {
-        h2 {
-          background-image: url('/wp-content/themes/coenv-fish/assets/img/divider-white-double.svg');
-          background-position: center bottom;
-          background-size: 60px 5px;
-          margin-bottom: 10px;
-          padding-bottom: 20px;
-        }
-      }
+  @media #{$medium-up} {
+    h2 {
+      background-image: url('/wp-content/themes/coenv-fish/assets/img/divider-white-double.svg');
+      background-position: center bottom;
+      background-size: 60px 5px;
+      margin-bottom: 10px;
+      padding-bottom: 20px;
     }
+  }
 
     @media #{$small-only} {
       border-top: solid 8px #fff; 
@@ -857,42 +815,29 @@ width: 30px;
     }
 
     @media #{$medium-up} {
-      &:hover {
 
         div.fac-stud-wrapper {
           max-width: 600px;
-          margin-top: 50px;
-          
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
         }
 
         div.fac-stud-content {
           display: block;
         }
             
-        &:after {
-          background: rgba(0, 0, 0, 0.8);
-          content: " ";
-          display: block;
-          height: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 10;
-        }  
-      }
     }
 
     .fac-stud-wrapper {
 
       @include o_sans_bold;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.65);
       border-top: solid 8px #fff;
       border-right: solid 8px #fff;
       border-bottom: solid 8px #fff;
       border-left: solid 8px #fff;
       color: #fff;
-      margin: 180px auto 0 auto;
       max-height: 340px;
       padding: 20px 24px;
       width: 500px;

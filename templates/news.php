@@ -6,17 +6,26 @@ Template Name: News
 $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
 
 // Dates
-$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+if(isset($wp_query->query_vars['coenv-year'])) {
+    $coenv_year = (int) urlencode(htmlentities($wp_query->query_vars['coenv-year']));
+    $coenv_month = (int) urlencode(htmlentities($wp_query->query_vars['coenv-month']));
 
-// Month needs an offset because php and WordPress calculate dates differently.
-$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    // Month needs an offset because php and WordPress calculate dates differently.
+    $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    $filtered = true;
+} else {
+    $coenv_year = $coenv_month = $coenv_date = null;
+}
 
 //Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+if(isset($wp_query->query_vars['category'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['category']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'category');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+} else {
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
+}
 
 ?>
 <?php get_header(); ?>
@@ -26,10 +35,10 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 				<div class="row filters">
 				<h2 class="large-12 columns left">Filter Results</h2>
 				
-				<div class="large-6 columns left" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="category">
+				<div class="large-6 columns left" data-url="<?php the_permalink() ?>" data-cat="category">
 					<?php coenv_base_cat_filter('category', $coenv_cat_term_1); // Category filter ?>
 				</div>
-				<div class="large-6 columns right" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="category">
+				<div class="large-6 columns right" data-url="<?php the_permalink() ?>" data-cat="category">
 					<?php coenv_base_date_filter('post',$coenv_month,$coenv_year); // Date filter ?>
 			 	</div>
 		</div>
@@ -45,36 +54,38 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 			'paged' => $paged
 		);
 		// Category filter
-		if($coenv_cat_1 && $coenv_cat_term_1) {
-			$query_args['taxonomy'] = $coenv_cat_1;
-			$query_args['term'] = $coenv_cat_term_1;
-		};
+        if($coenv_cat_term_1) :
+            $query_args['taxonomy'] = 'category';
+            $query_args['term'] = $coenv_cat_term_1;
+            unset($query_args['post__not_in']); // if filtering, we want to let sticky posts in
+        endif;
 
-		// Date filters
-		if ($coenv_year) {
-			$query_args['year'] = $coenv_year;
-		} 
-		if($coenv_month) {
-			$query_args['monthnum'] = $coenv_month;
-		}
-		$wp_query = new WP_Query( $query_args );
+        // Date filters
+        if ($coenv_year) {
+            $query_args['year'] = $coenv_year;
+            unset($query_args['post__not_in']);
+        }
+        if($coenv_month) {
+            $query_args['monthnum'] = $coenv_month;
+            unset($query_args['post__not_in']);
+        }
+
+        $wp_query = new WP_Query( $query_args );
 		
 		if ($wp_query->have_posts()) { 
 		
-			if ($coenv_cat_1) {
-			?>
-			<div class="panel">
-				<div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-				<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
-			</div>
-			<?php 
-			} 
-			if($coenv_year && $coenv_month) { ?>
-			<div class="panel">
-				<div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-				<div class="right"><a href="<?php echo $url_current; ?>">all posts &raquo;</a></div>
-			</div>
-			<?php } ?>
+		if ($coenv_cat_term_1): // Category filter ?>
+        <div class="panel">
+            <div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+        </div>
+        <?php endif; ?>
+        <?php if($coenv_year && $coenv_month): // Date filter ?>
+        <div class="panel">
+            <div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
+            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+        </div>
+        <?php endif; ?>
 
 		<div class="blog clearfix">
 		<?php
@@ -101,7 +112,7 @@ $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
 		        echo get_the_date('M j, Y');
 				$termlist = '';
 				foreach ($terms as $term) {
-		            $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+		            $termlist .= '<a href="/news-events/'. $term->taxonomy . '/' . $term->slug . '/">' . $term->name . '</a>, ';
 				}
 				$termlist = rtrim($termlist,', ');
 				if ( !empty( $terms ) ) {

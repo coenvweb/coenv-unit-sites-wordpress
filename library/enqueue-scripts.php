@@ -16,6 +16,8 @@ if (!function_exists('FoundationPress_scripts')) :
     wp_enqueue_script('jquery');
     wp_enqueue_script('foundation');
 
+    wp_localize_script('foundation', 'ajax_object', array('ajax_url'=>admin_url('admin-ajax.php')));
+
   }
 
   add_action( 'wp_enqueue_scripts', 'FoundationPress_scripts' );

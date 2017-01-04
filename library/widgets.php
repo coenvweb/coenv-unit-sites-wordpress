@@ -120,9 +120,10 @@ class coenv_base_fac_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $fac_cat = get_term_by( 'slug', (string) $_GET['fac-cat'], 'research_areas' );
+          $fac_cat_1 = get_query_var('research_areas');
+          $fac_cat = get_term_by('slug',$fac_cat_1,'research_areas');
           $fac_cat = $fac_cat->slug;
-     
+
           echo $args['before_widget'];
           echo '<span class="filter-cap">Filter:</span>';
           if ( ! empty( $instance['title'] ) ) {
@@ -139,11 +140,10 @@ class coenv_base_fac_cats extends WP_Widget {
                     $cats = get_categories($cats_args);
                     if ($cats) {
                          echo '<ul class="cats">';
-                         if ($fac_cat):
-                              echo '<li><a href="/faculty-research/">All Research Areas</a></li>';
-                         endif;
+                            echo '<li class="'.($fac_cat_1 ? '' : 'active').' fac_cat" data-cat="faculty-list-item">All Research Areas</li>';
                          foreach($cats as $cat) { 
-                              echo '<li><a href="/faculty-research/?tax=research_areas&term=' . $cat->slug . '#filter">' . $cat->name . '</a></li>';
+                              $selected = ($cat->slug == $fac_cat ? 'active' : '');
+                              echo '<li data-cat="'.$cat->slug.'" class="'.$selected.' fac_cat">' . $cat->name . '</li>';
                          }
                          echo '</ul>';
                     }
@@ -584,7 +584,6 @@ class CoEnv_Widget_Events extends WP_Widget {
     }
 
     $events = array_slice( $events, 0, $posts_per_page );
-
     ?>
       <?php echo $before_widget; ?>
             <?php //if ( $events_url != '' ) : ?>
