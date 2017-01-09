@@ -9,6 +9,15 @@ jQuery(function ($) {
 		// lightbox
 		$('a').nivoLightbox();
 
+        $('a').each(function () {
+            if( location.hostname === this.hostname || !this.hostname.length ) {
+            } else {
+                var href = $(this).attr('href');
+                var func = 'trackOutboundLink("' + href + '"); return false;';
+                $(this).attr('onclick', func);
+            }
+        });
+
 		// lightbox captions
         $('figure a img').each(function () {
             var $this = $(this);
@@ -89,6 +98,13 @@ jQuery(function ($) {
     var $grid = $('.faculty-list-teach').isotope({
       itemSelector: '.faculty-list-item',
       layoutMode: 'fitRows'
+    });
+
+    $grid.imagesLoaded().progress( function() {
+        $grid.isotope({
+            itemSelector: '.faculty-list-item',
+            layoutMode: 'fitRows'
+        });
     });
 
 	$('.fac_cat').on('click', function(e) {
