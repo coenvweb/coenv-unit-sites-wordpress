@@ -264,7 +264,8 @@ s=Math.max(0,s);var a=Math.floor(r/this.columnWidth);a-=r%this.columnWidth?0:1,a
             } else {
                 var href = $(this).attr('href');
                 var title = $(this).html();
-                var func = 'trackOutboundLink("' + href + ' - ' + title + '"); return false;';
+                var pagetitle = document.title;
+                var func = 'trackOutboundLink("' + href + ' - ' + title + ' - ' + pagetitle + '"); return false;';
                 $(this).attr('onclick', func);
             }
         });
