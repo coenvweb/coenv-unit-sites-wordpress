@@ -13,9 +13,7 @@ jQuery(function ($) {
             if( location.hostname === this.hostname || !this.hostname.length ) {
             } else {
                 var href = $(this).attr('href');
-                var title = $(this).html();
-                var pagetitle = document.title;
-                var func = 'trackOutboundLink("' + href + ' - ' + title + ' - ' + pagetitle + '"); return false;';
+                var func = 'trackOutboundLink("' + href + '"); return false;';
                 $(this).attr('onclick', func);
             }
         });

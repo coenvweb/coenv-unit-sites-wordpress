@@ -263,9 +263,7 @@ s=Math.max(0,s);var a=Math.floor(r/this.columnWidth);a-=r%this.columnWidth?0:1,a
             if( location.hostname === this.hostname || !this.hostname.length ) {
             } else {
                 var href = $(this).attr('href');
-                var title = $(this).html();
-                var pagetitle = document.title;
-                var func = 'trackOutboundLink("' + href + ' - ' + title + ' - ' + pagetitle + '"); return false;';
+                var func = 'trackOutboundLink("' + href + '"); return false;';
                 $(this).attr('onclick', func);
             }
         });
