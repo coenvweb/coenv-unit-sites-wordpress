@@ -171,7 +171,7 @@
 
             items_with_submenus.on("click.megamenu touchend.megamenu", function(e) {
 
-                if ($(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed")) {
+                if (plugin.isDesktopView() && $(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed")) {
                     e.preventDefault();
                     return;
                 }

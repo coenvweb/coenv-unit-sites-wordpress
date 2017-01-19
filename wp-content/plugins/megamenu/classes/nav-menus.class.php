@@ -28,6 +28,7 @@ class Mega_Menu_Nav_Menus {
             'hide_sub_menu_on_mobile' => 'false',
             'hide_arrow' => 'false',
             'item_align' => 'left',
+            'icon_position' => 'left',
             'panel_columns' => 6, // total number of columns displayed in the panel
             'mega_menu_columns' => 1, // for sub menu items, how many columns to span in the panel,
             'mega_menu_order' => 0
@@ -164,7 +165,6 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_script('color-box-min');
         wp_deregister_script('color-box');
         wp_deregister_style('color-box-css');
-
 
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );

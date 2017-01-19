@@ -487,6 +487,19 @@ class Mega_Menu_Menu_Item_Manager {
 
         $return .= '            </td>';
         $return .= '        </tr>';
+        $return .= '        <tr class="mega-menu-icon-position">';
+        $return .= '            <td class="mega-name">';
+        $return .=                  __("Icon Position", "megamenu");
+        $return .= '            </td>';
+        $return .= '            <td class="mega-value">';
+        $return .= '            <select id="mega-item-align" name="settings[icon_position]">';
+        $return .= '                <option value="left" ' . selected( $menu_item_meta['icon_position'], 'left', false ) . '>' . __("Left", "megamenu") . '</option>';
+        $return .= '                <option value="top" ' . selected( $menu_item_meta['icon_position'], 'top', false ) . '>' . __("Top", "megamenu") . '</option>';
+        $return .= '                <option value="right" ' . selected( $menu_item_meta['icon_position'], 'right', false ) . '>' . __("Right", "megamenu") . '</option>';
+        $return .= '            </select>';
+
+        $return .= '            </td>';
+        $return .= '        </tr>';
 
         $return .= apply_filters("megamenu_after_menu_item_settings", "",  $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
 

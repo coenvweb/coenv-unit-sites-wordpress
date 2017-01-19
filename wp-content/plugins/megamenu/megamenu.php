@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.3.3
+ * Version:     2.3.4
  * Author:      Tom Hemsley
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.3.3';
+    public $version = '2.3.4';
 
 
     /**
@@ -136,7 +136,6 @@ final class Mega_Menu {
                 do_action( 'sidebar_admin_setup' );
                 do_action( 'admin_enqueue_scripts', 'widgets.php' );
                 do_action( 'admin_print_styles-widgets.php' );
-
                 do_action( 'megamenu_nav_menus_scripts', $hook );
             }
 
@@ -326,15 +325,21 @@ final class Mega_Menu {
 
         }
 
+        $template = get_template();
 
-        switch(get_template()) {
+        if ($template == 'zerif-pro') {
+            $template = 'zerif';
+        }
+
+        switch ( $template ) {
             case "twentyseventeen":
-                require_once( MEGAMENU_PATH . 'integration/twentyseventeen/functions.php' );
-                break;
+            case "generatepress":
+            case "twentytwelve":
             case "zerif":
-            case "zerif-pro":
-                require_once( MEGAMENU_PATH . 'integration/zerif/functions.php' );
-                break;
+                if ( is_readable( MEGAMENU_PATH . "integration/{$template}/functions.php" ) ) {
+                    require_once( MEGAMENU_PATH . "integration/{$template}/functions.php" );
+                }
+            break;
         }
     }
 
@@ -692,6 +697,10 @@ final class Mega_Menu {
 
             if ( $item->megamenu_settings['icon'] != 'disabled' ) {
                 $item->classes[] = 'has-icon';
+            }
+
+            if ( $item->megamenu_settings['icon_position'] != 'left' ) {
+                $item->classes[] = "icon-" . $item->megamenu_settings['icon_position'];
             }
 
             if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth === 0 ) {

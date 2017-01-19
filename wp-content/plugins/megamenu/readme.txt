@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.3.2
+Stable tag: 2.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,12 @@ See https://www.megamenu.com for more screenshots
 
 == Changelog ==
 
+= 2.3.4 [15/01/16] =
+
+* New: Automatic integration for GeneratePress and Twenty Twelve (hide duplicate mobile button)
+* New: "Icon Position" option added in the menu item settings (left, top, right) (requires clearing the Mega Menu CSS under Mega Menu > Tools)
+* Fix: JavaScript fix for tabbed mobile menus
+
 = 2.3.3 [29/12/16] =
 
 * Fix: Compatibility with WPML Language switcher
@@ -113,7 +119,7 @@ See https://www.megamenu.com for more screenshots
 * Fix: Theme changes not being applied when PolyLang used in conjunction with the "Output in <head>" option
 * Fix: JavaScript error when a dynamic width has been used for the sub menu, but the matching element does not exist on the page
 
-= 2.3.1 [21/12/16]=
+= 2.3.1 [21/12/16] =
 
 * Improvement: Theme Editor switched to tabbed interface
 * Improvement: Theme Editor now uses AJAX save so you don't lose your place in the theme editor

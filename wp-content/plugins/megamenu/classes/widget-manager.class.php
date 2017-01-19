@@ -78,8 +78,8 @@ class Mega_Menu_Widget_Manager {
         register_sidebar(
             array(
                 'id' => 'mega-menu',
-                'name' => __("Mega Menu Widgets", "megamenu"),
-                'description'   => __("Do not manually edit this area.", "megamenu")
+                'name' => __("Max Mega Menu Widgets", "megamenu"),
+                'description'   => __("This is where Max Mega Menu stores widgets that you have added to sub menus using the mega menu builder. You can edit existing widgets here, but new widgets must be added through the Mega Menu interface (under Appearance > Menus).", "megamenu")
             )
         );
     }

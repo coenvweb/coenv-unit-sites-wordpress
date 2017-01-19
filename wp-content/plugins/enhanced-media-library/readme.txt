@@ -2,8 +2,8 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 4.5
-Tested up to: 4.7
-Stable tag: 2.3.6
+Tested up to: 4.7.1
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,9 +68,9 @@ Support is free for both versions of the plugin. "PRO"-users do not have priorit
 
 = Available Languages =
 
-You can see available translations and their progress here: https://translate.wordpress.org/projects/wp-plugins/enhanced-media-library Many thanks to all involved!
+You can see the list of available translations and their progress on [wpUXsolutions.com](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library). Many thanks to all involved!
 
-Assistance with translating is highly appreciated! If you'd like to be a translation editor of the PRO version please contact us on [wpuxsolutions.com](https://www.wpuxsolutions.com/support/create-new-ticket/)
+Assistance with translating is highly appreciated! If you'd like to be a translation editor or to suggest translations for your language please feel free to contribute to translation. All changes made are included to every new release of the plugin.
 
 
 = Compatible with the Plugins: =
@@ -94,26 +94,29 @@ Please let us know if you find any issue with the plugins from the list above or
 
 = Incompatibility =
 
-Please notice that you use the Enhanced Media Library with other plugins that add media categories, media folders, and manage MIME Types at your own risk. We cannot guarantee their compatibility because of different approach to the same functionality. It does NOT mean that we do not recommend using those plugins, it just means we do not recommend to use them at the same time with the Enhanced Media Library. Please choose the one you prefer.
+Please notice that you use Enhanced Media Library with other plugins which add media categories, media folders, or manage MIME Types at your own risk. We cannot guarantee their compatibility because of the different approach to the same functionality. We do not recommend using them at the same time with Enhanced Media Library. Please choose the one you prefer.
 
 
 > #### Enhanced Media Library PRO
 
-> Key features:
+> Additional comfort and even more convenient way to organize WordPress media library:
 
-> * Media items categorization in bulk (multiple items to multiple categories at once) for both just uploaded and existing
-> * Media items within a category can be selected in bulk with a single click
-> * Selected media items can be deleted in bulk in the Grid mode of the media library or in the post/page editor media popup with a single click
-> * Media items child to a post of any type can be auto-assigned to their parent post categories on upload
-> * Categories of existing media items can be synchronized with their parent post categories of any type with a single click
-> * Filter-based gallery in two clicks, no need to figure out your media category IDs, nor to delve into the text editor shortcode
+> * Categorize media items in bulk
+> * Select multiple media items in a single click
+> * Upload media items to parent (custom) post categories automatically
+> * Enhanced `gallery` / `playlist` shortcodes with just WordPress UI, no "coding"
+
+> [More on wpUXsolutions.com](https://www.wpuxsolutions.com/documents/enhanced-media-library/where-to-start#section2)
 
 
 = Useful Links =
 
-* [Where to start? (Information is being updated)](https://wpuxsolutions.com/documents/enhanced-media-library/eml-where-to-start/)
-* [Enhanced Media Shortcode Possible Conflicts](https://www.wpuxsolutions.com/documents/enhanced-media-library/enhanced-media-shortcode-possible-conflicts/)
-* [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs/)
+* [Where to Start?](https://wpuxsolutions.com/documents/enhanced-media-library/where-to-start)
+* [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library)
+* [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs)
+* [Contribute to Translation](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library)
+* [Enhanced Media Shortcode Possible Conflicts](https://www.wpuxsolutions.com/documents/enhanced-media-library/enhanced-media-shortcode-possible-conflicts)
+
 
 
 
@@ -163,6 +166,23 @@ Please notice that you use the Enhanced Media Library with other plugins that ad
 
 == Changelog ==
 
+= 2.4.1 =
+*Release Date - January 16, 2017*
+
+= Bugfixes =
+* A bug with saving taxonomy terms from post editor media popup fixed - [Support Ticket](https://wordpress.org/support/topic/category-filter-not-media-category-filter-stopped-working-again/)
+
+
+&nbsp;
+= 2.4 =
+*Release Date - January 13, 2017*
+
+= Improvements =
+* Better layout and workflow for the grid mode
+* RTL stylesheets added
+
+
+&nbsp;
 = 2.3.6 =
 *Release Date - December 16, 2016*
 

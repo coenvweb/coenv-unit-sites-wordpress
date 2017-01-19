@@ -139,12 +139,20 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			$item_output = $args->before;
 			$item_output .= '<a'. $attributes .'>';
 
+			if ( in_array('icon-top', $classes ) ) {
+				$item_output .= "<span class='mega-title-below'>";
+			}
+
 			if ( $settings['hide_text'] == 'true' ) {
 				/** This filter is documented in wp-includes/post-template.php */
 			} else if ( property_exists( $item, 'mega_description' ) && strlen( $item->mega_description ) ) {
 		        $item_output .= '<span class="mega-description-group"><span class="mega-menu-title">' . $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after . '</span><span class="mega-menu-description">' . $item->description . '</span></span>';
 		    } else {
 				$item_output .= $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after;
+			}
+
+			if ( in_array('icon-top', $classes ) ) {
+				$item_output .= "</span>";
 			}
 
 			$item_output .= '</a>';
