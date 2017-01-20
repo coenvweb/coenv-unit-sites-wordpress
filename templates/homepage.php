@@ -197,22 +197,40 @@ $wp_query = new WP_Query( $home_args );
 </div>
 <?php endif; ?>
 </div>
-    <div class="special-announcement columns large-12">
-        <div class="white-container">
-            <h4 class="announcement-title">Announcement</h3>
-            <?php the_widget('custom_post_widget', 'custom_post_id=3193'); ?>
-        </div>
-    </div>
+    
 </div>
 
 
-<div class="row events">
+<div class="row events" style="min-height: 100px;">
+<?php
+	$ctx = stream_context_create(array('http'=>
+		array(
+			'timeout' => 3,  //1200 Seconds is 20 Minutes
+		)
+	));
+    $events_xml = file_get_contents('https://www.trumba.com/calendars/sea_marinebio.rss', false, $ctx );
+	$xml = new SimpleXmlElement($events_xml);
+    $events = array();
+
+    foreach ($xml->channel->item as $item) {
+      $events[] = array(
+        'title' => $item->title,
+        'date'  => $item->category,
+        'url' => $item->link
+      );
+    }
+	if(!empty($events)) {
+?>
+
     <a href="/news-stories/events" id="More Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a>
     <a href="/news-stories/events" class="more hide-for-small-only" id="More Events">More Events <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
     <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
     <div class="list columns large-12">
         <?php the_widget('CoEnv_Widget_Events', 'feed_url=https://www.trumba.com/calendars/sea_marinebio.rss&posts_per_page=3'); ?>
     </div>      
+<?php 
+	}
+?>
 </div>
 
 <div class="row fhl">
