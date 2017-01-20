@@ -35,9 +35,10 @@ if (is_singular('post')){
 if (is_singular('faculty')){
     
 }
-if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
-
-	dynamic_sidebar( $ancestor_id );
-endif;
+if($GLOBALS['post']->ID != 3839) { //dont call sidebar widgets for events page
+    if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
+        dynamic_sidebar( $ancestor_id );
+    endif;
+}
 ?>
 </aside>
