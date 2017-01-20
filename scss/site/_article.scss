@@ -60,7 +60,7 @@
     }
 
 	h1 {
-		@include serif;
+        @include uni_regular();
 		@include font-size(24);
 		@include line-height(30);
 		font-weight: 400;
@@ -73,7 +73,7 @@
 	} // h1
 
 	h2 {
-		@include serif;
+        @include uni_regular();
 		@include font-size(18);
 		@include line-height(24);
 		font-weight: 800;
@@ -86,7 +86,7 @@
 	} // h2
 
 	h3 {
-		@include serif;
+        @include uni_regular();
 		@include font-size(16);
 		@include line-height(24);
 		font-weight: 800;
@@ -99,9 +99,20 @@
 	} // h3
 
 	h4 {
+        @include uni_regular();
 		@include font-size(14);
 		@include line-height(24);
 	}
+
+    h1, h2, h3, h4 {
+        a {
+            color: $black !important;
+            &:hover {
+                color: $accent-blue-dk !important;
+                text-decoration: underline;
+            }
+        }
+    }
 
 	hr {
 		height: 2px;
