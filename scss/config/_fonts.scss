@@ -129,7 +129,7 @@
 }
 
 .intro {
-    font-size: rem-calc(30)!important;
+    font-size: rem-calc(24)!important;
     line-height: normal;
     margin: rem-calc(20) 0;
     @include o_sans;
@@ -138,8 +138,8 @@
     -webkit-font-smoothing: antialiased;
     color: $accent-blue;
     
-    @media #{$large-up} {
-        font-size: 2vw!important;
+    @media #{$small-only} {
+        font-size: rem-calc(18) !important;
     }
     &:after {
         content: "";
