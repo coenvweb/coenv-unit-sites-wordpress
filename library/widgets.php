@@ -122,14 +122,9 @@ class coenv_base_fac_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-         if (isset($_GET['fac-cat'])) {
-            $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
-             $got_fac_cat = $_GET['fac-cat'];
-         } else {
-            $got_fac_cat = null;
-         }
-         if (empty($coenv_cat_term_1)) {
-          $fac_cat = get_term_by( 'slug', (string) $got_fac_cat, 'research_areas' );
+		$fac_cat_1 = get_query_var('research_areas');
+        $fac_cat = get_term_by('slug',$fac_cat_1,'research_areas');
+        $fac_cat = $fac_cat->slug;
      
           echo $args['before_widget'];
           
@@ -139,24 +134,23 @@ class coenv_base_fac_cats extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'research_areas'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                         echo '<ul class="fac-cats">';
-                         if ($fac_cat):
-                              echo '<li><a class="button" href="/faculty-research/faculty-instructor-bios/">All Research Areas</a></li>';
-                         endif;
-                         foreach($cats as $cat) { 
-                              echo '<li><a class="button" href="/faculty-research/faculty-instructor-bios/?fac-cat=' . $cat->slug . '">' . $cat->name . '</a></li>';
-                         }
-                         echo '</ul>';
-                    }
+			$cats_args  = array(
+			  'orderby' => 'name',
+			  'order' => 'ASC',
+			  'taxonomy' => 'research_areas'
+			  );
+			$cats = get_categories($cats_args);
+			if ($cats) {
+				 echo '<ul class="fac-cats">';
+				 if ($fac_cat):
+					  echo '<li><a class="button" href="/faculty-research/faculty-instructor-bios/">All Research Areas</a></li>';
+				 endif;
+				 foreach($cats as $cat) { 
+					  echo '<li><a class="button" href="/faculty-research/faculty-instructor-bios/research_areas/' . $cat->slug . '">' . $cat->name . '</a></li>';
+				 }
+				 echo '</ul>';
+			}
           echo $args['after_widget'];
-         }
      }
 
      /**
@@ -482,12 +476,9 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          if (isset($_GET['term'])){
-              $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
-              $blog_cat = $blog_cat->slug;
-          } else {
-              $blog_cat = null;
-          }
+          $blog_cat_1 = get_query_var('category');
+          $blog_cat = get_term_by('slug',$blog_cat_1,'category');
+          $blog_cat = $blog_cat->slug;
      
           echo $args['before_widget'];
           
@@ -518,7 +509,7 @@ class coenv_base_blog_cats extends WP_Widget {
                              
                              if ($slug !== 'uncategorized') {
                              
-                                 echo '<li><a class="cats ' . $check . '" href="/news-stories/?tax=category&term=' . $cat->slug . '">';
+                                 echo '<li><a class="cats ' . $check . '" href="/news-stories/category/' . $cat->slug . '">';
                                  echo $cat->name;
                                  echo '</a></li>';
                              }
@@ -619,12 +610,8 @@ class coenv_base_index_dates extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-         if (isset($_GET['coenv-year'])){
-              $coenv_year = (string) $_GET['coenv-year'];
-              $coenv_month = (string) $_GET['coenv-month'];
-          } else {
-              $coenv_year = $coenv_month = null;
-          }
+          $coenv_year = get_query_var('coenv-year');
+          $coenv_month = get_query_var('coenv-month');
          
      
           echo $args['before_widget'];
@@ -635,7 +622,7 @@ class coenv_base_index_dates extends WP_Widget {
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-          echo '<div data-url="'. $_SERVER['REQUEST_URI'] .'">';
+          echo '<div data-url="'. get_the_permalink() .'">';
           coenv_base_date_filter('post',$coenv_month,$coenv_year);
           echo '</div>';
           echo $args['after_widget'];

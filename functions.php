@@ -45,6 +45,9 @@ require_once('library/faculty.php');
 // Custom taxonomies functions
 require_once('library/taxonomies.php');
 
+// Custom rewrites functions
+require_once('library/rewrites.php');
+
 // Need to be sorted into includes
 
 
@@ -233,7 +236,7 @@ $cats = get_categories($cats_args);
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;
 			echo $tax_value;
-			echo '<option value="?fac-cat=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+			echo '<option value="/faculty-research/faculty-instructor-bios/research_areas/' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
 		}
 		echo '</select>';
 	}
@@ -248,7 +251,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
     echo '<label for="select-month" class="visuallyhidden">Month Filter</label>';
 	echo '<select name="select-category" class="select-category" id="select-month">';
-	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Months</option>';
+	echo '<option value="">All Months</option>';
 	if( $monthly->have_posts() ) :
 		while( $monthly->have_posts() ) : $monthly->the_post();
 		    if( get_the_date('mY') != $ref_month ) {
@@ -260,7 +263,7 @@ function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
 		    	} else {
 		    		$selected = '';
 		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+		    	echo '<option value="coenv-year/' . $year_num . '/coenv-month/' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
 		       // echo "\n".get_the_date('F Y');
 		        $ref_month = get_the_date('mY');
 		        $counter = 0;

@@ -4,33 +4,32 @@ Template Name: News
 */
 
 $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
-
 /*
  * Query variables
  */
 
 // Dates
-if(isset($_GET['coenv-year'])){
-$coenv_year = (int) urlencode(htmlentities($_GET['coenv-year']));
-$coenv_month = (int) urlencode(htmlentities($_GET['coenv-month']));
+if(isset($wp_query->query_vars['coenv-year'])) {
+    $coenv_year = (int) urlencode(htmlentities($wp_query->query_vars['coenv-year']));
+    $coenv_month = (int) urlencode(htmlentities($wp_query->query_vars['coenv-month']));
 
-// Month needs an offset because php and WordPress calculate dates differently.
-$coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    // Month needs an offset because php and WordPress calculate dates differently.
+    $coenv_date = date('F Y',mktime(10,0,0,$coenv_month+1,0,$coenv_year));
+    $filtered = true;
 } else {
     $coenv_year = $coenv_month = $coenv_date = null;
 }
 
 //Categories
-if(isset($_GET['tax'])){
-    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-}
-if(isset($_GET['term'])){
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+if(isset($wp_query->query_vars['category'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['category']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'category');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
 } else {
     $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
+
 ?>
 
 <?php get_header(); ?>
@@ -50,8 +49,8 @@ if(isset($_GET['term'])){
 			'paged' => $paged
 		);
 		// Category filter
-		if($coenv_cat_1 && $coenv_cat_term_1) :
-			$query_args['taxonomy'] = $coenv_cat_1;
+		if($coenv_cat_term_1) :
+			$query_args['taxonomy'] = 'category';
 			$query_args['term'] = $coenv_cat_term_1;
 		endif;
 
@@ -66,7 +65,7 @@ if(isset($_GET['term'])){
 		?>
 		<?php if ($wp_query->have_posts()): 
 		?>
-		<?php if ($coenv_cat_1): // Category filter ?>
+		<?php if ($coenv_cat_term_1): // Category filter ?>
 		<div class="panel row">
 			<div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
 			<div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
@@ -109,8 +108,9 @@ if(isset($_GET['term'])){
 		<?php 
         echo '<p>' . get_the_date('M j, Y');
                 $terms = wp_get_post_terms( get_the_ID(), 'category');
+				$termlist = '';
                 foreach ($terms as $term) {
-                    $termlist = '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                    $termlist .= '<a href="/category/' . $term->slug . '">' . $term->name . '</a>, ';
                 }
                 $termlist = rtrim($termlist,', ');
                 if (strpos($termlist,'uncategorized') == false)  {

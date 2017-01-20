@@ -9,13 +9,14 @@ Template Name: Faculty Index
 
 //Categories
 
-if(isset($_GET['fac-cat'])){
-    $coenv_cat_1 = urlencode(htmlentities($_GET['fac-cat']));
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['fac-cat']));
-    $coenv_cat_term_1_arr = $fac_cat = get_term_by('slug',$coenv_cat_term_1,'research_areas');
+//research areas
+if(isset($wp_query->query_vars['research_areas'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['research_areas']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
 } else {
-    $coenv_cat_1 = $coenv_cat_term_1 = $fac_cat = null;
+    $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
 ?>
 
@@ -45,7 +46,7 @@ $query_args = array(
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
 	'taxonomy' => 'research_areas',
-	'term' => isset($fac_cat->slug) ? $fac_cat->slug : '',
+	'term' => isset($coenv_cat_term_1) ? $coenv_cat_term_1->slug : '',
 	'meta_key' => 'last_name',
 	'orderby' => 'meta_value',
 	'order' => 'ASC',
@@ -74,7 +75,7 @@ $wp_query = new WP_Query( $query_args );
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="faculty-list-teach clearfix">
 
-<?php if ($coenv_cat_1): // Category filter ?>
+<?php if ($coenv_cat_term_1): // Category filter ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
 			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all faculty &raquo;</a></div>
