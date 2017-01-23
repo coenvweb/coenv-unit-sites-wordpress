@@ -66,12 +66,27 @@ endif;
 $wp_query = new WP_Query( $query_args );
 
 ?>
-            <div id="filter" class="row filters show-for-small-only">
-			<h2 class="large-12 columns left">Filter By Research Area</h2>
-			<div class="large-6 columns left" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="category">
-				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
-			</div>
-		</div>
+		<div id="filter" class="row filters show-for-small-only">
+            <h2 class="large-12 columns left">Filter By Research Area</h2>
+            <div class="large-6 columns left">
+                <?php
+                    $cats_args  = array(
+                      'orderby' => 'name',
+                      'order' => 'ASC',
+                      'taxonomy' => 'research_areas'
+                      );
+                    $cats = get_categories($cats_args);
+                    if ($cats) {
+                        echo '<select class="fac_filter">';
+                        echo '<option class="" value="faculty-list-item">All Research Areas</option>';
+                        foreach($cats as $cat) {
+                              echo '<option value="'.$cat->slug.'" class="">' . $cat->name . '</option>';
+                        }
+                         echo '</select>';
+                    }
+                ?>
+            </div>
+        </div>
 	<?php if ($wp_query->have_posts()): ?>
 	<div class="faculty-list-teach clearfix">
 
@@ -94,7 +109,12 @@ $wp_query = new WP_Query( $query_args );
         if (!$faculty_img_src) {
 		  $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
-		echo '<a href="' . $faculty_link . '"><li class="faculty-list-item"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></li></a>';
+        $faculty_areas = get_the_terms($post->ID, 'research_areas');
+        $term_list = ''; 
+        foreach($faculty_areas as $area) {
+            $term_list .= $area->slug . ' ';
+        }
+		echo '<a href="' . $faculty_link . '"><li class="faculty-list-item '.$term_list.'"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></li></a>';
 		endwhile;
 		?>
 				<div class="pager">

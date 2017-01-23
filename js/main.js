@@ -70,6 +70,64 @@ jQuery(function ($) {
         var catval = $(this).val();
         window.location.href = cat + catval;
     } );
+
+
+	var $grid = $('.faculty-list-teach').isotope({
+      itemSelector: '.faculty-list-item',
+      layoutMode: 'fitRows'
+    });
+
+    $grid.imagesLoaded().progress(function() {
+        $grid.isotope({
+            itemSelector: '.faculty-list-item',
+            layoutMode: 'fitRows',
+            fitRows: {
+                gutter: 1
+            }
+
+        });
+    });
+
+    $('.fac_cat').on('click', function(e) {
+        e.preventDefault();
+        pushHash($(this).data('cat'));
+    });
+
+    $('.fac_filter').on('change', function(e) {
+        e.preventDefault();
+        pushHash($(this).val());
+    });
+
+    $(window).on('hashchange', function() {
+        readHash();
+    });
+
+    function toggleFacControl(newValue) {
+        $('ul.cats li.fac_cat').each(function() {
+            if($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            }
+            if($(this).data('cat') == newValue) {
+                $(this).addClass('active');
+            }
+        });
+        $('.fac_filter').val(newValue);
+    }
+
+    function pushHash(hashValue) {
+        window.location.hash = hashValue;
+    }
+
+    function readHash() {
+        if(window.location.hash) {
+            var hash = window.location.hash.substr(1);
+            var filterValue = '.' + hash;
+            toggleFacControl(hash);
+            $grid.isotope({filter: filterValue});
+        }
+    }
+
+	readHash();
 });
 
 

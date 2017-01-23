@@ -65,6 +65,8 @@ module.exports = function(grunt) {
 		      'js/main.js',
             './js/alert-closer.js',
           'js/wp-menufix.js',
+          'js/isotope2.js',
+          'js/imagesloaded.pkgd.min.js',
         ],
 
         dest: 'js/app.js',

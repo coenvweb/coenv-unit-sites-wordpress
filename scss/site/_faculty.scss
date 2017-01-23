@@ -145,8 +145,8 @@ article.type-faculty {
 
 .faculty-list-item {
 	float: left;
-	margin-bottom: rem-calc(18px);
-	margin-right: rem-calc(18px);
+	margin-bottom: rem-calc(10px);
+	margin-right: rem-calc(10px);
 	width: rem-calc(120px);
 	height: 13.5rem;
     background-color: $accent-blue-dk;
@@ -198,13 +198,9 @@ ul.fac-terms {
 	margin-left:0;
 
 	li {
-		display: inline;
-		margin: 0 .5rem .5rem 0;
-		padding: 0;
-        .button {
+        &.button {
             @extend .fac-button;
         }
-
 	}
 }
 
@@ -213,7 +209,7 @@ ul.fac-terms {
     background: $bg-light!important;
     color: $text;
     filter: none;
-    &:hover {
+    &:hover, &.active {
         background: $accent-blue-dk!important;
         color: white!important;
     }
