@@ -98,110 +98,152 @@ wp_reset_postdata();
     <div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
         <a name="More News & Stories" href="/news-stories"><?php include(get_template_directory() . "/assets/img/news-icon.svg"); ?></a>
         <a href="/news-stories/" class="more hide-for-small-only" id="More Events">More News & Stories <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
-            <a name="More News & Stories" href="/news-stories">
-            <h2>News & Stories</h2></a>
+        <a name="More News & Stories" href="/news-stories">
+            <h2>News & Stories</h2>
+        </a>
     </div>
-                <div class="news-stories" data-equalizer>
-                <?php
-# Student/Alumni Spotlight
-		
-$sticky = get_option( 'sticky_posts' );
-$sticky_count = count($sticky);
-$posts_on_home = 1; //set posts_per_page here
+    <div class="news-stories" data-equalizer>
+    <?php
+        # Student/Alumni Spotlight or Research/Faculty Spotlight
 
-$home_args = array(
-    'post_type' => 'post',
-    'posts_per_page' => $posts_on_home - $sticky_count,
-    'post_status' => 'publish',
-    'cat' => 136,
-);
+        $sticky = get_option( 'sticky_posts' );
+        $sticky_count = count($sticky);
+        $posts_on_home = 1; //set posts_per_page here
 
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
+        $home_args = array(
+            'post_type' => 'post',
+            'posts_per_page' => $posts_on_home - $sticky_count,
+            'post_status' => 'publish',
+            'cat' => '136, 137',
+        );
+
+        $wp_query = new WP_Query( $home_args );
+        ?>
+        <?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns">
-        <div class="white-container" data-equalizer-watch>
-        <a name="More student & alumni stories" class="fake-cat button left" href="/news-stories">Student Spotlights</a>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link_target = '';
-            $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
-        }
-        echo '<div class="featured-thumbnail">';
-        echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-        the_post_thumbnail( 'large-sq' );
-        echo '<h3 class="news-title"><span class="white-title">' . get_the_title() . '</span></h3>';
-        echo '</a></div>';
-        echo '<span class="excerpt">';
-        echo the_advanced_excerpt('length=20&finish=sentence');
-        echo '<time class="article__time right" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-        echo $post_link . '</span>';
-	endwhile;
-	?>
-</div>
-</div>
-<?php endif; ?>
-                
-<?php
-# Research / Faculty Spotlight
-		
-$sticky = get_option( 'sticky_posts' );
-$sticky_count = count($sticky);
-$posts_on_home = 1; //set posts_per_page here
+            <div class="white-container" data-equalizer-watch>
+                <?php
+                while ( $wp_query->have_posts() ) :
+                $wp_query->the_post();
+                    $feature_post = get_the_ID();
+                    if(in_category(136)) { ?>
+                        <a name="More student & alumni stories" class="fake-cat button left" href="/news-stories/category/student-spotlight/">Student Spotlights</a>
+                    <?php } ?>
+                    <?php if(in_category(137)) { ?>
+                        <a name="More research news" class="fake-cat button left" href="/news-stories/category/research-faculty-spotlight/">Research News</a>
+                    <?php }
+                    # The Loop
+                    if (get_field('story_link_url')) {
+                        $post_link_url = get_field('story_link_url');
+                        $post_link_target = ' target="_blank" ';
+                        $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                    } else {
+                        $post_link_url = get_the_permalink();
+                        $post_link_target = '';
+                        $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
+                    }
+                    echo '<div class="featured-thumbnail">';
+                    echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+                    the_post_thumbnail( 'large-sq' );
+                    echo '<h3 class="news-title"><span class="white-title">' . get_the_title() . '</span></h3>';
+                    echo '</a></div>';
+                    echo '<span class="excerpt">';
+                    echo the_advanced_excerpt('length=20&finish=sentence');
+                    echo '<time class="article__time right" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                    echo $post_link . '</span>';
+                endwhile;
+                ?>
+            </div>
+        </div>
+        <?php endif; ?>
 
-$home_args = array(
-    'post_type' => 'post',
-    'posts_per_page' => $posts_on_home - $sticky_count,
-    'post_status' => 'publish',
-    'cat' => 137,
-);
+        <?php
+        # News Feed
 
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
-		<div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
-        <div class="white-container" data-equalizer-watch>
-                <a name="More research news" class="fake-cat button left" href="/news-stories">Research News</a>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="read-more button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link = '<a class="read-more button" href="' . $post_link_url . '">Read more</a>';
-        }
-        echo '<div class="featured-thumbnail">';
-        echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-        the_post_thumbnail( 'large-sq' );
-        echo '<h3 class="news-title"><span class="white-title">' . get_the_title() . '</span></h3>';
-        echo '</a></div>';
-        echo '<span class="excerpt">';
-        echo the_advanced_excerpt('length=20&finish=sentence');
-        echo '<time class="article__time right" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-        echo $post_link . '</span>';
-	endwhile;
-	?>
+        $posts_on_home = 2; //set posts_per_page here
+
+        $home_args = array(
+            'post_type' => 'post',
+            'posts_per_page' => $posts_on_home,
+            'post_status' => 'publish',
+            'post__not_in' => array($feature_post),
+        );
+
+        $wp_query = new WP_Query( $home_args );
+        ?>
+        <?php if ($wp_query->have_posts()): ?>
+            <div class="medium-6 columns" style="margin-top: 0; padding-top: 0;">
+                <div class="home-post" data-equalizer-watch>
+                    <?php
+                    # The Loop
+                    while ( $wp_query->have_posts() ) :
+                        $wp_query->the_post();
+						$rows = get_field('blog_link');
+                        $terms = wp_get_post_terms( get_the_ID(), 'category');
+                        if (get_field('story_link_url')) {
+                            $post_link_url = get_field('story_link_url');
+                            $post_link_target = ' target="_blank" ';
+                            $post_link = '<p><a class="read-more button left" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                        } else {
+                            $post_link_url = get_the_permalink();
+                            $post_link = '<a class="read-more button left" href="' . $post_link_url . '">Read more</a>';
+                        }
+						?>
+						<div class="blog-list-item clearfix">
+						<!--
+							<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
+							data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
+							data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
+							</div>
+							-->
+							
+
+							<?php
+								echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
+								echo the_excerpt();
+								echo $post_link;
+							'</div>';
+                            ?>
+                            <div class="news-meta">
+								<div class="blog-meta small-8 columns right">
+									<?php
+										echo '<p><span class="time">' . get_the_date('M j, Y');
+												$terms = wp_get_post_terms( get_the_ID(), 'category');
+												$termlist = '';
+												foreach ($terms as $term) {
+													$termlist .= '<a href="/category/' . $term->slug . '">' . $term->name . '</a>, ';
+												}
+												$termlist = rtrim($termlist,', ');
+												if (strpos($termlist,'uncategorized') == false)  {
+													echo '</span>  | ' . $termlist;
+												}
+										?>
+									</p>
+								</div>
+							</div>
+                            <?php
+							echo '<div class="blog-links right">';
+							if($rows) {
+								foreach($rows as $row) {
+									if($row['blog_link_type'] == 'upload') {
+										echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
+									} elseif ($row['blog_link_type'] == 'link') {
+										echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
+									}
+								}
+							} ?>
+							</div>
+						</div>
+				<?php
+                    endwhile;
+                ?>
+                </div>
+            </div>
+    <?php endif; ?>
     </div>
 </div>
-<?php endif; ?>
-</div>
-    
-</div>
 
-
-<div class="row events" style="min-height: 100px;">
+<div class="row events" style="min-height: 200px;">
 <?php
 	$ctx = stream_context_create(array('http'=>
 		array(

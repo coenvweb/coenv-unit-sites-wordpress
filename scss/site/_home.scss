@@ -20,16 +20,16 @@
         width: 4rem;
         text-align: center;
     }
-    
+
     div[role=main] {
         margin-top: 0;
     }
-    
+
     [role=main] .row {
         max-width: none;
         padding: 2rem 0;
     }
-    
+
     .hero {
         padding: 0!important;
         margin: 0;
@@ -37,12 +37,12 @@
             padding: 0;
         }
     }
-    
+
     .about-summary {
         background: $bg-cream;
         background-image: url("../assets/img/paper-texture-marbio.jpg");
     }
-    
+
     .about-summary p, .row .row h2 {
         @include uni;
         text-align: center;
@@ -159,6 +159,40 @@
         text-align: center;
         background: $bg-light;
         background-image: url("../assets/img/paper-texture-grey.jpg");
+
+        .home-post {
+			.blog-list-item {
+				position: relative;
+				h3 {
+					@media #{$medium-only} {
+						font-size: 1.7rem;
+					}
+				}
+				.news-meta {
+					p {
+						margin-bottom: 0rem;
+					}
+				}
+				.blog-meta {
+					font-weight: 400;
+					@include o_sans_bold;
+					text-transform: uppercase;
+					vertical-align: center;
+					text-align: right;
+					p {
+						font-size: .8rem!important;
+						margin-top: 0.25rem;
+					}
+					.time {
+						color: $accent-blue-dk!important;
+					}
+				}
+				.read-more {
+					position: relative;
+					bottom: 0px;
+				}
+			}
+        }
         
         .medium-6 {
             @media #{$small-only} {
@@ -597,9 +631,7 @@
     }
 
     .fhl {
-        @media #{$small-only} {
-            margin-top: -1rem;
-        }
+		background-color: white;
         .widget_img {
             @media #{$medium-up} {
                 float: left;

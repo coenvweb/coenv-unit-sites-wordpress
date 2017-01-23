@@ -34,81 +34,81 @@ if(isset($wp_query->query_vars['category'])){
 
 <?php get_header(); ?>
 <div class="row" id="main-col">
-	<div class="small-12 medium-8 columns right" role="main">
-		<div class="entry-content">
-		<?php
-		/**
-		  * Blog loop
-		  */
-		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+    <div class="small-12 medium-8 columns right" role="main">
+        <div class="entry-content">
+        <?php
+        /**
+          * Blog loop
+          */
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         $query_args = array(
-			'post_type'	=> 'post',
-			'post_status' => 'publish',
-			'posts_per_page' => 10,
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'posts_per_page' => 10,
             'ignore_sticky_posts' => 1,
-			'paged' => $paged
-		);
-		// Category filter
-		if($coenv_cat_term_1) :
-			$query_args['taxonomy'] = 'category';
-			$query_args['term'] = $coenv_cat_term_1;
-		endif;
+            'paged' => $paged
+        );
+        // Category filter
+        if($coenv_cat_term_1) :
+            $query_args['taxonomy'] = 'category';
+            $query_args['term'] = $coenv_cat_term_1;
+        endif;
 
-		// Date filters
-		if ($coenv_year) {
-			$query_args['year'] = $coenv_year;
-		} 
-		if($coenv_month) {
-			$query_args['monthnum'] = $coenv_month;
-		}
-		$wp_query = new WP_Query( $query_args );
-		?>
-		<?php if ($wp_query->have_posts()): 
-		?>
-		<?php if ($coenv_cat_term_1): // Category filter ?>
-		<div class="panel row">
-			<div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
-		</div>
-		<?php endif; ?>
-		<?php if($coenv_year && $coenv_month): // Date filter ?>
-		<div class="panel row">
-			<div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-			<div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
-		</div>
-		<?php endif; ?>
+        // Date filters
+        if ($coenv_year) {
+            $query_args['year'] = $coenv_year;
+        } 
+        if($coenv_month) {
+            $query_args['monthnum'] = $coenv_month;
+        }
+        $wp_query = new WP_Query( $query_args );
+        ?>
+        <?php if ($wp_query->have_posts()): 
+        ?>
+        <?php if ($coenv_cat_term_1): // Category filter ?>
+        <div class="panel row">
+            <div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+            <div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
+        </div>
+        <?php endif; ?>
+        <?php if($coenv_year && $coenv_month): // Date filter ?>
+        <div class="panel row">
+            <div class="columns small-8 post-number"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
+            <div class="columns small-4 all"><a href="<?php echo $url_current; ?>" class="button">all news & stories &raquo;</a></div>
+        </div>
+        <?php endif; ?>
 
-		<div class="blog clearfix">
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		$rows = get_field('blog_link');
-		$terms = wp_get_post_terms( get_the_ID(), 'category');
-		if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
+        <div class="blog clearfix">
+        <?php
+        # The Loop
+        while ( $wp_query->have_posts() ) :
+        $wp_query->the_post();
+        $rows = get_field('blog_link');
+        $terms = wp_get_post_terms( get_the_ID(), 'category');
+        if (get_field('story_link_url')) {
+            $post_link_url = get_field('story_link_url');
+            $post_link_target = ' target="_blank" ';
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
-        	$post_link_url = get_the_permalink();
+            $post_link_url = get_the_permalink();
             $post_link_target = '';
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
         }
-		?>
-		<div class="blog-list-item clearfix">
-		<!--
-		<div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
-		data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
+        ?>
+        <div class="blog-list-item clearfix">
+        <!--
+        <div class="share right" data-article-id="<?php the_ID(); ?>" data-article-title="<?php //echo get_the_title(); ?>"
+        data-article-shortlink="<?php //echo wp_get_shortlink(); ?>"
+        data-article-permalink="<?php //echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a>
         </div>
-    	-->
-        
+        -->
+
         <div class="news-meta small-12 columns">
         <div class="blog-meta clearfix small-6 columns left">
-		<?php 
+        <?php
         echo '<p>' . get_the_date('M j, Y');
                 $terms = wp_get_post_terms( get_the_ID(), 'category');
-				$termlist = '';
+                $termlist = '';
                 foreach ($terms as $term) {
                     $termlist .= '<a href="/category/' . $term->slug . '">' . $term->name . '</a>, ';
                 }
@@ -118,7 +118,7 @@ if(isset($wp_query->query_vars['category'])){
                 }
         ?>
         </p>
-		</div>
+        </div>
 
         <div class="blog-meta clearfix sharer small-6 columns right">
         <?php $title = rawurlencode(get_the_title());
@@ -132,57 +132,57 @@ if(isset($wp_query->query_vars['category'])){
         <?php get_template_part('assets/img/icons/inline', 'facebook-circle.svg'); ?><span class="visuallyhidden">Facebook</span></a>
         <a href=<?php echo 'mailto:?subject=' . $title . '&body=Check%20out%20this%20article%20from%20UW%20' . $site_name .':%20' . $shortlink . '>'; ?>
            <?php get_template_part('assets/img/icons/inline', 'email-circle.svg'); ?><span class="visuallyhidden">Email</span></a>
-		</div>
-		</div>
+        </div>
+        </div>
             
         <?php
-		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
+        echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
-		echo '<div class="post">';
-		if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-left: 2rem;" href="' . get_the_permalink() . '">';
-		the_post_thumbnail( 'medium' );
-		echo '</a>';
-		endif;
-		echo the_excerpt();
-		echo $post_link;
-		'</div>';
-		echo '<div class="blog-links right">';
-		if($rows) {
-			foreach($rows as $row) {
-				if($row['blog_link_type'] == 'upload') {
-					echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-				} elseif ($row['blog_link_type'] == 'link') {
-					echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-				} 
-			}
-		} ?>
-		</div>
-		</div>
-	</div>
-	<?php endwhile; ?>
-	</div>
-	<div class="pager">
-	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
-		<nav id="post-nav">
-			<div class="post-previous"><?php //next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
-			<div class="post-next"><?php //previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
-		</nav>
-	<?php } ?>
-	</div>
-  	<?php else: ?>
-  	<p>We're sorry. Your criteria did not match any posts. <a href="<?php echo $url_current; ?>">Return to all posts &raquo;</a></p>
-	<?php endif; ?>
-	  </div>		
-	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
-	<?php endif; ?>
-	<a href="#" class="back-to-top">Back to Top</a>
-	<?php do_action('foundationPress_after_content'); ?>
-	</div>
+        echo '<div class="post">';
+        if (has_post_thumbnail()):
+        echo '<a class="right" style="margin-left: 2rem;" href="' . get_the_permalink() . '">';
+        the_post_thumbnail( 'medium' );
+        echo '</a>';
+        endif;
+        echo the_excerpt();
+        echo $post_link;
+        '</div>';
+        echo '<div class="blog-links right">';
+        if($rows) {
+            foreach($rows as $row) {
+                if($row['blog_link_type'] == 'upload') {
+                    echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
+                } elseif ($row['blog_link_type'] == 'link') {
+                    echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
+                } 
+            }
+        } ?>
+        </div>
+        </div>
+    </div>
+    <?php endwhile; ?>
+    </div>
+    <div class="pager">
+    <?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
+        <nav id="post-nav">
+            <div class="post-previous"><?php //next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
+            <div class="post-next"><?php //previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
+        </nav>
+    <?php } ?>
+    </div>
+    <?php else: ?>
+    <p>We're sorry. Your criteria did not match any posts. <a href="<?php echo $url_current; ?>">Return to all posts &raquo;</a></p>
+    <?php endif; ?>
+      </div>        
+    <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+    <?php do_action('foundationPress_after_content'); ?>
+    <ul class="widget-area after-content">
+    <?php dynamic_sidebar("after-content"); ?>
+    </ul>
+    <?php endif; ?>
+    <a href="#" class="back-to-top">Back to Top</a>
+    <?php do_action('foundationPress_after_content'); ?>
+    </div>
 <?php wp_reset_postdata(); wp_reset_query(); ?>
 <?php get_sidebar(); ?>
 </div>
