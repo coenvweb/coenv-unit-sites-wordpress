@@ -30,6 +30,7 @@ function pub_tax() {
 		'show_admin_column'          => true,
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
+        'query_var'                  => 'authors',
 	);
 	register_taxonomy( 'author', array( 'publications' ), $args );
 	
