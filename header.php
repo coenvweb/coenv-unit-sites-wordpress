@@ -208,10 +208,10 @@
     <?php 
         if (is_search()) {
           $banner_style = '';
+        } elseif ($coenv_post->post_type == 'faculty' || $coenv_post_section->ID == '3698') {
+            $banner_style = 'style="background-image: url(\'/wp-content/uploads/sites/4/2015/07/1551.jpg\')"';
         } elseif (($banner) && (!is_single())) {
             $banner_style = 'style="background-image: url(' . $banner['url'] . ')"';
-        } elseif ($coenv_post->post_type == 'faculty') {
-            $banner_style = '';
         } elseif ($coenv_post->post_type == 'post') {
             $banner_style = 'style="background-image: url(\'/wp-content/uploads/sites/4/2014/08/SAFS_News.jpg\')"';
         }
