@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-<div class="page-row mini">
+<div class="page-row mini" style="background-image: url('<?php echo get_template_directory_uri(); ?>/assets/img/header-gen.png')">
     <div class="black-wedge light"></div><div class="black-wedge"></div>
     <div class="header-white show-for-medium-up"></div>
     <div class="header-title-container show-for-medium-up">
@@ -10,7 +10,7 @@
 </div>
 
 <div class="row" id="main-col">
-	<div class="small-12 medium-8 columns results" role="main" id="main-col">
+	<div class="small-12 medium-10 columns results" role="main" id="main-col">
 	
 	<?php if ( have_posts() ) : ?>
         <div class="search-filter">
