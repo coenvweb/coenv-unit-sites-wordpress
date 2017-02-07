@@ -57,7 +57,7 @@ RewriteCond %{HTTP_HOST} ^earthlab.uw.edu [NC]
 RewriteRule ^(.*)$ https://environment.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^earthlab.washington.edu [NC]
-RewriteRule ^(.*)$ https://environment.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://environment.uw.edu/research/major-initiatives/earthlab/ [R=307,NC,L]
 
 # SSL on each domain
 
