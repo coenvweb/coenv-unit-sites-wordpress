@@ -26,13 +26,13 @@ li.type-member {
             margin-right: 1rem;
         }
 
+        .member-contact {
+            font-size: 1.5rem;
+        }
 
         .member-line {
             padding-bottom: 0.5rem;
             overflow: hidden;
-            .member-contact {
-                display: inline;
-            }
             .member-name {
                 display: inline;
                 @include rem('font-size', 1.25);

@@ -10,6 +10,9 @@ Template Name: Members Index
 if(isset($wp_query->query_vars['research-areas'])) {
     $research_areas = urldecode($wp_query->query_vars['research-areas']);
 }
+if(isset($wp_query->query_vars['member-type'])) {
+    $member_type = urldecode($wp_query->query_vars['member-type']);
+}
 ?>
 
 <?php get_header(); ?>
@@ -17,9 +20,12 @@ if(isset($wp_query->query_vars['research-areas'])) {
 	<div class="small-12 medium-8 columns" role="main" id="main-col">
 		<div class="entry-content">
 		<div class="row filters">
-		    <h1 class="large-6 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
-			<div class=" large-6 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
+		    <h1 class="large-4 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
+			<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('research-areas', $research_areas); // Category filter ?>
+			</div>
+			<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
+				<?php coenv_base_cat_filter('member-type', $member_type); // Category filter ?>
 			</div>
 		</div>
 		<?php
@@ -55,6 +61,14 @@ if(isset($wp_query->query_vars['research-areas'])) {
                 'field' => 'slug',
                 'terms' => $research_areas,
             );
+        }        
+        
+        if($member_type) {
+            $query_args['tax_query'][] = array(
+                'taxonomy' => 'member-type',
+                'field' => 'slug',
+                'terms' => $member_type,
+            );
         }
 		
 
@@ -63,13 +77,20 @@ if(isset($wp_query->query_vars['research-areas'])) {
 		<?php if ($wp_query->have_posts()):
         if($research_areas) {
             $term = get_term_by('slug', $research_areas, 'research-areas');
-
-        ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> working in <strong><?php echo $term->name; ?></strong></div>
-		</div>
-		<?php
-        }
+            ?>
+            <div class="panel">
+                <div class="left"><?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> working in <strong><?php echo $term->name; ?></strong></div>
+            </div>
+            <?php
+         }
+         if($member_type) {
+            $term = get_term_by('slug', $member_type, 'member-type');
+            ?>
+            <div class="panel">
+                <div class="left"><?php echo $wp_query->found_posts; ?> <strong><?php echo $term->name; ?><?=($wp_query->found_posts > 1 ? 's' : '')?></strong></div>
+            </div>
+            <?php
+        } 
         ?>
 		<hr>
         <?php

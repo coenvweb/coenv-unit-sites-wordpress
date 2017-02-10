@@ -14,22 +14,11 @@ $member_name = get_the_title();
 $member_photo = get_the_post_thumbnail();
 ?>
 <li id="post-<?php the_ID() ?>" class="type-member row">
-    <div class="member-info large-4 columns">
+    <div class="member-info large-6 columns">
         <div class="member-line">
-            <p class="member-name">
+            <h3 class="member-name">
             <?php echo $member_name; ?>
-            </p>
-            <div class="member-contact">
-                <?php if ($member_email_address) { ?>
-                    <a class="email" href="mailto:<?php echo $member_email_address; ?>" target="_blank"><i class="fi-mail"></i></a>
-                <?php } ?>
-                <?php if ($member_number) { ?>
-                    <a class="phone_number" href="tel:<?php echo $member_number; ?>" target="_blank"><i class="fi-telephone"></i></a>
-                <?php } ?>
-                <?php if ($member_website_url) { ?>
-                    <a class="member-website" href="<?php echo $member_website_url; ?>" target="_blank"><i class="fi-web"></i></a>
-                <?php } ?>
-            </div>
+            </h3>
         </div>
 		<div class="member-photo">
             <?php
@@ -51,12 +40,24 @@ $member_photo = get_the_post_thumbnail();
         }
         ?>
         </ul>
+        
         <?php
         if( $member_department ) { ?>
             <div class="member-department"><?php echo $member_department ?></div>
         <?php } ?>
+        <div class="member-contact">
+            <?php if ($member_email_address) { ?>
+                <a class="email" href="mailto:<?php echo $member_email_address; ?>" target="_blank"><i class="fi-mail"></i></a>
+            <?php } ?>
+            <?php if ($member_number) { ?>
+                <a class="phone_number" href="tel:<?php echo $member_number; ?>" target="_blank"><i class="fi-telephone"></i></a>
+            <?php } ?>
+            <?php if ($member_website_url) { ?>
+                <a class="member-website" href="<?php echo $member_website_url; ?>" target="_blank"><i class="fi-web"></i></a>
+            <?php } ?>
+        </div>
     </div>
-    <div class="article__categories large-8 columns">
+    <div class="article__categories large-6 columns">
         <p>Research Areas</p>
         <?php coenv_base_mem_terms($post->ID); ?>
     </div>

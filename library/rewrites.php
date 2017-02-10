@@ -62,6 +62,7 @@ function add_cpt_rewrites($wp_rewrite) {
 add_action('generate_rewrite_rules', 'add_cpt_rewrites');
 
 function add_query_vars() {
+    add_rewrite_tag('%member-type%', '(.+?)/');
     add_rewrite_tag('%research-areas%', '(.+?)/');
     add_rewrite_tag('%coenv-month%', '(.+?)/');
     add_rewrite_tag('%coenv-year%', '(.+?)/');
