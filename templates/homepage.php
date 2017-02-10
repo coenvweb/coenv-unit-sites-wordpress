@@ -121,7 +121,7 @@ wp_reset_postdata();
         ?>
         <?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns">
-            <div class="white-container" data-equalizer-watch>
+            <div class="" data-equalizer-watch>
                 <?php
                 while ( $wp_query->have_posts() ) :
                 $wp_query->the_post();
