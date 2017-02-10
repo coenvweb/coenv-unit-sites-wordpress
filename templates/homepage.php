@@ -160,7 +160,7 @@ wp_reset_postdata();
         <?php
         # News Feed
 
-        $posts_on_home = 2; //set posts_per_page here
+        $posts_on_home = 3; //set posts_per_page here
 
         $home_args = array(
             'post_type' => 'post',
@@ -200,7 +200,7 @@ wp_reset_postdata();
 
 							<?php
 								echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
-                                echo the_advanced_excerpt('length=20&finish=sentence');
+                                echo the_advanced_excerpt('length=5&finish=sentence');
 								echo $post_link;
 							'</div>';
                             ?>
