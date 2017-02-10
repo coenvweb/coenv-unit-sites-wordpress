@@ -200,6 +200,7 @@ ul.fac-terms {
 	li {
         &.button {
             @extend .fac-button;
+            margin-right: 0.5rem;
         }
 	}
 }
@@ -234,7 +235,7 @@ ul.fac-terms {
 	margin: 1rem 0 0 0;
 	width: 100%;
 }
-#coenv_base_fac_cats-2 ul li {
+.coenv_base_fac_cats ul li {
 	margin-right: .5rem;
 }
 
