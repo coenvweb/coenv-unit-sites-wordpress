@@ -200,7 +200,12 @@ wp_reset_postdata();
 
 							<?php
 								echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
-                                echo the_advanced_excerpt('length=5&finish=sentence');
+                                if(has_excerpt()) {
+                                    
+                                    echo '<p>'.get_the_excerpt().'</p>';
+                                } else {
+                                    echo the_advanced_excerpt('length=5&finish=sentence');
+                                }
 								echo $post_link;
 							'</div>';
                             ?>
