@@ -121,7 +121,7 @@ wp_reset_postdata();
         ?>
         <?php if ($wp_query->have_posts()): ?>
 		<div class="medium-6 columns">
-            <div class="" data-equalizer-watch>
+            <div class="white-container" data-equalizer-watch>
                 <?php
                 while ( $wp_query->have_posts() ) :
                 $wp_query->the_post();
@@ -216,7 +216,7 @@ wp_reset_postdata();
 												$terms = wp_get_post_terms( get_the_ID(), 'category');
 												$termlist = '';
 												foreach ($terms as $term) {
-													$termlist .= '<a href="/category/' . $term->slug . '">' . $term->name . '</a>, ';
+													$termlist .= '<a href="/news-stories/category/' . $term->slug . '">' . $term->name . '</a>, ';
 												}
 												$termlist = rtrim($termlist,', ');
 												if (strpos($termlist,'uncategorized') == false)  {

@@ -162,6 +162,7 @@
 
         .home-post {
 			.blog-list-item {
+                border-bottom: none;
 				position: relative;
 				h3 {
 					@media #{$medium-only} {
