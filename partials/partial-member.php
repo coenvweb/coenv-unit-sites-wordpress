@@ -10,6 +10,7 @@ $member_department = $member_fields["home_department"];
 $member_number = $member_fields["phone_number"];
 $member_title = $member_fields["job_titles"];
 $member_lname = $member_fields["last_name"];
+$member_description = $member_fields["description"];
 $member_name = get_the_title();
 $member_photo = get_the_post_thumbnail();
 ?>
@@ -60,6 +61,9 @@ $member_photo = get_the_post_thumbnail();
     <div class="article__categories large-6 columns">
         <p>Research Areas</p>
         <?php coenv_base_mem_terms($post->ID); ?>
+    </div>
+    <div class="desc">
+        <?php echo $member_description; ?>
     </div>
     <?php
     /* Still needed? */
