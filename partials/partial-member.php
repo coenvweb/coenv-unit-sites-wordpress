@@ -62,7 +62,7 @@ $member_photo = get_the_post_thumbnail();
         <p>Research Areas</p>
         <?php coenv_base_mem_terms($post->ID); ?>
     </div>
-    <div class="desc">
+    <div class="desc large-12 columns">
         <?php echo $member_description; ?>
     </div>
     <?php
