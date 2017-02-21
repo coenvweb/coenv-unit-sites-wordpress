@@ -53,44 +53,47 @@ class SmackUCIAIOSEODataImport {
 
 	public function importDataForAIOSEOFields ($data_array, $importas,$pID) {
 		$createdFields = array();
-		foreach ($data_array as $dkey => $dvalue) {
+		foreach($data_array as $dkey => $dvalue) {
 			$createdFields[] = $dkey;
 		}
-		if (isset($data_array['keywords'])) {
+		if(isset($data_array['keywords'])) {
 			$custom_array['_aioseop_keywords'] = $data_array['keywords'];
 		}
-		if (isset($data_array['description'])) {
+		if(isset($data_array['description'])) {
 			$custom_array['_aioseop_description'] = $data_array['description'];
 		}
-		if (isset($data_array['title'])) {
+		if(isset($data_array['title'])) {
 			$custom_array['_aioseop_title'] = $data_array['title'];
 		}
-		if (isset($data_array['noindex'])) {
+		if(isset($data_array['noindex'])) {
 			$custom_array['_aioseop_noindex'] = $data_array['noindex'];
 		}
-		if (isset($data_array['nofollow'])) {
+		if(isset($data_array['nofollow'])) {
 			$custom_array['_aioseop_nofollow'] = $data_array['nofollow'];
 		}
-		if (isset($data_array['noodp'])) {
+		if(isset($data_array['custom_link'])) {
+                       $custom_array['_aioseop_custom_link'] = $data_array['custom_link'];
+                }
+		if(isset($data_array['noodp'])) {
 			$custom_array['_aioseop_noodp'] = $data_array['noodp'];
 		}
-		if (isset($data_array['noydir'])) {
+		if(isset($data_array['noydir'])) {
 			$custom_array['_aioseop_noydir'] = $data_array['noydir'];
 		}
-		if (isset($data_array['titleatr'])) {
+		if(isset($data_array['titleatr'])) {
 			$custom_array['_aioseop_titleatr'] = $data_array['titleatr'];
 		}
-		if (isset($data_array['menulabel'])) {
+		if(isset($data_array['menulabel'])) {
 			$custom_array['_aioseop_menulabel'] = $data_array['menulabel'];
 		}
-		if (isset($data_array['disable'])) {
+		if(isset($data_array['disable'])) {
 			$custom_array['_aioseop_disable'] = $data_array['disable'];
 		}
-		if (isset($data_array['disable_analytics'])) {
+		if(isset($data_array['disable_analytics'])) {
 			$custom_array['_aioseop_disable_analytics'] = $data_array['disable_analytics'];
 		}
-		if (!empty ($custom_array)) {
-			foreach ($custom_array as $custom_key => $custom_value) {
+		if(!empty ($custom_array)) {
+			foreach($custom_array as $custom_key => $custom_value) {
 				update_post_meta($pID, $custom_key, $custom_value);
 			}
 		}

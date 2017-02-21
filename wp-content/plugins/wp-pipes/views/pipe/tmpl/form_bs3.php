@@ -8,13 +8,7 @@
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 
-#$task	= filter_input(INPUT_GET, 'task');#JRequest::getCmd('task','edit');
-//global $option;
 $item = $this->item;
-//echo $item->eParams.'<hr />';
-//echo $item->aParams;
-
-
 $inputs = $item->inputs;
 $outputs = $item->outputs;
 $pipes = @$item->pipes;
@@ -30,12 +24,14 @@ $pipes_js = json_encode( $pipes );
 if ( ! $pipes_js ) {
 	$pipes_js = 'Array()';
 }
+$siteurl = get_site_url();
 ?>
 <script type="text/javascript">
 	<!--
-	var ogb_ops = <?php echo $ops_js;?>;
-	var ogb_ips = <?php echo $ips_js;?>;
-	var ogb_pipes = <?php echo $pipes_js;?>;
+	var siteurl = "<?php echo $siteurl; ?>";
+	var ogb_ops = <?php echo $ops_js; ?>;
+	var ogb_ips = <?php echo $ips_js; ?>;
+	var ogb_pipes = <?php echo $pipes_js; ?>;
 	var ogb_id;
 	var ogb_change_field = null;
 	var ogb_order = 'a';
@@ -44,40 +40,26 @@ if ( ! $pipes_js ) {
 	var ogb_loada = 1;
 	var pload = [];
 	var phload = [];
+
 	jQuery(document).ready(function () {
 		ogb_id = obgid('ogb_id').value;
-//		ogb_loadAdapter(ogb_id);
-//		ogb_loadEngine(ogb_id);
-//		ogb_load_process_params();
 		ogb_update_ips();
 	}, true);
-	/* @TODO: to Tung, please check to see if we can remove below code blog */
-	/*window.onbeforeunload = function(){
-	 var task = obgid('task').value;
-	 if(ogb_need_save){
-	 if(task==''){
-	 alert("WPPipes need save the changed, please click Ok and wait ...!");
-	 Joomla.submitbutton('save');
-	 return false;
-	 }else if(task=='cancel'){
-	 alert("WPPipes need save the changed, please click Ok then click Save!");
-	 obgid('task').value = '';
-	 return false;
-	 }
-	 }
-	 }*/
+
 	//-->
 	function submitbutton(form, task) {
 		form.task.value = task;
 		form.submit();
 		return false;
 	}
+
 	function switch_pipe(value) {
 		var answer = confirm('Are you sure? Please review and save all yours changes before switching to other pipe!');
 		if (answer) {
 			location = value;
 		}
 	}
+
 	function set_template(el) {
 		var href = el.getAttribute('data-href');
 		var answer = confirm('Warning: After you allow this action, all configures you set before will be overwritten! Do you want to continue?');
@@ -87,6 +69,7 @@ if ( ! $pipes_js ) {
 			location = href;
 		}
 	}
+
 	function delete_template(el, filename) {
 		var answer = confirm('Are you sure?');
 		if (!answer) {
@@ -107,7 +90,8 @@ if ( ! $pipes_js ) {
 			});
 		}
 	}
-	jQuery(document).ready(function () {
+
+	jQuery(document).ready(function ($) {
 		var config = {
 			".chosen-select": {}
 		};
@@ -116,8 +100,16 @@ if ( ! $pipes_js ) {
 		}
 		;
 		jQuery('.text-muted').tooltip();
-	})
+	});
 </script>
+<style>
+	.tab-content {
+		background-color: white;
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-top-width: 0px;
+	}
+</style>
 
 <h2>
 	<?php
@@ -128,7 +120,7 @@ if ( ! $pipes_js ) {
 		$other_pipes = $this->other_pipes;
 		?>
 		<select name="surf"
-		        onchange="switch_pipe(document.adminForm.surf.options[document.adminForm.surf.selectedIndex].value);"
+		        onchange="switch_pipe( document.adminForm.surf.options[document.adminForm.surf.selectedIndex].value );"
 		        value="GO" size="1" class="" style="margin-bottom:4px;">
 			<option value="1">- switch to other pipe -</option>
 			<?php foreach ( $other_pipes as $other ): ?>
@@ -216,7 +208,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 			<div id="toolbar-schedule" class="btn-wrapper">
 				<div class="btn-group">
 					<?php
-					if ( $item->adapter_params ) {
+					/*if ( $item->adapter_params ) {
 						$adapter_params = json_decode( $item->adapter_params );
 						$schedule = $adapter_params->schedule;
 					} else{
@@ -240,7 +232,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
     					<option ' . ( ( $schedule == 'h8' ) ? 'selected="selected"' : '' ) . ' value="h8">8 hours</option>
     					<option ' . ( ( $schedule == 'h12' ) ? 'selected="selected"' : '' ) . ' value="h12">12 hours</option>
     					<option ' . ( ( $schedule == 'h24' ) ? 'selected="selected"' : '' ) . ' value="h24">24 hours</option>
-    					</select>';
+    					</select>';*/
 					?>
 				</div>
 			</div>
@@ -300,6 +292,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 					</ul>
 				</div>
 			</div>
+			<!--<a href="#pipes-advanced-setting" class="btn btn-default btn-lg"><span class="fa fa-cog"></span> <?php _e('Options','wp-pipes');?></a>-->
 
 			<?php /* we will turn this back later ?>
 				<div class="btn-wrapper" id="toolbar-iwant">
@@ -461,7 +454,10 @@ if ( $item->inherit > 0 ) {
 	<!-- Source Output Box -->
 	<div class="col-md-2">
 		<div class="panel panel-success">
-			<div class="panel-heading">
+			<div class="panel-heading engine_output_class">
+				<?php if ( $item->engine != '' ) {
+					echo '<a class="preview_engine btn-pipes-preview" title="Click here to preview how the source\'s output fields of the first item look!" href="admin.php?page=' .PIPES::$__page_prefix . '.pipe&task=preview_engine&id=' . $item->id . '"><i rel="tooltip" class="fa fa-eye fa-2x"></i></a>';
+				}?>
 				<h4><?php echo __( 'Source Output' ); ?></h4>
 			</div>
 
@@ -528,6 +524,9 @@ if ( $item->inherit > 0 ) {
 												class="fa fa-expand"></i></a>
 									&nbsp;</span>
 							<strong style="color:#006600;"><?php echo $pipe->name; ?></strong>
+							<span>
+									<a class="preview_engine btn-pipes-preview" title="Click here to preview how the processor's output fields of the first item look!" href="admin.php?page=<?php echo PIPES::$__page_prefix; ?>.pipe&task=preview_processor&pipe_id=<?php echo $pipe->id?>&id=<?php echo $item->id;?>&ordering=<?php echo $i?>"><i rel="tooltip" class="fa fa-eye"></i></a>
+							</span>
                                     <span style="float: left;">&nbsp;<a href="javascript:void(0);" title="Help"
                                                                         onclick="showHelps(this,<?php echo $pipe->id; ?>);"><i
 			                                    class="fa fa-question-circle"></i></a>
@@ -651,16 +650,31 @@ if ( $item->inherit > 0 ) {
 			<div class="modal-body">
 				<iframe id="modal_iframe" src="" style="zoom:0.60" width="99.6%" height="600" frameborder="0"></iframe>
 			</div>
-			<!--      <div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				  </div>-->
 		</div>
 		<!-- /.modal-content -->
 	</div>
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+	<!-- /.modal_preview -->
+	<div class="modal fade" id="myModal_preview" tabindex="-1" role="dialog_preview" aria-labelledby="myModalLabel_preview" aria-hidden="true">
+		<div class="modal-dialog_preview">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel_preview">
+						<?php echo sprintf( __( 'Pipe#%s: Checking how the output fields of the first item from the source look...' ), $item->id ); ?><br />
+					</h4>
+</div>
+				<div class="modal-body">
+					<iframe id="modal_iframe_preview" src="" style="zoom:0.60" width="99.6%" height="600" frameborder="0"></iframe>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal_preview -->
 </div>
 <div id="dvLoading" style="display: none;"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
 
@@ -679,6 +693,21 @@ if ( $item->inherit > 0 ) {
 			$('#myModal').modal({show: true});
 			$('#myModal').on('hidden.bs.modal', function () {
 				$('#modal_iframe').attr("src", '');
+			});
+		});
+
+		$('.btn-pipes-preview').click(function (event) {
+			event.preventDefault();
+			var ahref = $(this).attr('href');
+			$('#myModal_preview').on('shown.bs.modal',function (e) {
+				$('#modal_iframe_preview').attr("src", ahref);
+			}).on("show.bs.modal", function () {console.log(ahref);
+				$(this).find(".modal-dialog_preview").css("height", '600px').css("width", '700px').css('margin-top', '100px');
+				$('#modal_iframe_preview').attr("src", ahref);
+			});
+			$('#myModal_preview').modal({show: true});
+			$('#myModal_preview').on('hidden.bs.modal', function () {
+				$('#modal_iframe_preview').attr("src", '');
 			});
 		});
 	});

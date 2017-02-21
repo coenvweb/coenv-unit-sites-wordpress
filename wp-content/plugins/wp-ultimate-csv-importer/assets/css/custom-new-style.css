@@ -409,3 +409,9 @@ background-color: rgb(128,128,128) !important;
     opacity: 1;
 }
 
+.upgrade_to_csv_pro a {
+    font-weight: 900;
+    color: #d54e21;
+    font-size: 105%;
+}
+

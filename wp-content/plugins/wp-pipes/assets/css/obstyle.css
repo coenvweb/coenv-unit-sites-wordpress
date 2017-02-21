@@ -564,3 +564,8 @@ ul.oblistfield li p.small, ul.unstyled li p.small {
 	cursor: pointer;
 	color: #0074a2;
 }
+.engine_output_class .preview_engine {
+	position: absolute;
+	right: 0;
+	top: -10px;
+}

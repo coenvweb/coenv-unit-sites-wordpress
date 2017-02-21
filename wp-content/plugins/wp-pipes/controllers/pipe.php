@@ -7,7 +7,7 @@
  * @license              GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
-
+jimport('joomla.filesystem.wrapper.path');
 class PIPESControllerPipe extends Controller {
 
 	public function __construct() {
@@ -425,6 +425,100 @@ class PIPESControllerPipe extends Controller {
 		$mod = $this->getModel( 'pipe' );
 		$res = $mod->quick_edit_pipe();
 		echo json_encode( $res );
+		exit();
+	}
+
+	function preview_engine() {
+		require_once PIPES_PATH . DS . 'grab.php';
+		$grab  = new obGrab;
+		$style = $this->set_style_preview();
+		if(!isset($_GET['id'])){
+			echo 'The pipe does not existed!';
+			exit();
+		}
+		$pipe_id = $_GET['id'];
+		$pipe = $grab->getItemInfo( $pipe_id );
+		$oeData = $grab->getEngineData( $pipe->engine, $pipe->engine_params );
+		if(count($oeData) < 1){
+			echo 'There is not any items found!';
+			exit();
+		}
+		$html = '<h2 class="ob_preview_title">' . sprintf( 'The output fields\'s value of %s. This is the stream #%d.', 'source', 1) . '</h2>';
+		if(isset($oeData[0])) {
+			$html .= '<ul>';
+			foreach ( $oeData[0] as $key_oe => $value_oe ) {
+				if($key_oe == 'src_url' || $key_oe == 'src_name'){
+					continue;
+				}
+				$html .= '<li><h4>' . $key_oe . ':</h4> <pre class="ob_preview_value">' . print_r($value_oe, true) . '</pre></li>';
+			}
+			$html .= '</ul>';
+			echo $style . $html;
+		}
+		exit();
+	}
+
+	function set_style_preview(){
+		$style = "<style>
+					.ob_preview_title{
+						background-color: yellowgreen;
+						text-align: center;
+					}
+					ul{
+						list-style: none;
+						background-color: lightgray;
+						padding: 5px;
+					}
+					h4{
+						text-transform: capitalize;
+					}
+					.ob_preview_value{
+						background-color: gray;
+						border-radius: 5px;
+						box-shadow: 1px 2px yellowgreen;
+						padding: 5px;
+						white-space: pre-wrap;
+					}
+				</style>";
+		return $style;
+	}
+
+	function preview_processor(){
+		require_once PIPES_PATH . DS . 'grab.php';
+		$grab  = new obGrab;
+		$style = $this->set_style_preview();
+		if(!isset($_GET['id'])){
+			echo 'The pipe does not exist!';
+			exit();
+		}
+		if(!isset($_GET['pipe_id']) || ! isset($_GET['ordering'])){
+			echo 'The processor does not exist!';
+			exit();
+		}
+		$pipe_id = $_GET['id'];
+		$ordering = $_GET['ordering'];
+		$item    = $grab->getItemInfo( $pipe_id );
+		$processors   = $grab->getPipes( $item );
+		$pipes = $grab->importProcess( $processors );
+		$oeData = $grab->getEngineData( $item->engine, $item->engine_params );
+		if(count($oeData) < 1){
+			echo JText::_( 'There is not any items found' );
+			exit();
+		}
+		$data         = array();
+		$data['oe']   = $oeData[0];
+		$data['op']   = array();
+		for ( $i = 0; $i < count( $pipes ); $i ++ ) {
+			$pipe = $pipes[$i];
+			$grab->callProcessors( $data, $pipe );
+		}
+		$html = '<h2 class="ob_preview_title">' . sprintf( 'The output fields\'s value of %s. This is the stream #%d.', $processors[$ordering]->name . ' Processor', 1) . '</h2>';
+		$html .= '<ul>';
+		foreach ( $data['op'][$ordering] as $key_oe => $value_oe ) {
+			$html .= '<li><h4>' . $key_oe . ': <h4><pre class="ob_preview_value">' . print_r($value_oe, true) . '</pre></li>';
+		}
+		$html .= '</ul>';
+		echo $style . $html;
 		exit();
 	}
 }

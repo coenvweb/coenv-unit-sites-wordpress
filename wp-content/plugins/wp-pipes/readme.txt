@@ -1,9 +1,9 @@
 === Plugin Name ===
-Contributors: thimpress, thongta, phamtungpth
+Contributors: thimpress, thongta, phamtungpth, tunnhn
 Donate link: http://thimpress.com/
 Tags: pipes, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, autoblog, autoblogging, curating, curation, curated content, content curation, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.4
+Tested up to: 4.7.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,18 @@ Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, R
 
 ###WordPress Content Curation###
 Curated Content is still safe with SEO, and this content curation plugin for WordPress works perfectly to create curated content from RSS Feed, Google News or any other sources.
+
+> **Limited Time Offer - The earlier you join, the more you save**
+
+> We are releasing the [best theme for magazine](https://thimpress.com/landing/magwp-magazine-wordpress-theme/)
+
+> PreOrder now and get 50% OFF and Free Installation Service
+
+> Or at least, please take a look at [Mag WP](https://magwp.thimpress.com) and give us feedback.
+
+###News and Magazine WordPress Themes###
+As you are using WP Pipes, most of the time you will use it for a newspaper or magazine website. Take a look at MagWP, **the only Magazine WordPress theme** we developed to work perfectly with Pipes and to publish content professionally on the web.
+It has many functions and demos which looks **90% similar to great newspapers like Nytimes, Bloomberg, Lifehack, Pinterest, etc**.
 
 [youtube https://www.youtube.com/watch?v=zLHFqAHQj2A&hd=1&&cc_load_policy=1]
 
@@ -138,6 +150,15 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.23 =
+* Fix: changed name of my_enqueue function for avoiding the conflict with other plugins.
+* Fix: put an example pipe into the root folder of WPPipes plugin. Users could call it via Import Sample Pipe button.
+* Fix: could work on PHP7.
+* Change: add buttons for displaying the output value of the first grabbed item with Source and Processors.
+* Improve: add new option in Post Destination add-on for forcing the pipe runs in Update mode even via cronjob.
+* Improve: Post Destination add-on could check if the image is featured and attached or not.
+* Improve: Post Source add-on allows users choosing multiple authors.
+
 = 1.22 =
 * Fix: solved bug lost input, output params of getFullText processor.
 * Fix: Check and use current using collation of database when installing new WP Pipes.

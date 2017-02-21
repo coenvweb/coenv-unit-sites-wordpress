@@ -30,7 +30,7 @@ foreach ( $users as $user ) {
 #--------------------------------------------------
 # Create Items table 
 #--------------------------------------------------
-$collation = '';
+
 
 if ( $wpdb->has_cap( 'collation' ) ) {
 	if ( ! empty( $wpdb->charset ) ) {

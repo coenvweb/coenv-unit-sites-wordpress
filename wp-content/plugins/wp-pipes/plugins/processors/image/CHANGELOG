@@ -1,4 +1,5 @@
-$Id: CHANGELOG 23 2014-01-11 08:24:20Z thongta $
+/* 2.3 - 2016-01-14 */
++ input html & enclosure can be a image url
 /* 2.2 - 2013-04-15 */
 + add Origin Url feature
 + add Clear Tiny Images feature

@@ -18,7 +18,7 @@ class PIPESModelSettings extends Model {
 		require_once dirname( dirname( __FILE__ ) ) . DS . 'tables' . DS . 'settings.php';
 		$itemsListTable = new PIPES_Settings_List_Table();
 		//Fetch, prepare, sort, and filter our data...
-
+		//PIPES::pipes_default_options();
 		$itemsListTable->prepare_items();
 
 		return $itemsListTable;
@@ -38,8 +38,7 @@ class PIPESModelSettings extends Model {
 						$value .= ' ' . ( ( $_POST['pipes_hh'] != '' ) ? $_POST['pipes_hh'] : '00' ) . ':' . ( ( $_POST['pipes_mn'] != '' ) ? $_POST['pipes_mn'] : '00' );
 						$value = strtotime( $value );
 					}
-					$sql = 'UPDATE ' . $wpdb->prefix . 'options SET `option_value` = "' . $value . "\" WHERE `option_name` = '" . $key . "'";
-					$wpdb->query( $sql );
+					update_option($key, $value);
 				}
 			}
 

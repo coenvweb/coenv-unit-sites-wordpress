@@ -675,6 +675,10 @@ class SmackUCIHelper {
 		# Added support for Customer Reviews plugin
 		if(in_array('wp-customer-reviews/wp-customer-reviews-3.php', $this->get_active_plugins()) ||  in_array('wp-customer-reviews/wp-customer-reviews.php', $this->get_active_plugins())) {
 			$importas['Customer Reviews'] = 'CustomerReviews';
+			if(isset($importas['wpcr3_review'])) {
+                               unset($importas['wpcr3_review']);
+                        }
+
 		}
 
 		return $importas;
@@ -1451,6 +1455,7 @@ class SmackUCIHelper {
 		                   'Title' => 'title',
 		                   'NOINDEX' => 'noindex',
 		                   'NOFOLLOW' => 'nofollow',
+				   'Canonical URL' => 'custom_link',
 		                   'Title Atr' => 'titleatr',
 		                   'Menu Label' => 'menulabel',
 		                   'Disable' => 'disable',
@@ -1849,7 +1854,7 @@ class SmackUCIHelper {
 					break;
 				case 'WPeCommerce':
 				case 'WPeCommerceCoupons':
-				# Note: Removed data import for WP-eCommerce fields
+					# Note: Removed data import for WP-eCommerce fields
 					break;
 				case 'MarketPress':
 					# Note: Removed data import for MarketPress fields
@@ -1859,6 +1864,9 @@ class SmackUCIHelper {
 					break;
 				default:
 					$conditions = $duplicateHandling['conditions'];
+					if(isset($duplicateHandling['is_duplicate_handle']) && $duplicateHandling['is_duplicate_handle'] == 'on') {
+						$duplicateHandling['action'] = 'Skip';
+					}
 					$duplicate_action = $duplicateHandling['action'];
 					// Assign post type
 					$data_array['post_type'] = $this->import_post_types( $importType, $this->event_information['import_as'] );
@@ -1867,12 +1875,8 @@ class SmackUCIHelper {
 					endif;
 					$is_update = false;
 					if($mode != 'Insert' && !empty($conditions)):
-						if (in_array('ID', $conditions)) {
-							$whereCondition = " ID = '{$data_array['ID']}'";
-							$duplicate_check_query = "select ID from $wpdb->posts where ($whereCondition) and (post_type = '{$data_array['post_type']}') and (post_status != 'trash') order by ID DESC";
-							$is_update = true;
-						}  elseif (in_array('post_title', $conditions)) {
-							$whereCondition = " post_title = '{$data_array['post_title']}'";
+						if( !empty($conditions[0]) ) {
+							$whereCondition = " " . $conditions[0] . " = '{$data_array[$conditions[0]]}'";
 							$duplicate_check_query = "select ID from $wpdb->posts where ($whereCondition) and (post_type = '{$data_array['post_type']}') and (post_status != 'trash') order by ID DESC";
 							$is_update = true;
 						}
@@ -1946,13 +1950,17 @@ class SmackUCIHelper {
 
 					// Initiate the action to insert / update the record
 					if ($mode == 'Insert') {
+						unset($data_array['ID']);
 						$retID = wp_insert_post($data_array); // Insert the core fields for the specific post type.
 						if(is_wp_error($retID) || $retID == '') {
 							$this->setSkippedRowCount($this->getSkippedRowCount() + 1);
-							$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = "Can't insert this " . $data_array['post_type'] . ". " . $retID->get_error_message();
-							return array('MODE' => $mode, 'ERROR_MSG' => $retID->get_error_message());
-							#echo $retID->get_error_message();
-							#TODO Exception
+							if(is_wp_error($retID)) {
+								$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = "Can't insert this " . $data_array['post_type'] . ". " . $retID->get_error_message();
+								return array('MODE' => $mode, 'ERROR_MSG' => $retID->get_error_message());
+							} else {
+								$uci_admin->detailed_log[ $uci_admin->processing_row_id ]['Message'] = "Can't insert this " . $data_array['post_type'];
+								return array( 'MODE' => $mode, 'ERROR_MSG' => "Can't insert this " . $data_array['post_type'] );
+							}
 						} else {
 							// WPML support on post types
 							global $sitepress;
@@ -1969,20 +1977,22 @@ class SmackUCIHelper {
 							$ID_result = $wpdb->get_results($duplicate_check_query);
 							if (is_array($ID_result) && !empty($ID_result)) {
 								$retID = $ID_result[0]->ID;
-								$data_array['ID'] = $retID;
-								wp_update_post($data_array);
-								$mode_of_affect = 'Updated';
-								$_SESSION[$eventKey]['summary']['updated'][] = $retID;
-								$this->setUpdatedRowCount($this->getUpdatedRowCount() + 1);
-								$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = 'Updated ' . $data_array['post_type'] . ' ID: ' . $retID . ', ' . $assigned_author;
+								$mode_of_affect = 'Skipped';
+								$_SESSION[$eventKey]['summary']['skipped'][] = $retID;
+								$this->setSkippedRowCount($this->getSkippedRowCount() + 1);
+								$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = 'Skipped ' . $data_array['post_type'] . ' ID: ' . $retID . ', Due to the duplicate found!';
+								return array( 'MODE' => $mode, 'ERROR_MSG' => 'Skipped ' . $data_array['post_type'] . ' ID: ' . $retID . ', Due to the duplicate found!' );
 							} else {
 								$retID = wp_insert_post($data_array);
 								if(is_wp_error($retID) || $retID == '') {
-									#echo $retID->get_error_message();
 									$this->setSkippedRowCount($this->getSkippedRowCount() + 1);
-									$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = "Can't insert this " . $data_array['post_type'] . ". " . $retID->get_error_message();
-									return array('MODE' => $mode, 'ERROR_MSG' => $retID->get_error_message());
-									#TODO Exception
+									if(is_wp_error($retID)) {
+										$uci_admin->detailed_log[$uci_admin->processing_row_id]['Message'] = "Can't insert this " . $data_array['post_type'] . ". " . $retID->get_error_message();
+										return array('MODE' => $mode, 'ERROR_MSG' => $retID->get_error_message());
+									} else {
+										$uci_admin->detailed_log[ $uci_admin->processing_row_id ]['Message'] = "Can't insert this " . $data_array['post_type'];
+										return array( 'MODE' => $mode, 'ERROR_MSG' => "Can't insert this " . $data_array['post_type'] );
+									}
 								}
 								$_SESSION[$eventKey]['summary']['inserted'][] = $retID;
 								$this->setInsertedRowCount($this->getInsertedRowCount() + 1);
@@ -2001,6 +2011,16 @@ class SmackUCIHelper {
 					}
 					$shortcodes = array();
 					$media_handle = isset($duplicateHandling['media_handling']) ? $duplicateHandling['media_handling'] : array();
+					/* Page template */
+					if($data_array['post_type'] == 'page') {
+						if(isset($data_array['wp_page_template'])) {
+							$page_template = $data_array['wp_page_template'];
+						}
+						else {
+							$page_template = "";
+						}
+						update_post_meta($retID, '_wp_page_template', $page_template);
+					}
 
 					#TODO: Need to import the media for scheduler
 					/* Set Featured Image */
@@ -2017,16 +2037,6 @@ class SmackUCIHelper {
 							update_option( 'smack_featured_' . $retID, $featured_image_info );
 						}
 					}
-					// Media handling on the inline images
-					if ( !empty($data_array['post_content']) ) {
-						$shortcodes = $this->capture_shortcodes($data_array['post_content'], $retID, 'Inline', $media_handle);
-						if(!empty($media_handle['download_img_tag_src']) && $media_handle['download_img_tag_src'] == 'on'){
-							$this->convert_local_image_src($data_array['post_content'], $retID, $media_handle);
-						}
-						if(!empty($shortcodes)) {
-							$this->convert_shortcode_to_image($shortcodes, $retID, 'Inline', $media_handle, $eventKey);
-						}
-					}
 					$uci_admin->detailed_log[$uci_admin->processing_row_id]['Status'] = $data_array['post_status'];
 					$returnArr['ID'] = $retID;
 					$returnArr['MODE'] = $mode_of_affect;
@@ -2035,8 +2045,8 @@ class SmackUCIHelper {
 					}
 					break;
 			}
-		}//Import type Not a ticket
-
+		}
+		//Import type Not a ticket
 		if($importType == 'ticket') {
 			$data_array['post_type'] = 'ticket';
 			$retID = $data_array['ID'];
@@ -2211,6 +2221,7 @@ class SmackUCIHelper {
 		unset($data_array['post_format']);
 		$categories = $tags = array();
 		foreach ($data_array as $termKey => $termVal) {
+			$smack_taxonomy = array();
 			switch ($termKey) {
 				case 'post_category' :
 					$categories [$termKey] = $data_array [$termKey];
@@ -2422,7 +2433,8 @@ class SmackUCIHelper {
 									$mpval = str_replace($oldWord, $newWord, $mpval);
 								}
 								$mpval = str_replace('+',' ', $mpval);
-								$import_dataArr[$groupvalue][$mpkey] = $mpval;
+								if(trim($mpval) != '')
+									$import_dataArr[$groupvalue][$mpkey] = $mpval;
 							}elseif(isset($set_formula_group[$groupvalue]) && in_array($mpval, $set_formula_group[$groupvalue])){
 								$pattern = "/({([\w]+)(.*?)(}))/";
 								preg_match_all($pattern, $mpval, $results, PREG_PATTERN_ORDER);
@@ -2445,7 +2457,8 @@ class SmackUCIHelper {
 								if($result == "false"){
 									$result = $mpval;
 								}
-								$import_dataArr[$groupvalue][$mpkey] = $result;
+								if($result != 0)
+									$import_dataArr[$groupvalue][$mpkey] = $result;
 							}else {
 								if ($mpval == 'publish') {
 									$result = 'publish';
@@ -2456,7 +2469,8 @@ class SmackUCIHelper {
 										$result = '';
 									}
 								}
-								$import_dataArr[$groupvalue][$mpkey] = $result;
+								if($result != '')
+									$import_dataArr[$groupvalue][$mpkey] = $result;
 							}
 
 						}
@@ -2669,7 +2683,7 @@ class SmackUCIHelper {
 		return $id;
 	}
 
-	public function duplicate_check($duplicate_header){
+	/*public function duplicate_check($duplicate_header){
 		global $wpdb;
 		$duplicate_header = array(
 			'post_title' => 'post1',
@@ -2689,7 +2703,7 @@ class SmackUCIHelper {
 		else {
 			return false;
 		}
-	}
+	}*/
 
 	public function serverReq_data(){
 		$record_arr = array();
@@ -2800,146 +2814,6 @@ class SmackUCIHelper {
 			}
 		}
 		return $shortcodelist;
-
-	}
-
-	public function convert_shortcode_to_image($shortcodelist,$postID,$shortcode_mode,$media_handle,$eventkey){
-		global $wpdb;
-		/* Image available in media */
-		$useexistingimages = 'false';
-		if(!empty($media_handle['imageprocess']) && $media_handle['imageprocess'] == 'duplicateimageoption'){
-			$useexistingimages = 'true';
-		}
-		if(is_array($shortcodelist) && !empty($shortcodelist)) {
-			foreach($shortcodelist as $postID => $shortcodes) {
-				$get_post_content = $wpdb->get_results($wpdb->prepare("select post_content from $wpdb->posts where ID = %d",$postID));
-				$post_content = $get_post_content[0]->post_content;
-				foreach($shortcodes as $shortcode) {
-					if($shortcode_mode == 'Inline') {
-						$get_inlineimage_val = substr($shortcode, "13", -1);
-						$image_attribute = explode('|',$get_inlineimage_val);
-						$get_inlineimage_val = $image_attribute[0];
-					} else if($shortcode_mode == 'Featured') {
-						$get_inlineimage_val = substr($shortcode, "15", -1);
-					}
-					$uploadDir = wp_upload_dir();
-					$inlineimageDir = $uploadDir['basedir'] .'/smack_uci_uploads/imports/'.$eventkey. '/inline_zip_uploads';
-					$inlineimageURL = $uploadDir['baseurl'] .'/smack_uci_uploads/imports/'.$eventkey. '/inline_zip_uploads';
-					$get_media_settings = get_option('uploads_use_yearmonth_folders');
-					if ($get_media_settings == 1) {
-						$dirname = date('Y') . '/' . date('m');
-						$full_path = $uploadDir['basedir'] . '/' . $dirname;
-						$baseurl = $uploadDir['baseurl'] . '/' . $dirname;
-					} else {
-						$full_path = $uploadDir['basedir'];
-						$baseurl = $uploadDir['baseurl'];
-					}
-					$wp_media_path = $full_path;
-					$inlineimageDirpath = $inlineimageDir;
-					$imagelist = $this->scanDirectories($inlineimageDirpath);
-					if(empty($imagelist)) {
-
-					}else{
-						$currentLoc = '';
-						foreach($imagelist as $imgwithloc) {
-							if(strpos($imgwithloc, $get_inlineimage_val)){
-								$currentLoc = $imgwithloc;
-							}
-						}
-						$exploded_currentLoc = explode("inline_zip_uploads", $currentLoc);
-						if(!empty($exploded_currentLoc))
-							$inlimg_curr_loc = isset($exploded_currentLoc[1]) ? $exploded_currentLoc[1] : '';
-						$inlineimageURL = $inlineimageURL . $inlimg_curr_loc;
-						if ($useexistingimages == 'false') {
-							$get_inlineimage_val = wp_unique_filename($wp_media_path, trim($get_inlineimage_val));
-						}
-						$this->get_images_from_url($inlineimageURL, $wp_media_path, $get_inlineimage_val);
-						$wp_media_path = $wp_media_path . "/" . $get_inlineimage_val;
-						if (@getimagesize($wp_media_path)) {
-							$inline_file ['guid'] = $baseurl . "/" . $get_inlineimage_val;
-							$inline_file ['post_title'] = $get_inlineimage_val;
-							$inline_file ['post_content'] = '';
-							$inline_file ['post_status'] = 'attachment';
-							$wp_upload_dir = wp_upload_dir();
-							$attachment = array('guid' => $inline_file ['guid'], 'post_mime_type' => 'image/jpeg', 'post_title' => preg_replace('/\.[^.]+$/', '', @basename($inline_file ['guid'])), 'post_content' => '', 'post_status' => 'inherit');
-							if ($get_media_settings == 1) {
-								$generate_attachment = $dirname . '/' . $get_inlineimage_val;
-							} else {
-								$generate_attachment = $get_inlineimage_val;
-							}
-							$uploadedImage = $wp_upload_dir['path'] . '/' . $get_inlineimage_val;
-							$real_image_name = $attachment['post_title'];
-							//duplicate check for media
-							global $wpdb;
-							$existing_attachment = array();
-							$query = $wpdb->get_results($wpdb->prepare("select post_title from $wpdb->posts where post_type = %s and post_mime_type = %s",'attachment','image/jpeg'));
-							if ( ! empty( $query ) ) {
-								foreach($query as $key){
-									$existing_attachment[] = $key->post_title;
-								}
-							}
-							//duplicate check for media
-							if($shortcode_mode == 'Inline'){
-								if(!empty($media_handle['imageprocess']) && $media_handle['imageprocess'] == 'duplicateimageoption') {
-									if(!in_array($attachment['post_title'] ,$existing_attachment)){
-										$attach_id = wp_insert_attachment($attachment, $generate_attachment, $postID);
-										$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
-										wp_update_attachment_metadata($attach_id, $attach_data);
-									}
-								}else{
-									$attach_id = wp_insert_attachment($attachment, $generate_attachment, $postID);
-									$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
-									wp_update_attachment_metadata($attach_id, $attach_data);
-								}
-								//set_post_thumbnail($postID, $attach_id);
-							}
-
-							if($shortcode_mode == 'Featured'){
-								//$query2 = $wpdb->get_results("select ID from $wpdb->posts where post_title = '$real_image_name' and post_type = 'attachment'");
-								if(!empty($media_handle['imageprocess']) && $media_handle['imageprocess'] == 'duplicateimageoption') {
-									if( !in_array($attachment['post_title'] ,$existing_attachment)){
-										$attach_id = wp_insert_attachment($attachment, $generate_attachment, $postID);
-										$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
-										wp_update_attachment_metadata($attach_id, $attach_data);
-										set_post_thumbnail($postID, $attach_id);
-									}else{
-										$query2 = $wpdb->get_results($wpdb->prepare("select ID from $wpdb->posts where post_title = %s and post_type = %s",$real_image_name,'attachment'));
-										foreach($query2 as $key2){
-											$attach_id = $key2->ID;
-										}
-										set_post_thumbnail($postID, $attach_id);
-									}
-								}else{
-									$attach_id = wp_insert_attachment($attachment, $generate_attachment, $postID);
-									$attach_data = wp_generate_attachment_metadata($attach_id, $uploadedImage);
-									wp_update_attachment_metadata($attach_id, $attach_data);
-									set_post_thumbnail($postID, $attach_id);
-
-								}
-							}
-							if($shortcode_mode == 'Inline') {
-								$oldWord = $shortcode;
-								//      $newWord = '<img src="' . $inline_file['guid'] . '" />';
-								$imgattr1 = isset($image_attribute[1]) ? $image_attribute[1] : '' ;
-								$imgattr2 = isset($image_attribute[2]) ? $image_attribute[2] : '' ;
-								$imgattr3 = isset($image_attribute[3]) ? $image_attribute[3] : '' ;
-								$newWord = '<img src="' . $inline_file['guid'] . '" '.$imgattr1.' '.$imgattr2.' '.$imgattr3.' />';
-								$post_content = str_replace($oldWord , $newWord , $post_content);
-							}
-						}else{
-
-							$inline_file = false;
-						}
-					}
-				}
-				if($shortcode_mode == 'Inline') {
-					$update_content['ID'] = $postID;
-					$update_content['post_content'] = $post_content;
-					wp_update_post($update_content);
-				}
-			}
-		}
-
 	}
 	
 	public function scanDirectories($rootDir, $allData=array()){
@@ -2965,27 +2839,6 @@ class SmackUCIHelper {
 			}
 		}
 		return $allData;
-	}
-
-	public function convert_local_image_src($content, $post_id, $media_handle) {
-		if(trim($content) != '') {
-			$doc = new DOMDocument();
-			@$doc->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
-
-			$searchNode = $doc->getElementsByTagName( "img" );
-			if ( ! empty( $searchNode ) ) {
-				foreach ( $searchNode as $searchNode ) {
-					$orig_img_src = $searchNode->getAttribute( 'src' );
-					$attachid     = $this->set_featureimage( $orig_img_src, $post_id, $media_handle );
-					$new_img_src  = wp_get_attachment_url( $attachid );
-					$searchNode->setAttribute( 'src', $new_img_src );
-				}
-				$post_content                   = $doc->saveHTML();
-				$update_content['ID']           = $post_id;
-				$update_content['post_content'] = $post_content;
-				wp_update_post( $update_content );
-			}
-		}
 	}
 
 	/**

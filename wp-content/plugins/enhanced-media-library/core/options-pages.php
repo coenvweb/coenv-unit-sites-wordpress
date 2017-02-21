@@ -1019,6 +1019,8 @@ if ( ! function_exists( 'wpuxss_eml_settings_cleanup' ) ) {
             delete_option( $option );
         }
 
+        delete_site_transient( 'eml_license_active' );
+
 
         deactivate_plugins( wpuxss_get_eml_basename() );
 

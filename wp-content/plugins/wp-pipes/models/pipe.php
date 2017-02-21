@@ -1051,6 +1051,7 @@ class PIPESModelPipe extends Model {
 			}
 		}
 		$pOutput = ogbLib::call_method( $class, 'process', array( $pInput, json_decode( $pipe->params ) ) );
+		unset($pOutput->stop);
 		foreach ( $pOutput as $out_key => $out_value ) {
 			if ( is_string( $out_value ) ) {
 				$out_value         = preg_replace( '#<script(.*?)>(.*?)</script>#is', '', $out_value );

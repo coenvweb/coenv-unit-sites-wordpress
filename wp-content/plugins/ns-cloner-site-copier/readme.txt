@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.0.1
 Tested up to: 4.7
-Stable tag: 3.0.5.9
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ Usually this means that the clone operation did not complete successfully. The m
 2. All new Add-on manager
 
 == Changelog ==
+
+= 3.0.6.0 =
+* Updated Kint library to resolve issues on some rare environments running OPCache and XCache
 
 = 3.0.5.9 =
 * Updated PHP 7 compatibility to use proper global variable variable emulation

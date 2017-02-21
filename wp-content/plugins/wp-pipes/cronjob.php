@@ -110,14 +110,12 @@ class ogbCronCallAIO {
 		if ( $text ) {
 			return $text;
 		}
-
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		curl_setopt( $ch, CURLOPT_HEADER, 0 );
 		ob_start();
 		curl_exec( $ch );
 		curl_close( $ch );
-
 		return ob_get_clean();
 	}
 
@@ -691,8 +689,6 @@ class ogbPlugCron {
 		if ( isset( $_GET['x'] ) ) {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
 			var_dump( $info_items );
-
-
 		}
 		if ( count( $info_items ) > 0 ) {
 			$return_time = 0;

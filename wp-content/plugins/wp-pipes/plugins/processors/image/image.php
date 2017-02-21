@@ -43,13 +43,16 @@ class WPPipesPro_image {
 			ogb_pr( $params, 'Params: ' );
 			ogb_pr( $data, 'Data: ' );
 		}
-		if ( isset( $data->enclosure ) && is_array( $data->enclosure ) ) {
+
+		if( isset( $data->enclosure ) && $data->enclosure && !is_array( $data->enclosure ) && filter_var($data->enclosure , FILTER_VALIDATE_URL) ) {
+			$html = '<img src="' . $data->enclosure . '">';
+		} elseif ( isset( $data->enclosure ) && is_array( $data->enclosure ) ) {
 			$html = '';
 			foreach ( $data->enclosure as $obj ) {
 				$enclosure = (array) $obj;
 				if ( isset( $params->limit_width ) ) {
-					$limit_period = explode( ';', $params->limit_width );
-					$width_img = (isset($enclosure['width']) && $enclosure['width'] > 0 )? $enclosure['width'] : 0;
+					$limit_period 	= explode( ';', $params->limit_width );
+					$width_img 		= (isset($enclosure['width']) && $enclosure['width'] > 0 )? $enclosure['width'] : 0;
 					if ( count( $limit_period ) > 1 && ( ( (int) $limit_period[0] > $width_img ) || ( $width_img > (int) $limit_period[1] ) ) ) {
 						continue;
 					}
@@ -60,6 +63,10 @@ class WPPipesPro_image {
 			}
 		} else {
 			$html = $data->html;
+		}
+
+		if(filter_var($data->html, FILTER_VALIDATE_URL)){
+			$html .= '<img src="' . $data->html . '">';
 		}
 
 		$res         = new stdClass();

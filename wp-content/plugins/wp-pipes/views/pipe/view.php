@@ -7,7 +7,7 @@
  * @license          GNU/GPL v3, see LICENSE
  */
 defined( 'PIPES_CORE' ) or die( 'Restricted access' );
-
+jimport('joomla.filesystem.wrapper.path');
 //require_once dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'view.php';
 
 class PIPESViewPipe extends View {

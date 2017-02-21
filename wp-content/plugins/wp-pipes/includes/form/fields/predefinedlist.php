@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -14,9 +14,7 @@ JFormHelper::loadFieldClass('list');
 /**
  * Form Field to load a list of predefined values
  *
- * @package     Joomla.Libraries
- * @subpackage  Form
- * @since       3.2
+ * @since  3.2
  */
 abstract class JFormFieldPredefinedList extends JFormFieldList
 {
@@ -65,9 +63,9 @@ abstract class JFormFieldPredefinedList extends JFormFieldList
 		$hash = md5($this->element);
 		$type = strtolower($this->type);
 
-		if (!isset(self::$options[$type][$hash]) && !empty($this->predefinedOptions))
+		if (!isset(static::$options[$type][$hash]) && !empty($this->predefinedOptions))
 		{
-			self::$options[$type][$hash] = parent::getOptions();
+			static::$options[$type][$hash] = parent::getOptions();
 
 			$options = array();
 
@@ -87,9 +85,9 @@ abstract class JFormFieldPredefinedList extends JFormFieldList
 				}
 			}
 
-			self::$options[$type][$hash] = array_merge(self::$options[$type][$hash], $options);
+			static::$options[$type][$hash] = array_merge(static::$options[$type][$hash], $options);
 		}
 
-		return self::$options[$type][$hash];
+		return static::$options[$type][$hash];
 	}
 }

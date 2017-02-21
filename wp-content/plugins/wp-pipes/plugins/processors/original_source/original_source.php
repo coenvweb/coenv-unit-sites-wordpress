@@ -19,6 +19,9 @@ class WPPipesPro_original_source {
 			print_r( $data );
 			echo '</pre>'; //exit();
 		}
+		if(!$params->text){
+			$params->text = 'Original Source';
+		}
 		$original_source = '<p><a href="' . $data->url . '" target="_blank">' . $params->text . '</a></p>';
 		$res             = new stdClass();
 		$res->html       = $data->html . "\n" . $original_source;

@@ -211,7 +211,7 @@ abstract class JHtmlBootstrap
 	{
 		return;
 	}
-	
+
 	public static function typeahead($selector = '.typeahead', $params = array())
 	{
 		if (!isset(self::$loaded[__METHOD__][$selector]))
@@ -417,7 +417,7 @@ abstract class JHtmlBootstrap
 
 		// Inject tab into UL
 		JFactory::getDocument()
-		->addScriptDeclaration($tabScriptLayout->render(array('selector' => $selector,'id' => $id, 'active' => $active, 'title' => $title)));
+			->addScriptDeclaration($tabScriptLayout->render(array('selector' => $selector,'id' => $id, 'active' => $active, 'title' => $title)));
 
 		$html = $tabLayout->render(array('id' => $id, 'active' => $active));
 

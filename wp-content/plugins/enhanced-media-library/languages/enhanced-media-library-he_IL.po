@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enhanced Media Library PRO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 03:05+0200\n"
-"PO-Revision-Date: 2017-01-13 03:05+0200\n"
+"POT-Creation-Date: 2017-02-11 15:16+0200\n"
+"PO-Revision-Date: 2017-02-11 15:16+0200\n"
 "Last-Translator: wpUXsolutions <wpUXsolutions@gmail.com>\n"
 "Language-Team: Hebrew (Israel)\n"
 "Language: he_IL\n"
@@ -32,9 +32,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: core/options-pages.php:97 core/options-pages.php:220
-#: core/options-pages.php:313 core/options-pages.php:1080
-#: core/options-pages.php:1204 core/options-pages.php:1529
-#: core/options-pages.php:1729
+#: core/options-pages.php:313 core/options-pages.php:1082
+#: core/options-pages.php:1206 core/options-pages.php:1531
+#: core/options-pages.php:1731
 msgid "Media Settings"
 msgstr "הגדרות מדיה"
 
@@ -50,7 +50,6 @@ msgstr "תוית מיון"
 msgid "MIME Types"
 msgstr "סוגי קבצים"
 
-#. Plugin Name of the plugin/theme
 #: core/options-pages.php:135 core/options-pages.php:136
 msgid "Enhanced Media Library"
 msgstr "ספרית מדיה משופרת"
@@ -59,13 +58,13 @@ msgstr "ספרית מדיה משופרת"
 msgid "General"
 msgstr ""
 
-#: core/options-pages.php:286 core/options-pages.php:1225
+#: core/options-pages.php:286 core/options-pages.php:1227
 msgid "Media Taxonomies"
 msgstr "תויות מיון למדיה"
 
 #: core/options-pages.php:310 core/options-pages.php:622
-#: core/options-pages.php:1076 core/options-pages.php:1201
-#: core/options-pages.php:1525
+#: core/options-pages.php:1078 core/options-pages.php:1203
+#: core/options-pages.php:1527
 msgid "You do not have sufficient permissions to access this page."
 msgstr "אין לך הרשאות מתאימות על מנת לגשת לדף זה."
 
@@ -141,9 +140,9 @@ msgstr ""
 msgid "Organize my uploads into month- and year-based folders"
 msgstr ""
 
-#: core/options-pages.php:474 core/options-pages.php:1249
-#: core/options-pages.php:1264 core/options-pages.php:1327
-#: core/options-pages.php:1399
+#: core/options-pages.php:474 core/options-pages.php:1251
+#: core/options-pages.php:1266 core/options-pages.php:1329
+#: core/options-pages.php:1401
 msgid "Edit"
 msgstr "ערוך"
 
@@ -151,23 +150,23 @@ msgstr "ערוך"
 msgid "Close"
 msgstr "סגור"
 
-#: core/options-pages.php:476 core/options-pages.php:1265
-#: core/options-pages.php:1328
+#: core/options-pages.php:476 core/options-pages.php:1267
+#: core/options-pages.php:1330
 msgid "View"
 msgstr "צפה"
 
-#: core/options-pages.php:477 core/options-pages.php:1266
-#: core/options-pages.php:1329
+#: core/options-pages.php:477 core/options-pages.php:1268
+#: core/options-pages.php:1331
 msgid "Update"
 msgstr "עדכן"
 
-#: core/options-pages.php:478 core/options-pages.php:1267
-#: core/options-pages.php:1330
+#: core/options-pages.php:478 core/options-pages.php:1269
+#: core/options-pages.php:1332
 msgid "Add New"
 msgstr "הוסף חדש"
 
-#: core/options-pages.php:479 core/options-pages.php:1268
-#: core/options-pages.php:1331
+#: core/options-pages.php:479 core/options-pages.php:1270
+#: core/options-pages.php:1333
 msgid "New"
 msgstr "חדש"
 
@@ -175,23 +174,23 @@ msgstr "חדש"
 msgid "Name"
 msgstr "שם"
 
-#: core/options-pages.php:481 core/options-pages.php:1269
-#: core/options-pages.php:1332
+#: core/options-pages.php:481 core/options-pages.php:1271
+#: core/options-pages.php:1334
 msgid "Parent"
 msgstr "הורה"
 
 #: core/options-pages.php:482 core/options-pages.php:718
-#: core/options-pages.php:1263 core/options-pages.php:1326
-#: core/taxonomies.php:340 enhanced-media-library.php:509
+#: core/options-pages.php:1265 core/options-pages.php:1328
+#: core/taxonomies.php:340 enhanced-media-library.php:518
 msgid "All"
 msgstr "הכל"
 
-#: core/options-pages.php:483 core/options-pages.php:1270
-#: core/options-pages.php:1333
+#: core/options-pages.php:483 core/options-pages.php:1272
+#: core/options-pages.php:1335
 msgid "Search"
 msgstr "חיפוש"
 
-#: core/options-pages.php:485 core/options-pages.php:1314
+#: core/options-pages.php:485 core/options-pages.php:1316
 msgid "New Taxonomy"
 msgstr "תוית מיון חדשה"
 
@@ -271,7 +270,7 @@ msgstr ""
 msgid "Synchronizing..."
 msgstr ""
 
-#: core/options-pages.php:547 core/options-pages.php:1653
+#: core/options-pages.php:547 core/options-pages.php:1655
 msgid "Restore WordPress default MIME Types"
 msgstr ""
 
@@ -429,84 +428,84 @@ msgstr ""
 msgid "Plugin settings restored from the backup."
 msgstr ""
 
-#: core/options-pages.php:1101
+#: core/options-pages.php:1103
 msgid "Media Items Order"
 msgstr ""
 
-#: core/options-pages.php:1108
+#: core/options-pages.php:1110
 msgid "Order media items by"
 msgstr ""
 
-#: core/options-pages.php:1111
+#: core/options-pages.php:1113
 msgid "Date"
 msgstr ""
 
-#: core/options-pages.php:1112
+#: core/options-pages.php:1114
 msgid "Title"
 msgstr ""
 
-#: core/options-pages.php:1113
+#: core/options-pages.php:1115
 msgid "Custom Order"
 msgstr ""
 
-#: core/options-pages.php:1115 core/options-pages.php:1127
+#: core/options-pages.php:1117 core/options-pages.php:1129
 msgid "For media library and media popups"
 msgstr ""
 
-#: core/options-pages.php:1116
+#: core/options-pages.php:1118
 msgid "Option allows to change order by drag and drop with Custom Order value."
 msgstr ""
 
-#: core/options-pages.php:1121
+#: core/options-pages.php:1123
 msgid "Sort order"
 msgstr ""
 
-#: core/options-pages.php:1124
+#: core/options-pages.php:1126
 msgid "Ascending"
 msgstr ""
 
-#: core/options-pages.php:1125
+#: core/options-pages.php:1127
 msgid "Descending"
 msgstr ""
 
-#: core/options-pages.php:1140
+#: core/options-pages.php:1142
 msgid "Media Shortcodes"
 msgstr ""
 
-#: core/options-pages.php:1147 core/options-pages.php:1150
+#: core/options-pages.php:1149 core/options-pages.php:1152
 msgid "Enhanced media shortcodes"
 msgstr ""
 
-#: core/options-pages.php:1151
+#: core/options-pages.php:1153
 msgid ""
 "Enhance WordPress media shortcodes to make them understand media taxonomies, "
 "upload date, and media items number limit"
 msgstr ""
 
-#: core/options-pages.php:1152
+#: core/options-pages.php:1154
 msgid "Gallery example:"
 msgstr ""
 
-#: core/options-pages.php:1153
+#: core/options-pages.php:1155
 msgid "Audio playlist example:"
 msgstr ""
 
-#: core/options-pages.php:1154
+#: core/options-pages.php:1156
 msgid "Video playlist example:"
 msgstr ""
 
-#: core/options-pages.php:1156
+#: core/options-pages.php:1158
 #, php-format
 msgid ""
 "%sWarning:%s Incompatibility with other gallery plugins or themes possible!"
 msgstr ""
 
-#: core/options-pages.php:1158
+#: core/options-pages.php:1160
 #, php-format
 msgid "%sLearn more%s."
 msgstr ""
 
-#: core/options-pages.php:1160
+#: core/options-pages.php:1162
 #, php-format
 msgid ""
 "Please check out your gallery front-end and back-end functionality once this "
@@ -514,237 +513,237 @@ msgid ""
 "%s."
 msgstr ""
 
-#: core/options-pages.php:1229 core/options-pages.php:1376
+#: core/options-pages.php:1231 core/options-pages.php:1378
 msgid "Assign following taxonomies to Media Library:"
 msgstr "הקצאת תויות המיון הבאות לספרית המדיה:"
 
-#: core/options-pages.php:1248 core/options-pages.php:1314
-#: core/options-pages.php:1398
+#: core/options-pages.php:1250 core/options-pages.php:1316
+#: core/options-pages.php:1400
 msgid "Assign Taxonomy"
 msgstr "הקצא תוית מיון"
 
-#: core/options-pages.php:1249 core/options-pages.php:1399
+#: core/options-pages.php:1251 core/options-pages.php:1401
 msgid "Edit Taxonomy"
 msgstr "ערוך תוית מיון"
 
-#: core/options-pages.php:1253 core/options-pages.php:1316
+#: core/options-pages.php:1255 core/options-pages.php:1318
 msgid "Delete Taxonomy"
 msgstr "מחק תוית מיון"
 
-#: core/options-pages.php:1258 core/options-pages.php:1321
+#: core/options-pages.php:1260 core/options-pages.php:1323
 msgid "Labels"
 msgstr "תויות"
 
-#: core/options-pages.php:1260 core/options-pages.php:1323
+#: core/options-pages.php:1262 core/options-pages.php:1325
 msgid "Singular"
 msgstr "יחיד"
 
-#: core/options-pages.php:1261 core/options-pages.php:1324
+#: core/options-pages.php:1263 core/options-pages.php:1326
 msgid "Plural"
 msgstr "רבים"
 
-#: core/options-pages.php:1262 core/options-pages.php:1325
+#: core/options-pages.php:1264 core/options-pages.php:1327
 msgid "Menu Name"
 msgstr "שם התפריט"
 
-#: core/options-pages.php:1275 core/options-pages.php:1298
-#: core/options-pages.php:1338 core/options-pages.php:1402
+#: core/options-pages.php:1277 core/options-pages.php:1300
+#: core/options-pages.php:1340 core/options-pages.php:1404
 msgid "Settings"
 msgstr "הגדרות"
 
-#: core/options-pages.php:1277 core/options-pages.php:1340
+#: core/options-pages.php:1279 core/options-pages.php:1342
 msgid "Taxonomy Name"
 msgstr "שם תוית המיון"
 
-#: core/options-pages.php:1278 core/options-pages.php:1341
+#: core/options-pages.php:1280 core/options-pages.php:1343
 msgid "Hierarchical"
 msgstr "היררכי"
 
-#: core/options-pages.php:1279 core/options-pages.php:1342
+#: core/options-pages.php:1281 core/options-pages.php:1344
 msgid "Column for List View"
-msgstr ""
-
-#: core/options-pages.php:1280 core/options-pages.php:1300
-#: core/options-pages.php:1343 core/options-pages.php:1404
-msgid "Filter for List View"
-msgstr ""
-
-#: core/options-pages.php:1281 core/options-pages.php:1301
-#: core/options-pages.php:1344 core/options-pages.php:1405
-msgid "Filter for Grid View / Media Popup"
 msgstr ""
 
 #: core/options-pages.php:1282 core/options-pages.php:1302
 #: core/options-pages.php:1345 core/options-pages.php:1406
+msgid "Filter for List View"
+msgstr ""
+
+#: core/options-pages.php:1283 core/options-pages.php:1303
+#: core/options-pages.php:1346 core/options-pages.php:1407
+msgid "Filter for Grid View / Media Popup"
+msgstr ""
+
+#: core/options-pages.php:1284 core/options-pages.php:1304
+#: core/options-pages.php:1347 core/options-pages.php:1408
 msgid "Edit in Media Popup"
 msgstr "עריכה בחלון מדיה"
 
-#: core/options-pages.php:1283 core/options-pages.php:1346
+#: core/options-pages.php:1285 core/options-pages.php:1348
 msgid "Show in Nav Menu"
 msgstr "הצג בתפריט הניווט"
 
-#: core/options-pages.php:1284 core/options-pages.php:1347
+#: core/options-pages.php:1286 core/options-pages.php:1349
 msgid "Remember Terms Order (sort)"
 msgstr ""
 
-#: core/options-pages.php:1285 core/options-pages.php:1348
+#: core/options-pages.php:1287 core/options-pages.php:1350
 msgid "Show in REST"
 msgstr ""
 
-#: core/options-pages.php:1286 core/options-pages.php:1349
+#: core/options-pages.php:1288 core/options-pages.php:1351
 msgid "Rewrite Slug"
 msgstr "שכתב סלוגן"
 
-#: core/options-pages.php:1287 core/options-pages.php:1350
+#: core/options-pages.php:1289 core/options-pages.php:1352
 msgid "Slug with Front"
 msgstr "סלוגן עם הקדמה"
 
-#: core/options-pages.php:1362
+#: core/options-pages.php:1364
 msgid "Add New Taxonomy"
 msgstr "הוסף תוית מיון חדשה"
 
-#: core/options-pages.php:1372
+#: core/options-pages.php:1374
 msgid "Non-Media Taxonomies"
 msgstr "תויות מיון ללא-מדיה"
 
-#: core/options-pages.php:1435
+#: core/options-pages.php:1437
 msgid "Options"
 msgstr "אפשרויות"
 
-#: core/options-pages.php:1445 core/options-pages.php:1448
+#: core/options-pages.php:1447 core/options-pages.php:1450
 msgid "Taxonomy archive pages"
 msgstr "ארכיון עמודי תויות מיון"
 
-#: core/options-pages.php:1449
+#: core/options-pages.php:1451
 msgid "Turn on media taxonomy archive pages on the front-end"
 msgstr "הפעל את עמודי ארכיון תויות המיון בתצוגת המשתמש"
 
-#: core/options-pages.php:1450
+#: core/options-pages.php:1452
 msgid ""
 "Re-save your permalink settings after this option change to make it work."
 msgstr ""
 "שמור מחדש את הגדרות ה-permalink לאחר שאפשרות זאת משתנה על מנת לגרום לה לעבוד."
 
-#: core/options-pages.php:1456 core/options-pages.php:1459
+#: core/options-pages.php:1458 core/options-pages.php:1461
 msgid "Assign all like hierarchical"
 msgstr "הקצא הכל באופן היררכי"
 
-#: core/options-pages.php:1460
+#: core/options-pages.php:1462
 msgid ""
 "Show non-hierarchical taxonomies like hierarchical in Grid View / Media Popup"
 msgstr "הצג תויות מיון לא-היררכיות כהיררכיות בתצוגת פריסה / חלון נפתח"
 
-#: core/options-pages.php:1466 core/options-pages.php:1469
+#: core/options-pages.php:1468 core/options-pages.php:1471
 msgid "Force filters"
 msgstr "כפה מסננים"
 
-#: core/options-pages.php:1470
+#: core/options-pages.php:1472
 msgid "Show media filters for ANY Media Popup"
 msgstr ""
 
-#: core/options-pages.php:1471
+#: core/options-pages.php:1473
 msgid "Try this if filters are not shown for third-party plugins or themes."
 msgstr ""
 
-#: core/options-pages.php:1477 core/options-pages.php:1480
+#: core/options-pages.php:1479 core/options-pages.php:1482
 msgid "Show count"
 msgstr ""
 
-#: core/options-pages.php:1481
+#: core/options-pages.php:1483
 msgid "Show item count per category for media filters"
 msgstr ""
 
-#: core/options-pages.php:1535
+#: core/options-pages.php:1537
 msgid "Add New MIME Type"
 msgstr "הוסף סוג קובץ חדש"
 
-#: core/options-pages.php:1555 core/options-pages.php:1610
+#: core/options-pages.php:1557 core/options-pages.php:1612
 msgid "Extension"
 msgstr "הרחבה"
 
-#: core/options-pages.php:1556 core/options-pages.php:1611
+#: core/options-pages.php:1558 core/options-pages.php:1613
 msgid "MIME Type"
 msgstr "סוג קובץ (MIME Type)"
 
-#: core/options-pages.php:1557 core/options-pages.php:1612
+#: core/options-pages.php:1559 core/options-pages.php:1614
 msgid "Singular Label"
 msgstr "תוית יחידה"
 
-#: core/options-pages.php:1558 core/options-pages.php:1613
+#: core/options-pages.php:1560 core/options-pages.php:1615
 msgid "Plural Label"
 msgstr "תויות רבות"
 
-#: core/options-pages.php:1559 core/options-pages.php:1589
-#: core/options-pages.php:1602 core/options-pages.php:1614
+#: core/options-pages.php:1561 core/options-pages.php:1591
+#: core/options-pages.php:1604 core/options-pages.php:1616
 msgid "Add Filter"
 msgstr "הוסף מסנן"
 
-#: core/options-pages.php:1560 core/options-pages.php:1590
-#: core/options-pages.php:1603 core/options-pages.php:1615
+#: core/options-pages.php:1562 core/options-pages.php:1592
+#: core/options-pages.php:1605 core/options-pages.php:1617
 msgid "Allow Upload"
 msgstr "אפשר העלאה"
 
-#: core/options-pages.php:1591 core/options-pages.php:1604
+#: core/options-pages.php:1593 core/options-pages.php:1606
 msgid "Delete MIME Type"
 msgstr "מחק סוג קובץ"
 
-#: core/options-pages.php:1651
+#: core/options-pages.php:1653
 msgid "Save Changes"
 msgstr "שמור שינויים"
 
-#: core/options-pages.php:1681
+#: core/options-pages.php:1683
 msgid "Changelog"
 msgstr ""
 
-#: core/options-pages.php:1682
+#: core/options-pages.php:1684
 msgid "What's new in"
 msgstr ""
 
-#: core/options-pages.php:1682
+#: core/options-pages.php:1684
 msgid "version"
 msgstr ""
 
-#: core/options-pages.php:1685
+#: core/options-pages.php:1687
 msgid "More features under the hood"
 msgstr ""
 
-#: core/options-pages.php:1687
+#: core/options-pages.php:1689
 msgid "Support"
 msgstr ""
 
-#: core/options-pages.php:1688
+#: core/options-pages.php:1690
 msgid "Feel free to ask for help on"
 msgstr ""
 
-#: core/options-pages.php:1688
+#: core/options-pages.php:1690
 msgid "Support is free for both versions of the plugin."
 msgstr ""
 
-#: core/options-pages.php:1690
+#: core/options-pages.php:1692
 msgid "Plugin rating"
 msgstr ""
 
-#: core/options-pages.php:1691
+#: core/options-pages.php:1693
 msgid "Please"
 msgstr ""
 
-#: core/options-pages.php:1691
+#: core/options-pages.php:1693
 msgid "vote for the plugin"
 msgstr ""
 
-#: core/options-pages.php:1691
+#: core/options-pages.php:1693
 msgid "Thanks!"
 msgstr ""
 
-#: core/options-pages.php:1693
+#: core/options-pages.php:1695
 msgid "Other plugins you may find useful"
 msgstr ""
 
-#: core/options-pages.php:1732
+#: core/options-pages.php:1734
 msgid "Utility"
 msgstr ""
 
-#: core/options-pages.php:1755
+#: core/options-pages.php:1757
 msgid "Vote!"
 msgstr ""
 
@@ -757,96 +756,100 @@ msgid "Media Library settings saved."
 msgstr ""
 
 #: core/taxonomies.php:333 core/taxonomies.php:339
-#: enhanced-media-library.php:508
+#: enhanced-media-library.php:517
 msgid "Filter by"
 msgstr "סנן על-פי"
 
-#: core/taxonomies.php:341 enhanced-media-library.php:510
+#: core/taxonomies.php:341 enhanced-media-library.php:519
 msgid "Not in a"
 msgstr ""
 
-#: core/taxonomies.php:1283 core/taxonomies.php:1290
+#: core/taxonomies.php:1288 core/taxonomies.php:1295
 msgid "Remove"
 msgstr "הסר"
 
-#: core/taxonomies.php:1285 core/taxonomies.php:1292
+#: core/taxonomies.php:1290 core/taxonomies.php:1297
 msgid "Deselect"
 msgstr "בטל בחירה"
 
-#: core/taxonomies.php:1337
+#: core/taxonomies.php:1342
 msgid "Caption this image&hellip;"
 msgstr "תאר תמונה זו&hellip;"
 
-#: core/taxonomies.php:1341
+#: core/taxonomies.php:1346
 msgid "Describe this video&hellip;"
 msgstr "תאר וידיאו זה&hellip;"
 
-#: core/taxonomies.php:1343
+#: core/taxonomies.php:1348
 msgid "Describe this audio file&hellip;"
 msgstr "תאר אודיו זה&hellip;"
 
-#: core/taxonomies.php:1345
+#: core/taxonomies.php:1350
 msgid "Describe this media file&hellip;"
 msgstr "תאר מדיה זו&hellip;"
 
-#: enhanced-media-library.php:342 enhanced-media-library.php:507
+#: enhanced-media-library.php:351 enhanced-media-library.php:516
 msgid "All Uncategorized"
 msgstr "הכל לא ממויין"
 
-#: enhanced-media-library.php:343 enhanced-media-library.php:511
+#: enhanced-media-library.php:352 enhanced-media-library.php:520
 msgid "Reset All Filters"
 msgstr "אפס את כל המסננים"
 
-#: enhanced-media-library.php:541
+#: enhanced-media-library.php:550
 msgid "Uploaded to post #"
 msgstr ""
 
-#: enhanced-media-library.php:542
+#: enhanced-media-library.php:551
 msgid "Based On"
 msgstr ""
 
-#: enhanced-media-library.php:574 enhanced-media-library.php:576
+#: enhanced-media-library.php:583 enhanced-media-library.php:585
 msgid "Media Categories"
 msgstr ""
 
-#: enhanced-media-library.php:575
+#: enhanced-media-library.php:584
 msgid "Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:577
+#: enhanced-media-library.php:586
 msgid "All Media Categories"
 msgstr ""
 
-#: enhanced-media-library.php:578
+#: enhanced-media-library.php:587
 msgid "Edit Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:579
+#: enhanced-media-library.php:588
 msgid "View Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:580
+#: enhanced-media-library.php:589
 msgid "Update Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:581
+#: enhanced-media-library.php:590
 msgid "Add New Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:582
+#: enhanced-media-library.php:591
 msgid "New Media Category Name"
 msgstr ""
 
-#: enhanced-media-library.php:583
+#: enhanced-media-library.php:592
 msgid "Parent Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:584
+#: enhanced-media-library.php:593
 msgid "Parent Media Category:"
 msgstr ""
 
-#: enhanced-media-library.php:585
+#: enhanced-media-library.php:594
 msgid "Search Media Categories"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Enhanced Media Library PRO"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

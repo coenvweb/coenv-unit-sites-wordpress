@@ -489,7 +489,7 @@
                             bstw( widget ).deactivate().activate();
                         }
 
-                        $( document ).trigger( 'widget-added', widget);
+                        $( document ).trigger( 'widget-added', [widget]);
 
                     });
 

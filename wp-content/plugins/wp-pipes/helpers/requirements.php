@@ -205,7 +205,7 @@ class AppRequirements {
 
 		<h3><?php echo __( 'WPPipes Requirements' ); ?></h3>
 		<div><?php echo __( 'If any of the items below are highlighted in red, you should try to correct them. Failure to do so could lead to your WPPipes operation not functioning correctly.' ); ?></div>
-		<table class="adminlist table table-bordered table-striped" width="100%">
+		<table class="adminlist table table-bordered" width="100%">
 			<thead>
 			<tr>
 				<th class="title"><?php echo __( 'Requirement' ); ?></th>
@@ -229,9 +229,9 @@ class AppRequirements {
 						<?php $style = $req['status'] ? 'font-weight: bold; color: green;' : 'font-weight: bold; color: red;'; ?>
 
 						<?php if ( $req['status'] ): ?>
-						<span class="badge badge-success" style="color:green;"><i class="fa fa-check-circle"></i></span>
+						<span style="color:green;"><i class="fa fa-check-circle"></i></span>
 						<?php else: ?>
-							<span class="badge badge-important" style="color:red;"><i class="fa fa-times-circle"></i></span>
+						<span style="color:red;"><i class="fa fa-times-circle"></i></span>
 						<?php endif; ?>
 					</td>
 					<td>

@@ -92,7 +92,7 @@ $action = 'admin.php?page=' . PIPES::$__page_prefix . '.pipe';
 	.ob-box-0 table {
 		border-spacing: 1px;
 		border-collapse: separate;
-	/ / font-size : 12 px;
+	/* font-size : 12 px; */
 	}
 
 	.ob-box-0 label {

@@ -612,6 +612,10 @@ window.eml = window.eml || { l10n: {} };
             this.on( 'ready', this.fixLayout, this );
             this.$window = $( window );
             this.$window.on( 'resize', _.debounce( _.bind( this.fixLayout, this ), 15 ) );
+
+            if ( $('.notice-dismiss').length ) {
+                $( document ).on( 'click', '.notice-dismiss', _.debounce( _.bind( this.fixLayout, this), 250 ) );
+            }
         },
 
         fixLayout: function() {
@@ -686,9 +690,10 @@ window.eml = window.eml || { l10n: {} };
 
             if ( -1 !== $.inArray( this.options.filters, [ 'uploaded', 'all' ] ) ||
                 ( parseInt( eml.l10n.force_filters ) &&
+                ! this.controller.isModeActive( 'eml-bulk-edit' ) &&
                 'gallery-edit' !== this.controller._state &&
                 'playlist-edit' !== this.controller._state &&
-                'video-playlist-edit' !== this.controller._state ) ||
+                'video-playlist-edit' !== this.controller._state ) || 
                 'customize' === eml.l10n.current_screen ) {
 
                 if ( this.controller.isModeActive( 'grid' ) ||
@@ -1075,7 +1080,9 @@ window.eml = window.eml || { l10n: {} };
             original.MediaFrame.Post.activate.apply( this, arguments );
 
             this.on( 'open', content.fixLayout, content );
-            $( document ).on( 'click', '.acf-expand-details', _.debounce( _.bind( content.fixLayout, content ), 250 ) );
+            if ( typeof acf !== 'undefined' && $('.acf-expand-details').length ) {
+                $( document ).on( 'click', '.acf-expand-details', _.debounce( _.bind( content.fixLayout, content ), 250 ) );
+            }
         }
     });
 

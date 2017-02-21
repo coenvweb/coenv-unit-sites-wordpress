@@ -16,8 +16,8 @@ class JText {
 		return __( $text, $text );
 	}
 
-	public static function alt( $text, $text ) {
-		return __( $text );
+	public static function alt( $text, $text1 ) {
+		return __( $text, $text1 );
 	}
 }
 

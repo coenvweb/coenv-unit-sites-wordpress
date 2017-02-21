@@ -3,7 +3,7 @@
  * @package     Joomla.Platform
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,9 +15,7 @@ defined('JPATH_PLATFORM') or die;
  * Provides a pop up date picker linked to a button.
  * Optionally may be filtered to use user's or server's time zone.
  *
- * @package     Joomla.Platform
- * @subpackage  Form
- * @since       11.1
+ * @since  11.1
  */
 class JFormFieldCalendar extends JFormField
 {
@@ -91,7 +89,6 @@ class JFormFieldCalendar extends JFormField
 		{
 			case 'maxlength':
 				$value = (int) $value;
-
 			case 'format':
 			case 'filter':
 				$this->$name = (string) $value;
@@ -105,7 +102,7 @@ class JFormFieldCalendar extends JFormField
 	/**
 	 * Method to attach a JForm object to the field.
 	 *
-	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the <field /> tag for the form field object.
+	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the `<field>` tag for the form field object.
 	 * @param   mixed             $value    The form field value to validate.
 	 * @param   string            $group    The field name group control value. This acts as as an array container for the field.
 	 *                                      For example if the field has name="foo" and the group value is set to "bar" then the
@@ -151,10 +148,10 @@ class JFormFieldCalendar extends JFormField
 		empty($this->size)      ? null : $attributes['size'] = $this->size;
 		empty($this->maxlength) ? null : $attributes['maxlength'] = $this->maxlength;
 		empty($this->class)     ? null : $attributes['class'] = $this->class;
-		!$this->readonly        ? null : $attributes['readonly'] = '';
-		!$this->disabled        ? null : $attributes['disabled'] = '';
+		!$this->readonly        ? null : $attributes['readonly'] = 'readonly';
+		!$this->disabled        ? null : $attributes['disabled'] = 'disabled';
 		empty($this->onchange)  ? null : $attributes['onchange'] = $this->onchange;
-		empty($hint)            ? null : $attributes['placeholder'] = $hint;
+		!strlen($hint)          ? null : $attributes['placeholder'] = $hint;
 		$this->autocomplete     ? null : $attributes['autocomplete'] = 'off';
 		!$this->autofocus       ? null : $attributes['autofocus'] = '';
 

@@ -73,34 +73,7 @@ function ogb_update_field(st, of) {
 		el.innerHTML = 'Click me';
 	} else {
 		ip.value = st + ',' + of + ',' + ipf[2];
-		el.innerHTML = (st == 'e' ? '[so]' : 'op[' + st + ']') + ' ' + of;
-	}
-	if (el.parentNode.parentNode.parentNode.parentNode.className == 'list-group-item') {
-		var ordering = el.parentNode.parentNode.id.split('-')[2];
-		var process_id = el.parentNode.parentNode.parentNode.parentNode.id.split('-')[1];
-		var url = ogb_be_url + 'write_down_input_processor&input_type=' + st + '&input_value=' + of + '&input_name=' + ipf[2] + '&process_id=' + process_id + '&ordering=' + ordering + '&id=' + ogb_id;
-		jQuery.ajax({
-			url       : url,
-			type      : 'GET',
-			beforeSend: function () {
-				jQuery('#dvLoading').show()
-			},
-			success   : function (txt) {
-				var result = JSON.parse(txt);
-				var current_process = new Array();
-				for (var key in result) {
-					if (typeof(result[key]) == 'string' && result[key] != '') {
-						if (result[key].length > 200)
-							result[key] = result[key].substring(0, 200) + "...";
-						current_process.push(key + '<br /><p data-placement="bottom" title="' + result[key] + '" class="text-muted small">' + result[key] + '</p>');
-					} else {
-						current_process.push(key);
-					}
-				}
-				updateOprocessor(current_process, ordering);
-				jQuery('#dvLoading').hide();
-			}
-		});
+		el.innerHTML = (st == 'e' ? '[so]' : 'po[' + st + ']') + ' ' + of;
 	}
 	call_tooltip();
 	ogb_gid('ogb-list-output').style.display = 'none';
@@ -495,7 +468,7 @@ function updateIprocessor(ip, order) {
 		var st = ip[i].st;
 		var key;
 		if (st != '') {
-			key = st == 'e' ? '[so]' : 'op[' + st + ']';
+			key = st == 'e' ? '[so]' : 'po[' + st + ']';
 		} else {
 			key = '';
 		}

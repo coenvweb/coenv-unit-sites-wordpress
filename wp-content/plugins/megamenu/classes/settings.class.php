@@ -1089,20 +1089,6 @@ class Mega_Menu_Settings {
                 </tr>
                 <tr>
                     <td class='mega-name'>
-                        <?php _e("Plugin Data", "megamenu"); ?>
-                        <div class='mega-description'><?php _e("Delete all saved Max Mega Menu plugin data from the database. Use with caution!", "megamenu"); ?></div>
-                    </td>
-                    <td class='mega-value'>
-                        <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
-                            <?php wp_nonce_field( 'megamenu_delete_data' ); ?>
-                            <input type="hidden" name="action" value="megamenu_delete_data" />
-
-                            <input type='submit' class='button button-secondary confirm' value='<?php _e("Delete Data", "megamenu"); ?>' />
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td class='mega-name'>
                         <?php _e("Export Theme", "megamenu"); ?>
                         <div class='mega-description'><?php _e("Export a menu theme", "megamenu"); ?></div>
                     </td>
@@ -1194,6 +1180,20 @@ class Mega_Menu_Settings {
                         </form>
                     </td>
                 </tr>
+                <tr>
+                    <td class='mega-name'>
+                        <?php _e("Plugin Data", "megamenu"); ?>
+                        <div class='mega-description'><?php _e("Delete all saved Max Mega Menu plugin data from the database. Use with caution!", "megamenu"); ?></div>
+                    </td>
+                    <td class='mega-value'>
+                        <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
+                            <?php wp_nonce_field( 'megamenu_delete_data' ); ?>
+                            <input type="hidden" name="action" value="megamenu_delete_data" />
+
+                            <input type='submit' class='button button-secondary confirm' value='<?php _e("Delete Data", "megamenu"); ?>' />
+                        </form>
+                    </td>
+                </tr>
             </table>
         </div>
 
@@ -1244,7 +1244,7 @@ class Mega_Menu_Settings {
             $header_links['pro'] = array(
                 'url' => 'https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
-                'text' => __("Upgrade to Pro - $19", "megamenu"),
+                'text' => __("Upgrade to Pro", "megamenu"),
                 'class' => 'mega-highlight'
             );
         }

@@ -73,6 +73,15 @@ class obGrab {
 			return $row;
 		}
 		$row = file_get_contents( $path );
+		if(!class_exists('SimplePie_Enclosure')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Enclosure.php');
+		}
+		if(!class_exists('SimplePie_Restriction')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Restriction.php');
+		}
+		if(!class_exists('SimplePie_Author')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Author.php');
+		}
 		$row = unserialize( $row );
 		if ( isset( $_GET['x2'] ) ) {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
@@ -202,7 +211,6 @@ class obGrab {
 		if ( property_exists($limit, 'limit_items') && $limit->limit_items < $total ) {
 			$total = $limit->limit_items;
 		}
-
 
 		$res        = new stdclass();
 		$res->pipe  = $item->name;
@@ -427,6 +435,9 @@ class obGrab {
 	}
 
 	function addInfoStore( $store, $data ) {
+		if( !is_object($store) ){
+			$store = new stdClass();
+		}
 		$src_url        = isset( $data['oe']->src_url ) ? $data['oe']->src_url : '#None';
 		$store->src_url = $src_url;
 

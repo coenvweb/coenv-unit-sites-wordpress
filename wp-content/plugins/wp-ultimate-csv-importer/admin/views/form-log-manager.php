@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) )
 							<div class="download-icon">
 							<a href="<?php echo $logfilename; ?>" download id="dwnldlog" style="margin-left:5px;font-size:15px;">
 								<span class="icon-cloud-download3"></span>
-							</a><span class="download-text">Download</span>
+							</a><span class="download-text"><?php echo esc_html__('Download','wp-ultimate-csv-importer');?></span>
 						</td>
 					</tr>
 				<?php } ?>

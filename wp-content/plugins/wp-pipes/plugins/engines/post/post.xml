@@ -24,7 +24,7 @@
 			<fieldset name="basic">
 				<field name="categories" multiple="1" type="postcategories" label="Categories" 
 				description="The categories that this engine will get posts from. Press Ctrl while selecting multiple categories."/>
-				<field name="author" type="gruser" default="" class="form-control" label="Author" description="Select an author for posts"/>
+				<field name="author" type="gruser" multiple="1" default="" class="form-control" label="Author" description="Select an author for posts"/>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="limit_items"

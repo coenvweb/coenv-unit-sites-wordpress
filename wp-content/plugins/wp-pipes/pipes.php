@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.22
+Version: 1.23
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -37,17 +37,17 @@ class PIPES extends Application {
 	}
 
 	public function admin_init() {
-		wp_register_style( 'pipes-obstyle', plugin_dir_url( __FILE__ ) . '/assets/css/obstyle.css' );
-		wp_register_style( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . '/assets/css/bootstrap.min.css' );
-		wp_register_style( 'pipes-font-awesome-css', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' );
-		wp_register_style( 'pipes-process-css', plugin_dir_url( __FILE__ ) . '/assets/css/process.css' );
-		wp_register_style( 'pipes-chosen-css', plugin_dir_url( __FILE__ ) . '/assets/css/chosen.css' );
+		wp_register_style( 'pipes-obstyle', plugin_dir_url( __FILE__ ) . 'assets/css/obstyle.css' );
+		wp_register_style( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . 'assets/css/bootstrap.min.css' );
+		wp_register_style( 'pipes-font-awesome-css', '//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css' );
+		wp_register_style( 'pipes-process-css', plugin_dir_url( __FILE__ ) . 'assets/css/process.css' );
+		wp_register_style( 'pipes-chosen-css', plugin_dir_url( __FILE__ ) . 'assets/css/chosen.css' );
 		//wp_register_style( 'pipes-inputtags-css', plugin_dir_url( __FILE__ ) . '/assets/css/bootstrap-tagsinput.css' );
-		wp_register_script( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap.min.js' );
-		wp_register_script( 'pipes-process', plugin_dir_url( __FILE__ ) . '/assets/js/process.js' );
-		wp_register_script( 'pipes-ogb-lib-admin', plugin_dir_url( __FILE__ ) . '/assets/js/ogb-lib-admin.js' );
-		wp_register_script( 'pipes-chosen', plugin_dir_url( __FILE__ ) . '/assets/js/chosen.jquery.js' );
-		wp_register_script( 'pipes-angular', plugin_dir_url( __FILE__ ) . '/assets/js/angular.js' );
+		wp_register_script( 'pipes-bootstrap-min', plugin_dir_url( __FILE__ ) . 'assets/js/bootstrap.min.js' );
+		wp_register_script( 'pipes-process', plugin_dir_url( __FILE__ ) . 'assets/js/process.js' );
+		wp_register_script( 'pipes-ogb-lib-admin', plugin_dir_url( __FILE__ ) . 'assets/js/ogb-lib-admin.js' );
+		wp_register_script( 'pipes-chosen', plugin_dir_url( __FILE__ ) . 'assets/js/chosen.jquery.js' );
+		wp_register_script( 'pipes-angular', plugin_dir_url( __FILE__ ) . 'assets/js/angular.js' );
 		//js for input tags
 		//wp_register_script( 'pipes-bootstrap-tagsinput', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap-tagsinput.js' );
 
@@ -73,7 +73,6 @@ class PIPES extends Application {
 	public function pipes_default_options() {
 		global $pipes_settings;
 		include_once( dirname( __FILE__ ) . DS . 'settings-init.php' );
-
 		foreach ( $pipes_settings as $section ) {
 			foreach ( $section as $value ) {
 				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
@@ -126,12 +125,12 @@ class PIPES extends Application {
 		wp_enqueue_style( 'pipes-font-awesome-css' );
 		wp_enqueue_style( 'pipes-process-css' );
 		wp_enqueue_style( 'pipes-chosen-css' );
-		//wp_enqueue_style( 'pipes-inputtags-css' );//css for input tags
+//		wp_enqueue_style( 'pipes-inputtags-css' );//css for input tags
 		wp_enqueue_script( 'pipes-bootstrap-min' );
 		wp_enqueue_script( 'pipes-process' );
 		wp_enqueue_script( 'pipes-ogb-lib-admin' );
 		wp_enqueue_script( 'pipes-chosen' );
-		wp_enqueue_script( 'pipes-angular' );
+		//wp_enqueue_script( 'pipes-angular' );
 		$page = isset($_GET['page'])?$_GET['page']:'';
 		if( $page == 'pipes.plugins' ) {
 			wp_enqueue_script( 'pipes-angular' );
@@ -198,7 +197,7 @@ class PIPES extends Application {
 }
 
 
-function my_enqueue( $hook ) {
+function mywppipes_enqueue( $hook ) {
 	//wp_enqueue_script( 'my_custom_script', plugin_dir_url( __FILE__ ) . 'assets/js/ogb.js' );
 	wp_register_script( 'my_custom_script', plugin_dir_url( '' ) . basename( PIPES_PATH ) . '/assets/js/call_pipe.js' );
 	wp_enqueue_script( 'my_custom_script' );
@@ -213,7 +212,7 @@ function ts_js() {
 if ( ! is_admin() ) {
 	error_reporting( E_ERROR );
 	if ( get_option( 'pipes_cronjob_active' ) ) {
-		add_action( 'wp_enqueue_scripts', 'my_enqueue' );
+		add_action( 'wp_enqueue_scripts', 'mywppipes_enqueue' );
 		add_action( 'wp_print_scripts', 'ts_js' );
 	}
 }

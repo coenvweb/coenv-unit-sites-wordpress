@@ -78,6 +78,10 @@ class WPPipesAdapter_post {
 			ogb_pr( $params, 'Params: ' );
 			ogb_pr( $data, 'Data: ' );
 		}
+		if('' == $data->title){
+			print_r('Can not insert data. Please check if you put value into title field! ');
+			return;
+		}
 		if ( '' == $data->slug ) {
 			$data->slug = sanitize_title( $data->title );
 		}
@@ -198,7 +202,6 @@ class WPPipesAdapter_post {
 
 	public static function set_feature_image( $image_url, $post_id ) {
 		$upload_dir = wp_upload_dir(); // Set upload folder
-		$image_data = @file_get_contents( $image_url, true ); // Get image data
 
 		$filename = basename( $image_url ); // Create image file name
 		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
@@ -206,17 +209,27 @@ class WPPipesAdapter_post {
 		} else {
 			$file = $upload_dir['basedir'] . '/' . $filename;
 		}
+		$attach_id = self::checkDuplicate_att( array( 'title' => $filename, 'slug' => sanitize_file_name( $filename ) ) );
+		if($attach_id && is_file($file)){
+			set_post_thumbnail( $post_id, $attach_id );
+
+			return;
+		}
+
+		$image_data = file_get_contents( $image_url, true ); // Get image data
 		if ( false === $image_data ) {
 			echo '<pre>';
 			print_r( 'invalid url of image, could not get image from ' );
 		} else {
 			file_put_contents( $file, $image_data );
 		}
+
 		$wp_filetype = wp_check_filetype( $filename, null );
 		$attachment  = array(
 			'post_mime_type' => $wp_filetype['type'],
 			'post_title'     => sanitize_file_name( $filename ),
 			'post_content'   => '',
+			'guid'			 => $upload_dir['url'] . '/' . $filename,
 			'post_status'    => 'inherit'
 		);
 		$attach_id   = wp_insert_attachment( $attachment, $file, $post_id );
@@ -227,16 +240,29 @@ class WPPipesAdapter_post {
 
 	}
 
+	public static function checkDuplicate_att( $fields = array() ) {
+		global $wpdb;
+		if ( ! count( $fields ) ) {
+			return false;
+		}
+
+		$res = 0;
+		$qry = "SELECT `ID` FROM " . $wpdb->prefix . "posts WHERE (`post_title`='" . addslashes( $fields['title'] ) . "' OR `post_name` = '" . addslashes( $fields['slug'] ) . "') AND `post_type` = 'attachment'";
+		$res = (int) $wpdb->get_var( $qry );
+
+		return $res;
+	}
+
 	/**
 	 * @param bool $param
 	 *
 	 * @return stdClass
 	 */
 	public static function getDataFields( $param = false ) {
-		if(isset($_GET['arg2']) && $_GET['arg2'] == 1){
+		if ( isset($_GET['arg2']) && $_GET['arg2'] == 1 ) {
 			$custom_fields = self::get_all_post_custom();
 			$custom_fields = str_replace('-', '__', $custom_fields);
-		}else{
+		} else {
 			$custom_fields = array();
 		}
 		$data          = new stdClass();

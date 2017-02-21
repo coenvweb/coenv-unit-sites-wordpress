@@ -57,7 +57,7 @@ class SmackUCIExporter {
 
 	var $offset = 0;
 
-	var $limit = 100;
+	var $limit = 1000;
 
 	var $totalRowCount;
 
@@ -92,7 +92,7 @@ class SmackUCIExporter {
 	$this->eventExclusions = isset($_POST['eventExclusions']) && !empty($_POST['eventExclusions']) ? $_POST['eventExclusions'] : array();
 		$this->fileName        = isset($_POST['fileName']) ? sanitize_text_field($_POST['fileName']) : ''; //'Post.csv';
 		$this->offset          = isset($_POST['offset']) ? sanitize_text_field($_POST['offset']) : 0;
-		$this->limit           = isset($_POST['limit']) ? sanitize_text_field($_POST['limit']) : 100;
+		$this->limit           = isset($_POST['limit']) ? sanitize_text_field($_POST['limit']) : 1000;
 		$this->exportData();
 	}
 
@@ -738,8 +738,14 @@ class SmackUCIExporter {
 										if(isset($TermsData[$termName]))
 											$this->data[$id][$termName] = $TermsData[$termName] . ',' . $taxonomyData[0];
 										else
-											$this->data[$id][$termName] = $taxonomyData[0];
-									}
+											$get_exist_data = $this->data[$id][$termName];
+                                                                                        if( $get_exist_data == '' ){
+                                                                                                $this->data[$id][$termName] = $taxonomyData[0];
+                                                                                        }
+                                                                                        else {
+                                                                                                $this->data[$id][$termName] = $get_exist_data . '|' . $taxonomyData[0];
+                                                                                        }
+																												}
 								}
 								else {
 									if(!isset($TermsData['post_tag'])) {
@@ -748,7 +754,9 @@ class SmackUCIExporter {
 											$postTags .= $tags . ',';
 										}
 										$postTags = substr($postTags, 0, -1);
-										$this->data[$id][$termName] = $postTags;
+										if( $this->data[$id][$termName] == '' ) {
+											$this->data[$id][$termName] = $postTags;
+										}
 									}
 								}
 								if(!isset($TermsData['category'])){
@@ -786,12 +794,26 @@ class SmackUCIExporter {
 		$result = array();
 		foreach ($this->headers as $hKey) {
 			foreach ( $data as $recordId => $rowValue ) {
-				if(array_key_exists($hKey, $rowValue)):
-					$result[$recordId][$hKey] = $rowValue[$hKey];
-				else:
-					$result[$recordId][$hKey] = '';
-				endif;
-			}
+				foreach($rowValue as $key => $value){
+                                       if(array_key_exists($hKey, $rowValue)):
+                                               $result[$recordId][$hKey] = $rowValue[$hKey];
+                                       else:
+                                               if(preg_match('/_aioseop_/', $key)):
+                                               $key = preg_replace('/_aioseop_/','',$key);
+                                               endif;
+					       if(preg_match('/wpcf-/', $key)):
+                                                        $key = preg_replace('/wpcf-/','',$key);
+                                               endif;
+					       $rowValue[$key] = $value;
+                                               if(array_key_exists($hKey, $rowValue)):
+                                               $result[$recordId][$hKey] = $rowValue[$hKey];
+                                               else:
+                                               $result[$recordId][$hKey] = '';
+                                               endif;
+                                       endif;
+                               }
+                       }       
+			
 		}
 		return $result;
 	}

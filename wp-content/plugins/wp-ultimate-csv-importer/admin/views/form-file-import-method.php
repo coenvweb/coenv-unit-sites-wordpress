@@ -68,10 +68,13 @@ if ( ! defined( 'ABSPATH' ) )
          </div>
       </div>
       <div class="clearfix"></div>
-      <div class="panel upload-view" style="width: 99%;">
+      <div class="panel upload-view" style="width: 98%;">
          <!-- <div class="panel-heading">
             <h1 class="text-center"><?php //echo esc_html__('Hello, Choose CSV/XML to import','wp-ultimate-csv-importer');?></h1>
             </div> -->
+	 <div id="warningsec" style="color:red;width:100%; min-height: 110px;border: 1px solid #d1d1d1;background-color:#fff;display:none;">
+        <div id ="warning" class="display-warning" style="color:red;align:center;display:inline;font-weight:bold;font-size:15px; border: 1px solid red;margin:2% 2%;padding: 20px 0 20px;position: absolute;text-align: center;width:93%;display:none;"> </div>
+</div>          
          <div class="panel-body">
             <div class="row">
                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
@@ -113,10 +116,10 @@ if ( ! defined( 'ABSPATH' ) )
                         <div class="clearfix"></div>
                         <div class="form-group mt10">
                            <label>
-                           <input type="radio" name="import_mode" id="mode_insert" value="new_items" checked="checked"> <?php echo esc_html__('New Items','wp-ultimate-csv-importer');?>
+	                           <input type="radio" name="import_mode" id="mode_insert" value="new_items" checked="checked"> <?php echo esc_html__('New Items','wp-ultimate-csv-importer');?>
                            </label>
                            <label class="pl20" title="Please upgrade to PRO for updating records">
-                           <input type="radio" name="import_mode" id="mode_update" value="existing_items" disabled="disabled"><?php echo esc_html__(' Existing Items','wp-ultimate-csv-importer');?>
+        	                   <input type="radio" name="import_mode" id="mode_update" value="existing_items" disabled="disabled"><?php echo esc_html__(' Existing Items','wp-ultimate-csv-importer');?>
                            </label>
                         </div>
                         <div id="select_module" class="select_module col-md-8 col-md-offset-3">
@@ -143,14 +146,14 @@ if ( ! defined( 'ABSPATH' ) )
                         <div class="file_upload">
                            <input id="upload_file" type="file" name = "files[]" onchange ="upload_method()"/>
                            <div class="file-upload-icon">   
-			<span id="fileupload" style="cursor: pointer;" class="import-icon"> <img src="<?php echo plugins_url().'/'.SM_UCI_SLUG ;?>/assets/images/upload-128.png" width="60" height="60" /> </span>
-                        <span class="file-upload-text">Click here to upload from desktop</span>
-			</div>
+				<span id="fileupload" style="cursor: pointer;" class="import-icon"> <img src="<?php echo plugins_url().'/'.SM_UCI_SLUG ;?>/assets/images/upload-128.png" width="60" height="60" /> </span>
+                        	<span class="file-upload-text"><?php echo esc_html__('Click here to upload from desktop','wp-ultimate-csv0-importer-pro');?></span>
+			    </div>
 			</div>
                      </div>
                      <div class="bhoechie-tab-content" id="division5" style="width: 100%;text-align: center;margin-top: 150px;font-size: 2.2em;color: red;">
-		                  <?php echo esc_html__('This feature is only available in PRO.','wp-ultimate-csv-importer');?>
-	                 </div>
+		        <?php echo esc_html__('This feature is only available in PRO.','wp-ultimate-csv-importer');?>
+	             </div>
                   </div>
                </div>
                <!-- Row -->
@@ -160,9 +163,9 @@ if ( ! defined( 'ABSPATH' ) )
       </div>
       <script type="text/javascript">
 	      jQuery(document).ready(function() {
-             jQuery('#mode_update').click(function(e) {
+              jQuery('#mode_update').click(function(e) {
                 swal('Warning!', 'Please upgrade to PRO for updating records.', 'warning')
-             });
+              });
 		      jQuery("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
 			      e.preventDefault();
 			      jQuery(this).siblings('a.active').removeClass("active");
@@ -184,6 +187,7 @@ if ( ! defined( 'ABSPATH' ) )
       <input type="hidden" id="file_extension" name="file_extension" value="">
       <input type="hidden" id="import_method" name = "import_method" value="desktop">
       <input type='hidden' id='file_version' name='file_version' value=''>
+      <input type='hidden' id='upload_max' name='upload_max' value='<?php echo ini_get('upload_max_filesize');?>'>
    </form>
 </div>
 

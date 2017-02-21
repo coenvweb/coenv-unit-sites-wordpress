@@ -3,7 +3,7 @@
  * @package     Joomla.Platform
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -12,9 +12,7 @@ defined('JPATH_PLATFORM') or die;
 /**
  * Abstract Form Field class for the Joomla Platform.
  *
- * @package     Joomla.Platform
- * @subpackage  Form
- * @since       11.1
+ * @since  11.1
  */
 abstract class JFormField
 {
@@ -61,7 +59,7 @@ abstract class JFormField
 	protected $autofocus = false;
 
 	/**
-	 * The SimpleXMLElement object of the <field /> XML element that describes the form field.
+	 * The SimpleXMLElement object of the `<field>` XML element that describes the form field.
 	 *
 	 * @var    SimpleXMLElement
 	 * @since  11.1
@@ -273,19 +271,19 @@ abstract class JFormField
 	protected $labelclass;
 
 	/**
-	* The javascript onchange of the form field.
-	*
-	* @var    string
-	* @since  3.2
-	*/
+	 * The javascript onchange of the form field.
+	 *
+	 * @var    string
+	 * @since  3.2
+	 */
 	protected $onchange;
 
 	/**
-	* The javascript onclick of the form field.
-	*
-	* @var    string
-	* @since  3.2
-	*/
+	 * The javascript onclick of the form field.
+	 *
+	 * @var    string
+	 * @since  3.2
+	 */
 	protected $onclick;
 
 	/**
@@ -311,6 +309,28 @@ abstract class JFormField
 	 * @since  11.1
 	 */
 	protected static $generated_fieldname = '__field';
+
+	/**
+	 * Name of the layout being used to render the field
+	 *
+	 * @var    string
+	 * @since  3.5
+	 */
+	protected $layout;
+
+	/**
+	 * Layout to render the form field
+	 *
+	 * @var  string
+	 */
+	protected $renderLayout = 'joomla.form.renderfield';
+
+	/**
+	 * Layout to render the label
+	 *
+	 * @var  string
+	 */
+	protected $renderLabelLayout = 'joomla.form.renderlabel';
 
 	/**
 	 * Method to instantiate the form field object.
@@ -369,6 +389,7 @@ abstract class JFormField
 			case 'validate':
 			case 'value':
 			case 'class':
+			case 'layout':
 			case 'labelclass':
 			case 'size':
 			case 'onchange':
@@ -430,6 +451,7 @@ abstract class JFormField
 			case 'hint':
 			case 'value':
 			case 'labelclass':
+			case 'layout':
 			case 'onchange':
 			case 'onclick':
 			case 'onblur':
@@ -481,6 +503,16 @@ abstract class JFormField
 				$this->$name = !($value === 'false' || $value === 'off' || $value === '0');
 				break;
 
+			case 'translate_label':
+				$value = (string) $value;
+				$this->translateLabel = $this->translateLabel && !($value === 'false' || $value === 'off' || $value === '0');
+				break;
+
+			case 'translate_description':
+				$value = (string) $value;
+				$this->translateDescription = $this->translateDescription && !($value === 'false' || $value === 'off' || $value === '0');
+				break;
+
 			case 'size':
 				$this->$name = (int) $value;
 				break;
@@ -517,7 +549,7 @@ abstract class JFormField
 	/**
 	 * Method to attach a JForm object to the field.
 	 *
-	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the <field /> tag for the form field object.
+	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the `<field>` tag for the form field object.
 	 * @param   mixed             $value    The form field value to validate.
 	 * @param   string            $group    The field name group control value. This acts as as an array container for the field.
 	 *                                      For example if the field has name="foo" and the group value is set to "bar" then the
@@ -549,7 +581,8 @@ abstract class JFormField
 			'multiple', 'name', 'id', 'hint', 'class', 'description', 'labelclass', 'onchange',
 			'onclick', 'onblur', 'validate', 'pattern', 'default', 'required',
 			'disabled', 'readonly', 'autofocus', 'hidden', 'autocomplete', 'spellcheck',
-			'translateHint', 'translateLabel', 'translateDescription', 'size');
+			'translateHint', 'translateLabel','translate_label', 'translateDescription',
+			'translate_description' ,'size');
 
 		$this->default = isset($element['value']) ? (string) $element['value'] : $this->default;
 
@@ -567,6 +600,14 @@ abstract class JFormField
 
 		// Set the visibility.
 		$this->hidden = ($this->hidden || (string) $element['type'] == 'hidden');
+
+		$this->layout = !empty($this->element['layout']) ? (string) $this->element['layout'] : $this->layout;
+
+		// Add required to class list if field is required.
+		if ($this->required)
+		{
+			$this->class = trim($this->class . ' required');
+		}
 
 		return true;
 	}
@@ -654,7 +695,15 @@ abstract class JFormField
 	 *
 	 * @since   11.1
 	 */
-	abstract protected function getInput();
+	protected function getInput()
+	{
+		if (empty($this->layout))
+		{
+			throw new UnexpectedValueException(sprintf('%s has no layout assigned.', $this->name));
+		}
+
+		return $this->getRenderer($this->layout)->render($this->getLayoutData());
+	}
 
 	/**
 	 * Method to get the field title.
@@ -862,9 +911,10 @@ abstract class JFormField
 	/**
 	 * Method to get a control group with label and input.
 	 *
-	 * @return  string  A string containing the html for the control goup
+	 * @return  string  A string containing the html for the control group
 	 *
-	 * @since   3.2
+	 * @since      3.2
+	 * @deprecated 3.2.3 Use renderField() instead
 	 */
 	public function getControlGroup()
 	{

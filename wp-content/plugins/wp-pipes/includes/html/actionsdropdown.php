@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  HTML
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -12,9 +12,7 @@ defined('JPATH_PLATFORM') or die;
 /**
  * HTML utility class for building a dropdown menu
  *
- * @package     Joomla.Libraries
- * @subpackage  HTML
- * @since       3.2
+ * @since  3.2
  */
 abstract class JHtmlActionsDropdown
 {
@@ -47,10 +45,10 @@ abstract class JHtmlActionsDropdown
 
 		$html[] = '</button>';
 		$html[] = '<ul class="dropdown-menu">';
-		$html[] = implode('', self::$dropDownList);
-		$html[] = '</ul></div>';
+		$html[] = implode('', static::$dropDownList);
+		$html[] = '</ul>';
 
-		self::$dropDownList = null;
+		static::$dropDownList = null;
 
 		return implode('', $html);
 	}
@@ -68,7 +66,7 @@ abstract class JHtmlActionsDropdown
 	public static function publish($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'publish';
-		self::addCustomItem(JText::_('JTOOLBAR_PUBLISH'), 'publish', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_PUBLISH'), 'publish', $id, $task);
 	}
 
 	/**
@@ -84,7 +82,7 @@ abstract class JHtmlActionsDropdown
 	public static function unpublish($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'unpublish';
-		self::addCustomItem(JText::_('JTOOLBAR_UNPUBLISH'), 'unpublish', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_UNPUBLISH'), 'unpublish', $id, $task);
 	}
 
 	/**
@@ -100,7 +98,7 @@ abstract class JHtmlActionsDropdown
 	public static function feature($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'featured';
-		self::addCustomItem(JText::_('JFEATURE'), 'featured', $id, $task);
+		static::addCustomItem(JText::_('JFEATURE'), 'featured', $id, $task);
 	}
 
 	/**
@@ -116,7 +114,7 @@ abstract class JHtmlActionsDropdown
 	public static function unfeature($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'unfeatured';
-		self::addCustomItem(JText::_('JUNFEATURE'), 'unfeatured', $id, $task);
+		static::addCustomItem(JText::_('JUNFEATURE'), 'unfeatured', $id, $task);
 	}
 
 	/**
@@ -132,7 +130,7 @@ abstract class JHtmlActionsDropdown
 	public static function archive($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'archive';
-		self::addCustomItem(JText::_('JTOOLBAR_ARCHIVE'), 'archive', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_ARCHIVE'), 'archive', $id, $task);
 	}
 
 	/**
@@ -148,7 +146,7 @@ abstract class JHtmlActionsDropdown
 	public static function unarchive($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'unpublish';
-		self::addCustomItem(JText::_('JTOOLBAR_UNARCHIVE'), 'unarchive', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_UNARCHIVE'), 'unarchive', $id, $task);
 	}
 
 	/**
@@ -164,7 +162,7 @@ abstract class JHtmlActionsDropdown
 	public static function duplicate($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'duplicate';
-		self::addCustomItem(JText::_('JTOOLBAR_DUPLICATE'), 'copy', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_DUPLICATE'), 'copy', $id, $task);
 	}
 
 	/**
@@ -180,7 +178,7 @@ abstract class JHtmlActionsDropdown
 	public static function trash($id, $prefix = '')
 	{
 		$task = ($prefix ? $prefix . '.' : '') . 'trash';
-		self::addCustomItem(JText::_('JTOOLBAR_TRASH'), 'trash', $id, $task);
+		static::addCustomItem(JText::_('JTOOLBAR_TRASH'), 'trash', $id, $task);
 	}
 
 	/**
@@ -207,7 +205,7 @@ abstract class JHtmlActionsDropdown
 	 */
 	public static function divider()
 	{
-		self::$dropDownList[] = '<li class="divider"></li>';
+		static::$dropDownList[] = '<li class="divider"></li>';
 	}
 
 	/**
@@ -224,7 +222,7 @@ abstract class JHtmlActionsDropdown
 	 */
 	public static function addCustomItem($label, $icon = '', $id = '', $task = '')
 	{
-		self::$dropDownList[] = '<li>'
+		static::$dropDownList[] = '<li>'
 			. '<a href = "javascript://" onclick="listItemTask(\'' . $id . '\', \'' . $task . '\')">'
 			. ($icon ? '<span class="icon-' . $icon . '"></span> ' : '')
 			. $label

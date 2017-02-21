@@ -3,7 +3,7 @@
  * @package     Joomla.Platform
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,12 +11,10 @@ defined('JPATH_PLATFORM') or die;
 
 /**
  * Color Form Field class for the Joomla Platform.
- * This implementation is designed to be compatible with HTML5's <input type="color">
+ * This implementation is designed to be compatible with HTML5's `<input type="color">`
  *
- * @package     Joomla.Platform
- * @subpackage  Form
- * @link        http://www.w3.org/TR/html-markup/input.color.html
- * @since       11.3
+ * @link   http://www.w3.org/TR/html-markup/input.color.html
+ * @since  11.3
  */
 class JFormFieldColor extends JFormField
 {
@@ -37,12 +35,28 @@ class JFormFieldColor extends JFormField
 	protected $control = 'hue';
 
 	/**
+	 * The format.
+	 *
+	 * @var    string
+	 * @since  3.6.0
+	 */
+	protected $format = 'hex';
+
+	/**
+	 * The keywords (transparent,initial,inherit).
+	 *
+	 * @var    string
+	 * @since  3.6.0
+	 */
+	protected $keywords = '';
+
+	/**
 	 * The position.
 	 *
 	 * @var    mixed
 	 * @since  3.2
 	 */
-	protected $position = 'right';
+	protected $position = 'default';
 
 	/**
 	 * The colors.
@@ -74,6 +88,8 @@ class JFormFieldColor extends JFormField
 		switch ($name)
 		{
 			case 'control':
+			case 'format':
+			case 'keywords':
 			case 'exclude':
 			case 'colors':
 			case 'split':
@@ -100,6 +116,12 @@ class JFormFieldColor extends JFormField
 			case 'split':
 				$value = (int) $value;
 			case 'control':
+			case 'format':
+				$this->$name = (string) $value;
+				break;
+			case 'keywords':
+				$this->$name = (string) $value;
+				break;
 			case 'exclude':
 			case 'colors':
 				$this->$name = (string) $value;
@@ -113,7 +135,7 @@ class JFormFieldColor extends JFormField
 	/**
 	 * Method to attach a JForm object to the field.
 	 *
-	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the <field /> tag for the form field object.
+	 * @param   SimpleXMLElement  $element  The SimpleXMLElement object representing the `<field>` tag for the form field object.
 	 * @param   mixed             $value    The form field value to validate.
 	 * @param   string            $group    The field name group control value. This acts as as an array container for the field.
 	 *                                      For example if the field has name="foo" and the group value is set to "bar" then the
@@ -131,7 +153,9 @@ class JFormFieldColor extends JFormField
 		if ($return)
 		{
 			$this->control  = isset($this->element['control']) ? (string) $this->element['control'] : 'hue';
-			$this->position = isset($this->element['position']) ? (string) $this->element['position'] : 'right';
+			$this->format   = isset($this->element['format']) ? (string) $this->element['format'] : 'hex';
+			$this->keywords = isset($this->element['keywords']) ? (string) $this->element['keywords'] : '';
+			$this->position = isset($this->element['position']) ? (string) $this->element['position'] : 'default';
 			$this->colors   = (string) $this->element['colors'];
 			$this->split    = isset($this->element['split']) ? (int) $this->element['split'] : 3;
 		}
@@ -225,7 +249,7 @@ class JFormFieldColor extends JFormField
 			$split = $split ? $split : 3;
 
 			$html = array();
-			$html[] = '<select name="' . $this->name . '" id="' . $this->id . '"' . $disabled . $required
+			$html[] = '<select data-chosen="true" name="' . $this->name . '" id="' . $this->id . '"' . $disabled . $required
 				. $class . $position . $onchange . $autofocus . ' style="visibility:hidden;width:22px;height:1px">';
 
 			foreach ($colors as $i => $c)

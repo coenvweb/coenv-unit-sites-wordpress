@@ -39,28 +39,28 @@ if ( ! defined( 'ABSPATH' ) )
 ?>
 
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
-    <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
-    <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
+    <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank"><?php echo esc_html__('Documentation','wp-ultimste-csv-importer');?></a></div>
+    <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimste-csv-importer');?></a></div>
 </div>
 <div class="wp_ultimate_csv_importer_pro panel col-md-12" style="font-size:14px; height: 650px;width:99%;">
-    <div class="col-md-10" style="text-align:center;width:99%;font-size:15px;margin-top:20px;">If you love WP Ultimate CSV Importer show us your care with a 5-star review on <a style="font-size:15px;" target="_blank"  href ="https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post">wordpress.org!</a></div>
+    <div class="col-md-10" style="text-align:center;width:99%;font-size:15px;margin-top:20px;"><?php echo esc_html__('If you love WP Ultimate CSV Importer show us your care with a 5-star review on','wp-ultimate-csv-importer');?> <a style="font-size:15px;" target="_blank"  href ="https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post"><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer');?></a></div>
      <div class="col-md-12">
         <div class="col-md-6 col-sm-6 mt40 mb40" style="">
-            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:15px;">Enquiry form</legend>
+            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:15px;"><?php echo esc_html__('Enquiry form','wp-ultimate-csv-importer');?></legend>
                 <form class="support-form" type="post" style="margin-top:10px;" action="">
                     <div class="form-group">
-                        <label>Email</label>
+                        <label><?php echo esc_html__('Email','wp-ultimate-csv-importer');?></label>
                         <input name="email" id="email" class="form-control" value="" type="text">
                     </div>
                     <div class="form-group">
-                        <label>Enquiry type</label>
+                        <label><?php echo esc_html__('Enquiry type','wp-ultimate-csv-importer');?></label>
                         <select name="" id="query" class="selectpicker form-control" data-live-search="false">
-                            <option value="Bug Reporting">Bug Reporting</option>
-                            <option value="Pre-Sale Enquiry">Pre-Sale Enquiry</option>
-                            <option value="Feature Enhancement">Feature Enhancement</option>
+                            <option value="Bug Reporting"><?php echo esc_html__('Bug Reporting','wp-ultimate-csv-importer');?></option>
+                            <option value="Pre-Sale Enquiry"><?php echo esc_html__('Pre-Sale Enquiry','wp-ultimate-csv-importer');?></option>
+                            <option value="Feature Enhancement"><?php echo esc_html__('Feature Enhancement','wp-ultimate-csv-importer');?></option>
                         </select></div>
                     <div class="form-group">
-                        <label for="comment">Message</label>
+                        <label for="comment"><?php echo esc_html__('Message','wp-ultimate-csv-importer');?></label>
                         <textarea class="form-control" style="height:200px;" rows="5" name="message" id="message"></textarea>
                     </div>
                     <div id="loading" style="opacity:0.7;background-color: #fff;z-index: 99;text-align: center;">
@@ -74,9 +74,9 @@ if ( ! defined( 'ABSPATH' ) )
             </fieldset>
         </div>
         <div class="col-md-6 col-sm-6 mt40 mb40">
-            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:20px;">News Letter Subscription</legend>
+            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:20px;"><?php echo esc_html__('News Letter Subscription','wp-ultimate-csv-importer');?></legend>
                 <div class="form-group">
-                    <label>Email</label>
+                    <label><?php echo esc_html__('Email','wp-ultimate-csv-importer');?></label>
                     <input name="subscribe_email" id="subscribe_email" class="form-control" value="" type="text">
                 </div>
                 <div id="loading" style="opacity:0.7;background-color: #fff;z-index: 99;text-align: center;">
@@ -90,9 +90,9 @@ if ( ! defined( 'ABSPATH' ) )
             </fieldset>
         </div>
         <div style="font-size:15px;" class="col-md-6 col-sm-6 mt40 mb40">
-            <div><b>Note</b></div>
-            <div class="mt20"><i class="icon-news-paper" style="color:#178D7C;"></i>&nbsp; Subscribe to Smackcoders Mailing list (a few messages a year)</div>
-            <div class="mt20"><i class="icon-mail" style="color:#178D7C;"></i>&nbsp;Please draft a mail to support@smackcoders.com. If you doesn't get any acknowledgement within an hour!</div>
+            <div><b><?php echo esc_html__('Note','wp-ultimate-csv-importer');?></b></div>
+            <div class="mt20"><i class="icon-news-paper" style="color:#178D7C;"></i>&nbsp; <?php echo esc_html__('Subscribe to Smackcoders Mailing list (a few messages a year)','wp-ultimate-csv-importer');?></div>
+            <div class="mt20"><i class="icon-mail" style="color:#178D7C;"></i>&nbsp;<?php echo esc_html__("Please draft a mail to support@smackcoders.com. If you doesn't get any acknowledgement within an hour!","wp-ultimate-csv-importer");?></div>
         </div>
     </div>
 </div>

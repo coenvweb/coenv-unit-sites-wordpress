@@ -169,8 +169,8 @@ if(isset($ucioptimize['delete_all_trackback_comments'])) {
     $delete_all_trackback_comments = '';
 } ?>
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
-            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
-            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank"><?php echo esc_html__('Documentation','wp-ultimate-csv-importer');?></a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimate-csv-importer');?></a></div>
          </div>
 <div class="whole_body wp_ultimate_csv_importer_pro" style="margin-top: 40px;">
     <form id="form_import_file">
@@ -396,14 +396,13 @@ if(isset($ucioptimize['delete_all_trackback_comments'])) {
                                             } ?></td>
                                         <td></td>
                                     </tr>
-                                    <!--<tr>
-                                        <td><?php echo esc_html_e('Mod Security','wp-ultimate-csv-importer'); ?> </td>
-                                        <td><?php if(isset($mod_security) && in_array('mod_security.c', $mod_security)) {
-                                                echo '<label style="color:green;">'; echo __('Yes','wp-ultimate-csv-importer'); echo '</label>';
-                                            } else {
-                                                echo '<label style="color:red;">'; echo __('No','wp-ultimate-csv-importer'); echo '</label>';
-                                            } ?></td>
-                                        <tr>-->
+                                <?php if(defined('DISABLE_WP_CRON') && DISABLE_WP_CRON == true) { ?>    
+				<tr>
+                                        <td>echo esc_html_e('WP CRON','wp-ultimate-csv-importer'); ?> </td>
+                                        <td><?php echo '<label style="color:green;">'; echo __('Disabled','wp-ultimate-csv-importer'); echo '</label>';
+					    ?></td>
+                                     <tr>
+				<?php } ?>
                                 </table>
                                 <!-- Extension modules end-->
                                 <!-- Debug info start-->

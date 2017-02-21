@@ -1,28 +1,28 @@
 === CSV Import for WordPress ===
 Contributors: smackcoders, smacksupport
 Donate link: https://www.paypal.me/smackcoders
-Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, import inline images
+Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, Events Manager
 Requires at least: 4.0
-Tested up to: 4.7
-Stable tag: 5.0.3
-Version: 5.0.3
+Tested up to: 4.7.2
+Stable tag: 5.1.1
+Version: 5.1.1
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 License: GPLv2 or later
 WP Ultimate CSV Importer enables to import Post types, images from external URL and export all Post Types as CSV file.
 
 == Description ==
-WP Ultimate CSV Importer is an import and export tool that helps to a build WordPress site at the drop of a hat by importing Post, Page, Custom Post, Users, WordPress Custom Fields, Reviews of WP Customer Reviews and SEO fields of All in One SEO. The plugin supports export and import all Custom Post Types. The import is for selective modules, but the export is for all the core modules along with few third party plugins.
+WP Ultimate CSV Importer is an import and export tool that helps to build a WordPress site at the drop of a hat by importing Post, Page, Custom Post, Users, Comments, [WordPress Custom Fields](http://www.smackcoders.com/blog/adding-custom-fields-data-wordpress-free-wp-ultimate-csv-importer.html?utm_source=web&utm_campaign=wp_org&utm_medium=readme) & [CustomPress fields](http://www.smackcoders.com/blog/custompress-import.html?utm_source=web&utm_campaign=wp_org&utm_medium=readme), Reviews of WP Customer Reviews and SEO fields of All in One SEO. The plugin supports export and import of all Custom Post Types. The import is for selective modules, but the export is for all the core modules along with few third party plugins.
 
-The image can be imported from external URL like Google image. You can also specify dynamic or static content on the flow of import.
+The image can be imported from external URL like Google image, pixabay, shutterstock, etc,. The images are imported in the background with the help of WP-CRON to enhance the performance. You can [easily configure your WP-Cron](http://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=web&utm_campaign=wp_org&utm_medium=readme) for faster import.
 
 Please show your support for WP Ultimate CSV Importer by giving it a [rating](https://wordpress.org/support/view/plugin-reviews/wp-ultimate-csv-importer?rate=5#postform) :)
 
 = Modules supported in Import and Export =
-* Core Modules - Post, Page, Custom Post and Users.
+* Core Modules - Post, Page, Custom Post, Comments and Users.
 * Custom Post - CPT UI, CustomPress and default WordPress Custom Post.
-* Custom Field - CustomPress & WordPress default fields.
-* SEO field - All in One SEO.
+* Custom Field - CustomPress, [WordPress default Text & Textarea fields of Types, Pods, etc,](http://www.smackcoders.com/blog/adding-custom-fields-data-wordpress-free-wp-ultimate-csv-importer.html?utm_source=web&utm_campaign=wp_org&utm_medium=readme).
+* SEO field - Free version of All in One SEO.
 * Reviews - WP Customer Reviews
 
 = Modules supported in Export =
@@ -33,52 +33,58 @@ Please show your support for WP Ultimate CSV Importer by giving it a [rating](ht
 = Highlighted Feature =
 * High performance rocket speed import.
 * Imports image from an external URLs.
+* Optimized database with enhanced duplicate handling.
 * WordPress core custom fields can be dynamically registered on the flow of import.
+* Import static & dynamic content on the flow of import.
 * Post type import with terms & taxonomies with any of depth of parent-child values.
-* Send email to newly imported User with password information.
-* Insert dynamic or static content on the flow of import.
+* Send email to newly imported User with auto generated password information.
 * Can be used in WordPress multisite.
-* Multi category and multi tag import.
+* Post Type import along with multi category & multi tag.
 * CSV with any delimiter in UTF-8 format can be imported.
 * Exports all the imported files of different modules with filters.
 
 = Note =
 * The Users module is disabled in multisite.
-* Password protected image can't be imported from  featured image.
+* Featured image from password protected image location can't be imported.
 * All languages supported by WordPress can be imported in UTF-8 without BOM format.
 
 [youtube https://www.youtube.com/watch?v=GbDlQcbnNJY]
 
 = Ultimate CSV Importer PRO =
-Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and it is extended with a lot of features that enables to [import](https://goo.gl/RzUvq), schedule, [update](https://goo.gl/RzUvq) and [export](https://www.youtube.com/watch?v=0YA0au4cXW0) both CSV and XML files. The import details over a year is mentioned in dashboard chart and the site updates can be tracked in a fraction of a second. Any changes like modifying existing content or appending new content can be done with the update. The update or import can be performed periodically with scheduler. The update or schedule is done with the templates which is created with mapped fields in the mapping section of the import. The export option enables to export the imported modules as CSV based on the filters.
+Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and it is extended with a lot of features that enables to import, schedule, update and export CSV files. The import details over a year is in dashboard chart to easily track the site updates in a fraction of a second. Any changes like modifying existing content or appending new content can be done in simple update flow. You can also update or import periodically with scheduler. The update or schedule is done with the templates which is created with mapped fields in the mapping section of the import. The export option enables to export the imported modules as CSV based on the filters.
 
 = Supported Modules To Import and Export =
-* Core Module - Post, Page, Custom Post, Category, Tags, Users, Customer Reviews.
+* Core Module - Post, Page, Custom Post, Comments, Category, Tags, Users, Customer Reviews.
 * eCommerce Products – WooCommerce, MarketPress, WP e-Commerce & eShop.
-* SEO field - All in One SEO and Yoast SEO.
-* Multilingual - WPML & qTranslate X
-* Custom fields – CustomPress, ACF, Types, Pods, CCTM & WordPress default fields.
-* Custom Post – CustomPress, Types, Pods, CPT UI, CCTM.
+* SEO field - Free & Pro version of All in One SEO and Yoast SEO.
+* Multilingual - WPML & [qTranslate X](http://www.smackcoders.com/blog/import-marketpress-pro-event-manager-and-more.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org)
+* Image - NextGEN Gallery
+* Events Management - Events Manager FREE & Pro
+* Custom fields – CustomPress, ACF, Types, Pods, CCTM & WordPress default Text & Textarea fields.
+* Custom Post – CustomPress, Types, Pods, CPT UI, CCTM & default WordPress Custom Post.
 
 = Highlighted Feature of PRO =
-* Import image from external URL.
+* Import image from external URL along with the advanced SEO option.
+* Rename featured image loaded from external URL.
 * Import CSV from FTP and SFTP location.
 * WPML & qTranslate X add-on support.
 * Supports WooCommerce product import along with 6 WooCommerce add-on.
-* Imports products of MarketPress PRO add-on.
-* Registers Custom Fields of ACF, Types and WordPress fields in the flow of import.
-* Supports Custom Posts created with CPT UI, CCTM, Types and Pods.
-* Imported modules can be managed in the File manager and the logs are maintained in the Log manager.
-* Handles duplicate with title and content.
+* Imports products of MarketPress Lite & PRO version add-on.
+* Registers Custom Fields of ACF (FREE & Pro), Types, Pods and WordPress fields in the flow of import.
+* Imported modules can be managed in the File manager.
+* Detailed logs are maintained in the Log manager.
+* Duplicate handling with any of the WordPress field.
+* Import all the supported features of WP Ultimate CSV Importer with [Rest API](http://www.smackcoders.com/document/wp-ultimate-csv-importer-rest-api.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org).
+* Extendable for your needs with [API](https://www.smackcoders.com/document/docs/api/classes/SmackUCI_API.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org).
 
 = Helpful Links =
-[Documentation](https://goo.gl/Ben1cP).
+[Documentation](http://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv?utm_source=web&utm_campaign=readme&utm_medium=wp_org).
 
-You can try the [live demo](https://goo.gl/H3V59Z) or request for free trial by clicking Try Now in [WordPress Ultimate CSV Importer](https://goo.gl/F8Wz4v) page to generate your own WordPress test environment.
+You can try the [live demo](http://demo.smackcoders.com/wp-ultimate-csv-importer/wp-admin?utm_source=web&utm_campaign=readme&utm_medium=wp_org) or request for free trial by clicking Try Now in [WordPress Ultimate CSV Importer](http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) page to generate your own WordPress test environment.
 
-Read our [blog](https://goo.gl/2TDZW4) to know more about the new [features](https://goo.gl/BwEzHy) of our WordPress plugins.
+Read our [blog](http://www.smackcoders.com/blog/category/wordpress-products?utm_source=web&utm_campaign=readme&utm_medium=wp_org) to know more about the new [features](http://www.smackcoders.com/wp-ultimate-csv-importer-pro/features.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) of our WordPress plugins.
 
-[FAQ](https://goo.gl/eH7BHT) and [Troubleshooting tips](https://wordpress.org/support/topic/tips-to-trouble-shoot-wp-ultimate-csv-importer-issues-1)
+[FAQ](http://www.smackcoders.com/wordpress-products-faq.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) and [Troubleshooting tips](https://wordpress.org/support/topic/tips-to-trouble-shoot-wp-ultimate-csv-importer-issues-1)
 
 == Installation ==
 1. Extract the wp-ultimate-csv-importer.zip in wordpress/wp-content/plugins using FTP or with plugin install in wp-admin.
@@ -86,7 +92,7 @@ Read our [blog](https://goo.gl/2TDZW4) to know more about the new [features](htt
 
 == Screenshots ==
 1. Dashboard view of the importer
-2. Upload section of CSV/XML.
+2. Upload section of CSV.
 3. Mapping view of the uploaded CSV/XML fields with WordPress fields
 4. Detailed real-time log.
 5. Settings with php.ini details.
@@ -95,17 +101,45 @@ Read our [blog](https://goo.gl/2TDZW4) to know more about the new [features](htt
 
 == Frequently Asked Questions ==
 = Common Issues =
-How to solve auto_prepend_file and auto_append_file error?<br />
-Check your phpinfo.php. Ensure that auto_prepend_file and auto_append_file options are disabled.
-If not you can disable it in php.ini settings file. You can also do it by a .htaccess file
-Create a .htaccess file in the root and set the following values.<br />
-php_value auto_prepend_file none<br />
-php_value auto_append_file none<br />
+<b>1. How to solve auto_prepend_file and auto_append_file error?</b><br />
+* Check your phpinfo.php. Ensure that auto_prepend_file and auto_append_file options are disabled.<br />
+* If not, you can disable it in php.ini settings file. You can also do it in .htaccess file.<br />
+* Create a .htaccess file in the root and set the following values.<br />
+* php_value auto_prepend_file none<br />
+* php_value auto_append_file none<br />
 This will solve your issue or get support from hosting if you didn’t have sufficient permission.
 
-For more FAQ, you can refer [here](https://goo.gl/eH7BHT).
+<b>2. Why my featured images not getting uploaded?</b><br />
+The importer uploads images in the background for faster performance and it requires WP-Cron to be enabled. You can [easily configure WP-Cron](http://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wp_org&utm_campaign=readme&utm_medium=faq) for smooth and speedy import.
+
+<b>3. What are the supported custom fields in FREE version?</b><br />
+The importer supports [default WordPress Text and Text area fields](http://www.smackcoders.com/blog/adding-custom-fields-data-wordpress-free-wp-ultimate-csv-importer.html?utm_source=wordpress_org&utm_campaign=readme&utm_medium=faq) of Types, Pods, etc,.. You can also import the Text & Text area fields created with custom codes in WordPress standards.
+
+For more FAQ, you can refer [here](http://www.smackcoders.com/wordpress-products-faq.html?utm_source=wp_org&utm_campaign=readme&utm_medium=faq).
 
 == Changelog ==
+= 5.1.1 =
+* Fixed: Broken when SCRIPT_DEBUG is true. [Solved](https://wordpress.org/support/topic/broken-when-script_debug-is-true/).
+* Fixed: Issue in duplicate handling to skip the duplicate records.
+* Added: Missing font "glyphicons-halflings-regular.woff2".
+* Removed: Unwanted console warnings.
+* Added: Compatibility for WordPress 4.7.2.
+= 5.1 =
+* Added: Language Support for German, French, Italian, Spanish, Dutch & Russian.
+* Added: Restriction to show “Admin dashboard widget” only for users with Admin role. [Solved](https://wordpress.org/support/topic/admin-dashboard-widget-is-showing-to-all-users)
+* Added: Notice to [enable wp-cron](http://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wp_org&utm_campaign=readme&utm_medium=change_log) to populate the feature images. [Solved](https://wordpress.org/support/topic/version-5-03-issues).
+* Added: Warning messages to notify when uploads directory is missing, insufficient permission to access and uploaded file size exceeds your server limits.
+* Added: Duplicate handling feature to skip the duplicate records.
+* Added: Canonical URL support in All in One SEO data import.
+* Improved: CSV export performance.
+* Fixed: All custom fields in WP installation adding to a Post. [Solved](https://wordpress.org/support/topic/version-5-03-issues).
+* Fixed: Mixing up of Custom taxonomies while assigning a term to Post. [Solved](https://wordpress.org/support/topic/version-5-03-issues).
+* Fixed: Adding unwanted data before and after post content. [Solved](https://wordpress.org/support/topic/version-5-03-issues).
+* Fixed: Issue with Post Category & Tags export.
+* Fixed: Missing up of SEO fields in mapping section.
+* Fixed: Issue in exporting All in one SEO fields.
+* Fixed: Issue in assigning page template (wp_page_template).
+* Removed: Warnings in migration script.
 = 5.0.3 =
 * Added: Support for traditional Chinese characters.
 * Fixed: Author/Editor menu visibility issue
@@ -404,6 +438,10 @@ For more FAQ, you can refer [here](https://goo.gl/eH7BHT).
 * Initial release version. Tested and found works well without any issues.
 
 == Upgrade Notice ==
+= 5.1.1 =
+* Upgrade now to get the fix for duplicate handling feature.
+= 5.1 =
+* Upgrade now for 6 language support, duplicate handling and more.
 = 5.0.3 =
 * Upgrade now for Chinese character support and a fix for category import.
 = 5.0.2 =

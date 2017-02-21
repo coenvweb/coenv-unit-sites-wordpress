@@ -50,7 +50,6 @@ class SmackUCIUnInstall {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		// Roles + caps.
 		#include_once ( 'includes/class-uci-install.php' );
-		SmackUCIInstall::remove_capabilities();
 		SmackUCIInstall::remove_options();
 		$ucisettings = get_option('sm_uci_pro_settings');
 		$droptable = isset($ucisettings['drop_table']) ? $ucisettings['drop_table'] : '';

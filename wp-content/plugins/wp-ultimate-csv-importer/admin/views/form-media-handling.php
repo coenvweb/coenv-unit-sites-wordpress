@@ -61,8 +61,8 @@ if(isset($_REQUEST['templateid'])) {
 $records =  $uci_admin->GetPostValues(sanitize_key($_REQUEST['eventkey']));
 ?>
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
-            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
-            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank"><?php echo esc_html__('Documentation','wp-ultimate-csv-importer');?></a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimate-csv-importer');?></a></div>
          </div>
 
 <div class="template_body whole_body wp_ultimate_csv_importer_pro" style="margin-top: 40px;">
@@ -176,7 +176,7 @@ $records =  $uci_admin->GetPostValues(sanitize_key($_REQUEST['eventkey']));
 		<div class="clearfix"></div>
 		<div class="col-md-12 mt15 mb15">
 			<div class="pull-left">
-				<a class="smack-btn btn-default btn-radius" href="<?php echo $backlink;?>">Back</a></div>
+				<a class="smack-btn btn-default btn-radius" href="<?php echo $backlink;?>"><?php echo esc_html__('Back','wp-ultimate-csv-importer');?></a></div>
 			<div class="pull-right">
 				<input type="submit" class="smack-btn smack-btn-primary btn-radius" value="<?php echo esc_attr__('Continue','wp-ultimate-csv-importer');?>">
 			</div>

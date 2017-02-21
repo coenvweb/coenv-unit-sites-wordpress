@@ -13,8 +13,13 @@ defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 
 class PIPES_Helper_Plugins {
 	public static function parseXMLInstallFile( $path ) {
-		// Read the file to see if it's a valid component XML file
-		$xml = simplexml_load_file( $path );
+		$path_php = preg_replace('/.xml$/i', '.php', $path);
+		if( !is_file( $path_php ) ) {
+			return;
+		}
+		$pdata		= get_plugin_data( $path_php );
+		$version	= $pdata['Version'];
+		$xml		= simplexml_load_file( $path );
 
 		if ( ! $xml ) {
 			return false;
@@ -31,25 +36,20 @@ class PIPES_Helper_Plugins {
 		}
 
 		$data = array();
-
 		$data['name']    = (string) $xml->name;
 		$data['element'] = pathinfo( $path, PATHINFO_FILENAME );
-
 		// Check if we're a language. If so use metafile.
-		$data['type']  = $xml->getName() == 'metafile' ? 'language' : (string) $xml->attributes()->type;
-		$data['group'] = $xml->getName() == 'metafile' ? 'language' : (string) $xml->attributes()->group;
-
-		$group_arr            = explode( '-', $data['group'] );
-		$data['addon']        = @$group_arr[1];
-		$data['creationDate'] = ( (string) $xml->creationDate ) ? (string) $xml->creationDate : JText::_( 'Unknown' );
-		$data['author']       = ( (string) $xml->author ) ? (string) $xml->author : JText::_( 'Unknown' );
-
-		$data['copyright']   = (string) $xml->copyright;
-		$data['authorEmail'] = (string) $xml->authorEmail;
-		$data['authorUrl']   = (string) $xml->authorUrl;
-		$data['version']     = (string) $xml->version;
-		$data['description'] = (string) $xml->description;
-
+		$data['type']	= $xml->getName() == 'metafile' ? 'language' : (string) $xml->attributes()->type;
+		$data['group']	= $xml->getName() == 'metafile' ? 'language' : (string) $xml->attributes()->group;
+		$group_arr				= explode( '-', $data['group'] );
+		$data['addon']			= @$group_arr[1];
+		$data['creationDate']	= ( (string) $xml->creationDate ) ? (string) $xml->creationDate : JText::_( 'Unknown' );
+		$data['author']			= ( (string) $xml->author ) ? (string) $xml->author : JText::_( 'Unknown' );
+		$data['copyright']		= (string) $xml->copyright;
+		$data['authorEmail']	= (string) $xml->authorEmail;
+		$data['authorUrl']		= (string) $xml->authorUrl;
+		$data['version']		= $version;
+		$data['description']	= (string) $xml->description;
 
 		return $data;
 	}
@@ -60,9 +60,9 @@ class PIPES_Helper_Plugins {
 			return call_user_func( array( 'PIPES_Helper_Plugins', 'get' . $type . 's' ), $update );
 		}
 		if ( ! isset( $_SESSION['PIPES']['plugins'] ) || $update || empty( $_SESSION['PIPES']['plugins'] ) ) {
-			$engines    = self::getEngines( $update ); # get engines
-			$adapters   = self::getAdapters( $update ); # get adapters
-			$processors = self::getProcessors( $update ); #get processors
+			$engines    = self::getEngines( $update );		# get engines
+			$adapters   = self::getAdapters( $update );		# get adapters
+			$processors = self::getProcessors( $update );	#get processors
 			switch ( $addon_type ) {
 				case 'adapters':
 					$plugins = $adapters;
@@ -77,13 +77,11 @@ class PIPES_Helper_Plugins {
 					$plugins = array_merge( $engines, $adapters, $processors );
 					break;
 			}
-
 			$_SESSION['PIPES']['plugins'] = $plugins;
 		}
 
 		return $_SESSION['PIPES']['plugins'];
 	}
-
 
 	public static function getEngines( $update = false ) {
 		if ( ! isset( $_SESSION['PIPES']['engines'] ) || $update || empty( $_SESSION['PIPES']['engines'] ) ) {

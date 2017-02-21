@@ -2,12 +2,12 @@
 /******************************
  * Plugin Name: WP Ultimate CSV Importer
  * Description: Seamlessly create posts, custom posts, pages, media, SEO and more from your CSV data with ease.
- * Version: 5.0.3
+ * Version: 5.1.1
  * Author: smackcoders
+ * Plugin URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_pro&utm_medium=wordpress
+ * Author URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_pro&utm_medium=wordpress
  * Text Domain: wp-ultimate-csv-importer
- * Domain Path: /languages
- * Plugin URI: https://goo.gl/kKWPui
- * Author URI: https://goo.gl/kKWPui
+ * Domain Path: /languages/
  */
 
 /*********************************************************************************
@@ -57,7 +57,7 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 	 */
 	class SM_WPUltimateCSVImporter {
 
-		public $version = '5.0.3';
+		public $version = '5.1.1';
 
 		/**
 		 * The single instance of the class.
@@ -92,7 +92,8 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 			include_once ( 'uninstall.php' );
 
 			do_action( 'wp_ultimate_csv_importer_loaded' );
-			add_filter( 'plugin_row_meta', array('SmackUCIInstall', 'plugin_row_meta'), 10, 2 );
+			//add_filter( 'plugin_row_meta', array('SmackUCIInstall', 'plugin_row_meta'), 10, 2 );
+			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ),  array('SmackUCIInstall', 'plugin_row_meta'), 10, 2 );			
 
 			if ( ! function_exists( 'is_plugin_active' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -101,7 +102,7 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 				// add plugin upgrade notification
 				if(get_option('ULTIMATE_CSV_IMP_VERSION') <= 5.0)
 					add_action( 'admin_notices', array('SmackUCIInstall', 'important_upgrade_notice') );
-
+					add_action( 'admin_notices', array('SmackUCIInstall', 'important_cron_notice') );
 				add_action( 'admin_notices', array( 'SmackUCIInstall', 'wp_ultimate_csv_importer_notice' ) );
 			}
 
@@ -120,6 +121,12 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 		private function init_hooks() {
 			register_activation_hook( __FILE__, array( 'SmackUCIInstall', 'install' ) );
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
+			add_action( 'init', array( $this, 'smack_uci_enqueue_scripts') );
+			/* add_action( 'wp_default_scripts', function( $scripts ) {
+				if ( ! empty( $scripts->registered['jquery'] ) ) {
+					$scripts->registered['jquery']->deps = array_diff( $scripts->registered['jquery']->deps, array( 'jquery-migrate' ) );
+				}
+			} ); */
 			add_action('wp_dashboard_setup', array($this,'uci_pro_add_dashboard_widgets'));
 			add_action('smack_uci_email_scheduler', array('SmackUCIEmailScheduler', 'send_login_credentials_to_users'));
 			add_action('smack_uci_image_scheduler', array('SmackUCIMediaScheduler', 'populateFeatureImages'));
@@ -179,9 +186,13 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 			include_once ( 'includes/class-uci-email-scheduler.php' );
 			include_once ( 'includes/class-uci-media-scheduler.php' );
 			#SmackUCIMediaScheduler::populateFeatureImages();
-			# Register / Enqueue the plugin scripts & style
+		}
+
+		public function smack_uci_enqueue_scripts() {
+			// Register / Enqueue the plugin scripts & style
 			$uciPages = array('sm-uci-dashboard', 'sm-uci-import', 'sm-uci-managers', 'sm-uci-export', 'sm-uci-settings', 'sm-uci-support');
 			if (isset($_REQUEST['page']) && in_array(sanitize_text_field($_REQUEST['page']), $uciPages)) {
+				// Ultimate CSV Importer Styles
 				wp_enqueue_style( 'ultimate-css', plugins_url( 'assets/css/ultimate-importer.css', __FILE__ ) );
 				wp_enqueue_style( 'boot.css', plugins_url( 'assets/css/bootstrap.css', __FILE__ ) );
 				wp_enqueue_style( 'Icomoon Icons', plugins_url( 'assets/css/icomoon.css', __FILE__ ) );
@@ -189,44 +200,45 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 				wp_enqueue_style( 'jquery-fileupload.css', plugins_url( 'assets/css/jquery.fileupload.css', __FILE__ ) );
 				wp_enqueue_style( 'jquery-style', plugins_url( 'assets/css/jquery-ui.css', __FILE__ ) );
 				wp_enqueue_style('icheck', plugins_url('assets/css/icheck/green.css', __FILE__));
-				wp_enqueue_script( 'icheck-js', plugins_url( 'assets/js/icheck.min.js', __FILE__ ) );
-				wp_enqueue_script( 'file-download-js', plugins_url( 'assets/js/jquery.fileDownload.js', __FILE__ ) );
-				wp_register_script( 'ultimate-importer-js', plugins_url( 'assets/js/ultimate-importer.js', __FILE__ ) );
-				wp_enqueue_script( 'jquery' );
-				wp_enqueue_script( 'ultimate-importer-js' );
-				wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'assets/js/bootstrap-datepicker.js', __FILE__ ) );
-				wp_enqueue_script( 'bootstrap-datepicker-js' );
 				wp_enqueue_style( 'bootstrap-datepicker-css', plugins_url('assets/css/bootstrap-datepicker.css', __FILE__ ) );
-				wp_enqueue_script( 'jquery-ui-dialog' );
-				wp_enqueue_script( 'file-tree', plugins_url( 'assets/js/jqueryfiletree.js', __FILE__ ) );
 				wp_enqueue_style( 'file-tree-css', plugins_url( 'assets/css/jqueryfiletree.css', __FILE__ ) );
-				wp_localize_script( 'ultimate-importer-js', 'uci_importer', array(
-					'adminurl' => admin_url(),
-					'siteurl'  => site_url(),
-					'requestpage' => $_REQUEST['page'],
-					'db_orphanedMsg' => __('no of Orphaned Post/Page meta has been removed.', 'wp-ultimate-csv-importer'),
-					'db_tagMsg' => __('no of Unassigned tags has been removed.', 'wp-ultimate-csv-importer'),
-					'db_revisionMsg' => __('no of Post/Page revisions has been removed.', 'wp-ultimate-csv-importer'),
-					'db_draftMSg' => __('no of Auto drafted Post/Page has been removed.', 'wp-ultimate-csv-importer'),
-					'db_trashMsg' => __('no of Post/Page in trash has been removed.', 'wp-ultimate-csv-importer'),
-					'db_spamMsg' => __('no of Spam comments has been removed.', 'wp-ultimate-csv-importer'),
-					'db_commentTrashMsg' => __('no of Comments in trash has been removed.', 'wp-ultimate-csv-importer'),
-					'db_unapprovedMsg' => __('no of Unapproved comments has been removed.', 'wp-ultimate-csv-importer'),
-					'db_pingbackMsg' => __('no of Pingback comments has been removed.', 'wp-ultimate-csv-importer'),
-					'db_trackbackMsg' => __('no of Trackback comments has been removed.', 'wp-ultimate-csv-importer'),
-				) );
 				// WaitMe CSS & JS for blur the page and show the progressing loader
 				wp_enqueue_style('waitme-css', plugins_url('assets/css/waitMe.css', __FILE__));
 				wp_enqueue_style('sweet-alert-css', plugins_url('assets/css/sweetalert.css', __FILE__));
 				wp_enqueue_style('custom-style', plugins_url('assets/css/custom-style.css', __FILE__));
 				//new files include
-				wp_enqueue_style('custom-new-style', plugins_url('assets/css/custom-new-style.css', __FILE__));
-                wp_enqueue_style( 'bootstrap-select-css', plugins_url( 'assets/css/bootstrap-select.css', __FILE__ ));
-                wp_register_script('bootstrap-js', plugins_url('assets/js/bootstrap.js', __FILE__));
+				//wp_enqueue_style('custom-new-style', plugins_url('assets/css/custom-new-style.css', __FILE__));
+				wp_enqueue_style( 'bootstrap-select-css', plugins_url( 'assets/css/bootstrap-select.css', __FILE__ ));
+				// Ultimate CSV Importer Scripts
+				wp_enqueue_script( 'jquery' );
+				wp_enqueue_script( 'icheck-js', plugins_url( 'assets/js/icheck.min.js', __FILE__ ) );
+				wp_enqueue_script( 'file-download-js', plugins_url( 'assets/js/jquery.fileDownload.js', __FILE__ ) );
+				wp_register_script( 'ultimate-importer-js', plugins_url( 'assets/js/ultimate-importer.js', __FILE__ ) );
+				wp_enqueue_script( 'ultimate-importer-js' );
+				wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'assets/js/bootstrap-datepicker.js', __FILE__ ) );
+				wp_enqueue_script( 'bootstrap-datepicker-js' );
+				wp_enqueue_script( 'jquery-ui-dialog' );
+				wp_enqueue_script( 'file-tree', plugins_url( 'assets/js/jqueryfiletree.js', __FILE__ ) );
+				wp_localize_script( 'ultimate-importer-js', 'uci_importer', array(
+							'adminurl' => admin_url(),
+							'siteurl'  => site_url(),
+							'requestpage' => $_REQUEST['page'],
+							'db_orphanedMsg' => __('no of Orphaned Post/Page meta has been removed.', 'wp-ultimate-csv-importer'),
+							'db_tagMsg' => __('no of Unassigned tags has been removed.', 'wp-ultimate-csv-importer'),
+							'db_revisionMsg' => __('no of Post/Page revisions has been removed.', 'wp-ultimate-csv-importer'),
+							'db_draftMSg' => __('no of Auto drafted Post/Page has been removed.', 'wp-ultimate-csv-importer'),
+							'db_trashMsg' => __('no of Post/Page in trash has been removed.', 'wp-ultimate-csv-importer'),
+							'db_spamMsg' => __('no of Spam comments has been removed.', 'wp-ultimate-csv-importer'),
+							'db_commentTrashMsg' => __('no of Comments in trash has been removed.', 'wp-ultimate-csv-importer'),
+							'db_unapprovedMsg' => __('no of Unapproved comments has been removed.', 'wp-ultimate-csv-importer'),
+							'db_pingbackMsg' => __('no of Pingback comments has been removed.', 'wp-ultimate-csv-importer'),
+							'db_trackbackMsg' => __('no of Trackback comments has been removed.', 'wp-ultimate-csv-importer'),
+							) );
+				wp_register_script('bootstrap-js', plugins_url('assets/js/bootstrap.js', __FILE__));
 				wp_enqueue_script('bootstrap-js');
-                wp_register_script('bootstrap-select-js', plugins_url('assets/js/bootstrap-select.js', __FILE__));
+				wp_register_script('bootstrap-select-js', plugins_url('assets/js/bootstrap-select.js', __FILE__));
 				wp_enqueue_script('bootstrap-select-js');
-                //new files include close
+				//new files include close
 				wp_register_script('waitme-js', plugins_url('assets/js/waitMe.js', __FILE__));
 				wp_enqueue_script('waitme-js');
 				// Sweet Alert Js
@@ -240,6 +252,8 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 					wp_enqueue_script( 'uci-dashboard', plugins_url('assets/js/chart-js/Chart.bundle.js', __FILE__) );
 					wp_enqueue_script( 'uci-dashboard-chart', plugins_url( 'assets/js/chart-js/dashchart.js', __FILE__ ) );
 				}
+				//new files include
+				wp_enqueue_style('custom-new-style', plugins_url('assets/css/custom-new-style.css', __FILE__));
 			}
 		}
 
@@ -263,8 +277,18 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 			wp_enqueue_script( 'uci-wp-dash-chart-js', plugins_url('assets/js/chart-js/Chart.bundle.js', __FILE__) );
 			wp_enqueue_script( 'uci-dashboard-chart-widget', plugins_url( 'assets/js/chart-js/dashchart-widget.js', __FILE__ ) );
 			// Add widget on WordPress Dashboard
-			wp_add_dashboard_widget('uci_pro_dashboard_linechart', 'Ultimate-CSV-Importer-Pro-Activity', array('SmackUCIAdmin', 'LineChart'),$screen = get_current_screen(), 'advanced', 'high');
-			wp_add_dashboard_widget('uci_pro_dashboard_piechart', 'Ultimate-CSV-Importer-Pro-Statistics', array('SmackUCIAdmin', 'PieChart'),$screen = get_current_screen() , 'advanced', 'high' );
+			$get_current_user = wp_get_current_user();
+			$role = $get_current_user->roles[0];
+			if( $role == "administrator" ) {
+				wp_add_dashboard_widget( 'uci_pro_dashboard_linechart', 'Ultimate-CSV-Importer-Pro-Activity', array(
+					'SmackUCIAdmin',
+					'LineChart'
+				), $screen = get_current_screen(), 'advanced', 'high' );
+				wp_add_dashboard_widget( 'uci_pro_dashboard_piechart', 'Ultimate-CSV-Importer-Pro-Statistics', array(
+					'SmackUCIAdmin',
+					'PieChart'
+				), $screen = get_current_screen(), 'advanced', 'high' );
+			}
 		}
 
 		/**

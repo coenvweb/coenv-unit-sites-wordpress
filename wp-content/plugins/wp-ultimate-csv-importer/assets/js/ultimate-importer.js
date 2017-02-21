@@ -16,6 +16,38 @@ jQuery(function(){
     });
 });
 
+jQuery(function() {
+    var check_upload_dir = document.getElementById('is_found').value;
+    if(check_upload_dir == "dir not found") {
+       jQuery('<p/>').text("Warning: Sorry. There is no uploads directory Please create it with write permission.").appendTo('#warning');
+       jQuery('#warning p').css('color', 'red');
+       jQuery('#warning').css('font-weight', 'bold'); 
+       jQuery('#warning').css('display', 'block');
+       jQuery('#warningsec').css('display', 'block');
+       jQuery('#panel upload-view').css('visibility', 'hidden');
+       jQuery('.bhoechie-tab-container').css('visibility', 'hidden');
+       jQuery('.list-inline pull-right mb10').css('visibility', 'hidden');
+       jQuery('.clearfix').css('visibility', 'hidden');
+       jQuery('.row').css('visibility', 'hidden');
+       jQuery('.panel-body').css('display', 'none');
+       return false;
+    }
+    var check_permission = document.getElementById('is_perm_found').value;
+    if(check_permission == "perm not found") {
+        jQuery('<p/>').text("Warning: Sorry. There is no permission for your uploads directory. Please provide the write permission.").appendTo('#warning');
+        jQuery('#warning p').css('color', 'red');
+        jQuery('#warning').css('font-weight', 'bold');
+        jQuery('#warning').css('display', 'block');
+        jQuery('#warningsec').css('display', 'block');
+        jQuery('#panel upload-view').css('visibility', 'hidden');
+        jQuery('.bhoechie-tab-container').css('visibility', 'hidden');
+        jQuery('.list-inline pull-right mb10').css('visibility', 'hidden');
+        jQuery('.clearfix').css('visibility', 'hidden');
+        jQuery('.row').css('visibility', 'hidden');
+        jQuery('.panel-body').css('display', 'none');
+   }
+});
+
 // example use
 var timer;
 
@@ -256,6 +288,27 @@ function upload_method(){
                         else {
                             var fileSize = (file.size) + ' byte';
                         }
+			var max_filesize = document.getElementById('upload_max').value;  
+                       	var max_size = 'Please increase the upload_max_filesize in php.ini \n (Or) \n Upload the csv file below ' +  max_filesize + '.';   
+                       	if(fileSize == '0 byte') {
+                               warning = 'Un Supported File Format';
+                           swal({
+                                title: 'Sorry your filesize is exceeded.',
+                                text:  max_size,
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Upload file again?",
+                                closeOnConfirm: false
+                            },
+                            function(){
+                                jQuery('#displaysection').css('display', 'none');
+                                jQuery('#division1').css('display', '');
+                                swal("Deleted!", "Your uploaded file has been deleted.", "success");
+                            });
+                        	document.getElementById('upload_file').value="";
+                        	return false;
+                       	}
                         jQuery("#filenamedisplay").empty();
                         jQuery('<label/>').text((file.uploadedname) + ' - ' + fileSize).appendTo('#filenamedisplay');
                     }
@@ -1287,11 +1340,14 @@ function set_widgetheight(count) {
 
 jQuery(function(){
     jQuery('#duplicate').on('ifChecked', function(){
-        swal('Warning!', 'Please upgrade to PRO for duplicate handling.', 'warning')
+	jQuery('#duplicate_headers').show();
+        document.getElementById('duplicate_conditions').disabled = false;
+        jQuery('.selectpicker').selectpicker('refresh');
     });
 
     jQuery('#duplicate').on('ifUnchecked', function(){
-        swal('Warning!', 'Please upgrade to PRO for duplicate handling.', 'warning')
+	jQuery('#duplicate_headers').hide();
+        jQuery('.selectpicker').selectpicker('refresh');
     });
 });
 
@@ -1343,9 +1399,8 @@ jQuery('#thumbnail_size').on('ifChecked', function(){
 function toggle_configdetails(id) {
     if(id == 'duplicate'){
         if(jQuery('#'+id).is(':checked')){
-            swal('Warning!', 'Please upgrade to PRO for duplicate handling.', 'warning')
-            //jQuery('#duplicate_headers').show();
-            //document.getElementById('duplicate_conditions').disabled = false;
+            jQuery('#duplicate_headers').show();
+            document.getElementById('duplicate_conditions').disabled = false;
         }
         else
             jQuery('#duplicate_headers').hide();
@@ -1777,9 +1832,11 @@ function enable_media_seo_headers(key) {
 
 function enable_mapping_fields(prefix, row_no, id) {
     var selected_option = jQuery('#'+ id + ' option:selected').val();
-    document.getElementById(prefix + "_num_" + row_no).checked = false;
+    jQuery('#' + prefix + "_num_" + row_no).iCheck('uncheck');
     if(selected_option != '--select--')
-        document.getElementById(prefix + "_num_" + row_no).checked = true;
+        jQuery('#' + prefix + "_num_" + row_no).iCheck('check');
+    if(selected_option == '--select--')
+        jQuery('#' + prefix + "_num_" + row_no).iCheck('uncheck');
 }
 
 jQuery(function () {

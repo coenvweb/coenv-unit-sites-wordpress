@@ -119,6 +119,9 @@ class WPPipesEngine_rssreader {
 
 	public static function get_items_feed( $url, $params ) {
 		$cache_path = self::getPath( $url );
+		if(is_file($cache_path) && !$params->cache){
+			unlink($cache_path);
+		}
 		if ( ! self::need_update( $cache_path ) ) {
 			$rows = self::get_cache( $cache_path );
 

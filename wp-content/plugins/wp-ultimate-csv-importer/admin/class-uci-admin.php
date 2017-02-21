@@ -62,19 +62,19 @@ class SmackUCIAdmin extends SmackUCIHelper {
 	 */
 	public static function admin_menus() {
 		global $submenu;
-		add_menu_page(SM_UCI_SETTINGS, SM_UCI_NAME, 'manage_options', SM_UCI_SLUG, array(__CLASS__, 'sm_uci_screens'),plugins_url("assets/images/faviconWT16.png",dirname(__FILE__)));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Dashboard', 'manage_options', 'sm-uci-dashboard', array(__CLASS__, 'sm_uci_screens'));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Import / Update', 'manage_options', 'sm-uci-import', array(__CLASS__, 'sm_uci_screens'));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Managers', 'manage_options', 'sm-uci-managers', array(__CLASS__, 'sm_uci_screens'));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Export', 'manage_options', 'sm-uci-export', array(__CLASS__, 'sm_uci_screens'));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Settings', 'manage_sm_uci_settings', 'sm-uci-settings', array(__CLASS__, 'sm_uci_screens'));
-		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Support', 'manage_options', 'sm-uci-support', array(__CLASS__, 'sm_uci_screens'));
+		add_menu_page(SM_UCI_SETTINGS, SM_UCI_NAME, 'manage_options', SM_UCI_SLUG, array(__CLASS__, 'sm_uci_screens'),plugins_url("assets/images/wp-ultimate-csv-importer.png",dirname(__FILE__)));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Dashboard', 'wp-ultimate-csv-importer') , 'manage_options', 'sm-uci-dashboard', array(__CLASS__, 'sm_uci_screens'));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Import / Update','wp-ultimate-csv-importer'), 'manage_options', 'sm-uci-import', array(__CLASS__, 'sm_uci_screens'));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Managers','wp-ultimate-csv-importer'), 'manage_options', 'sm-uci-managers', array(__CLASS__, 'sm_uci_screens'));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Export','wp-ultimate-csv-importer'), 'manage_options', 'sm-uci-export', array(__CLASS__, 'sm_uci_screens'));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Settings','wp-ultimate-csv-importer'), 'manage_options', 'sm-uci-settings', array(__CLASS__, 'sm_uci_screens'));
+		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, esc_html__('Support','wp-ultimate-csv-importer'), 'manage_options', 'sm-uci-support', array(__CLASS__, 'sm_uci_screens'));
 		unset($submenu[SM_UCI_SLUG][0]);
 	}
 
 	public static function admin_menus_for_other_roles() {
 		global $submenu;
-		add_menu_page(SM_UCI_SETTINGS, SM_UCI_NAME, '2', SM_UCI_SLUG, array(__CLASS__, 'sm_uci_screens'),plugins_url("assets/images/faviconWT16.png",dirname(__FILE__)));
+		add_menu_page(SM_UCI_SETTINGS, SM_UCI_NAME, '2', SM_UCI_SLUG, array(__CLASS__, 'sm_uci_screens'),plugins_url("assets/images/wp-ultimate-csv-importer.png",dirname(__FILE__)));
 		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Dashboard', '2', 'sm-uci-dashboard', array(__CLASS__, 'sm_uci_screens'));
 		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Import / Update', '2', 'sm-uci-import', array(__CLASS__, 'sm_uci_screens'));
 		add_submenu_page(SM_UCI_SLUG, SM_UCI_NAME, 'Managers', '2', 'sm-uci-managers', array(__CLASS__, 'sm_uci_screens'));
@@ -122,7 +122,18 @@ class SmackUCIAdmin extends SmackUCIHelper {
                         <a href="'. esc_url (admin_url() .'admin.php?page=sm-uci-support') . '" class="nav-tab" id = "menu6">'.esc_html__('Support','wp-ultimate-csv-importer').'</a>
                 </h2>
 		        </div>
-				<div id="notification_wp_csv"></div>';
+		<div id="notification_wp_csv"></div>';
+		$myDir = SM_UCI_DEFAULT_UPLOADS_DIR;
+               if(is_dir($myDir)) {
+                echo "<input type='hidden' id='is_found' name='is_found' value='dir found'/>";
+               } else {
+                echo "<input type='hidden' id='is_found' name='is_found' value='dir not found'/>";
+               } if(is_writable($myDir)) {
+                echo "<input type='hidden' id='is_perm_found' name='is_perm_found' value='perm found'/>";
+               } else {
+                echo "<input type='hidden' id='is_perm_found' name='is_perm_found' value='perm not found'/>";
+               }
+
 	}
 
 	public function show_import_screen() {

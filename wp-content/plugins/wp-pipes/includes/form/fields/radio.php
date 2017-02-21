@@ -3,22 +3,22 @@
  * @package     Joomla.Platform
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
 defined('JPATH_PLATFORM') or die;
 
+JFormHelper::loadFieldClass('list');
+
 /**
  * Form Field class for the Joomla Platform.
  * Provides radio button inputs
  *
- * @package     Joomla.Platform
- * @subpackage  Form
- * @link        http://www.w3.org/TR/html-markup/command.radio.html#command.radio
- * @since       11.1
+ * @link   http://www.w3.org/TR/html-markup/command.radio.html#command.radio
+ * @since  11.1
  */
-class JFormFieldRadio extends JFormField
+class JFormFieldRadio extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -27,6 +27,14 @@ class JFormFieldRadio extends JFormField
 	 * @since  11.1
 	 */
 	protected $type = 'Radio';
+
+	/**
+	 * Name of the layout being used to render the field
+	 *
+	 * @var    string
+	 * @since  3.5
+	 */
+	protected $layout = 'joomla.form.field.radio';
 
 	/**
 	 * Method to get the radio button field input markup.

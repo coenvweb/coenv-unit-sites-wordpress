@@ -110,7 +110,7 @@ class PIPESViewPipes extends View {
 						<p class="hide-if-no-customize">
 							or
 						</p>
-						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=http://thimpress.com/wp-content/uploads/pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
+						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=<?php echo plugins_url(); ?>/pipes/sample_pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
 					</div>
 					<div class="welcome-panel-column">
 						<h4>Next Steps</h4>

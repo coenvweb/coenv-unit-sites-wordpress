@@ -61,8 +61,8 @@ $uploadLogURL = $get_upload_url['baseurl'] . '/smack_uci_uploads/imports/'. $eve
 $logfilename = $uploadLogURL.".log";
 ?>
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
-            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
-            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank"><?php echo esc_html__('Documentation','wp-ultimate-csv-importer');?></a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimate-csv-importer');?></a></div>
          </div>
 
 <div class="template_body whole_body wp_ultimate_csv_importer_pro" style="font-size: 15px; margin-top: 40px;">

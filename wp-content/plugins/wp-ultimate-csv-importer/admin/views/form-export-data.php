@@ -57,8 +57,8 @@ $exportType = 'csv';
 <div id='wp_warning' style = 'display:none;' class = 'error'></div>
 <?php if(!isset($_REQUEST['exportType'])) { ?>
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
-            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
-            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank"><?php echo esc_html__('Documentation','wp-ultimate-csv-importer');?></a></div>
+            <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimate-csv-importer');?></a></div>
          </div>
 	<form class="form-horizontal" method="post" name="exportmodule" id="exportmodule" action='<?php echo esc_url(add_query_arg(array('page'=> 'sm-uci-export', 'exportType'=>'export-with-filters'), admin_url() . "admin.php"))?>' onsubmit="return export_module();" >
 		<div class="template_body whole_body wp_ultimate_csv_importer_pro" xmlns="http://www.w3.org/1999/html" style="margin-top: 40px;">
@@ -141,12 +141,12 @@ if($exportType) :
 			<input type="hidden" name="moduletobeexport" id="moduletobeexport" value="<?php echo $module; ?>" >
 			<input type="hidden" name="optional_type" id="optional_type" value="<?php echo $exportAs; ?>" >
 			<input type="hidden" name="offset" id="offset" value="0" >
-			<input type="hidden" name="limit" id="limit" value="100" >
+			<input type="hidden" name="limit" id="limit" value="1000" >
 			<input type="hidden" name="total_row_count" id="total_row_count" value="" >
 			<p>
 			<div class="csv-importer-heading"><h4 class="media_styles"><?php echo esc_html__('To export data based on the filters','wp-ultimate-csv-importer'); ?></h4></div>
 			<p>
-				<label class="media_styles">Export File Name:</label>
+				<label class="media_styles"><?php echo esc_html__('Export File Name:','wp-ultimate-csv-importer');?></label>
 				<input class='form-control' type='text' name='export_filename' id='export_filename' value='' placeholder="export_as_<?php echo(date("Y-m-d")); ?>" size="18" style="width:50% !important;">
 				<a id="download_file_link" href="" target="_blank" class="col-sm-4" style="margin-top: -35px; float: right; display: none;"> <input type="button" name="download_file" id="download_file" class="smack-btn smack-btn-primary btn-radius" style="display: none;" value="Download"></a>
 			</p>
@@ -155,7 +155,7 @@ if($exportType) :
 			
 			<div id='delimiterstatus' class="col-md-12" style='padding:15px;display:none;'>
 				<div class="col-md-5 col-md-offset-1">
-					<label class="export_label"> Delimiters </label><br>
+					<label class="export_label"> <?php echo esc_html__('Delimiters','wp-ultimate-csv-importer');?> </label><br>
 					<select class="selectpicker" name='postwithdelimiter' id='postwithdelimiter' class="search_dropdown_mapping selectpicker">
 						<option>Select</option>
 						<option>,</option>
@@ -164,7 +164,7 @@ if($exportType) :
 						<option>{Tab}</option>
 						<option>{Space}</option>
 					</select></div>
-					<div class="col-md-5"><label class="export_label">Other Delimiters</label> <input type = 'text' class="form-control" name='other_delimiter' id ='other_delimiter' style="width:75% !important;" size=6>
+					<div class="col-md-5"><label class="export_label"><?php echo esc_html__('Other Delimiters','wp-ultimate-csv-importer');?></label> <input type = 'text' class="form-control" name='other_delimiter' id ='other_delimiter' style="width:75% !important;" size=6>
 				</div>
 			</div>
 

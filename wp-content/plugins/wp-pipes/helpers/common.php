@@ -168,7 +168,8 @@ class ogb_common {
 
 		//$li = str_replace('class="hasTooltip"','class="hasTip hasTooltip"', $li);
 		$element = str_replace( '<label', '<label data-toggle="tooltip"', $element );
-		$element = str_replace( 'title=', 'data-original-title=', $element );
+		//$element = str_replace( 'title=', 'data-original-title=', $element );
+		$element = preg_replace( '#(<label[^>]*)title=#i', '$1data-original-title=', $element );
 		//$html = '<div class="ogb-params"><ul class="unstyled config-option-list">'.$li.'</ul><div class="clr"></div></div>';
 		$html = '<div class="ogb-params"><div class="tab-content">' . $element . '</div><div class="clr"></div></div>';
 
@@ -191,11 +192,22 @@ class ogb_common {
 			return null;
 		}
 		$default = file_get_contents( $path );
+		if(!class_exists('SimplePie_Enclosure')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Enclosure.php');
+		}
+		if(!class_exists('SimplePie_Author')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Author.php');
+		}
+		if(!class_exists('SimplePie_Restriction')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Restriction.php');
+		}
 		$default = unserialize( $default );
 		if ( $type == '' ) {
 			return $default;
-		} else {
+		} elseif( isset($default->$type) ) {
 			return $default->$type;
+		}else{
+			return null;
 		}
 	}
 

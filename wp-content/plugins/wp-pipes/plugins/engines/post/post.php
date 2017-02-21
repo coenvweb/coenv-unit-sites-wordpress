@@ -15,13 +15,9 @@ class WPPipesEngine_post {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
 			ogb_pr( $params, 'Params: ' );
 		}
-		$limit = 0;
 		$data = self::getItemsPost( $params );
 		$datas = array();
 		foreach ( $data as $key=>$value ) {
-			if($limit >= (int)$params->limit_items){
-				break;
-			}
 			if (has_post_thumbnail( $value->ID ) ) {
 				$image = wp_get_attachment_image_src( get_post_thumbnail_id( $value->ID ), 'single-post-thumbnail' );
 			}
@@ -32,13 +28,12 @@ class WPPipesEngine_post {
 			$data[$key]->src_url		= isset($value->ID)?get_permalink($value->ID):'';
 			
 			$datas[]					= $data[$key];
-			$limit++;
 		}
 		if ( isset( $_GET['e1'] ) ) {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
 			echo 'Total: ' . count( $datas );
 			ogb_pr( $datas, 'Data: ' );
-		}//var_dump($data);die;
+		}
 
 		return $datas;
 	}
@@ -52,16 +47,21 @@ class WPPipesEngine_post {
 
 
 	public static function getItemsPost( $params ) {
-		global $wpdb;
+		$tags_list = array();
+		if(count($params->tags)){
+			foreach($params->tags as $tag){
+				$tag_obj = get_term_by('slug', $tag, 'post_tag');
+				$tags_list[] = $tag_obj->term_id;
+			}
+		}
 		$just_seven = new WP_Query(
 			array(
+				'tag__in' => $tags_list,
 				'category__in' => $params->categories,
-				'author' => $params->author
+				'author__in' => $params->author,
+				'posts_per_page' => $params->limit_items
 			)
 		);
-		//$tl = count( $rows );
-//		echo "\n<p>URL: " . '<a href="' . $url . '" target="_blank">' . $url . '</a>';
-//		echo "\n<br />[ Found: " . $c_items . ' ][ +' . $tl . ' ][ ' . $obtl . '/' . $limit . ' ]' . "</p>\n";
 
 		return $just_seven->posts;
 	}

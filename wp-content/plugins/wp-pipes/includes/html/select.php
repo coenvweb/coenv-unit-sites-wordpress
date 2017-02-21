@@ -589,7 +589,7 @@ abstract class JHtmlSelect
 			elseif (is_object($element))
 			{
 				$key = $options['option.key'] === null ? $elementKey : $element->$options['option.key'];
-				$text = $element->$options['option.text'];
+				$text = $element->{$options['option.text']};
 
 				if (isset($element->$options['option.attr']))
 				{

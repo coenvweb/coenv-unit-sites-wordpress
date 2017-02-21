@@ -116,7 +116,6 @@ class SmackUCIInstall {
 		if ( is_null( $current_uci_version ) && apply_filters( 'sm_uci_enable_setup_wizard', true ) ) {
 			self::create_options();         // Create option data on the initial stage
 			self::create_tables();          // Create tables on the fresh install
-			self::create_capabilities();    // Create capabilities to the import feasibility
 			#self::create_cron_jobs();       // Create default cron jobs
 			self::create_files();           // Create needed files on the fresh installation
 		}
@@ -155,7 +154,7 @@ class SmackUCIInstall {
 
 		foreach ( self::$db_updates as $version => $updater ) {
 			if ( version_compare( $current_db_version, $version, '<' ) ) {
-				include( $updater );
+				include_once ( $updater );
 				self::update_db_version( $version );
 			}
 		}
@@ -171,11 +170,11 @@ class SmackUCIInstall {
 	public static function cron_schedules( $schedules ) {
 		return array(
 			'wp_ultimate_csv_importer_scheduled_images' => array(
-				'interval' => 1,
+				'interval' => 10, // seconds
 				'display' => __('Schedule images on every second', SM_UCI_SLUG)
 			),
 			'wp_ultimate_csv_importer_scheduled_emails' => array(
-				'interval' => 1,
+				'interval' => 5, // seconds
 				'display' => __('Schedule emails on every second', SM_UCI_SLUG)
 			),
 		);
@@ -319,42 +318,6 @@ class SmackUCIInstall {
 	}
 
 	/**
-	 * Create capabilities.
-	 */
-	public static function create_capabilities() {
-		// Add capability for administrator roles
-		$role = get_role( 'administrator' );
-		$role->add_cap( 'manage_sm_uci_pro');
-		$role->add_cap( 'manage_sm_uci_settings');
-
-		// Add capability for editor roles
-		$e_role = get_role( 'editor' );
-		$e_role->add_cap( 'manage_sm_uci_pro');
-
-		// Add capability for author roles
-		$a_role = get_role( 'author' );
-		$a_role->add_cap( 'manage_sm_uci_pro');
-	}
-
-	/**
-	 * woocommerce_remove_roles function.
-	 */
-	public static function remove_capabilities() {
-		// Remove capability for administrator roles
-		$role = get_role( 'administrator' );
-		$role->remove_cap( 'manage_sm_uci_pro');
-		$role->remove_cap( 'manage_sm_uci_settings');
-
-		// Remove capability for editor roles
-		$e_role = get_role( 'editor' );
-		$e_role->remove_cap( 'manage_sm_uci_pro');
-
-		// Remove capability for author roles
-		$a_role = get_role( 'author' );
-		$a_role->remove_cap( 'manage_sm_uci_pro');
-	}
-
-	/**
 	 * Todo: add PHP docs
 	 */
 	public static function remove_options() {
@@ -402,6 +365,7 @@ class SmackUCIInstall {
 		);
 		foreach ( $files as $file ) {
 			if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
+				@chmod($file['base'], 0777);
 				if ( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) ) {
 					fwrite( $file_handle, $file['content'] );
 					fclose( $file_handle );
@@ -431,15 +395,16 @@ class SmackUCIInstall {
 	public static function plugin_row_meta( $links, $file ) {
 		if ( $file == SM_UCI_PLUGIN_BASENAME ) {
 			$row_meta = array(
-				'docs'    => '<a href="' . esc_url( apply_filters( 'sm_uci_docs_url', 'https://goo.gl/hyU5G1' ) ) . '" title="' . esc_attr( __( 'View WP Ultimate CSV Importer Pro Documentation', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Docs', 'wp-ultimate-csv-importer' ) . '</a>',
-				'videos' => '<a href="' . esc_url( apply_filters( 'sm_uci_videos_url', 'https://goo.gl/RzUvqS' ) ) . '" title="' . esc_attr( __( 'View Videos For WP Ultimate CSV Importer Pro', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Videos', 'wp-ultimate-csv-importer' ) . '</a>',
+				'upgrade_to_csv_pro' => '<a style="font-weight: bold;color: #d54e21;font-size: 105%;" href="' . esc_url( apply_filters( 'upgrade_to_csv_pro_url',  'http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_free&utm_medium=wordpress' ) ) . '" title="' . esc_attr( __( 'Upgrade to Pro', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Upgrade to Pro', 'wp-ultimate-csv-importer' ) . '</a>',
+				'docs'    => '<a href="' . esc_url( apply_filters( 'sm_uci_docs_url', 'http://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv?utm_source=plugin&utm_campaign=csv_importer_pro&utm_medium=wordpress' ) ) . '" title="' . esc_attr( __( 'View WP Ultimate CSV Importer Pro Documentation', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Docs', 'wp-ultimate-csv-importer' ) . '</a>',
+				'videos' => '<a href="' . esc_url( apply_filters( 'sm_uci_videos_url', 'https://www.youtube.com/embed/GbDlQcbnNJY?utm_source=plugin&utm_campaign=csv_importer_free&utm_medium=wordpress' ) ) . '" title="' . esc_attr( __( 'View Videos For WP Ultimate CSV Importer Pro', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Videos', 'wp-ultimate-csv-importer' ) . '</a>',
 				'support' => '<a href="' . esc_url( apply_filters( 'sm_uci_support_url', admin_url() . 'admin.php?page=sm-uci-support' ) ) . '" title="' . esc_attr( __( 'Contact Support', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Support', 'wp-ultimate-csv-importer' ) . '</a>',
-				'free_trail' => '<a href="' . esc_url( apply_filters( 'sm_uci_support_url', 'https://goo.gl/gbS3fs' ) ) . '" title="' . esc_attr( __( 'Get your free trail', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Free Trail', 'wp-ultimate-csv-importer' ) . '</a>',
+				'free_trial' => '<a href="' . esc_url( apply_filters( 'sm_uci_support_url', 'http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_free&utm_medium=wordpress' ) ) . '" title="' . esc_attr( __( 'Get your free trial', 'wp-ultimate-csv-importer' ) ) . '" target="_blank">' . __( 'Free Trial', 'wp-ultimate-csv-importer' ) . '</a>',
 			);
+			unset( $links['edit'] );
+			//unset($links['View details']);
 
-			unset($links['View details']);
-
-			return array_merge( $links, $row_meta );
+			return array_merge( $row_meta, $links );
 		}
 
 		return (array) $links;
@@ -448,7 +413,7 @@ class SmackUCIInstall {
 	public static function showUpgradeNotification($currentPluginMetadata, $newPluginMetadata){
 		// check "upgrade_notice"
 		if (isset($newPluginMetadata->upgrade_notice) && strlen(trim($newPluginMetadata->upgrade_notice)) > 0){
-			echo '<p style="background-color: #d54e21; padding: 10px; color: #f9f9f9; margin-top: 10px"><strong>Important Upgrade Notice:</strong> ';
+			echo '<p style="background-color: #d54e21; padding: 10px; color: #f9f9f9; margin-top: 10px"><strong>'.esc_html__('Important Upgrade Notice:','wp-ultimate-csv-importer').'</strong> ';
 			echo esc_html($newPluginMetadata->upgrade_notice), '</p>';
 		}
 	}
@@ -458,7 +423,18 @@ class SmackUCIInstall {
 		if($get_notice != 'off') {
 			?>
 			<div class="notice notice-error is-dismissible" onclick="dismiss_notices('upgrade_notice');">
-				<p style="margin-top: 10px"><strong>Upgrade Notice: </strong> Download and replace the latest version of <a href="https://wordpress.org/plugins/wp-ultimate-csv-importer/" target="_blank">WP Ultimate CSV Importer</a> for 10x faster import performance with easy user interface. </p>
+				<p style="margin-top: 10px"><strong><?php echo esc_html__('Upgrade Notice:','wp-ultimate-csv-importer');?> </strong> <?php echo esc_html__('Download and replace the latest version of','wp-ultimate-csv-importer');?> <a href="https://wordpress.org/plugins/wp-ultimate-csv-importer/" target="_blank">WP Ultimate CSV Importer</a> <?php echo esc_html__('for 10x faster import performance with easy user interface.','wp-ultimate-csv-importer');?> </p>
+			</div>
+			<?php
+		}
+	}
+
+	public static function important_cron_notice() {
+		$get_notice = get_option('smack_uci_enable_cron_notice');
+		if($get_notice != 'off') {
+			?>
+			<div class="notice notice-error is-dismissible" onclick="dismiss_notices('enable_cron_notice');">
+				<p style="margin-top: 10px"><strong><?php echo esc_html__( 'Notice:', 'wp-ultimate-csv-importer' ); ?> </strong> <?php echo esc_html__( 'To populate Featured images, Please make sure that CRON is enabled in your server.', 'wp-ultimate-csv-importer' ); ?></p>
 			</div>
 			<?php
 		}
@@ -469,7 +445,7 @@ class SmackUCIInstall {
 		if($get_notice != 'off') {
 			?>
 			<div class='notice updated uci-message wc-connect is-dismissible' onclick="dismiss_notices('rating_notice');">
-				<p><?php echo "If you love WP Ultimate CSV Importer show us you care with a 5-star review on <a href='https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post' target='_blank'> wordpress.org! </a>"; ?></p>
+				<p><?php echo esc_html__("If you love WP Ultimate CSV Importer show us you care with a 5-star review on","wp-ultimate-csv-importer")?> <a href='https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post' target='_blank'><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer') ?></a></p>
 			</div>
 			<?php
 		}

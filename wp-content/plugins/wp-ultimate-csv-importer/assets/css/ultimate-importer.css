@@ -8,6 +8,9 @@ height:100%;
 #edit {
 cursor:pointer;
 }
+#warning{
+color:red;
+}
 #corehead {
 cursor:pointer;
 }
