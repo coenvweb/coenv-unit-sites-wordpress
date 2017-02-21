@@ -54,10 +54,10 @@ RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^earthlab.uw.edu [NC]
-RewriteRule ^(.*)$ https://environment.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://environment.uw.edu/research/major-initiatives/earthlab/ [R=307,NC,L]
 
 RewriteCond %{HTTP_HOST} ^earthlab.washington.edu [NC]
-RewriteRule ^(.*)$ https://environment.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://environment.uw.edu/research/major-initiatives/earthlab/ [R=307,NC,L]
 
 # SSL on each domain
 
@@ -243,7 +243,7 @@ RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
 RewriteRule .? - [S=1]
 RewriteRule ^major/?$ undergraduate-students/prospective-students-undergrad/ [R=301,L]
 
-RewriteCond %{HTTP_HOST} !^beta.smea.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
 # weird caching of old bug at launch
 # delete this soon
