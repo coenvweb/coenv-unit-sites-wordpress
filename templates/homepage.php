@@ -253,7 +253,8 @@ wp_reset_postdata();
 	$ctx = stream_context_create(array('http'=>
 		array(
 			'timeout' => 3,  //1200 Seconds is 20 Minutes
-		)
+		),
+        'ssl' => array('verify_peer' => false, 'verify_peer_name' => false),
 	));
     $events_xml = file_get_contents('https://www.trumba.com/calendars/sea_marinebio.rss', false, $ctx );
 	$xml = new SimpleXmlElement($events_xml);
