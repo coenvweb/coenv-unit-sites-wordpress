@@ -347,3 +347,26 @@ add_filter( 'widget_text', 'remove_plaintext_email', 20 );
 if( function_exists('acf_add_options_page') ) {
     acf_add_options_page();
 }
+
+function add_theme_caps() {
+    $contribs = get_role( 'contributor' );
+
+    $contribs->add_cap( 'edit_faculty' );
+    $contribs->add_cap( 'edit_facultys' );
+    $contribs->add_cap( 'edit_other_facultys' );
+    $contribs->add_cap( 'publish_facultys' );
+    $contribs->add_cap( 'read_faculty' );
+    $contribs->add_cap( 'read_private_facultys' );
+    $contribs->add_cap( 'delete_faculty' ); 
+
+    $editors = get_role( 'editor' );
+
+    $editors->add_cap( 'edit_faculty' );
+    $editors->add_cap( 'edit_facultys' );
+    $editors->add_cap( 'edit_other_facultys' );
+    $editors->add_cap( 'publish_facultys' );
+    $editors->add_cap( 'read_faculty' );
+    $editors->add_cap( 'read_private_facultys' );
+    $editors->add_cap( 'delete_faculty' );  
+}
+add_action( 'admin_init', 'add_theme_caps');

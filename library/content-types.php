@@ -9,19 +9,29 @@ function coenv_base_post_types_init() {
   register_post_type( 'faculty',
     array(
       'labels' => array(    
-      'name' => __( 'Faculty' ),
-      'singular_name' => __( 'Faculty' ),
-      'add_new_item' => __( 'Add Faculty'),
-      'edit_item' => __( 'Edit Faculty Member'),
-      'new_item' => __( 'New Faculty'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => 'faculty-research/faculty'),
-    'menu_icon' => 'dashicons-id',
+		  'name' => __( 'Faculty' ),
+		  'singular_name' => __( 'Faculty' ),
+		  'add_new_item' => __( 'Add Faculty'),
+		  'edit_item' => __( 'Edit Faculty Member'),
+		  'new_item' => __( 'New Faculty'),
+		),
+		//'hierarchical' => true,
+		'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+		'public' => true,
+		'has_archive' => false,
+		'show_ui' => true,
+		//'rewrite' => array('slug' => 'faculty-research/faculty'),
+		'menu_icon' => 'dashicons-id',
+		'capabilities' => array(
+			'edit_post' => 'edit_faculty',
+			'edit_posts' => 'edit_facultys',
+			'edit_others_posts' => 'edit_other_facultys',
+			'publish_posts' => 'publish_facultys',
+			'read_post' => 'read_faculty',
+			'read_private_posts' => 'read_private_facultys',
+			'delete_post' => 'delete_faculty'
+		),
+		'map_meta_cap' => true,
     )
 
   );

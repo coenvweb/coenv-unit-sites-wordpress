@@ -179,11 +179,13 @@ function img_unautop($pee) {
 function coenv_base_change_post_label() {
     global $menu;
     global $submenu;
-    $menu[5][0] = 'News';
-    $submenu['edit.php'][5][0] = 'News';
-    $submenu['edit.php'][10][0] = 'Add News';
-    $submenu['edit.php'][16][0] = 'News Tags';
-    echo '';
+    if($menu[5][0] == 'Post') {
+        $menu[5][0] = 'News';
+        $submenu['edit.php'][5][0] = 'News';
+        $submenu['edit.php'][10][0] = 'Add News';
+        $submenu['edit.php'][16][0] = 'News Tags';
+        echo '';
+    }
 }
 function coenv_base_change_post_object() {
     global $wp_post_types;
