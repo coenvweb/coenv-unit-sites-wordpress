@@ -3,10 +3,13 @@
   Template Name: Journal
 */
 
+$journal = getQRFeed();
+
 $journal_date = get_field('journal_date', 'option');
 $journal_volume = get_field('journal_volume', 'option');
 $journal_issue = get_field('journal_issue', 'option');
 $journal_cover = get_field('journal_cover', 'option');
+$journal_link = get_field('latest_issue_link', 'option');
 
 ?>
 <?php get_header(); ?>
@@ -36,7 +39,7 @@ $journal_cover = get_field('journal_cover', 'option');
             <h3>Current Issue</h3>
 
             <div class="journal-cover">
-                <img class="" src="<?php echo $journal_cover['url']; ?>" alt="<?php echo $journal_cover['alt']; ?>" />
+                <img class="" src="<?php echo $journal_cover; ?>" alt="Current QR Issue Cover" />
             </div>
 
             <ul class="journal-meta">
@@ -47,18 +50,21 @@ $journal_cover = get_field('journal_cover', 'option');
 
             <div class="journal-articles">
             <?php
-                if( have_rows('journal_articles', 'options') ) {
-
+                if(count($journal->feeds) >= 3) {
+                    array_pop($journal->feeds);
+                    array_pop($journal->feeds);
+                    shuffle($journal->feeds);
                     echo '<h3>Recent Journal Articles</h3>';
                     echo '<ul class="article-list">';
-                        while ( have_rows('journal_articles', 'options') ) : the_row();
-
-                            $title = get_sub_field('article_title');
-                            $link = get_sub_field('article_link');
-                            echo '<a href="'.$link.'"><li>'.$title.'</li></a>';
-
-                        endwhile;
+                    $count = 0;
+                    foreach($journal->feeds as $feed) {
+                        if($count < 5) {
+                            echo '<a href="'.$feed->articleUrl.'"><li>'.$feed->title.'</li></a>';
+                        }
+                        $count++;
+                    }
                     echo '</ul>';
+                    echo '<p>View the <a href="'.$journal_link.'">latest issue</a></p>';
                 }
             ?>
             </div>

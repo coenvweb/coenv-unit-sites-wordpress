@@ -1,13 +1,13 @@
 {
     "key": "group_577d6800b7ad1",
-    "title": "Homepage Journal Info",
+    "title": "Journal Info",
     "fields": [
         {
             "key": "field_577d68186db79",
             "label": "Journal Description",
             "name": "journal_description",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "A short description to display on the journal info section of the homepage",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,13 +18,30 @@
             "default_value": "",
             "tabs": "all",
             "toolbar": "full",
-            "media_upload": 0
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_58b5b13d09040",
+            "label": "QR Site Link",
+            "name": "qr_site_link",
+            "type": "url",
+            "instructions": "Link to QR site home on cambridge",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
         },
         {
             "key": "field_577d68486db7a",
             "label": "Current Journal Date",
             "name": "journal_date",
-            "type": "date_picker",
+            "type": "text",
             "instructions": "",
             "required": 1,
             "conditional_logic": 0,
@@ -33,9 +50,11 @@
                 "class": "",
                 "id": ""
             },
-            "display_format": "d\/m\/Y",
-            "return_format": "d\/m\/Y",
-            "first_day": 1
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         },
         {
             "key": "field_577d687f6db7b",
@@ -83,7 +102,7 @@
             "key": "field_577d68ee6db7d",
             "label": "Journal Cover",
             "name": "journal_cover",
-            "type": "image",
+            "type": "url",
             "instructions": "",
             "required": 1,
             "conditional_logic": 0,
@@ -92,16 +111,8 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
-            "preview_size": "full",
-            "library": "all",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": 10,
-            "mime_types": ""
+            "default_value": "",
+            "placeholder": ""
         },
         {
             "key": "field_577d692e6db7e",
@@ -137,5 +148,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1467836915
+    "modified": 1488303419
 }

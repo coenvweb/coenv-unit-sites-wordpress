@@ -309,3 +309,47 @@ add_action('publish_future_post', 'single_sticky_only');
 if(function_exists('acf_add_options_page')) {
     acf_add_options_page();
 }
+
+function getQRFeed() {
+    $feed_url = 'https://www.cambridge.org/core/journals/quaternary-research/latest-issue/feed';
+	$journal_json = get_transient('journal_json');
+    if($journal_json == false || $journal_json == '') {
+		$ctx = stream_context_create(array('http'=>
+			array(
+				'timeout' => 3,  //1200 Seconds is 20 Minutes
+			),
+			'ssl' => array('verify_peer' => false, 'verify_peer_name' => false),
+		));
+      	$journal_json = file_get_contents( $feed_url, false, $ctx);
+
+		//store journal info for later
+      	set_transient( 'journal_json', $journal_json, 60 * MINUTE_IN_SECONDS );
+
+		$journal = json_decode($journal_json);
+
+		$firstArticle = $journal->feeds[0];
+
+		update_field('journal_volume', $firstArticle->volume, 'options');
+		update_field('journal_issue', $firstArticle->issue, 'options');
+		update_field('journal_cover', $firstArticle->issueCoverUrl, 'options');
+		update_field('journal_date', $firstArticle->pubDate[2]->month . '/' . $firstArticle->pubDate[2]->day . '/' . $firstArticle->pubDate[2]->year, 'options');
+		update_field('latest_issue_link', $firstArticle->issueUrl, 'options');
+
+		return $journal;
+
+    } else {
+        return json_decode($journal_json);
+    }
+}
+
+if( !current_user_can( 'administrator' ) ) {
+	function disable_acf_load_field( $field ) {
+		$field['disabled'] = 1;
+		return $field;
+	}
+	add_filter('acf/load_field/name=journal_date', 'disable_acf_load_field');
+	add_filter('acf/load_field/name=journal_volume', 'disable_acf_load_field');
+	add_filter('acf/load_field/name=journal_issue', 'disable_acf_load_field');
+	add_filter('acf/load_field/name=journal_cover', 'disable_acf_load_field');
+	add_filter('acf/load_field/name=latest_issue_link', 'disable_acf_load_field');
+}

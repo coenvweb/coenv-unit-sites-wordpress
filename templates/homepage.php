@@ -87,12 +87,14 @@ echo '</div>';
     Journal Info from Options Page
 */
 
+$journal = getQRFeed();
+
 $journal_desc = get_field('journal_description', 'option');
 $journal_date = get_field('journal_date', 'option');
 $journal_volume = get_field('journal_volume', 'option');
 $journal_issue = get_field('journal_issue', 'option');
 $journal_cover = get_field('journal_cover', 'option');
-$journal_link = get_field('latest_issue_link', 'option');
+$journal_link = get_field('qr_site_link', 'option');
 
 ?>
     <div class="large-6 columns">
@@ -105,7 +107,7 @@ $journal_link = get_field('latest_issue_link', 'option');
             </ul>
 
             <div class="journal-cover">
-                <img class="" src="<?php echo $journal_cover['url']; ?>" alt="<?php echo $journal_cover['alt']; ?>" />
+                <img class="" src="<?php echo $journal_cover; ?>" alt="Current QR Cover" />
             </div>
 
             <p class="journal-desc"><?php echo $journal_desc; ?></p>
