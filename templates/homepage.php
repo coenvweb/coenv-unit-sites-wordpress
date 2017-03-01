@@ -117,90 +117,95 @@ $journal_link = get_field('qr_site_link', 'option');
                 <a class="button" href="<?php echo home_url() . '/journal/'; ?>">Learn More</a>
             </div>
 
+            <?php
+            # News with featured news
+
+            $sticky = get_option( 'sticky_posts' );
+            $posts_on_home = 3; //set posts_per_page here
+
+            $home_args = array(
+                'post_type' => 'post',
+                'posts_per_page' => $posts_on_home - count($sticky),
+                'post_status' => 'publish',
+            );
+
+            $wp_query = new WP_Query( $home_args );
+            ?>
+                <?php if ($wp_query->have_posts()): ?>
+                <div class="home-news-section">
+                    
+                    <h2 style="margin-top: 0; padding-top: 0;">News</h2>
+                    <?php
+                    # The Loop
+                    while ( $wp_query->have_posts() ) :
+                    $wp_query->the_post();
+                    $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+                    if (get_field('story_link_url')) {
+                        $post_link_url = get_field('story_link_url');
+                        $post_link_target = ' target="_blank" ';
+                        $post_link = '<p><a class="button full_button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                    } else {
+                        $post_link_url = get_the_permalink();
+                        $post_link = '<a class="button full_button" href="' . $post_link_url . '">Read more</a>';
+                    }
+
+                    if(is_sticky(get_the_ID())) {
+                        echo '<div class="featured-news home-news">';
+                        if(has_post_thumbnail() ) {
+                            $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
+                            $alt = get_post_meta(get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true);
+                            echo '<div class="featured-thumbnail">';
+                                echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+                                    echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
+                                echo '</a>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<div class="small-news home-news">';
+                    }
+                        echo '<div class="post-meta">';
+                            echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                            // Get categories
+                            $more_terms = wp_get_post_terms(get_the_id(), 'category');
+                            if (!empty($more_terms)) {
+                                $more_terms_arr = array();
+
+                                foreach ($more_terms as &$term) {
+                                    if ($term->slug != 'uncategorized') {
+                                        $more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                                    }
+                                }   
+                                $more_terms_str = ' | ' . implode(', ', $more_terms_arr);
+
+                            } else {
+                                $more_terms_str = '';
+                            }
+                            $more_terms = "";
+                            echo $more_terms_str;
+                        echo '</div>';
+                        echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
+                        echo '<div class="featured-content">';
+                            
+                            echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
+                        echo '</div>';
+                        echo $post_link;
+                    echo '</div>';
+
+                endwhile;
+                ?>
+            <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="large-6 columns">
+        <div class="reasearch-funding">
+            <?php dynamic_sidebar('home-research'); ?>
         </div>
         <div class="events">
             <?php dynamic_sidebar('home-events'); ?>
         </div>
     </div>
-
-<?php
-# News with featured news
-
-$sticky = get_option( 'sticky_posts' );
-$posts_on_home = 3; //set posts_per_page here
-
-$home_args = array(
-    'post_type' => 'post',
-    'posts_per_page' => $posts_on_home - count($sticky),
-    'post_status' => 'publish',
-);
-
-$wp_query = new WP_Query( $home_args );
-?>
-	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-section large-6 columns">
-        
-		<h2 style="margin-top: 0; padding-top: 0;">News</h2>
-		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-        $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
-        if (get_field('story_link_url')) {
-            $post_link_url = get_field('story_link_url');
-            $post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button full_button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-            $post_link_url = get_the_permalink();
-            $post_link = '<a class="button full_button" href="' . $post_link_url . '">Read more</a>';
-        }
-
-        if(is_sticky(get_the_ID())) {
-            echo '<div class="featured-news home-news">';
-            if(has_post_thumbnail() ) {
-                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
-                $alt = get_post_meta(get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true);
-                echo '<div class="featured-thumbnail">';
-                    echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-                        echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
-                    echo '</a>';
-                echo '</div>';
-            }
-        } else {
-            echo '<div class="small-news home-news">';
-        }
-            echo '<div class="post-meta">';
-                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-                // Get categories
-                $more_terms = wp_get_post_terms(get_the_id(), 'category');
-                if (!empty($more_terms)) {
-                    $more_terms_arr = array();
-
-                    foreach ($more_terms as &$term) {
-                        if ($term->slug != 'uncategorized') {
-                            $more_terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
-                        }
-                    }   
-                    $more_terms_str = ' | ' . implode(', ', $more_terms_arr);
-
-                } else {
-                    $more_terms_str = '';
-                }
-                $more_terms = "";
-                echo $more_terms_str;
-            echo '</div>';
-            echo '<a href="' . $post_link_url . '"><h4>' . get_the_title() . '</h4></a>';
-            echo '<div class="featured-content">';
-                
-                echo '<p>' . the_advanced_excerpt('length=20&finish=sentence') . '</p>';
-            echo '</div>';
-            echo $post_link;
-        echo '</div>';
-
-	endwhile;
-	?>
-<?php endif; ?>
-</div>
 <?php wp_reset_postdata(); 
 wp_reset_query(); //roll back query vars to as per the request ?>
 </div>
