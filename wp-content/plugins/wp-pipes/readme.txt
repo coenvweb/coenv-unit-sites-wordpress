@@ -150,6 +150,17 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.25 =
+* Improve: Add new button in Settings page to restore the configurations of WPPipes to default value.
+* Improve: Add new button in All Pipes page to create tables in case they are missing after installing.
+* Change: Provide more info about our other products.
+
+= 1.24 =
+* Fix: work more properly with PHP7.
+* Fix: corrected links in back end of WPPipes.
+* Improve: add new button in Settings page to delete Cache folder.
+* Improve: add new input field in Post Destination, WPPipes could create new categories automatically.
+
 = 1.23 =
 * Fix: changed name of my_enqueue function for avoiding the conflict with other plugins.
 * Fix: put an example pipe into the root folder of WPPipes plugin. Users could call it via Import Sample Pipe button.

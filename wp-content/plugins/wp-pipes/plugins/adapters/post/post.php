@@ -88,8 +88,9 @@ class WPPipesAdapter_post {
 		$dup_id = self::checkDuplicate( array( 'title' => $data->title, 'slug' => $data->slug ) );
 		$action = '';
 		$msg    = '';
+		$force_update      = isset( $params->force_update ) && $params->force_update == 1;
 		if ( $dup_id > 0 ) {
-			if ( isset( $_GET['u'] ) ) {
+			if ( isset( $_GET['u'] ) || $force_update == 1 ) {
 				$action = 'Update';
 				$msg    = 'Update - id:' . $dup_id;
 			} else {
@@ -157,7 +158,7 @@ class WPPipesAdapter_post {
 
 		$post = array();
 		if ( $uid > 0 ) {
-			$post['ID'] = $uid;
+			$post = get_post($uid, ARRAY_A);
 		}
 
 		$post['post_title'] = wp_strip_all_tags( $data->title );
@@ -171,6 +172,28 @@ class WPPipesAdapter_post {
 
 		$post['post_status']   = $params->public;
 		$post_cate             = is_array( $params->category ) ? $params->category : array( $params->category );
+		if ( $data->category != '' ) {
+			$categories = explode( "|", $data->category );
+			$list_cate  = array();
+			foreach ( $categories as $cats ) {
+				$sub_cat = trim($cats);
+				$term    = term_exists( $sub_cat, 'category' );
+				if ( $term !== 0 && $term !== null ) {
+					$new_cat_id = $term['term_id'];
+				} else {
+					$cat_defaults = array(
+						'cat_ID'               => 0,
+						'cat_name'             => $sub_cat,
+						'category_description' => '',
+						'category_nicename'    => sanitize_title( $sub_cat ),
+						'category_parent'      => 0,
+						'taxonomy'             => 'category'
+					);
+					$new_cat_id   = wp_insert_category( $cat_defaults );
+				}
+				$post_cate[] = $new_cat_id;
+			}
+		}
 		$post['post_category'] = $post_cate;
 		$post['post_date']     = $created;
 		$post['post_date_gmt'] = $created;
@@ -266,7 +289,7 @@ class WPPipesAdapter_post {
 			$custom_fields = array();
 		}
 		$data          = new stdClass();
-		$inputs        = 'title,slug,excerpt,content,date,images,metakey';
+		$inputs        = 'title,slug,excerpt,content,date,images,metakey,category';
 		$data->input   = explode( ',', $inputs );
 		$data->input   = array_unique( array_merge ( $data->input, $custom_fields ) );
 

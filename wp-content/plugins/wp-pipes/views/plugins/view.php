@@ -19,7 +19,8 @@ class PIPESViewPlugins extends View {
 	
 	public function display(){
 		$model = $this->getModel();
-		$this->data = $model->getPipesPlugins();		
+		$this->data = $model->getPipesPlugins();
+		do_action( 'wppipes_loaded_ads' );
 		parent::display();
 	}
 

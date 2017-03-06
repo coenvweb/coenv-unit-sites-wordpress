@@ -69,6 +69,112 @@ class PIPESControllerPipes extends Controller {
 		//$this->display();
 	}
 
+	public function create_tables(){
+		global $wpdb;
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+#--------------------------------------------------
+# Add user_meta for all admins
+#--------------------------------------------------
+		$users     = get_users();
+		$user_meta = array( 'pipes_help_box' => 1, 'pipes_per_page' => 20, 'addons_per_page' => 20 );
+		foreach ( $users as $user ) {
+			if ( is_super_admin( $user->ID ) ) {
+				foreach ( $user_meta as $meta_key => $value ) {
+					$meta_value = get_user_meta( $user->ID, $meta_key, true );
+					if ( $meta_value == '' ) {
+						update_user_meta( $user->ID, $meta_key, $value );
+					}
+				}
+			}
+		}
+
+#--------------------------------------------------
+# Create Items table
+#--------------------------------------------------
+
+
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			if ( ! empty( $wpdb->charset ) ) {
+				$collation .= "DEFAULT CHARACTER SET $wpdb->charset";
+			}
+			if ( ! empty( $wpdb->collate ) ) {
+				$collation .= " COLLATE $wpdb->collate";
+			}
+		}
+
+		$sql = 'CREATE TABLE IF NOT EXISTS `' . $wpdb->prefix . 'wppipes_items` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`name` varchar(255) NOT NULL,
+			`published` tinyint(1) NOT NULL,
+			`engine` varchar(100) NOT NULL,
+			`engine_params` text NOT NULL,
+			`adapter` varchar(100) NOT NULL,
+			`adapter_params` text NOT NULL,
+			`inherit` int(11) NOT NULL DEFAULT "0",
+			`inputs` text NOT NULL,
+			`outputs` text NOT NULL,
+			PRIMARY KEY (`id`)
+	  	) ' . $collation;
+		dbDelta( $sql );
+
+
+#--------------------------------------------------
+# Create Pipes table
+#--------------------------------------------------
+		$sql = 'CREATE TABLE IF NOT EXISTS `' . $wpdb->prefix . 'wppipes_pipes` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`code` varchar(100) NOT NULL,
+			`name` varchar(100) NOT NULL,
+			`item_id` int(11) NOT NULL,
+			`params` text NOT NULL,
+			`ordering` int(11) NOT NULL,
+			PRIMARY KEY (`id`)
+		) ' . $collation;
+		dbDelta( $sql );
+		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+		exit();
+	}
+
+	public function pipes_restore_default_options() {
+		global $pipes_settings;
+		include_once( dirname(dirname( __FILE__ )) . DS . 'settings-init.php' );
+		foreach ( $pipes_settings as $section ) {
+			foreach ( $section as $value ) {
+				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
+					update_option( $value['id'], $value['default'] );
+				}
+			}
+		}
+		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+		exit();
+	}
+
+	public function delete_cache_folder(){
+		$dirPath = OGRAB_CACHE;
+		$this->deleteDirCache($dirPath);
+		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+		exit();
+	}
+
+	function deleteDirCache($dirPath){
+		if (! is_dir($dirPath)) {
+			throw new InvalidArgumentException("$dirPath must be a directory");
+		}
+		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+			$dirPath .= '/';
+		}
+		$files = glob($dirPath . '*', GLOB_MARK);
+		foreach ($files as $file) {
+			if (is_dir($file)) {
+				self::deleteDirCache($file);
+			} else {
+				unlink($file);
+			}
+		}
+		rmdir($dirPath);
+	}
+
 	public function move_to_draft() {
 		$mod = $this->getModel( 'pipes' );
 		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';

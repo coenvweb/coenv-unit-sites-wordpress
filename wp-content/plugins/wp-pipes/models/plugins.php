@@ -152,7 +152,7 @@ class PIPESModelPlugins extends Model {
 	}
 
 	public function getAllPipesPlugins(){
-		$plugins_cache_file = OGRAB_CACHE . 'plugins';
+		$plugins_cache_file = OGRAB_CACHE . 'plugins.txt';
 		$plugins_json		= '';
 		$plugins			= array();
 		if ( is_file( $plugins_cache_file ) ) {

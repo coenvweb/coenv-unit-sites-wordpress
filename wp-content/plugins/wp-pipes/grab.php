@@ -82,6 +82,9 @@ class obGrab {
 		if(!class_exists('SimplePie_Author')){
 			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Author.php');
 		}
+		if(!class_exists('SimplePie_Credit')){
+			require_once(OBGRAB_SITE.'plugins'.DS.'engines'.DS.'rssreader'.DS.'helpers'.DS.'library'.DS.'SimplePie'.DS.'Credit.php');
+		}
 		$row = unserialize( $row );
 		if ( isset( $_GET['x2'] ) ) {
 			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";

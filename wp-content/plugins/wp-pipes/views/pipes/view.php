@@ -20,6 +20,7 @@ class PIPESViewPipes extends View {
 	public function display() {
 		$model            = $this->getModel();
 		$this->itemsTable = $model->getTable();
+		do_action( 'wppipes_loaded_ads' );
 		//$this->_layout= 'bs3';
 		parent::display();
 	}
@@ -56,8 +57,8 @@ class PIPESViewPipes extends View {
 		// Help Sidebar
 		$screen->set_help_sidebar(
 			'<p>' . __( '<strong>For more information:</strong>' ) . '</p>' .
-			'<p>' . __( '<a href="http://foobla.com/wordpress/pipes">Documentation on Pipes Manager</a>' ) . '</p>' .
-			'<p>' . __( '<a href="http://foobla.com/forums">Support Forums</a>' ) . '</p>'
+			'<p>' . __( '<a href="https://www.youtube.com/watch?v=zLHFqAHQj2A">Video on Creating a Pipe</a>' ) . '</p>' .
+			'<p>' . __( '<a href="http://thimpress.com/forums/forum/plugins/forum-pipes/">Support Forums</a>' ) . '</p>'
 //			. '<p>' . __( '<a href="http://www.youtube.com/v/TO3g-_wErEI?autoplay=1&vq=hd1080" class="button button-primary"><span class="fa fa-youtube-play" title=""></span> Video Tutorial</a>' ) . '</p>'
 		);
 
@@ -90,6 +91,8 @@ class PIPESViewPipes extends View {
 	}
 
 	function metabox_help( $data = '' ) {
+		$exist_db = ogb_common::check_existed_db();
+		$area = ogb_common::ip_info("Visitor", "Country");
 		require_once( OBGRAB_HELPERS . 'requirements.php' );
 		$requirements = new AppRequirements;
 		?>
@@ -111,6 +114,12 @@ class PIPESViewPipes extends View {
 							or
 						</p>
 						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=<?php echo plugins_url(); ?>/pipes/sample_pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
+						<?php if($exist_db): ?>
+							<p style="color: red;">
+								Notice: the install process was not completed! Please click below button to create necessary tables.
+							</p>
+							<a href="admin.php?page=pipes.pipes&task=create_tables" class="button button-primary button-default">Create Tables</a>
+						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
 						<h4>Next Steps</h4>
@@ -137,26 +146,36 @@ class PIPESViewPipes extends View {
 								<i class="fa fa-shopping-cart fa-fw fa-lg"></i>
 								<a href="http://foob.la/pipestore" target="_blank">Checkout Pipes Marketplace</a>
 							</li>
+							<?php if($area != '' && $area != 'Vietnam'){?>
+								<li>
+									<i class="fa fa-hourglass-start fa-fw fa-lg"></i>
+									<a href="http://foob.la/sgcron" style="color: red;" target="_blank">How to Set up Schedule for each pipe!</a>
+								</li>
+							<?php } ?>
 						</ul>
 					</div>
 					<div class="welcome-panel-column welcome-panel-last">
 						<h4>Explore my power</h4>
 						<ul>
 							<li>
-								Create Posts from RSS Feed, Facebook...
+								Create Posts from RSS Feed, Youtube, Email...
 							</li>
 							<li>
 								Create RSS Feed from Posts, WooCommerce...
 							</li>
 							<li>
-								Create WooCommerce Products from Amazon...
+								Create WooCommerce Products from Amazon, CDV files...
+							</li>
+							<li>
+								Tweet on Twitter from RSS feeds, post...
+							</li>
+							<li>
+								Post content onto WordPress.com, Blogspot...
 							</li>
 							<li>
 
 							</li>
 						</ul>
-						<p>Find out
-							<a href="http://foob.la/pipepower" target="_blank">more things you can do with me</a></p>
 					</div>
 				</div>
 			</div>

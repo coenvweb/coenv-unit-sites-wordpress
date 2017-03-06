@@ -25,6 +25,11 @@
 			<fieldset name="basic">
 				<field name="category" multiple="1" class="fullwidth" type="postcategories" label="Categories"
 					   description="The categories that this feed is assigned to. Press Ctrl while selecting multiple categories."/>
+				<field name="force_update" type="list" class="form-control" default="0" label="Force Update"
+					   description="Do you want to run update method via cronjob?">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="postformat" type="postformat" default="0" label="Post Format"

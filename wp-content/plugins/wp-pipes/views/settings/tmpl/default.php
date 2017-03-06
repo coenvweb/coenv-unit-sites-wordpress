@@ -68,7 +68,7 @@ echo PIPES::show_message( false );
 									<label title="Yes"><input type="radio" name="' . $setting->option_name . '" value="1" ' . ( ( $setting->option_value == 1 ) ? 'checked="checked"' : '' ) . '>
 									<span>Yes, I want to run my Pipes automatically when someone access my Wordpress site.</span></label><br>
 									<label title="No"><input type="radio" name="' . $setting->option_name . '" value="0" ' . ( ( $setting->option_value == 0 ) ? 'checked="checked"' : '' ) . '>
-									<span>No, I will create a cronjob task myself to run the script <a href="'.get_site_url().'/?pipes=cron&task=callaio" target="_blank">'.get_site_url().'/?pipes=cron&task=callaio</a>. More instruction can be found at <a href="http://thimpress.com/settings-up-cronjob-schedule-for-pipes/" target="_blank">this cronjob guideline</a></span>.</label><br />
+									<span>No, I will create a cronjob task myself to run the script <a href="'.get_site_url().'/?pipes=cron&task=callaio" target="_blank">'.get_site_url().'/?pipes=cron&task=callaio</a>. More instruction can be found at <a href="http://thimpress.com/schedule-auto-posting-pipes-cron-job/" target="_blank">this cronjob guideline</a></span>.</label><br />
 									</fieldset>';
 						if($this->area != '' && $this->area != 'Vietnam'){
 							echo '<span style="color:red;">One of our partners released a plugin for you setting up cronjob with any specific pipes. Check it out at <a href="http://virtualstuff.info/product/cronjob-single-pipe/" alt="cronjob single pipe">http://virtualstuff.info/product/cronjob-single-pipe/</a></span>';
@@ -157,6 +157,8 @@ echo PIPES::show_message( false );
 
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes" />
+			<a href="admin.php?page=pipes.pipes&task=pipes_restore_default_options" class="btn btn-primary btn-default" style="float: right;">Restore</a>
+			<a href="admin.php?page=pipes.pipes&task=delete_cache_folder" class="btn btn-primary btn-default" style="float: right; margin-right: 20px;">Clear Cache</a>
 		</p>
 	</form>
 </div>

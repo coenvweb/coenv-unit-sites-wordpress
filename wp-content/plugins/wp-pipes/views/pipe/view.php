@@ -23,7 +23,7 @@ class PIPESViewPipe extends View {
 
 	public function display() {
 		$id = filter_input( INPUT_GET, 'id' );
-
+		do_action( 'wppipes_loaded_ads' );
 		$model = $this->getModel();
 
 //		$item	= $this->get('EditData');
@@ -96,8 +96,8 @@ class PIPESViewPipe extends View {
 		// Help Sidebar
 		$screen->set_help_sidebar(
 			'<p>' . __( '<strong>For more information:</strong>' ) . '</p>' .
-			'<p>' . __( '<a href="http://foobla.com/wordpress/pipes">Documentation on Creating a Pipe</a>' ) . '</p>' .
-			'<p>' . __( '<a href="http://foobla.com/forums">Support Forums</a>' ) . '</p>'
+			'<p>' . __( '<a href="https://www.youtube.com/watch?v=zLHFqAHQj2A">Video on Creating a Pipe</a>' ) . '</p>' .
+			'<p>' . __( '<a href="http://thimpress.com/forums/forum/plugins/forum-pipes/">Support Forums</a>' ) . '</p>'
 //			. '<p>' . __( '<a href="http://www.youtube.com/v/TO3g-_wErEI?autoplay=1&vq=hd1080" class="button button-primary"><span class="fa fa-youtube-play" title=""></span> Video Tutorial</a>' ) . '</p>'
 		);
 	}
