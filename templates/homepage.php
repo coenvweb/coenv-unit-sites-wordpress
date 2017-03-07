@@ -303,105 +303,14 @@ Template Name: Homepage
 							</a>
 			        	</div>
 			        </div>
-
-
-
-
-
-
 		</div>
 		<?php if ( !empty( $featured ) ): ?></div><?php endif; ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			<?php } ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		<?php if ( !empty( $featured ) ): ?></div><?php endif; ?>
 	</div>
 </div>
+
+<?php if(have_rows('homepage_statistics', 'options')) { ?>
 
 <div class="full-stats">
 	<div class="row">
@@ -409,29 +318,26 @@ Template Name: Homepage
 				<h2>Stats &amp; Info</h2>
 				<div class="large-12">
 					<div class="row stats">
+                        <?php while(have_rows('homepage_statistics', 'options')): the_row(); ?>
 						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">19</div>
-							<div class="stat-label">Projects in 2015</div>
+							<div class="stat-value"><?php echo get_sub_field('value'); ?></div>
+							<div class="stat-label"><?php echo get_sub_field('label'); ?></div>
 						</div>
-						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">90</div>
-							<div class="stat-label">Partners in the Field</div>
-						</div>
-						<div class="large-4 medium-4 small-12 columns">
-							<div class="stat-value">725</div>
-							<div class="stat-label">Publications</div>	
-						</div>
+                        <?php endwhile; ?>
 					</div>
-						<div class="large-12 text-center"><a class="button" href="/our-work/">Learn More About Our Work</a></div>
+                    <?php while(have_rows('homepage_statistics_link', 'options')): the_row(); ?>
+					    <div class="large-12 text-center"><a class="button" href="<?php echo get_sub_field('link_to'); ?>"><?php echo get_sub_field('link_label'); ?></a></div>
+                    <?php endwhile; ?>
 				</div>
 		</div>
 	</div>
 </div>
+<?php } ?>
 <div class="full-learn-more">
 	<div class="row">
 		<div class="small-12 columns">
 			<h2>Learn More About the Climate Impacts Group</h2>
-			<p>The Climate Impacts Group conducts pioneering research on climate variability, climate change, and climate impacts, and works with public and private entities to apply this information in risk assessment, planning, and decision making. Through research and interaction with stakeholders, we work to increase community and ecosystem resilience to fluctuations in climate.</p>
+			<p><?php echo get_field('meta_description', 'options'); ?></p>
 			<ul class="links">
 				<li><a class="button" href="/about/what-we-do/">Learn More</a></li>
 				<li><a class="button" href="/about-cig/contact-us/">Contact Us</a></li>
