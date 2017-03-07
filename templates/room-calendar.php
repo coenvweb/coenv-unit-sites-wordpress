@@ -14,6 +14,9 @@ get_header(); ?>
 	<?php dynamic_sidebar("before-content"); ?>
 	<?php while (have_posts()) : the_post(); ?>
 		<article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
+            <header class="article__header">
+                <h1 class="article__title"><?php the_title(); ?></h1>
+            </header>
 			<?php do_action('foundationPress_page_before_entry_content'); ?>
 			<div class="entry-content">
                 <?php the_content() ?>
