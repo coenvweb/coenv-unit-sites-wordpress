@@ -216,6 +216,46 @@ function foo_register_alt_version_features($features) {
 add_filter('bu_alt_versions_feature_support', 'foo_register_alt_version_features');
 
 /* 
+ * Category filters for WPQuery project template
+ */
+function coenv_base_proj_cat_filter($tax,$tax_value,$meta) {
+
+$tax_obj = get_taxonomy($tax);
+$tax_str = $tax_obj->labels->name;
+
+$meta_query = array(
+	array(
+		'key' => 'funding_type',
+		'value' => $meta,
+		'compare' => '=',
+	),
+);
+
+$query_args = array(
+	'post_type' => 'member_projects',
+	'post_status' => 'publish',
+	'posts_per_page' => -1,
+	'meta_query' => $meta_query,
+	'fields' => 'ids',
+);
+
+$wp_query = new WP_Query($query_args);
+
+$cats = wp_get_object_terms($wp_query->posts, $tax);
+	if ($cats) {
+		echo '<select name="select-category" class="select-category" id="select-category">';
+		echo '<option class="level-0" value="' . get_the_permalink() . '">All ' . $tax_str . '</option>';
+		foreach($cats as $cat) { 
+			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+			echo $cat->slug;
+			echo $tax_value;
+			echo '<option value="' . $tax . '/' . $cat->slug . '/"' . $selected . '>' . $cat->name . '</option>';
+		}
+		echo '</select>';
+	}
+}
+
+/*
  * Category filters for WPQuery templates (blog, publications, faculty, etc.)
  */
 function coenv_base_cat_filter($tax,$tax_value) {

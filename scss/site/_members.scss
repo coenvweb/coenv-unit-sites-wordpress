@@ -21,13 +21,18 @@ li.type-member {
         }
 
         .member-photo {
+            width: 100%;
             max-width: 10rem;
-            float: left;
-            margin-right: 1rem;
         }
 
         .member-contact {
-            font-size: 1.5rem;
+            a {
+                display: block;
+                i {
+                    font-size: 1.5rem;
+                    margin-right: 5px;
+                }
+            }
         }
 
         .member-line {

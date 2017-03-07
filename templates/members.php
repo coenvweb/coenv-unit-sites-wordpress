@@ -79,7 +79,7 @@ if(isset($wp_query->query_vars['member-type'])) {
             $term = get_term_by('slug', $research_areas, 'research-areas');
             ?>
             <div class="panel">
-                <div class="left"><?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> working in <strong><?php echo $term->name; ?></strong></div>
+                <?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> working in <strong><?php echo $term->name; ?></strong> <a class="right button" href="<?php the_permalink(); ?>">All Members</a>
             </div>
             <?php
          }
@@ -87,7 +87,7 @@ if(isset($wp_query->query_vars['member-type'])) {
             $term = get_term_by('slug', $member_type, 'member-type');
             ?>
             <div class="panel">
-                <div class="left"><?php echo $wp_query->found_posts; ?> <strong><?php echo $term->name; ?><?=($wp_query->found_posts > 1 ? 's' : '')?></strong></div>
+                <?php echo $wp_query->found_posts; ?> <strong><?php echo $term->name; ?><?=($wp_query->found_posts > 1 ? 's' : '')?></strong> <a class="button right" href="<?php the_permalink(); ?>">All Members</a>
             </div>
             <?php
         } 

@@ -153,13 +153,13 @@ if(isset($wp_query->query_vars['category'])){
         <?php if ($coenv_cat_term_1): // Category filter ?>
         <div class="panel">
             <div class="left"><?php echo $wp_query->found_posts; ?> posts in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+            <div class="right"><a class="button" href="<?php echo the_permalink(); ?>">All Posts</a></div>
         </div>
         <?php endif; ?>
         <?php if($coenv_year && $coenv_month): // Date filter ?>
         <div class="panel">
             <div class="left"><?php echo $wp_query->found_posts; ?> posts from <strong><?php echo $coenv_date; ?></strong></div>
-            <div class="right"><a href="<?php echo the_permalink(); ?>">all posts &raquo;</a></div>
+            <div class="right"><a class="button" href="<?php echo the_permalink(); ?>">All Posts</a></div>
         </div>
         <?php endif; ?>
         <?php

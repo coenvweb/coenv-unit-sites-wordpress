@@ -21,41 +21,45 @@ $member_photo = get_the_post_thumbnail();
             <?php echo $member_name; ?>
             </h3>
         </div>
-		<div class="member-photo">
-            <?php
-                if($member_photo) {
-                    echo $member_photo;
-                } else {
-                    echo "<img src='" . get_template_directory_uri() . "/assets/img/member_placeholder.jpg' alt='member image' />";
+        <div class="row collapse">
+            <div class="member-photo large-6 columns">
+                <?php
+                    if($member_photo) {
+                        echo '<a href="'.get_the_post_thumbnail_url(get_the_ID(), 'large').'">'.$member_photo.'</a>';
+                    } else {
+                        echo "<img src='" . get_template_directory_uri() . "/assets/img/member_placeholder.jpg' alt='member image' />";
+                    }
+                ?>
+            </div>
+            <div class="large-6 columns">
+                <ul class="member-titles">
+                <?php
+                if( have_rows('job_titles') ) {
+                    while ( have_rows('job_titles') ) : the_row();
+                        echo "<li>";
+                            the_sub_field('job_title');
+                        echo "</li>";
+                    endwhile;
                 }
-            ?>
-        </div>
-        <ul class="member-titles">
-        <?php
-        if( have_rows('job_titles') ) {
-            while ( have_rows('job_titles') ) : the_row();
-                echo "<li>";
-                    the_sub_field('job_title');
-                echo "</li>";
-            endwhile;
-        }
-        ?>
-        </ul>
-        
-        <?php
-        if( $member_department ) { ?>
-            <div class="member-department"><?php echo $member_department ?></div>
-        <?php } ?>
-        <div class="member-contact">
-            <?php if ($member_email_address) { ?>
-                <a class="email" href="mailto:<?php echo $member_email_address; ?>" target="_blank"><i class="fi-mail"></i></a>
-            <?php } ?>
-            <?php if ($member_number) { ?>
-                <a class="phone_number" href="tel:<?php echo $member_number; ?>" target="_blank"><i class="fi-telephone"></i></a>
-            <?php } ?>
-            <?php if ($member_website_url) { ?>
-                <a class="member-website" href="<?php echo $member_website_url; ?>" target="_blank"><i class="fi-web"></i></a>
-            <?php } ?>
+                ?>
+                </ul>
+                
+                <?php
+                if( $member_department ) { ?>
+                    <div class="member-department"><?php echo $member_department ?></div>
+                <?php } ?>
+                <div class="member-contact">
+                    <?php if ($member_email_address) { ?>
+                        <a class="email" href="mailto:<?php echo $member_email_address; ?>" target="_blank"><i class="fi-mail"></i><?php echo $member_email_address; ?></a>
+                    <?php } ?>
+                    <?php if ($member_number) { ?>
+                        <a class="phone_number" href="tel:<?php echo $member_number; ?>" target="_blank"><i class="fi-telephone"></i><?php echo $member_number; ?></a>
+                    <?php } ?>
+                    <?php if ($member_website_url) { ?>
+                        <a class="member-website" href="<?php echo $member_website_url; ?>" target="_blank"><i class="fi-web"></i> Visit Website</a>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
     </div>
     <div class="article__categories large-6 columns">
