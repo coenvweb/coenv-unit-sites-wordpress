@@ -11,7 +11,7 @@ form {
 
 		input,
 		button {
-			@include font-size(14);
+			@include font-size(16);
 			white-space: nowrap;
 			display: inline-block;
 			background: #fff;
@@ -45,7 +45,7 @@ form {
 		button {
 			display: inline-block;
 			vertical-align: top;
-			@include font-size(12);
+			@include font-size(16);
 			border-radius: 0;
 			@include rem('height', $field-wrap-height);
 		}
