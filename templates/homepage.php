@@ -113,8 +113,8 @@ $journal_link = get_field('qr_site_link', 'option');
             <p class="journal-desc"><?php echo $journal_desc; ?></p>
 
             <div class="journal-links">
-                <a class="button" href="<?php echo $journal_link; ?>">View the Journal Publication Site</a>
-                <a class="button" href="<?php echo home_url() . '/journal/'; ?>">Learn More</a>
+                <a class="button" href="<?php echo home_url() . '/journal/'; ?>">About the Journal</a>
+                <a class="button" href="<?php echo $journal_link; ?>">Subscribe and Search</a>
             </div>
 
             <?php
