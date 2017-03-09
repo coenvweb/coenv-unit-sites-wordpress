@@ -56,7 +56,7 @@ function add_cpt_rewrites($wp_rewrite) {
     $a_rules = generate_cpt_rewrite_rules('post', 'about/news', array('coenv-year', 'coenv-month'));
     $b_rules = generate_cpt_rewrite_rules('members', 'people/members');
     $c_rules = generate_cpt_rewrite_rules('member_projects', 'research/qrc-funded-projects', array('project-search'));
-    $d_rules = generate_cpt_rewrite_rules('member_projects', 'research/qrc-funded-projects/previously-funded-qrc-projects', array('project-search'));
+    $d_rules = generate_cpt_rewrite_rules('member_projects', 'research/previously-funded-qrc-projects', array('project-search'));
     $wp_rewrite->rules = $a_rules + $b_rules + $c_rules + $d_rules + $wp_rewrite->rules;
 }
 add_action('generate_rewrite_rules', 'add_cpt_rewrites');
