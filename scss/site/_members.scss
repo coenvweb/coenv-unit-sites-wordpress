@@ -1,3 +1,19 @@
+.member-template {
+	form {
+        .field-wrap {
+            display: block;
+            input[type="text"] {
+                @include rem('height', 2.64286);
+                margin-bottom: 0rem;
+                font-size: 1rem;
+            }   
+            button[type="submit"] {
+                @include rem('height', 2.64286);
+                margin-bottom: 0rem;
+            }   
+        }   
+    }
+}
 li.type-member {
     list-style-type: none;
     @include rem('font-size', 1);

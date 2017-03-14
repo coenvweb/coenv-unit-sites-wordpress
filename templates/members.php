@@ -13,20 +13,32 @@ if(isset($wp_query->query_vars['research-areas'])) {
 if(isset($wp_query->query_vars['member-type'])) {
     $member_type = urldecode($wp_query->query_vars['member-type']);
 }
+if(isset($wp_query->query_vars['member-search'])) {
+    $member_search = urldecode($wp_query->query_vars['member-search']);
+}
 ?>
 
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main" id="main-col">
+	<div class="member-template small-12 medium-8 columns" role="main" id="main-col">
 		<div class="entry-content">
+		<h1 class="large-12 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
-		    <h1 class="large-4 columns article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 			<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('research-areas', $research_areas); // Category filter ?>
 			</div>
 			<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('member-type', $member_type); // Category filter ?>
 			</div>
+			<div class="large-4 columns project_search" data-url="<?php the_permalink() ?>" data-cat="member-search">
+                <form role="search" method="get" class="search-form" action="<?php the_permalink() ?>">
+                    <div class="field-wrap">
+                        <label for="member-search">Search members</label>
+                        <input value="<?=$member_search?>" name="member-search" id="s" placeholder="Search members" aria-label="Search" title="Search" type="text">
+                        <button type="submit"><i class="fi-magnifying-glass"></i><span>Search</span></button>
+                    </div>
+                </form>
+            </div>
 		</div>
 		<?php
 		/**
@@ -54,6 +66,10 @@ if(isset($wp_query->query_vars['member-type'])) {
             ),
 			'paged' => $paged,
 		);
+
+		if($member_search) {
+            $query_args['s'] = $member_search;
+        }
 
         if($research_areas) {
             $query_args['tax_query'][] = array(
@@ -90,7 +106,15 @@ if(isset($wp_query->query_vars['member-type'])) {
                 <?php echo $wp_query->found_posts; ?> <strong><?php echo $term->name; ?><?=($wp_query->found_posts > 1 ? 's' : '')?></strong> <a class="button right" href="<?php the_permalink(); ?>">All Members</a>
             </div>
             <?php
+         }
+         if($member_search) {
+            ?>
+            <div class="panel">
+                <?php echo $wp_query->found_posts; ?> member<?=($wp_query->found_posts > 1 ? 's' : '')?> matching <strong><?=$member_search?></strong> <a class="button right" href="<?php the_permalink(); ?>">All Members</a>
+            </div>
+            <?php
         } 
+
         ?>
 		<hr>
         <?php
