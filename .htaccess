@@ -287,6 +287,9 @@ ExpiresByType application/pdf "access plus 1 month"
 ExpiresByType text/x-javascript "access plus 1 month"
 ExpiresByType application/x-shockwave-flash "access plus 1 month"
 ExpiresByType image/x-icon "access plus 1 year"
+ExpiresByType video/mp4  "access plus 1 year"
+ExpiresByType video/ogg  "access plus 1 year"
+ExpiresByType video/webm  "access plus 1 year"
 ExpiresDefault "access plus 7 days"
 </IfModule>
 ## EXPIRES CACHING ##
