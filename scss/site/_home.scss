@@ -56,6 +56,11 @@
     }
 
     .coenv_static_widget {
+        .widget_img {
+            width: 45%;
+            overflow: hidden;
+            float: right;
+        }
         .widget_links {
             list-style-type: none;
             margin: 0px;

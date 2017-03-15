@@ -271,7 +271,11 @@ $cats_args  = array(
 $cats = get_categories($cats_args);
 	if ($cats) {
 		echo '<select name="select-category" class="select-category" id="select-category">';
-		echo '<option class="level-0" value="' . get_the_permalink() . '">All ' . $tax_str . '</option>';
+        if($tax == 'member-type') {
+		    echo '<option class="level-0" value="' . get_the_permalink() . '">All Current Members</option>';
+        } else {
+		    echo '<option class="level-0" value="' . get_the_permalink() . '">All ' . $tax_str . '</option>';
+        }
 		foreach($cats as $cat) { 
 			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
 			echo $cat->slug;

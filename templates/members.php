@@ -72,12 +72,21 @@ if(isset($wp_query->query_vars['member-search'])) {
         }
 
         if($research_areas) {
-            $query_args['tax_query'][] = array(
+           $query_args['tax_query'][] = array(
                 'taxonomy' => 'research-areas',
                 'field' => 'slug',
                 'terms' => $research_areas,
-            );
+            ); 
         }        
+
+        if(!isset($member_type)) {
+           $query_args['tax_query'][] = array(
+                'taxonomy' => 'member-type',
+                'field' => 'slug',
+                'terms' => 'former-member',
+                'operator' => 'NOT IN',
+            ); 
+        }
         
         if($member_type) {
             $query_args['tax_query'][] = array(
