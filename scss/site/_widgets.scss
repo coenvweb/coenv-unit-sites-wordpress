@@ -25,7 +25,25 @@
 // Sidebar Widgets
 aside#sidebar div.columns {
 
-	
+	//news feed cat filter
+    .widget_coenv_base_news_cats {
+        ul {
+            list-style-type: none;
+            padding: 0rem;
+            margin: 0rem;
+            li {
+                border-bottom: 1px solid $text-lt;
+                padding: 0.5rem 0rem;
+                h4 {
+                    font-size: 1.25rem;
+                }
+                p {
+                    margin: 0rem;
+                }
+            }
+        }
+    }
+
 	// Content blocks
 	.widget_custom_post_widget {
 		.widget_content {

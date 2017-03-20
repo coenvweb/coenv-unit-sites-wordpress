@@ -450,9 +450,9 @@ class coenv_base_blog_cats extends WP_Widget {
       */
      function __construct() {
           parent::__construct(
-               'coenv_base_blog_cats', // Base ID
-               __('Blog category filter (COENV)', 'text_domain'), // Name
-               array( 'description' => __( 'Allows filtering of blog posts base on blog category', 'text_domain' ), ) // Args
+               'coenv_base_news_cats', // Base ID
+               __('News Cateogry Feed', 'text_domain'), // Name
+               array( 'description' => __( 'Show a short feed of recent news items in a single category in the sidebar', 'text_domain' ), ) // Args
           );
      }
      
@@ -466,46 +466,46 @@ class coenv_base_blog_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-          $blog_cat = get_term_by( 'slug', (string) $_GET['term'], 'category' );
-          $blog_cat = $blog_cat->slug;
-     
-          echo $args['before_widget'];
-          
-          if ( ! empty( $instance['title'] ) ) {
-               echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
-          }
-          if ( ! empty( $instance['textarea'] ) ) {
-               echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
-          }
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'category'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                         echo '<ul class="blog-cats inline-list">';
-                         if ($blog_cat) {
-                         echo '<li><a class="cats unchecked" href="/about/news-events/">All News</a></li>';
-                         }
-                         foreach($cats as $cat) { 
-                             $slug = $cat->slug;
-                             if ($slug == $blog_cat) {
-                                 $check = 'checked';
-                             } else {
-                                 $check = 'unchecked';
-                             }
-                             
-                             if ($slug !== 'uncategorized') {
-                             
-                                 echo '<li><a class="cats ' . $check . '" href="/about/news-events/?tax=category&term=' . $cat->slug . '">';
-                                 echo $cat->name;
-                                 echo '</a></li>';
-                             }
-                         }
-                         echo '</ul>';
-                    }
-          echo $args['after_widget'];
+		$category = $instance['category'];
+        $query_args = array(
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'posts_per_page' => 4,
+            'ignore_sticky_posts' => 1,
+            'taxonomy' => 'category',
+            'term' => $category,
+        );
+        
+        $wp_query = new WP_Query( $query_args );
+        
+        if ($wp_query->have_posts()) {
+
+            echo $args['before_widget'];
+            if ( ! empty( $instance['title'] ) ) {
+                echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+            }
+
+            echo "<ul class='widget-news-list'>"; 
+                while ( $wp_query->have_posts() ) :
+                    $wp_query->the_post();
+                ?>  
+                    <li class="news-preview">
+                        <p class="post-meta">
+                            <?php echo get_the_date('M d, Y'); ?>
+                        </p>
+                        <h4><a href="<?php echo get_the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                    </li>
+
+                <?php
+                endwhile;
+            echo "</ul>";
+
+            if($instance['more_link']) {
+                echo "See more <a href='/about/news/category/".$category."'>".$category." news items</a>";
+            }
+
+            echo $args['after_widget'];
+        }
      }
 
      /**
@@ -521,15 +521,14 @@ class coenv_base_blog_cats extends WP_Widget {
           if ( isset( $instance[ 'title' ] ) ) {
                $title = $instance[ 'title' ];
           }
-          else {
-               $title = __( 'Blog or News Categories (list)', 'text_domain' );
-          }
           if ( isset( $instance[ 'textarea' ] ) ) {
                $textarea = $instance[ 'textarea' ];
           }
-          else {
-               $textarea = __( '', 'text_domain' );
+          if ( isset( $instance[ 'category' ] ) ) {
+               $category = $instance[ 'category' ];
           }
+
+          $cats = get_terms('category');
           
           ?>
           <p>
@@ -537,11 +536,19 @@ class coenv_base_blog_cats extends WP_Widget {
           <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
           </p>
           <p>
-          <label for="<?php echo $this->get_field_id( 'textarea' ); ?>"><?php _e( 'Description:' ); ?></label> 
-          <textarea class="widefat" id="<?php echo $this->get_field_id( 'textarea' ); ?>" name="<?php echo $this->get_field_name( 'textarea' ); ?>" type="text"><?php echo $textarea; ?></textarea>
+          <label for="<?php echo $this->get_field_id( 'category' ); ?>"><?php _e( 'Category' ); ?></label> 
+          <select class="widefat" id="<?php echo $this->get_field_id( 'category' ); ?>" name="<?php echo $this->get_field_name( 'category' ); ?>">
+            <option value="0">Select one...</option>
+            <?php foreach($cats as $cat) {  ?>
+                <option <?=($cat->slug == $category ? 'selected' : '')?> value="<?php echo $cat->slug; ?>"><?php echo $cat->name; ?></option>
+            <?php } ?>
+          </select>
           </p>
-         
-          <?php 
+          <p>
+            <label for="<?php echo $this->get_field_id( 'more_link' ); ?>"><?php _e( 'Display a link to more related news items?' ); ?></label>
+            <input <?=($instance['more_link'] ? 'checked' : '')?> class="widefat" id="<?php echo $this->get_field_id( 'more_link' ); ?>" name="<?php echo $this->get_field_name( 'more_link' ); ?>" type="checkbox" >
+          </p>
+          <?php
      }
 
      /**
@@ -557,133 +564,19 @@ class coenv_base_blog_cats extends WP_Widget {
      public function update( $new_instance, $old_instance ) {
           $instance = array();
           $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-          $instance['textarea'] = ( ! empty( $new_instance['textarea'] ) ) ? strip_tags( $new_instance['textarea'] ) : '';
+          $instance['more_link'] = ( ! empty( $new_instance['more_link'] ) ) ? strip_tags( $new_instance['more_link'] ) : '';
+          $instance['category'] = ( ! empty( $new_instance['category'] ) ) ? strip_tags( $new_instance['category'] ) : '';
 
 
           return $instance;
      }
 
 } 
-
-
 
 function register_coenv_base_blog_cats() {
     register_widget( 'coenv_base_blog_cats' );
 }
 add_action( 'widgets_init', 'register_coenv_base_blog_cats' );
-
-/*
- * Placeholder for date-based archive for custom post types
- */
-
-class coenv_base_index_dates extends WP_Widget {
-
-     /**
-      * Register widget with WordPress.
-      */
-     function __construct() {
-          parent::__construct(
-               'coenv_base_index_dates', // Base ID
-               __('Filter by date (COENV)', 'text_domain'), // Name
-               array( 'description' => __( 'Allows filtering of indexes (faculty, news, blog post, etc.) by date', 'text_domain' ), ) // Args
-          );
-     }
-     
-
-     /**
-      * Front-end display of widget.
-      *
-      * @see WP_Widget::widget()
-      *
-      * @param array $args     Widget arguments.
-      * @param array $instance Saved values from database.
-      */
-     public function widget( $args, $instance ) {
-     
-          echo $args['before_widget'];
-          
-          if ( ! empty( $instance['title'] ) ) {
-               echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
-          }
-          if ( ! empty( $instance['textarea'] ) ) {
-               echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
-          }
-
-          echo '<ul>';
-          echo '<li><a href="#">November 2014</a></li>';
-          echo '<li><a href="#">October 2014</a></li>';
-          echo '<li><a href="#">September 2014</a></li>';
-          echo '<li><a href="#">August 2014</a></li>';
-          echo '<li><a href="#">July 2014</a></li>';
-          echo '<li><a href="#">June 2014</a></li>';
-          echo '<li><a href="#">May 2014</a></li>';
-          echo '</ul>';
-
-          echo $args['after_widget'];
-     }
-
-     /**
-      * Back-end widget form.
-      *
-      * @see WP_Widget::form()
-      *
-      * @param array $instance Previously saved values from database.
-      */
-     public function form( $instance ) {
-      //var_dump($instance);
-
-          if ( isset( $instance[ 'title' ] ) ) {
-               $title = $instance[ 'title' ];
-          }
-          else {
-               $title = __( 'Categories', 'text_domain' );
-          }
-          if ( isset( $instance[ 'textarea' ] ) ) {
-               $textarea = $instance[ 'textarea' ];
-          }
-          else {
-               $textarea = __( '', 'text_domain' );
-          }
-          
-          ?>
-          <p>
-          <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-          <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-          </p>
-          <p>
-          <label for="<?php echo $this->get_field_id( 'textarea' ); ?>"><?php _e( 'Description:' ); ?></label> 
-          <textarea class="widefat" id="<?php echo $this->get_field_id( 'textarea' ); ?>" name="<?php echo $this->get_field_name( 'textarea' ); ?>" type="text"><?php echo $textarea; ?></textarea>
-          </p>
-         
-          <?php 
-     }
-
-     /**
-      * Sanitize widget form values as they are saved.
-      *
-      * @see WP_Widget::update()
-      *
-      * @param array $new_instance Values just sent to be saved.
-      * @param array $old_instance Previously saved values from database.
-      *
-      * @return array Updated safe values to be saved.
-      */
-     public function update( $new_instance, $old_instance ) {
-          $instance = array();
-          $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-          $instance['textarea'] = ( ! empty( $new_instance['textarea'] ) ) ? strip_tags( $new_instance['textarea'] ) : '';
-
-
-          return $instance;
-     }
-
-} 
-
-
-function register_coenv_base_index_dates() {
-    register_widget( 'coenv_base_index_dates' );
-}
-add_action( 'widgets_init', 'register_coenv_base_index_dates' );
 
 /**
  * Social Links Widget
