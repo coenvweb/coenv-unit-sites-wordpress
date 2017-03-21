@@ -8,6 +8,7 @@ $W: #333;
 $accent: #5f3e8d;
 $accent-purple: $accent;
 $accent-lt: lighten( $accent, 15% );
+$accent-dk: darken( $accent, 15% );
 $accent-blue: #1e325f;
 $accent-red: #b82828;
 $accent-red-hover: #8e1f1f;
@@ -31,6 +32,11 @@ $bg-dk: #363533;
 $bk-menu: #6a6a6a;
 $bg-light: #f6f5f7;
 $bg-lighter: #fcfcfc;
+
+$gold: #A59665;
+$gold-dk: darken($gold, 15%);
+$gold-lt: lighten($gold, 15%);
+$gold-vlt: lighten($gold, 40%);
 
 /*  Global shadow
     ======================================================================== */

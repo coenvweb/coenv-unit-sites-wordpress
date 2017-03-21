@@ -21,6 +21,8 @@
     } else {
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
+    
+  <script src="//www.washington.edu/static/alert.js" type="text/javascript"></script>
 
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
@@ -47,6 +49,17 @@
       
     <!--<script type="text/javascript" src="//use.typekit.net/dyq8fxo.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>-->
+      
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-93084852-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 
   
     <?php wp_head(); ?>
@@ -55,10 +68,11 @@
         $banner = coenv_banner();
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
+      
+        $ancestor_id = 'ancestor-' . coenv_get_ancestor();
     ?>
-      <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
   </head>
-  <body <?php body_class(); ?>>
+  <body <?php body_class($ancestor_id); ?>>
   
   <div class="skipnav"><a href="#main-col">Skip to main content</a> <a href="#footer">Skip to footer unit links</a></div>
   <?php do_action('foundationPress_after_body'); ?>
@@ -77,7 +91,7 @@
                 s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
                 c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
-</svg><span class="visuallyhidden"><?php bloginfo('name') ?></span></a>
+</svg><span class="visuallyhidden">University of Washington</span></a>
     </div>
     <div class="middle tab-bar-section">
         <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
@@ -146,6 +160,7 @@
     </div><!-- .row -->
   </nav><!-- #top-nav -->
   
+      <div class="purple-zone">
   <div class="row title-row">
     <div class="columns large-12">
     <ul class="title-area hide-for-small">
@@ -170,16 +185,17 @@
           </h1>
             <div class="units show-for-large-up">
                 <ul>
-              <li><a href="http://environment.uw.edu" title="UW College of the Environment">
-  <?php include("assets/img/college-of-the-environment.svg"); ?>
-                  <span class="visuallyhidden">College of the Environment</span></a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
+              <li><a href="http://environment.uw.edu">
+  <?php include("assets/img/college-of-the-environment.svg"); ?><span class="visuallyhidden">College of the Environment</span>
+                  </a></li>
+              <li><a href="http://uw.edu"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
                 </ul>
           </div> 
         </li>          
       </ul>
     </div>
   </div>
+          </div>
   
         <div class="top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
@@ -189,7 +205,7 @@
                       $exclude = implode(',',coenv_base_menu_exclude());
                       add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_list_pages( array(
-                          'depth' => 0,
+                          'depth' => 3,
                           'walker' => new top_bar_new_walker(),
                           'title_li' => false,
                           'sort_column' => 'menu_order, post_title',
@@ -211,19 +227,30 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single())) {
-            echo '<div class="page-row">';
+    <?php if (($banner) ) {
+            echo '<div class="page-row"';
+            echo 'style="background-image: url(' . $banner['url'] . ');">';
             echo '<div>';
         }
      ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
+     <?php if ( (empty($banner))) {
             echo '<div class="page-row mini">';
             echo '<div>';
      }
      ?>
     <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
+            <h1 class="page-title">
+      <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_search()) && (!is_404())) {
+            echo get_the_title();
+      } elseif (is_page_template('templates/news.php') || is_singular('post')) {
+            echo '<a href="about/news-and-events">News and Events</a>';
+      } elseif (is_search())  {
+            echo 'Search Results';
+        } elseif (is_404())  {
+            echo '404';
+      };?></h1>
     </div>
+      </div>
 
 </div>
 <?php endif; ?>

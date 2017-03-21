@@ -2,8 +2,14 @@
     background-color: $white;
     text-align: center;
     border-bottom: #d7dee5 1px solid;
+    @extend .shadow;
+    z-index: 5;
     min-height: rem-calc(60);
     padding-top: rem-calc(8);
+    @media #{$medium-only} {
+        padding-top: 0;
+        min-height: rem-calc(40);
+    }
     
     .top-bar-section {
         display: inline-block;
@@ -14,14 +20,14 @@
                     font-size: rem-calc(16);
                 }
                 @media #{$medium-only} {
+                    font-size: rem-calc(12);
                     background-image: none!important;
                 }
-                font-size: rem-calc(14);
+                font-size: rem-calc(12);
                 color: $text;
                 @include encode_cb;
                 background-color: #ffffff;
                 text-align: left;
-
                 &:hover, &:focus {
                     color: $accent;
                 }
@@ -35,7 +41,8 @@
                     }
                 }
                 & .current_page_item > a {
-                    background-color: $bg-light;
+                    background-color: $bg-lighter;
+                    color: $accent;
                     border-top: 1px solid #dddddd;
                     border-bottom: 1px solid #dddddd;
                 }
@@ -43,6 +50,7 @@
         
             .dropdown {
                 @include shadow;
+                width: 250px;
     
                 a {
                     @include encode();
@@ -50,23 +58,40 @@
                     text-transform: none;
                     background-color: #f6f5f7;
                     border-bottom: 1px solid #fff;
+                    white-space: normal;
+                    line-height: 130%;
+                    padding: 1rem;
                     &:hover{
                         background-color: $bg-lighter;
                     }
+                    @media #{$medium-only} {
+                        line-height: 100%;
+                        font-size: rem-calc(12);
+                    }
+                }
+                
+                & > .has-dropdown > a:after {
+                    content: none;
                 }
             }
 
-            & > .page_item_has_children {
+            & > .page_item {
+                
                 &:before {
                     display: block;
                     position: absolute;
-                    top: 8px;
+                    top: 18px;
                     left: 0;
                     bottom: 8px;
                     width: 1px;
-                    height: 30px;
+                    height: 15px;
                     background: #d7dee5;
+                    @extend .uw-skew;
+                    @media #{$medium-only} {
+                        display: none;
+                    }
                 }
+                
 
                 &:not(:first-child) {
                     &:before {
@@ -89,15 +114,49 @@
                 
             }
     
-            .has-dropdown > a {
-                padding-right: rem-calc(15)!important;
-                @media #{$medium-only} {
-                    padding-right: rem-calc(15)!important;
-                }
-                .has-dropdown > a {
-                }
+            & > .has-dropdown > a {
+                line-height: 3rem;
+                padding: 0 rem-calc(10) 0 rem-calc(20) 0!important;
+                text-transform: uppercase;
                 &:after {
-                    content: none;
+                    content: "\f347";
+                    font-family: dashicons;
+                    display: inline;
+                    position: relative;
+                    color: $accent;
+                    top: .4rem;
+                    margin-right: 0;
+                    margin-left: .5rem;
+                    font-size: 1.5rem;
+                    height: 1rem;
+                }
+                @media #{$medium-only} {
+                    line-height: 2.2rem;
+                    padding: 6px .2vw 0 .5vw 0!important;
+                    &:after {
+                        border: 3px;
+                        margin-left: .1vw;
+                        font-size: 1.5vw;
+                        top: .15vw;
+                        margin-right: 2px;
+                    }
+                }
+            }
+            
+            & > .has-dropdown > .dropdown > .has-dropdown {
+                &:after {
+                    content: "\f347";
+                    font-family: dashicons;
+                    display: block;
+                    position: absolute;
+                    color: $accent;
+                    top: 1.1rem;
+                    margin-right: 0;
+                    margin-left: .5rem;
+                    font-size: 1.5rem;
+                    height: 1rem;
+                    right: 1rem;
+                    transform: rotate(-90deg);
                 }
             }
         }

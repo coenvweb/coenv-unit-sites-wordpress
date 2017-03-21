@@ -21,7 +21,7 @@
 		<?php endif ?>
 		<?php if ( coenv_base_post_parent(get_the_id())): ?>
 		<?php if ( is_page() || is_single()) : ?>
-			<h1 class="article__title"><?php the_title() ?></h1>
+			
 		<?php else : ?>
 			<h1 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h1>
 		<?php endif ?>
