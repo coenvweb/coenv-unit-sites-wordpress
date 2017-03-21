@@ -25,5 +25,11 @@ function kitchensink_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'kitchensink_scripts' );
 
+//Enqueue the Dashicons script
+add_action( 'wp_enqueue_scripts', 'amethyst_enqueue_dashicons' );
+function amethyst_enqueue_dashicons() {
+    wp_enqueue_style( 'dashicons' );
+}
+
 
 ?>
