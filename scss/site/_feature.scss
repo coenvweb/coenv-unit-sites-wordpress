@@ -1,3 +1,11 @@
+.feature-row {
+    background-color: #eee;
+    max-width: none;
+    .homepage-features {
+        margin-bottom: 0;
+    }
+}
+
 .feature {
 	color: $white;
 	
@@ -7,29 +15,38 @@
 	
 	.feature-image {
 		width: 100%;
-		padding-top: 40%;
-		max-height: rem-calc(350);
+		height: 50vh;
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
 		position: relative;
+        min-height: 15rem;
+        max-height: 50vw;
 	}
 	
 	.feature-info-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+        @media #{$medium-up} {
+            padding: 0 2rem;
+        }
 		
 		.feature-info {
 			background-color: $accent;
 			padding: rem-calc(16);
 			position: absolute;
-			right: 0;
+            margin: 0 auto;
 			bottom: 0;
 			width: 50%;
+            max-width: 45rem;
 
 			@media #{$small-only} {
-				width: 50%;
+				width: 100%;
+                position: relative;
 
 				h2 {
-					font-size: rem-calc(14);
+					font-size: rem-calc(24);
 				}
 				p.feature-excerpt {
 					font-size: rem-calc(12);

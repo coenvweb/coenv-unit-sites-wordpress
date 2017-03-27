@@ -51,10 +51,13 @@
 		display: inline-block;
 		padding: 0;
 		margin: 0;
-		font-size: rem-calc(10);
+		font-size: rem-calc(9);
 		@include rem('line-height', 1.8);
 		@include rem('height', 1.8);
 		vertical-align: top;
+        @media #{$large-up} {
+            font-size: rem-calc(10);
+        }
 	}
 
 	input[type="text"] {
@@ -68,7 +71,6 @@
 
 	button[type="submit"] {
 		background: #666;
-
 		i {
 			@include font-size(16);
 			color: #eee;
@@ -84,7 +86,10 @@
 	a,
 	input,
 	button {
-		@include rem('padding', 0, 0.5);
+		@include rem('padding', 0, 0.3);
+        @media #{$large-up} {
+            @include rem('padding', 0, 0.5);
+        }
 	}
 
 	a {
@@ -105,10 +110,8 @@
 
     
     #menu-top {
-        
         i {
             top: rem-calc(3);
-            
             &:before {
                 font-size: rem-calc(18);
             }
@@ -118,7 +121,7 @@
 	#menu-university {
 		float: left;
         margin-left: rem-calc(14);
-
+        
 	} // #menu-university
 
 	#menu-buttons {

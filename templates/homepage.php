@@ -4,86 +4,44 @@ Template Name: Homepage
 */
 ?>
 <?php get_header(); ?>
-<div class="row">
-	<div class="small-12 large-12 columns" role="main" id="main-col">
+<div class="row feature-row">
+	<div class="small-12 large-12" role="main" id="main-col">
 	
 	<?php do_action('foundationPress_before_content'); ?>
 	<?php dynamic_sidebar("before-content"); ?>
+        <div class="playpause"></div>
+        <div class="homepage-features">
 		<?php
+        $heroes = get_field('hero_slider');
+        if($heroes) {
+            foreach($heroes as $hero) { 
+            ?>
+                <div class="feature">
+                <div class="feature-image" style="background-image:url(<?php echo $hero['hero_image']; ?>)">
+                </div>
+                <div class="feature-info-container">
+                <div class="feature-info" style="background-color:' . $feature_color . '">
+                    <div class="feature-content">
+                        <h2><?php echo $hero['hero_title']; ?></h2>
+                        <p class="feature-excerpt"><?php echo $hero['hero_description']; ?></p>
+                        <a class="button" href="<?php echo $hero['hero_link_url']; ?>"><?php echo $hero['hero_link_title']; ?></a>
 
-		/**
-		 * Loop for homepage features.
-		 */
-		$feature_args = array(
-			'post_type'	=> 'features',
-			'post_status' => 'publish',
-			'posts_per_page' => 4,
-			'orderby' => 'menu_order',
-			);
-		$feature_query = new WP_Query( $feature_args ); ?>
-		<?php //if ($feature_query->have_posts()) { ?>
-		<div class="playpause"></div>
-			<div class="homepage-features">
-			<?php
-			# The Loop
-			while ( $feature_query->have_posts() ) :
-				$feature_query->the_post();
-			if (get_field('feature_add_links')) {
-				$feature_link_type = get_field('feature_link_type');
-				$feature_link_type_internal = get_field('feature_link_page');
-			}
-			if (get_field('feature_color')) {
-				$feature_color = get_field('feature_color');
-			}
-			if (get_field('feature_excerpt')) {
-				$feature_excerpt = get_field('feature_excerpt');
-			}
-			if (get_the_post_thumbnail()) {
-				$feature_image = wp_get_attachment_image_src(get_post_thumbnail_id(), 'thumbnail-size', true);
-				$feature_caption = get_post(get_post_thumbnail_id());
-				$feature_caption = $feature_caption->post_excerpt;
-			}
-			$rows = get_field('feature_add_links');
-			
-echo '<div class="feature">';
-	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
+                    </div><!-- .feature-content -->
 
-		echo '<div class="feature-info-container">';
-		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
-		echo '<div class="feature-info" style="background-color:' . $feature_color . '">';
-			echo '<div class="feature-content">';
-				echo '<h2>' . get_the_title() . '</h2>';
-				echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
-				if($rows)
-					{
-						foreach($rows as $row) {
-							if($row['feature_link_type'] == 'internal') {
-								$link_title =  $row['feature_link_to_a_page_on_this_site'][0]['feature_link_title_internal'];
-								$link_url = get_permalink($row['feature_link_to_a_page_on_this_site'][0]['feature_select_page'][0]);
-								$link_target = 'self';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} elseif ($row['feature_link_type'] == 'external') {
-								$link_title = $row['feature_link_to_an_external_site'][0]['feature_link_title'];
-								$link_url = $row['feature_link_to_an_external_site'][0]['feature_link_url'];
-								$link_target ='blank';
-								echo '<a class="button" href="' . $link_url . '" target="_' . $link_target . '">' . $link_title . '</a>';
-							} 
-						}
-					}
+                </div><!-- .feature-info -->
 
-			echo '</div><!-- .feature-content -->';
+                </div><!-- .feature-info-container -->
 
-		echo '</div><!-- .feature-info -->';
-
-	echo '</div><!-- .feature-info-container -->';
-	echo '</div>';
-
-
-echo '</div><!-- .feature -->';
-endwhile;
-wp_reset_postdata();
-echo '</div>';
-?>
+            </div>
+            <?php
+            }
+        }
+            ?>
+        </div>
+    </div>
+</div>
+<div class="row">
+	<div class="small-12 large-12 columns">
 <?php 
 # Widget area for content blocks
 if ( is_active_sidebar( 'home-columns' ) ) : 
