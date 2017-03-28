@@ -246,7 +246,7 @@ RewriteRule ^major/?$ undergraduate-students/prospective-students-undergrad/ [R=
 
 # FHL Redirects
 RewriteCond %{HTTP_HOST} !^fhl.uw\.edu [NC]
-RewriteRule .? - [S=18]
+RewriteRule .? - [S=17]
 RewriteRule ^news_index.html https://fhl.uw.edu/about/news-and-events/newsletters/ [R=301,NC,L]
 RewriteRule ^res_index.html https://fhl.uw.edu/research/ [R=301,NC,L]
 RewriteRule ^resAppInfo.html https://fhl.uw.edu/research/applying-for-research-space/ [R=301,NC,L]
@@ -258,7 +258,6 @@ RewriteRule ^oael.html https://fhl.uw.edu/facilities-resources/other-research-fa
 RewriteRule ^stu_index.html https://fhl.uw.edu/courses/ [R=301,NC,L]
 RewriteRule ^help_endowments.html https://fhl.uw.edu/community/support-fhl/scholarship-fellowship-funds/ [R=301,NC,L]
 RewriteRule ^adopt.html https://fhl.uw.edu/facilities-resources/boating-and-diving/rv-centennial/adopt-a-trip/ [R=301,NC,L]
-RewriteRule ^studentSummer2017.html#SumA-4 https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,NC,L]
 RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,NC,L]
 RewriteRule ^about.html https://fhl.uw.edu/about/ [R=301,NC,L]
 RewriteRule ^stafflist.html https://fhl.uw.edu/about/people/ [R=301,NC,L]
