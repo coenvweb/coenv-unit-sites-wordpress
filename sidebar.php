@@ -10,7 +10,7 @@
  * Serves up sidebar widgets for individual top level pages
  */
 ?>
-<aside id="sidebar" class="small-12 medium-4 large-3 columns">
+<aside id="sidebar" class="small-12 medium-3 columns">
 <?php
 if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav">';

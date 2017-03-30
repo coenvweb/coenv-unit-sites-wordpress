@@ -16,7 +16,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 ?>
 <?php get_header(); ?>
 <div class="row">
-	<div class="small-12 medium-8 columns" role="main" id="main-col">
+	<div class="small-12 medium-9 columns right" role="main" id="main-col">
 		<div class="entry-content">
 		<div class="row filters">
 			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="dataset_region">

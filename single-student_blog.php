@@ -7,7 +7,7 @@ Template Name: Student Blog
 <?php get_header(); ?>
 <?php $blog_slug->slug; ?>
 <div class="row">
-	<div class="columns large-12 section-title">
+	<div class="columns large-12 section-title right">
 		<h1><a href="/students">Students</a></h1>
 	</div>
 	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>

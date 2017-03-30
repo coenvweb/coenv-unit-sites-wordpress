@@ -2,7 +2,7 @@
 <div class="row">
 	<?php the_breadcrumb(); ?>
 <!-- Row for main content area -->
-	<div class="small-12 large-8 columns" role="main" id="main-col">
+	<div class="small-12 large-9 columns right" role="main" id="main-col">
 	
 	<?php if ( have_posts() ) : ?>
 	

@@ -146,7 +146,7 @@ blockquote {
 }
 
 h1 {
-    @include uni;
+    @include encode_cb;
     font-size: rem-calc(26)!important;
     line-height: rem-calc(30);
     font-weight: 400;
@@ -159,7 +159,7 @@ h1 {
 } // h1
 
 h2 {
-    @include uni;
+    @include encode_cb;
     font-size: rem-calc(24);
     line-height: rem-calc(24);
     font-weight: 400;
@@ -172,7 +172,7 @@ h2 {
 } // h2
 
 h3 {
-    @include uni;
+    @include encode_cb;
     font-size: rem-calc(20);
     line-height: rem-calc(24);
     font-weight: 400;
