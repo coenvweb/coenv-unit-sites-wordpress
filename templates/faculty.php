@@ -118,10 +118,9 @@ $wp_query = new WP_Query( $query_args );
 	<?php endif; ?>
         </div>
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
+		<div id="after-content" class="before-content widget-area" role="complementary">
+			<?php dynamic_sidebar( 'after-content' ); ?>
+		</div><!-- #after-content -->
 	<?php endif; ?>
 	<a href="#" class="back-to-top">Back to Top</a>
 	<?php do_action('foundationPress_after_content'); ?>
