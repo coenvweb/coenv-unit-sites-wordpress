@@ -85,7 +85,7 @@ class top_bar_mobile_walker extends Walker_Page {
                             </svg>
                             <span class="visuallyhidden">' . $title . '</span>
                         </a>
-                    <div class="content" id=accordion-' . $id . '>';
+                    <ul class="content" id=accordion-' . $id . '>';
         }
         if ( $depth == 1 ) {
             $output .= '<li id=' . $id . '><a href=' . $link . '>' . $title . '</a></li>';
@@ -99,7 +99,7 @@ class top_bar_mobile_walker extends Walker_Page {
     function end_el( &$output, $object, $depth = 0, $args = array(), $id = 0 ) {
         $output .= '';
         if ( $depth === 0 ) {
-            $output .= '</div></div></div></div>';
+            $output .= '</ul></div></div></div>';
         }
     }
     
