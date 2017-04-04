@@ -60,7 +60,7 @@ class top_bar_mobile_walker extends Walker_Page {
     //Start the menu rendering by indenting
     function start_lvl( &$output, $depth = 0, $args = array() ) {
         $indent = str_repeat( "\t", $depth);
-        $output .= $indent . '<ul class="children-' . $depth . '">';
+        $output .= $indent . '<li class="children-' . $depth . '">';
     }
     
     static $count = 0;
@@ -104,7 +104,7 @@ class top_bar_mobile_walker extends Walker_Page {
     }
     
     function end_lvl( &$output, $depth = 0, $args = array(), $id = 0 ) {
-        $output .= '</ul>';
+        $output .= '</li>';
     }
 }
 
