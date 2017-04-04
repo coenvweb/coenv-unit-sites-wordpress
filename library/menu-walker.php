@@ -60,7 +60,7 @@ class top_bar_mobile_walker extends Walker_Page {
     //Start the menu rendering by indenting
     function start_lvl( &$output, $depth = 0, $args = array() ) {
         $indent = str_repeat( "\t", $depth);
-        $output .= $indent . '<li class="children-' . $depth . '">';
+        $output .= $indent . '<div class="children-' . $depth . '">';
     }
     
     static $count = 0;
@@ -71,7 +71,7 @@ class top_bar_mobile_walker extends Walker_Page {
         $link = get_the_permalink($item->ID);
         if ( $depth === 0 ) {
             $output .= '
-            <div class="off-canvas-list item-' . $id . '">
+            <ul class="off-canvas-list item-' . $id . '">
                 <a class="primary-link columns small-9" href=' . $link . '>
                     <div class="parent">' . $title . '</div>
                 </a>
@@ -85,7 +85,7 @@ class top_bar_mobile_walker extends Walker_Page {
                             </svg>
                             <span class="visuallyhidden">' . $title . '</span>
                         </a>
-                    <ul class="content" id=accordion-' . $id . '>';
+                    <div class="content" id=accordion-' . $id . '>';
         }
         if ( $depth == 1 ) {
             $output .= '<li id=' . $id . '><a href=' . $link . '>' . $title . '</a></li>';
@@ -99,12 +99,12 @@ class top_bar_mobile_walker extends Walker_Page {
     function end_el( &$output, $object, $depth = 0, $args = array(), $id = 0 ) {
         $output .= '';
         if ( $depth === 0 ) {
-            $output .= '</ul></div></div></div>';
+            $output .= '</div></div></div></ul>';
         }
     }
     
     function end_lvl( &$output, $depth = 0, $args = array(), $id = 0 ) {
-        $output .= '</li>';
+        $output .= '</div>';
     }
 }
 

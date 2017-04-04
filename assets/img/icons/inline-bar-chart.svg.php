@@ -3,7 +3,7 @@ You may NOT sub-license, resell, rent, redistribute or otherwise transfer the ic
 
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="svg-icon" width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
 
-<path id="bar_chart_6_icon" d="M367.625,97.795l33.424,33.424l-17.061,16.654l-33.557-33.556L367.625,97.795z
+<path d="M367.625,97.795l33.424,33.424l-17.061,16.654l-33.557-33.556L367.625,97.795z
 
 	 M336.01,128.18l-17.703,17.013l33.803,33.802l17.566-17.148L336.01,128.18z M62.344,462h107.084V358.065H62.344V462z
 

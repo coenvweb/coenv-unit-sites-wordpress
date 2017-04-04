@@ -3,7 +3,7 @@ You may NOT sub-license, resell, rent, redistribute or otherwise transfer the ic
 
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" width="512px" height="512px" class="svg-icon" xml:space="preserve">
 
-<path id="email-8-icon" d="M381.339,199.065c0,0-87.156-3.628-135.339,47.962c22.631-98.556,135.339-121.492,135.339-121.492v-30.29
+<path d="M381.339,199.065c0,0-87.156-3.628-135.339,47.962c22.631-98.556,135.339-121.492,135.339-121.492v-30.29
 
 	L472,162.301l-90.661,67.054V199.065z M68.978,232.351L246.001,97.183l46.868,35.781c8.265-6.265,21.454-13.641,32.543-19.223
 
