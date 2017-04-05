@@ -50,6 +50,9 @@ RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^qrc.washington.edu [NC]
+RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
+
 RewriteCond %{HTTP_HOST} ^fhl.washington.edu [NC]
 RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R=301,NC,L]
 
