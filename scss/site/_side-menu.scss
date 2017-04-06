@@ -1,13 +1,25 @@
 // General sidebar
 aside#sidebar {
 	padding-right: 1rem !important;
+    margin-top: 1.85rem;
 
 	.section-title {
 		@include encode_cb;
+        h2 {
+            margin-bottom: 0;
+        }
+        
 		a {
-
-		font-size: rem-calc(22);
-
+            text-transform: uppercase;
+            color: white;
+            padding: .5rem 1rem!important;
+            font-size: rem-calc(16);
+            width: 100%;
+            background-color: $accent;
+            display: block;
+            &:hover {
+                background-color: $accent-lt;
+            }
 		}
 	}
 
