@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Faculty Index
+Template Name: PI Index
 */
 
 /*
