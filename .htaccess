@@ -50,6 +50,9 @@ RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
 RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^qrc.washington.edu [NC]
+RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
+
 RewriteCond %{HTTP_HOST} ^fhl.washington.edu [NC]
 RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R=301,NC,L]
 
@@ -206,7 +209,7 @@ RewriteRule ^pnwc/?$ learn/ [R=301,L]
 
 # Botanicgardens Redirects
 RewriteCond %{HTTP_HOST} !^botanicgardens.uw\.edu [NC]
-RewriteRule .? - [S=31]
+RewriteRule .? - [S=32]
 RewriteRule ^gardens/wpa.shtml https://botanicgardens.uw.edu/washington-park-arboretum/ [R=301,L]
 RewriteRule ^visit_hours.shtml https://botanicgardens.uw.edu/washington-park-arboretum/visit/ [R=301,L]
 RewriteRule ^visit/directions.shtml https://botanicgardens.uw.edu/directions/ [R=301,L]
@@ -238,6 +241,7 @@ RewriteRule ^herbarium/?$ https://botanicgardens.uw.edu/center-for-urban-horticu
 RewriteRule ^ren/?$ https://botanicgardens.uw.edu/science-conservation/restoration-ecology-network/ [L,R=301]
 RewriteRule ^map/?$ https://depts.washington.edu/uwbg/gardens/map.html [R=301,L]
 RewriteRule ^farm/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/garens/uw-farm/ [R=301,L]
+RewriteRule ^supportYFP/?$ https://www.washington.edu/giving/make-a-gift/?source_typ=3&source=WPAEDP [R=301,NC,L]
 
 # Env Studies Redirects
 RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
@@ -246,7 +250,7 @@ RewriteRule ^major/?$ undergraduate-students/prospective-students-undergrad/ [R=
 
 # FHL Redirects
 RewriteCond %{HTTP_HOST} !^fhl.uw\.edu [NC]
-RewriteRule .? - [S=17]
+RewriteRule .? - [S=16]
 RewriteRule ^news_index.html https://fhl.uw.edu/about/news-and-events/newsletters/ [R=301,L]
 RewriteRule ^res_index.html https://fhl.uw.edu/research/ [R=301,L]
 RewriteRule ^resAppInfo.html https://fhl.uw.edu/research/applying-for-research-space/ [R=301,L]
@@ -258,12 +262,11 @@ RewriteRule ^oael.html https://fhl.uw.edu/facilities-resources/other-research-fa
 RewriteRule ^stu_index.html https://fhl.uw.edu/courses/ [R=301,L]
 RewriteRule ^help_endowments.html https://fhl.uw.edu/community/support-fhl/scholarship-fellowship-funds/ [R=301,L]
 RewriteRule ^adopt.html https://fhl.uw.edu/facilities-resources/boating-and-diving/rv-centennial/adopt-a-trip/ [R=301,L]
-RewriteRule ^about.html https://fhl.uw.edu/about/ [R=301,L]
-RewriteRule ^stafflist.html https://fhl.uw.edu/about/people/ [R=301,L]
-RewriteRule ^facMap.html https://fhl.uw.edu/about/campus-map/ [R=301,L]
-RewriteRule ^facilities.html https://fhl.uw.edu/facilities-resources/ [R=301,L]
-RewriteRule ^studentFellowships.html https://fhl.uw.edu/research/postdoctoral-research-fellowship/ [R=301,L]
-RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,L]
+RewriteRule ^about.html https://fhl.uw.edu/about/ [R=301,L]
+RewriteRule ^stafflist.html https://fhl.uw.edu/about/people/ [R=301,L]
+RewriteRule ^facMap.html https://fhl.uw.edu/about/campus-map/ [R=301,L]
+RewriteRule ^facilities.html https://fhl.uw.edu/facilities-resources/ [R=301,L]
+RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
