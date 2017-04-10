@@ -161,7 +161,15 @@ class SmackUCIAdmin extends SmackUCIHelper {
 				if(empty($parserObj->screenData)):
 					$parserObj->wp_session = "Your mapping configuration may lost. Please configure your mapping again!";
 				endif;
-				include ( 'views/form-mapping-configuration.php' );
+				switch($_REQUEST['mapping_type']) {
+                                        case 'advanced':
+                                                include ( 'views/form-advanced-mapping-configuration.php' );
+                                                break;
+                                        case 'normal':
+                                        default:
+                                                include ( 'views/form-mapping-configuration.php' );
+						break;
+				}
 				break;
 			case 'media_config':
 				include ( 'views/form-media-handling.php' );

@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.8.2
+Version: 2.8.3
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -12,7 +12,7 @@ Domain Path: /lang/
 
 /*
 	Copyright 2011 - 2011  Drew Gourley
-	Copyright 2013 - 2016  Marcel Pol   (email: marcel@timelord.nl)
+	Copyright 2013 - 2017  Marcel Pol   (email: marcel@timelord.nl)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -32,15 +32,21 @@ Domain Path: /lang/
 
 /* TODO:
  * - Add pagination, just like next_post_link().
+ *   https://wordpress.org/support/topic/how-to-create-a-navigation-in-archivephp-with-the-given-order/
+ * - Order by post count (and other orderby's)
+ *   https://wordpress.org/support/topic/order-terms-by-post-count/
+ * - Order Woo terms, also after filtering products with widgets:
+ *   https://wordpress.org/support/topic/plugin-does-not-keep-custom-order-when-using-filter/
  */
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.8.2');
+define('CUSTOMTAXORDER_VER', '2.8.3');
 
 
 function customtaxorder_register_settings() {
 	register_setting('customtaxorder_settings', 'customtaxorder_settings', 'customtaxorder_settings_validate');
+	register_setting('customtaxorder_settings', 'customtaxorder_taxonomies', 'customtaxorder_taxonomies_validate');
 }
 add_action('admin_init', 'customtaxorder_register_settings');
 
@@ -87,9 +93,17 @@ function customtaxorder_settings_validate($input) {
 			}
 		}
 	}
+	$output = array();
+	foreach ( $input as $key => $value) {
+		$key = (string) sanitize_text_field( $key );
+		$output[$key] = (int) $value;
+	}
+	return $output;
+}
+function customtaxorder_taxonomies_validate($input) {
+	$input = (string) sanitize_text_field( $input );
 	return $input;
 }
-
 
 function customtaxorder_menu() {
 	$args = array( 'public' => true );
@@ -172,6 +186,18 @@ function customtax_cmp( $a, $b ) {
  * Function to update the database with the submitted order
  */
 function customtaxorder_update_order() {
+
+	/* Check Nonce */
+	$verified = false;
+	if ( isset($_POST['custom-taxonomy-order-ne-nonce']) ) {
+		$verified = wp_verify_nonce( $_POST['custom-taxonomy-order-ne-nonce'], 'custom-taxonomy-order-ne-nonce' );
+	}
+	if ( $verified == false ) {
+		// Nonce is invalid.
+		echo '<div id="message" class="error fade notice is-dismissible"><p>' . __('The Nonce did not validate. Please try again.', 'custom-taxonomy-order-ne') . '</p></div>';
+		return;
+	}
+
 	if (isset($_POST['hidden-custom-order']) && $_POST['hidden-custom-order'] != "") {
 		global $wpdb;
 		$parent_ID_order = 0;
@@ -278,10 +304,13 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
 
 /*
  * customtaxorder_wp_get_object_terms_order_filter
+ *
+ * Filters:
  * wp_get_object_terms is used to sort in wp_get_object_terms and wp_get_post_terms functions.
  * get_terms is used in wp_list_categories and get_terms functions.
  * get_the_terms is used in the the_tags function.
  * tag_cloud_sort is used in the wp_tag_cloud and wp_generate_tag_cloud functions (but then the get_terms filter here does nothing).
+ *
  * Default sorting is by name (according to the codex).
  *
  */

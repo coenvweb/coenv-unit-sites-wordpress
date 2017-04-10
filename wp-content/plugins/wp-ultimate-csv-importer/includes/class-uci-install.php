@@ -429,25 +429,33 @@ class SmackUCIInstall {
 		}
 	}
 
-	public static function important_cron_notice() {
-		$get_notice = get_option('smack_uci_enable_cron_notice');
-		if($get_notice != 'off') {
-			?>
-			<div class="notice notice-error is-dismissible" onclick="dismiss_notices('enable_cron_notice');">
-				<p style="margin-top: 10px"><strong><?php echo esc_html__( 'Notice:', 'wp-ultimate-csv-importer' ); ?> </strong> <?php echo esc_html__( 'To populate Featured images, Please make sure that CRON is enabled in your server.', 'wp-ultimate-csv-importer' ); ?></p>
-			</div>
-			<?php
-		}
-	}
-
+	 public static function important_cron_notice() {
+                $get_notice = get_option('smack_uci_enable_cron_notice');
+                if($get_notice != 'off' && isset($_REQUEST['page']) && $_REQUEST['page'] == 'sm-uci-import') {
+                        ?>
+                        <div class="notice notice-error wc-connect is-dismissible" onclick="dismiss_notices('enable_cron_notice');" >
+                        <p style="margin-top: 10px">
+                        <strong><?php echo esc_html__( 'Notice:', 'wp-ultimate-csv-importer' ); ?> </strong> <?php echo esc_html__( 'To populate Featured images, Please make sure that CRON is enabled in your server. ', 'wp-ultimate-csv-importer' ); ?></p>
+                        </div>
+                        <?php
+                        if(function_exists( 'curl_version' ) == null || function_exists( 'curl_version' ) == '' && isset($_REQUEST['page']) && $_REQUEST['page'] == 'sm-uci-import') { ?>
+                                <div class="notice notice-error">
+                                        <p style="margin-top: 10px;">
+                                                <strong><?php echo esc_html__( 'Notice:', 'wp-ultimate-csv-importer' ); ?> </strong> <?php echo esc_html__( 'Please install CURL & enable it in your server. ', 'wp-ultimate-csv-importer' ); ?>
+                                        </p>
+                                </div>
+                        <?php }
+                }
+        }
 	public static function wp_ultimate_csv_importer_notice() {
-		$get_notice = get_option('smack_uci_rating_notice');
-		if($get_notice != 'off') {
-			?>
-			<div class='notice updated uci-message wc-connect is-dismissible' onclick="dismiss_notices('rating_notice');">
-				<p><?php echo esc_html__("If you love WP Ultimate CSV Importer show us you care with a 5-star review on","wp-ultimate-csv-importer")?> <a href='https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post' target='_blank'><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer') ?></a></p>
-			</div>
-			<?php
-		}
-	}
+                $get_notice = get_option('smack_uci_rating_notice');
+                $smack_uci_pages = array('sm-uci-import', 'sm-uci-dashboard', 'sm-uci-managers', 'sm-uci-export', 'sm-uci-settings', 'sm-uci-support');
+                if($get_notice != 'off' && isset($_REQUEST['page']) && in_array($_REQUEST['page'], $smack_uci_pages)) {
+                        ?>
+                        <div class='notice Updated uci-message wc-connect is-dismissible' onclick="dismiss_notices('rating_notice');">
+                        <p><?php echo esc_html__("If you love WP Ultimate CSV Importer show us you care with a 5-star review on","wp-ultimate-csv-importer")?> <a href='https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post' target='_blank'><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer') ?></a></p>
+                        </p></div>
+                        <?php
+                }
+        } 
 }

@@ -451,7 +451,8 @@ function server_method(){
 
 function toggle_func(id){
     jQuery('#'+id+'toggle').slideToggle('slow');
-    jQuery('#icon'+id).toggleClass("glyphicon glyphicon-minus").toggleClass("glyphicon glyphicon-plus");
+    jQuery('#icon'+id).toggleClass("icon-circle-down").toggleClass("icon-circle-up");
+    jQuery('#'+id).toggleClass("text-primary");
 }
 
 /** VAlidate Custom Field Choice Text **/
@@ -1952,6 +1953,73 @@ function send_support_email() {
     });
 
 }
+jQuery(function(){
+    //Sliding Textbox option for radio Switch
+    jQuery('.wp_ultimate_slide').on('ifChecked', function(){
+        var key = jQuery(this).data("key");
+        var source = jQuery('.source-' + jQuery(this).attr('id'));
+        if(key == true){
+            source.slideDown();
+        } else if (key == false) {
+            jQuery(this).parents('.wp_ultimate_container').find('.set_from_csv').slideUp();
+        }
+    });
+
+    jQuery('.wp_ultimate_slide').on('ifChecked', function(){
+        var key_select = jQuery(this).data("select");
+        var select_source = jQuery('.select-' + jQuery(this).attr('id'));
+        if(key_select == true){
+            select_source.slideDown();
+        } else if (key_select == false) {
+            jQuery(this).parents('.wp_ultimate_container').find('.slide_select').slideUp();
+        }
+    });
+
+    // toggle SlideUp/SlideDown Textbox
+    jQuery('.wp_ultimate_toggle').on('ifChecked', function(){
+        jQuery(this).parents('.wp_ultimate_toggle_container').find('.wp_ultimate_toggle_target').slideDown();
+    });
+    jQuery('.wp_ultimate_toggle').on('ifUnchecked', function(){
+        jQuery(this).parents('.wp_ultimate_toggle_container').find('.wp_ultimate_toggle_target').slideUp();
+    });
+});
+
+
+jQuery(window).scroll(function () {
+    var threshold = 100;
+    //jQuery("#test").html(jQuery(window).scrollTop());
+    if (jQuery(window).scrollTop() >= threshold)
+        jQuery('#mapping-sidebar').addClass('sidebar-fixed');
+    else
+        jQuery('#mapping-sidebar').removeClass('sidebar-fixed');
+    var check = jQuery("#mapping-content").height() - jQuery("#mapping-sidebar").height()-21;
+    if (jQuery(window).scrollTop() >= check){
+        jQuery('#mapping-sidebar').addClass('bottom');
+    }
+    else{
+        jQuery('#mapping-sidebar').removeClass('bottom');
+    }
+
+
+    if (jQuery(document).scrollTop() >  50){
+        jQuery('.mapping-sidebar-content-section').css({'max-height': (jQuery(window).height() - 147) + 'px' });
+    }
+    else{
+        jQuery('.mapping-sidebar-content-section').css({'max-height': (jQuery(window).height() - 220) + 'px' });
+    }
+
+    // jQuery(document).ready(function() {
+    //   function setHeight() {
+    //     windowHeight = jQuery(window).innerHeight()-500;
+    //     jQuery('.mapping-sidebar-content-section').css('max-height', windowHeight);
+    //   };
+    //   setHeight();
+
+    //   jQuery(window).resize(function() {
+    //     //setHeight();
+    //   });
+    // });
+});
 
 function send_subscribe_email() {
     document.getElementById('loading-img-subs').style.display = "block";
@@ -2009,4 +2077,108 @@ function dismiss_notices(type) {
             //swal('Success!', 'Thanks for submitting the query.', 'success')
         }
     });
+}
+function mapping_type(type) {
+    var url = window.location.href;
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    var get_type = getUrlParameter('mapping_type');
+    if(get_type === undefined && type == 'normal') {
+        window.location.replace(url + '&mapping_type=normal');
+        //jQuery.param.querystring(window.location.href, 'mapping_type=normal');
+    } else {
+        if(type == 'normal') {
+            window.location.replace(url + '&mapping_type=normal');
+        } else {
+            window.location.replace(url + '&mapping_type=advanced');
+            //jQuery.param.querystring(window.location.href, 'mapping_type=advanced');
+        }
+    }
+   }
+
+var dragableDroppable = function() {
+        jQuery(".draggable").draggable({
+         //revert: true,
+         helper: 'clone',
+         containment: "document",
+         helper: function() {
+            return jQuery(this).clone().appendTo('body').css({
+                'zIndex': 5
+            });
+        },
+         start: function(event, ui) {
+            jQuery(this).fadeTo('fast', 0.5);
+         },
+         stop: function(event, ui) {
+            jQuery(this).fadeTo(0, 1);
+         }
+      });
+      jQuery(".droppable").droppable({
+         hoverClass: 'active',
+         drop: function(event, ui) {
+            this.value += '{' + jQuery(ui.draggable).text() + '}';
+         }
+      });
+};
+function retrieve_record(action, value) {
+    jQuery('.route-loader-container').addClass('active');
+    var current_record = jQuery('#current_row').val();
+    var eventKey = jQuery('#event_key').val();
+    var row_no = 0;
+    if(action == 'prev') {
+        row_no = parseInt(current_record) - 1;
+    } else if(action == '') {
+        row_no = parseInt(value);
+    } else {
+        row_no = parseInt(current_record) + 1;
+    }
+    var total_no_of_records = jQuery('#total_no_of_records').val();
+    if(row_no > total_no_of_records) {
+        row_no = total_no_of_records;
+    } else if (row_no <= 0) {
+        row_no = 1;
+    }
+    jQuery.ajax({
+        url: ajaxurl,
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'action': 'retrieve_record',
+            'row_no': parseInt(row_no),
+            'event_key': eventKey,
+        },
+        success: function (response) {
+            //swal('Success!', 'Thanks for submitting.', 'success')
+            var html = '';
+            jQuery('ul.uci_mapping_attr_value').empty();
+            jQuery.each(response, function(key, val){
+                if(val.length > 150) val = val.substring(0, 150) + '<span style="color: red;"> [more]</span>';
+                html = '<div class="uci_mapping_csv_column"><li draggable="true" ondragstart="drag(event)" class="uci_csv_column_header" title="' + key + '"style="color: #00A699; font-weight: 600;">' + key + '</li> <li class="uci_csv_column_val" style="border-right: none;">' + val + '</li></div>';
+                jQuery('ul.uci_mapping_attr_value').append(html);
+                jQuery('li.uci_csv_column_header').addClass('draggable');
+                dragableDroppable();
+            });
+            jQuery('#current_row').val(row_no);
+	    //jQuery('ul.uci_mapping_attr_value').empty();
+            //jQuery('ul.uci_mapping_attr_value').append(html);
+            jQuery('.route-loader-container').removeClass('active');
+        }
+    });
+}
+
+function removeRow(row_id) {
+    jQuery("#"+row_id).remove();
 }

@@ -83,7 +83,19 @@ function ucipro_widget_bar_stacked_chart() {
 
 function ucipro_widget_linechart()
 {
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    //var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var months = new Array();
+    var today = new Date();
+    var aMonth = today.getMonth();
+    var i;
+    for (i=0; i<12; i++) {
+        aMonth++;
+        if (aMonth > 11) {
+            aMonth = 0;
+        }
+        months[i] = mon[aMonth];
+    }
     var dataSets = [];
     var config = {};
     jQuery.ajax({

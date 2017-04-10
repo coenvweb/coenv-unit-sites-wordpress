@@ -45,61 +45,66 @@ class SmackUCIAdminAjax {
 		self::smuci_ajax_events();
 	} */
 
-	public static function smuci_ajax_events(){
+	public static function smuci_ajax_events() {
 		$ajax_actions = array(
-			'upload_actions' => false,
-			'ftp_actions' => false,
-			'uci_picklist_handler' => false,
-			'external_file_actions' => false,
-			'file_treeupload' => false,
-			'parseDataToImport' => false,
-			'parseDataToExport' => false,
-			'sendmail' => false,
-			'send_subscribe_email' =>false,
-			'static_formula_method_handler' => false,
-			'check_templatename' => false,
-			'delete_template' => false,
-			'update_template' => false,
-			'delete_schedule' => false,
-			'edit_schedule' => false,
-			'filter_template' => false,
-			'search_template' => false,
-			'get_mediaimg_size' => false,
-			'get_headerData' => false,
-			'update_event' => false,
-			'selectrevision' => false,
-			'downloadFile' => false,
-			'download_AllFiles' => false,
-			'deleteFileEvent' => false,
-			'deleteRecordEvent' => false,
-			'deleteAllEvents' => false,
-			'deleteScheduledFile' => false,
-			'deleteAllScheduledEvent' => false,
-			'trashRecords' => false,
-			'downloadLog' => false,
-			'register_acfpro_fields' => false,
-			'register_acf_free_fields' => false,
-			'delete_acf_pro_fields' => false,
-			'delete_acf_free_fields' => false,
-			'register_pods_fields' => false,
-			'delete_pods_fields' => false,
-			'add_bidirectional_fields' => false,
-			'register_types_fields' => false,
-			'delete_types_fields' => false,
-			'check_CFRequiredFields' => false,
-			'schedule_your_current_event' => false,
-			'inlineimage_upload' => false,
-			'set_post_types' => false,
-			'FetchPieChartData' => false,
-			'FetchBarStackedChartData' => false,
-			'FetchLineChartData' => false,
-			'options_savein_ajax' => false,
-			'database_optimization_settings' => false,
-			'database_optimization_process' => false,
-			'upload_zipfile_handler' => false,
-			'get_schedule_event_info' => false,
-			'dismiss_notices' => false,
-		);
+				'upload_actions' => false,
+				'ftp_actions' => false,
+				'uci_picklist_handler' => false,
+				'external_file_actions' => false,
+				'file_treeupload' => false,
+				'parseDataToImport' => false,
+				'parseDataToExport' => false,
+				'sendmail' => false,
+				'send_subscribe_email' =>false,
+				'retrieve_record' => false,
+				'static_formula_method_handler' => false,
+				'check_templatename' => false,
+				'delete_template' => false,
+				'update_template' => false,
+				'delete_schedule' => false,
+				'edit_schedule' => false,
+				'filter_template' => false,
+				'search_template' => false,
+				'get_mediaimg_size' => false,
+				'get_headerData' => false,
+				'update_event' => false,
+				'selectrevision' => false,
+				'downloadFile' => false,
+				'download_AllFiles' => false,
+				'deleteFileEvent' => false,
+				'deleteRecordEvent' => false,
+				'deleteAllEvents' => false,
+				'deleteScheduledFile' => false,
+				'deleteAllScheduledEvent' => false,
+				'trashRecords' => false,
+				'downloadLog' => false,
+				'register_acfpro_fields' => false,
+				'register_acf_free_fields' => false,
+				'delete_acf_pro_fields' => false,
+				'delete_acf_free_fields' => false,
+				'register_pods_fields' => false,
+				'delete_pods_fields' => false,
+				'add_bidirectional_fields' => false,
+				'register_types_fields' => false,
+				'delete_types_fields' => false,
+				'check_CFRequiredFields' => false,
+				'schedule_your_current_event' => false,
+				'inlineimage_upload' => false,
+				'set_post_types' => false,
+				'FetchPieChartData' => false,
+				'FetchBarStackedChartData' => false,
+				'FetchLineChartData' => false,
+				'options_savein_ajax' => false,
+				'database_optimization_settings' => false,
+				'database_optimization_process' => false,
+				'upload_zipfile_handler' => false,
+				'get_schedule_event_info' => false,
+				'dismiss_notices' => false,
+				'sendmail' => false,
+				'send_subscribe_email' =>false,
+				'retrieve_record' => false,
+				'preview_record' => false,
+				);
 		foreach($ajax_actions as $action => $value ){
 			add_action('wp_ajax_'.$action, array(__CLASS__, $action));
 		}
@@ -841,5 +846,59 @@ class SmackUCIAdminAjax {
 			die;
 		}
 	}
-	
+
+	public function retrieve_record() {
+		$parserObj = new SmackCSVParser();
+		if($_POST) {
+			$file = SM_UCI_IMPORT_DIR . '/' . $_POST['event_key'] . '/' . $_POST['event_key'];
+			$csv_row = $parserObj->parseCSV($file, $_POST['row_no']);
+			print_r(json_encode($csv_row[$_POST['row_no']]));
+		}
+		die;
+	}
+
+	public function preview_record() {
+		$parserObj = new SmackCSVParser();
+		$modified_result = array();
+		$result = '';
+		if($_POST) {
+			$file = SM_UCI_IMPORT_DIR . '/' . $_POST['event_key'] . '/' . $_POST['event_key'];
+			$csv_row = $parserObj->parseCSV($file, $_POST['row_no']);
+			$data = $csv_row[$_POST['row_no']];
+			$mapping = array('title' => $_POST['title'], 'content' => $_POST['content'], 'excerpt' => $_POST['excerpt'], 'image' => $_POST['image']);
+			foreach($mapping as $key => $val) {
+				$pattern = "/({([a-z A-Z 0-9 | , _ -]+)(.*?)(}))/";
+				preg_match_all($pattern, $val, $results, PREG_PATTERN_ORDER);
+				for($i=0; $i<count($results[2]); $i++) {
+					$oldWord = $results[0][$i];
+					$get_val = $results[2][$i];
+					//TODO xml
+					if(isset($data[$get_val])) {
+						$newWord = $data[$get_val];
+					} else {
+						$newWord = $get_val;
+					}
+					$val = str_replace($oldWord, ' ' . $newWord, $val);
+				}
+				$modified_result[$key] = $val;
+			}
+			$result .= '<table class="table table-striped">';
+			$result .= '<tr>';
+			$result .= '<td><p><b>' . $modified_result['title'] . '</b></p></td>';
+			$result .= '</tr>';
+			$result .= '<tr>';
+			$result .= '<td><p>' . $modified_result['content'] . '</p></td>';
+			$result .= '</tr>';
+			$result .= '<tr>';
+			$result .= '<td><p><img src="' . $modified_result['image'] . '" width="50" height="50" /></p></td>';
+			$result .= '</tr>';
+			$result .= '<tr>';
+			$result .= '<td><p>' . $modified_result['excerpt'] . '</p></td>';
+			$result .= '</tr>';
+
+			$result .= '</table>';
+			print $result;
+		}
+		die;
+	}
 }

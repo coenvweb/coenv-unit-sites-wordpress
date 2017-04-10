@@ -72,8 +72,38 @@ if($istemplate == 'no'){
    $actionURL = esc_url(admin_url() . 'admin.php?page=sm-uci-import&step=media_config&eventkey='.$_REQUEST['eventkey']);
 }
 $templateName = '';
-
+if(isset($_REQUEST['templateid'])) {
+   $templateInfo = $wpdb->get_results($wpdb->prepare("select templatename, mapping from wp_ultimate_csv_importer_mappingtemplate where id = %d", $_REQUEST['templateid']));
+   $template_mapping = maybe_unserialize($templateInfo[0]->mapping);
+   $templateName = $templateInfo[0]->templatename;
+   $actionURL .= '&templateid=' . intval($_REQUEST['templateid']);
+   $backlink .= '&templateid=' . intval($_REQUEST['templateid']);
+}
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
+   $templateInfo = $wpdb->get_results($wpdb->prepare("select templatename, mapping from wp_ultimate_csv_importer_mappingtemplate where eventKey = %s", $_REQUEST['eventkey']));
+   $template_mapping = maybe_unserialize($templateInfo[0]->mapping);
+   $templateName = $templateInfo[0]->templatename;
+}
 ?>
+<?php
+$normal = 'active'; $advanced = '';
+if(isset($_REQUEST['mapping_type']) && $_REQUEST['mapping_type'] == 'normal') {
+   $normal = 'active';
+   $advanced = '';
+} elseif(isset($_REQUEST['mapping_type']) && $_REQUEST['mapping_type'] == 'advanced') {
+   $normal = '';
+   $advanced = 'active';
+}
+?>
+<div class="col-md-6 col-md-offset-3">
+   <ul class="mapping-switcher">
+      <li class="<?php echo $normal; ?>" onclick="mapping_type('normal');">Normal Mapping</li>
+      <li class="<?php echo $advanced; ?>" onclick="mapping_type('advanced');">Advanced Mapping</li>
+   </ul>
+</div>
+<div class="clearfix"></div>
+
+
 <div class="list-inline pull-right mb10 wp_ultimate_csv_importer_pro">
             <div class="col-md-6 mt10"><a href="https://goo.gl/jdPMW8" target="_blank">Documentation</a></div>
             <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank">Sample CSV</a></div>
@@ -127,7 +157,7 @@ $templateName = '';
                                           $name = $value1['name']; ?>
                                           <tr id='<?php print($prefix); ?>_tr_count<?php print($CORE_count); ?>'>
                                              <td id='<?php print ($prefix); ?>_tdg_count<?php print($CORE_count); ?>' class='left_align' style='width:20%;'>
-                                                <label class='wpfields'> <?php print('<b style="">'.$label.'</b></label><br><label class="samptxt">[Name: '.$name.']'); ?> </label>
+						 <label class='wpfields'> <?php print('<b style="">'.$label.'</b></label><br><label class="samptxt">[Name: '.$name.']'); ?> </label>
                                                 <input type='hidden' name='<?php echo $key . '__fieldname' . $mappingcount; ?>' id='<?php echo $key . '__fieldname' . $mappingcount; ?>' value='<?php echo $name; ?>' class='hiddenclass'/>
                                              </td>
                                              <td class="mappingtd_style">
@@ -239,6 +269,8 @@ $templateName = '';
       </div>
       <div class="clearfix"></div>
          <div class="mb20"></div>
+      <input type="hidden" name="smack_uci_mapping_method" value="<?php echo sanitize_title($_REQUEST['mapping_type']); ?>">
+
    </form>
 </div>
 <input type='hidden' id='h1' name='h1' value='<?php if (isset($mappingcount)) { echo $mappingcount; } ?>'/>

@@ -129,8 +129,12 @@ function customtaxorder() {
 ?>
 
 	<h1><?php echo __('Order ', 'custom-taxonomy-order-ne') . $tax_label; ?></h1>
-	<form name="custom-order-form" method="post" action="">
-		<?php
+	<form name="custom-order-form" method="post" action=""><?php
+
+		/* Nonce */
+		$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
+		echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
+
 		$args = array(
 			'orderby' => 'term_order',
 			'order' => 'ASC',

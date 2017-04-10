@@ -1682,9 +1682,14 @@ class SmackUCIHelper {
 		$result = array();
 		$available_groups_type = $uci_admin->available_widgets($importType, $this->event_information['import_as']);
 		#$this->groupMapping = $this->generateDataArrayBasedOnGroups($available_groups_type, $eventMapping, $data);
-		if(!empty($data)) {
-			$uci_admin->setRowMapping( $this->generateDataArrayBasedOnGroups( $available_groups_type, $eventMapping, $data ) );
-		}
+                $mapping_config = $uci_admin->getMappingConfiguration();
+                $mapping_method = $mapping_config['smack_uci_mapping_method'];
+$currentMapping = $this->generateDataArrayBasedOnGroups( $available_groups_type, $eventMapping, $data, $mapping_method);
+                if(empty($currentMapping)) {
+                        $uci_admin->setRowMapping( $data );
+                } else {
+                        $uci_admin->setRowMapping($this->generateDataArrayBasedOnGroups($available_groups_type, $eventMapping, $data, $mapping_method));
+                }
 		$event_information = $uci_admin->getEventInformation();
 		if(empty($event_information)) {
 			$screen_data = $uci_admin->GetPostValues( $eventKey );
@@ -1748,7 +1753,7 @@ class SmackUCIHelper {
 					# Note: Removed data import for eCommerce meta fields
 					break;
 				case 'CORECUSTFIELDS':
-					$this->importDataForWPMetaFields($groupValue, $this->getLastImportId());
+					$this->importDataForWPMetaFields($groupValue, $this->getLastImportId(), $importType);
 					break;
 				case 'ACF':
 					# Note: Removed data import for ACF fields
@@ -1796,7 +1801,11 @@ class SmackUCIHelper {
 		$returnArr = array();
 		global $wpdb, $uci_admin;
 		$mode_of_affect = 'Inserted';
-
+		if(!$data_array['post_format'])
+		{
+			if($data_array['post_format_option'])
+				$data_array['post_format']=$data_array['post_format_option'];
+		}
 		#TODO: Check the mode & conditions based on import configuration values.
 
 		$event_info = $uci_admin->getEventInformation();
@@ -1902,11 +1911,15 @@ class SmackUCIHelper {
 							$assigned_author = $user_records['message'];
 						}
 					}
-
+					$post_format_array=array('post-format-aside','post-format-image','post-format-video','post-format-audio','post-format-quote','post-format-link','post-format-gallery','aside','image','video','audio','quote','link','gallery');
 					/* Post Format Options */
 					if ( ! empty( $data_array['post_format'] ) ) {
 						if ( ! is_numeric( $data_array['post_format'] ) ) {
-							$post_format = $data_array ['post_format'];
+							if(in_array(trim($data_array['post_format']),$post_format_array)){
+								$post_format = $data_array['post_format'];
+							}
+							else
+								unset($data_array['post_format']);
 						} else {
 							switch ( $data_array ['post_format'] ) {
 								case 1 :
@@ -1934,12 +1947,10 @@ class SmackUCIHelper {
 						}
 						$data_array['post_format'] = $post_format;
 					}
-
 					/* Post Status Options */
 					if ( !empty($data_array['post_date']) ) {
 						$data_array = $this->assign_post_status( $data_array );
 					}
-
 					// Assign post type
 					//$data_array['post_type'] = $this->import_post_types( $importType );
 
@@ -1952,6 +1963,7 @@ class SmackUCIHelper {
 					if ($mode == 'Insert') {
 						unset($data_array['ID']);
 						$retID = wp_insert_post($data_array); // Insert the core fields for the specific post type.
+
 						if(is_wp_error($retID) || $retID == '') {
 							$this->setSkippedRowCount($this->getSkippedRowCount() + 1);
 							if(is_wp_error($retID)) {
@@ -2058,12 +2070,16 @@ class SmackUCIHelper {
 		return $returnArr;
 	}
 
-	public function importDataForWPMetaFields ($data_array, $pID) {
+	public function importDataForWPMetaFields ($data_array, $pID, $importType) {
 		$createdFields = array();
 		if(!empty($data_array)) {
 			foreach ($data_array as $custom_key => $custom_value) {
 				$createdFields[] = $custom_key;
-				update_post_meta($pID, $custom_key, $custom_value);
+				if( $importType != 'Users'){
+					update_post_meta($pID, $custom_key, $custom_value);
+				}else{
+					update_user_meta($pID, $custom_key, $custom_value);
+				}
 			}
 		}
 		return $createdFields;
@@ -2151,6 +2167,7 @@ class SmackUCIHelper {
 							$exist_term_id = array( $checkAvailable['term_id'] );
 							$exist_term_id = array_map( 'intval', $exist_term_id );
 							$exist_term_id = array_unique( $exist_term_id );
+							$parent_term_id2 = $checkAvailable['term_id'];
 							wp_set_object_terms( $pID, $exist_term_id, $category_name, true );
 						}
 					}
@@ -2366,15 +2383,20 @@ class SmackUCIHelper {
 	 * @param $data_rows
 	 * @return mixed
 	 */
-	public function generateDataArrayBasedOnGroups($available_groups_type = null, $mapping_records = null, $data_rows = null){
+	public function generateDataArrayBasedOnGroups($available_groups_type = null, $mapping_records = null, $data_rows = null, $method = 'advanced'){
 		//new mapped array
-		$import_dataArr = array();
+		$import_dataArr = $current_mapped_check_serialize = array();
 		if(!empty($available_groups_type)) {
+			if($method == 'normal' || $method == ''):
 			foreach ($available_groups_type as $groupname => $groupvalue) {
 				if(!empty($mapping_records)) {
 					foreach ( $mapping_records as $mapping_key => $mapping_value ) {
 						$current_mapped_group_mapkey = explode( $groupvalue . '__mapping', $mapping_key );
 						$current_mapped_group_key    = explode( $groupvalue . '__fieldname', $mapping_key );
+						//Serialize check
+                                                if( $groupvalue == 'CORECUSTFIELDS' ){
+                                                        $current_mapped_check_serialize = explode( $groupvalue . '__SerializeVal', $mapping_key );
+                                                }
 						$current_static_group_key    = explode( $groupvalue . '_statictext_mapping', $mapping_key );
 						$current_formula_group_key   = explode( $groupvalue . '_formulatext_mapping', $mapping_key );
 						if ( is_array( $current_mapped_group_mapkey ) && count( $current_mapped_group_mapkey ) == 2 ) {
@@ -2384,6 +2406,12 @@ class SmackUCIHelper {
 							$set_fields_group[ $groupvalue ][] = $mapping_value;
 							$current_row_val                   = $mapping_value;
 						}
+						//serialize
+                                                if ( is_array( $current_mapped_check_serialize ) && count( $current_mapped_check_serialize ) == 2 ) {
+                                                        $serialize_index = substr( $mapping_key , -1);
+                                                        $set_fields_serialize[ 'SerializeVal' ][$serialize_index] = $mapping_value;
+                                                        $current_row_val                   = $mapping_value;
+                                                }
 						//static and formula features
 						if ( is_array( $current_static_group_key ) && count( $current_static_group_key ) == 2 ) {
 							$set_static_group[ $groupvalue ][ $current_row_val ] = $mapping_value;
@@ -2412,7 +2440,27 @@ class SmackUCIHelper {
 						}
 					}
 				}
+				//serialized
+                                if(!empty($set_fields_serialize['SerializeVal'] )) {
+                                        foreach ($set_fields_serialize['SerializeVal'] as $grp => $val) {
+                                                        $new_mapped_array['SerializeVal'][$set_fields_group['CORECUSTFIELDS'][$grp]] = $val;
+                                        }
+                                        $available_groups_type['SerializeVal'] = 'SerializeVal';
+                                }
 			}
+			elseif($method == 'advanced'):
+				foreach ($available_groups_type as $groupname => $groupvalue) {
+					if(!empty($mapping_records)) {
+						foreach ( $mapping_records as $mapping_key => $mapping_value ) {
+							$current_mapping_field = explode($groupvalue . '__', $mapping_key);
+							if (is_array($current_mapping_field) && count($current_mapping_field) == 2) {
+								$new_mapped_array[ $groupvalue ][ $current_mapping_field[1] ] = $mapping_value;
+								$set_static_group[ $groupvalue ][ $current_mapping_field[1] ] = $mapping_value;
+							}
+						}
+					}
+				}
+			endif;
 			//Empty rows checking
 			foreach ($available_groups_type as $groupname => $groupvalue) {
 				if (!empty($new_mapped_array[$groupvalue])) {
@@ -2430,12 +2478,12 @@ class SmackUCIHelper {
 									} else {
 										$newWord = $get_val;
 									}
-									$mpval = str_replace($oldWord, $newWord, $mpval);
+									$mpval = str_replace($oldWord, ' ' . $newWord, $mpval);
 								}
-								$mpval = str_replace('+',' ', $mpval);
+								//$mpval = str_replace('+',' ', $mpval);
 								if(trim($mpval) != '')
 									$import_dataArr[$groupvalue][$mpkey] = $mpval;
-							}elseif(isset($set_formula_group[$groupvalue]) && in_array($mpval, $set_formula_group[$groupvalue])){
+							} elseif(isset($set_formula_group[$groupvalue]) && in_array($mpval, $set_formula_group[$groupvalue])) {
 								$pattern = "/({([\w]+)(.*?)(}))/";
 								preg_match_all($pattern, $mpval, $results, PREG_PATTERN_ORDER);
 								for($i=0; $i<count($results[2]); $i++) {
@@ -2459,14 +2507,19 @@ class SmackUCIHelper {
 								}
 								if($result != 0)
 									$import_dataArr[$groupvalue][$mpkey] = $result;
-							}else {
+							} else {
 								if ($mpval == 'publish') {
 									$result = 'publish';
-								} else {
-									if (!empty($data_rows) && array_key_exists($mpval, $data_rows)) {
-										$result = $data_rows[$mpval];
-									} else {
+								} else{
+									if($groupvalue == 'SerializeVal'){
+										$import_dataArr['SerializeVal'][$mpkey] = $mpval;
 										$result = '';
+									} else{
+										if (!empty($data_rows) && array_key_exists($mpval, $data_rows)) {
+											$result = $data_rows[$mpval];
+										} else {
+											$result = '';
+										}
 									}
 								}
 								if($result != '')
@@ -2479,6 +2532,10 @@ class SmackUCIHelper {
 			}
 		}
 		return $import_dataArr;
+	}
+
+	public function saveAdvancedTemplate($uci_admin, $templateName = null) {
+		#NOTE: Removed save mapping template feature
 	}
 
 	/**

@@ -2,7 +2,7 @@
 /******************************
  * Plugin Name: WP Ultimate CSV Importer
  * Description: Seamlessly create posts, custom posts, pages, media, SEO and more from your CSV data with ease.
- * Version: 5.1.1
+ * Version: 5.2
  * Author: smackcoders
  * Plugin URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_pro&utm_medium=wordpress
  * Author URI: http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=plugin&utm_campaign=csv_importer_pro&utm_medium=wordpress
@@ -57,7 +57,7 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 	 */
 	class SM_WPUltimateCSVImporter {
 
-		public $version = '5.1.1';
+		public $version = '5.2';
 
 		/**
 		 * The single instance of the class.
@@ -218,6 +218,9 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 				wp_register_script( 'bootstrap-datepicker-js', plugins_url( 'assets/js/bootstrap-datepicker.js', __FILE__ ) );
 				wp_enqueue_script( 'bootstrap-datepicker-js' );
 				wp_enqueue_script( 'jquery-ui-dialog' );
+				wp_enqueue_script('jquery-ui-draggable');
+				wp_enqueue_script('jquery-ui-droppable');
+				wp_enqueue_script('jquery-ui-core');
 				wp_enqueue_script( 'file-tree', plugins_url( 'assets/js/jqueryfiletree.js', __FILE__ ) );
 				wp_localize_script( 'ultimate-importer-js', 'uci_importer', array(
 							'adminurl' => admin_url(),
@@ -238,12 +241,17 @@ if ( ! class_exists( 'SM_WPUltimateCSVImporter' ) ) :
 				wp_enqueue_script('bootstrap-js');
 				wp_register_script('bootstrap-select-js', plugins_url('assets/js/bootstrap-select.js', __FILE__));
 				wp_enqueue_script('bootstrap-select-js');
+				wp_register_script('stickySidebar-js', plugins_url('assets/js/stickySidebar.js', __FILE__));
+				wp_enqueue_script('stickySidebar-js');
 				//new files include close
 				wp_register_script('waitme-js', plugins_url('assets/js/waitMe.js', __FILE__));
 				wp_enqueue_script('waitme-js');
 				// Sweet Alert Js
 				wp_register_script('sweet-alert-js', plugins_url('assets/js/sweetalert-dev.js', __FILE__));
 				wp_enqueue_script('sweet-alert-js');
+				// Tinymce Editor Js
+				wp_register_script('ckeditor-js', plugins_url('assets/js/ckeditor-js/ckeditor.js', __FILE__));
+				wp_enqueue_script('ckeditor-js');
 				//MODAL POP UP JS
 				wp_enqueue_script('pop-up',plugins_url('assets/js/modal.js',__FILE__));
 				// Morris chart CSS & JS for dashboard

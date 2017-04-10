@@ -3,9 +3,9 @@ Contributors: smackcoders, smacksupport
 Donate link: https://www.paypal.me/smackcoders
 Tags: csv importer, import csv, import woocommerce, import marketpress, import seo by yoast, import all in one seo, scheduled import, import remote file, export woocommerce, import types fields, import acf fields, Events Manager
 Requires at least: 4.0
-Tested up to: 4.7.2
-Stable tag: 5.1.1
-Version: 5.1.1
+Tested up to: 4.7.3
+Stable tag: 5.2
+Version: 5.2
 Author: smackcoders
 Author URI: http://profiles.wordpress.org/smackcoders/
 License: GPLv2 or later
@@ -48,7 +48,7 @@ Please show your support for WP Ultimate CSV Importer by giving it a [rating](ht
 * Featured image from password protected image location can't be imported.
 * All languages supported by WordPress can be imported in UTF-8 without BOM format.
 
-[youtube https://www.youtube.com/watch?v=GbDlQcbnNJY]
+[youtube https://www.youtube.com/watch?v=Uho22R0BCHQ&feature=youtu.be]
 
 = Ultimate CSV Importer PRO =
 Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and it is extended with a lot of features that enables to import, schedule, update and export CSV files. The import details over a year is in dashboard chart to easily track the site updates in a fraction of a second. Any changes like modifying existing content or appending new content can be done in simple update flow. You can also update or import periodically with scheduler. The update or schedule is done with the templates which is created with mapped fields in the mapping section of the import. The export option enables to export the imported modules as CSV based on the filters.
@@ -80,7 +80,8 @@ Ultimate CSV Importer PRO has all the features of WP Ultimate CSV Importer and i
 = Helpful Links =
 [Documentation](http://www.smackcoders.com/documentation/ultimate-csv-importer-pro/how-to-import-csv?utm_source=web&utm_campaign=readme&utm_medium=wp_org).
 
-You can try the [live demo](http://demo.smackcoders.com/wp-ultimate-csv-importer/wp-admin?utm_source=web&utm_campaign=readme&utm_medium=wp_org) or request for free trial by clicking Try Now in [WordPress Ultimate CSV Importer](http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) page to generate your own WordPress test environment.
+Watch our [product video](https://youtu.be/Uho22R0BCHQ)
+You can try the [live demo](http://demo.smackcoders.com/wordpress/wp-admin/admin.php?page=sm-uci-dashboard) or request for free trial by clicking Try Now in [WordPress Ultimate CSV Importer](http://www.smackcoders.com/wp-ultimate-csv-importer-pro.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) page to generate your own WordPress test environment.
 
 Read our [blog](http://www.smackcoders.com/blog/category/wordpress-products?utm_source=web&utm_campaign=readme&utm_medium=wp_org) to know more about the new [features](http://www.smackcoders.com/wp-ultimate-csv-importer-pro/features.html?utm_source=web&utm_campaign=readme&utm_medium=wp_org) of our WordPress plugins.
 
@@ -91,33 +92,48 @@ Read our [blog](http://www.smackcoders.com/blog/category/wordpress-products?utm_
 2. Activate the plugin in WordPress plugin list.
 
 == Screenshots ==
-1. Dashboard view of the importer
+1. Dashboard view of the importer.
 2. Upload section of CSV.
-3. Mapping view of the uploaded CSV/XML fields with WordPress fields
-4. Detailed real-time log.
-5. Settings with php.ini details.
-6. Downloadable log manager for all imported events.
-7. Export module with filters.
+3. Simple Drag and Drop mapping.
+4. Mapping view of the uploaded CSV fields with WordPress fields.
+5. Detailed real-time log.
+6. Settings with php.ini details.
+7. Downloadable log manager for all imported events.
+8. Export module with filters.
 
 == Frequently Asked Questions ==
 = Common Issues =
-<b>1. How to solve auto_prepend_file and auto_append_file error?</b><br />
-* Check your phpinfo.php. Ensure that auto_prepend_file and auto_append_file options are disabled.<br />
-* If not, you can disable it in php.ini settings file. You can also do it in .htaccess file.<br />
-* Create a .htaccess file in the root and set the following values.<br />
-* php_value auto_prepend_file none<br />
-* php_value auto_append_file none<br />
-This will solve your issue or get support from hosting if you didn’t have sufficient permission.
+1. What are reasons for my import to break?<br />
+Import may hang due to the following reasons<br />
+	* CSV not properly validated.<br />
+	* CSV not properly encoded to UTF-8.<br />
+	* System Requirements are not matched the required values.<br />
 
-<b>2. Why my featured images not getting uploaded?</b><br />
-The importer uploads images in the background for faster performance and it requires WP-Cron to be enabled. You can [easily configure WP-Cron](http://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wp_org&utm_campaign=readme&utm_medium=faq) for smooth and speedy import.
+2. How to validate a CSV? <br />
+WP Ultimate CSV Importer allows you to import CSVs that are validated. So kindly validate your CSV using CSV Lint. Your CSV may have any escape characters and misplaced skip characters which may cause the import to cease.<br />
 
-<b>3. What are the supported custom fields in FREE version?</b><br />
+3. What are the supported CSV Formats? <br />
+WP Ultimate CSV Importer recognizes only the UTF-8 encoded characters. You can check on the UTF-8 encode with CSV Lint. Any chance if you are using Excel, we recommend you to use Google Sheets. Excel will miss some characters to be encoded to proper UTF-8.<br />
+
+4. What are the Minimum Requirements needed to upload CSV? <br />
+Basic System Requirements need to be met to upload a CSV with bulk of records. Kindly check your System Requirements by Settings → Security and Performance on WP Ultimate CSV Importer plugin. You have to increase the system requirements values to the minimum values mentioned in the plugin. <br />
+
+5. Why my featured images not getting uploaded? <br />
+The importer uploads images in the background for faster performance and it requires WP-Cron to be enabled. You can [easily configure WP-Cron](http://www.smackcoders.com/blog/enable-configure-wp-cron.html?utm_source=wp_org&utm_campaign=readme&utm_medium=faq) for smooth and speedy import. <br />
+
+6. What are the supported custom fields in FREE version? <br />
 The importer supports [default WordPress Text and Text area fields](http://www.smackcoders.com/blog/adding-custom-fields-data-wordpress-free-wp-ultimate-csv-importer.html?utm_source=wordpress_org&utm_campaign=readme&utm_medium=faq) of Types, Pods, etc,.. You can also import the Text & Text area fields created with custom codes in WordPress standards.
 
 For more FAQ, you can refer [here](http://www.smackcoders.com/wordpress-products-faq.html?utm_source=wp_org&utm_campaign=readme&utm_medium=faq).
 
 == Changelog ==
+= 5.2 =
+* Added: Advance mapping view with Drag ‘n’ Drop support.
+* Added: Ultimate member plugin support for Users Import.
+* Fixed: Issue with Post format.
+* Fixed: Month order in dashboard charts.
+* Added: Latest version support on All In One SEO 2.3.12.1.
+* Added: Compatibility for WordPress 4.7.3.
 = 5.1.1 =
 * Fixed: Broken when SCRIPT_DEBUG is true. [Solved](https://wordpress.org/support/topic/broken-when-script_debug-is-true/).
 * Fixed: Issue in duplicate handling to skip the duplicate records.
@@ -438,6 +454,8 @@ For more FAQ, you can refer [here](http://www.smackcoders.com/wordpress-products
 * Initial release version. Tested and found works well without any issues.
 
 == Upgrade Notice ==
+= 5.2 =
+* Upgrade now to get enhanced User Interface and support for latest version of All in one SEO. 2.3.12.1.
 = 5.1.1 =
 * Upgrade now to get the fix for duplicate handling feature.
 = 5.1 =

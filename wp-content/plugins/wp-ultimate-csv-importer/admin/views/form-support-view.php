@@ -43,17 +43,17 @@ if ( ! defined( 'ABSPATH' ) )
     <div class="col-md-6 mt10"><a href="https://goo.gl/fKvDxH" target="_blank"><?php echo esc_html__('Sample CSV','wp-ultimste-csv-importer');?></a></div>
 </div>
 <div class="wp_ultimate_csv_importer_pro panel col-md-12" style="font-size:14px; height: 650px;width:99%;">
-    <div class="col-md-10" style="text-align:center;width:99%;font-size:15px;margin-top:20px;"><?php echo esc_html__('If you love WP Ultimate CSV Importer show us your care with a 5-star review on','wp-ultimate-csv-importer');?> <a style="font-size:15px;" target="_blank"  href ="https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post"><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer');?></a></div>
+    <div class="col-md-10" style="text-align:center;width:99%;font-size:15px;margin-top:20px;"><?php echo esc_html__('Love WP Ultimate CSV Importer, Give a 5 star review on','wp-ultimate-csv-importer');?> <a style="font-size:15px;" target="_blank"  href ="https://wordpress.org/support/plugin/wp-ultimate-csv-importer/reviews/?rate=5#new-post"><?php echo esc_html__('wordpress.org!','wp-ultimate-csv-importer');?></a></div>
      <div class="col-md-12">
         <div class="col-md-6 col-sm-6 mt40 mb40" style="">
-            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:15px;"><?php echo esc_html__('Enquiry form','wp-ultimate-csv-importer');?></legend>
+            <fieldset class="scheduler-border"> <legend class="scheduler-border" style="margin-top:15px;"><?php echo esc_html__('Contact Support','wp-ultimate-csv-importer');?></legend>
                 <form class="support-form" type="post" style="margin-top:10px;" action="">
                     <div class="form-group">
                         <label><?php echo esc_html__('Email','wp-ultimate-csv-importer');?></label>
                         <input name="email" id="email" class="form-control" value="" type="text">
                     </div>
                     <div class="form-group">
-                        <label><?php echo esc_html__('Enquiry type','wp-ultimate-csv-importer');?></label>
+                        <label><?php echo esc_html__('Contact type','wp-ultimate-csv-importer');?></label>
                         <select name="" id="query" class="selectpicker form-control" data-live-search="false">
                             <option value="Bug Reporting"><?php echo esc_html__('Bug Reporting','wp-ultimate-csv-importer');?></option>
                             <option value="Pre-Sale Enquiry"><?php echo esc_html__('Pre-Sale Enquiry','wp-ultimate-csv-importer');?></option>

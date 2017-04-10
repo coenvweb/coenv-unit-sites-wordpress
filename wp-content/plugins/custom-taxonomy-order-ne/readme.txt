@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
-Tested up to: 4.6
-Stable tag: 2.8.2
+Tested up to: 4.7
+Stable tag: 2.8.3
 License: GPLv2 or later
 
 
@@ -124,8 +124,6 @@ You can start translating strings there for your locale. They need to be validat
 and you want to apply for being validator, please post it on the support forum. I will make a request on make/polyglots to
 have you added as validator for this plugin/locale.
 
-Email any other questions to marcel at timelord dot nl.
-
 == Screenshots ==
 
 1. Screenshot of the menu page for Custom Taxonomy Order.
@@ -133,6 +131,12 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.8.3 =
+* 2017-03-29
+* Add Nonce check to admin pages.
+* Register setting for taxonomies too, with callback function.
+* Run sanitize_text_field on the keyname in the option for customtaxorder_settings.
 
 = 2.8.2 =
 * 2016-10-19

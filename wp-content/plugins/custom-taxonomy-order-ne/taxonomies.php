@@ -19,8 +19,12 @@ function custom_taxonomy_order() {
 		<div id="icon-customtaxorder"></div>
 		<h1><?php _e('Order Taxonomies', 'custom-taxonomy-order-ne'); ?></h1>
 
-		<form name="custom-order-form" method="post" action="">
-			<?php
+		<form name="custom-order-form" method="post" action=""><?php
+
+			/* Nonce */
+			$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
+			echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
+
 			$args = array();
 			$output = 'objects';
 			$taxonomies = get_taxonomies( $args, $output );
@@ -79,11 +83,22 @@ function custom_taxonomy_order() {
  * Save order of the taxonomies in an option
  */
 function customtaxorder_update_taxonomies() {
+
+	/* Check Nonce */
+	$verified = false;
+	if ( isset($_POST['custom-taxonomy-order-ne-nonce']) ) {
+		$verified = wp_verify_nonce( $_POST['custom-taxonomy-order-ne-nonce'], 'custom-taxonomy-order-ne-nonce' );
+	}
+	if ( $verified == false ) {
+		// Nonce is invalid.
+		echo '<div id="message" class="error fade notice is-dismissible"><p>' . __('The Nonce did not validate. Please try again.', 'custom-taxonomy-order-ne') . '</p></div>';
+		return;
+	}
+
 	if (isset($_POST['hidden-taxonomy-order']) && $_POST['hidden-taxonomy-order'] != "") {
 
 		$new_order = $_POST['hidden-taxonomy-order'];
 		$new_order = sanitize_text_field( $new_order );
-
 		update_option('customtaxorder_taxonomies', $new_order);
 
 		echo '<div id="message" class="updated fade notice is-dismissible"><p>'. __('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';

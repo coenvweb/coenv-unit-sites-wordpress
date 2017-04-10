@@ -176,6 +176,9 @@ if(isset($ucioptimize['delete_all_trackback_comments'])) {
     <form id="form_import_file">
         <div class="import_holder" id="import_holder" >
             <div class="panel " style="width: 99%;">
+                <div id="warningsec" style="color:red;width:100%; min-height: 110px;border: 1px solid #d1d1d1;background-color:#fff;display:none;">
+                    <div id ="warning" class="display-warning" style="color:red;align:center;display:inline;font-weight:bold;font-size:15px; border: 1px solid red;margin:2% 2%;padding: 20px 0 20px;position: absolute;text-align: center;width:93%;display:none;"> </div>
+                </div>
                 <div class="panel-body no-padding">
                     <div style="height:300px;" class="col-md-3 setting-manager-list no-padding" id="left_sidebar">
                         <ul id="example">
