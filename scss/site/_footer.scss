@@ -99,19 +99,24 @@
                 line-height: rem-calc(28);
                 border-bottom: #292827 1px solid;
                 border-top: #43423f 1px solid;
-                &:nth-child(8) {
+                min-height: rem-calc(28);
+                &:nth-child(9) {
                     border-bottom: none;
-                }
-                &:nth-child(15) {
+                }   
+                &:nth-child(16) {
                     border-bottom: none;
-                }
+                }   
+                &:nth-child(17) {
+                    border-top: none;
+                    border-bottom: none;
+                }   
                 &:nth-child(1) {
                     border-top: none;
-                }
-                &:nth-child(9) {
-                    border-top: none;
-                }
+                }   
                 &:nth-child(10) {
+                    border-top: none;
+                }   
+                &:nth-child(11) {
                     padding-bottom: rem-calc(2);
                 }
             }
