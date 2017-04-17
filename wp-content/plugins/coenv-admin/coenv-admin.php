@@ -255,4 +255,18 @@ if( function_exists('acf_set_options_page_capability') )
     acf_set_options_page_capability( 'manage_options' );
 }
 
+function netid_login_form() {
+	$login_url = add_query_arg('action', 'shibboleth');
+    $login_url = remove_query_arg('reauth', $login_url);
+    $blog_title = get_bloginfo('name');
+    echo '<h2 class="blog_title">'.$blog_title.'</h2>';
+    echo '<p id="netid_login"><a class="purple netid" href="' . esc_url($login_url) . '">' . __('Login with UW NetID', 'coenv-admin') . '</a></p>';
+}
+add_action('login_form', 'netid_login_form');
 
+function netid_login_styles() {
+    if(!strpos($_SERVER['HTTP_HOST'],'.dev')) {
+        wp_enqueue_style('netid_login', plugins_url( 'coenv-login.css', __FILE__ ), false, '1.0.0');
+    }
+}
+add_action( 'login_enqueue_scripts', 'netid_login_styles' );
