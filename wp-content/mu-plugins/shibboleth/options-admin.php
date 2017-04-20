@@ -15,7 +15,6 @@ if ( is_multisite() ) {
 function shibboleth_admin_panels() {
 	$hookname = add_options_page(__('Shibboleth options', 'shibboleth'), 
 		__('Shibboleth', 'shibboleth'), 'manage_options', 'shibboleth-options', 'shibboleth_options_page' );
-	add_contextual_help($hookname, shibboleth_help_text());
 }
 
 /**
@@ -26,7 +25,6 @@ function shibboleth_admin_panels() {
 function shibboleth_network_admin_panels() {
 	$hookname = add_submenu_page('settings.php', __('Shibboleth options', 'shibboleth'), 
 		__('Shibboleth', 'shibboleth'), 'manage_network_options', 'shibboleth-options', 'shibboleth_options_page' );
-	add_contextual_help($hookname, shibboleth_help_text());
 }
 
 
