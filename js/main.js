@@ -12,12 +12,14 @@ jQuery(function ($) {
 		// lightbox captions
         $('figure a img').each(function () {
             var $this = $(this);
-            $this.parent().attr('title', $this.attr('alt'));
+            $this.parent().attr('title', ($this.parent().next().text()));
+            $this.parent().attr('data-lightbox-gallery', 1);
 		});
 		$('div.gallery img').each(function () {
             var $this = $(this);
             $this.parent().attr('title', $this.attr('alt'));
 		});
+
 
 		//$(".wp-caption-text.gallery-caption").hide();
 		//$("div.gallery dl:gt(0)").hide();
