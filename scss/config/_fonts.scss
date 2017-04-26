@@ -197,6 +197,10 @@ h3 {
             line-height: rem-calc(20);
         }
     }
+    
+    b, strong {
+        @include o_sans_bold;
+    }
 }
 
 /*	Base font size
