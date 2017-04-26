@@ -26,26 +26,6 @@ function coenv_base_post_types_init() {
     )
 
   );
-  register_post_type( 'intern',
-    array(
-      'labels' => array(    
-      'name' => __( 'Interns' ),
-      'singular_name' => __( 'Intern' ),
-      'add_new_item' => __( 'Add Intern'),
-      'edit_item' => __( 'Edit Intern'),
-      'new_item' => __( 'New Intern'),
-      ),
-    'hierarchical' => true,
-    // drew - i think we need this for each tax connected to a content type
-    'taxonomies' => array('intern_year','intern_theme'),
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    'rewrite' => array('slug' => 'intern'),
-  'menu_icon' => 'dashicons-book',
-    )
-  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
