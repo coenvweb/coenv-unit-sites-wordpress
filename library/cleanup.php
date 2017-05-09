@@ -170,12 +170,12 @@ function image_editor($html, $id, $alt, $title) {
 } 
 
 function my_remove_meta_boxes() {
-	remove_meta_box( 'featured-video-plus-box', 'page', 'normal' );
-	remove_meta_box( 'featured-video-plus-box', 'features', 'normal' );
-	remove_meta_box( 'featured-video-plus-box', 'datasets', 'normal' );
-	remove_meta_box( 'featured-video-plus-box', 'publications', 'normal' );
+	remove_meta_box( 'featured-video-plus-box', 'page', 'side' );
+	remove_meta_box( 'featured-video-plus-box', 'features', 'side' );
+	remove_meta_box( 'featured-video-plus-box', 'datasets', 'side' );
+	remove_meta_box( 'featured-video-plus-box', 'publications', 'side' );
 }
-add_action( 'admin_menu', 'my_remove_meta_boxes' );
+add_action( 'add_meta_boxes', 'my_remove_meta_boxes');
 
 // Wrap images with figure tag 
 function img_unautop($pee) {

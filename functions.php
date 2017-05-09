@@ -312,3 +312,11 @@ add_filter('wp_get_attachment_url', 'coenv_url_ssl');
 if( function_exists('acf_add_options_page') ) {
     acf_add_options_page();
 }
+
+function my_remove_meta_boxes() {
+    remove_meta_box( 'featured-video-plus-box', 'page', 'side' );
+    remove_meta_box( 'featured-video-plus-box', 'features', 'side' );
+    remove_meta_box( 'featured-video-plus-box', 'datasets', 'side' );
+    remove_meta_box( 'featured-video-plus-box', 'publications', 'side' );
+}
+add_action( 'add_meta_boxes', 'my_remove_meta_boxes');
