@@ -81,10 +81,10 @@ Template Name: Homepage
 	        	<div class="medium-6 small-12 columns">
 	                <div class="featured-news">
 	                	<?php if ( has_post_thumbnail() ) {
-						$thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'home_news' );
 						?>
 						<div class="featured-thumbnail"><a href="<?php echo $post_link_url; ?>" class="img" <?php echo $post_link_target; ?>>
-						<img src="<?php echo $thumbnail['0']; ?>" class="feature-img" /></a></div>
+                            <?php the_post_thumbnail('home_news'); ?>
+						</a></div>
 						<?php } ?>
 					
 						<div class="post-content">
