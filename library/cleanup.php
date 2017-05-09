@@ -169,6 +169,14 @@ function image_editor($html, $id, $alt, $title) {
         $html);
 } 
 
+function my_remove_meta_boxes() {
+	remove_meta_box( 'featured-video-plus-box', 'page', 'normal' );
+	remove_meta_box( 'featured-video-plus-box', 'features', 'normal' );
+	remove_meta_box( 'featured-video-plus-box', 'datasets', 'normal' );
+	remove_meta_box( 'featured-video-plus-box', 'publications', 'normal' );
+}
+add_action( 'admin_menu', 'my_remove_meta_boxes' );
+
 // Wrap images with figure tag 
 function img_unautop($pee) {
     $pee = preg_replace('/<p>\\s*?(<a .*?><img.*?><\\/a>|<img.*?>)?\\s*<\\/p>/s', '<figure>$1</figure>', $pee);
