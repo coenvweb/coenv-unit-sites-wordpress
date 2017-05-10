@@ -119,8 +119,9 @@ jQuery(function ($) {
                 $('.megamenu_submit .mega_left').append(success.html(icon).append(message.data));
             }
 
-        }).fail(function() {
-            alert( megamenu.theme_save_error );
+        }).fail(function(message) {
+            var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + "<br /><br />" + message.responseText );
+            $('.megamenu_submit').after(error);
         });
     }).on("change", function(e) {
         $(".theme_result_message").css('visibility', 'hidden');

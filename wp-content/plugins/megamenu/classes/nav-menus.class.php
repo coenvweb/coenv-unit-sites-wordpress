@@ -188,11 +188,13 @@ class Mega_Menu_Nav_Menus {
                 'get_started' => __("Use these settings to enable Max Mega Menu", "megamenu"),
                 'launch_lightbox' => __("Mega Menu", "megamenu"),
                 'is_disabled_error' => __("Please enable Max Mega Menu using the settings on the left of this page.", "megamenu"),
+                'save_menu' => __("Please save the menu structure to enable this option.", "megamenu"),
                 'saving' => __("Saving", "megamenu"),
                 'nonce' => wp_create_nonce('megamenu_edit'),
                 'nonce_check_failed' => __("Oops. Something went wrong. Please reload the page.", "megamenu"),
                 'css_prefix' => $prefix,
-                'css_prefix_message' => __("Custom CSS Classes will be prefixed with 'mega-'", "megamenu")
+                'css_prefix_message' => __("Custom CSS Classes will be prefixed with 'mega-'", "megamenu"),
+                'not_installed_image_widget' => __("Image Widget not installed. Please go to Plugins > Add New and search for 'Image Widget' to enable this option.", "megamenu")
             )
         );
 
@@ -259,6 +261,8 @@ class Mega_Menu_Nav_Menus {
                 }
             }
 
+            $submitted_settings = apply_filters("megamenu_submitted_settings_meta", $submitted_settings);
+
             if ( ! get_option( 'megamenu_settings' ) ) {
 
                 update_option( 'megamenu_settings', $submitted_settings );
@@ -308,6 +312,8 @@ class Mega_Menu_Nav_Menus {
         } else if ( ! count ( $tagged_menu_locations ) ) {
 
             echo "<p>" . __("Please assign this menu to a theme location to enable the Mega Menu settings.", "megamenu") . "</p>";
+
+            echo "<p>" . __("To assign this menu to a theme location, scroll to the bottom of this page and tag the menu to a 'Display location'.", "megamenu") . "</p>";
 
         } else { ?>
 

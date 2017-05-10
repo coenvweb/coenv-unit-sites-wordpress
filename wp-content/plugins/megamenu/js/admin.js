@@ -216,6 +216,12 @@
 
                                 var selector = $(this);
 
+                                if (selector.val() == 'not_installed_image_widget') {
+                                    alert(megamenu.not_installed_image_widget);
+                                    selector.val('disabled');
+                                    return;
+                                }
+
                                 if (selector.val() != 'disabled') {
 
                                     start_saving();
@@ -553,6 +559,8 @@ jQuery(function ($) {
         var menu_id = $('input#menu').val();
         var title = menu_item.find('.menu-item-title').text();
 
+        menu_item.data('megamenu_has_button', 'true');
+
         // fix for Jupiter theme
         if ( ! title ) {
             title = menu_item.find('.item-title').text();
@@ -588,6 +596,24 @@ jQuery(function ($) {
             custom_css_classes.after(css_prefix);
         }
 
+    });
+
+    $('.megamenu_enabled #menu-to-edit li.menu-item').live('hover', function() {
+        var menu_item = $(this);
+
+        if (!menu_item.data('megamenu_has_button')) {
+
+            menu_item.data('megamenu_has_button', 'true');
+
+            var button = $("<span>").addClass("mm_launch mm_disabled")
+                                    .html(megamenu.launch_lightbox)
+                                    .on('click', function(e) {
+                                        e.preventDefault();
+                                        alert(megamenu.save_menu);
+                                    });
+
+            $('.item-title', menu_item).append(button);
+        }
     });
 
 

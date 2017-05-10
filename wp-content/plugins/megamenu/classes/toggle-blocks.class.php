@@ -222,7 +222,7 @@ class Mega_Menu_Toggle_Blocks {
             'description' => __( "Configure the contents of the mobile toggle bar", "megamenu" ),
             'settings' => array(
                 array(
-                    'title' => __( "", "megamenu" ),
+                    'title' => "",
                     'type' => 'toggle_blocks',
                     'key' => 'toggle_blocks'
                 )

@@ -106,7 +106,7 @@ final class Mega_Menu_Style_Manager {
             'menu_item_border_top'                      => '0px',
             'menu_item_border_bottom'                   => '0px',
             'menu_item_border_color_hover'              => '#fff',
-            'menu_item_highlight_current'               => 'off',
+            'menu_item_highlight_current'               => 'on',
             'menu_item_divider'                         => 'off',
             'menu_item_divider_color'                   => 'rgba(255, 255, 255, 0.1)',
             'menu_item_divider_glow_opacity'            => '0.1',
@@ -248,12 +248,14 @@ final class Mega_Menu_Style_Manager {
             'mobile_menu_item_height'                   => '40px',
             'mobile_background_from'                    => 'container_background_from',
             'mobile_background_to'                      => 'container_background_to',
+            'mobile_menu_item_link_font_size'           => 'menu_item_link_font_size',
+            'mobile_menu_item_link_color'               => 'menu_item_link_color',
+            'mobile_menu_item_link_text_align'          => 'menu_item_link_text_align',
             'disable_mobile_toggle'                     => 'off',
-            'custom_css'                                => '
-/** Push menu onto new line **/
-#{$wrap} {
-    clear: both;
-}'
+            'custom_css'                                => '/** Push menu onto new line **/ 
+#{$wrap} { 
+    clear: both; 
+}' 
         ) );
     }
 
@@ -421,6 +423,10 @@ final class Mega_Menu_Style_Manager {
      */
     public function generate_css() {
 
+        if ( function_exists('wp_raise_memory_limit') ) {
+            wp_raise_memory_limit(); // attempt to raise memory limit to 256MB
+        }
+
         // the settings may have changed since the class was instantiated,
         // reset them here
         $this->settings = get_option( "megamenu_settings" );
@@ -481,6 +487,7 @@ final class Mega_Menu_Style_Manager {
 
         $upload_dir = wp_upload_dir();
         $filename = $this->get_css_filename();
+        
         $dir = trailingslashit( $upload_dir['basedir'] ) . 'maxmegamenu/';
 
         WP_Filesystem( false, $upload_dir['basedir'], true );
@@ -968,6 +975,7 @@ final class Mega_Menu_Style_Manager {
     public function head_css() {
 
         if ( in_array( $this->get_css_output_method(), array( 'disabled', 'fs' ) ) ) {
+            echo "<style type=\"text/css\">/** Mega Menu CSS Disabled **/</style>\n";
             return;
         }
 

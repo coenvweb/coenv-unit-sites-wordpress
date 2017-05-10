@@ -388,7 +388,7 @@ class Mega_Menu_Menu_Item_Manager {
             }
 
         } else {
-            $return .= "<p class='no_widgets'>" .  __("No widgets found. Add a widget to this area using the Widget Selector (top right)") . "</p>";
+            $return .= "<p class='no_widgets'>" .  __("No widgets found. Add a widget to this area using the Widget Selector (top right)", "megamenu") . "</p>";
         }
 
         $return .= "</div>";

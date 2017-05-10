@@ -77,7 +77,7 @@
         };
 
         plugin.isDesktopView = function() {
-            return Math.max(window.outerWidth, $(window).width()) >= plugin.settings.breakpoint; // account for scrollbars
+            return Math.max(window.outerWidth, $(window).width()) > plugin.settings.breakpoint; // account for scrollbars
         };
 
         plugin.isMobileView = function() {

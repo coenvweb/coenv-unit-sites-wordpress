@@ -800,6 +800,10 @@
 	background: #2ea2cc;
 	border-color: #0074a2;
 }
+.megamenu_enabled .mm_launch.mm_disabled {
+	background: #999;
+	border-color: #333;
+}
 .megamenu_enabled .mm_prefix {
 	display: block;
 	font-size: 0.9em;

@@ -102,6 +102,8 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 
 			if ( $settings['disable_link'] != 'true') {
 				$atts['href'] = ! empty( $item->url ) ? $item->url : '';
+			} else {
+				$atts['tabindex'] = 0;
 			}
 
 			if ( isset( $settings['icon']) && $settings['icon'] != 'disabled' ) {

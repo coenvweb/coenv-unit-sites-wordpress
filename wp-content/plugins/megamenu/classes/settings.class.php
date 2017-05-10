@@ -266,6 +266,9 @@ class Mega_Menu_Settings {
         // delete toggle blocks
         delete_option("megamenu_toggle_blocks");
 
+        // delete version
+        delete_option("megamenu_version");
+
         // delete all widgets assigned to menus
         $widget_manager = new Mega_Menu_Widget_Manager();
 
@@ -724,7 +727,10 @@ class Mega_Menu_Settings {
                             <div class='mega-description'>
                                 <div class='fs' style='display: <?php echo $css == 'fs' ? 'block' : 'none' ?>'><?php _e("CSS will be saved to wp-content/uploads/maxmegamenu/style.css and enqueued from there.", "megamenu"); ?></div>
                                 <div class='head' style='display: <?php echo $css == 'head' ? 'block' : 'none' ?>'><?php _e("CSS will be loaded from the cache in a &lt;style&gt; tag in the &lt;head&gt; of the page.", "megamenu"); ?></div>
-                                <div class='disabled' style='display: <?php echo $css == 'disabled' ? 'block' : 'none' ?>'><?php _e("CSS will not be output, you must enqueue the CSS for the menu manually.", "megamenu"); ?></div>
+                                <div class='disabled' style='display: <?php echo $css == 'disabled' ? 'block' : 'none' ?>'>
+                                    <?php _e("CSS will not be output, you must enqueue the CSS for the menu manually.", "megamenu"); ?>
+                                    <div class='fail'><?php _e("Selecting this option will effectively disable the theme editor and many of the features available in Max Mega Menu and Max Mega Menu Pro. Only enable this option if you fully understand the consequences.", "megamenu"); ?>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -856,7 +862,7 @@ class Mega_Menu_Settings {
                     <tr>
                         <td class='mega-name'>
                             <?php _e("Registered Menu Locations", "megamenu"); ?>
-                            <div class='mega-description'><?php _e("This is an overview of the menu locations supported by your theme. You can enable Max Mega Menu and adjust the settings for a specific menu location by going to Appearance > Menus."); ?></div>
+                            <div class='mega-description'><?php _e("This is an overview of the menu locations supported by your theme. You can enable Max Mega Menu and adjust the settings for a specific menu location by going to Appearance > Menus.", "megamenu"); ?></div>
                         </td>
                         <td class='mega-value'>
                             <p>
@@ -927,7 +933,7 @@ class Mega_Menu_Settings {
                                             <h5><?php _e("Menu Display Options", "megamenu"); ?></h5>
 
                                             <?php if ( ! $is_custom_location ) : ?>
-                                            <p><?php _e("These options are for advanced users only. Your theme should already include the code required to display this menu on your site."); ?>
+                                            <p><?php _e("These options are for advanced users only. Your theme should already include the code required to display this menu on your site.", "megamenu"); ?>
                                             <?php endif; ?>
 
                                             <table>
@@ -976,7 +982,7 @@ class Mega_Menu_Settings {
                                                     echo '<div class="megamenu_submit"><div class="mega_left">';
                                                     submit_button();
                                                     echo '</div><div class="mega_right">';
-                                                    echo "<a class='confirm mega-delete' href='{$delete_location_url}'>" . __("Delete location") . "</a>";
+                                                    echo "<a class='confirm mega-delete' href='{$delete_location_url}'>" . __("Delete location", "megamenu") . "</a>";
                                                     echo '</div></div>';
 
                                                 }
@@ -1003,7 +1009,7 @@ class Mega_Menu_Settings {
                                 wp_nonce_url( admin_url("admin-post.php"), 'megamenu_add_menu_location' )
                             ) );
 
-                            echo "<br /><p><a class='button button-secondary' href='{$add_location_url}'>" . __("Add another menu location") . "</a></p>";
+                            echo "<br /><p><a class='button button-secondary' href='{$add_location_url}'>" . __("Add another menu location", "megamenu") . "</a></p>";
 
                             ?>
 
@@ -1118,7 +1124,7 @@ class Mega_Menu_Settings {
                                     }
                                     if ( isset( $_POST['format'] ) && $_POST['format'] == 'json' ) {
 
-                                        echo "<p>" . __("Log into the site you wish to import the theme to. Go to Mega Menu > Tools and paste this into the 'Import Theme' text area:") . "</p>";
+                                        echo "<p>" . __("Log into the site you wish to import the theme to. Go to Mega Menu > Tools and paste this into the 'Import Theme' text area:", "megamenu") . "</p>";
 
                                         echo "<textarea>" . htmlentities( json_encode( $diff ) ) . "</textarea>";
 
@@ -1127,7 +1133,7 @@ class Mega_Menu_Settings {
 
                                         $key .= "_" . time();
 
-                                        echo "<p>" . __("Paste this code into your themes functions.php file:") . "</p>";
+                                        echo "<p>" . __("Paste this code into your themes functions.php file:", "megamenu") . "</p>";
 
                                         echo '<textarea>';
                                         echo 'function megamenu_add_theme_' . $key . '($themes) {';
@@ -1155,8 +1161,8 @@ class Mega_Menu_Settings {
                                 echo "</select>";
 
                                 echo "<h4>" . __("Export Format", "megamenu") . "</h4>";
-                                echo "<input value='json' type='radio' checked='checked' name='format'>" . __("JSON - I want to import this theme into another site I'm developing") . "<br />";
-                                echo "<input value='php' type='radio' name='format'>" . __("PHP - I want to distribute this Menu Theme in a WordPress Theme I'm developing") . "<br />";
+                                echo "<input value='json' type='radio' checked='checked' name='format'>" . __("JSON - I want to import this theme into another site I'm developing", "megamenu") . "<br />";
+                                echo "<input value='php' type='radio' name='format'>" . __("PHP - I want to distribute this Menu Theme in a WordPress Theme I'm developing", "megamenu") . "<br />";
 
                                 echo "<input type='submit' name='export' class='button button-secondary' value='" . __("Export Theme", "megamenu") . "' />";
 
@@ -1527,6 +1533,17 @@ class Mega_Menu_Settings {
 
             <h3 class='editing_theme'><?php echo __("Editing theme", "megamenu") . ": " . $this->active_theme['title']; ?></h3>
 
+            <?php
+
+            $saved_settings = get_option("megamenu_settings");
+
+            if (isset($saved_settings['css']) && $saved_settings['css'] == 'disabled') {
+                ?>
+                    <div class='fail'><?php _e("CSS Output (under Mega Menu > General Settings) has been disabled. Therefore, changes made within the theme editor will not be applied to your menu.", "megamenu"); ?></div>
+                <?php
+            }
+            ?>
+
             <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="theme_editor">
                 <input type="hidden" name="theme_id" value="<?php echo $this->id; ?>" />
                 <input type="hidden" name="action" value="megamenu_save_theme" />
@@ -1542,10 +1559,10 @@ class Mega_Menu_Settings {
                                 'title' => array(
                                     'priority' => 10,
                                     'title' => __( "Theme Title", "megamenu" ),
-                                    'description' => __( "", "megamenu" ),
+                                    'description' => "",
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'title'
                                         )
@@ -1584,7 +1601,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Set the general line height to use in the panel contents.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'line_height'
                                         )
@@ -1596,7 +1613,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Set the z-index to ensure the panels appear ontop of other content.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'z_index',
                                             'validation' => 'int'
@@ -1679,7 +1696,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Define the height of each top level menu item link. This value plus the Menu Padding (top and bottom) settings define the overall height of the menu bar.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'menu_item_link_height',
                                             'validation' => 'px'
@@ -1777,7 +1794,7 @@ class Mega_Menu_Settings {
                                     'info' => array( __( "This option will apply to all menu items. To align an individual menu item to the right, edit the menu item itself and set 'Menu Item Align' to 'Right'.", "megamenu" ) ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'align',
                                             'key' => 'menu_item_align'
                                         )
@@ -1838,7 +1855,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Define the size of the gap between each top level menu item.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'menu_item_spacing',
                                             'validation' => 'px'
@@ -2733,7 +2750,7 @@ class Mega_Menu_Settings {
                                     'info' => array( __( "Set this value to the width of your longest menu item title to stop menu items wrapping onto 2 lines.", "megamenu" ) ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'flyout_width',
                                             'validation' => 'px'
@@ -2889,7 +2906,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "The height of each flyout menu item.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'flyout_link_height',
                                             'validation' => 'px'
@@ -3009,28 +3026,6 @@ class Mega_Menu_Settings {
                         'mobile_menu' => array(
                             'title' => __( "Mobile Menu", "megamenu" ),
                             'settings' => array(
-                                /**'responsive_text' => array(
-                                    'title' => __( "Toggle Bar Text", "megamenu" ),
-                                    'description' => __( "Text to display next to the mobile toggle icon.", "megamenu" ),
-                                    'settings' => array(
-                                        array(
-                                            'title' => __( "", "megamenu" ),
-                                            'type' => 'freetext',
-                                            'key' => 'responsive_text'
-                                        )
-                                    )
-                                ),**/
-                                /**'toggle_font' => array(
-                                    'title' => __( "Toggle Bar Text Color", "megamenu" ),
-                                    'description' => __( "Set the font color for the toggle bar.", "megamenu" ),
-                                    'settings' => array(
-                                        array(
-                                            'title' => __( "", "megamenu" ),
-                                            'type' => 'color',
-                                            'key' => 'toggle_font_color'
-                                        )
-                                    )
-                                ),**/
                                 'toggle_bar_background' => array(
                                     'priority' => 20,
                                     'title' => __( "Toggle Bar Background", "megamenu" ),
@@ -3059,7 +3054,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Set the height of the mobile menu toggle bar.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'toggle_bar_height'
                                         )
@@ -3071,7 +3066,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Hide the toggle bar and display the menu in it's open state by default.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'checkbox',
                                             'key' => 'disable_mobile_toggle'
                                         )
@@ -3083,7 +3078,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Set the width at which the menu turns into a mobile menu. Set to 0px to disable responsive menu.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'responsive_breakpoint',
                                             'validation' => 'px'
@@ -3096,7 +3091,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Number of columns to display widgets/second level menu items in.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'mobile_columns',
                                             'key' => 'mobile_columns'
                                         )
@@ -3130,12 +3125,35 @@ class Mega_Menu_Settings {
                                     'description' => __( "Height of each top level item in the mobile menu.", "megamenu" ),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'freetext',
                                             'key' => 'mobile_menu_item_height'
                                         )
                                     )
-                                )
+                                ),
+                                'mobile_menu_item_font' => array(
+                                    'priority' => 50,
+                                    'title' => __( "Font", "megamenu" ),
+                                    'description' => __( "The font to use for each top level menu item in the mobile menu.", "megamenu" ),
+                                    'settings' => array(
+                                        array(
+                                            'title' => __( "Color", "megamenu" ),
+                                            'type' => 'color',
+                                            'key' => 'mobile_menu_item_link_color'
+                                        ),
+                                        array(
+                                            'title' => __( "Size", "megamenu" ),
+                                            'type' => 'freetext',
+                                            'key' => 'mobile_menu_item_link_font_size',
+                                            'validation' => 'px'
+                                        ),
+                                        array(
+                                            'title' => __( "Align", "megamenu" ),
+                                            'type' => 'align',
+                                            'key' => 'mobile_menu_item_link_text_align'
+                                        ),
+                                    )
+                                ),
                             )
                         ),
                         'custom_styling' => array(
@@ -3147,7 +3165,7 @@ class Mega_Menu_Settings {
                                     'description' => __( "Define any custom CSS you wish to add to menus using this theme. You can use standard CSS or SCSS.", "megamenu"),
                                     'settings' => array(
                                         array(
-                                            'title' => __( "", "megamenu" ),
+                                            'title' => "",
                                             'type' => 'textarea',
                                             'key' => 'custom_css'
                                         )
@@ -3718,7 +3736,7 @@ class Mega_Menu_Settings {
         wp_localize_script( 'mega-menu-theme-editor', 'megamenu_settings',
             array(
                 'confirm' => __("Are you sure?", "megamenu"),
-                "theme_save_error" => __("Error saving theme, please try refreshing the page", "megamenu")
+                "theme_save_error" => __("Error saving theme, please try refreshing the page. Server response:", "megamenu")
             )
         );
 

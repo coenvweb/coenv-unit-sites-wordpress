@@ -271,6 +271,13 @@ class Mega_Menu_Widget_Manager {
 
         }
 
+        if ( ! is_plugin_active('image-widget-deluxe/image-widget-deluxe.php') && ! is_plugin_active('image-widget/image-widget.php') ) {
+            $widgets[] = array(
+                'text' => __("Image Widget", "megamenu"),
+                'value' => "not_installed_image_widget"
+            );
+        }
+
         uasort( $widgets, array( $this, 'sort_by_text' ) );
 
         return $widgets;

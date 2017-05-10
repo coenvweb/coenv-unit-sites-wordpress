@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.7
-Stable tag: 2.3.4
+Stable tag: 2.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,8 +48,7 @@ Max Mega Menu is developed with a focus on code quality, performance and usabili
 ####Pro Features:
 
 > * Sticky Menu
-> * Vertical Menus
-> * Accordion Menus
+> * Vertical & Accordion Menus
 > * FontAwesome, Genericon & Custom Icons
 > * Custom Item Styling
 > * Menu Logo
@@ -57,17 +56,11 @@ Max Mega Menu is developed with a focus on code quality, performance and usabili
 > * WooCommerce & EDD support
 > * Google Fonts
 > * Roles & Restrictions
-> * Search, icon and logo mobile toggle blocks
+> * Search, icon, HTML and logo mobile toggle blocks
 > * Automatic updates
 > * Priority Support
 >
 > Find out more: https://www.megamenu.com/upgrade/
-
-Translations:
-
-* Italian (thanks to aeco)
-* German (thanks to Thomas Meyer & dirk@d10n)
-* French (thanks to Pierre_02)
 
 == Frequently Asked Questions ==
 
@@ -102,6 +95,24 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.3.6 [09/05/17] =
+
+* Fix: Mobile breakpoint detection
+* Fix: Increase wp_nav_menu_args priority to fix conflict with Thim-Core (Eduma theme)
+* Fix: Add tabindex to items where the link has been disabled
+* Fix: Deleting newly added mobile toggle blocks
+* Improvement: Add mega menu button to unsaved menu items
+* Improvement: Enable descriptions and disable css prefix of menu item classes by default (for new users only)
+* Improvement: Add mobile font color to theme options
+* Improvement: Improve error shown when failing to save theme
+* Improvement: Improve message shown when menu is not tagged to a location
+* Improvement: Attempt to raise memory limit when generating CSS
+* Improvement: Enable highlight current item by default
+* Improvement: Show warnings when CSS output is set to disabled
+* Improvement: Add image widget option to available widgets, even if not installed
+* Improvement: Update translations
+* Improvement: Add megamenu_submitted_settings_meta filter
 
 = 2.3.5 [19/02/17] =
 

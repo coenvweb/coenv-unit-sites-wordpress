@@ -66,7 +66,7 @@ jQuery(function($) {
 
 
     // Delete block
-    $( ".block-settings").on('click', 'a.mega-delete', function(e) {
+    $( ".mega-toggle_blocks").on('click', 'a.mega-delete', function(e) {
         e.preventDefault();
         $(this).parent(".block-settings").parent(".block").remove();
         reindex_blocks();

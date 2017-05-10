@@ -584,6 +584,12 @@ body[class*='mega-menu_page_maxmegamenu_'] .menu_settings h3 {
     width: 100%;
     box-sizing: border-box;
 }
+
+.megamenu_outer_wrap .megamenu_right .mega-description .fail {
+	margin-top: 20px;
+	color: #666;
+}
+
 .megamenu_outer_wrap .megamenu_wrap .megamenu_submit .success {
     border: 1px solid #7ad03a;
     background: #7ad03a;

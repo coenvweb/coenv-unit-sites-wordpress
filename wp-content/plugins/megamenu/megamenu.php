@@ -4,11 +4,11 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.3.5
+ * Version:     2.3.6
  * Author:      Tom Hemsley
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
- * Copyright:   2016 Tom Hemsley (https://www.megamenu.com)
+ * Copyright:   2017 Tom Hemsley (https://www.megamenu.com)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.3.5';
+    public $version = '2.3.6';
 
 
     /**
@@ -61,7 +61,7 @@ final class Mega_Menu {
         add_action( 'widgets_init', array( $this, 'register_widget' ) );
         add_action( 'after_setup_theme', array( $this, 'register_nav_menus' ) );
 
-        add_filter( 'wp_nav_menu_args', array( $this, 'modify_nav_menu_args' ), 9999 );
+        add_filter( 'wp_nav_menu_args', array( $this, 'modify_nav_menu_args' ), 99999 );
         add_filter( 'wp_nav_menu', array( $this, 'add_responsive_toggle' ), 10, 2 );
         add_filter( 'wp_nav_menu_objects', array( $this, 'add_widgets_to_menu' ), 10, 2 );
         add_filter( 'megamenu_nav_menu_objects_before', array( $this, 'setup_menu_items' ), 5, 2 );
@@ -208,6 +208,16 @@ final class Mega_Menu {
             add_option( "megamenu_version", $this->version );
 
             do_action( "megamenu_after_install" );
+
+            $settings = get_option( "megamenu_settings" );
+
+            // set defaults
+            if ( ! $settings ) {
+                $settings['prefix'] = 'disabled';
+                $settings['descriptions'] = 'enabled';
+
+                add_option( "megamenu_settings", $settings);
+            }
 
         }
 
