@@ -6,7 +6,7 @@
 @import "config/fonts"; // Your custom fonts
 
 /* Foundation 5 */
-@import "foundation"; // Foundation 5 by Zurb
+@import "../bower_components/foundation/scss/foundation.scss";
 
 /* Plugins */
 @import "plugins/nivo-lightbox"; // Nivo Lightbox
