@@ -36,7 +36,7 @@ gulp.task('main_js', function () {
             './js/lib/outlayer.js',
             './js/lib/masonry.pkgd.js',
             './js/lib/sizzle.js',
-            './js/lib/nivo-lightbox.js',
+            './js/nivo-lightbox/nivo-lightbox.js',
             './js/lib/iodash.js',
             './js/foundation/js/foundation.min.js',
             './js/init-foundation.js',
