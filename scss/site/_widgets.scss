@@ -75,3 +75,104 @@
 	float: left;
 	width: 20%;
 }
+
+#twitter {
+    
+    background-image: url('../assets/img/side-nav-top-2.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+    margin: .5rem 0rem;
+    background-color: #e8e3d3;
+
+    .at_title {
+        font-size: 1rem;
+        font-weight: 800;
+        vertical-align: middle;
+        padding: .75rem;
+        color: #4b2e83;
+    }
+
+    .tweet {
+        background-color: #e8e3d3;
+        margin: 0.75rem 0rem;
+        &:first-of-type {
+            margin-top: 0;
+        }
+        &:nth-of-type(2n+3) {
+            clear: both;
+        }
+    }
+
+    .tweet-wrapper {
+        padding: 0.75rem;
+    }
+
+    .tweet-head {
+        padding-bottom: 1rem;
+        overflow: hidden;
+        font-size: 0.9rem;
+
+        img {
+            float:left;
+            width: 2.75rem;
+        }
+
+        .names {
+            float: left;
+            text-align: left;
+            padding-left: 0.5rem;
+        }
+
+	    .username {
+            a {
+                color: black !important;
+                font-weight: 800;
+            }
+        }
+
+        .at_name {
+            a {
+                color: $text-lt !important;
+            }
+        }
+    }
+
+    .twitter-logo {
+        color: #55acee;
+    }
+
+    .tweet-footer {
+        overflow: hidden;
+        padding-top: 0.75rem;
+
+        a {
+            color: $text-lt !important;
+        }
+
+        .timestamp {
+            display: inline-block;
+        }
+
+        .twitter-logo {
+            float: left;
+            font-size: 1.25rem;
+            margin-right: 0.25rem;
+
+            i {
+                vertical-align: text-top;
+            }
+        }
+
+        .twitter-actions {
+            float: right;
+            text-align: right;
+
+            a {
+                margin-left: 1rem;
+                color: $text-lt !important;
+            }
+
+        }
+
+    }
+}
