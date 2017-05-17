@@ -6,11 +6,23 @@ Template Name: Datasets
 /*
  * Query variables
  */
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+if(isset($wp_query->query_vars['dataset_region'])){
+	$coenv_cat_1 = 'dataset_region';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['dataset_region']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'dataset_region');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+}
+
+if(isset($wp_query->query_vars['dataset_type'])){
+	$coenv_cat_1 = 'dataset_type';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['dataset_type']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'dataset_type');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+}
+$page_link = get_the_permalink();
 
 ?>
 <?php get_header(); ?>
@@ -20,10 +32,10 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
 			<h3 class="small-12 columns">Filter Datasets</h3>
-			<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="dataset_region">
+			<div class=" large-6 columns" data-url="<?php the_permalink(); ?>" data-cat="dataset_region">
 				<?php coenv_base_cat_filter('dataset_region', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="dataset_type">
+			<div class="large-6 columns" data-url="<?php the_permalink(); ?>" data-cat="dataset_type">
 				<?php coenv_base_cat_filter('dataset_type', $coenv_cat_term_1); // Category filter ?>
 			</div>
 		</div>
@@ -42,7 +54,6 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			'paged' => $paged
 		);
 
-		// Category filter
 		if($coenv_cat_1 && $coenv_cat_term_1) :
 			$query_args['taxonomy'] = $coenv_cat_1;
 			$query_args['term'] = $coenv_cat_term_1;
@@ -54,13 +65,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<?php if ($coenv_cat_1 == 'dataset_region'): ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> dataset<?php if((int)$wp_query->found_posts > 1): echo 's'; endif; ?> from the region <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/data/cig-datasets/">all datasets &raquo;</a></div>
+			<div class="right"><a href="/resources/data/cig-datasets/">all datasets &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($coenv_cat_1 == 'dataset_type'): ?>
 		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> datasets of type <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/data/cig-datasets/">all datasets &raquo;</a></div>
+			<div class="left"><?php echo $wp_query->found_posts; ?> dataset<?php if((int)$wp_query->found_posts > 1): echo 's'; endif; ?> of type <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
+			<div class="right"><a href="/resources/data/cig-datasets/">all datasets &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
@@ -76,7 +87,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$dataset_region_arr = array();
 
 			foreach ($dataset_region as &$term) {
-				$dataset_region_arr[] = '<a href="?tax=dataset_region&term=' . $term->slug . '">' . $term->name . '</a>';
+				$dataset_region_arr[] = '<a href="'.$page_link.'dataset_region/' . $term->slug . '">' . $term->name . '</a>';
 			}
 			$dataset_region_str = implode(', ', $dataset_region_arr) . ', ';
 			$dataset_region = "";
@@ -88,7 +99,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$dataset_type_arr = array();
 
 			foreach ($dataset_type as &$term) {
-				$dataset_type_arr[] = '<a href="?tax=dataset_type&term=' . $term->slug . '">' . $term->name . '</a>';
+				$dataset_type_arr[] = '<a href="'.$page_link.'dataset_type/' . $term->slug . '">' . $term->name . '</a>';
 			}
 			$dataset_type_str = implode(', ', $dataset_type_arr);
 			$dataset_type = "";

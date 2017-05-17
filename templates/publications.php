@@ -7,12 +7,32 @@ Template Name: Publications Page
  * Query variables
  */
 
-// Categories
-$coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-$coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-$coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
-$coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-$coenv_inpress = urlencode(htmlentities($_GET['inpress']));
+if(isset($wp_query->query_vars['publication_theme'])){
+	$coenv_cat_1 = 'publication_theme';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['publication_theme']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'publication_theme');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+}
+
+if(isset($wp_query->query_vars['publication_author'])){
+	$coenv_cat_1 = 'author';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['publication_author']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'author');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+}
+
+if(isset($wp_query->query_vars['publication_year'])){
+	$coenv_cat_1 = 'publication_year';
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['publication_year']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'publication_year');
+    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
+}
+
+$page_link = get_the_permalink();
+
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 ?>
 <?php get_header(); ?>
@@ -22,13 +42,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
 		<div class="row filters">
 			<h3 class="small-12 columns">Filter Publications</h3>
-			<div class="small-12 large-4 columns" data-url="/resources/publications/" data-cat="publication_theme">
+			<div class="small-12 large-4 columns" data-url="<?php the_permalink(); ?>" data-cat="publication_theme">
 				<?php coenv_base_cat_filter('publication_theme', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="small-12 large-4 columns" data-url="/resources/publications/" data-cat="author">
+			<div class="small-12 large-4 columns" data-url="<?php the_permalink(); ?>" data-cat="author">
 				<?php coenv_base_cat_filter('author', $coenv_cat_term_1); // Category filter ?>
 			</div>
-			<div class="small-12 large-4 columns" data-url="/resources/publications/" data-cat="publication_year">
+			<div class="small-12 large-4 columns" data-url="<?php the_permalink(); ?>" data-cat="publication_year">
 				<?php coenv_base_cat_filter('publication_year', $coenv_cat_term_1); // Category filter ?>
 			</div>
 
@@ -62,13 +82,13 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 		<?php if ($coenv_cat_1 == 'publication_theme'): ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> publications listed under <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
+			<div class="right"><a href="<?php the_permalink(); ?>">all publications &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($coenv_cat_1 == 'author'): ?>
 		<div class="panel">
 			<div class="left"><?php echo $wp_query->found_posts; ?> publications written by <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
+			<div class="right"><a href="<?php the_permalink(); ?>">all publications &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($coenv_cat_1 == 'publication_year'): ?>
@@ -88,7 +108,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 				</strong>
 				<?php } ?>
 				<strong><?php echo strtolower($year_cat->name); ?></strong></div>
-			<div class="right"><a href="/research/publications/">all publications &raquo;</a></div>
+			<div class="right"><a href="<?php the_permalink(); ?>">all publications &raquo;</a></div>
 		</div>
 		<?php endif; ?>
 		<?php if ($wp_query->have_posts()): ?>
@@ -104,7 +124,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			$publication_terms_arr = array();
 
 			foreach ($publication_terms as &$term) {
-				$publication_terms_arr[] = '<a href="?tax=publication_theme&term=' . $term->slug . '">' . $term->name . '</a>';
+				$publication_terms_arr[] = '<a href="'.$page_link.'publication_theme/' . $term->slug . '">' . $term->name . '</a>';
 			}
 			$publication_terms_str = implode(', ', $publication_terms_arr);
 			$publication_terms = "";
@@ -120,11 +140,11 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 			if ($publication_in_press[0] !== '1') {
 				$publication_years_arr = array();
 				foreach ($publication_years as &$year) {
-					$publication_years_arr[] = '<a href="?tax=publication_year&term=' . $year->slug . '">' . $year->name . '</a>';
+					$publication_years_arr[] = '<a href="'.$page_link.'publication_year/' . $year->slug . '">' . $year->name . '</a>';
 				}
 				$publication_years_str = implode(', ', $publication_years_arr);
 			} else {
-				$publication_years_str = '<a href="?tax=publication_year&term=in-press">In press</a>';
+				$publication_years_str = '<a href="'.$page_link.'publication_year/in-press/">In press</a>';
 			}
 		} else {
 			$publication_years_str = '';	
