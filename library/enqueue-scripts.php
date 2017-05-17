@@ -11,6 +11,8 @@ if (!function_exists('FoundationPress_scripts')) :
     wp_register_script( 'jquery', get_template_directory_uri() . '/js/jquery/dist/jquery.min.js', array(), '1.0.0', false );
     wp_register_script( 'foundation', get_template_directory_uri() . '/js/app.js', array('jquery'), '1.0.0', true );
 
+    wp_localize_script( 'foundation', 'adminAjax', array('ajaxurl' => admin_url('admin-ajax.php') ) );
+
     // enqueue scripts
     wp_enqueue_script('modernizr');
     wp_enqueue_script('jquery');

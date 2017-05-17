@@ -38,6 +38,7 @@ gulp.task('main_js', function () {
             './js/lib/sizzle.js',
             './js/lib/nivo-lightbox.js',
             './js/lib/iodash.js',
+            './js/foundation/js/foundation.min.js',
             './js/init-foundation.js',
             './js/kitchen-sink.js',
             './js/share.js',
