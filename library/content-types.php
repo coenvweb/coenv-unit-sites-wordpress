@@ -59,9 +59,27 @@ function coenv_base_post_types_init() {
     'has_archive' => false,
     'show_ui' => true,
     //'rewrite' => array('slug' => 'student_blog'),
-  'menu_icon' => 'dashicons-exerpt-view',
+    'menu_icon' => 'dashicons-exerpt-view',
     )
   );
+  register_post_type( 'people',
+    array(
+      'labels' => array(    
+      'name' => __( 'People' ),
+      'singular_name' => __( 'People' ),
+      'add_new_item' => __( 'Add People'),
+      'edit_item' => __( 'Edit People'),
+      'new_item' => __( 'New People'),
+      ),
+    //'hierarchical' => true,
+    'supports' => array( 'title', 'thumbnail' ),
+    'public' => true,
+    'has_archive' => false,
+    'show_ui' => true,
+    'rewrite' => array('slug' => 'about/people'),
+    'menu_icon' => 'dashicons-id',
+    )
+  ); 
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
@@ -78,6 +96,7 @@ function hide_editor() {
 
 define( 'PUBS_PAGE_PARENT_ID', '124' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
+define( 'PEOPLE_PARENT_ID', '58' );
 define( 'NEWS_PARENT_ID', '142' );
  
  
@@ -92,6 +111,23 @@ function coenv_base_dataset_parent( $data, $postarr ) {
  
     if ( $post->post_type == "datasets" ){
         $data['post_parent'] = DATASET_PAGE_PARENT_ID;
+    }
+ 
+    return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  );
+
+function coenv_base_people_parent( $data, $postarr ) {
+    global $post;
+ 
+ 
+    // verify if this is an auto save routine.
+    // If it is our form has not been submitted, so we dont want to do anything
+    //if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+     //  return $data;
+ 
+    if ( $post->post_type == "people" ){
+        $data['post_parent'] = PEOPLE_PARENT_ID;
     }
  
     return $data;
@@ -148,16 +184,4 @@ function coenv_base_custom_field_excerpt($field_name) {
   }
   return apply_filters('the_excerpt', $text);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -121,6 +121,41 @@ function pub_tax() {
 
 add_action( 'init', 'pub_tax' );
 
+/**
+* Custom Taxonomies for People
+**/
+function people_tax() {
+
+	$people_labels = array(
+		'name'                       => _x( 'Classifications', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Classification', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Classifications', 'text_domain' ),
+		'all_items'                  => __( 'All Classifications', 'text_domain' ),
+		'parent_item'                => __( 'Parent Classification', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Classification:', 'text_domain' ),
+		'new_item_name'              => __( 'New Classification', 'text_domain' ),
+		'add_new_item'               => __( 'Add Classification', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Classification', 'text_domain' ),
+		'update_item'                => __( 'Update Classification', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Classifications', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Classification', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from the most cited Classifications', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$people_args = array(
+		'labels'                     => $people_labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'classification', array( 'people' ), $people_args );
+
+}
+add_action( 'init', 'people_tax' );
 
 /**
 * Custom Taxonomies for Datasets

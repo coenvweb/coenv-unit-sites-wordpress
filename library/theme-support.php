@@ -109,12 +109,12 @@ function coenv_get_ancestor($attr = 'ID') {
         return false;
     }
 
-    if ( ($post->post_type == 'post' || is_archive() || is_search()) && !is_post_type_archive( array( 'faculty' ) ) ) {
+    if ( ($post->post_type == 'post' || is_archive() || is_search()) ) {
 
-        $page_for_posts = get_option( 'page_for_posts' );
-
-        if ( $page_for_posts == 0 ) {
-            return false;
+        if(get_option('page_for_posts')) {
+            $page_for_posts = get_option( 'page_for_posts' );
+        } else {
+            $page_for_posts = NEWS_PARENT_ID;
         }
 
         $ancestor = get_post( $page_for_posts );
@@ -180,12 +180,7 @@ function coenv_banner() {
     $banner = false;
 
     $ancestor_id = coenv_get_ancestor('ID');
-    
-    if ( is_singular( 'post' )) { //change news pages' section titles
-        unset ($ancestor_id);
-        $ancestor_id = 7;
-    }
-    
+
     if ( has_post_thumbnail( $ancestor_id ) ) {
         $page_id = $ancestor_id;
     }
@@ -215,17 +210,13 @@ function coenv_banner() {
 function coenv_base_section_title($id) {
 
     $coenv_post = get_post($id);
-    $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
+    $coenv_post_section = get_post(coenv_get_ancestor('ID'));
 
     if (is_404()):
         $section_title = '<div class="section-title"><h2>Not Found (404)</h2></div>';
     elseif (is_search()):
         $section_title = '<div class="section-title"><h2>Search</h2></div>';
-     elseif ( $coenv_post->post_type == 'publications' ):
-        $section_title = '<div class="section-title"><h2><a href="/resources/">Resources</a></h2></div>';
-     elseif ( $coenv_post->post_type == 'datasets' ):
-        $section_title = '<div class="section-title"><h2><a href="/resources/">Datasets</a></h2></div>';
-    elseif (coenv_base_post_parent($id)):
+    elseif ($coenv_post_section):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
