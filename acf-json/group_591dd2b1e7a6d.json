@@ -156,25 +156,6 @@
             "maxlength": ""
         },
         {
-            "key": "field_591dd7992cc20",
-            "label": "Quote\/Mission",
-            "name": "misson",
-            "type": "textarea",
-            "instructions": "A short quote or mission statement for this person (1-2 sentences)",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "maxlength": "",
-            "rows": "",
-            "new_lines": ""
-        },
-        {
             "key": "field_591dd7f92cc21",
             "label": "Areas of Expertise",
             "name": "areas_of_expertise",
@@ -215,6 +196,25 @@
             ]
         },
         {
+            "key": "field_59235287d9a7d",
+            "label": "Quote or Mission",
+            "name": "quote_or_mission",
+            "type": "textarea",
+            "instructions": "A short 1-2 sentence quote or mission to be highlighted on this person's profile",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "rows": "",
+            "new_lines": "wpautop"
+        },
+        {
             "key": "field_591dd8732cc23",
             "label": "Bio",
             "name": "bio",
@@ -237,7 +237,7 @@
             "key": "field_591dd89d2cc24",
             "label": "Research Interests",
             "name": "research_interests",
-            "type": "repeater",
+            "type": "wysiwyg",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -246,32 +246,11 @@
                 "class": "",
                 "id": ""
             },
-            "collapsed": "",
-            "min": 0,
-            "max": 0,
-            "layout": "table",
-            "button_label": "Add Interest",
-            "sub_fields": [
-                {
-                    "key": "field_591ddb542cc25",
-                    "label": "Interest",
-                    "name": "interest",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": ""
-                }
-            ]
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
         },
         {
             "key": "field_591ddb662cc27",
@@ -363,7 +342,7 @@
                     },
                     "default_value": "",
                     "tabs": "all",
-                    "toolbar": "full",
+                    "toolbar": "basic",
                     "media_upload": 0,
                     "delay": 0
                 }
@@ -402,11 +381,11 @@
                         "id": ""
                     },
                     "choices": {
-                        "google-scholar": "Google Scholar",
-                        "research-gate": "ResearchGate",
-                        "twitter": "Twitter",
-                        "scival": "SciVal",
-                        "youtube": "YouTube"
+                        "Google Scholar": "Google Scholar",
+                        "ResearchGate": "ResearchGate",
+                        "Twitter": "Twitter",
+                        "SciVal": "SciVal",
+                        "YouTube": "YouTube"
                     },
                     "default_value": [],
                     "allow_null": 0,
@@ -447,7 +426,7 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
+            "return_format": "url",
             "library": "all",
             "min_size": "",
             "max_size": "",
@@ -471,5 +450,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1495138326
+    "modified": 1495558054
 }

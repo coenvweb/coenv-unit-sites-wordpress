@@ -132,7 +132,7 @@ function coenv_base_people_parent( $data, $postarr ) {
  
     return $data;
 }
-add_action( 'wp_insert_post_data', 'coenv_base_dataset_parent', '104', 2  );
+add_action( 'wp_insert_post_data', 'coenv_base_people_parent', '104', 2  );
 
 function coenv_base_news_parent( $data, $postarr ) {
     global $post;

@@ -1,0 +1,172 @@
+article.type-people {
+    .people-header {
+        .people-title {
+            background-image: none;
+            margin-bottom: 1rem;
+        }
+        .people-meta {
+            .people-photo {
+                border-left: 5px solid #4b2e83;
+                background-image: url("../assets/img/blockquote-top.png");
+                background-repeat: no-repeat;
+                background-position: top left;
+                padding-top: 5px;
+            }
+            .job_title {
+                @include o_sans_bold;
+            }
+            .person_contact {
+                margin: 1rem 0rem;
+                margin-left: 0px;
+                list-style-type: none;
+                li {
+                    margin: 0rem;
+                    a {
+                        display: inline-block;
+                        &.email {
+                            background-image: url('../assets/img/icon-fac-mail.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            padding-left: 40px;
+                            background-size: 27px 19px;
+                        }
+                        &.phone {
+                            background-image: url('../assets/img/icon-fac-phone.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.Twitter {
+                            background-image: url('../assets/img/icon-fac-twitter.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.SciVal {
+                            background-image: url('../assets/img/icon-fac-scival.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.YouTube {
+                            background-image: url('../assets/img/icon-fac-link.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.ResearchGate {
+                            background-image: url('../assets/img/icon-fac-link.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.Google {
+                            background-image: url('../assets/img/icon-fac-google-scholar.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.cv {
+                            background-image: url('../assets/img/icon-fac-google-scholar.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                    }
+                }
+            }
+
+            .expertise_title {
+                margin-bottom: 1rem;
+                margin-top: 2rem;
+            }
+            .expertise {
+                list-style-type: none;
+                margin-left: 0rem;
+                li {
+                    
+                }
+            }
+            .mission {
+                background-image: url("../assets/img/blockquote-top.png");
+                background-repeat: no-repeat;
+                background-position: top left;
+                background-color: #ebebeb;
+                padding: 1rem;
+                @include o_sans_bold;
+                padding: rem-calc(15) rem-calc(20);
+                p {
+                    margin-bottom: 0rem;
+                }
+            }
+            h2 {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+
+.people_index {
+
+    .people-list {
+        .people-list-item {
+            &:hover {
+                img {
+                    -webkit-transform:scale(1.05);
+                    -moz-transform:scale(1.05);
+                    -ms-transform:scale(1.05);
+                    -o-transform:scale(1.05);
+                     transform:scale(1.05);
+                }   
+            }   
+
+            overflow: hidden;
+            img {
+                border: 5px solid #ebebec;
+                -webkit-transition: all .2s ease;
+                -moz-transition: all .2s ease;
+                -o-transition: all .2s ease;
+                -ms-transition: all .2s ease;
+                transition: all .2s ease;
+                max-width: 100%;
+            }   
+            h3 {
+                @include o_sans_bold;
+                font-size: 1rem;
+                line-height: 1.25rem;
+                margin-top: .5rem;
+                text-align: center;
+
+                a { 
+                    color: #000;
+                }   
+            }   
+        }
+    }
+
+}
+
+
+/* Why was this is a faculty file? */
+#sidebar .widget {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+.article__categories {
+    margin-bottom: 1rem;
+}
+.article__categories h2 {
+    @include rem('font-size', 1);
+    line-height: 1;
+    @include sans;
+    padding: 0;
+    margin: 0 0 .5rem 0;
+}
