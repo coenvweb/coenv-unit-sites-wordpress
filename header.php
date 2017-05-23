@@ -139,7 +139,7 @@
             <?php wp_nav_menu(array(
               'theme_location' => 'top-buttons', 
               'depth' => 1,
-              'menu_class' => 'off-canvas-list',
+              'menu_class' => 'off-canvas-list give',
               'container' => 'false',
               'fallback_cb' => 'false',
               'item_spacing' => 'preserve'
