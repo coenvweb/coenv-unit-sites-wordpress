@@ -137,23 +137,31 @@
 
   <aside class="right-off-canvas-menu">
     <nav class="mobile-menu">
-            <?php
-            echo '<ul class="off-canvas-list"><li>';
-            get_search_form();
-            echo '</li></ul>';
-            
-            add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            $exclude = implode(',',coenv_base_menu_exclude());
-            wp_list_pages( array(
-                'depth' => 0,
-                'walker' => new top_bar_mobile_walker(),
-                'title_li' => false,
-                'sort_column' => 'menu_order, post_title',
-                'post_type'    => 'page',
-                'exclude' => '$exclude',
-            ) );
-            remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
-            ?>
+        <?php
+        echo '<ul class="off-canvas-list"><li>';
+        get_search_form();
+        echo '</li></ul>';
+
+        add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
+        $exclude = implode(',',coenv_base_menu_exclude());
+        wp_list_pages( array(
+            'depth' => 0,
+            'walker' => new top_bar_mobile_walker(),
+            'title_li' => false,
+            'sort_column' => 'menu_order, post_title',
+            'post_type'    => 'page',
+            'exclude' => '$exclude',
+        ) );
+        remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
+        ?>
+        <?php wp_nav_menu(array(
+          'theme_location' => 'top-buttons', 
+          'depth' => 1,
+          'menu_class' => 'off-canvas-list',
+          'container' => 'false',
+          'fallback_cb' => 'false',
+          'item_spacing' => 'preserve'
+        )); ?>
     </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
