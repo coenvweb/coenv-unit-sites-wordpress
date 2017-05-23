@@ -1,4 +1,4 @@
-<?php  
+<?php
 
 /**
  * People fields
@@ -16,13 +16,31 @@ $services = get_field('services');
                 <?php endif ?>
             </h1>
             <div class="people-meta row">
-                
                 <div class="head-left small-12 medium-6 medium-push-6 columns ">
-                    <?php foreach($titles as $title) { ?>
-                        <div class="job_title">
-                            <?=$title['title'];?> | <?=$title['organization'];?>
+                    <div class="titles">
+                        <?php foreach($titles as $title) { ?>
+                            <div class="job_title">
+                                <?=$title['title'];?> | <?=$title['organization'];?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="expertise">
+                        <h2 class="expertise_title">Areas of Expertise</h2>
+                        <?php for($i = 0; $i < count($areas); $i++) { ?>
+                            <?php $area = $areas[$i]; ?>
+                            <span class="area"><?=$area['area'];?></span> <?=($i < count($areas) - 1 ? '|' : '')?>
+                        <?php } ?>
+                    </div>
+                    <?php if(get_field('quote_or_mission')) { ?>
+                        <div class="mission">
+                            <?php the_field('quote_or_mission'); ?>
                         </div>
                     <?php } ?>
+                </div>
+                <div class="head-right small-12 medium-6 medium-pull-6 columns ">
+                    <div class="people-photo">
+                        <?php the_post_thumbnail(); ?>
+                    </div>
                     <ul class="person_contact">
                         <?php if(get_field('email')) { ?>
                             <li class="email"><a class="email" href="mailto:<?=get_field('email');?>"><?=get_field('email');?></a></li>
@@ -41,24 +59,7 @@ $services = get_field('services');
                             </li>
                         <?php } ?>
                     </ul>
-                    <h2 class="expertise_title">Areas of Expertise</h2>
-                    <ul class="expertise">
-                        <?php for($i = 0; $i < count($areas); $i++) { ?>
-                            <?php $area = $areas[$i]; ?>
-                            <li class="area"><?=$area['area'];?></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div class="head-right small-12 medium-6 medium-pull-6 columns ">
-                    <div class="people-photo">
-                        <?php the_post_thumbnail(); ?>
-                    </div>
 
-                    <?php if(get_field('quote_or_mission')) { ?>
-                        <div class="mission">
-                            <?php the_field('quote_or_mission'); ?>
-                        </div>
-                    <?php } ?>
                 </div>
             </div>
         </div>

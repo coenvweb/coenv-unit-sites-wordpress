@@ -22,7 +22,9 @@ get_header();
         <div class="people_index">
             <?php
 
-            $people_class = get_terms('classification');
+            $people_class = get_terms('classification', array(
+                'orderby' => 'term_order',
+            ));
 
             foreach($people_class as $class) {
                 $query_args = array(
@@ -43,14 +45,25 @@ get_header();
                 );
                 $wp_query = new WP_Query($query_args);
             ?>
-                <?php if ($wp_query->have_posts()): ?>
+                <?php if ($wp_query->have_posts()): 
+                    $director = false;
+                ?>
                     <h2 class="classification-head <?=$class->name?>"><?=$class->name?></h2>
-                    <ul class="people-list <?=$class->name?>-list small-block-grid-3 medium-block-grid-4 large-block-grid-5">
+                    <?php if(strpos($class->name, 'Director') || strpos($class->name, 'Director') === 0) { ?>
+                        <?php $director = true; ?>
+                        <ul class="people-list <?=$class->name?>-list small-block-grid-2 medium-block-grid-2 large-block-grid-2">
+                    <?php } else { ?>
+                        <ul class="people-list <?=$class->name?>-list small-block-grid-3 medium-block-grid-4 large-block-grid-4">
+                    <?php } ?>
                         <?php
                         # The Loop
                         while ( $wp_query->have_posts() ) :
                             $wp_query->the_post();
-                            $people_img_src = get_the_post_thumbnail_url(null, 'people-grid');
+                            if($director) {
+                                $people_img_src = get_the_post_thumbnail_url();
+                            } else {
+                                $people_img_src = get_the_post_thumbnail_url(null, 'people-grid');
+                            }
                             $title = get_field('first_name') . ' ' . get_field('last_name');
                             
                             if ( !$people_img_src) {

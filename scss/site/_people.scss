@@ -12,17 +12,38 @@ article.type-people {
                 background-position: top left;
                 padding-top: 5px;
             }
-            .job_title {
+            .titles {
                 @include o_sans_bold;
+                margin-bottom: 1rem;
             }
             .person_contact {
-                margin: 1rem 0rem;
                 margin-left: 0px;
+                border-left: 5px solid #4b2e83;
                 list-style-type: none;
+                background-image: url("../assets/img/blockquote-top.png");
+                background-repeat: no-repeat;
+                background-position: top left;
+                padding-top: 5px;
+                background-color: #ebebeb;
                 li {
-                    margin: 0rem;
+                    background-image: url("../assets/img/blockquote-top.png");
+                    background-repeat: no-repeat;
+                    background-position: bottom left;
+                    padding-left: 0.25rem;
+                    margin-bottom: 0rem;
+                    &:hover {
+                        background-image: url("../assets/img/blockquote-top-gold.png");
+                    }
                     a {
+                        width: 100%;
+                        padding-top: .5rem;
+                        padding-bottom: 1rem;
                         display: inline-block;
+                        color: #000;
+                        text-decoration: none;
+                        &:hover {
+                            text-decoration: none;
+                        }
                         &.email {
                             background-image: url('../assets/img/icon-fac-mail.svg');
                             background-position: left center;
@@ -88,11 +109,8 @@ article.type-people {
                 margin-top: 2rem;
             }
             .expertise {
-                list-style-type: none;
-                margin-left: 0rem;
-                li {
-                    
-                }
+                text-align: center;
+                margin-bottom: 2rem;
             }
             .mission {
                 background-image: url("../assets/img/blockquote-top.png");
@@ -144,14 +162,13 @@ article.type-people {
                 line-height: 1.25rem;
                 margin-top: .5rem;
                 text-align: center;
-
-                a { 
+                a {
                     color: #000;
+                    text-decoration: none;
                 }   
             }   
         }
     }
-
 }
 
 

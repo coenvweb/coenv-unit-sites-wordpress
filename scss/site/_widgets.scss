@@ -77,15 +77,20 @@
 }
 
 #twitter {
-    
+
     background-image: url('../assets/img/side-nav-top-2.png');
     background-repeat: no-repeat;
     background-position: top left;
     margin: .5rem 0rem;
-    background-color: #e8e3d3;
+    background-color: #ebebeb;
 
     .at_title {
-        font-size: 1rem;
+        .twitter-logo {
+            font-size: 2rem;
+            margin-right: 1rem;
+            margin-bottom: -1rem;
+        }
+        font-size: 1.5rem;
         font-weight: 800;
         vertical-align: middle;
         padding: .75rem;
@@ -93,7 +98,7 @@
     }
 
     .tweet {
-        background-color: #e8e3d3;
+        background-color: #ebebeb;
         margin: 0.75rem 0rem;
         &:first-of-type {
             margin-top: 0;
@@ -101,6 +106,7 @@
         &:nth-of-type(2n+3) {
             clear: both;
         }
+        border-bottom: 1px solid #cccccc;
     }
 
     .tweet-wrapper {
