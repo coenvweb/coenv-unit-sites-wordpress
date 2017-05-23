@@ -136,6 +136,14 @@
             ) );
             remove_filter( 'page_css_class', 'add_parent_class', 10, 4 );
             ?>
+            <?php wp_nav_menu(array(
+              'theme_location' => 'top-buttons', 
+              'depth' => 1,
+              'menu_class' => 'off-canvas-list',
+              'container' => 'false',
+              'fallback_cb' => 'false',
+              'item_spacing' => 'preserve'
+            )); ?>
     </nav>
     <?php foundationPress_mobile_off_canvas(); ?>
   </aside>
