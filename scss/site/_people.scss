@@ -154,7 +154,8 @@ article.type-people {
                 -o-transition: all .2s ease;
                 -ms-transition: all .2s ease;
                 transition: all .2s ease;
-                max-width: 100%;
+                width: 100%;
+                margin: auto;
             }   
             h3 {
                 @include o_sans_bold;

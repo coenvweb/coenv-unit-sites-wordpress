@@ -10,7 +10,7 @@ function FoundationPress_theme_support() {
     add_theme_support('post-thumbnails');
     // set_post_thumbnail_size(150, 150, false);
 
-    add_image_size('people-grid', 135, 135, true);
+    add_image_size('people-grid', 170, 170, true);
 
         // Add media sizes
         // thumbnail: 200x200 square crop
