@@ -144,7 +144,7 @@ if(isset($wp_query->query_vars['category'])){
 			
 			<h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
 			<?php 	
-				echo the_advanced_excerpt('length=100&length_type=words&no_custom=1&allowed_tags=p,a');
+				echo the_advanced_excerpt('length=100&length_type=words&no_custom=0&allowed_tags=p,a');
 				echo $post_link;
 			?>
 		</div>
