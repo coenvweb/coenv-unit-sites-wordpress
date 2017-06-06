@@ -10,34 +10,8 @@ $services = get_field('services');
 <article id="post-<?php the_ID() ?>" <?php post_class( 'person' ) ?>>
     <section class="article__content">
         <div class="people-header">
-            <h1 class="people-title article__title">
-                <?php if ( is_page() || is_single()) : ?>
-                    <?php the_title() ?>, <?php echo get_field('credentials'); ?>
-                <?php endif ?>
-            </h1>
             <div class="people-meta row">
-                <div class="head-left small-12 medium-6 medium-push-6 columns ">
-                    <div class="titles">
-                        <?php foreach($titles as $title) { ?>
-                            <div class="job_title">
-                                <?=$title['title'];?> | <?=$title['organization'];?>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <div class="expertise">
-                        <h2 class="expertise_title">Areas of Expertise</h2>
-                        <?php for($i = 0; $i < count($areas); $i++) { ?>
-                            <?php $area = $areas[$i]; ?>
-                            <span class="area"><?=$area['area'];?></span> <?=($i < count($areas) - 1 ? '|' : '')?>
-                        <?php } ?>
-                    </div>
-                    <?php if(get_field('quote_or_mission')) { ?>
-                        <div class="mission">
-                            <?php the_field('quote_or_mission'); ?>
-                        </div>
-                    <?php } ?>
-                </div>
-                <div class="head-right small-12 medium-6 medium-pull-6 columns ">
+                <div class="head-left small-12 medium-6 columns ">
                     <div class="people-photo">
                         <?php the_post_thumbnail(); ?>
                     </div>
@@ -60,6 +34,33 @@ $services = get_field('services');
                         <?php } ?>
                     </ul>
 
+                </div>
+                <div class="head-right small-12 medium-6 columns">
+                    <h1 class="people-title article__title">
+                        <?php if ( is_page() || is_single()) : ?>
+                            <?php the_title() ?>, <?php echo get_field('credentials'); ?>
+                        <?php endif ?>
+                    </h1>
+                    <div class="titles">
+                        <?php foreach($titles as $title) { ?>
+                            <div class="job_title">
+                                <?=$title['title'];?> | <?=$title['organization'];?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <?php if(get_field('quote_or_mission')) { ?>
+                        <div class="mission">
+                            <?php the_field('quote_or_mission'); ?>
+                        </div>
+                    <?php } ?>
+                    <div class="expertise">
+                        <h4 class="expertise_title">Areas of Expertise</h4>
+                            <?php for($i = 0; $i < count($areas); $i++) { ?>
+                                <?php $area = $areas[$i]; ?>
+                                <span class="area"><?=$area['area'];?> <?= ($i + 1 != count($areas) ? '|' : '') ?></span>
+                            <?php } ?>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
