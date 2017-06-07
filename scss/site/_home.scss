@@ -1,16 +1,16 @@
 // Homepage Widgets
 .home .full-news .post-meta {
-        @include o_sans_bold;
-    }
-     .home .full-stats .button {
+    @include o_sans_bold;
+}
+.home .full-stats .button {
     font-size: rem-calc(16);
-    }
+}
 .home {
     .post-meta {
-            margin-bottom: rem-calc(5);
-        }
-    
-        h2 {
+        margin-bottom: rem-calc(5);
+    }
+
+    h2 {
         @include encode_black;
         font-size: rem-calc(27);
         @include line-height(32);
@@ -28,9 +28,9 @@
         }
 
 
-        }
+    }
 
-        h3 {
+    h3 {
         @include encode_black;
         @include font-size(16);
         line-height: 1.4;
@@ -40,23 +40,23 @@
         margin-bottom: 30px;
         padding-bottom: 30px;
         text-transform: uppercase;
-        }
-        
-        ul.links {
+    }
+
+    ul.links {
+        margin: 0;
+        padding: 0;
+
+         @media #{$small-only} {
+             text-align: center;
+         }
+
+         li {
+            display:inline;
+            list-style: none;
             margin: 0;
-            padding: 0;
-
-            @media #{$small-only} {
-                text-align: center;
-            }
-
-            li { 
-                display:inline;
-                list-style: none;
-                margin: 0;
-                padding: 0 8px 0 0;
-            }
-        }
+            padding: 0 8px 0 0;
+         }
+    }
 
     .full-feature {
         background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-spring.jpg');
@@ -71,18 +71,17 @@
         text-align: center;
 
         &.season-fall {
-            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-fall.jpg');
+           background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-fall.jpg');
 
         }
         &.season-winter {
-            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-winter.jpg');
+           background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-winter.jpg');
         }
         &.season-spring {
-            background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-spring.jpg');
+           background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-hero-spring.jpg');
         }
-        
-        p,
-        h3 {
+
+        p, h3 {
             margin: 0;
         }
 
@@ -101,213 +100,198 @@
             width: 340px;
             @extend .uw-skew;
 
-                @media #{$small-only} {
+            @media #{$small-only} {
                 width: 260px;
+            }
 
-                }
 
-
-                p {
-
+            p.tag {
                 @include encode-thin;
                 letter-spacing: 2;
                 color: $white;
                 text-transform: uppercase;
                 font-size: rem-calc(27);
                 letter-spacing: .1rem;
-                 @extend .uw-un-skew;
+                @extend .uw-un-skew;
 
-
-
-                    @media #{$small-only} {
-
-                        font-size: rem-calc(18);
-
-
+                @media #{$small-only} {
+                    font-size: rem-calc(18);
                 }
 
-            }
+           }
 
-
-
-
-
-        }
-        h3 {
+       }
+       h1.hero-statement {
+            @include encode_black;
             color: #fff;
             font-size: rem-calc(60);
-            width: 94%;
+            width: 90%;
             letter-spacing: .2rem;
             line-height: 1.25;
             margin: 22px auto 23px auto;
             padding-bottom: rem-calc(12);
             text-shadow: 1px 1px 50px #000;
+            text-transform: uppercase;
 
             @media #{$small-only} {
-
-                        font-size: rem-calc(28);
-                        margin-bottom: 12px;
-
-                        text-shadow: 1px 1px 2px #000;
-
-
-                }
-
-
-        }
-        .button {
+                font-size: rem-calc(28);
+                margin-bottom: 12px;
+                text-shadow: 1px 1px 2px #000;
+            }
+       }
+       .button {
             font-size: rem-calc(16);
             padding: rem-calc(8) rem-calc(12);
-        }
+       }
     }
     .home .full-news h3 {
         @include o_sans_bold;
         line-height: 1;
     }
-    
+
     .full-news {
         background-color: $white;
         background-image: url('/wp-content/themes/coenv-cig/assets/img/home-section-top-tile.png');
         background-position: top center;
         background-repeat: repeat-x;
         border-top: solid 5px #b6a47c;
-        float: left;
-        padding: 26px 0 60px 0;
-        width: 100%;
+float: left;
+padding: 26px 0 60px 0;
+width: 100%;
 
-        p {
+       p {
 
-                margin-bottom: 1em;
+           margin-bottom: 1em;
 
-            }
+       }
 
-        .post-meta,
-            .terms {
-                font-size: rem-calc(13);
-            }
-        .button {
-            margin-bottom: 0;
-            margin-top: rem-calc(20);
-        }
-        .home-news-header {
-            float: left;
-            width: 100%;
-        }
-        .featured-news {
-            margin-right: 60px;
-
-            
-            @media#{$small-only} {
-                background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
-                background-repeat: no-repeat;
-                background-position: bottom left;
-                float: left;
-                margin-bottom: 25px;
-                margin-right: 0;
-                padding-bottom: 20px;
-            }
-        }
-        .more-news {
-
-            @media#{$small-only} {
-                text-align: center;
-            }
-            @media#{$small-up} {
-                padding-left: 0;
-            }
-        }
-        
-        
-        h2 {
-            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
-            color: $accent;
-            margin-bottom: 40px;
-            float: left;
-        }
-        h3 {
-            @include o_sans_bold;
-            color: $accent;
-            font-size: rem-calc(22);
-            margin-bottom: rem-calc(12);
-            padding-bottom: 0;
-            text-transform: none;
-        }
-        .large-4 .small-news {
-        min-height: 320px;
-
-            @media #{$small-only} {
-                min-height: 0;
-            }
-        }
-        .small-news {
-            background-color: #fff;
-            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
-            background-repeat: no-repeat;
-            background-position: bottom left;
-            float: left;
-            list-style: none;
-            margin-bottom: 25px;
-            padding-bottom: 30px;
-            padding-right: 20px;
-            width: 100%;
+       .post-meta,
+           .terms {
+               font-size: rem-calc(13);
+           }
+       .button {
+           margin-bottom: 0;
+           margin-top: rem-calc(20);
+       }
+       .home-news-header {
+float: left;
+width: 100%;
+       }
+       .featured-news {
+           margin-right: 60px;
 
 
-                h3 {
-                    background: none;
-                    margin: 0;
-                    padding: 0;
-                a {
-                    color: #737373;
-                }
+           @media#{$small-only} {
+               background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
+               background-repeat: no-repeat;
+               background-position: bottom left;
+float: left;
+       margin-bottom: 25px;
+       margin-right: 0;
+       padding-bottom: 20px;
+           }
+       }
+       .more-news {
 
-            }
+           @media#{$small-only} {
+               text-align: center;
+           }
+           @media#{$small-up} {
+               padding-left: 0;
+           }
+       }
 
-        }
-        
-    
-        
+
+       h2 {
+           background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+color: $accent;
+       margin-bottom: 40px;
+float: left;
+       }
+       h3 {
+           @include o_sans_bold;
+color: $accent;
+       font-size: rem-calc(22);
+       margin-bottom: rem-calc(12);
+       padding-bottom: 0;
+       text-transform: none;
+       }
+       .large-4 .small-news {
+           min-height: 320px;
+
+           @media #{$small-only} {
+               min-height: 0;
+           }
+       }
+       .small-news {
+           background-color: #fff;
+           background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-gray.svg");
+           background-repeat: no-repeat;
+           background-position: bottom left;
+float: left;
+       list-style: none;
+       margin-bottom: 25px;
+       padding-bottom: 30px;
+       padding-right: 20px;
+width: 100%;
+
+
+       h3 {
+background: none;
+margin: 0;
+padding: 0;
+         a {
+color: #737373;
+         }
+
+       }
+
+       }
+
+
+
     }
-    
+
     .full-stats {
         background-color: #333;
         background-image: url('/wp-content/themes/coenv-cig/assets/img/bg-home-stats.jpg');
         background-position: top center;
         background-repeat: repeat-x;
         border-top: solid 6px #b6a47c;
-        float: left;
-        height: 439px;
-        overflow: hidden;
-        padding: 32px 0;
-        width: 100%;
+float: left;
+height: 439px;
+overflow: hidden;
+padding: 32px 0;
+width: 100%;
 
-         @media #{$small-only} {
-                height: auto;
-            }
+       @media #{$small-only} {
+height: auto;
+       }
 
-        h2 {
-            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
-            color: $white;
-            margin-bottom: 23px;
-        }
-        
-        .stats {
-            @include encode_black;
-            letter-spacing: .13rem;
-            margin-bottom: 49px;
-            div {
-                text-align: center;
-            } 
-            .stat-value {
-                color: #b6a47c;
-                font-size: rem-calc(100);
-                line-height: 1.25;
-            }
-            .stat-label {
-                color: $white;
-                font-size: rem-calc(23);
-                text-transform: uppercase;
-            }
-        }
+       h2 {
+           background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
+color: $white;
+       margin-bottom: 23px;
+       }
+
+       .stats {
+           @include encode_black;
+           letter-spacing: .13rem;
+           margin-bottom: 49px;
+           div {
+               text-align: center;
+           } 
+           .stat-value {
+color: #b6a47c;
+       font-size: rem-calc(100);
+       line-height: 1.25;
+           }
+           .stat-label {
+color: $white;
+       font-size: rem-calc(23);
+       text-transform: uppercase;
+           }
+       }
 
     }
     .full-learn-more {
@@ -316,33 +300,33 @@
         background-position: top center;
         background-repeat: repeat-x;
         border-top: solid 6px #b6a47c;
-        float: left;
-        overflow: hidden;
-        padding: 38px 0;
-        width: 100%;
+float: left;
+overflow: hidden;
+padding: 38px 0;
+width: 100%;
 
-        h2 {
-            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
-            color: $accent;
-        }
-        p {
-            font-size: rem-calc(22);
+       h2 {
+           background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-purple.svg");
+color: $accent;
+       }
+       p {
+           font-size: rem-calc(22);
 
-            @media #{$small-only} {
-                @include font-size(16);
-            }
-        }
+           @media #{$small-only} {
+               @include font-size(16);
+           }
+       }
 
 
 
     }
-    
+
     .widget_coenv_base_index_dates ul {
         margin-left: 1rem;
     }
 
     .widget_links {
-        float: right;
+float: right;
     }
 
     .list-news-small {
@@ -354,46 +338,46 @@
             list-style: none;	
         }
     }
-    
+
     .widgettitle {
-        display: none;
+display: none;
     }
-    
+
     .news-row {
         background-color: $white;
         border-top: solid 6px #b6a47c;
     }
 
     .home-news-section {
-        margin: 0 auto;
-
-
-        
+margin: 0 auto;
 
 
 
-        div:nth-child(2) {
-            //padding-left: 30px;
 
-        }
 
-        .featured-thumbnail {
-            max-height: rem-calc(350);
-            margin-bottom: rem-calc(17);
-            overflow: hidden;
 
-            img {
-                width: 100%;
-                height: auto;
-            }
-        }
-        :not(:last-child) .small-news {
-                margin-bottom: rem-calc(30);	
-        }
-        .columns {
-            padding-left: 0;
-            padding-right: 0;
-        }
+div:nth-child(2) {
+        //padding-left: 30px;
+
+    }
+
+    .featured-thumbnail {
+        max-height: rem-calc(350);
+        margin-bottom: rem-calc(17);
+overflow: hidden;
+
+          img {
+width: 100%;
+height: auto;
+          }
+    }
+    :not(:last-child) .small-news {
+        margin-bottom: rem-calc(30);	
+    }
+    .columns {
+        padding-left: 0;
+        padding-right: 0;
+    }
 
     }
     .home-news-section .columns.small-news {
@@ -407,30 +391,30 @@
 
     }
 
-        
-        .social-news {
-            border: solid 1px #e6e6e6;
-            margin-top: 2.25rem;
-            padding: 1rem 1.5rem;
-            width: 100%;
-            background-color: #e8e8ed;
-            .right {
-                @media #{$large-up} {
-                    text-align: right;
-                }
-            }
-            h3 {
-                @include o_sans_bold;
-                color: #000;
-                font-size: rem-calc(23);
-                margin-bottom: 0;
-            }
-            p {
-                font-size: rem-calc(16);
-            }
-            svg {
-                fill: $accent;
-                height: 65px;
-            }
-}
+
+    .social-news {
+border: solid 1px #e6e6e6;
+        margin-top: 2.25rem;
+padding: 1rem 1.5rem;
+width: 100%;
+       background-color: #e8e8ed;
+       .right {
+           @media #{$large-up} {
+               text-align: right;
+           }
+       }
+       h3 {
+           @include o_sans_bold;
+color: #000;
+       font-size: rem-calc(23);
+       margin-bottom: 0;
+       }
+       p {
+           font-size: rem-calc(16);
+       }
+       svg {
+fill: $accent;
+height: 65px;
+       }
+    }
 }

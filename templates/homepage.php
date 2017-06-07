@@ -2,19 +2,27 @@
 /*
 Template Name: Homepage
 */
+
+get_header();
+
+$heroes = get_field('hero_area');
+
+foreach($heroes as $hero) {
 ?>
-<?php get_header(); ?>
-<div class="full-feature">
-	<div class="row">
-		<div class="large-12 homepage-features columns">
-			<div class="boundless-1">
-				<p>Together We Will</p>
-			</div>
-			<h3>Increase climate resilience</h3>
-			<p><a class="button" href="/about/">Learn More</a></p>
-		</div>
-	</div>
-</div>			
+    <div class="full-feature" style="background-image: url(<?=$hero['hero_image']?>)">
+        <div class="row">
+            <div class="large-12 homepage-features columns">
+                <div class="boundless-1">
+                    <p class="tag"><?=$hero['tag_text']?></p>
+                </div>
+                <h1 class="hero-statement"><?=$hero['hero_text']?></h1>
+                <p><a class="button" href="<?=$hero['page_link']?>"><?=$hero['link_text']?></a></p>
+            </div>
+        </div>
+    </div>			
+<?php
+}
+?>
 <div class="full-news">
 	<div class="row">
 		<div class="large-12 home-news-section columns">

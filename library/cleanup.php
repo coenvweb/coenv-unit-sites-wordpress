@@ -171,7 +171,6 @@ function image_editor($html, $id, $alt, $title) {
 
 function my_remove_meta_boxes() {
 	remove_meta_box( 'featured-video-plus-box', 'page', 'side' );
-	remove_meta_box( 'featured-video-plus-box', 'features', 'side' );
 	remove_meta_box( 'featured-video-plus-box', 'datasets', 'side' );
 	remove_meta_box( 'featured-video-plus-box', 'publications', 'side' );
 }

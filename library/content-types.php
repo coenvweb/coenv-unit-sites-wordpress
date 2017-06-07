@@ -6,24 +6,6 @@
  */
 
 function coenv_base_post_types_init() {
-  register_post_type( 'features',
-    array(
-      'labels' => array(    
-      'name' => __( 'Homepage Features' ),
-      'singular_name' => __( 'Homepage Feature' ),
-      'add_new_item' => __( 'Add Homepage Feature'),
-      'edit_item' => __( 'Edit Homepage Feature'),
-      'new_item' => __( 'New Homepage Feature'),
-      ),
-    'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    'rewrite' => array('slug' => 'features'),
-  'menu_icon' => 'dashicons-slides',
-    )
-  );
   register_post_type( 'publications',
     array(
       'labels' => array(    
