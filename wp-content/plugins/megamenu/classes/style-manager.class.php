@@ -271,7 +271,6 @@ final class Mega_Menu_Style_Manager {
         return apply_filters( "megamenu_themes", $themes );
     }
 
-
     /**
      * Merge the saved themes (from options table) into array of complete themes
      *
@@ -279,7 +278,7 @@ final class Mega_Menu_Style_Manager {
      */
     private function merge_in_saved_themes( $all_themes ) {
 
-        if ( $saved_themes = get_site_option( "megamenu_themes" ) ) {
+        if ( $saved_themes = max_mega_menu_get_themes() ) {
 
             foreach ( $saved_themes as $key => $settings ) {
 

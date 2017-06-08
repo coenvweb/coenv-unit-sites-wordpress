@@ -1,0 +1,181 @@
+/*
+Theme Name: Leaf Child (food)
+Theme URI: http://fatboythemes.com/themes/leaf/
+Author: Brad Thomas
+Author URI: http://wp-ultra.com
+Template: leaf
+*/
+
+@import url("../leaf/style.css");
+
+@media only screen and (max-width: 710px) {
+img.placesetting { 
+   display:none;
+ }
+}
+
+.main-navigation .current-menu-item > a,
+.main-navigation .current-menu-ancestor > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_ancestor > a {
+	color: #ffb42e!important;
+	font-weight: bold;
+}
+
+.main-navigation li ul::after {
+top: 8px!important;
+}
+
+.scroll-to-top {
+height:0px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
+font-weight: bold;
+color: #333333;
+}
+
+#contact {
+   display: -moz-inline-box;
+   display:inline-block;
+   *display:inline;
+   position: relative;
+   vertical-align: top;
+   min-width: 300px;
+   max-width: 434px;
+   height: 312px;
+   color: #333333;
+   padding: 10px;
+   margin: 0px;
+   margin-bottom: 25px;
+   -moz-box-shadow: 0 0px 8px rgba(150, 150, 150, 0.4);
+   -webkit-box-shadow: 0 0px 8px rgba(150, 150, 150, 0.4);
+   box-shadow: 0 0px 8px rgba(150, 150, 150, 0.4);
+}
+
+.contact-title {
+font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
+font-size: 160%;
+font-weight: bold;
+color: #333333;
+padding-bottom:10px;
+}
+
+img.avatar {
+margin-right: 32px;
+}
+
+ul li:nth-of-type(4n+1)#contact {  
+  background-image:url(http://depts.washington.edu/coenv/food/wp-content/uploads/2012/12/contact-fork.png);
+  background-position: bottom;
+  background-color: #df5d2d;
+}
+ul li:nth-of-type(4n+2)#contact {  
+  margin-left: 18px;
+  background-image:url(http://depts.washington.edu/coenv/food/wp-content/uploads/2012/12/contact-fork.png);
+  background-position: center bottom;  
+  background-color: #55b491;
+}
+ul li:nth-of-type(4n+3)#contact {  
+  background-color: #9ec97b;
+  background-image:url(http://depts.washington.edu/coenv/food/wp-content/uploads/2012/12/contact-fork.png);
+  background-position: center bottom;
+}
+ul li:nth-of-type(4n+4)#contact {  
+  background-color: #ffaf50;
+  background-image:url(http://depts.washington.edu/coenv/food/wp-content/uploads/2012/12/contact-fork.png);
+  background-position: center bottom;
+  margin-left: 18px;
+}
+
+#contact_divide {
+width: 100%;
+margin-top: 15px;
+list-style-type: none;
+}
+
+
+.site-content article {
+min-height: 400px;
+}
+
+.main-navigation {
+font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
+border-bottom: none;
+border-top: 1px dashed white;
+}
+
+.main-navigation li a{
+color: #eeeeee;
+font-size: 140%;
+border-left: none;
+}
+
+.main-navigation li a:hover {
+color: #ffb43e;
+}
+
+.main-navigation .current-menu-item > a,
+.main-navigation .current-menu-ancestor > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_ancestor > a {
+	font-weight: bold !important;
+}
+
+.main-navigation li ul li a {
+font-size: 100%;
+font-weight: normal;
+}
+
+.site-content {
+border: none;
+}
+
+.site-content article {
+min-height: 100px;
+}
+
+.site-header {
+background-color: #842744
+} 
+
+#secondary .search-bar #s {
+min-width: 75%;
+}
+
+*/  .divider-title span, .widget-title span {
+background: #ffb43e;
+} /*
+
+.site-footer {
+background: #d1d3d4;
+border-top: 4px solid #d1d3d4;
+}
+
+body {
+text-shadow: none!important;
+}
+
+h1 {
+font-size: 3.2rem!important;
+}
+
+.entry-content li {
+ list-style-image: url(http://depts.washington.edu/coenv/food/wp-content/uploads/2013/01/Carrot_bullet_left.png) !important;
+ margin: 0 0 1rem 3rem !important;
+ }
+
+.main-navigation .current-menu-item > a,
+.main-navigation .current-menu-ancestor > a,
+.main-navigation .current_page_item > a,
+.main-navigation .current_page_ancestor > a {
+	color: #ffb43e!important;
+	font-weight: bold;
+}
+
+#page {
+-moz-box-shadow: 0 0px 8px rgba(150, 150, 150, 1);
+-webkit-box-shadow: 0 0px 8x rgba(150, 150, 150, 1);
+box-shadow: 0 0px 8px rgba(150, 150, 150, 1);
+}

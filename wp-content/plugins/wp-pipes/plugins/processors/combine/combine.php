@@ -24,18 +24,22 @@ class WPPipesPro_combine {
 			$params->combine = stripcslashes( $params->combine );
 			$combine = str_replace( '\"', '"', $params->combine );
 			$combine = str_replace( "\'", "'", $combine );
+			$data_noneed_oe = $data->no_need['oe'];
+			$data_noneed_op = $data->no_need['op'];
 			preg_match_all('/(?<={).*?(?=})/i', $combine, $matches );
 			$inputs = array();
 			if(is_array($matches[0]) && count($matches[0])> 0){
 				foreach($matches[0] as $key=>$value){
 					$value = str_replace('[so]', '[oe]', $value);
 					$seperate_array = explode(' ',$value);
+					$attribute = $seperate_array[1];
 					if($seperate_array[0] == '[oe]'){
-						$inputs[$matches[0][$key]] = $data->no_need['oe']->$seperate_array[1];
+						$inputs[$matches[0][$key]] = $data_noneed_oe->$attribute;
 					}else{
 						preg_match('/(?<=\[).*?(?=\])/i', $seperate_array[0], $result);
-						if(isset($data->no_need['op'][$result[0]]->$seperate_array[1])){
-							$inputs[$matches[0][$key]] = $data->no_need['op'][$result[0]]->$seperate_array[1];
+						$processor = $data_noneed_op[ $result[0] ];
+						if(isset($processor->$attribute)){
+							$inputs[$matches[0][$key]] = $data_noneed_op[$result[0]]->$attribute;
 						}
 					}
 				}

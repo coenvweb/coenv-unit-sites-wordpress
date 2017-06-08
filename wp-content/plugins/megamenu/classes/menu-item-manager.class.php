@@ -383,7 +383,7 @@ class Mega_Menu_Menu_Item_Manager {
                 $return .= '            <h4>' .  esc_html( $item['title'] ) . '</h4>';
                 $return .= '        </div>';
                 $return .= '    </div>';
-                $return .= '    <div class="widget-inner"></div>';
+                $return .= '    <div class="widget-inner widget-inside"></div>';
                 $return .= '</div>';
             }
 

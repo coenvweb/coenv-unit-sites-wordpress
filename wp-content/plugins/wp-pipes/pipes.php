@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.25
+Version: 1.26
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -258,7 +258,7 @@ if (!class_exists('Ob_Advertisment')) {
 					'name' => 'Education WordPress Theme | Education WP',
 					'url' => 'http://themeforest.net/item/education-wordpress-theme-education-wp/14058034',
 					'demo' => 'http://educationwp.thimpress.com',
-					'img' => 'https://0.s3.envato.com/files/218944792/01_preview.__large_preview.png',
+					'img' => 'https://image-tf.s3.envato.com/files/225684161/01_preview.__large_preview-3.__large_preview.jpg',
 					'description' => 'Education WordPress Theme – Education WP is made for educational web, LMS, Training Center, Courses Hub, College, Academy, University, School, Kindergarten. Education WP 2.7 newly released: Seamless lesson design, LearnPress 2.0, new Ivy League Demos, Visual Coposer, faster, stable, scalable, more light weight. See changelog. Complete Education WordPress Theme Based on our experience of building LMS with our previous theme eLearning WP - Education WP is the next generation and one of the best education WordPress themes around, containing all the strength of eLearning WP but with a better UI/UX. This WordPress educational theme has been developed based on the #1 LMS plugin on the official WordPress Plugins directory',
 				),
 				array(
@@ -273,10 +273,10 @@ if (!class_exists('Ob_Advertisment')) {
 			shuffle( $list_themes );
 			array_unshift($list_themes, array(
 				'name' => 'MagWP - The Complete Magazine WordPress Theme ',
-				'url' => 'https://thimpress.com/landing/magwp-magazine-wordpress-theme/',
+				'url' => 'https://themeforest.net/item/magazine-wordpress-theme-mag-wp/19305239?utm_source=wporg&utm_medium=pipes&ref=thimpress&utm_campaign=magwp',
 				'demo' => 'https://magwp.thimpress.com/',
-				'img' => 'https://thimpress.com/wp-content/uploads/2017/03/magwp-preview-image.png',
-				'description' => 'Be the first to get the fastest, most powerful and stunning WordPress theme for Magazines, Personal blogs and Newspapers for the price of $39 (-50% OFF)',
+				'img' => 'https://thimpress.com/wp-content/uploads/2017/06/mag.__large_preview.png',
+				'description' => 'MagWP is a WordPress theme that lets you write articles and blog posts with ease. We offer great support, awesome designs (10 website demos in 1 theme), and friendly help!',
 			));
 
 			?>
@@ -295,7 +295,7 @@ if (!class_exists('Ob_Advertisment')) {
 					$theme['description'] = preg_replace( '/(?<=\S,)(?=\S)/', ' ', $theme['description'] );
 					$theme['description'] = str_replace( "\n", ' ', $theme['description'] );
 					$theme['description'] = explode( " ", $theme['description'] );
-					$theme['description'] = array_splice( $theme['description'], 0, sizeof( $theme['description'] ) - 1 );
+					$theme['description'] = array_splice( $theme['description'], 0, sizeof( $theme['description'] ) - 0 );
 					$theme['description'] = implode( " ", $theme['description'] ) . " ...";
 					?>
 
@@ -312,7 +312,7 @@ if (!class_exists('Ob_Advertisment')) {
 								<?php echo wp_kses_post( $theme['description'] ); ?>
 							</p>
 							<p class="theme-controls">
-								<a href="<?php echo esc_url( $theme['url'] ); ?>" class="button button-primary" target="_blank">Get it now</a>
+								<a href="<?php echo esc_url( $theme['url'] ); ?>" class="button button-primary" target="_blank">Read More</a>
 								<a href="<?php echo esc_url( $url_demo ); ?>" class="button" target="_blank">View Demo</a>
 							</p>
 						</div>

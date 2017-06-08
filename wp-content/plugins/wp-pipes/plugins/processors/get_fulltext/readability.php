@@ -43,7 +43,7 @@ function obgrabArticle( $html, $with_title = true ) {
 	$allParagraphs = $document->getElementsByTagName( 'p' );
 	$topDivCount   = 0;
 	$topDiv        = null;
-	$topDivParas;
+	//$topDivParas;
 
 	$articleContent = $document->createElement( 'div' );
 

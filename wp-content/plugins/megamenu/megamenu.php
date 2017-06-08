@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.3.6
+ * Version:     2.3.7.1
  * Author:      Tom Hemsley
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.3.6';
+    public $version = '2.3.7.1';
 
 
     /**
@@ -77,6 +77,10 @@ final class Mega_Menu {
         add_filter( 'black_studio_tinymce_enable_pages' , array($this, 'megamenu_blackstudio_tinymce' ) );
 
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts'), 11 );
+
+        add_action( 'admin_print_footer_scripts-nav-menus.php', array( $this, 'admin_print_footer_scripts' ) );
+        add_action( 'admin_print_scripts-nav-menus.php', array( $this, 'admin_print_scripts' ) );
+        add_action( 'admin_print_styles-nav-menus.php', array( $this, 'admin_print_styles' ) );
 
         add_shortcode( 'maxmenu', array( $this, 'register_shortcode' ) );
         add_shortcode( 'maxmegamenu', array( $this, 'register_shortcode' ) );
@@ -135,7 +139,6 @@ final class Mega_Menu {
                 // load widget scripts and styles first to allow us to dequeue conflicting colorbox scripts from other plugins
                 do_action( 'sidebar_admin_setup' );
                 do_action( 'admin_enqueue_scripts', 'widgets.php' );
-                do_action( 'admin_print_styles-widgets.php' );
                 do_action( 'megamenu_nav_menus_scripts', $hook );
             }
 
@@ -144,6 +147,42 @@ final class Mega_Menu {
             }
 
         }
+
+    }
+
+
+    /**
+     * Print the widgets.php scripts on the nav-menus.php page. Required for 4.8 Core Media Widgets.
+     *
+     * @since 2.3.7
+     */
+    public function admin_print_footer_scripts( $hook ) {
+
+        do_action( 'admin_footer-widgets.php' );
+
+    }
+
+
+    /**
+     * Print the widgets.php scripts on the nav-menus.php page. Required for 4.8 Core Media Widgets.
+     *
+     * @since 2.3.7
+     */
+    public function admin_print_scripts( $hook ) {
+
+        do_action( 'admin_print_scripts-widgets.php' );
+
+    }
+
+
+    /**
+     * Print the widgets.php scripts on the nav-menus.php page. Required for 4.8 Core Media Widgets.
+     *
+     * @since 2.3.7
+     */
+    public function admin_print_styles( $hook ) {
+
+        do_action( 'admin_print_styles-widgets.php' );
 
     }
 
@@ -1083,5 +1122,141 @@ if ( ! function_exists( 'max_mega_menu_is_enabled' ) ) {
         $settings = get_option( 'megamenu_settings' );
 
         return is_array( $settings ) && isset( $settings[ $location ]['enabled'] ) && $settings[ $location ]['enabled'] == true;
+    }
+}
+
+if ( ! function_exists('max_mega_menu_share_themes_across_multisite') ) {
+    /*
+     * Return saved themes
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_share_themes_across_multisite() {
+
+        if ( defined('MEGAMENU_SHARE_THEMES_MULTISITE') && MEGAMENU_SHARE_THEMES_MULTISITE === false ) {
+            return false;
+        }
+
+        return apply_filters( 'megamenu_share_themes_across_multisite', true );
+        
+    }
+}
+
+if ( ! function_exists('max_mega_menu_get_themes') ) {
+    /*
+     * Return saved themes
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_get_themes() {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return get_option( "megamenu_themes" );
+        }
+
+        return get_site_option( "megamenu_themes" );      
+
+    }
+}
+
+if ( ! function_exists('max_mega_menu_save_themes') ) {
+    /*
+     * Save menu theme
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_save_themes( $themes ) {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return update_option( "megamenu_themes", $themes );
+        }
+
+        return update_site_option( "megamenu_themes", $themes );
+        
+    }
+}
+
+if ( ! function_exists('max_mega_menu_save_last_updated_theme') ) {
+    /*
+     * Save last updated theme
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_save_last_updated_theme( $theme ) {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return update_option( "megamenu_themes_last_updated", $theme );
+        }
+
+        return update_site_option( "megamenu_themes_last_updated", $theme );
+        
+    }
+}
+
+if ( ! function_exists('max_mega_menu_get_last_updated_theme') ) {
+    /*
+     * Return last updated theme
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_get_last_updated_theme() {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return get_option( "megamenu_themes_last_updated" );
+        }
+
+        return get_site_option( "megamenu_themes_last_updated" );
+        
+    }
+}
+
+if ( ! function_exists('max_mega_menu_get_toggle_blocks') ) {
+    /*
+     * Return saved toggle blocks
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_get_toggle_blocks() {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return get_option( "megamenu_toggle_blocks" );
+        }
+
+        return get_site_option( "megamenu_toggle_blocks" );
+        
+    }
+}
+
+if ( ! function_exists('max_mega_menu_save_toggle_blocks') ) {
+    /*
+     * Save toggle blocks
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_save_toggle_blocks( $saved_blocks ) {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return update_option( "megamenu_toggle_blocks", $saved_blocks );
+        }
+
+        return update_site_option( "megamenu_toggle_blocks", $saved_blocks );
+
+    }
+}
+
+if ( ! function_exists('max_mega_menu_delete_themes') ) {
+    /*
+     * Delete saved themes
+     *
+     * @since 2.3.7
+     */
+    function max_mega_menu_delete_themes() {
+
+        if ( ! max_mega_menu_share_themes_across_multisite() ) {
+            return delete_option( "megamenu_themes" );
+        }
+
+        return delete_site_option( "megamenu_themes" );
+
     }
 }

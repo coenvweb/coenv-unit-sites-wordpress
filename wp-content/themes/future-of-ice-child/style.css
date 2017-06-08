@@ -1,0 +1,203 @@
+/*
+ Theme Name:     Future of Ice Child
+ Theme URI:      http://coenv.washington.edu/
+ Description:    Future of Ice Child Theme
+ Author:         Drew Collins
+ Template:       coenv-wordpress-theme
+ Version:        1.0.0
+*/
+
+/* =Imports styles from the parent theme
+-------------------------------------------------------------- */
+@import url('../coenv-wordpress-theme/assets/styles/build/screen.css');
+
+
+/* =Theme customization starts here
+-------------------------------------------------------------- */
+#features .feature .feature-info-container .feature-info .feature-type {
+color: #445569;
+}
+
+#features .feature .feature-info-container .feature-info .feature-content h1 {
+color: #445569;
+}
+
+#features .feature .feature-info-container .feature-info .feature-content p, #features .feature .feature-info-container .feature-info .feature-content .feature-caption {
+color: #323232;
+}
+
+#features .feature .feature-image {
+height: auto;
+margin: 2%;
+}
+
+.home .layout-wrapper, .page .layout-wrapper, .search .layout-wrapper {
+background: url("assets/img/antarctica.jpg");
+background-position: 0 -140px;
+background-repeat: no-repeat;
+background-color: #445569;
+}
+
+.blog .banner-wrapper, .archive .banner-wrapper, .error404 .banner-wrapper {
+background: url("assets/img/antarctica.jpg");
+background-position: 0 -180px;
+background-repeat: no-repeat;
+background-color: #445569;
+}
+
+.single .banner-wrapper {
+background: url("assets/img/antarctica.jpg");
+background-position: 0 -180px;
+background-repeat: no-repeat;
+background-color: #445569;
+}
+
+.site-header {
+background: none;
+box-shadow: none;
+}
+
+.svg .site-header #logo a {
+  background-image: url(assets/img/logo_ice.svg);
+background-size:cover;
+}
+
+
+.main-menu.normal-menu #menu-main .page-depth-0 span > a {
+color: #fff;
+font-weight: 400;
+}
+
+.rsOverflow {
+max-width: 785px!important;
+}
+
+#features .features-nav {
+max-width: 785px;
+margin: 0px;
+}
+
+#features .feature {
+margin: 0px;
+}
+
+#features .feature .feature-info-container .feature-info .feature-type {
+display: none;
+}
+
+#features .feature .feature-info-container .feature-info {
+vertical-align: top;
+padding-top: 28px;
+}
+
+
+#features .features-nav a:hover, #features .features-nav a.active {
+background: rgba(250, 250, 250, 0.2)
+}
+
+@media (max-width: 616px) {
+.rsOverflow {
+max-width: 100%!important;
+}
+#features .features-nav {
+max-width: 100%;
+margin: 0px;
+}
+}
+
+@media (max-width: 767px) {
+#features .feature .feature-image {
+width: 96%;
+}
+}
+
+@media (min-width: 616px) {
+  .home .widget {
+    float: right;
+    width: 24.7169811%;
+    padding: 2rem;
+    height: 450px;
+  }
+
+#features {
+margin: 200px -15px 20px -15px;
+}
+
+.rsOverflow {
+max-width: 73%!important;
+}
+
+#features .features-nav {
+max-width: 73%;
+margin: 0px;
+}
+}
+
+@media (max-width: 950px) {
+  .home .widget {
+    height: auto;
+}
+}
+
+.widget {
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+background: #fff;
+padding: 1rem 1rem 0 1rem;
+margin: 0 0 1rem 0;
+}
+
+.widget a {
+color:#323232;
+text-decoration: none;
+}
+
+.widget ul {
+list-style-type: none;
+margin: 1rem 0 1rem 0;
+}
+
+.widget ul li {
+margin-left: -40px;
+margin-bottom: 10px;
+}
+
+.widget > header h1:after {
+border-top: none;
+}
+
+.widget > header h1 {
+color: #445569;
+margin: 0 0 7px;
+margin: 0 0 0.5rem;
+font-family: "Skolar", Georgia, serif;
+font-size: 24px;
+font-size: 1.71429rem;
+line-height: 30px;
+line-height: 2.14286rem;
+font-weight: 400;
+}
+
+.article__content .wp-caption {
+  margin: 0;
+  padding: 0;
+  width: auto !important;
+}
+
+.archive .blog-header {
+  display: none;
+}
+/* =Styles for responsive video embeds
+-------------------------------------------------------------- */
+.videoWrapper {
+  position: relative;
+  padding-bottom: 53.25%;
+  padding-top: 25px;
+  height: 0;
+}
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

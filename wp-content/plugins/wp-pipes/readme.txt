@@ -3,7 +3,7 @@ Contributors: thimpress, thongta, phamtungpth, tunnhn
 Donate link: http://thimpress.com/
 Tags: pipes, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, autoblog, autoblogging, curating, curation, curated content, content curation, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.7.2
+Tested up to: 4.7.5
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -21,13 +21,11 @@ Powerful Data Migration WordPress plugin: CSV importing for Posts/WooCommerce, R
 ###WordPress Content Curation###
 Curated Content is still safe with SEO, and this content curation plugin for WordPress works perfectly to create curated content from RSS Feed, Google News or any other sources.
 
-> **Limited Time Offer - The earlier you join, the more you save**
+> **Are you looking for a great news WordPress theme?**
 
-> We are releasing the [best theme for magazine](https://thimpress.com/landing/magwp-magazine-wordpress-theme/)
+> You found it! Mag WP is an amazing magazine WordPress theme for a blog, news, newspaper, magazine, publishing industry and reviews website.
 
-> PreOrder now and get 50% OFF and Free Installation Service
-
-> Or at least, please take a look at [Mag WP](https://magwp.thimpress.com) and give us feedback.
+> [Read more](https://themeforest.net/item/magazine-wordpress-theme-mag-wp/19305239?utm_source=wporg&utm_medium=pipes&ref=thimpress&utm_campaign=magwp) | [View MagWP Demo](https://magwp.thimpress.com)
 
 ###News and Magazine WordPress Themes###
 As you are using WP Pipes, most of the time you will use it for a newspaper or magazine website. Take a look at MagWP, **the only Magazine WordPress theme** we developed to work perfectly with Pipes and to publish content professionally on the web.
@@ -150,6 +148,11 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.26 =
+* Fix: bug with Combine processor for working on PHP7+.
+* Fix: Remove Deprecated bugs in library of RSS Destination add-on.
+* Improve: Add new option in Get Image processor to force only downloading files which have mime as image.
+
 = 1.25 =
 * Improve: Add new button in Settings page to restore the configurations of WPPipes to default value.
 * Improve: Add new button in All Pipes page to create tables in case they are missing after installing.

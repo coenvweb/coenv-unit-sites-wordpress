@@ -285,7 +285,7 @@ class HtmlDescribable {
 	/**
 	 * Constructor, set truncSize to unlimited
 	 */
-	function HtmlDescribable() {
+	function __construct() {
 		$this->truncSize            = 0; // 0 means do not truncate
 		$this->descriptionTruncSize = 0;
 	}
@@ -327,7 +327,7 @@ class FeedHtmlField {
 	 *
 	 * @param  $string : if given, sets the rawFieldContent property
 	 */
-	function FeedHtmlField( $parFieldContent ) {
+	function __construct( $parFieldContent ) {
 		if ( $parFieldContent ) {
 			$this->rawFieldContent = $parFieldContent;
 		}
@@ -827,7 +827,7 @@ class FeedDate {
 	 * }
 	 * }
 	 */
-	function FeedDate( $dateString = "" ) {
+	function __construct( $dateString = "" ) {
 		if ( $dateString == '' ) {
 			$daylight_saving = date( 'I' ); // Whether or not the date is in daylight saving time
 		} else {
@@ -1037,7 +1037,7 @@ class RSSCreator10 extends FeedCreator {
  * Written by Thong Tran - foobla.com
  * */
 class OBJSONCreator extends FeedCreator {
-	function OBJSONCreator() {
+	function __construct() {
 		$this->contentType = "application/json";
 	}
 
@@ -1227,7 +1227,7 @@ class RSSCreator091 extends FeedCreator {
 	 */
 	var $RSSVersion;
 
-	function RSSCreator091() {
+	function __construct() {
 		$this->_setRSSVersion( "0.91" );
 		$this->contentType = "application/rss+xml";
 	}
@@ -1379,7 +1379,7 @@ class RSSCreator091 extends FeedCreator {
  * @author Kai Blankenhorn <kaib@bitfolge.de>
  */
 class RSSCreator20 extends RSSCreator091 {
-	function RSSCreator20() {
+	function __construct() {
 		parent::_setRSSVersion( "2.0" );
 		$this->contentType = "application/rss+xml";
 	}
@@ -1394,7 +1394,7 @@ class RSSCreator20 extends RSSCreator091 {
  * @author Scott Reynen <scott@randomchaos.com> and Kai Blankenhorn <kaib@bitfolge.de>
  */
 class PIECreator01 extends FeedCreator {
-	function PIECreator01() {
+	function __construct() {
 		$this->encoding = "utf-8";
 	}
 
@@ -1451,7 +1451,7 @@ class PIECreator01 extends FeedCreator {
  * @author Mohammad Hafiz Ismail (mypapit@gmail.com)
  */
 class AtomCreator10 extends FeedCreator {
-	function AtomCreator10() {
+	function __construct() {
 		$this->contentType = "application/atom+xml";
 		$this->encoding    = "utf-8";
 	}
@@ -1570,7 +1570,7 @@ class AtomCreator10 extends FeedCreator {
  * @author Kai Blankenhorn <kaib@bitfolge.de>, Scott Reynen <scott@randomchaos.com>
  */
 class AtomCreator03 extends FeedCreator {
-	function AtomCreator03() {
+	function __construct() {
 		$this->contentType = "application/atom+xml";
 		$this->encoding    = "utf-8";
 	}
@@ -1638,7 +1638,7 @@ class AtomCreator03 extends FeedCreator {
  * @author Kai Blankenhorn <kaib@bitfolge.de>
  */
 class MBOXCreator extends FeedCreator {
-	function MBOXCreator() {
+	function __construct() {
 		$this->contentType = "text/plain";
 		$this->encoding    = "ISO-8859-15";
 	}
@@ -1726,7 +1726,7 @@ class MBOXCreator extends FeedCreator {
  * @since  1.5
  */
 class OPMLCreator extends FeedCreator {
-	function OPMLCreator() {
+	function __construct() {
 		$this->encoding = "utf-8";
 	}
 
@@ -1952,7 +1952,7 @@ class JSCreator extends HTMLCreator {
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=183668 - added 2012-10-28 by Thong Tran
  */
 class GoogleSiteMapIndex extends FeedCreator {
-	function GoogleSiteMapIndex() {
+	function __construct() {
 		$this->contentType = "application/xml";
 	}
 

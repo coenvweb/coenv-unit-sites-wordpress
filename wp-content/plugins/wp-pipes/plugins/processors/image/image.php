@@ -18,6 +18,7 @@ class WPPipesPro_image {
 		$df->image_local = 'images/wppipes';
 		$df->origin_url  = '';
 		$df->makelist    = 1;
+		$df->ignore_check_mime = 1;
 		$df->number_imgs = 1;
 		$df->remove      = 0;
 
@@ -253,8 +254,7 @@ class WPPipesPro_image {
 				$mime = implode( "/", $mime );
 			}
 			$temp_arr = explode( "/", $mime );
-
-			if ( ! in_array( 'image', $temp_arr ) ) { //check is image or not
+			if ( ! in_array( 'image', $temp_arr ) && $params->ignore_check_mime ) { //check is image or not
 				continue;
 			}
 

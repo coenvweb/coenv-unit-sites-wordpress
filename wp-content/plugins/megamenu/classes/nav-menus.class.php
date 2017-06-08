@@ -51,6 +51,8 @@ class Mega_Menu_Nav_Menus {
         add_action( 'wp_ajax_mm_hide_nags', array($this, 'set_nag_transient') );
         add_filter( 'hidden_meta_boxes', array( $this, 'show_mega_menu_metabox' ) );
 
+        add_filter('siteorigin_panels_is_admin_page', array( $this, 'enable_site_origin_page_builder' ) );
+
         if ( function_exists( 'siteorigin_panels_admin_enqueue_scripts' ) ) {
             add_action( 'admin_print_scripts-nav-menus.php', array( $this, 'siteorigin_panels_admin_enqueue_scripts') );
         }
@@ -61,6 +63,21 @@ class Mega_Menu_Nav_Menus {
 
     }
 
+
+    /**
+     * Enqueue Site Origin Page Builder scripts on nav-menus page.
+     *
+     * @since 2.3.7
+     */
+    public function enable_site_origin_page_builder( $enabled ) {
+        $screen = get_current_screen();
+
+        if ($screen->base == 'nav-menus') {
+            return true;
+        }
+
+        return $enabled;
+    }
 
     /**
      * Enqueue Page Builder scripts (https://wordpress.org/plugins/siteorigin-panels/)

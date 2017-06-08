@@ -307,6 +307,15 @@
                     $('#cboxLoadedContent').addClass('depth-' + panel.settings.menu_item_depth).append(header_container).append(tabs_container).append(content_container);
                     $('#cboxLoadedContent').css({'width': '100%', 'height': '100%', 'display':'block'});
                     $('#cboxLoadedContent').trigger('megamenu_content_loaded');
+
+                    // fix for WordPress 4.8 widgets when lightbox is opened, closed and reopened
+                    if (wp.textWidgets !== undefined) {
+                        wp.textWidgets.widgetControls = {}; // WordPress 4.8 Text Widget
+                    }
+
+                    if (wp.mediaWidgets !== undefined) {
+                        wp.mediaWidgets.widgetControls = {}; // WordPress 4.8 Media Widgets
+                    }
                 }
             });
 
@@ -443,7 +452,7 @@
                     }, function (response) {
 
                         var $response = $(response);
-                        var $form = $response.find('form');
+                        var $form = $response;
 
                         // bind delete button action
                         $(".delete", $form).on("click", function (e) {

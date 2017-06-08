@@ -73,7 +73,7 @@ class Mega_Menu_Settings {
             $style_manager = new Mega_Menu_Style_Manager();
             $this->themes = $style_manager->get_themes();
 
-            $last_updated = get_option('megamenu_themes_last_updated');
+            $last_updated = max_mega_menu_get_last_updated_theme();
 
             $preselected_theme = isset( $this->themes[ $last_updated ] ) ? $last_updated : 'default';
 
@@ -152,7 +152,7 @@ class Mega_Menu_Settings {
 
         $theme = esc_attr( $_POST['theme_id'] );
 
-        $saved_themes = get_site_option( "megamenu_themes" );
+        $saved_themes = max_mega_menu_get_themes();
 
         if ( isset( $saved_themes[ $theme ] ) ) {
             unset( $saved_themes[ $theme ] );
@@ -162,8 +162,8 @@ class Mega_Menu_Settings {
 
         $saved_themes[ $theme ] = $prepared_theme;
 
-        update_site_option( "megamenu_themes", $saved_themes );
-        update_site_option( "megamenu_themes_last_updated", $theme );
+        max_mega_menu_save_themes( $saved_themes );
+        max_mega_menu_save_last_updated_theme( $theme );
 
         do_action("megamenu_after_theme_save");
         do_action("megamenu_delete_cache");
@@ -289,7 +289,7 @@ class Mega_Menu_Settings {
         delete_transient( "megamenu_css" );
 
         // delete custom themes
-        delete_site_option( "megamenu_themes" );
+        max_mega_menu_delete_themes();
 
         $this->redirect( admin_url( "admin.php?page=maxmegamenu_tools&delete_data=true" ) );
 
@@ -351,7 +351,7 @@ class Mega_Menu_Settings {
 
         if ( is_array( $import ) ) {
 
-            $saved_themes = get_site_option( "megamenu_themes" );
+            $saved_themes = max_mega_menu_get_themes();
 
             $next_id = $this->get_next_theme_id();
 
@@ -361,7 +361,7 @@ class Mega_Menu_Settings {
 
             $saved_themes[ $new_theme_id ] = $import;
 
-            update_site_option( "megamenu_themes", $saved_themes );
+            max_mega_menu_save_themes( $saved_themes );
 
             do_action("megamenu_after_theme_import");
 
@@ -391,7 +391,7 @@ class Mega_Menu_Settings {
 
         $copy = $this->themes[$theme];
 
-        $saved_themes = get_site_option( "megamenu_themes" );
+        $saved_themes = max_mega_menu_get_themes();
 
         $next_id = $this->get_next_theme_id();
 
@@ -401,7 +401,7 @@ class Mega_Menu_Settings {
 
         $saved_themes[ $new_theme_id ] = $copy;
 
-        update_site_option( "megamenu_themes", $saved_themes );
+        max_mega_menu_save_themes( $saved_themes );
 
         do_action("megamenu_after_theme_duplicate");
 
@@ -427,13 +427,13 @@ class Mega_Menu_Settings {
             return;
         }
 
-        $saved_themes = get_site_option( "megamenu_themes" );
+        $saved_themes = max_mega_menu_get_themes();
 
         if ( isset( $saved_themes[$theme] ) ) {
             unset( $saved_themes[$theme] );
         }
 
-        update_site_option( "megamenu_themes", $saved_themes );
+        max_mega_menu_save_themes( $saved_themes );
 
         do_action("megamenu_after_theme_delete");
 
@@ -455,13 +455,13 @@ class Mega_Menu_Settings {
 
         $theme = esc_attr( $_GET['theme_id'] );
 
-        $saved_themes = get_site_option( "megamenu_themes" );
+        $saved_themes = max_mega_menu_get_themes();
 
         if ( isset( $saved_themes[$theme] ) ) {
             unset( $saved_themes[$theme] );
         }
 
-        update_site_option( "megamenu_themes", $saved_themes );
+        max_mega_menu_save_themes( $saved_themes );
 
         do_action("megamenu_after_theme_revert");
 
@@ -483,7 +483,7 @@ class Mega_Menu_Settings {
 
         $this->init();
 
-        $saved_themes = get_site_option( "megamenu_themes" );
+        $saved_themes = max_mega_menu_get_themes();
 
         $next_id = $this->get_next_theme_id();
 
@@ -496,7 +496,7 @@ class Mega_Menu_Settings {
 
         $saved_themes[$new_theme_id] = $new_theme;
 
-        update_site_option( "megamenu_themes", $saved_themes );
+        max_mega_menu_save_themes( $saved_themes );
 
         do_action("megamenu_after_theme_create");
 
@@ -560,7 +560,7 @@ class Mega_Menu_Settings {
 
         $last_id = 0;
 
-        if ( $saved_themes = get_site_option( "megamenu_themes" ) ) {
+        if ( $saved_themes = max_mega_menu_get_themes() ) {
 
             foreach ( $saved_themes as $key => $value ) {
 

@@ -44,6 +44,11 @@
                 });
             }
 
+            // pause video widget videos
+            anchor.siblings(".mega-sub-menu").find('.widget_media_video video').each(function() {
+                this.player.pause();
+            });
+
             anchor.parent().removeClass("mega-toggle-on").triggerHandler("close_panel");
             plugin.addAnimatingClass(anchor.parent());
         };

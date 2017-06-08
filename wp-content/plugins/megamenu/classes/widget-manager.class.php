@@ -582,14 +582,13 @@ class Mega_Menu_Widget_Manager {
 
         ?>
 
-        <div class='widget-content'>
-            <form method='post'>
-                <input type="hidden" name="widget-id" class="widget-id" value="<?php echo $widget_id ?>" />
-                <input type='hidden' name='action'    value='mm_save_widget' />
-                <input type='hidden' name='id_base'   value='<?php echo $id_base; ?>' />
-                <input type='hidden' name='widget_id' value='<?php echo $widget_id ?>' />
-                <input type='hidden' name='_wpnonce'  value='<?php echo $nonce ?>' />
-
+        <form method='post'>
+            <input type="hidden" name="widget-id" class="widget-id" value="<?php echo $widget_id ?>" />
+            <input type='hidden' name='action'    value='mm_save_widget' />
+            <input type='hidden' name='id_base'   class="id_base" value='<?php echo $id_base; ?>' />
+            <input type='hidden' name='widget_id' value='<?php echo $widget_id ?>' />
+            <input type='hidden' name='_wpnonce'  value='<?php echo $nonce ?>' />
+            <div class='widget-content'>
                 <?php
                     if ( is_callable( $control['callback'] ) ) {
                         call_user_func_array( $control['callback'], $control['params'] );
@@ -604,8 +603,9 @@ class Mega_Menu_Widget_Manager {
                 <?php
                     submit_button( __( 'Save' ), 'button-primary alignright', 'savewidget', false );
                 ?>
-            </form>
-        </div>
+            </div>
+        </form>
+        
 
         <?php
     }
@@ -669,7 +669,7 @@ class Mega_Menu_Widget_Manager {
         $return .= '            <h4>' . esc_html( $title ) . '</h4>';
         $return .= '        </div>';
         $return .= '    </div>';
-        $return .= '    <div class="widget-inner"></div>';
+        $return .= '    <div class="widget-inner widget-inside"></div>';
         $return .= '</div>';
 
         return $return;

@@ -48,7 +48,7 @@ class Mega_Menu_Toggle_Blocks {
      */
     private function get_toggle_blocks_for_theme( $theme_id ) {
 
-        $blocks = get_site_option( "megamenu_toggle_blocks" );
+        $blocks = max_mega_menu_get_toggle_blocks();
 
         if ( isset( $blocks[ $theme_id ] ) ) {
             return $blocks[ $theme_id ];
@@ -174,7 +174,7 @@ class Mega_Menu_Toggle_Blocks {
 
         $theme = esc_attr( $_POST['theme_id'] );
 
-        $saved_blocks = get_site_option( "megamenu_toggle_blocks" );
+        $saved_blocks = max_mega_menu_get_toggle_blocks();
 
         if ( isset( $saved_blocks[ $theme ] ) ) {
             unset( $saved_blocks[ $theme ] );
@@ -184,7 +184,7 @@ class Mega_Menu_Toggle_Blocks {
 
         $saved_blocks[ $theme ] = $submitted_settings;
 
-        update_site_option( "megamenu_toggle_blocks", $saved_blocks );
+        max_mega_menu_save_toggle_blocks( $saved_blocks );
 
     }
 
@@ -198,13 +198,13 @@ class Mega_Menu_Toggle_Blocks {
 
         $theme = esc_attr( $_GET['theme_id'] );
 
-        $saved_toggle_blocks = get_site_option( "megamenu_toggle_blocks" );
+        $saved_toggle_blocks = max_mega_menu_get_toggle_blocks();
 
         if ( isset( $saved_toggle_blocks[$theme] ) ) {
             unset( $saved_toggle_blocks[$theme] );
         }
 
-        update_site_option( "megamenu_toggle_blocks", $saved_toggle_blocks );
+        max_mega_menu_save_toggle_blocks( $saved_toggle_blocks );
     }
 
 
@@ -305,12 +305,24 @@ class Mega_Menu_Toggle_Blocks {
                     } else {
                         $open_icon = 'disabled';
                     }
+                    
+                    if ( isset( $settings['closed_text'] ) ) {
+                        $closed_text = "'" . do_shortcode( stripslashes( html_entity_decode( $settings['closed_text'], ENT_QUOTES ) ) ) . "'";
+                    } else {
+                        $closed_text = "'MENU'";
+                    }
 
+                    if ( isset( $settings['open_text'] ) ) {
+                        $open_text = "'" . do_shortcode( stripslashes( html_entity_decode( $settings['open_text'], ENT_QUOTES ) ) ) . "'";
+                    } else {
+                        $open_text = "''";
+                    }
+                    
                     $styles = array(
                         'id' => $index,
                         'align' => isset($settings['align']) ? "'" . $settings['align'] . "'" : "'right'",
-                        'closed_text' => isset($settings['closed_text']) ? "'" . $settings['closed_text'] . "'" : "'MENU'",
-                        'open_text' => isset($settings['open_text']) ? "'" . $settings['open_text'] . "'" : "''",
+                        'closed_text' => $closed_text,
+                        'open_text' => $open_text,
                         'closed_icon' => $closed_icon != 'disabled' ? "'\\" . $closed_icon  . "'" : "''",
                         'open_icon' => $open_icon != 'disabled' ? "'\\" . $open_icon . "'" : "''",
                         'text_color' => isset($settings['text_color']) ? $settings['text_color'] : '#fff',
