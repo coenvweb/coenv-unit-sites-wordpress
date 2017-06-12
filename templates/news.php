@@ -120,7 +120,9 @@ if(isset($wp_query->query_vars['category'])){
 	 				}
 				}
 				$termlist = rtrim($termlist,', ');
-				echo $termlist;
+                if($termlist) {
+				echo ' | ' . $termlist;
+                }
 				?>
 				</div>
 				
