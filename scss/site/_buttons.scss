@@ -1,7 +1,7 @@
 .button {
-	background: $white-button;
+	background: $accent;
 	border-radius: 4px;
-	color: $text;
+	color: $white !important;
 	display: inline-block;
 	@include encode_black;
 	@include font-size(12);
@@ -13,10 +13,12 @@
 	text-decoration: none !important;
 	text-transform: uppercase;
 	vertical-align: middle;
+    box-shadow: 0 2px #d9d9d9;
 
 	&:hover {
-		background: rgba(0,0,0,0.6);
+		background: darken($accent, 20%);
 		color: #fff !important;
+        box-shadow: 0 2px #c5c5c5;
 	}
 
 	.dark {
@@ -30,22 +32,3 @@
 	}
 
 } // .button
-
-
-.home {
-
-a.button {
-            background-color: $accent;
-            box-shadow: 0 2px #d9d9d9;
-            color: $white;
-        }
-        }
-
-div[role="main"] .button {
-
-background-color: $accent;
-color: $white;
-
-
-
-}

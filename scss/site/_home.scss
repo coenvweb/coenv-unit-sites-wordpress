@@ -531,6 +531,10 @@ color: $white;
                 box-shadow: none;
                 border: 3px solid white;
                 z-index: 3;
+                &:hover {
+                    color: rgba(0,0,0,0.9) !important;
+                    background-color: $white;
+                }
             }
         }
     }
