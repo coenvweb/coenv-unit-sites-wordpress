@@ -194,7 +194,7 @@ foreach($heroes as $hero) {
                 <div class="people-tile small-12" style="background-image: url(<?=$people_tile['tile_image']?>)">
                    <div class="tile-wrapper">
                         <a href="<?=get_permalink($person)?>">
-                            <?php if(get_the_post_thumbnail_url($person->ID, 'thumbnail') { ?>
+                            <?php if(get_the_post_thumbnail_url($person->ID, 'thumbnail')) { ?>
                                 <img class="round-tile-img" src="<?=get_the_post_thumbnail_url($person->ID, 'thumbnail')?>" alt="<?=$person->post_title?>" />
                             <?php } else { ?>
                                 <img class="round-tile-img" src="<?php echo get_template_directory_uri() . '/assets/img/blank-153x153.jpg' ?>" alt="Person not photographed" />
