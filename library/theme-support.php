@@ -226,3 +226,26 @@ function coenv_base_section_title($id) {
         
         echo $section_title;
     }
+
+add_action('save_post', 'single_sticky_only');
+add_action('publish_post', 'single_sticky_only');
+add_action('publish_future_post', 'single_sticky_only');
+
+function single_sticky_only($post_id) {
+    $upd_post = get_post($post_id);
+    // if this is published and a sticky or becoming a sticky
+    if($upd_post->post_status == 'publish' && (is_sticky($post_id) || ( isset($_POST['sticky']) && $_POST['sticky'] == true))) {
+        $stickies = get_option('sticky_posts');
+        $newSticky = array();
+        foreach($stickies as $sticky) {
+            $sticky = get_post($sticky);
+            //the current update, or non published stickies
+            if( $sticky->post_status != 'publish' || $sticky == $post_id ) { 
+                $newSticky[] = $sticky->ID;
+            }   
+        }   
+        //overwrite stickies - can only have one published sticky
+        update_option('sticky_posts', $newSticky);
+    }   
+}
+
