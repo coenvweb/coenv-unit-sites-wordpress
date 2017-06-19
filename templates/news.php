@@ -35,7 +35,7 @@ if(isset($wp_query->query_vars['category'])){
 
 <?php get_header(); ?>
 <div class="row">
-    <div class="small-12 medium-8 columns" role="main" id="main-col">
+    <div class="small-12 medium-push-4 large-push-3 medium-8 large-9 columns" role="main" id="main-col">
         <div class="entry-content">
         <h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
         <div class="row filters">
@@ -76,7 +76,7 @@ if(isset($wp_query->query_vars['category'])){
                         } else {
                             $post_link_url = get_the_permalink();
                             $post_link = '<a class="button full_button" href="' . $post_link_url . '">Read more</a>';
-                        }   
+                        }
                         if(has_post_thumbnail()) {
                             $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumb' );
                             $alt = get_post_meta(get_post_thumbnail_id( get_the_ID() ), '_wp_attachment_image_alt', true);
@@ -85,8 +85,8 @@ if(isset($wp_query->query_vars['category'])){
                                     echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
                                 echo '</a>';
                             echo '</div>';
-                        }   
-                        ?>  
+                        }
+                        ?>
 
                         <header class="article__header">
                             <div class="article__meta">
@@ -94,14 +94,14 @@ if(isset($wp_query->query_vars['category'])){
                                     <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time>
                                     <?php $categories = get_the_category_list(' ') ?>
                                     <?php if ( $categories ) : ?>
+                                        |
                                         <div class="article__categories">
-                                            | <?php echo $categories ?>
+                                            <?php echo $categories ?>
                                         </div>
                                     <?php endif ?>
                                 </div>
                             </div>
-                            <h1 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h1>
-
+                            <h2 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h2>
                         </header>
 
                         <section class="article__content">
@@ -165,12 +165,12 @@ if(isset($wp_query->query_vars['category'])){
         <?php
         # The Loop
         while ( $wp_query->have_posts() ) :
-        $wp_query->the_post();
-        $terms = wp_get_post_terms( get_the_ID(), 'category');
-        echo '<div class="blog clearfix">';
-        get_template_part( 'partials/partial', 'article' );
-        ?>
-        </div>
+            $wp_query->the_post();
+            $terms = wp_get_post_terms( get_the_ID(), 'category');
+            echo '<div class="blog clearfix">';
+            get_template_part( 'partials/partial', 'story' );
+            ?>
+            </div>
     <?php endwhile; ?>
     <div class="pager">
     <?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>

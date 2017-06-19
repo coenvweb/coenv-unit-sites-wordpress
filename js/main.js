@@ -27,7 +27,37 @@ jQuery(function ($) {
             var $this = $(this);
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
-        
+
+        var j_slider = $('.article-list').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            dots: true,
+            onAfterChange: function(slider, index) {
+                $('.current').html(index + 1);
+            },
+            responsive: [
+                {
+                    breakpoint: 800,
+                    settings: {
+                        slidesToShow: 1,
+                        sliesToScroll: 1,
+                        centerMode: true,
+                        centerPadding: '65px',
+                    }
+                },
+                {
+                    breakpoint: 640,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                        centerMode: false,
+                        centerPadding: '0px'
+                    }
+                }
+            ]
+        });
+
     }
 
     // Category filter for custom post type indicies

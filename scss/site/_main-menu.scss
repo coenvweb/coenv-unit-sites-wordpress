@@ -4,67 +4,79 @@
     border-bottom: #d7dee5 1px solid;
     min-height: rem-calc(60);
     padding-top: rem-calc(8);
-    
+
     .top-bar-section {
         display: inline-block;
-        
+
         #menu-main-menu { 
+
             li a {
-                @media #{$large-up} {
-                    font-size: rem-calc(16);
-                }
                 @media #{$medium-only} {
                     background-image: none!important;
+                    padding: 0 2rem !important;
                 }
-                font-size: rem-calc(14);
+                font-size: rem-calc(16);
                 color: $text;
                 @include encode_cb;
                 background-color: #ffffff;
                 text-align: left;
+                text-transform: uppercase;
 
                 &:hover, &:focus {
-                    color: $accent;
+                    color: $uw-purple;
                 }
-                
             }
+
             li.current_page_parent {
                 & > a {
-                    color: $accent;
+                    color: $uw-purple;
                     &:hover {
                         color: $accent;
                     }
                 }
                 & .current_page_item > a {
                     background-color: $bg-light;
+                    color: $uw-purple;
                     border-top: 1px solid #dddddd;
                     border-bottom: 1px solid #dddddd;
                 }
             }
-        
+
             .dropdown {
+                border-top: 4px solid $uw-purple;
+                width: auto;
                 @include shadow;
-    
+
                 a {
-                    @include encode();
-                    font-size: rem-calc(14);
+                    @include encode_med;
+                    font-size: rem-calc(16);
+                    line-height: 3rem;
                     text-transform: none;
                     background-color: #f6f5f7;
                     border-bottom: 1px solid #fff;
                     &:hover{
                         background-color: $bg-lighter;
                     }
+
+                    @media #{$medium-only} {
+                        font-size: rem-calc(14);
+                        line-height: 2.25rem;
+                    }
                 }
             }
 
-            & > .page_item_has_children {
+            & > li {
+                text-align: right;
+                right: 0px;
+                left: auto;
                 &:before {
                     display: block;
                     position: absolute;
-                    top: 8px;
+                    top: 15px;
                     left: 0;
                     bottom: 8px;
                     width: 1px;
-                    height: 30px;
+                    height: 18px;
                     background: #d7dee5;
                 }
 
@@ -73,32 +85,29 @@
                         content: "";
                     }
                 }
-                
-                &.page-item-55 > a {
-                    background-position-x: 99%;                        
-                }
-                
-                &.current_page_item.page-item-55 > a, &.page-item-55 > a:hover {
-                    background-position-x: 99%;
-                }
 
                 &.current_page_item > a, & > a:hover{
-                        color: $accent;
+                    color: $uw-purple;
                 }
-
+                
+                & > a {
+                    padding: 0 5.5rem !important;
+                    @media #{$medium-only} {
+                        padding: 0 2.5rem !important;
+                    }
+                }
                 
             }
-    
-            .has-dropdown > a {
-                padding-right: rem-calc(15)!important;
-                @media #{$medium-only} {
-                    padding-right: rem-calc(15)!important;
-                }
-                .has-dropdown > a {
-                }
+
+            .has-dropdown a {
                 &:after {
-                    content: none;
+                    content: '';
+                    width: 0px;
                 }
+            }
+
+            li {
+                position: relative;
             }
         }
     }

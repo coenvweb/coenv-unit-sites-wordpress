@@ -21,7 +21,7 @@ $page_link = get_the_permalink();
 
 <?php get_header(); ?>
 <div class="row">
-    <div class="member-projects small-12 medium-8 columns" role="main" id="main-col">
+    <div class="member-projects small-12 medium-push-4 large-push-3 medium-8 large-9 columns" role="main" id="main-col">
         <div class="entry-content">
             <h1 class="article__title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h1>
             <?php the_content(); ?>
@@ -44,7 +44,6 @@ $page_link = get_the_permalink();
           * Blog loop
           */
         $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-        
 
         if($funding_type) {
             $meta_query = array(

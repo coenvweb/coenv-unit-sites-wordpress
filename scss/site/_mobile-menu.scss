@@ -17,13 +17,14 @@
                 font-size: rem-calc(20)!important;
             }
         }
-        input {
+        #s {
             color: $white;
             background-color: transparent;
             height: rem-calc(43);
             width: 75%;
             @include placeholder {
-                color: $white!important;
+                color: $white;
+                @include encode_cb;
                 font-size: rem-calc(12);
                 padding: 0 0 0 rem-calc(3);
                 margin: 0;
@@ -119,18 +120,16 @@
         span:after {
             content: none;
         }
-        
+
         i {
             &:before {
-             
                 content: "\f10a";
                 position: relative;
                 right: rem-calc(30);
                 font-size: rem-calc(28);
-                color: $text;
+                color: $white;
                 font-family: "foundation-icons";
                 font-style: normal;
-
             }
         }
     }

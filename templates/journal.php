@@ -3,80 +3,41 @@
   Template Name: Journal
 */
 
-$journal = getQRFeed();
-
-$journal_date = get_field('journal_date', 'option');
-$journal_volume = get_field('journal_volume', 'option');
-$journal_issue = get_field('journal_issue', 'option');
-$journal_cover = get_field('journal_cover', 'option');
-$journal_link = get_field('latest_issue_link', 'option');
-
 ?>
 <?php get_header(); ?>
-<div class="row">
-    <div class="small-12 medium-8 columns" role="main" id="main-col">
-    <?php dynamic_sidebar("before-content"); ?>
+<div class="journal" id="main-col">
     <?php while (have_posts()) : the_post(); ?>
         <article <?php post_class() ?> id="post-<?php the_ID(); ?>" class="template-page">
-            <div class="entry-content">
-                <?php the_content(); ?>
+            <div class="intro-content">
+                <div class="row">
+                    <div class="small-12 columns">
+                        <?php echo get_field('intro'); ?>
+                        <?php echo do_shortcode('[qrc_journal]'); ?>
+                    </div>
+                </div>
             </div>
-            <footer>
-                <?php wp_link_pages(array('before' => '<nav id="page-nav"><p>' . __('Pages:', 'FoundationPress'), 'after' => '</p></nav>' )); ?>
-                <p><?php the_tags(); ?></p>
-            </footer>
+            <div class="entry-content">
+                <div class="row">
+                    <div class="small-12 medium-8 columns">
+                        <?php the_content(); ?>
+                        <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
+                            <div id="after-content" class="before-content widget-area" role="complementary">
+                                <?php dynamic_sidebar( 'after-content' ); ?>
+                            </div><!-- #after-content -->
+                        <?php endif; ?> 
+                    </div>
+                    <div class="journal-sidebar small-12 medium-4 columns">
+                        <?php
+                        $ancestor_id = coenv_base_get_ancestor('ID');
+                        if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
+
+                            dynamic_sidebar( $ancestor_id );
+                        endif;
+                        ?>
+                    </div>
+                </div>
+            </div>
         </article>
     <?php endwhile;?>
-    <?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-        <div id="after-content" class="before-content widget-area" role="complementary">
-            <?php dynamic_sidebar( 'after-content' ); ?>
-        </div><!-- #after-content -->
-    <?php endif; ?>
-    <a href="#" class="back-to-top">Back to Top</a>
-    </div>
-    <aside id="sidebar" class="small-12 medium-4 large-3 columns">
-        <div class="widget journal-info">
-            <h3>Current Issue</h3>
-
-            <div class="journal-cover">
-                <img class="" src="<?php echo $journal_cover; ?>" alt="Current QR Issue Cover" />
-            </div>
-
-            <ul class="journal-meta">
-                <li class="journal-date"><span class="meta-label">Published: </span><?php echo $journal_date; ?></li>
-                <li class="journal-volume"><span class="meta-label">Volume: </span><?php echo $journal_volume; ?></li>
-                <li class="journal-issue"><span class="meta-label">Issue: </span><?php echo $journal_issue; ?></li>
-            </ul>
-
-            <div class="journal-articles">
-            <?php
-                if(count($journal->feeds) >= 3) {
-                    array_pop($journal->feeds);
-                    array_pop($journal->feeds);
-                    shuffle($journal->feeds);
-                    echo '<h3>Recent Journal Articles</h3>';
-                    echo '<ul class="article-list">';
-                    $count = 0;
-                    foreach($journal->feeds as $feed) {
-                        if($count < 5) {
-                            echo '<a href="'.$feed->articleUrl.'"><li>'.$feed->title.'</li></a>';
-                        }
-                        $count++;
-                    }
-                    echo '</ul>';
-                    echo '<p>View the <a href="'.$journal_link.'">latest issue</a></p>';
-                }
-            ?>
-            </div>
-        </div>
-
-        <?php
-        $ancestor_id = coenv_base_get_ancestor('ID');
-        if (!function_exists('dynamic_sidebar') || !dynamic_sidebar( $ancestor_id )):
-
-            dynamic_sidebar( $ancestor_id );
-        endif;
-        ?>
-    </aside>
 </div>
 <?php get_footer(); ?>

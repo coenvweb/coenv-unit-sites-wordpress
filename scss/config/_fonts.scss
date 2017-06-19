@@ -9,6 +9,13 @@
 }
 
 @font-face {
+	font-family: encode-sans-medium;  
+	src: url("../assets/fonts/EncodeSansNormal-600-SemiBold.ttf") format('truetype');  
+	font-weight: normal;
+    font-style: normal;  
+}
+
+@font-face {
 	font-family: encode-sans-condensed;  
 	src: url("../assets/fonts/EncodeSansCondensed-800-ExtraBold.ttf") format('truetype');  
 	font-weight: normal;
@@ -20,6 +27,14 @@
 	src: url("../assets/fonts/OpenSans-800.ttf") format('truetype');  
 	font-weight: 800;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'uni-sans';
+    src: url('../assets/fonts/fontfabric_-_unisansregular.otf');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 @font-face {
@@ -90,16 +105,27 @@
     -webkit-font-smoothing: antialiased;
 }
 
+@mixin encode_med() {
+    letter-spacing: .5px;
+    font-family: "encode-sans-medium", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
+}
+
 @mixin encode_cb() {
     letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
     font-family: "encode-sans-condensed", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    font-weight: 800!important;
     //text-transform: uppercase;
 }
 
 @mixin uni() {
     font-family: "uni-sans-light", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .5px;
+}
+
+@mixin uni_reg() {
+    font-family: "uni-sans", "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif!important;
     -webkit-font-smoothing: antialiased;
     letter-spacing: .5px;
 }
@@ -124,74 +150,14 @@
 }
 
 blockquote {
-    margin: 0!important;
-    padding: rem-calc(20) rem-calc(80)!important;
     border-left: 0px!important;
-    border-top: 2px solid #f6f5f7;
-    border-bottom: 2px solid #f6f5f7;
-    
+
     p {
         margin: 0!important;
-        @include encode_cb;
-        text-transform: none;
-        color: #000000!important;
         font-size: rem-calc(18);
     }
 }
 
-h1 {
-    @include uni;
-    font-size: rem-calc(26)!important;
-    line-height: rem-calc(30);
-    font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(36);
-        line-height: rem-calc(48);
-    }
-
-} // h1
-
-h2 {
-    @include uni;
-    font-size: rem-calc(24);
-    line-height: rem-calc(24);
-    font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(32);
-        line-height: rem-calc(30);
-    }
-
-} // h2
-
-h3 {
-    @include uni;
-    font-size: rem-calc(20);
-    line-height: rem-calc(24);
-    font-weight: 400;
-
-    @media #{$medium-up} {
-        font-size: rem-calc(28);
-        line-height: rem-calc(24);
-    }
-
-} // h3
-
-.article__content {
-
-    h4 {
-        @include uni;
-        font-weight: 600;
-        font-size: rem-calc(14);
-        line-height: rem-calc(12);
-
-        @media #{$medium-up} {
-            font-size: rem-calc(20);
-            line-height: rem-calc(20);
-        }
-    }
-}
 
 /*	Base font size
 		======================================================================== */

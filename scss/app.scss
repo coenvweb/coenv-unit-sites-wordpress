@@ -8,6 +8,7 @@
 /* Foundation 5 */
 @import "../bower_components/foundation/scss/foundation"; // Foundation 5 by Zurb
 @import "../assets/foundation-icons/foundation-icons.css";
+@import "../js/lib/slick.css";
 
 /* Plugins */
 @import "plugins/nivo-lightbox"; // Nivo Lightbox
@@ -31,6 +32,7 @@
 @import "site/news"; // news styles
 @import "site/widgets"; // widget styles
 @import "site/projects"; // member project styles
+@import "site/journal"; // journal template and shortcode styles
 
 
 /* College Customizations */

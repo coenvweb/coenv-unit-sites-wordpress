@@ -3,23 +3,28 @@
 .tab-bar {
     margin-bottom: 0;
     text-align: center;
-    background: $white;
+    background: $uw-purple;
     border-bottom: 1px solid $border;
     
     .tab-bar-section {
         padding-left: rem-calc(30);
         margin: auto;
+
+        a { 
+            color: #fff;
+        }
     }
 
     
     h1 {
-        color: $text!important;
-        margin-top: rem-calc(15);
-        font-size: rem-calc(28)!important;
+        color: $white!important;
+        margin-top: rem-calc(10);
+        font-size: rem-calc(32)!important;
         text-align: left;
         @media #{$small-up} {
-            font-size: rem-calc(12)!important;
-            line-height: rem-calc(14);
+            text-align: center;
+            font-size: rem-calc(16)!important;
+            line-height: rem-calc(26);
         }
     }
     .right-small, .left-small {
@@ -27,31 +32,33 @@
     }
 
     .mobile-logo {
-        color: $accent;
+        color: $white;
         font-size: rem-calc(20);
         
         #mobile-logo {
             width: rem-calc(55);
-            fill: $accent;
+            fill: $white;
             margin-top: rem-calc(-10);
             margin-left: rem-calc(10);
         }
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #000,0 7px 0 1px #000,0 14px 0 1px #000;
+        box-shadow: 0 0px 0 1px #fff,0 7px 0 1px #fff,0 14px 0 1px #fff;
     }
 
 }
 
 // desktop header
 
+.full-header {
+    background: $uw-purple;
+}
+
 .title-row {
-    background: $white;
 }
 
 .top-bar-container {
-    border-top: #d7dee5 1px solid;
     margin-bottom: 0;
 }
 
@@ -64,25 +71,27 @@
 
 .name {
     h1 {
-        @include encode;
+        @include encode_cb;
+        text-transform: uppercase;
         font-weight: 500!important;
-        font-size: rem-calc(18)!important;
+        font-size: rem-calc(19)!important;
         @media #{$large-up} {
-            font-size: rem-calc(23)!important;
+            font-size: rem-calc(24)!important;
         }
         float: left;
-        margin: rem-calc(18) 0;
+        margin: rem-calc(18);
+        margin-right: 0px;
         a {
-            color: $text;
+            color: $white;
         }
     }
     #desktop-logo {
-        fill: $accent;
-        width: rem-calc(108);
-        height: rem-calc(73);
-        margin-right: rem-calc(10);
+        fill: $white;
+        width: rem-calc(100);
+        height: rem-calc(68);
+        margin-right: rem-calc(16);
+        margin-bottom: -1px;
         vertical-align: middle;
-        
         span {
             @extend .visuallyhidden;
         }
@@ -90,11 +99,16 @@
 }
 
 .units {
+    ul {
+        margin-left: 0px;
+    }
     float: right;
     padding: 0;
-    height: 109px;
-    width: 300px;
-    margin: 0 0 0 rem-calc(30);
+    width: 250px;
+    @media #{$medium-only} {
+        width: 215px;
+    }
+    margin: 0 0 0 0;
     position: relative;
     top: 30px;
     
@@ -104,52 +118,51 @@
         width: 215px;
         padding: 0 0 0 0 !important;
         margin: 0 0 8px 0   !important;
-        list-style: none;
-        &:first-of-type:after {
-            content: "";
-            display: block;
-            position: absolute;
-            width: 1px;
-            top: 0;
-            left: 0;
-            height: 36px;
-            background-color: $text;
-            @extend .uw-skew;
+        @media #{$medium-only} {
+            margin: 0 0 4px 0 !important;
         }
+        list-style: none;
     }
     .uw-name {
-        width: 215px;
-        height: 15px;
+        width: 200px;
+        height: 16px;
+        @media #{$medium-only} {
+            width: 175px;
+            height: 15px;
+        }
+        fill: $white;
     }
     .college-name {
-        width: 215px;
-        height: 12px;
-        margin-top: 2px;
+        width: 250px;
+        height: 18px;
+        @media #{$medium-only} {
+            width: 200px;
+            height: 16px;
+        }
+        fill: $white;
+        border-bottom: 0.25px solid $border;
+        padding-bottom: 0.25rem;
+        @media #{$medium-only} {
+            padding-bottom: 0.1rem;
+        }
     }
     a {
-        padding-bottom: 0;
-    }
-    .slash {
-        margin: 0;
-    }
-    .college-name, .uw-name {
-        float: left;
+        .college-name, .uw-name {
+            float: left;
+        }
     }
 }
 
 .section-title {
-    padding: 0 1rem;
+    padding: 0 2rem;
     margin: 0;     
     a {
-        font-size: rem-calc(28);
-        @include encode_cb;
+        color: $black;
+        font-size: rem-calc(20);
+        @include encode;
+    }
+}
 
-        @media #{$medium-up} {
-            font-size: rem-calc(36);
-            max-width: 28%;
-        }
-    }
-    }
 .title-area {
 	list-style: none;
 	margin-left: 0;
@@ -159,6 +172,24 @@
 }
 .breadcrumbs>* {
 	line-height: rem-calc(16);
+}
+
+.banner {
+    @media #{$large-up} {
+        height: rem-calc(275);
+    }
+    @media #{$xxlarge-up} {
+        height: rem-calc(300);
+    }
+    @media #{$medium-only} {
+        height: rem-calc(200);
+    }
+    @media #{$small-only} {
+        height: rem-calc(175);
+    }
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center 42%;
 }
 
 //uw alert closer

@@ -2,7 +2,6 @@
 <html class="no-js" <?php language_attributes(); ?> >
   <head>
     <meta charset="utf-8" />
-    <meta name='robots' content='noindex,follow' />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php if ( is_category() ) {
       echo 'Category Archive for &quot;'; single_cat_title(); echo '&quot; | '; bloginfo( 'name' );
@@ -21,11 +20,13 @@
     } else {
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
+    
 
             <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie-blessed1dev.css" /><![endif]-->
           <!--[if IE 9]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/appie.css" /><![endif]-->
       
-    <!--[if !IE]><!--><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" /><!--<![endif]-->
+    <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css" />
+    <!--[if IE]><link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/ie.css" /><![endif]-->
       
     <link rel="apple-touch-icon" sizes="57x57" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-60x60.png">
@@ -43,20 +44,53 @@
     <link rel="manifest" href="<?php echo get_template_directory_uri() ?>/assets/img/manifest.json">
     <meta name="msapplication-TileColor" content="#4b2e84">
     <meta name="msapplication-TileImage" content="<?php echo get_template_directory_uri() ?>/assets/img/ms-icon-144x144.png">
+    <meta name="google-site-verification" content="YZshYmNWIWJ6vVGORO3Hw-w_INXAhywLCBH-EEyxEP0" />
     <meta name="theme-color" content="#4b2e84">
-      
-    <!--<script type="text/javascript" src="//use.typekit.net/dyq8fxo.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+	  ga('create', 'UA-86746960-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script async src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
   
     <?php wp_head(); ?>
       
-    <?php 
+    <?php
         $banner = coenv_banner();
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
-    ?>
-      <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
+
+		$post = get_queried_object();
+		$post_title = get_the_title().' | ' . get_bloginfo( 'name' );
+		if (!is_front_page() ) {
+            $advancedExcerpt = strip_tags(get_the_excerpt());
+        } else {
+            $advancedExcerpt = 'The Program on Climate Change provides a framework for intense cross-disciplinary collaboration that furthers and supports research and education in climate science at UW';
+        }
+		$post_description = $advancedExcerpt;
+		$post_link = get_permalink();
+		if ( has_post_thumbnail( $post->ID ) ) {
+			$thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
+			$post_image = $thumb_src[0];
+		} elseif ( $banner ) {
+			$post_image = $banner['url'];
+		} else {
+			$post_image = get_template_directory_uri().'/assets/img/icons/logo-1200x1200.png';
+		}
+	  $coenv_excerpt = strip_tags(get_the_excerpt());
+	  $coenv_excerpt = preg_replace( "/\r|\n/", "", $coenv_excerpt );
+  ?>
+  <meta property="og:title" content="<?php echo $post_title ?>" />
+  <meta property="og:description" content="<?php echo $coenv_excerpt; ?>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="<?php echo $post_link ?>" />
+  <meta property="og:image" content="<?php echo $post_image ?>" />
+  <meta property="og:site_name" content="<?php bloginfo('name') ?>" />
   </head>
   <body <?php body_class(); ?>>
   
@@ -77,7 +111,7 @@
                 s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
                 c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
                 C107.176,0.112,80.251,0.112,79.343,0.112z"></path>
-</svg><span class="visuallyhidden"><?php bloginfo('name') ?></span></a>
+</svg><span class="visuallyhidden">Mobile W Logo</span></a>
     </div>
     <div class="middle tab-bar-section">
         <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
@@ -146,42 +180,46 @@
     </div><!-- .row -->
   </nav><!-- #top-nav -->
   
-  <div class="row title-row">
-    <div class="columns large-12">
-    <ul class="title-area hide-for-small">
-      <li class="name">
-        <h1>
-          <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
-            <!--[if gte IE 9 | !IE]><!-->
-                <svg id="desktop-logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve">
-                  <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
-                    c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
-                    c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
-                    s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
-                    c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
-                    C107.176,0.112,80.251,0.112,79.343,0.112z"/>
-                </svg>
-            <!-- <![endif]-->
-            <!--[if lte IE 8]>
-                <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="desktop-logo">
-            <![endif]-->
-            <span><?php bloginfo('name') ?></span> 
-          </a>
-          </h1>
-            <div class="units show-for-large-up">
-                <ul>
-              <li><a href="http://environment.uw.edu" title="UW College of the Environment">
-  <?php include("assets/img/college-of-the-environment.svg"); ?>
-                  <span class="visuallyhidden">College of the Environment</span></a></li>
-              <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington</span></a></li>
-                </ul>
-          </div> 
-        </li>          
-      </ul>
-    </div>
+  <div class="full-header show-for-medium-up">
+      <div class="row title-row">
+        <div class="columns large-12">
+        <ul class="title-area hide-for-small">
+          <li class="name">
+            <h1>
+              <a href="<?php bloginfo('url') ?>" rel="home" title="<?php bloginfo('name') ?>">
+                <!--[if gte IE 9 | !IE]><!-->
+                    <svg id="desktop-logo" width="108" height="73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 108 73" enable-background="new 0 0 108 73" xml:space="preserve" role="img" aria-label="Wlogo">
+                      <title>UW W Logo</title>
+                      <path d="M79.343,0.112c0,0.858,0,12.238,0,13.098c0.856,0,9.206,0,9.206,0L78.271,51.461
+                        c0,0-12.577-50.636-12.756-51.349c-0.687,0-12.626,0-13.303,0c-0.188,0.696-13.796,51.352-13.796,51.352L28.95,13.21
+                        c0,0,8.726,0,9.585,0c0-0.859,0-12.239,0-13.098c-0.919,0-37.532,0-38.451,0c0,0.858,0,12.238,0,13.098c0.851,0,8.52,0,8.52,0
+                        s14.703,58.809,14.88,59.522c0.708,0,19.942,0,20.639,0c0.183-0.697,9.852-37.454,9.852-37.454s9.188,36.747,9.364,37.454
+                        c0.707,0,19.941,0,20.639,0C84.164,72.03,99.635,13.21,99.635,13.21s7.6,0,8.449,0c0-0.859,0-12.239,0-13.098
+                        C107.176,0.112,80.251,0.112,79.343,0.112z"/>
+                    </svg>
+                <!-- <![endif]-->
+                <!--[if lte IE 8]>
+                    <img src="<?php echo get_bloginfo('template_directory'); ?>/assets/img/W.png" id="desktop-logo">
+                <![endif]-->
+                <span><?php bloginfo('name') ?></span> 
+              </a>
+              </h1>
+                <div class="units show-for-medium-up">
+                    <ul>
+                  <li><a href="http://environment.uw.edu" title="UW College of the Environment">
+                        <?php include("assets/img/college-of-the-environment.svg"); ?>
+                        <span class="visuallyhidden">College of the Environment Logo Text</span>
+                      </a></li>
+                  <li><a href="http://uw.edu" title="University of Washington"><?php include("assets/img/university-of-washington-02.svg"); ?><span class="visuallyhidden">University of Washington Logo Text</span></a></li>
+                    </ul>
+              </div> 
+            </li>          
+          </ul>
+        </div>
+      </div>
   </div>
   
-        <div class="top-bar-container show-for-medium-up">
+        <div class="row top-bar-container show-for-medium-up">
             <nav class="top-bar" data-topbar="">
                 <div class="top-bar-section">
                     <ul id="menu-main-menu" class="top-bar-menu">
@@ -211,20 +249,13 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single())) {
+    <?php if ($banner) {
             echo '<div class="page-row">';
-            echo '<div>';
+            echo '<div class="banner" style="background-image: url(' . $banner['url'] . ')">';
+            echo '</div>';
+            echo '</div>';
         }
      ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
-            echo '<div class="page-row mini">';
-            echo '<div>';
-     }
-     ?>
-    <div class="section-row row">
-        <?php echo coenv_base_section_title($post->ID); ?>
-    </div>
 
-</div>
 <?php endif; ?>
 <?php do_action('foundationPress_after_header'); ?>

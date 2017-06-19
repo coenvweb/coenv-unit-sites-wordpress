@@ -1,63 +1,75 @@
-<?php 
-if (get_field('story_link_url')) {
-			$post_link_url = get_field('story_link_url');
-			$post_link_target = ' target="_blank" ';
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
-        } else {
-        	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
-        } 
-?>
+<?php if (is_front_page()): ?>
+	<article class="story">
+		<div class="inner">
+			<?php if ( has_post_thumbnail() ) : ?>
+				<a href="<?php the_permalink() ?>" class="img">
+					<?php the_post_thumbnail( 'medium' ) ?>
+				</a>
+			<?php endif ?>
 
-<article class="story featured-story" id="story-<?php the_ID() ?>">
+			<div class="content">
+				<h1><a href="<?php the_permalink() ?>"><?php the_title() ?></a></h1>
+				<?php the_excerpt() ?>
+	            <a href="<?php the_permalink() ?>" class="button">Read more</a>
+			</div>
+		</div><!-- .inner -->
+	</article>
+<?php else: ?>
+	<article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 
-    <?php if ( has_post_thumbnail() && is_sticky() ) : ?>
-        <div class="featured-thumbnail">
-            <a href="<?php echo $post_link_url ?>" class="img" <?php if(isset($post_link_target)) {echo $post_link_target;} ?>>
-                <?php the_post_thumbnail( 'large' ); ?>
-            </a>
-        </div>
-    <?php endif ?>
+        <header class="article__header">
+            <div class="article__meta">
+            <?php if ( !is_page() ) : ?>
+                <div class="post-info">
+                    <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
+                    <?php
+                    $more_terms = wp_get_post_terms(get_the_id(), 'category');
+                    if (!empty($more_terms)) {
+                        $more_terms_arr = array();
 
-    <div class="post-meta">
-        <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time>
-        <?php // Get categories
-            if (!empty($terms)) {
-                $terms_arr = array();
-
-                foreach ($terms as &$term) {
-                    if ($term->slug != 'uncategorized') {
-                        $terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                        foreach ($more_terms as &$term) {
+                            if ($term->slug != 'uncategorized') {
+                                $more_terms_arr[] = '<a href="/about/news/category/' . $term->slug . '">' . $term->name . '</a>';
+                            }
+                        }
                     }
-                }
-                $terms_str = ' / ' . implode(', ', $terms_arr);
+                    ?>
+                    |
+                    <div class="article__categories">
+                         <?php echo implode(', ', $more_terms_arr) ?>
+                    </div>
+                </div>
+            <?php endif ?>
+            </div>
 
-            } else {
-                $terms_str = '';
-            }
-            $terms = "";
-        ?>
-        <?php echo $terms_str; ?>
-    </div>
+            <?php if ( is_page() || is_single() ) : ?>
+                <h2 class="article__title"><?php the_title() ?></h2>
+            <?php else : ?>
+                <h2 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h2>
+            <?php endif ?>
 
-    <div class="content">
-        <h3><a href="<?php echo $post_link_url ?>"><?php the_title() ?></a></h3>
-        <p><?php the_advanced_excerpt('length=30&finish=sentence') ?></p>
-        <?php if (is_page_template('templates/homepage.php')) : ?>
-            <a href="<?php echo $post_link_url ?>" class="button">Read more »</a>
-        <?php else : ?>
-            <div class="blog-links right">
-		<?php if(isset($rows)) {
-            foreach($rows as $row) {
-                if($row['blog_link_type'] == 'upload') {
-                    echo '<a class="button" href="' . $row['blog_upload_file'] . '" target="_blank">' . $row['blog_file_link_text'] . '</a>';
-                } elseif ($row['blog_link_type'] == 'link') {
-                    echo '<a class="button" href="' . $row['blog_link_url'] . '" target="_blank">' . $row['blog_link_text'] . '</a>';
-                } 
-            }
-        }; ?>
-		</div>
-        <?php endif ?>
-    </div>
+        </header>
+        <section class="article__content">
+            <?php if(has_post_thumbnail()) { ?>
+            <div class="coenv-thumb"><a style="float: right;" href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'small' ) ?></a></div>
+            <?php } ?>
+            <?php if ( get_field('story_link_url') && get_field('story_source_name') ): ?>
+                <?php $trimmed_content = breezer_addDivToImage(get_the_content()); ?>
+                <?php $trimmed_content = strip_tags($trimmed_content,'<a>'); ?>
+                <?php $trimmed_content = strip_shortcodes ($trimmed_content); ?>
+                <?php echo '<p>' . $trimmed_content . '</p>'; ?>
+                <a href="<?php the_field('story_link_url'); ?>" class="button" target="_blank"><?php the_field('story_source_name'); ?></a> 
+            <?php else: ?>
+                <?php $trimmed_content = breezer_addDivToImage(get_the_excerpt()); ?>
+                <?php $trimmed_content = strip_tags($trimmed_content,'<a>'); ?>
+                <?php $trimmed_content = strip_shortcodes ($trimmed_content); ?>
+                <?php echo '<p>' . $trimmed_content . '</p>'; ?>
+                <a href="<?php echo the_permalink(); ?>" class="button">Read more</a>
+            <?php endif; ?>
 
-</article>
+        </section>
+        <?php remove_filter( 'the_title', 'wptexturize' );
+        remove_filter( 'the_excerpt', 'wptexturize' ); ?>
+
+    </article><!-- .article -->
+<?php endif; ?>

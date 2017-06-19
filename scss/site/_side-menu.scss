@@ -1,88 +1,104 @@
 // General sidebar
 aside#sidebar {
-	padding-right: 1rem !important;
+    padding-right: 1rem !important;
+    margin-top: 2rem;
 
-	.section-title {
-		@include encode_cb;
-		a {
-
-		font-size: rem-calc(22);
-
-		}
-	}
-
-	// Hide for mobile	
-	.coenv_base_subnav,
-	&.section-title {
-		@media #{$small-only} {
-			display:none;
-		}
-	}
-
-	// Second-level navigation
-	.coenv_base_subnav ul {
-		border-top: 1px solid #dddddd;
-		margin: 0  1rem rem-calc(30) 0;
-		padding: 0;
-		line-height: 10px;
-		width: 100%;
-		li {
-			background-color: #f2f2f2;
-			border-bottom: 1px solid #ccc;
-			padding: 0;
-			margin: 0;
-			text-transform: uppercase;
-			font-size: 1rem;
-			a {
-				display: block;
-				line-height: 152%;
-				&:not(.button) {
-					color: #000;
-				}
-				&:hover {
-					color: $accent;
-				}
-			}
-			ul {
-				margin-bottom: 0;
-				li {
-					border: 0;
-
-					a {
-					padding-left: 2rem !important;
-					}
-				}
-				&.side-nav {
-					padding-top: 0;
-					background-image: none;
-				}
-			}
-		}
-	}
-	.widget {
-		margin-bottom: rem-calc(30);
-	}
-
-    .journal-info {
-        .journal-meta {
-            list-style-type: none;
-            padding-top: 0.5rem;
-            margin: 0;
-        }
-    }
-
-    .journal-articles {
-        .article-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            
-            li {
-                padding: 0.25rem 0;
-                border-bottom: 1px solid $border;
+    .section-title {
+        background-color: #f2f2f2;
+        border: 1px solid #ccc;
+        margin-bottom: 0 !important;
+        a {
+            @include encode_cb;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            vertical-align: middle;
+            text-transform: uppercase;
+            &:before {
+                content: "\f169";
+                font-family: "foundation-icons";
+                font-size: 1.5rem;
+                line-height: 0.5rem;
+                margin-right: 1rem;
+                color: $uw-gold;
+                vertical-align: -20%;
             }
         }
     }
 
-}
+    // Hide for mobile  
+    .coenv_base_subnav,
+    &.section-title {
+        @media #{$small-only} {
+            display:none;
+        }
+    }
 
+    // Second-level navigation
+    .coenv_base_subnav ul {
+        margin: 0  1rem rem-calc(30) 0;
+        padding: 0;
+        line-height: 10px;
+        width: 100%;
+        li {
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            margin: 0;
+            text-transform: capitalize;
+            font-size: 1.5rem;
+            a {
+                @include encode;
+                position: relative;
+                padding: 1rem 1rem 1rem 2rem;
+                display: block;
+                line-height: 1.5rem;
+                color: #000;
+            }
+            a.active {
+                color: $uw-purple;
+            }
+            ul {
+                margin-bottom: 0;
+                li {
+                    text-transform: none;
+                    border-top: 1px solid #ccc;
+                    border-bottom: none;
+                    border-left: none;
+                    border-right: none;
+                    font-size: 1.5rem;
+
+                    a {
+                        padding-left: 2.5rem !important;
+                    }
+                    a.active {
+                        &:before {
+                            display: none;
+                        }
+                    }
+                    ul {
+                        li {
+                            text-transform: none;
+                            font-size: 1.25rem;
+                            a {
+                                padding-left: 3rem !important;
+                            }
+                        }
+                    }
+                }
+                &.side-nav {
+                    padding-top: 0;
+                    background-image: none;
+                }
+            }
+        }
+    }
+    .widget {
+        margin-bottom: rem-calc(30);
+    }
+
+    h2 {
+        margin-top: 0.5rem;
+        line-height: 2rem;
+    }
+}
