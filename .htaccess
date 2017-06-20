@@ -7,6 +7,9 @@ AuthType shibboleth
 Require shibboleth
 # End Shibboleth
 
+<IfModule pagespeed_module>
+    ModPagespeedDisallow https://dev.atmos.uw.edu/*
+</IfModule>
 
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
