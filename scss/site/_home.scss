@@ -346,108 +346,110 @@ color: $white;
         }
     }
 
-    .full-summary {
+    .sum-tiles {
         background-color: #292929;
-        background-image: url('../assets/img/summary-bg.png');
+        background-image: url('../assets/img/summary-topo.svg');
         background-size: 100%;
-        .summary {
-            &:before {
-                content: '';
-                display: block;
-                position: absolute;
-                top: -2rem;
-                left: 0px;
-                background-color: #b7a57a;
-                width: 3rem;
-                height: .5rem;
+        .full-summary {
+            .summary {
+                &:before {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    top: -2rem;
+                    left: 0px;
+                    background-color: #b7a57a;
+                    width: 3rem;
+                    height: .5rem;
+                }
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    top: -2rem;
+                    left: 1rem;
+                    background-color: #b7a57a;
+                    @extend .uw-skew;
+                    width: 5rem;
+                    height: .5rem;
+                }
+                position: relative;
+                @include encode-thin;
+                margin-top: 4.5rem;
+                margin-bottom: 3.5rem;
+                color: white;
+                font-size: rem-calc(30);
+                @media #{$medium-only} {
+                    font-size: rem-calc(24);
+                }
+                @media #{$small-only} {
+                    font-size: rem-calc(18);
+                }
             }
-            &:after {
-                content: '';
-                display: block;
-                position: absolute;
-                top: -2rem;
-                left: 1rem;
-                background-color: #b7a57a;
-                @extend .uw-skew;
-                width: 5rem;
-                height: .5rem;
-            }
-            position: relative;
-            @include encode-thin;
-            margin-top: 4.5rem;
-            margin-bottom: 3.5rem;
-            color: white;
-            font-size: rem-calc(30);
-            @media #{$medium-only} {
-                font-size: rem-calc(24);
-            }
-            @media #{$small-only} {
-                font-size: rem-calc(18);
+            hr {
+                border-top: 5px solid #b7a57a;
+                margin-bottom: 0rem;
             }
         }
-        hr {
-            border-top: 5px solid #b7a57a;
-            margin-bottom: 0rem;
+        .full-tiles {
+            padding: 2.5rem 0rem;
+            @media #{$small-only} {
+                padding-top: 0rem;
+            }
+            .row {
+                display: -webkit-box;
+                display: -moz-box;
+                display: -webkit-flexbox;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+                @media #{$small-only} {
+                    flex-direction: column;
+                    flex-wrap: nowrap;
+                }
+            }
+            .action-tile {
+                -webkit-box-flex: 1;
+                -moz-box-flex: 1;
+                -webkit-flex: 1;
+                -ms-flex: 1;
+                flex: 1;
+                color: white;
+                text-align: center;
+                padding-top: 1rem;
+                @media #{$medium-up} {
+                    &:not(:first-of-type) {
+                        border-left: 1px solid white;
+                    }
+                }
+                .action-title {
+                    color: white;
+                    padding: 0rem;
+                    margin: 0rem;
+                    @media #{$small-only} {
+                        padding-top: 1rem;
+                    }
+                    &:after {
+                        display: block;
+                        content: url('../assets/img/action-title-after.png');
+                        margin-bottom: 1.15rem;
+                        height: 1rem;
+                        margin-top: -1rem;
+                    }
+                }
+                .action-text {
+                    @include encode-thin;
+                    width: 66%;
+                    margin: auto;
+                    margin-bottom: 1rem;
+                }
+            }
         }
     }
 
-    .full-tiles {
-        background-color: #292929;
-        padding: 2.5rem 0rem;
-        @media #{$small-only} {
-            padding-top: 0rem;
-        }
-        .row {
-            display: -webkit-box;
-            display: -moz-box;
-            display: -webkit-flexbox;
-            display: -ms-flexbox;
-            display: -webkit-flex;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            @media #{$small-only} {
-                flex-direction: column;
-                flex-wrap: nowrap;
-            }
-        }
-        .action-tile {
-            -webkit-box-flex: 1;
-            -moz-box-flex: 1;
-            -webkit-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-            color: white;
-            text-align: center;
-            padding-top: 1rem;
-            @media #{$medium-up} {
-                &:not(:first-of-type) {
-                    border-left: 1px solid white;
-                }
-            }
-            .action-title {
-                color: white;
-                padding: 0rem;
-                margin: 0rem;
-                @media #{$small-only} {
-                    padding-top: 1rem;
-                }
-                &:after {
-                    display: block;
-                    content: url('../assets/img/action-title-after.png');
-                    margin-bottom: 1.15rem;
-                    height: 1rem;
-                    margin-top: -1rem;
-                }
-            }
-            .action-text {
-                @include encode-thin;
-                width: 66%;
-                margin: auto;
-                margin-bottom: 1rem;
-            }
-        }
-    }
+    
     .social-tiles {
         .people-tile, .mail-tile {
             .tile-wrapper {

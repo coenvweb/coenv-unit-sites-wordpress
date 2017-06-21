@@ -24,31 +24,33 @@ foreach($heroes as $hero) {
 }
 ?>
 
-<div class="full-summary">
-    <div class="row large-collapse">
-        <div class="large-12 columns">
-            <p class="summary">
-                <?=get_field('summary_statement')?>
-            </p>
+<div class="sum-tiles">
+    <div class="full-summary">
+        <div class="row large-collapse">
+            <div class="large-12 columns">
+                <p class="summary">
+                    <?=get_field('summary_statement')?>
+                </p>
+            </div>
+            <hr class="summary-divider">
         </div>
-        <hr class="summary-divider">
     </div>
-</div>
 
-<div class="full-tiles">
-    <div class="row">
-        <?php
-            $tiles = get_field('action_tiles');
-            foreach($tiles as $tile) {
-        ?>
-                <div class="action-tile small-12 medium-4 columns">
-                    <h2 class="action-title"><?=$tile['title']?></h2>
-                    <p class="action-text"><?=$tile['description']?></p>
-                    <a href="<?=$tile['page_link']?>" class="button"><?=$tile['link_text']?></a>
-                </div>
-        <?php
-            }
-        ?>
+    <div class="full-tiles">
+        <div class="row">
+            <?php
+                $tiles = get_field('action_tiles');
+                foreach($tiles as $tile) {
+            ?>
+                    <div class="action-tile small-12 medium-4 columns">
+                        <h2 class="action-title"><?=$tile['title']?></h2>
+                        <p class="action-text"><?=$tile['description']?></p>
+                        <a href="<?=$tile['page_link']?>" class="button"><?=$tile['link_text']?></a>
+                    </div>
+            <?php
+                }
+            ?>
+        </div>
     </div>
 </div>
 
