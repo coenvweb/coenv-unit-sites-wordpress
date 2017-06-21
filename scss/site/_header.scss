@@ -46,6 +46,9 @@
         color: $black;
         a {
             color: $black;
+            &:hover {
+                color: $accent;
+            }
         }
     }
 
@@ -141,6 +144,9 @@
         span {
             @extend .visuallyhidden;
         }
+        &:hover {
+            fill: $accent-lt;
+        }
     }
 }
 
@@ -208,6 +214,9 @@
         color: $black;
         a {
             color: $black;
+            &:hover {
+                color: $accent;
+            }
         }
         
         @media #{$xlarge-up} {
@@ -404,6 +413,9 @@
 
         a {
             color: $text;
+            &:hover {
+                color: $accent;
+            }
         }
 
         span {
