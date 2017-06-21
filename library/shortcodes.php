@@ -52,7 +52,7 @@ function tableau_func( $atts ) {
     ), $atts );
 
     return '
-    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/viz_v1.js"></script> 
+    <script type="text/javascript" src="https://tableau.washington.edu/javascripts/api/viz_v1.js"></script> 
     <div class="tableauPlaceholder" style="width: ' . $tableau['width'] . ' height: ' . $tableau['height'] . '"> 
     <noscript><a href=""><img src="' . $tableau['alt_image'] . '" style="border: none" /></a></noscript>
     <object class="tableauViz" width="' . $tableau['width'] . '" height="' . $tableau['height'] . '" style="display:none;">
