@@ -66,33 +66,43 @@ $services = get_field('services');
         </div>
         <hr>
         <div class="people-content">
-            <div class="bio">
-                <h2>Bio</h2>
-                <?php echo get_field('bio'); ?>
-            </div>
+            <?php if(get_field('bio')) { ?>
+                <div class="bio">
+                    <h2>Bio</h2>
+                    <?php echo get_field('bio'); ?>
+                </div>
+            <?php } ?>
 
-            <div class="research-interests">
-                <h2>Research Interests</h2>
-                <?php echo get_field('research_interests'); ?>
-            </div>
-            <div class="current-projects">
-                <h2>Select Current Projects</h2>
-                <ul class="projects">
-                <?php foreach(get_field('current_projects') as $project) { ?>
-                    <li class="project">
-                        <a href="<?=$project['project_link']?>"><?=$project['project_name']?></a>
-                    </li>
-                <?php } ?>
-                </ul>
-            </div>
-            <div class="recent-pubs">
-                <h2>Recent Publications</h2>
-                <?php foreach(get_field('recent_publications') as $pub) { ?>
-                    <p class="pub">
-                        <?php echo $pub['citation']; ?>
-                    </p>
-                <?php } ?>
-            </div>
+            <?php if(get_field('research_interests')) { ?>
+                <div class="research-interests">
+                    <h2>Research Interests</h2>
+                    <?php echo get_field('research_interests'); ?>
+                </div>
+            <?php } ?>
+
+            <?php if(get_field('current_projects')) { ?>
+                <div class="current-projects">
+                    <h2>Select Current Projects</h2>
+                    <ul class="projects">
+                    <?php foreach(get_field('current_projects') as $project) { ?>
+                        <li class="project">
+                            <a href="<?=$project['project_link']?>"><?=$project['project_name']?></a>
+                        </li>
+                    <?php } ?>
+                    </ul>
+                </div>
+            <?php } ?>
+
+            <?php if(get_field('recent_publications')) { ?>
+                <div class="recent-pubs">
+                    <h2>Recent Publications</h2>
+                    <?php foreach(get_field('recent_publications') as $pub) { ?>
+                        <p class="pub">
+                            <?php echo $pub['citation']; ?>
+                        </p>
+                    <?php } ?>
+                </div>
+            <?php } ?>
        </div>
     </section>
 </article><!-- .article -->
