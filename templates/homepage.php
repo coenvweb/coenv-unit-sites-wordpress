@@ -81,60 +81,245 @@ wp_reset_postdata();
 echo '</div>';
 ?>
     </div>
-    <div class="news-events-row row">
-<div class="row">
-<div class="large-7 columns">
-    <div class="small-news">
-        <a class="button right" href="/about/news-events"><div class="button-background "><p>Learn More »</p></div></a>
+    
+    <div class="news-events-row">
+            <div class="row news-wrap">
+                <div class="large-8 medium-8 columns">
+                    <div class="news-section">
+    <div class="news-header">
+        <a class="button right" href="/about/news-events"><div class="button-background "><p>More stories »</p></div></a>
         <a href="/about/news-events"><h4>What's New</h4></a>
+    </div>
+                
 <?php
-$home_args = array(
-	'post_type'	=> 'post',
-	'post_status' => 'publish',
-	'posts_per_page' => 3,
+
+# Featured News
+
+$feat_args = array(
+    'post_type' => array('post'),
+    'post_status' => 'publish',
+    'posts_per_page' => 1,
+    'tax_query' => array(
+        'relation' => 'OR',
+        array(
+            'taxonomy' => 'category',
+            'terms' => 'featured',
+            'field' => 'slug'
+        ),
+    )
 );
-$wp_query = new WP_Query( $home_args );
+    
+
+$wp_query = new WP_Query( $feat_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-small">
-		<ul class="list-news-small">
+	<div class="home-news-section clearfix">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		echo '<li class="news-small">';
-        echo '<div class="post-meta">';
-        echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
-        // Get categories
-        $terms = wp_get_post_terms(get_the_id(), 'category');
-        if (!empty($terms)) {
-            $termlist = '';
-            foreach ($terms as &$term) {
-                $termlist .= '<a href="?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+        $featured[] = $post->ID;
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link_target = null;
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        } if ( has_post_thumbnail()) {
+                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
+                $alt = get_post_meta(get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true);
+                echo '<div class="medium-12 large-7 columns featured-news">';
+				echo '<div class="featured-thumbnail">';
+				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+				echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
+				echo '</a></div>';
+                echo '<div class="post-content">';
+				echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                // Get categories
+                $terms = wp_get_post_terms(get_the_id(), 'category');
+                // Filter display of administrative post categories
+                $terms = wp_list_filter($terms, array('slug'=>'uncategorized','slug'=>'featured'),'NOT');
+				if (!empty($terms)) {
+					$terms_arr = array();
+					
+					foreach ($terms as &$term) {
+						// exclude administrative terms
+						//if ($term->slug != 'uncategorized' || $term->slug != 'featured') {
+							$terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+						//}
+					}
+					$terms_str = ' / ' . implode(', ', $terms_arr);
+
+				} else {
+					$terms_str = '';
+				}
+				$terms = "";
+				echo $terms_str;
+	            echo '</div>';
+                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h5>' . get_the_title() . '</h5></a>';
+	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+	            echo $post_link;
+                echo '</div>';
+                ?>
+    </div>
+        <?php
+                
+			}
+            else {
+                if (get_field('story_link_url')) {
+                    $post_link_url = get_field('story_link_url');
+                    $post_link_target = ' target="_blank" ';
+                    $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+                } else {
+                    $post_link_url = get_the_permalink();
+                    $post_link = '<a class="svg-link" href="' . $post_link_url . '">More';
+                }	
+                echo '<div class="featured-section">';
+                echo '<div class="large-7 medium-12 columns left no-feature">';
+                echo '<div class="small-news">';
+                echo '<div class="post-content">';
+                echo '<div class="post-meta">';
+                echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+                // Get categories
+                $more_terms = wp_get_post_terms(get_the_id(), 'category');
+                if (!empty($more_terms)) {
+                    $more_terms_arr = array();
+
+                    foreach ($more_terms as &$term) {
+                        if ($term->slug != 'uncategorized') {
+                            $more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+                        }
+                    }
+                    $more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+
+                } else {
+                    $more_terms_str = '';
+                }
+                $more_terms = "";
+                echo $more_terms_str;
+                echo '</div>';
+                echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+                echo '<p>' . the_advanced_excerpt('length=15&finish=sentence') . '</p>';
+                echo $post_link;
+                if (strpos($post_link, 'svg') !== false) { get_template_part('assets/img/icons/inline', 'more-arrow.svg'); };
+                echo '</a></div></div>'; 
+                ?>
+    </div>
+                <?php
             }
-            $termlist = rtrim($termlist,', ');
-            if (strpos($termlist,'uncategorized') == false)  {
-            echo '| ' . $termlist;
-            }
-        }
-        echo '</div>';
-        echo '<a href="' . get_the_permalink() . '"><p>' . get_the_title() . '</p></a></li>';
-	endwhile;	
-		echo '</ul></div>';
-	endif;
+	endwhile;
+endif; ?>
+
+
+
+<?php
+# Other News
+$sticky = count(get_option('sticky_posts')); 
+if ($sticky > 2) {
+    $sticky = 2;
+} else {
+    $sticky = 1;
+}
+if(!empty($featured)) {
+    $home_args = array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'posts_per_page' => 3 - $sticky,
+        'post__not_in' => $featured,
+        'cat' => -19, //hide q+a posts]
+        'orderby' => 'date',
+        'order' => 'DESC'
+    );
+}
+else {
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 3,
+        'post_status' => 'publish',
+        'cat' => -19,
+    );
+   echo '<div class="home-news-section clearfix" data-equalizer data-equalizer-mq="large-up">';
+}
+
+$wp_query = new WP_Query( $home_args );
 ?>
+	<?php if ($wp_query->have_posts()): ?>
+		<?php
+        if(!empty($featured)) {
+            echo '<div class="large-5 medium-6 columns right">';
+        }
+		# The Loop
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link = '<a class="svg-link" href="' . $post_link_url . '">More';
+        }	
+        if (empty( $featured )) {
+            echo '<div class="large-4 medium-6 columns left no-feature" data-equalizer-watch>';
+        }
+        echo '<div class="small-news">';
+        echo '<div class="post-content">';
+		echo '<div class="post-meta">';
+		echo '<time class="article__time" datetime="' . get_the_date('Y-m-d h:i:s') . '">' . get_the_date('M j, Y') . '</time>';
+		// Get categories
+        $more_terms = wp_get_post_terms(get_the_id(), 'category');
+		if (!empty($more_terms)) {
+			$more_terms_arr = array();
+			
+			foreach ($more_terms as &$term) {
+				if ($term->slug != 'uncategorized') {
+					$more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+				}
+			}
+			$more_terms_str = ' / ' . implode(', ', $more_terms_arr);
+
+		} else {
+			$more_terms_str = '';
+		}
+		$more_terms = "";
+		echo $more_terms_str;
+		echo '</div>';
+		echo '<a href="' . $post_link_url . '"><h5>' . get_the_title() . '</h5></a>';
+		echo '<p>' . the_advanced_excerpt('length=15&finish=sentence') . '</p>';
+       	echo $post_link;
+        echo '</a></div></div>'; 
+        if (empty( $featured )) {
+            echo '</div>';
+        }
+        endwhile;
+        ?>
+        <?php 
+        
+    echo '</div></div></section>';
+    endif;
+	?>
+
+<?php if (!empty($featured)) : ?>
+    </div>
+<?php endif; ?>
 </div>
-</div>
-				
-<div class="large-5 columns">
-    <div class="events">
-    <a class="button right" href="/about/news-events/events"><div class="button-background"><p>Learn More »</p></div></a>
-	<h4>Events</h4>
-	<?php the_widget('CoEnv_Widget_Events', 'feed_url=https://www.trumba.com/calendars/sea_envir.rss&posts_per_page=3'); ?>
+    <div class="large-4 medium-4 columns">
+        <div class="events-section">
+        <div class="events-header">
+            <a class="button right" href="/about/news-events/events"><div class="button-background"><p>More events »</p></div></a>
+            <h4>Events</h4>
+        </div>
+        <div class="events">
+        <?php the_widget('CoEnv_Widget_Events', 'feed_url=https://www.trumba.com/calendars/sea_envir.rss&posts_per_page=3'); ?>
+        </div>
     </div>
 </div>
 </div>
 </div>
+
 <div class="spotlight-purple">
 <div class="row spotlight">
     <div class="spotlight-content">
@@ -162,15 +347,6 @@ $wp_query = new WP_Query( $home_args );
         <?php the_widget('custom_post_widget', 'custom_post_id=2745&show_featured_image=true'); ?>
     </div>
 </div>
-        
-<div class="row minor-programs" data-equalizer data-equalizer-mq="large-up">
-    <div class="large-6 columns programs" data-equalizer-watch>
-        <?php the_widget('custom_post_widget', 'custom_post_id=2750'); ?>
-    </div>
-    <div class="large-6 columns programs" data-equalizer-watch>
-        <?php the_widget('custom_post_widget', 'custom_post_id=2752'); ?>
-</div>
-        
 
 <?php do_action('foundationPress_after_content'); ?>
 </div>

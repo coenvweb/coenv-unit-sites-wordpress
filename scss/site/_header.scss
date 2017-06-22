@@ -39,7 +39,7 @@
     h1 {
         @include encode-cb();
         font-weight: normal;
-        font-size: 4.2vw!important;
+        font-size: 3.8vw!important;
         padding: 0 0 0 5%;
         text-transform: uppercase;
         letter-spacing: .5px;
@@ -145,7 +145,7 @@
             @extend .visuallyhidden;
         }
         &:hover {
-            fill: $accent-lt;
+            fill: lighten($accent-lt, 15%);
         }
     }
 }
@@ -276,6 +276,9 @@
     }
     a {
         padding-bottom: 0;
+        &:hover {
+            fill: $accent;
+        }
     }
     .slash {
         margin: 0;
