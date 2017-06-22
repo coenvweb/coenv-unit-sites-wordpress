@@ -21,6 +21,16 @@ article.type-people {
                 background-position: bottom left;
                 background-repeat: no-repeat;
                 padding-bottom: 1rem;
+                .job_title {
+                    display: block;
+                    font-size: 1.1rem;
+                    .org {
+                        display: block;
+                        @include o_sans_bold;
+                        text-transform: uppercase;
+                        font-size: .65rem;
+                    }
+                }
             }
             .person_contact {
                 margin-left: 0px;
@@ -116,13 +126,14 @@ article.type-people {
                 font-size: 1.25rem;
             }
             .expertise {
-				margin-bottom: 1rem;
-				span {
-					@include o_sans_bold;
-					font-size: rem-calc(14);
-					margin-bottom: 6px;
-					text-transform: uppercase;
-				}
+                margin-bottom: 1rem;
+                span.area {
+                    @include o_sans_bold;
+                    font-size: rem-calc(14);
+                    margin-bottom: 6px;
+                    text-transform: uppercase;
+                    display: block;
+                }
             }
             .mission {
                 p {

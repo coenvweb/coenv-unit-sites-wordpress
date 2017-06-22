@@ -2,8 +2,6 @@
 /*
 Template Name: People Index
 */
-
-
 get_header();
 ?>
 <div class="row">
@@ -49,12 +47,10 @@ get_header();
                     $director = false;
                 ?>
                     <h2 class="classification-head <?=$class->name?>"><?=$class->name?></h2>
-                    <?php if(strpos($class->name, 'Director') || strpos($class->name, 'Director') === 0) { ?>
-                        <?php $director = true; ?>
-                        <ul class="people-list <?=$class->name?>-list small-block-grid-2 medium-block-grid-2 large-block-grid-2">
-                    <?php } else { ?>
-                        <ul class="people-list <?=$class->name?>-list small-block-grid-3 medium-block-grid-4 large-block-grid-4">
-                    <?php } ?>
+                    <?php if(strpos($class->name, 'Director') || strpos($class->name, 'Director') === 0) { 
+                        $wp_query->posts = array_reverse($wp_query->posts);
+                    } ?>
+                    <ul class="people-list <?=$class->name?>-list small-block-grid-3 medium-block-grid-4 large-block-grid-4">
                         <?php
                         # The Loop
                         while ( $wp_query->have_posts() ) :

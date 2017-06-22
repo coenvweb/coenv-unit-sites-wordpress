@@ -82,46 +82,6 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": ""
-                },
-                {
-                    "key": "field_5938321efbbbe",
-                    "label": "Link Text",
-                    "name": "link_text",
-                    "type": "text",
-                    "instructions": "Button link text",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "maxlength": 25
-                },
-                {
-                    "key": "field_59383233fbbbf",
-                    "label": "Page Link",
-                    "name": "page_link",
-                    "type": "page_link",
-                    "instructions": "Page link for hero area button",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "post_type": [
-                        "page"
-                    ],
-                    "taxonomy": [],
-                    "allow_null": 0,
-                    "allow_archives": 0,
-                    "multiple": 0
                 }
             ]
         },
@@ -244,9 +204,9 @@
             ]
         },
         {
-            "key": "field_593ac0bfd028b",
-            "label": "People Tile",
-            "name": "people_tile",
+            "key": "field_594be5c1d3e46",
+            "label": "NWCSC Tile",
+            "name": "nwcsc_tile",
             "type": "repeater",
             "instructions": "",
             "required": 1,
@@ -259,24 +219,24 @@
             "collapsed": "",
             "min": 1,
             "max": 1,
-            "layout": "table",
+            "layout": "block",
             "button_label": "",
             "sub_fields": [
                 {
-                    "key": "field_593ac0cbd028c",
+                    "key": "field_594be5d6d3e47",
                     "label": "Tile Background Image",
-                    "name": "tile_image",
+                    "name": "tile_background_image",
                     "type": "image",
                     "instructions": "",
-                    "required": 0,
+                    "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "100",
                         "class": "",
                         "id": ""
                     },
                     "return_format": "url",
-                    "preview_size": "large",
+                    "preview_size": "medium",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -287,15 +247,39 @@
                     "mime_types": ""
                 },
                 {
-                    "key": "field_593ac159d028d",
-                    "label": "Tile Link Text",
-                    "name": "tile_link_text",
+                    "key": "field_594be6bd4f9ca",
+                    "label": "Tile Image",
+                    "name": "tile_image",
+                    "type": "image",
+                    "instructions": "Image to be displayed above the tile title heading",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_594be608d3e48",
+                    "label": "Tile Title",
+                    "name": "tile_title",
                     "type": "text",
                     "instructions": "",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "50",
                         "class": "",
                         "id": ""
                     },
@@ -306,25 +290,39 @@
                     "maxlength": ""
                 },
                 {
-                    "key": "field_593ac167d028e",
-                    "label": "Tile Link",
-                    "name": "tile_link",
-                    "type": "page_link",
+                    "key": "field_594be616d3e49",
+                    "label": "Tile Link Text",
+                    "name": "tile_link_text",
+                    "type": "text",
                     "instructions": "",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "50",
                         "class": "",
                         "id": ""
                     },
-                    "post_type": [
-                        "page"
-                    ],
-                    "taxonomy": [],
-                    "allow_null": 0,
-                    "allow_archives": 0,
-                    "multiple": 0
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_594be62cd3e4a",
+                    "label": "Tile Link URL",
+                    "name": "tile_link_url",
+                    "type": "url",
+                    "instructions": "Full url including http:\/\/ or https:\/\/",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": ""
                 }
             ]
         },
@@ -361,7 +359,7 @@
                         "id": ""
                     },
                     "return_format": "url",
-                    "preview_size": "large",
+                    "preview_size": "medium",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -452,6 +450,91 @@
             ]
         },
         {
+            "key": "field_593ac0bfd028b",
+            "label": "People Tile",
+            "name": "people_tile",
+            "type": "repeater",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "",
+            "min": 1,
+            "max": 1,
+            "layout": "table",
+            "button_label": "",
+            "sub_fields": [
+                {
+                    "key": "field_593ac0cbd028c",
+                    "label": "Tile Background Image",
+                    "name": "tile_image",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "preview_size": "large",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_593ac159d028d",
+                    "label": "Tile Link Text",
+                    "name": "tile_link_text",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "maxlength": ""
+                },
+                {
+                    "key": "field_593ac167d028e",
+                    "label": "Tile Link",
+                    "name": "tile_link",
+                    "type": "page_link",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "post_type": [
+                        "page"
+                    ],
+                    "taxonomy": [],
+                    "allow_null": 0,
+                    "allow_archives": 0,
+                    "multiple": 0
+                }
+            ]
+        },
+        {
             "key": "field_593ac2bfd6e90",
             "label": "Twitter Tile",
             "name": "twitter_tile",
@@ -484,7 +567,7 @@
                         "id": ""
                     },
                     "return_format": "url",
-                    "preview_size": "large",
+                    "preview_size": "medium",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -586,7 +669,7 @@
                         "id": ""
                     },
                     "return_format": "url",
-                    "preview_size": "large",
+                    "preview_size": "medium",
                     "library": "all",
                     "min_width": "",
                     "min_height": "",
@@ -804,5 +887,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1497365530
+    "modified": 1498146937
 }

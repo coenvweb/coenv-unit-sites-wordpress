@@ -27,8 +27,6 @@
             font-size: rem-calc(22);
             padding-bottom: 15px;
         }
-
-
     }
 
     h3 {
@@ -130,10 +128,6 @@
                 margin-bottom: 12px;
                 text-shadow: 1px 1px 2px #000;
             }
-       }
-       .button {
-            font-size: rem-calc(16);
-            padding: rem-calc(8) rem-calc(12);
        }
     }
     .home .full-news h3 {
@@ -242,7 +236,7 @@
        }
 
        h2 {
-           background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
+            background-image: url("/wp-content/themes/coenv-cig/assets/img/rule-white.svg");
             color: $white;
             margin-bottom: 23px;
        }
@@ -296,7 +290,7 @@ color: $white;
     }
 
     .home-news-section {
-        margin: 0 auto;
+        margin: 0 auto 1rem auto;
 
 
         .featured-thumbnail {
@@ -376,7 +370,7 @@ color: $white;
                 position: relative;
                 @include encode-thin;
                 margin-top: 4.5rem;
-                margin-bottom: 3.5rem;
+                margin-bottom: 1.5rem;
                 color: white;
                 font-size: rem-calc(30);
                 @media #{$medium-only} {
@@ -402,7 +396,7 @@ color: $white;
                 display: -webkit-flexbox;
                 display: -ms-flexbox;
                 display: -webkit-flex;
-                display: flex;
+                display: flex; 
                 flex-wrap: wrap;
                 flex-direction: row;
                 @media #{$small-only} {
@@ -416,6 +410,13 @@ color: $white;
                 -webkit-flex: 1;
                 -ms-flex: 1;
                 flex: 1;
+                display: -webkit-box;
+                display: -moz-box;
+                display: -webkit-flexbox;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                flex-direction: column;
                 color: white;
                 text-align: center;
                 padding-top: 1rem;
@@ -444,6 +445,11 @@ color: $white;
                     width: 66%;
                     margin: auto;
                     margin-bottom: 1rem;
+                    flex-grow: 1;
+                }
+                .button {
+                    align-self: flex-end;
+                    margin: auto;
                 }
             }
         }
@@ -451,23 +457,20 @@ color: $white;
 
     
     .social-tiles {
-        .people-tile, .mail-tile {
+        .people-tile, .mail-tile, .nwcsc-tile {
             .tile-wrapper {
                 width: 100%;
                 height: 100%;
                 background:rgba(0,0,0,0.5);
             }
         }
-        .smedia {
+        .small-tiles {
             display: flex;
-            @media #{$medium-only} {
-                width: 100% !important;
-                flex-direction: column;
-                flex-wrap: nowrap;
-            }
-            .facebook-tile, .twitter-tile {
+            .facebook-tile, .twitter-tile, .nwcsc-tile, .mail-tile {
                 align-items: stretch;
-                margin-top: 0rem !important;
+                flex: 1;
+                margin-bottom: 0rem;
+                margin-top: 0rem;
                 .tile-wrapper {
                     width: 100%;
                     height: 100%;
@@ -489,17 +492,19 @@ color: $white;
         }
         .facebook-tile {
             margin-left: 3% !important;
-            @media #{$medium-only} {
-                margin-left: 0px !important;
-            }
             .tile-wrapper {
                 background:rgba(59,89,152,0.8);
             }
-        } 
-        .people-tile, .mail-tile, .facebook-tile, .twitter-tile {
+        }
+        .nwcsc-tile {
+            margin-left: 3% !important;
+        }
+        .people-tile, .mail-tile, .nwcsc-tile, .facebook-tile, .twitter-tile {
             margin: 1rem 0rem;
             background-size: cover;
             text-align: center;
+            display: flex;
+            flex-direction: column;
             .round-tile-img {
                 margin-top: 1.5rem;
                 width: 8rem;
@@ -515,7 +520,12 @@ color: $white;
             .tile-title {
                 color: white;
                 margin-bottom: 1rem;
-                font-size: 1.2rem;
+                @media #{$small-up} {
+                    font-size: 1rem;
+                }
+                @media #{$large-up} {
+                    font-size: 1.2rem;
+                }
                 z-index: 3;
                 a {
                     color: white;
@@ -523,16 +533,26 @@ color: $white;
                         
                     }
                 }
+                flex-grow: 1;
             }
             .tile-button {
+                align-self: flex-end;
                 margin-top: .5rem;
                 margin-bottom: 1rem;
                 background: none;
                 border-radius: .5rem;
+                @media #{$small-up} {
+                    font-size: .65rem;
+                }
+                @media #{$large-up} {
+                    font-size: .85rem;
+                }
+
                 font-size: .9rem;
                 box-shadow: none;
                 border: 3px solid white;
                 z-index: 3;
+                text-align: center;
                 &:hover {
                     color: rgba(0,0,0,0.9) !important;
                     background-color: $white;

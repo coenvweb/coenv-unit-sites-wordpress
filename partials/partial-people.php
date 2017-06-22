@@ -38,13 +38,17 @@ $services = get_field('services');
                 <div class="head-right small-12 medium-6 columns">
                     <h1 class="people-title article__title">
                         <?php if ( is_page() || is_single()) : ?>
-                            <?php the_title() ?>, <?php echo get_field('credentials'); ?>
+                            <?php the_title() ?>
+                            <?php if(get_field('credentials')) { ?>
+                                <?php echo ", " . get_field('credentials'); ?>
+                            <?php } ?>
                         <?php endif ?>
                     </h1>
                     <div class="titles">
                         <?php foreach($titles as $title) { ?>
                             <div class="job_title">
-                                <?=$title['title'];?> | <?=$title['organization'];?>
+                                <?=$title['title'];?>
+                                <span class="org"><?=$title['organization'];?></span>
                             </div>
                         <?php } ?>
                     </div>
@@ -53,14 +57,16 @@ $services = get_field('services');
                             <?php the_field('quote_or_mission'); ?>
                         </div>
                     <?php } ?>
+                    <?php if($areas) { ?>
                     <div class="expertise">
                         <h4 class="expertise_title">Areas of Expertise</h4>
                             <?php for($i = 0; $i < count($areas); $i++) { ?>
                                 <?php $area = $areas[$i]; ?>
-                                <span class="area"><?=$area['area'];?> <?= ($i + 1 != count($areas) ? '|' : '') ?></span>
+                                <span class="area"><?=$area['area'];?></span>
                             <?php } ?>
                         </ul>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

@@ -16,7 +16,6 @@ foreach($heroes as $hero) {
                     <p class="tag"><?=$hero['tag_text']?></p>
                 </div>
                 <h1 class="hero-statement"><?=$hero['hero_text']?></h1>
-                <p><a class="button" href="<?=$hero['page_link']?>"><?=$hero['link_text']?></a></p>
             </div>
         </div>
     </div>          
@@ -181,6 +180,36 @@ foreach($heroes as $hero) {
             ?>
             </div>
             <div class="medium-6 small-12 columns social-tiles">
+               <div class="small-tiles">
+                   <?php
+                        $mail_tile = get_field('email_tile')[0];
+                        $tile_image_src = $mail_tile['tile_image']['url'];
+                        $tile_image_alt = $mail_tile['tile_image']['alt'];
+                    ?>
+                    <div class="small-6 mail-tile" style="background-image: url(<?=$mail_tile['tile_background_image']?>)">
+                       <div class="tile-wrapper">
+                            <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
+                            <h3 class="tile-title">
+                                <a href="<?=$mail_tile['tile_link_url']?>"><?=$mail_tile['tile_title']?></a>
+                            </h3>
+                            <a href="<?=$mail_tile['tile_link_url']?>" class="button tile-button"><?=$mail_tile['tile_link_text']?></a>
+                        </div>
+                    </div>
+                    <?php
+                        $nwcsc_tile = get_field('nwcsc_tile')[0];
+                        $tile_image_src = $nwcsc_tile['tile_image']['url'];
+                        $tile_image_alt = $nwcsc_tile['tile_image']['alt'];
+                    ?>
+                    <div class="small-6 nwcsc-tile" style="background-image: url(<?=$nwcsc_tile['tile_background_image']?>)">
+                       <div class="tile-wrapper">
+                            <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
+                            <h3 class="tile-title">
+                                <a href="<?=$nwcsc_tile['tile_link_url']?>"><?=$nwcsc_tile['tile_title']?></a>
+                            </h3>
+                            <a href="<?=$nwcsc_tile['tile_link_url']?>" class="button tile-button"><?=$nwcsc_tile['tile_link_text']?></a>
+                        </div>
+                    </div>
+                </div>
                 <?php
                     $people_tile = get_field('people_tile')[0];
                     $people_args = array(
@@ -213,24 +242,11 @@ foreach($heroes as $hero) {
                     </div> 
                 </div>
                 <?php
-                    $mail_tile = get_field('email_tile')[0];
-                    $tile_image_src = $mail_tile['tile_image']['url'];
-                    $tile_image_alt = $mail_tile['tile_image']['alt'];
-                ?>
-               <div class="small-12 mail-tile" style="background-image: url(<?=$mail_tile['tile_background_image']?>)">
-                   <div class="tile-wrapper">
-                        <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
-                        <h3 class="tile-title">
-                            <a href="<?=$mail_tile['tile_link_url']?>"><?=$mail_tile['tile_title']?></a>
-                        </h3>
-                        <a href="<?=$mail_tile['tile_link_url']?>" class="button tile-button"><?=$mail_tile['tile_link_text']?></a>
-                    </div>
-                </div> 
-                <?php
                     $twitter_tile = get_field('twitter_tile')[0];
+                    $facebook_tile = get_field('facebook_tile')[0];
                 ?>
-                <div class="smedia">
-                    <div class="small-6 medium-12 large-6 twitter-tile" style="background-image: url(<?=$twitter_tile['tile_background_image']?>)">
+                <div class="small-tiles">
+                    <div class="small-6 twitter-tile" style="background-image: url(<?=$twitter_tile['tile_background_image']?>)">
                         <div class="tile-wrapper">
                             <?php if($twitter_tile['tile_link_url'] && $twitter_tile['tile_link_text'] && $twitter_tile['tile_title']) { ?>
                                 <img class="tile-img" src="<?=get_template_directory_uri()?>/assets/img/twitter-logo.png" alt="Twitter Logo" />
@@ -242,9 +258,8 @@ foreach($heroes as $hero) {
                         </div>
                     </div>
                     <?php
-                        $facebook_tile = get_field('facebook_tile')[0];
                     ?>
-                   <div class="small-6 medium-12 large-6 facebook-tile" style="background-image: url(<?=$facebook_tile['tile_background_image']?>)">
+                    <div class="small-6 facebook-tile" style="background-image: url(<?=$facebook_tile['tile_background_image']?>)">
                         <div class="tile-wrapper">
                             <?php if($facebook_tile['tile_link_url'] && $facebook_tile['tile_link_text'] && $facebook_tile['tile_title']) { ?>
                                 <img class="tile-img" src="<?=get_template_directory_uri()?>/assets/img/facebook-like.png" alt="Facebook Like Icon" />
