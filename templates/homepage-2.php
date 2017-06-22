@@ -268,17 +268,17 @@ foreach($heroes as $hero) {
                     <?php
                     ?>
                     <div class="small-6 facebook-tile" style="background-image: url(<?=$facebook_tile['tile_background_image']?>)">
-                        <div class="tile-wrapper">
-                            <?php if($facebook_tile['tile_link_url'] && $facebook_tile['tile_link_text'] && $facebook_tile['tile_title']) { ?>
-                                <img class="tile-img" src="<?=get_template_directory_uri()?>/assets/img/facebook-like.png" alt="Facebook Like Icon" />
-                                <h3 class="tile-title">
-                                    <a href="<?=$facebook_tile['tile_link_url']?>"><?=$facebook_tile['tile_title']?></a>
-                                </h3>
-                                <?php if($facebook_tile['tile_link_url']) { ?>
-                                    <a href="<?=$facebook_tile['tile_link_url']?>" class="button tile-button"><?=$facebook_tile['tile_link_text']?></a>
-                                <?php } ?>
-                            <?php } ?>
-                        </div>
+                        <?php if($facebook_tile['tile_link_url'] && $facebook_tile['tile_link_text'] && $facebook_tile['tile_title']) { ?>
+                            <div class="tile-wrapper">
+                                    <img class="tile-img" src="<?=get_template_directory_uri()?>/assets/img/facebook-like.png" alt="Facebook Like Icon" />
+                                    <h3 class="tile-title">
+                                        <a href="<?=$facebook_tile['tile_link_url']?>"><?=$facebook_tile['tile_title']?></a>
+                                    </h3>
+                                    <?php if($facebook_tile['tile_link_url']) { ?>
+                                        <a href="<?=$facebook_tile['tile_link_url']?>" class="button tile-button"><?=$facebook_tile['tile_link_text']?></a>
+                                    <?php } ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
