@@ -72,12 +72,12 @@ get_header();
                         endwhile;
                         ?>
                     </ul>
-                    <ul class="widget-area after-content">
-                        <?php dynamic_sidebar( "after-content" ); ?>
-                    </ul>
                 <?php endif; ?>
                 <?php wp_reset_query(); ?>
             <?php } ?>
+            <ul class="widget-area after-content">
+                <?php dynamic_sidebar( "after-content" ); ?>
+            </ul>
         </div>
     </div>
     <?php get_sidebar(); ?>

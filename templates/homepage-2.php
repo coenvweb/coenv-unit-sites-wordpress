@@ -192,7 +192,9 @@ foreach($heroes as $hero) {
                             <h3 class="tile-title">
                                 <a href="<?=$mail_tile['tile_link_url']?>"><?=$mail_tile['tile_title']?></a>
                             </h3>
-                            <a href="<?=$mail_tile['tile_link_url']?>" class="button tile-button"><?=$mail_tile['tile_link_text']?></a>
+                            <?php if($mail_tile['tile_link_url']) { ?>
+                                <a href="<?=$mail_tile['tile_link_url']?>" class="button tile-button"><?=$mail_tile['tile_link_text']?></a>
+                            <?php } ?>
                         </div>
                     </div>
                     <?php
@@ -206,7 +208,9 @@ foreach($heroes as $hero) {
                             <h3 class="tile-title">
                                 <a href="<?=$nwcsc_tile['tile_link_url']?>"><?=$nwcsc_tile['tile_title']?></a>
                             </h3>
-                            <a href="<?=$nwcsc_tile['tile_link_url']?>" class="button tile-button"><?=$nwcsc_tile['tile_link_text']?></a>
+                            <?php if($nwcsc_tile['tile_link_url']) { ?>
+                                <a href="<?=$nwcsc_tile['tile_link_url']?>" class="button tile-button"><?=$nwcsc_tile['tile_link_text']?></a>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -238,7 +242,9 @@ foreach($heroes as $hero) {
                                 <?=$title['title']?>, <?=$title['organization'] ?>
                             </a>
                         </h3>
-                        <a href="<?=$people_tile['tile_link']?>" class="button tile-button"><?=$people_tile['tile_link_text']?></a>
+                        <?php if($people_tile['tile_link']) { ?>
+                            <a href="<?=$people_tile['tile_link']?>" class="button tile-button"><?=$people_tile['tile_link_text']?></a>
+                        <?php } ?>
                     </div> 
                 </div>
                 <?php
@@ -253,7 +259,9 @@ foreach($heroes as $hero) {
                                 <h3 class="tile-title">
                                     <a href="<?=$twitter_tile['tile_link_url']?>"><?=$twitter_tile['tile_title']?></a>
                                 </h3>
-                                <a href="<?=$twitter_tile['tile_link_url']?>" class="button tile-button"><?=$twitter_tile['tile_link_text']?></a>
+                                <?php if($twitter_tile['tile_link_url']) { ?>
+                                    <a href="<?=$twitter_tile['tile_link_url']?>" class="button tile-button"><?=$twitter_tile['tile_link_text']?></a>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
@@ -266,7 +274,9 @@ foreach($heroes as $hero) {
                                 <h3 class="tile-title">
                                     <a href="<?=$facebook_tile['tile_link_url']?>"><?=$facebook_tile['tile_title']?></a>
                                 </h3>
-                                <a href="<?=$facebook_tile['tile_link_url']?>" class="button tile-button"><?=$facebook_tile['tile_link_text']?></a>
+                                <?php if($facebook_tile['tile_link_url']) { ?>
+                                    <a href="<?=$facebook_tile['tile_link_url']?>" class="button tile-button"><?=$facebook_tile['tile_link_text']?></a>
+                                <?php } ?>
                             <?php } ?>
                         </div>
                     </div>
