@@ -131,11 +131,11 @@ if(isset($_GET['term'])){
 		echo '<h3><a href="' . $post_link_url . '"' . $post_link_target . '>' . get_the_title() . '</a></h3>';
 
 		echo '<div class="post">';
-		/*if (has_post_thumbnail()):
-		echo '<a class="right" style="margin-right: 2rem;" href="' . get_the_permalink() . '">';
+		if (has_post_thumbnail()):
+		echo '<a class="right" style="margin-left: 2rem;" href="' . get_the_permalink() . '">';
 		the_post_thumbnail( 'medium' );
 		echo '</a>';
-		endif;*/
+		endif;
 		echo the_excerpt(); ?>
         <div class="blog-meta clearfix sharer medium-6 columns right">
         <?php $title = rawurlencode(get_the_title());
