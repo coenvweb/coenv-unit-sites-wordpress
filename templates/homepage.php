@@ -175,7 +175,7 @@ $wp_query = new WP_Query( $feat_args );
                     $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
                 } else {
                     $post_link_url = get_the_permalink();
-                    $post_link = '<a class="svg-link" href="' . $post_link_url . '">More';
+                    $post_link = '<a class="svg-link button" href="' . $post_link_url . '">More';
                 }	
                 echo '<div class="featured-section">';
                 echo '<div class="large-7 medium-12 columns left no-feature">';
@@ -260,7 +260,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="svg-link" href="' . $post_link_url . '">More';
+            $post_link = '<a class="svg-link button" href="' . $post_link_url . '">More';
         }	
         if (empty( $featured )) {
             echo '<div class="large-4 medium-6 columns left no-feature" data-equalizer-watch>';
