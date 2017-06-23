@@ -160,7 +160,7 @@ $wp_query = new WP_Query( $feat_args );
 				echo $terms_str;
 	            echo '</div>';
                 echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h5>' . get_the_title() . '</h5></a>';
-	            echo '<p>' . the_advanced_excerpt('length=60&finish=sentence') . '</p>';
+	            echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
 	            echo $post_link;
                 echo '</div>';
                 ?>
@@ -229,7 +229,6 @@ if(!empty($featured)) {
         'post_status' => 'publish',
         'posts_per_page' => 3 - $sticky,
         'post__not_in' => $featured,
-        'cat' => -19, //hide q+a posts]
         'orderby' => 'date',
         'order' => 'DESC'
     );
@@ -239,7 +238,6 @@ else {
         'post_type' => 'post',
         'posts_per_page' => 3,
         'post_status' => 'publish',
-        'cat' => -19,
     );
    echo '<div class="home-news-section clearfix" data-equalizer data-equalizer-mq="large-up">';
 }
