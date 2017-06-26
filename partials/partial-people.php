@@ -29,7 +29,7 @@ $services = get_field('services');
                         <?php } ?> 
                         <?php if(get_field('cirriculum_vitae')) { ?>
                             <li class="cv">
-                                <a class="cv" href="<?=get_field('cirriculum_vitae')?>">Cirriculum Vitae</a>
+                                <a class="cv" href="<?=get_field('cirriculum_vitae')?>">Curriculum Vitae</a>
                             </li>
                         <?php } ?>
                     </ul>
