@@ -84,7 +84,7 @@ echo '</div>';
     
     <div class="news-events-row">
             <div class="row news-wrap">
-                <div class="large-8 medium-8 columns">
+                <div class="large-8 medium-12 columns">
                     <div class="news-section">
     <div class="news-header">
         <a class="button right" href="/about/news-events"><div class="button-background "><p>More stories »</p></div></a>
@@ -113,7 +113,7 @@ $feat_args = array(
 $wp_query = new WP_Query( $feat_args );
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="home-news-section clearfix">
+	<div class="home-news-section clearfix" data-equalizer data-equalizer-mq="large-up">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -130,7 +130,7 @@ $wp_query = new WP_Query( $feat_args );
         } if ( has_post_thumbnail()) {
                 $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'thumb' );
                 $alt = get_post_meta(get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true);
-                echo '<div class="medium-12 large-7 columns featured-news">';
+                echo '<div class="medium-12 large-7 columns featured-news" data-equalizer-watch>';
 				echo '<div class="featured-thumbnail">';
 				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
 				echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
@@ -178,7 +178,7 @@ $wp_query = new WP_Query( $feat_args );
                     $post_link = '<a class="svg-link button" href="' . $post_link_url . '">Read more';
                 }	
                 echo '<div class="featured-section">';
-                echo '<div class="large-7 medium-12 columns left no-feature">';
+                echo '<div class="large-7 medium-12 columns left no-feature" data-equalizer-watch>';
                 echo '<div class="small-news">';
                 echo '<div class="post-content">';
                 echo '<div class="post-meta">';
@@ -227,7 +227,7 @@ if(!empty($featured)) {
     $home_args = array(
         'post_type' => 'post',
         'post_status' => 'publish',
-        'posts_per_page' => 3 - $sticky,
+        'posts_per_page' => 2,
         'post__not_in' => $featured,
         'orderby' => 'date',
         'order' => 'DESC'
@@ -247,7 +247,7 @@ $wp_query = new WP_Query( $home_args );
 	<?php if ($wp_query->have_posts()): ?>
 		<?php
         if(!empty($featured)) {
-            echo '<div class="large-5 medium-6 columns right">';
+            echo '<div class="large-5 medium-12 columns right" data-equalizer-watch>';
         }
 		# The Loop
 		while ( $wp_query->have_posts() ) :
@@ -261,7 +261,7 @@ $wp_query = new WP_Query( $home_args );
             $post_link = '<a class="svg-link button" href="' . $post_link_url . '">Read more';
         }	
         if (empty( $featured )) {
-            echo '<div class="large-4 medium-6 columns left no-feature" data-equalizer-watch>';
+            echo '<div class="large-4 medium-12 columns left no-feature" data-equalizer-watch>';
         }
         echo '<div class="small-news">';
         echo '<div class="post-content">';
@@ -304,7 +304,7 @@ $wp_query = new WP_Query( $home_args );
     </div>
 <?php endif; ?>
 </div>
-    <div class="large-4 medium-4 columns">
+    <div class="large-4 medium-12 columns">
         <div class="events-section">
         <div class="events-header">
             <a class="button right" href="/about/news-events/events"><div class="button-background"><p>More events »</p></div></a>
