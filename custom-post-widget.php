@@ -69,7 +69,7 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image ) {
+if ( $show_featured_image && (!empty($widget_img)) ) {
 	echo '<div class="widget_img">';
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
 	echo '</div>';

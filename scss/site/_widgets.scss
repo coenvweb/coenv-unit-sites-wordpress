@@ -151,8 +151,10 @@ aside#sidebar div.columns {
 	.widget_custom_post_widget {
         background-color: #f2f2f2;
         border: $accent-green solid 4px;
+        .widget_img {
+            border-bottom: $accent-green solid 4px;
+        }
 		.widget_content {
-            border-top: $accent-green solid 4px;
 			padding: rem-calc(20) rem-calc(20) rem-calc(5) rem-calc(20);
             h4 {
                 @include uni();
