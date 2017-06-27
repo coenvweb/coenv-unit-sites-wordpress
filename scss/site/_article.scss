@@ -306,6 +306,7 @@
 div[role="main"] {
     @media #{$medium-up} {
 	   margin-top: 2rem;
+        min-height: 750px;
     }
     margin-top: .5rem;
     padding-bottom: 3rem;
