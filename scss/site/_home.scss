@@ -172,9 +172,24 @@
     .featured-thumbnail {
         max-height: 300px;
         overflow: hidden;
+        position: relative;
         img {
             position: relative;
             margin-top: -50%;
+        }
+        &:before {
+            content: "";
+            display: block;
+            left: 1.5rem;
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid $bg-lighter;
+            z-index: 3;
         }
     }
 }
