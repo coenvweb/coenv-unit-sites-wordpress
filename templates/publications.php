@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Publications Page
+//////not a template - Publications Page
 */
 
 /*
