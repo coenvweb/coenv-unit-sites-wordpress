@@ -81,10 +81,6 @@ add_filter("attachment_fields_to_save", "add_image_attachment_fields_to_save", n
  */
 function jk_img_caption_shortcode_filter($val, $attr, $content = null) {
 
-
-
-
-
 	extract(shortcode_atts(array(
 		'id'      => '',
 		'align'   => 'aligncenter',
@@ -104,7 +100,7 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null) {
 
 		// Extract the thumbnail size and add to classes
 		extract( shortcode_atts( array(
-		'id' => '', 'align' => 'alignnone', 'width' => '', 'caption' => ''
+		    'id' => '', 'align' => 'alignnone', 'width' => '', 'caption' => ''
 		), $attr) );
 
 		if ( 1 > (int) $width || empty($caption) ) return $content;
@@ -119,22 +115,23 @@ function jk_img_caption_shortcode_filter($val, $attr, $content = null) {
 		// if the class attribute is not empty get an array of all classes
 		if ( $class_attr ) {
 			foreach ( explode(' ', $class_attr) as $aclass ) {
-				if ( strpos($aclass, 'size-') === 0 ) $class .= ' ' . $aclass;
+				if ( strpos($aclass, 'size-') === 0 || strpos($aclass, 'inline') === 0 ) $class .= ' ' . $aclass;
 			}
 		}
 
 		$class .= ' ' . esc_attr($align);
 
-
+        $container = '';
+        if(strpos($class, 'inline')) {
+            $container = "style='width: " . (0 + (int) $width) . "px'";
+        }
 	
-		
-		
 
-
-	$figure_out = '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="' . $class . '" itemscope itemtype="http://schema.org/ImageObject"><div class="figure-img">' . do_shortcode( $content ) . $photo_source_div . '</div><figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description">';
+	$figure_out = '<figure id="' . $id . '" aria-describedby="figcaption_' . $id . '" class="' . $class . '" itemscope itemtype="http://schema.org/ImageObject" '.$container.'><div class="figure-img" style="width: ' . (0 + (int) $width) . 'px" >' . do_shortcode( $content ) . $photo_source_div . '</div><figcaption id="figcaption_'. $id . '" class="wp-caption-text" itemprop="description">';
 	
-	$figure_out .= '<p>' . $caption . '</p>';
-	if ( $photo_source ) {
+    	
+    $figure_out .= $caption;
+    if ( $photo_source ) {
 		if (!empty($photo_source_url)) {
 			$figure_out .= '<p><em>Image courtesy of <a href="' . $photo_source_url . '" target="blank">' . $photo_source . '</a></em></p>';
 		} else { 
@@ -150,24 +147,15 @@ add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
 // add custom image sizes
 if ( function_exists( 'add_image_size' ) ) {
 	add_image_size( 'med-sidecap', 350 ); //(cropped)
-	}
+	add_image_size( 'large-sidecap', 435 ); //(cropped)
+}
 add_filter('image_size_names_choose', 'my_image_sizes');
 function my_image_sizes($sizes) {
 	$addsizes = array(
-		"med-sidecap" => __( "Medium (right caption)")
+		"med-sidecap" => __( "Medium (1/3 right caption)"),
+		"large-sidecap" => __( "Large (1/2 right caption)")
 	);
 	$newsizes = array_merge($sizes, $addsizes);
 	return $newsizes;
 }
-
-
-
-
-
-
-
-
-
-
-
 ?>

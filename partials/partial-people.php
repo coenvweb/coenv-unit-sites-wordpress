@@ -92,7 +92,11 @@ $services = get_field('services');
                     <ul class="projects">
                     <?php foreach(get_field('current_projects') as $project) { ?>
                         <li class="project">
-                            <a href="<?=$project['project_link']?>"><?=$project['project_name']?></a>
+                            <?php if($project['project_link']) { ?>
+                                <a href="<?=$project['project_link']?>"><?=$project['project_name']?></a>
+                            <?php } else { ?>
+                                <?=$project['project_name']?>
+                            <?php } ?>
                         </li>
                     <?php } ?>
                     </ul>
