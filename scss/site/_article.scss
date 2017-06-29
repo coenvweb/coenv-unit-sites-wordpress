@@ -78,9 +78,6 @@
 
     }
 
-    
-    
-
     hr {
         height: 2px;
         border: none;
@@ -108,9 +105,6 @@
     } // blockquote
 
     // tables
-
-
-
     table {
         width: 100%;
         thead {
@@ -230,7 +224,6 @@
 
         &.inline {
             .wp-caption-text {
-                margin: 0 0 1.5rem 0;
                 @include rem('padding', 1, 1);
                 @include font-size(12);
                 @include rem('line-height', 1.25);
@@ -267,6 +260,7 @@
 
         .wp-caption-text {
             @include font-size(12);
+            margin-bottom: 0rem;
             p {
                 @include font-size(12);
                 margin: 0;
@@ -280,7 +274,6 @@
         img {
             background-color: #fff;
             margin: 0;
-            padding: 0  20px 0 0;
         }
         &.size-medium {
             width: 100%;
