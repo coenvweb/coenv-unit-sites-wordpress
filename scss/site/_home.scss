@@ -399,6 +399,9 @@ color: $white;
                 display: flex; 
                 flex-wrap: wrap;
                 flex-direction: row;
+                &:before {
+                    content: normal;
+                }
                 @media #{$small-only} {
                     flex-direction: column;
                     flex-wrap: nowrap;

@@ -23,8 +23,10 @@
 }
 
 #top-nav {
-	@include rem('padding', 0.25, 0, 0.3);
-	background: $bg-dk;
+	@include rem('padding', 0.35, 0, 0.45);
+	background-color: #363533;
+    background-image: url('../assets/img/el-header-slant.svg');
+    background-size: contain;
 	font-size: 0;
 	text-align: right;
 	display: block;
@@ -109,10 +111,46 @@
 	} // form
 
 	#menu-university {
-		float: left;
-        margin-left: rem-calc(8);
-
+        float: left;
+        margin-left: 0px;
+        li {
+            a {
+                line-height: 2rem;
+                color: $white;
+            }
+        }
+        color: $white;
 	} // #menu-university
+
+    .el-logo {
+        font-size: 1.25rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: -.1rem;
+        float: left;
+        color: $white;
+        span.light {
+            color: #888888;
+        }
+    }
+
+    .el-divider {
+        float: left;
+        width: 2rem;
+        height: 100%;
+        font-size: 1rem;
+        margin: 0rem 1rem;
+        &:before {
+            display: block;
+            content: "";
+            color: $white;
+            width: 2px;
+            background-color: $white;
+            height: 30px;
+            @extend .uw-skew;
+            margin: .1rem auto 0rem auto;
+        }
+    }
 
 	#menu-buttons {
         
