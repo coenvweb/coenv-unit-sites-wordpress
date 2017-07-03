@@ -199,12 +199,10 @@ foreach($heroes as $hero) {
                     </div>
                     <?php
                         $nwcsc_tile = get_field('nwcsc_tile')[0];
-                        $tile_image_src = $nwcsc_tile['tile_image']['url'];
-                        $tile_image_alt = $nwcsc_tile['tile_image']['alt'];
                     ?>
                     <div class="small-6 nwcsc-tile" style="background-image: url(<?=$nwcsc_tile['tile_background_image']?>)">
                        <div class="tile-wrapper">
-                            <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
+                            <div class="tile-img-blank"></div>
                             <h3 class="tile-title">
                                 <a href="<?=$nwcsc_tile['tile_link_url']?>"><?=$nwcsc_tile['tile_title']?></a>
                             </h3>

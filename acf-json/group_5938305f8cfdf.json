@@ -247,30 +247,6 @@
                     "mime_types": ""
                 },
                 {
-                    "key": "field_594be6bd4f9ca",
-                    "label": "Tile Image",
-                    "name": "tile_image",
-                    "type": "image",
-                    "instructions": "Image to be displayed above the tile title heading",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "preview_size": "thumbnail",
-                    "library": "all",
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": ""
-                },
-                {
                     "key": "field_594be608d3e48",
                     "label": "Tile Title",
                     "name": "tile_title",
@@ -887,5 +863,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1498146937
+    "modified": 1499115580
 }
