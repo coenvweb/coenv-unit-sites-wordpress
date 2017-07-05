@@ -43,6 +43,29 @@
             @include grid-column(12);
         }
     }
+    
+    .give a{
+        height: 3.2142857143rem;
+        padding-top: 1rem;
+        background: $accent-red;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 800;
+        font-size: .8571428571rem;
+        letter-spacing: .5px;
+        -webkit-font-smoothing: subpixel-antialiased;
+        font-family: "encode-sans-condensed","open-sans","Helvetica Neue",Helvetica,Arial,sans-serif !important;
+        font-weight: 800 !important;
+        i:before {
+            margin-right: 3px;
+        }
+
+        &:hover {
+            background: darken( $accent-red, 10% );
+        }
+            
+    }
+    
     .off-canvas-list {
         border-bottom: solid 2px $text;
         a {
