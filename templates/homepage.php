@@ -59,13 +59,14 @@ Template Name: Homepage
         </div>
     </div>
 </div>
+<div class="row"><div class="columns large-12"><h2 class="column prompt">We work on:</h2></div></div>
+<div class="row home-content-row">
 <?php
 $content_areas = get_field('content_areas');
 if($content_areas) {
     foreach($content_areas as $content_area) { 
     ?>
-        <div class="row <?php echo sanitize_title( $content_area['home_content_title'], 'empty' ) ?> home-content-row">
-            <div class="home-content-container large-12 columns">
+            <div class="home-content-container large-4 columns">
                 <?php
                 if( $content_area['home_content_image'] ) {
                     echo '<a href="' . $first_link . '">';
@@ -101,65 +102,92 @@ if($content_areas) {
 
             </div><!-- .feature-info-container -->
 
-        </div>
     <?php
     }
 }
 ?>
+</div>
 <div class="row">
-	<div class="small-12 large-12 columns">
+	<div class="small-12 large-9 columns">
     <?php
     # News with featured news
 
-    $sticky = get_option( 'sticky_posts' );
-    $sticky_count = count($sticky);
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 2,
+        'post_status' => 'publish',
+    );
+
+    $wp_query = new WP_Query( $home_args );
+    ?>
+    <?php if ($wp_query->have_posts()): ?>
+    <hr />
+    <div class="home-news-section clearfix">
+        <div>
+            <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">News</h2>
+            <a class="button columns large-3 right" href="/news-and-events">More News</a>
+        </div>
+        <?php
+        # The Loop
+        while ( $wp_query->have_posts() ) :
+        $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
+        $wp_query->the_post();
+
+        echo '<div class="large-12 columns featured-news">';
+        get_template_part( 'partials/partial', 'story' );
+        echo '</div>';
+    endwhile;
+    ?>
+        </div>
+        </div>
+    <?php endif; ?>
+    <div class="small-12 large-3 columns">
+    <?php
+    # News with featured news
     $posts_on_home = 3; //set posts_per_page here
 
-    if( $sticky ) {
-        $home_args = array(
-            'post_type' => 'post',
-            'posts_per_page' => $posts_on_home - $sticky_count,
-            'post_status' => 'publish',
-        );
-    }
-    else {
-        $home_args = array(
-            'post_type' => 'post',
-            'posts_per_page' => $posts_on_home - $sticky_count,
-            'post_status' => 'publish',
-        );
-    }
+    $home_args = array(
+        'post_type' => 'post',
+        'posts_per_page' => 1,
+        'post_status' => 'publish',
+        'ignore_sticky_posts' => 1
+    );
 
     $wp_query = new WP_Query( $home_args );
     ?>
         <?php if ($wp_query->have_posts()): ?>
         <hr />
-        <div class="home-news-section clearfix">
             <div>
-                <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">News and Events</h2>
-                <a class="button columns large-3 right" href="/news-and-events">More News</a>
+                <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">Spotlight</h2>
+                <a class="button columns large-3 right" href="/news-and-events">More Spotlights</a>
             </div>
-        <div class="row">
             <?php
             # The Loop
             while ( $wp_query->have_posts() ) :
             $terms = wp_get_post_terms( get_the_ID(), 'blog_category');
             $wp_query->the_post();
 
-            if ( $wp_query->current_post == 0 ) {
-                echo '<div class="large-8 columns featured-news">';
-                get_template_part( 'partials/partial', 'story' );		
-            }
-            else {
-                echo '<div class="large-4 columns small-news">';
-                get_template_part( 'partials/partial', 'story' );
-            }
+            echo '<div class="large-12 columns small-news">';
+            get_template_part( 'partials/partial', 'story' );
+            echo '</div>';
 
-           echo '</div>';
         endwhile;
         ?>
         </div>
     <?php endif; ?>
+    </div>
+    <div class="row">
+	<div class="small-12 large-12 columns">
+    <hr />
+    <div class="home-news-section clearfix">
+        <div>
+            <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">Upcoming Events</h2>
+            <a class="button columns large-3 right" href="/news-and-events">More Events</a>
+        </div>
+        </div>
+        
+    
+    
     <a href="#" class="back-to-top">Back to Top</a>
     <?php do_action('foundationPress_after_content'); ?>
 </div>
