@@ -111,7 +111,7 @@ if($content_areas) {
         'post_type' => 'post',
         'posts_per_page' => 2,
         'post_status' => 'publish',
-        'category__not_in' => 4
+        'category__not_in' => 141
     );
 
     $wp_query = new WP_Query( $home_args );
@@ -147,7 +147,7 @@ if($content_areas) {
         'posts_per_page' => 1,
         'post_status' => 'publish',
         'ignore_sticky_posts' => 1,
-        'category__in' => 4
+        'category__in' => 141
     );
 
     $wp_query = new WP_Query( $home_args );
