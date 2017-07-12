@@ -75,28 +75,23 @@ if($content_areas) {
                 }
                 ?>
                 <div class="home-content">
-                    <div class="home-content">
-                        <a href="<?php echo $first_link ?>"><h2><?php echo $content_area['home_content_title']; ?></h2></a>
-                        <p class="home-content-content"><?php echo $content_area['home_content_content']; ?></p>
-                        <?php $buttons = $content_area['home_content_links'];
+                    <a href="<?php echo $first_link ?>"><h2><?php echo $content_area['home_content_title']; ?></h2></a>
+                    <p class="home-content-content"><?php echo $content_area['home_content_content']; ?></p>
+                    <?php $buttons = $content_area['home_content_links'];
 
-                        if( !empty( $buttons ) )  {
-                            $done_buttons = '<ul class="home-content-links">';
-                            $first = true;
-                            foreach($buttons as $button) {
-                                    $done_buttons .= '<li><a class="button white" href="' . $button['link_url'] . '" >' . $button['link_title'] . '</a></li>';
-                                    if ( $first ) {
-                                        $first_link = $button['link_url'];
-                                        $first = false;
-                                    }
+                    if( !empty( $buttons ) )  {
+                        $done_buttons = '<ul class="home-content-links">';
+                        $first = true;
+                        foreach($buttons as $button) {
+                                $done_buttons .= '<li><a class="button white" href="' . $button['link_url'] . '" >' . $button['link_title'] . '</a></li>';
+                                if ( $first ) {
+                                    $first_link = $button['link_url'];
+                                    $first = false;
                                 }
-                            $done_buttons .= '</ul>';
-                            echo $done_buttons;
-                        } ?>
-                        
-
-
-                    </div><!-- .feature-content -->
+                            }
+                        $done_buttons .= '</ul>';
+                        echo $done_buttons;
+                    } ?>
 
                 </div><!-- .feature-info -->
 
@@ -116,6 +111,7 @@ if($content_areas) {
         'post_type' => 'post',
         'posts_per_page' => 2,
         'post_status' => 'publish',
+        'category__not_in' => 4
     );
 
     $wp_query = new WP_Query( $home_args );
@@ -150,7 +146,8 @@ if($content_areas) {
         'post_type' => 'post',
         'posts_per_page' => 1,
         'post_status' => 'publish',
-        'ignore_sticky_posts' => 1
+        'ignore_sticky_posts' => 1,
+        'category__in' => 4
     );
 
     $wp_query = new WP_Query( $home_args );

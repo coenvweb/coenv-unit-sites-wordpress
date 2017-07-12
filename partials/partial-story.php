@@ -42,7 +42,7 @@ if (get_field('story_link_url')) {
 
     <div class="content">
         <h3><a href="<?php echo $post_link_url ?>"><?php the_title() ?></a></h3>
-        <p><?php the_advanced_excerpt('length=30&finish=sentence') ?></p>
+        <p><?php the_advanced_excerpt('length=15&finish=sentence') ?></p>
         <?php if (is_page_template('templates/homepage.php')) : ?>
             <a href="<?php echo $post_link_url ?>" class="button">Read more »</a>
         <?php else : ?>

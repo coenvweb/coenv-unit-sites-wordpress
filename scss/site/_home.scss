@@ -2,14 +2,28 @@
 
 .home {
     .home-content-row {
+        height: 300px;
         img {
-            float: right;
+            position: absolute;
+            z-index: -1;
+            width: 100%;
             max-width: 300px;
             padding: 1rem 0 1rem 1rem;
+            left: 50%;
+            transform: translateX(-50%);
         }
         ul {
             list-style: none;
             margin-left: 0;
+            
+        }
+        h2 {
+            color: white;
+        }
+        .home-content {
+            position: relative;
+            top: 100px;
+            text-align: center;
         }
     }
     
