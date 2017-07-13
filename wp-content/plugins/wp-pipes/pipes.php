@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.26
+Version: 1.27
 Author: ThimPress
 Author URI: http://thimpress.com
 */

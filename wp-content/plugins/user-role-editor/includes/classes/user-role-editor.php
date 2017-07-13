@@ -251,16 +251,7 @@ class User_Role_Editor {
       }
       
       $assign_role = $this->lib->get_assign_role();
-      $users_quant = $assign_role->count_users_without_role();      
-      if ($users_quant>0) {
-?>          
-        &nbsp;&nbsp;<input type="button" name="move_from_no_role" id="move_from_no_role" class="button"
-                        value="Without role (<?php echo $users_quant;?>)" onclick="ure_move_users_from_no_role_dialog()">
-        <div id="move_from_no_role_dialog" class="ure-dialog">
-            <div id="move_from_no_role_content" style="padding: 10px;"></div>                
-        </div>
-<?php        
-      }
+      $assign_role->show_html();
       
   }
   // end of move_users_from_no_role()
@@ -515,7 +506,7 @@ class User_Role_Editor {
     public function plugin_row_meta($links, $file) {
 
         if ($file == plugin_basename(dirname(URE_PLUGIN_FULL_PATH) .'/'.URE_PLUGIN_FILE)) {
-            $links[] = '<a target="_blank" href="http://role-editor.com/changelog">' . esc_html__('Changelog', 'user-role-editor') . '</a>';
+            $links[] = '<a target="_blank" href="https://www.role-editor.com/changelog">' . esc_html__('Changelog', 'user-role-editor') . '</a>';
         }
 
         return $links;
@@ -810,8 +801,8 @@ class User_Role_Editor {
 
     public function admin_css_action() {
 
-        wp_enqueue_style('wp-jquery-ui-dialog');
         wp_enqueue_style('wp-jquery-ui-selectable');        
+        wp_enqueue_style('ure-jquery-ui-general', URE_PLUGIN_URL . 'css/jquery-ui.min.css', array(), false, 'screen');
         wp_enqueue_style('ure-admin-css', URE_PLUGIN_URL . 'css/ure-admin.css', array(), false, 'screen');
     }
     // end of admin_css_action()

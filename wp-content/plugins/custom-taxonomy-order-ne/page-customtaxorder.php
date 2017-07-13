@@ -125,8 +125,7 @@ function customtaxorder() {
 	$message = "";
 	if (isset($_POST['order-submit'])) {
 		customtaxorder_update_order();
-	}
-?>
+	} ?>
 
 	<h1><?php echo __('Order ', 'custom-taxonomy-order-ne') . $tax_label; ?></h1>
 	<form name="custom-order-form" method="post" action=""><?php

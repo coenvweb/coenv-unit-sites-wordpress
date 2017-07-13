@@ -172,7 +172,7 @@ class WPPipesAdapter_post {
 
 		$post['post_status']   = $params->public;
 		$post_cate             = is_array( $params->category ) ? $params->category : array( $params->category );
-		if ( $data->category != '' ) {
+		if ( @$data->category != '' ) {
 			$categories = explode( "|", $data->category );
 			$list_cate  = array();
 			foreach ( $categories as $cats ) {
@@ -196,7 +196,7 @@ class WPPipesAdapter_post {
 		}
 		$post['post_category'] = $post_cate;
 		$post['post_date']     = $created;
-		$post['post_date_gmt'] = $created;
+		$post['post_date_gmt'] = get_gmt_from_date($created);
 
 		$post['post_author'] = $params->author;
 		$post['post_format'] = ( !$params->postformat ) ? 'standard' : $params->postformat;

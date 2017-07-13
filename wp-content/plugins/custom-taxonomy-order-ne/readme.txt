@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
 Requires at least: 3.7
-Tested up to: 4.7
-Stable tag: 2.8.3
+Tested up to: 4.8
+Stable tag: 2.9.0
 License: GPLv2 or later
 
 
@@ -131,6 +131,12 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.9.0 =
+* 2017-07-10
+* Drop support for attributes in WooCommerce (deprecated).
+* Use the correct number of parameters with add_filter calls.
+* Set default order in WP_Term_Query->get_terms() according to our settings (probably WP 4.9).
 
 = 2.8.3 =
 * 2017-03-29

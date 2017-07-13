@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.8.3
+Version: 2.9.0
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -35,13 +35,12 @@ Domain Path: /lang/
  *   https://wordpress.org/support/topic/how-to-create-a-navigation-in-archivephp-with-the-given-order/
  * - Order by post count (and other orderby's)
  *   https://wordpress.org/support/topic/order-terms-by-post-count/
- * - Order Woo terms, also after filtering products with widgets:
- *   https://wordpress.org/support/topic/plugin-does-not-keep-custom-order-when-using-filter/
+ *
  */
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.8.3');
+define('CUSTOMTAXORDER_VER', '2.9.0');
 
 
 function customtaxorder_register_settings() {
@@ -303,6 +302,35 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
 
 
 /*
+ * Set defaults in Class WP_Term_Query->parse_query();
+ * Default is name now. Set it to term_order if desired.
+ */
+function customtaxorder_get_terms_defaults( $query_var_defaults, $taxonomies ) {
+	$options = customtaxorder_get_settings();
+
+	$taxonomy = 'category';
+	if ( isset( $query_var_defaults['taxonomy'] ) ) {
+		if ( is_string( $query_var_defaults['taxonomy'] ) && ! empty( $query_var_defaults['taxonomy'] ) ) {
+			$taxonomy = $query_var_defaults['taxonomy'];
+		}
+	}
+
+	if ( ! isset( $options[$taxonomy] ) ) {
+		$options[$taxonomy] = 0; // Default if it was not set in options yet.
+	}
+
+	if ( $options[$taxonomy] == 1 ) {
+		$query_var_defaults['orderby'] = 'term_order';
+	} elseif ( $options[$taxonomy] == 2 ) {
+		$query_var_defaults['orderby'] = 'name';
+	}
+
+	return $query_var_defaults;
+}
+add_filter('get_terms_defaults', 'customtaxorder_get_terms_defaults', 10, 2);
+
+
+/*
  * customtaxorder_wp_get_object_terms_order_filter
  *
  * Filters:
@@ -310,6 +338,7 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
  * get_terms is used in wp_list_categories and get_terms functions.
  * get_the_terms is used in the the_tags function.
  * tag_cloud_sort is used in the wp_tag_cloud and wp_generate_tag_cloud functions (but then the get_terms filter here does nothing).
+ * term_query_results is used in WP_Term_Query->get_terms() (probably in WP 4.9+).
  *
  * Default sorting is by name (according to the codex).
  *
@@ -332,7 +361,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 	if ( !isset ( $options[$taxonomy] ) ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
 	}
-	if ( $options[$taxonomy] == 1 && !isset($_GET['orderby']) ) {
+	if ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
 
 		// no filtering so the test in wp_generate_tag_cloud() works out right for us
 		// filtering will happen in the tag_cloud_sort filter sometime later
@@ -349,7 +378,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		foreach ($terms as $term) {
 			if ( ! $term->parent == 0 ) {
 				$parents = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
-				if ( is_array($parents) && !empty($parents) ) {
+				if ( is_array($parents) && ! empty($parents) ) {
 					$ancestor_ID = array_pop( $parents );
 					$ancestor_term = get_term($ancestor_ID);
 					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
@@ -365,10 +394,11 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 	}
 	return $terms;
 }
-add_filter( 'wp_get_object_terms', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
-add_filter( 'get_terms', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
-add_filter( 'get_the_terms', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
-add_filter( 'tag_cloud_sort', 'customtaxorder_wp_get_object_terms_order_filter', 10, 3 );
+add_filter( 'wp_get_object_terms', 'customtaxorder_wp_get_object_terms_order_filter' );
+add_filter( 'get_terms', 'customtaxorder_wp_get_object_terms_order_filter');
+add_filter( 'get_the_terms', 'customtaxorder_wp_get_object_terms_order_filter' );
+add_filter( 'tag_cloud_sort', 'customtaxorder_wp_get_object_terms_order_filter' );
+add_filter( 'term_query_results', 'customtaxorder_wp_get_object_terms_order_filter' );
 
 
 /*
@@ -399,6 +429,7 @@ add_filter('acf/format_value_for_api', 'customtaxorder_wp_get_object_terms_order
  */
 function customtaxorder_order_categories( $categories ) {
 	$options = customtaxorder_get_settings();
+
 	if ( !isset ( $options['category'] ) ) {
 		$options['category'] = 0; // default if not set in options yet
 	}
@@ -408,7 +439,7 @@ function customtaxorder_order_categories( $categories ) {
 	}
 	return $categories;
 }
-add_filter('get_the_categories', 'customtaxorder_order_categories', 10, 3);
+add_filter( 'get_the_categories', 'customtaxorder_order_categories' );
 
 
 /*

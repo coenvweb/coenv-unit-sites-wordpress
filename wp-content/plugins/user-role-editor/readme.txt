@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=vladi
 Tags: user, role, editor, security, access, permission, capability
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 4.34
+Stable tag: 4.35.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,17 @@ https://translate.wordpress.org/projects/wp-plugins/user-role-editor/
 
 
 == Changelog =
+= [4.35.1] 10.07.2017 =
+* Fix: "Grant Roles" button at the bottom of "Users" page did not work as had the same ID as a similar button at the top of this page.
+* Update: when bbPress plugin is active, "Grant Roles" does not revoke bbPress role granted to user anymore.
+* Fix: The same ID "move_from_no_role" and "move_from_no_role_dialog" were included twice to the "Users" page.
+
+= [4.35] 11.06.2017 =
+* Update: Bulk capabilities selection checkbox is not shown for 'administrator' role for single site WP, and is shown if current user is superadmin for multisite WP. It was done to exclude sudden revoke of all capabilities from the 'administrator' role.
+* Update: Full copy of JQuery UI 1.11.4 custom theme CSS file (jquery-ui.css) was included.
+* Fix: User->User Role Editor page apparently loads own jQuery UI CSS (instead of use of WordPress default one) in order to exclude the conflicts with themes and plugins which can load own jQuery UI CSS globally not for own pages only.
+* Fix: "Change Log" link was replaced with secure https://www.role-editor.com/changelog
+
 = [4.34] 02.06.2017 =
 * New: Multisite 'upgrade_network' capability support was added for compatibility with WordPress 4.8.
 * New: Multisite 'delete_sites' capability support was added.
