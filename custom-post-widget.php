@@ -24,7 +24,7 @@ $widget_img_attr = array(
 	'class'	=> "attachment-$size",
     );
 }
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'sm-sq');
+$widget_img = get_the_post_thumbnail( $content_post -> ID, 'widget_35_3');
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
@@ -70,11 +70,11 @@ if ( $widget_img ) {
 
 echo $before_widget;
 
-if ( $show_featured_image && $widget_img ) {
 	echo '<div class="widget_img">';
+if ( $show_featured_image && $widget_img ) {
 	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
-	echo '</div>';
 	}
+	echo '</div>';
 echo '<div class="widget_content">';
 if (isset($link_position[0])) {
     echo $buttons;
@@ -85,10 +85,11 @@ if ( $show_custom_post_title ) {
 	echo $after_title;
 }
 echo $widget_copy;
-echo '</div>';
 if ( $link_position == null ) {
 	echo $buttons;
 }
+
+echo '</div>';
 echo $after_widget;
 
 if ( $widget_img ) {

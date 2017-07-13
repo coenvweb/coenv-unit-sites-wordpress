@@ -136,25 +136,14 @@
 }
 
 .intro {
-    font-size: rem-calc(20)!important;
+    font-size: rem-calc(24)!important;
     line-height: normal;
-    margin: rem-calc(20) 0;
-    @include uni;
+    margin: rem-calc(20) 0 rem-calc(10) 0;
+    @include uni_reg;
     font-weight: 400;
-    letter-spacing: .5px;
     -webkit-font-smoothing: antialiased;
-    
     @media #{$large-up} {
-        font-size: rem-calc(36)!important;
-    }
-}
-
-blockquote {
-    border-left: 0px!important;
-
-    p {
-        margin: 0!important;
-        font-size: rem-calc(18);
+        font-size: rem-calc(34)!important;
     }
 }
 

@@ -1,16 +1,12 @@
-
 /*	Module: article
-
     ======================================================================== */
 
 .article {
-position: relative;
-margin-bottom: rem-calc(18);
-
-@media print {
-    padding: 0;
-}
-
+    position: relative;
+    margin-bottom: rem-calc(18);
+    @media print {
+        padding: 0;
+    }
 } // .article
 
 .entry-content {
@@ -37,18 +33,11 @@ margin-bottom: rem-calc(18);
             display: none;
         }
     }
-
 }
 
 .article__header {
-
-    border-bottom: 1px solid $border;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-
     .article__meta {
         margin-bottom: 0.5rem;
-
         .post-info {
             @include encode_med;
             text-transform: none;
@@ -71,16 +60,52 @@ margin-bottom: rem-calc(18);
 
     } // .article__meta
 
+    h1.article__title {
+        text-transform: uppercase;
+		position: relative;
+        color: $uw-gold;
+		padding-bottom: 1.5rem;
+		margin-bottom: 1rem;
+		&:after {
+			position: absolute;
+			content: ' ';
+			height: .5rem;
+			background-color: $uw-gold;
+			-ms-transform: skewX(-15deg);
+			-webkit-transform: skewX(-15deg);
+			transform: skewX(-15deg);
+			bottom: 0;
+			width: 6rem;
+			left: 2rem;
+		}   
+		&:before {
+			position: absolute;
+			content: ' ';
+			height: .5rem;
+			background-color: $uw-gold;
+			bottom: 0;
+			width: 6rem;
+			left: 0rem;
+		}
+    }
+
+    h2.article__title {
+        
+    }
 } // .article__header
 
-.article__content {
+.article__content, .entry-content {
     @extend .clearfix;
-    
+
     h2, h3, h4, h5, h6 {
         @include uni_reg;
         a {
             color: $black;
         }
+    }
+
+    .small {
+        font-size: .9rem;
     }
 
     a {
@@ -100,9 +125,9 @@ margin-bottom: rem-calc(18);
     }
 
     h2 {
-        @include rem('font-size', 2.5);
         margin-top: 0;
         margin-bottom: 1rem;
+		border-bottom: 1px solid $text-white;
     }
 
     li {
@@ -120,36 +145,58 @@ margin-bottom: rem-calc(18);
 
     blockquote {
         border: none;
-        float: left;
         display: block;
         padding: 0rem !important;
-        margin-right: 1.5rem !important;
+        overflow: hidden;
+        clear: both;
         position: relative;
-        width: 45%;
+        font-size: rem-calc(22);
+
+        &:before {
+            content: url('../assets/img/qrc_quote.svg');
+            height: 100%;
+            display: block;
+            padding-top: 1rem;
+            text-align: right;
+            width: 9%;
+            float: left;
+        }
+
+        &:after {
+            bottom: 0;
+            position: absolute;
+            content: '';
+            height: 1px;
+            width: 90%;
+            background-color: $uw-purple;
+            display: block;
+        }
 
         p {
             @include encode;
             color: $uw-purple !important;
             text-align: left;
             border-top: 1px solid $uw-purple;
-            padding: 1rem 0.25rem;
-        }
-
-        &:before {
-            content: url('../assets/img/pcc_quote.svg');
-            width: 2rem;
+            padding: 1rem .25rem;
+            margin-bottom: 0rem;
+            font-size: rem-calc(22);
+            height: 100%;
+            width: 90%;
+            float: right;
             display: block;
-            margin-bottom: 0.5rem;
-        }
 
-        &:after {
-            content: url('../assets/img/pcc_section_div_flat_purple.svg');
-            position: absolute;
-            top: 1.9rem;
-            left: 0;
-            width: 7rem;
+            &:after {
+                content: url('../assets/img/qrc_quote.svg');
+                -webkit-transform: rotate(180deg);
+                -moz-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                transform: rotate(180deg);
+                width: 2.5rem;
+                display: inline-block;
+                text-align: left;
+            }
         }
-
     } //blockquote
 
     // tables
@@ -255,7 +302,7 @@ margin-bottom: rem-calc(18);
         //width: auto !important;
         color: #fff;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        background-color: $bg-dk;
+        background-color: $white;
         
         .source {
             background-color: rgba(0,0,0,.5);
@@ -282,12 +329,11 @@ margin-bottom: rem-calc(18);
 
         .wp-caption-text {
             @include rem('margin', 0.25, 1, 0.5, 1);
-            @include rem('padding', .25, 1);
+            @include rem('padding', .25, .5);
             @include font-size(12);
             @include rem('line-height', 1.25);
-            color: $text-very-lt;
             text-align: left;
-
+            color: $text-lt;
 
             a {
                 color: #fff;

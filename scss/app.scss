@@ -16,6 +16,7 @@
 @import "plugins/slick"; // Slick Slider
 
 /* Site structure */
+@import "site/type"; //Typography definitions
 @import "site/structure"; // Your site structure
 @import "site/top-menu"; // top standard menu
 @import "site/main-menu"; // main standard menu
@@ -33,6 +34,7 @@
 @import "site/widgets"; // widget styles
 @import "site/projects"; // member project styles
 @import "site/journal"; // journal template and shortcode styles
+
 
 
 /* College Customizations */

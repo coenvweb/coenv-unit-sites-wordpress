@@ -60,6 +60,7 @@ require_once('library/rewrites.php');
 
 add_image_size( 'med_sq', '240', '240', true );
 add_image_size( 'sm_sq', '120', '120', true );
+add_image_size( 'widget_35_3', '350', '300', true );
 
 
 /**

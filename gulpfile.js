@@ -65,7 +65,7 @@ gulp.task('sass', function () {
         cascade: false
     }))
     .pipe(cssmin())
-    .pipe(sourcemaps.write('./css/maps'))
+    .pipe(sourcemaps.write())
     .pipe(rename('app.css'))
     .pipe(gulp.dest('./css'))
     .pipe(livereload());

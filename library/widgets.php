@@ -54,8 +54,8 @@ function coenv_base_sidebar_widgets() {
       'id' => 'before-content',
       'name' => __('Body / Before content', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
-      'before_widget' => $before_widget,
-      'after_widget' => $after_widget,
+      'before_widget' => '<article id="%1$s" class="row widget %2$s">',
+      'after_widget' => '</article>',
       'before_title' => $before_title,
       'after_title' => $after_title   
   ));
@@ -63,8 +63,8 @@ function coenv_base_sidebar_widgets() {
       'id' => 'after-content',
       'name' => __('Body / After content', 'foundationpress'),
       'description' => __('Drag widgets to this container', 'foundationpress'),
-      'before_widget' => $before_widget,
-      'after_widget' => $after_widget,
+      'before_widget' => '<article id="%1$s" class="row widget %2$s">',
+      'after_widget' => '</article>',
       'before_title' => $before_title,
       'after_title' => $after_title     
   ));
@@ -207,7 +207,7 @@ class coenv_base_fac_cats extends WP_Widget {
 
 // register coenv_base_fac_cats widget
 function register_coenv_base_fac_cats() {
-    register_widget( 'coenv_base_fac_cats' );
+    //register_widget( 'coenv_base_fac_cats' );
 }
 add_action( 'widgets_init', 'register_coenv_base_fac_cats' );
 
@@ -271,7 +271,7 @@ class coenv_base_subnav extends WP_Widget {
 } 
 
 function register_coenv_base_subnav() {
-    register_widget( 'coenv_base_subnav' );
+    //register_widget( 'coenv_base_subnav' );
 }
 add_action( 'widgets_init', 'register_coenv_base_subnav' );
 
@@ -653,6 +653,11 @@ add_action( 'widgets_init', 'register_coenv_widget_social' );
 
 // unregister all default WP Widgets
 function unregister_default_wp_widgets() {
+    unregister_widget('WP_Widget_Archives');
+    unregister_widget('WP_Widget_Categories');
+    unregister_widget('WP_Widget_Media_Audio');
+    unregister_widget('WP_Widget_Media_Image');
+    unregister_widget('WP_Widget_Media_Video');
     unregister_widget('WP_Widget_Pages');
     unregister_widget('WP_Widget_Calendar');
     unregister_widget('WP_Widget_Links');
