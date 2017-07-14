@@ -320,9 +320,60 @@ $wp_query = new WP_Query( $home_args );
 
 <div class="spotlight-purple">
 <div class="row spotlight">
-    <div class="spotlight-content">
-        <?php the_widget('custom_post_widget', 'custom_post_id=26848&show_featured_image=true'); ?>
-    </div>
+        <?php
+
+# Featured News
+
+$feat_args = array(
+    'post_type' => array('post'),
+    'post_status' => 'publish',
+    'posts_per_page' => 1,
+    'tax_query' => array(
+        'relation' => 'OR',
+        array(
+            'taxonomy' => 'category',
+            'terms' => 'spotlight',
+            'field' => 'slug'
+        ),
+    )
+);
+    
+
+$wp_query = new WP_Query( $feat_args );
+?>
+	<?php if ($wp_query->have_posts()): ?>
+		<?php
+		# The Loop
+		while ( $wp_query->have_posts() ) :
+		$wp_query->the_post();
+        $featured[] = $post->ID;
+		if (get_field('story_link_url')) {
+			$post_link_url = get_field('story_link_url');
+			$post_link_target = ' target="_blank" ';
+            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+        } else {
+        	$post_link_url = get_the_permalink();
+            $post_link_target = null;
+            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+        } if ( has_post_thumbnail()) {
+                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), array(300, 0) );
+                $alt = get_post_meta(get_post_thumbnail_id( $post->ID ), '_wp_attachment_image_alt', true);
+                echo '<div class="featured-thumbnail">';
+				echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+				echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
+				echo '</a></div>';
+                echo '<div class="spotlight-content">';
+				echo '<div class="post-meta">';
+                echo '<h3>Student Spotlight</h3>';
+	            echo '</div>';
+                echo '<a href="' . $post_link_url . '"' . $post_link_target . '><h2>' . get_the_title() . '</h2></a>';
+	            echo '<p>' . the_advanced_excerpt('length=30&finish=sentence') . '</p>';
+	            echo $post_link;
+                echo '</div>';  
+			};
+            
+	endwhile;
+endif; ?>
 </div>
 </div>
         
