@@ -134,6 +134,13 @@ function coenv_get_ancestor($attr = 'ID') {
         $ancestor = get_post( array_pop( $ancestors ) );
         return $ancestor->$attr;
     }
+    
+    if ( $post->post_type == 'faculty' ) {
+        $index_page = get_page_by_path('about/faculty');
+        $ancestors = get_post_ancestors( $index_page->ID );
+        $ancestor = get_post( array_pop( $ancestors ) );
+        return $ancestor->$attr;
+    }
 
     // test for custom post types
     $custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
@@ -226,6 +233,6 @@ function coenv_base_section_title($id) {
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     endif;
-        
+    
         echo $section_title;
     }

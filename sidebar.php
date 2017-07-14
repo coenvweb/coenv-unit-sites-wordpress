@@ -16,7 +16,9 @@ if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav">';
         if ((!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             $ancestor_post = $GLOBALS['post']->ID;
-        } else {
+        }elseif ((is_singular('faculty')) ) {
+            $ancestor_post = 24463;
+        }else {
             $ancestor_post = 24459;
         }
         echo coenv_base_section_title($ancestor_post);
