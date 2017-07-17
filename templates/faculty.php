@@ -65,6 +65,7 @@ $wp_query = new WP_Query( $query_args );
 		?>
 	<?php endif; ?>
         </div>
+                    </div>
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">
