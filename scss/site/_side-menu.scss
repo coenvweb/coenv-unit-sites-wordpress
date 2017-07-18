@@ -7,6 +7,9 @@ aside#sidebar {
         background-color: #f2f2f2;
         border: 1px solid #ccc;
         margin-bottom: 0 !important;
+        h2 {
+            margin-bottom: .5rem;
+        }
         a {
             @include encode_cb;
             font-size: 1.5rem;

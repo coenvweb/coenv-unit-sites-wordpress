@@ -3,12 +3,18 @@
         margin-top: 2rem;
         margin-bottom: 0.5rem;
         border-bottom: 1px solid $border;
-
+        .featured-thumbnail {
+            @media #{$medium-up} {
+                float: right;
+            }
+            margin: 0rem 0rem 1rem 1rem;
+        }
         .article__header {
             padding-bottom: 0.75rem;
             margin-bottom: 0rem;
             border: none;
             .article__categories {
+                margin-bottom: 0;
                 a {
                     &:hover {
                         text-decoration: underline;
@@ -17,16 +23,15 @@
             }
             //aggregate news titles
             h2 {
-                @include encode;
                 @include font-size(20);
                 @include line-height(24);
                 color: $text-dk;
-
                 @media #{$medium-up} {
                     @include font-size(28);
                     @include line-height(32);
                 }   
-
+                border-bottom: none;
+                margin-bottom: 0;
                 a { 
                     color: $text-dk;
                     text-decoration: none;
@@ -42,6 +47,7 @@
                 color: $text-md;
                 font-size: rem-calc(16);
             }
+            clear: both;
         }
     }
 } //aggregate news page

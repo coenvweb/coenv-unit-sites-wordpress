@@ -215,11 +215,12 @@ function coenv_banner() {
 function coenv_base_section_title($id) {
 
     $coenv_post = get_post($id);
-    //print_r($coenv_post);
     $section_ancestors = get_post_ancestors($id);
     $coenv_post_section = get_post(array_pop($section_ancestors));
 
-    if (coenv_base_post_parent($id)):
+    if ( is_singular( 'post' )): //change news pages' section titles
+        $section_title = '<div class="section-title"><h2><a href="'.get_site_url().'/about/overview/">About</a></h2></div>';
+    elseif (coenv_base_post_parent($id)):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';

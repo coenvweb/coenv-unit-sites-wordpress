@@ -107,7 +107,6 @@ function getQRFeed() {
 
         update_field('journal_volume', $firstArticle->volume, 'options');
         update_field('journal_issue', $firstArticle->issue, 'options');
-        update_field('journal_cover', $firstArticle->issueCoverUrl, 'options');
         update_field('journal_date', $firstArticle->pubDate[2]->month . '/' . $firstArticle->pubDate[2]->day . '/' . $firstArticle->pubDate[2]->year, 'options');
         update_field('latest_issue_link', $firstArticle->issueUrl, 'options');
 

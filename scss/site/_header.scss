@@ -19,12 +19,14 @@
     h1 {
         color: $white!important;
         margin-top: rem-calc(10);
-        font-size: rem-calc(32)!important;
-        text-align: left;
         @media #{$small-up} {
             text-align: center;
             font-size: rem-calc(16)!important;
             line-height: rem-calc(26);
+        }
+        @media #{$large-up} {
+            text-align: left;
+            font-size: rem-calc(48)!important;
         }
     }
     .right-small, .left-small {

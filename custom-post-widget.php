@@ -13,18 +13,23 @@ $widget_title = apply_filters( 'widget_title', $content_post->post_title);
 $src = 0;
 $size = 0;
 if (isset($attachment)){
-$widget_img_attr = array(
-	'src'	=> $src,
-	'class'	=> "attachment-$size",
-	'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
-	'title'	=> trim( strip_tags( $attachment->post_title ) ),
-);}else {
-$widget_img_attr = array(
-	'src'	=> $src,
-	'class'	=> "attachment-$size",
-    );
+    $widget_img_attr = array(
+        'src'	=> $src,
+        'class'	=> "attachment-$size",
+        'alt'	=> trim( strip_tags( $attachment->post_excerpt ) ),
+        'title'	=> trim( strip_tags( $attachment->post_title ) ),
+        );
+}else {
+    $widget_img_attr = array(
+        'src'	=> $src,
+        'class'	=> "attachment-$size",
+        );
 }
-$widget_img = get_the_post_thumbnail( $content_post -> ID, 'widget_35_3');
+if(is_front_page()) {
+    $widget_img = get_the_post_thumbnail( $content_post -> ID, 'home_2_1');
+} else {
+    $widget_img = get_the_post_thumbnail( $content_post -> ID, 'widget_35_3');
+}
 $widget_copy = get_field('block_text', $content_post -> ID);
 $rows = get_field('add_links', $content_post -> ID);
 
@@ -64,34 +69,36 @@ if( !empty( $rows ) )  {
  * Print the widget
  */
 
-if ( $widget_img ) {
-    echo '<div class="solid-widget">';
-}
-
-echo $before_widget;
-
-	echo '<div class="widget_img">';
-if ( $show_featured_image && $widget_img ) {
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
-	}
-	echo '</div>';
-echo '<div class="widget_content">';
-if (isset($link_position[0])) {
-    echo $buttons;
-}
-if ( $show_custom_post_title ) {
-	echo $before_title;
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
-	echo $after_title;
-}
-echo $widget_copy;
-if ( $link_position == null ) {
-	echo $buttons;
-}
-
-echo '</div>';
-echo $after_widget;
-
-if ( $widget_img ) {
+echo '<div class="solid-widget">';
+    if(!is_front_page()) {
+        echo $before_widget;
+    }
+    echo '<div class="widget_img">';
+        if ( $show_featured_image && $widget_img ) {
+            echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_img . '</a>';
+        }
     echo '</div>';
-}
+    echo '<div class="widget_content">';
+        if(is_front_page()) {
+            echo '<div class="widget_content_wrap">';
+        }
+        if (isset($link_position[0])) {
+            echo $buttons;
+        }
+        if ( $show_custom_post_title ) {
+            echo $before_title;
+            echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
+            echo $after_title;
+        }
+        echo $widget_copy;
+        if ( $link_position == null ) {
+            echo $buttons;
+        }
+        if(is_front_page()) {
+            echo '</div>';
+        }
+    echo '</div>';
+    if(!is_front_page()) {
+        echo $after_widget;
+    }
+echo '</div>';

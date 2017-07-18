@@ -16,7 +16,6 @@
 	</article>
 <?php else: ?>
 	<article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
-
         <header class="article__header">
             <div class="article__meta">
             <?php if ( !is_page() ) : ?>
@@ -41,17 +40,15 @@
                 </div>
             <?php endif ?>
             </div>
-
             <?php if ( is_page() || is_single() ) : ?>
                 <h2 class="article__title"><?php the_title() ?></h2>
             <?php else : ?>
                 <h2 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h2>
             <?php endif ?>
-
         </header>
         <section class="article__content">
             <?php if(has_post_thumbnail()) { ?>
-            <div class="coenv-thumb"><a style="float: right;" href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'small' ) ?></a></div>
+                <div class="coenv-thumb"><a href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'small' ) ?></a></div>
             <?php } ?>
             <?php if ( get_field('story_link_url') && get_field('story_source_name') ): ?>
                 <?php $trimmed_content = breezer_addDivToImage(get_the_content()); ?>
@@ -66,10 +63,8 @@
                 <?php echo '<p>' . $trimmed_content . '</p>'; ?>
                 <a href="<?php echo the_permalink(); ?>" class="button">Read more</a>
             <?php endif; ?>
-
         </section>
         <?php remove_filter( 'the_title', 'wptexturize' );
         remove_filter( 'the_excerpt', 'wptexturize' ); ?>
-
     </article><!-- .article -->
 <?php endif; ?>

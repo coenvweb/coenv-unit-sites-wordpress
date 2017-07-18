@@ -17,70 +17,114 @@
 li.type-member {
     list-style-type: none;
     @include rem('font-size', 1);
-
-	.member-info {
-		padding-bottom: rem-calc(10px);
-
-		p {
-			margin: 0;
-			padding: rem-calc(10px);
-		}
-
-        .member-titles {
-            list-style-type: none;
-            padding-bottom: 0.25rem;
-            padding-left: 0;
-            margin: 0;
-
-            li {
+    @media #{$large-up} {
+        @include rem('font-size', 1.1);
+    }
+    margin-top: 1rem;
+    .member {
+        display: flex;
+        .member-info {
+            flex: 0 0 auto;
+            @media #{$small-up} {
+                width: 100%;
             }
-        }
-
-        .member-photo {
-            width: 100%;
-            max-width: 10rem;
-        }
-
-        .member-contact {
-            a {
-                display: block;
-                i {
-                    font-size: 1.5rem;
-                    margin-right: 5px;
+            @media #{$medium-up} {
+                width: 50%;
+            }
+            @media #{$large-up} {
+                width: 67%;
+            }
+            @include uni_reg;
+            display: flex;
+            flex-direction: column;
+            p {
+                margin: 0;
+                padding: rem-calc(10px);
+            }
+            .member-card, .member-contact {
+                flex: 1;
+                align-items: center;
+                justify-content: center;
+                padding-left: 1rem;
+            }
+            .member-titles, .member-department {
+                text-transform: uppercase;
+                line-height: 1.25rem;
+            }
+            .member-titles {
+                list-style-type: none;
+                margin: 0;
+                li {
+                    line-height: 1.25rem;
+                }
+            }
+            .member-contact {
+                background-color: $text-very-lt;
+                a {
+                    display: block;
+                    color: $text;
+                    &:hover {
+                        color: $uw-purple;
+                        text-decoration: none;
+                        i {
+                            color: $uw-purple;
+                        }
+                    }
+                    i {
+                        font-size: 1rem;
+                        margin-right: 5px;
+                    }
                 }
             }
         }
-
-        .member-line {
-            padding-bottom: 0.5rem;
-            overflow: hidden;
-            .member-name {
-                display: inline;
-                @include rem('font-size', 1.25);
-                font-weight: bold;
-                line-height: 1;
-                float: left;
-                margin-bottom: 0rem;
-                margin-right: 0.5rem;
-                padding: 0;
+        .member-photo {
+            flex: 1;
+            @media #{$small-up} {
+                width: 100%;
             }
-		}
-
+            @media #{$medium-up} {
+                width: 50%;
+            }
+            @media #{$large-up} {
+                width: 33%;
+            }
+            img {
+                display: block;
+                width: 100%;
+            }
+        }
 	}
+
+    .member-line {
+         padding: .5rem 0rem;
+         overflow: hidden;
+        .member-name {
+            @include uni_reg;
+            @include rem('font-size', 1.75);
+            line-height: 1;
+            margin-bottom: 0rem;
+            padding: 0;
+        }
+    }
 
     .article__categories {
         padding-bottom: rem-calc(10px);
+        padding-left: 1rem !important;
         margin-bottom: 0rem;
-
+        h4 {
+            margin-bottom: 1rem;
+        }
         ul.mem-terms {
             li {
                 margin-left: 0rem;
-                margin-right: 1rem;
+                margin-bottom: 0rem;
+                margin-right: .5rem;
+                a.button {
+                    margin-bottom: .5rem;
+                }
             }
         }
-        
     }
-
 } // end li.type-member
 
 .member-list-teach h2:first-child {

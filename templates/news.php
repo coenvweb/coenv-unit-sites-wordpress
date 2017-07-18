@@ -77,34 +77,45 @@ if(isset($wp_query->query_vars['category'])){
                             $post_link_url = get_the_permalink();
                             $post_link = '<a class="button full_button" href="' . $post_link_url . '">Read more</a>';
                         }
-                        if(has_post_thumbnail()) {
-                            $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumb' );
-                            $alt = get_post_meta(get_post_thumbnail_id( get_the_ID() ), '_wp_attachment_image_alt', true);
-                            echo '<div class="featured-thumbnail">';
-                                echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
-                                    echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
-                                echo '</a>';
-                            echo '</div>';
-                        }
                         ?>
 
                         <header class="article__header">
                             <div class="article__meta">
                                 <div class="post-info">
                                     <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time>
-                                    <?php $categories = get_the_category_list(' ') ?>
-                                    <?php if ( $categories ) : ?>
-                                        |
-                                        <div class="article__categories">
-                                            <?php echo $categories ?>
-                                        </div>
-                                    <?php endif ?>
+									<?php
+									$more_terms = wp_get_post_terms(get_the_id(), 'category');
+									if (!empty($more_terms)) {
+										$more_terms_arr = array();
+
+										foreach ($more_terms as &$term) {
+											if ($term->slug != 'uncategorized') {
+												$more_terms_arr[] = '<a href="/about/news/category/' . $term->slug . '">' . $term->name . '</a>';
+											}   
+										}   
+									}   
+									?>  
+									|   
+									<div class="article__categories">
+										 <?php echo implode(', ', $more_terms_arr) ?>
+									</div>
                                 </div>
                             </div>
                             <h2 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h2>
                         </header>
 
                         <section class="article__content">
+                            <?php
+                            if(has_post_thumbnail()) {
+                                $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'thumb' );
+                                $alt = get_post_meta(get_post_thumbnail_id( get_the_ID() ), '_wp_attachment_image_alt', true);
+                                echo '<div class="featured-thumbnail">';
+                                    echo '<a href="' . $post_link_url . '" class="img"' . $post_link_target . '>';
+                                        echo '<img src="' . $thumbnail[0] . '" class="feature-img" alt="' . $alt . '" />';
+                                    echo '</a>';
+                                echo '</div>';
+                            }
+                            ?>
                             <?php the_advanced_excerpt('length=30&finish=sentence') ?>
                             <?php echo $post_link; ?>
                         </section>
@@ -168,7 +179,7 @@ if(isset($wp_query->query_vars['category'])){
             $wp_query->the_post();
             $terms = wp_get_post_terms( get_the_ID(), 'category');
             echo '<div class="blog clearfix">';
-            get_template_part( 'partials/partial', 'story' );
+            get_template_part( 'partials/partial', 'article' );
             ?>
             </div>
     <?php endwhile; ?>

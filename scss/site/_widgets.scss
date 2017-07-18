@@ -10,49 +10,59 @@
 aside#sidebar {
 
     //Events Widget in Sidebar
-    .event-list {
-        @include uni_reg;
-        display: flex;
-        list-style-type: none;
-        margin-bottom: 0.5rem;
-        margin-left: 0rem;
-        text-align: center;
-        flex-direction: column;
-        li{
-            flex: 0 1 auto;
-            margin: 0.5rem 0rem;
-            padding: 0.5rem;
-            background-color: $bg-light;
-            border-bottom: 2px solid $uw-purple;
-            margin-bottom: 0.5rem;
-            position: relative;
-            i {
-                @extend .visuallyhidden;
-            }
-            .date {
-                @include encode;
-                margin: 0.5rem 0rem;
-                font-size: .9rem;
-            }
-            .title {
+    .widget-events {
+        h4 {
+            a {
                 @include uni_reg;
-                font-size: 1.1rem;
-                margin-bottom: 0;
-                color: $text;
+                @include rem('font-size', 1.8);
+                padding: 1.5rem 0rem;
             }
-            &:before {
-                position: absolute;
-                content: ' ';
-                background-color: $uw-purple;
-                -ms-transform: skewX(-15deg);
-                -webkit-transform: skewX(-15deg);
-                transform: skewX(-15deg);
-                width: 5rem;
-                height: 0.5rem;
-                top: -0.25rem;
-                left: 0;
-                right: 0;
-                margin: auto;
+        }
+        .event-list {
+            @include uni_reg;
+            display: flex;
+            width: 100%;
+            list-style-type: none;
+            margin-bottom: 0.5rem;
+            margin-left: 0rem;
+            text-align: center;
+            flex-direction: column;
+            li{
+                flex: 0 1 auto;
+                margin: 0.5rem 0rem;
+                padding: 0.5rem;
+                background-color: $bg-light;
+                border-bottom: 2px solid $uw-purple;
+                margin-bottom: 0.5rem;
+                position: relative;
+                i {
+                    @extend .visuallyhidden;
+                }
+                .date {
+                    @include encode;
+                    margin: 0.5rem 0rem;
+                    font-size: .9rem;
+                }
+                .title {
+                    @include uni_reg;
+                    font-size: 1.1rem;
+                    margin-bottom: 0;
+                    color: $text;
+                }
+                &:before {
+                    position: absolute;
+                    content: ' ';
+                    background-color: $uw-purple;
+                    -ms-transform: skewX(-15deg);
+                    -webkit-transform: skewX(-15deg);
+                    transform: skewX(-15deg);
+                    width: 5rem;
+                    height: 0.5rem;
+                    top: -0.25rem;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                }
             }
         }
     }
@@ -77,6 +87,9 @@ aside#sidebar {
                     a {
                         color: $white;
                         text-decoration: none;
+                        &:hover {
+                            color: $white;
+                        }
                     }
                     &:after {
                         position: absolute;
@@ -138,40 +151,13 @@ aside#sidebar {
                     }
                 }
             }
-            .button {
-                margin-top: 0.5rem;
-                margin-bottom: 0rem;
-                background-color: $uw-purple;
-                color: $white;
-                text-align: left;
-                a {
-                    color: $white;
-                    text-align: left;
-                }
-            }
 
            .widget_links {
                 margin-top: rem-calc(15);
-               li {
+                li {
                     display: inline-block;
                     color: $uw-gold;
-                    border: 3px solid $uw-gold;
-                    border-radius: 5px;
                     text-align: center;
-                    &:hover {
-                        border-color: lighten($uw-gold, 10%) !important;
-                    }
-                    a {
-                        letter-spacing: rem-calc(1);
-                        margin: 0;
-                        text-align: center;
-                        color: $uw-gold;
-                        @include encode_cb;
-                        text-decoration: none;
-                        &:hover {
-                            color: lighten($uw-gold, 10%) !important;
-                        }
-                    }
                     .button {
                         text-transform: uppercase;
                         &:before, &:after {
@@ -215,10 +201,8 @@ aside#sidebar {
                 } 
                 .widget_links {
                     li {
-                        background-color: #f9f9f9;
                         a {
                             color: $uw-gold;
-                            background-color: #f9f9f9;
                         }
                     }
                 }
@@ -309,27 +293,7 @@ aside#sidebar {
                 li {
                     display: inline-block;
                     color: $uw-gold;
-                    border: 3px solid $uw-gold;
-                    border-radius: 5px;
                     text-align: center;
-                    background-color: $uw-purple;
-                    &:hover {
-                        background-color: $uw-purple;
-                        border-color: lighten($uw-gold, 10%) !important;
-                    }
-                    a {
-                        letter-spacing: rem-calc(1);
-                        margin: 0;
-                        text-align: center;
-                        color: $uw-gold;
-                        @include encode_cb;
-                        text-decoration: none;
-                        background-color: $uw-purple;
-                        &:hover {
-                            background-color: $uw-purple;
-                            color: lighten($uw-gold, 10%) !important;
-                        }
-                    }
                     .button {
                         text-transform: uppercase;
                         &:before, &:after {

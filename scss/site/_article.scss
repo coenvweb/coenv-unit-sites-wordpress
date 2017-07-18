@@ -9,29 +9,58 @@
     }
 } // .article
 
-.entry-content {
-    //single page titles
-    h1 {
+
+h1.article__title {
+    text-transform: uppercase;
+    position: relative;
+    color: $uw-gold;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    font-size: 3.5rem;
+    a {
         color: $uw-gold;
-        text-transform: uppercase;
-        margin-top: 0;
-        @include encode;
-        @include font-size(30);
-        @include line-height(32);
-
-        @media #{$medium-up} {
-            @include font-size(38);
-            @include line-height(50);
-        }
-
-        a {
+        &:hover {
             text-decoration: none;
             color: $uw-gold;
         }
-
-        br {
-            display: none;
-        }
+    }
+    &:after {
+        position: absolute;
+        content: ' ';
+        height: .5rem;
+        background-color: $uw-gold;
+        -ms-transform: skewX(-15deg);
+        -webkit-transform: skewX(-15deg);
+        transform: skewX(-15deg);
+        bottom: 0;
+        width: 6rem;
+        left: 2rem;
+    }   
+    &:before {
+        position: absolute;
+        content: ' ';
+        height: .5rem;
+        background-color: $uw-gold;
+        bottom: 0;
+        width: 6rem;
+        left: 0rem;
+    }
+    &.single {
+        @include font-size(20);
+		@include line-height(24);
+		color: $text-dk;
+		@media #{$medium-up} {
+			@include font-size(28);
+			@include line-height(32);
+		}
+        border-bottom: 1px solid $border;
+        text-transform: none;
+        margin-top: 0;
+        padding-bottom: .5rem;
+		&:before, &:after {
+			display: none;
+		}
     }
 }
 
@@ -51,6 +80,7 @@
         .article__categories {
             display: inline-block;
             margin-left: 0.5rem;
+            margin-bottom: 0;
             a {
                 &:hover {
                     color: $accent;
@@ -60,34 +90,7 @@
 
     } // .article__meta
 
-    h1.article__title {
-        text-transform: uppercase;
-		position: relative;
-        color: $uw-gold;
-		padding-bottom: 1.5rem;
-		margin-bottom: 1rem;
-		&:after {
-			position: absolute;
-			content: ' ';
-			height: .5rem;
-			background-color: $uw-gold;
-			-ms-transform: skewX(-15deg);
-			-webkit-transform: skewX(-15deg);
-			transform: skewX(-15deg);
-			bottom: 0;
-			width: 6rem;
-			left: 2rem;
-		}   
-		&:before {
-			position: absolute;
-			content: ' ';
-			height: .5rem;
-			background-color: $uw-gold;
-			bottom: 0;
-			width: 6rem;
-			left: 0rem;
-		}
-    }
+    
 
     h2.article__title {
         

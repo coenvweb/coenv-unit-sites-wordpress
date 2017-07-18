@@ -1,33 +1,36 @@
 /*	Module: button
 		======================================================================== */
 
-.button {
-	display: inline-block;
-	vertical-align: middle;
-	@include rem('padding', 0.25, 1);
-	@include sans;
-	@include font-size(12);
-	font-weight: 400;
-	background: $white-button;
-	text-decoration: none;
-	color: $text;
-	//@include border-radius( $radius );
-	border-radius: $radius;
-	//min-height: rem-calc(28);
-	
-	&:hover {
-		background: rgba(0,0,0,0.6);
-		color: #fff !important;
-	}
-	
-	.dark {
-		background: $bg-dk;
-		color: $white;
-		
-		&:hover {
-			background: $white-button;
-			color: $text;
-		}
-	}
-
-} // .button
+div#main-col, aside#sidebar {
+    .button {
+        vertical-align: middle;
+        @include rem('padding', 0.25, 1);
+        font-weight: 400;
+        display: inline-block;
+        @include encode_cb;
+        @include font-size(12);
+        color: $uw-gold;
+        border: 3px solid $uw-gold;
+        border-radius: 5px;
+        text-align: center;
+        background-color: transparent;
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: rem-calc(1);
+        &:hover, &:focus {
+            background-color: transparent;
+            border-color: darken($uw-gold, 10%) !important;
+            color: darken($uw-gold, 10%) !important;
+            text-decoration: none !important;
+        }   
+        .dark {
+            background: $bg-dk;
+            color: $white;
+            
+            &:hover {
+                background: $white-button;
+                color: $text;
+            }
+        }
+    }	
+}
