@@ -10,6 +10,7 @@ Template Name: Faculty Index
 
 	<div class="small-12 medium-8 columns right" role="main">
         <div class="entry-content">
+            <?php get_template_part( 'partials/partial', 'article' ) ?>
 <?php
 
 $wp_query = new WP_Query();
@@ -38,13 +39,13 @@ $wp_query = new WP_Query( $query_args );
 
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="faculty-list-teach clearfix">
+	<ul class="faculty-list-teach clearfix small-block-grid-2">
 
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
-		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'faculty_sm');
+		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
 		$faculty_link = get_the_permalink();
 		$faculty_phone_rows = get_field('phone_number');
 		$faculty_email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
@@ -57,15 +58,23 @@ $wp_query = new WP_Query( $query_args );
 		if (!$faculty_img_src) {
 		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
-		echo '<div class="faculty-list-item">';
-		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '</div>';
+		echo '<li class="faculty-list-item">';
+		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" class="left" alt="' . get_the_title() . '" /></a>';
+		echo '<a href="' . get_the_permalink() . '"><h3>' . get_the_title() . '</h3>';
+        echo '<h4>' . $first_faculty_title . '</h4></a>';
+		echo '</li>';
+        echo '<li class="faculty-list-item">';
+		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" class="left" alt="' . get_the_title() . '" /></a>';
+		echo '<a href="' . get_the_permalink() . '"><h3>' . get_the_title() . '</h3>';
+        echo '<h4>' . $first_faculty_title . '</h4></a>';
+        echo '<p>' . $first_faculty_phone . '</p>';
+        echo '<p><a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a></p>';
+		echo '</li>';
 		endwhile;
 		?>
 	<?php endif; ?>
-        </div>
-                    </div>
+        </ul>
+    </div>
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
 	<?php do_action('foundationPress_after_content'); ?>
 	<ul class="widget-area after-content">

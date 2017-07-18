@@ -1,3 +1,22 @@
+.page-template-faculty {
+    li.faculty-list-item {
+        background-color: $text-very-lt;
+        padding: 1rem;
+        &:nth-child(odd) {
+            border-right: .5rem solid white;
+        }
+        &:nth-child(even) {
+            border-left: .5rem solid white;
+        }
+        img {
+            margin-right: 1rem;
+        }
+        h4 {
+            font-size: 1.2rem!important;
+        }
+    }
+}
+
 .faculty {
     .faculty_contact_fields {
         svg {
