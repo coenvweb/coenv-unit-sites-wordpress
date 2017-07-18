@@ -182,6 +182,7 @@ aside#sidebar div.columns {
                     color: $text;
                     border: $text 2px solid;
                     text-align: left;
+                    margin-bottom: .5rem;
                     &:hover {
                         color: $text-md!important;
                     }
