@@ -48,6 +48,9 @@ require_once('library/taxonomies.php');
 // Custom rewrites functions
 require_once('library/rewrites.php');
 
+// Custom shortcodes
+require_once('library/shortcodes.php');
+
 // Need to be sorted into includes
 
 
