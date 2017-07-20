@@ -262,11 +262,8 @@
 
 <?php if (!is_front_page() && !is_search() && !is_404()) : ?>
 <div class="container" role="document">
-    <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
-            echo '<div class="page-row"';
-      } else {
-            echo '<div class="page-row mini"';
-      };
+<?php
+    echo '<div class="page-row ' . $banner['title'] . '"';
     echo ' style="background-image: url(' . $banner['url'] . ');">';
     echo '<div class="black-wedge light"></div><div class="black-wedge"></div>';
      ?>
