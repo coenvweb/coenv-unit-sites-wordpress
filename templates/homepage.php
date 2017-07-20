@@ -216,13 +216,6 @@ endif; ?>
 
 
 <?php
-# Other News
-$sticky = count(get_option('sticky_posts')); 
-if ($sticky > 2) {
-    $sticky = 2;
-} else {
-    $sticky = 1;
-}
 if(!empty($featured)) {
     $home_args = array(
         'post_type' => 'post',

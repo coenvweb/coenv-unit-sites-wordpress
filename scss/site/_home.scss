@@ -98,6 +98,14 @@
         }
     }
 }
+    
+.large-5 .small-news{
+    height: 50%;
+}
+    
+.no-feature .small-news{
+    height: 100%;
+}
 
 .small-news, .featured-news, .event-list li {
     svg {
@@ -108,7 +116,7 @@
         display: none;
     }
     background-color: $bg-lighter;
-    height: 100%;
+    
     h5 {
         color: $text-grey;
         font-size: rem-calc(20);
@@ -177,7 +185,6 @@
         position: relative;
         img {
             position: relative;
-            margin-top: -50%;
         }
         &:before {
             content: "";
