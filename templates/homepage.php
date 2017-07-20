@@ -43,12 +43,15 @@ Template Name: Homepage
 			$rows = get_field('feature_add_links');
 			
             echo '<div class="feature">';
-                echo '<div class="feature-container">';
-                    echo '<div class="feature-image">';
-                        echo '<img src="'.$feature_image[0].'" alt="QRC Hero Image" />';
+                echo '<div class="feature-image" style="background-image: url('.$feature_image[0].')">';
+                    echo '<div class="feature-image-row">';
+                        echo '<div class="feature-image-container">';
+                        echo '</div>';
                     echo '</div>';
+                echo '</div>';
+                echo '<div class="feature-info-container">';
                     echo '<div class="feature-info">';
-                        echo '<div class="feature-content" style="background-color:' . $feature_color . '">';
+                        echo '<div class="feature-content">';
                             echo '<h2>' . get_the_title() . '</h2>';
                             echo '<p class="feature-excerpt">' . $feature_excerpt . '</p>';
                             if($rows)
