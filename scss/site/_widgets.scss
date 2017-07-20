@@ -160,6 +160,8 @@ aside#sidebar {
                     text-align: center;
                     .button {
                         text-transform: uppercase;
+                        text-decoration: none;
+                        color: $uw-gold;
                         &:before, &:after {
                             display: none;
                         }
@@ -181,10 +183,10 @@ aside#sidebar {
                         @include rem('font-size', 1.8);
                     }
                     h4, a {
-                        color: $uw-purple;
+                        color: $black;
                         text-decoration: none;
                         &:hover {
-                            color: darken($uw-purple, 10%);
+                            color: darken($uw-purple, 30%);
                         }
                     }
                     table {

@@ -108,9 +108,13 @@ li.type-member {
     }
 
     .article__categories {
-        padding-bottom: rem-calc(10px);
-        padding-left: 1rem !important;
+        margin-top: 1rem;
         margin-bottom: 0rem;
+        @media #{$large-up} {
+            margin-top: 0;
+            padding-bottom: rem-calc(10px);
+            padding-left: 1rem !important;
+        }
         h4 {
             margin-bottom: 1rem;
         }
