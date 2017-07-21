@@ -183,7 +183,7 @@ function coenv_banner() {
     
     if ( is_singular( 'post' )) { //change news pages' section titles
         unset ($ancestor_id);
-        $ancestor_id = 7;
+        $ancestor_id = 3823;
     }
     
     if ( has_post_thumbnail( $ancestor_id ) ) {
@@ -218,8 +218,10 @@ function coenv_base_section_title($id) {
     //print_r($coenv_post);
     $section_ancestors = get_post_ancestors($id);
     $coenv_post_section = get_post(array_pop($section_ancestors));
-
-    if (coenv_base_post_parent($id)):
+    
+    if (is_singular('post')):
+        $section_title = '<div class="section-title"><h2><a href="/about">About</a></h2></div>';
+    elseif (coenv_base_post_parent($id)):
         $section_title = '<div class="section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';

@@ -251,7 +251,7 @@
       <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_search()) && (!is_404())) {
             echo get_the_title();
       } elseif (is_page_template('templates/news.php') || is_singular('post')) {
-            echo '<a href="about/news-and-events">News and Events</a>';
+            echo '<a href="about/news">News</a>';
       } elseif (is_search())  {
             echo 'Search Results';
         } elseif (is_404())  {

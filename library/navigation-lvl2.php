@@ -7,7 +7,7 @@ function coenv_base_hierarchical_submenu($postid) {
     $post = get_post($postid);
     $top_post = $post;
     if ( $post->post_type == 'post' ) {
-        $index_page = get_page_by_path('news-and-events');
+        $index_page = get_page_by_path('about/news');
         $ancestors = get_post_ancestors( $index_page->ID );
         $post = get_post( array_pop( $ancestors ) );
     }

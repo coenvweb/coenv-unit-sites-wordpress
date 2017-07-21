@@ -55,6 +55,10 @@ aside#sidebar {
 				&:hover {
 					color: $accent;
 				}
+                &.active {
+                    color: white;
+                    background-color: $accent-dk;
+                }
 			}
 			ul {
 				margin-bottom: 0;
