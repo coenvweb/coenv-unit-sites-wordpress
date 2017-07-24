@@ -250,6 +250,8 @@
             <h1 class="page-title">
       <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) ) && (!is_search()) && (!is_404())) {
             echo get_the_title();
+      } elseif (is_page_template('templates/pi.php') || is_singular('pi')) {
+            echo '<a href="about/news">News</a>';
       } elseif (is_page_template('templates/news.php') || is_singular('post')) {
             echo '<a href="about/news">News</a>';
       } elseif (is_search())  {
