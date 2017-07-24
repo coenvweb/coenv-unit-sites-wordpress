@@ -28,11 +28,17 @@ function coenv_base_apostophe_fname($fname) {
 
 function coenv_base_proj_terms($id, $page) {
     $proj_terms = wp_get_post_terms( $id, 'project-category' );
+    $len = count($proj_terms);
+    $count = 1;
     if ($proj_terms) {
-        echo '<ul class="proj-terms inline-list">';
-        foreach ($proj_terms as $term) {
-            echo '<li><a class="button" href="' . $page . 'project-category/' . $term->slug . '">' . $term->name . '</a></li>';
-        }
+        echo '<ul class="proj-terms">';
+            foreach ($proj_terms as $term) {
+                echo '<li><a class="" href="' . $page . 'project-category/' . $term->slug . '">' . $term->name . '</a></li>';
+                if($count < $len) {
+                    echo ', ';
+                }
+                $count++;
+            }
         echo '</ul>';
     }
 }

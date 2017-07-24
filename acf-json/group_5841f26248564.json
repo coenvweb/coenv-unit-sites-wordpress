@@ -15,10 +15,11 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
             "tabs": "all",
             "toolbar": "basic",
-            "media_upload": 0
+            "media_upload": 0,
+            "default_value": "",
+            "delay": 0
         },
         {
             "key": "field_5841f2955043e",
@@ -33,11 +34,11 @@
                 "class": "",
                 "id": ""
             },
-            "collapsed": "",
             "min": 1,
-            "max": "",
+            "max": 0,
             "layout": "table",
             "button_label": "Add Row",
+            "collapsed": "",
             "sub_fields": [
                 {
                     "key": "field_584af11252955",
@@ -53,10 +54,10 @@
                         "id": ""
                     },
                     "default_value": "",
+                    "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": "",
-                    "maxlength": ""
+                    "append": ""
                 },
                 {
                     "key": "field_584af12852956",
@@ -72,10 +73,10 @@
                         "id": ""
                     },
                     "default_value": "",
+                    "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": "",
-                    "maxlength": ""
+                    "append": ""
                 },
                 {
                     "key": "field_584af13352957",
@@ -91,12 +92,31 @@
                         "id": ""
                     },
                     "default_value": "",
+                    "maxlength": "",
                     "placeholder": "",
                     "prepend": "",
-                    "append": "",
-                    "maxlength": ""
+                    "append": ""
                 }
             ]
+        },
+        {
+            "key": "field_59761069bfaf7",
+            "label": "Year(s) Awarded",
+            "name": "year_awarded",
+            "type": "text",
+            "instructions": "Text related to award dates for display next to project categories in the index",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         },
         {
             "key": "field_5845aca6e7966",
@@ -111,15 +131,15 @@
                 "class": "",
                 "id": ""
             },
+            "layout": "vertical",
             "choices": {
                 "current": "Currently Funded",
                 "previous": "Previously Funded"
             },
-            "allow_null": 0,
+            "default_value": "",
             "other_choice": 0,
             "save_other_choice": 0,
-            "default_value": "",
-            "layout": "vertical",
+            "allow_null": 0,
             "return_format": "value"
         }
     ],
@@ -147,5 +167,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1481306496
+    "modified": 1500910053
 }

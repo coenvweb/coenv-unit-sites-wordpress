@@ -5,7 +5,6 @@
         margin-left: 0px;
         .type-project {
             margin: 1rem 0rem;
-            padding-bottom: 1rem;
             border-bottom: 1px solid #ccc;
             .slideout {
                 width: 0px;
@@ -25,10 +24,18 @@
                     }
                 }
             }
+            .project-title {
+                border-bottom: 0;
+            }
+            .year {
+				@include encode_med;
+				text-transform: none;
+				letter-spacing: 0.5px;
+				font-size: rem-calc(15);
+            }
             .pi-list {
                 list-style-type: none;
                 margin-left: 0px;
-                margin-bottom: 0.5rem;
                 display: inline-block;
                 li {
                     display: inline-block;
@@ -40,14 +47,21 @@
                     }
                 }
             }
+            .proj-meta {
+                margin-bottom: 0.5rem;
+            }
         }
         .proj-terms {
-            margin-bottom: 0.5rem;
+			@include encode_med;
+			text-transform: none;
+			letter-spacing: 0.5px;
+			font-size: rem-calc(15);
+            display: inline-block;
+            list-style-type: none;
+            margin-left: 0rem;
+            margin-bottom: 0;
             li {
-                margin: 0.25rem;
-                &:first-child {
-                    margin-left: 0px;
-                }
+				display: inline;
             }
         }
     }
