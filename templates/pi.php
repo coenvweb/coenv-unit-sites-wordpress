@@ -46,7 +46,7 @@ $wp_query->query;
 * Faculty loop
 */
 $query_args = array(
-	'post_type'	=> 'faculty',
+	'post_type'	=> 'pi',
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
 	'taxonomy' => 'research_areas',
