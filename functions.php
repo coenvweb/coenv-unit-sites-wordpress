@@ -96,7 +96,7 @@ function coenv_base_get_ancestor($attr = 'ID') {
 		return false;
 	}
 
-	if ( ($post->post_type == 'post' || is_archive() || is_search())) {
+	if ( ($post->post_type == 'post' || $post->post_type == 'pi' || is_archive() || is_search())) {
 
 		$page_for_posts = get_option( 'page_for_posts' );
 

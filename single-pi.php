@@ -1,8 +1,5 @@
 <?php get_header(); ?>
 <div class="row">
-	<div class="columns large-12 section-title"><h1><a href="/faculty">Faculty</a></h1></div>
-	<?php //if (!is_front_page() && function_exists('bcn_display')): ?>
-	<!--<div class="breadcrumbs"><?php //bcn_display(); ?></div>-->
 	<?php //endif; ?>
 	<div class="small-12 medium-9 columns right" role="main" id="main-col">
 	<?php do_action('foundationPress_before_content'); ?>
@@ -13,7 +10,7 @@
 
 					<?php while ( have_posts() ) : the_post() ?>
 
-						<?php get_template_part( 'partials/partial', 'faculty' ) ?>
+						<?php get_template_part( 'partials/partial', 'pi' ) ?>
 
 					<?php endwhile ?>
 

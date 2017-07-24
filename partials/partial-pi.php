@@ -1,14 +1,11 @@
 <?php  
 
 /**
- * Faculty fields
+ * PI fields
  */
 $faculty_fields = get_fields();
-$faculty_email_address = str_replace('u.washington.edu','uw.edu',$faculty_fields["email_address"]);
 $faculty_website_url = $faculty_fields["website_url"];
-$faculty_scival_url  = $faculty_fields["scival_url"];
 $faculty_twitter_url = $faculty_fields["twitter_url"];
-$faculty_advising = $faculty_fields["faculty_advising"];
 $faculty_fname = $faculty_fields["first_name"];
 $faculty_lname = $faculty_fields["last_name"];
 $faculty_name = $faculty_fname . ' ' . $faculty_lname;
@@ -45,8 +42,16 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 				endwhile;
 				echo '</ul>';
 			}
-			if ($faculty_email_address) {
-				echo '<li class="email"><a href="' . $faculty_email_address . '">' .  $faculty_email_address . '</a></li>';
+			if( have_rows('email') ) {
+				echo '<li class="emails">';
+				echo '<ul>';
+				while ( have_rows('email') ) : the_row();
+					echo '<li>';
+                $address = str_replace('u.washington.edu','uw.edu',get_sub_field('address'));
+                echo '<a href="mailto:' . $address . '">' . $address . '</a>';
+					echo '</li>';
+				endwhile;
+				echo '</ul>';
 			}
 			if( have_rows('phone_number') ) {
 				echo '<li class="phone-numbers">';
@@ -77,9 +82,6 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 			<?php }
 			if ($faculty_twitter_url) {
 				echo '<li class="faculty-twitter"><a href="' . $faculty_twitter_url . '">Twitter</a></li>';
-			}
-			if ($faculty_scival_url) {
-				echo '<li class="faculty-scival"><a href="' . $faculty_scival_url . '">SciVal</a></li>';
 			}
 			if ($faculty_cv) {
 				echo '<li class="cv"><a href="' . $faculty_cv . '">Curriculum Vitae (CV)</a></li>';
