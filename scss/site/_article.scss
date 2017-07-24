@@ -107,6 +107,11 @@ h1.article__title {
         }
     }
 
+    .gallery {
+        padding-top: 1rem;
+        background-color: $bg-light;
+    }
+
     .small {
         font-size: .9rem;
     }
@@ -136,7 +141,11 @@ h1.article__title {
     li {
         line-height: 1.6;
         margin-bottom: rem-calc(5px);
+    }
 
+    ul, ol {
+        font-size: rem-calc(16);
+        margin-left: 1.1rem;
     }
 
     hr {

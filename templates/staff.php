@@ -7,8 +7,8 @@ Template Name: Staff Index
  * Query variables
  */
 
+$is_staff = true;
 ?>
-
 <?php get_header(); ?>
 <div class="row">
 	<div class="small-12 medium-push-4 large-push-3 medium-8 large-9 columns" role="main" id="main-col">
@@ -49,7 +49,7 @@ Template Name: Staff Index
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		    $wp_query->the_post();
-		    get_template_part( 'partials/partial', 'staff' );
+            include(locate_template('partials/partial-member.php'));
         ?>
 	<?php endwhile; ?>
   	<?php else: ?>

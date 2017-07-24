@@ -3,6 +3,7 @@
 /**
  * Member fields
  */
+$post_type = get_post_type();
 $member_fields = get_fields();
 $member_email_address = str_replace('u.washington.edu','uw.edu',$member_fields["email_address"]);
 $member_website_url = $member_fields["website_url"];
@@ -63,13 +64,19 @@ $member_photo = get_the_post_thumbnail(null, 'med_sq');
                 </div>
             </div>
         </div>
-        <div class="article__categories small-12 large-6 columns">
-            <h4>Research Areas</h4>
-            <?php coenv_base_mem_terms($post->ID); ?>
-        </div>
-        <div class="desc small-12 columns">
-            <?php echo $member_description; ?>
-        </div>
+        <?php if($is_staff) { ?>
+            <div class="staff-desc small-12 large-6 columns">
+                <?php echo get_the_content(); ?>
+            </div>
+        <?php } else { ?>
+            <div class="article__categories small-12 large-6 columns">
+                <h4>Research Areas</h4>
+                <?php coenv_base_mem_terms($post->ID); ?>
+            </div>
+            <div class="desc small-12 columns">
+                <?php echo $member_description; ?>
+            </div>
+        <?php } ?>
     </div>
     <hr>
 </li>
