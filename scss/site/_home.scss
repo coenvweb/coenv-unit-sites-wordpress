@@ -27,8 +27,12 @@
     }
 
     h2 {
-        font-size: 3.25rem;
-        line-height: 3.5rem;
+        font-size: 3rem;
+        line-height: 3.25rem;
+        @media #{$xlarge-up} {
+            font-size: 3.25rem;
+            line-height: 3.5rem;
+        }
         @media #{$small-only} {
             font-size: 2rem;
             line-height: 2.25rem;
@@ -230,7 +234,7 @@
                     padding: 2rem;
                 }
                 @media #{$medium-up} {
-                    @include grid-column($columns: 8, $collapse: true);
+                    @include grid-column($columns: 7, $collapse: true);
                     padding-left: 3rem !important;
                     padding-top: 1rem;
                     padding-right: 0;
@@ -249,7 +253,10 @@
                     }
                 }
                 @media #{$large-up} {
-                    padding-top: 3rem;
+                }
+                @media #{$xlarge-up} {
+                    padding-top: 2rem;
+                    @include grid-column($columns: 8, $collapse: true);
                 }
                 h4 {
                     font-size: 2rem;
@@ -298,7 +305,7 @@
                     @media #{$medium-up} {
                         font-size: 1.1rem;
                     }
-                    @media #{$large-up} {
+                    @media #{$xlarge-up} {
                         max-width: 800px;
                         font-size: 1.5rem;
                     }
@@ -402,7 +409,7 @@
             @media #{$medium-up} {
                 font-size: 1.1rem;
             }
-            @media #{$large-up} {
+            @media #{$xlarge-up} {
                 font-size: 1.5rem;
             }
         }
