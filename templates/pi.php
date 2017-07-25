@@ -8,13 +8,12 @@ Template Name: PI Index
  */
 
 //Categories
-if(isset($_GET['tax'])){
-    $coenv_cat_1 = urlencode(htmlentities($_GET['tax']));
-}
-if(isset($_GET['term'])){
-    $coenv_cat_term_1 = urlencode(htmlentities($_GET['term']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,$coenv_cat_1);
+//research areas
+if(isset($wp_query->query_vars['research_areas'])){
+    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['research_areas']));
+    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
+    $filtered = true;
 } else {
     $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
@@ -49,8 +48,6 @@ $query_args = array(
 	'post_type'	=> 'pi',
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
-	'taxonomy' => 'research_areas',
-	'term' => $fac_cat->slug,
 	'meta_key' => 'last_name',
 	'orderby' => 'meta_value',
 	'order' => 'ASC',

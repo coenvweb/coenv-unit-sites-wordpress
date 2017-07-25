@@ -68,13 +68,8 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 				<li class="locations">
 					<ul>
 					<?php while ( have_rows('locations') ) : the_row();
-						echo '<li class="location"><a href="http://washington.edu/maps/?';
-						the_sub_field('building');
-						echo  '" target="_blank">';
-						the_sub_field('building');
-						echo ' ';
-						the_sub_field('room_number');
-						echo '</a>';
+						echo '<li class="location">';
+						the_sub_field('location');
 						echo '</li>';
 					endwhile; ?>
 					</ul>
@@ -86,8 +81,14 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 			if ($faculty_cv) {
 				echo '<li class="cv"><a href="' . $faculty_cv . '">Curriculum Vitae (CV)</a></li>';
 			}
-			if ($faculty_website_url) { ?>
-				<li class="faculty-website"><a class="button" href="#" target="_blank">Visit <?php echo coenv_base_apostophe_fname($faculty_fname); ?> website</a></li>
+			if( have_rows('links') ) { ?>
+				<li class="links">
+					<ul>
+					<?php while ( have_rows('links') ) : the_row();
+						echo '<li class="cv"><a href="' . the_sub_field('link_url') . '">' . the_sub_field('link_label') . '</a></li>';
+					endwhile; ?>
+					</ul>
+				</li>
 			<?php } ?>
 			</ul>		
 		</div>
