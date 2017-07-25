@@ -36,6 +36,7 @@
                     color: $text-dk;
                     text-decoration: none;
                     &:hover {
+                        text-decoration: underline;
                         color: $black !important;
                     }   
                 }   

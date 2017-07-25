@@ -26,6 +26,12 @@
             }
             .project-title {
                 border-bottom: 0;
+				@include font-size(24);
+                @include line-height(26);
+                @media #{$medium-up} {
+                    @include font-size(28);
+                    @include line-height(32);
+                }
             }
             .year {
 				@include encode_med;
@@ -35,12 +41,15 @@
             }
             .pi-list {
                 list-style-type: none;
+				margin-bottom: 0;
                 margin-left: 0px;
-                display: inline-block;
+                display: inline;
                 li {
-                    display: inline-block;
+                    display: inline;
+					margin-bottom: 0;
                     &:not(:first-child) {
                         &:before {
+							display: inline;
                             content: "|";
                             margin: 0rem 0.2rem;
                         }
@@ -49,6 +58,7 @@
             }
             .proj-meta {
                 margin-bottom: 0.5rem;
+				line-height: 1rem;
             }
         }
         .proj-terms {

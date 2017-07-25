@@ -63,6 +63,7 @@
             }
         }
         .events {
+            margin-bottom: 1rem;
             background-color: $bg-light;
             .widget-events {
                 a.button {
@@ -187,6 +188,9 @@
                         @include line-height(32);
                     }
                     margin-bottom: 1rem;
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
                 p {
                     color: $text-dk;

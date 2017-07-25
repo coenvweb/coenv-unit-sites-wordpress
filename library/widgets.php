@@ -480,10 +480,10 @@ class coenv_base_blog_cats extends WP_Widget {
 
             echo $args['before_widget'];
             if ( ! empty( $instance['title'] ) ) {
-                echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+                echo '<h4 class="archive-title">' . apply_filters( 'widget_title', $instance['title'] ). '</h4>';
             }
 
-            echo "<ul class='widget-news-list'>"; 
+            echo "<ul class='widget-news-list'>";
                 while ( $wp_query->have_posts() ) :
                     $wp_query->the_post();
                 ?>  
@@ -491,7 +491,7 @@ class coenv_base_blog_cats extends WP_Widget {
                         <p class="post-meta">
                             <?php echo get_the_date('M d, Y'); ?>
                         </p>
-                        <h4><a href="<?php echo get_the_permalink(); ?>"><?php the_title(); ?></a></h4>
+                        <h4 class="article_title"><a href="<?php echo get_the_permalink(); ?>"><?php the_title(); ?></a></h4>
                     </li>
 
                 <?php
@@ -499,7 +499,7 @@ class coenv_base_blog_cats extends WP_Widget {
             echo "</ul>";
 
             if($instance['more_link']) {
-                echo "See more <a href='/about/news/category/".$category."'>".$category." news items</a>";
+                echo "<div class='widget_button'>See more <a href='/about/news/category/".$category."'>".$category." news items</a></div>";
             }
 
             echo $args['after_widget'];
