@@ -221,7 +221,7 @@ aside#sidebar {
                         td {
                             text-align: left;
                             color: $white;
-                            width: 100%;
+                            width: 50%;
                             padding: .25rem;
                             padding-left: 0rem;
                         }
@@ -240,6 +240,7 @@ aside#sidebar {
 
            .widget_links {
                 margin-top: rem-calc(15);
+                margin-left: 0;
                 li {
                     display: inline-block;
                     color: $uw-gold;
@@ -308,6 +309,7 @@ aside#sidebar {
         margin: 1rem;
         .widget_content {
             h4 {
+                margin-bottom: .5rem;
                 color: $text;
                 &:after {
                     display: block;
@@ -321,6 +323,7 @@ aside#sidebar {
                     color: $text;
                     &:hover {
                         color: $text;
+                        text-decoration: none;
                     }
                 }
             }
@@ -425,6 +428,9 @@ aside#sidebar {
                 padding-right: 0;
                 padding-bottom: 0;
             }
+            p {
+                margin-bottom: .5rem;
+            }
             h4 {
                font-size: 2rem;
                 @include uni_reg;
@@ -460,6 +466,8 @@ aside#sidebar {
                 } 
             }
             .widget_links {
+                margin-top: 1rem;
+                margin-left: 0;
                 li {
                     display: inline-block;
                     color: $uw-gold;
