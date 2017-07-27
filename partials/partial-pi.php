@@ -8,10 +8,14 @@ $faculty_twitter_url = $faculty_fields["twitter_url"];
 $faculty_fname = $faculty_fields["first_name"];
 $faculty_lname = $faculty_fields["last_name"];
 $faculty_name = $faculty_fname . ' ' . $faculty_lname;
-$faculty_cv_link = $faculty_fields["curriculum_vitae_link"];
-$faculty_cv_file = $faculty_fields["curriculum_vitae_file"];
+if (!empty($faculty_fields["curriculum_vitae_link"])) {
+    $faculty_cv_link = $faculty_fields["curriculum_vitae_link"];
+}
+if (!empty($faculty_fields["curriculum_vitae_file"])) {
+    $faculty_cv_file = $faculty_fields["curriculum_vitae_file"];
+}
 $faculty_pubs = $faculty_fields["selected_publications"];
-$faculty_img = get_the_post_thumbnail($page->ID, 'med');
+$faculty_img = get_the_post_thumbnail(get_the_id(), 'medium');
 ?>
 <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 	<header class="article__header">
@@ -88,7 +92,7 @@ $faculty_img = get_the_post_thumbnail($page->ID, 'med');
 				<li class="links">
 					<ul>
 					<?php while ( have_rows('links') ) : the_row();
-						echo '<li class="cv"><a href="' . the_sub_field('link_url') . '">' . the_sub_field('link_label') . '</a></li>';
+						echo '<li class="link"><a href="' . get_sub_field('link_url') . '">' . get_sub_field('link_label') . '</a></li>';
 					endwhile; ?>
 					</ul>
 				</li>
