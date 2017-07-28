@@ -64,6 +64,7 @@ function add_query_vars() {
     add_rewrite_tag('%category%', '(.+?)/');
     add_rewrite_tag('%coenv-year%', '(.+?)/');
     add_rewrite_tag('%coenv-month%', '(.+?)/');
+    add_rewrite_tag('%research_areas%', '(.+?)/');
 }
 add_action('init', 'add_query_vars');
 

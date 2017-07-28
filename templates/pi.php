@@ -7,16 +7,19 @@ Template Name: PI Index
  * Query variables
  */
 
-//Categories
+$filtered=false;
+
 //research areas
 if(isset($wp_query->query_vars['research_areas'])){
     $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['research_areas']));
     $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
     $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
     $filtered = true;
+    echo $coenv_cat_term_1;
 } else {
     $coenv_cat_1 = $coenv_cat_term_1 = null;
 }
+
 ?>
 
 <?php get_header(); ?>

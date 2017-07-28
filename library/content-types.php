@@ -21,7 +21,7 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    'rewrite' => array('slug' => '/research/principal-investigator'),
+    'rewrite' => array('slug' => '/research/principal-investigators'),
     'menu_icon' => 'dashicons-id',
     )
 
