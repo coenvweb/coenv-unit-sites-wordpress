@@ -14,8 +14,19 @@
 <?php
 if (!is_front_page()) {
 	echo '<div class="coenv_base_subnav">';
-        echo coenv_base_section_title($GLOBALS['post']->ID);
+    if (is_singular('post')) {
+        $ancestor = coenv_base_section_title(28);
+        echo coenv_base_hierarchical_submenu(3823);
+    } elseif (is_singular('pi')) {
+        $ancestor = coenv_base_section_title(3831);
+        echo coenv_base_hierarchical_submenu(3857);
+    } elseif (is_singular('researchers')) {
+        $ancestor = coenv_base_section_title(3041);
+        echo coenv_base_hierarchical_submenu(3041);
+    } else {
+        $ancestor = coenv_base_section_title($GLOBALS['post']->ID);
 		echo coenv_base_hierarchical_submenu($GLOBALS['post']->ID);
+    }
 	echo '</div>';
 }
 ?>

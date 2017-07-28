@@ -37,7 +37,7 @@ $faculty_img = get_the_post_thumbnail(get_the_id(), 'medium');
 			<p class="faculty-name"><?php echo $faculty_name; ?></p>
 			<?php echo '<ul class="faculty_contact_fields">';
 			if( have_rows('job_titles') ) {
-				echo '<li class="job-titles">';
+				echo '<li class="job-titles">Title:';
 				echo '<ul>';
 				while ( have_rows('job_titles') ) : the_row();
 					echo '<li>';
@@ -46,8 +46,18 @@ $faculty_img = get_the_post_thumbnail(get_the_id(), 'medium');
 				endwhile;
 				echo '</ul>';
 			}
+            if( have_rows('education') ) {
+				echo '<li class="education">Education:';
+				echo '<ul>';
+				while ( have_rows('education') ) : the_row();
+					echo '<li>';
+					the_sub_field('degree');
+					echo '</li>';
+				endwhile;
+				echo '</ul>';
+			}
 			if( have_rows('email') ) {
-				echo '<li class="emails">';
+				echo '<li class="emails">Email:';
 				echo '<ul>';
 				while ( have_rows('email') ) : the_row();
 					echo '<li>';
@@ -58,7 +68,7 @@ $faculty_img = get_the_post_thumbnail(get_the_id(), 'medium');
 				echo '</ul>';
 			}
 			if( have_rows('phone_number') ) {
-				echo '<li class="phone-numbers">';
+				echo '<li class="phone-numbers">Phone:';
 				echo '<ul>';
 				while ( have_rows('phone_number') ) : the_row();
 					echo '<li>';
@@ -69,7 +79,7 @@ $faculty_img = get_the_post_thumbnail(get_the_id(), 'medium');
 				echo '</li>';
 			}
 			if( have_rows('locations') ) { ?>
-				<li class="locations">
+				<li class="locations">Location:
 					<ul>
 					<?php while ( have_rows('locations') ) : the_row();
 						echo '<li class="location">';

@@ -28,9 +28,6 @@ if(isset($wp_query->query_vars['research_areas'])){
 				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
 				<?php coenv_base_cat_filter('research_areas', $coenv_cat_term_1); // Category filter ?>
 				</div>
-				<div class="share columns large-6" data-article-id="<?php the_ID(); ?>" data-article-title="<?php echo get_the_title(); ?>"
-		data-article-shortlink="<?php echo wp_get_shortlink(); ?>"
-		data-article-permalink="<?php echo the_permalink(); ?>"><a href="#"><i class="fi-share"></i>Share</a></div>
 	</div>
 
 <?php

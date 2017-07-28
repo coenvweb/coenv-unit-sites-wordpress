@@ -139,7 +139,6 @@ function coenv_get_ancestor($attr = 'ID') {
         $index_page = get_page_by_path('research/principal-investigators');
         $ancestors = get_post_ancestors( $index_page->ID );
         $ancestor = get_post( array_pop( $ancestors ) );
-        echo $ancestor->$attr;
         return $ancestor->$attr;
     }
     
