@@ -14,7 +14,7 @@ function coenv_base_hierarchical_submenu($postid) {
     if ( $post->post_type == 'pi' ) {
         $index_page = get_page_by_path('research/principal-investigators');
         $ancestors = get_post_ancestors( $index_page->ID );
-        $post = get_post( array_pop( $ancestors );
+        $post = get_post( array_pop( $ancestors ));
     }
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
