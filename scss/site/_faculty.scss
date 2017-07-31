@@ -24,6 +24,13 @@
             height: 16px;
         }
     }
+    .faculty-name {
+        @media #{$large-up} {
+            position: relative;
+            top: 50%;
+            transform: translateY(50%);
+        }
+    }
 }
 
 .faculty-info {
@@ -35,40 +42,46 @@
     border-right: 6px solid #ebebeb;
     margin: 0;
     padding: 0;
-    line-height: 10px;
+    @media #{$large-up} {
+        max-width: calc(31% - 2px);
+    }
 
-    ul.faculty_contact_fields {	
-            background-position: left bottom;
-            background-repeat: no-repeat;
-            list-style: none;
-            margin-bottom: 0;
-            margin-left: 0;
+    .faculty_contact_fields {	
+        background-position: left bottom;
+        background-repeat: no-repeat;
+        list-style: none;
+        margin-bottom: 0;
+        margin-left: 0;
+        padding: 0;
+        a {
+            line-height: 30px;
+        }
     }
 }
 
-ul.faculty_contact_fields li {
-			display: block;
-			background-repeat: no-repeat;
-			background-position: left top;
-			line-height: 1.2;
-			list-style: none;
-			margin: 0;
-			font-size: .75rem;
-			
-			a {
-				@include uni;
-				display: inline-block;
-				font-size: rem-calc(18);
-				padding: 16px 16px 14px 16px;
+.faculty_contact_fields li {
+    display: block;
+    background-repeat: no-repeat;
+    background-position: left top;
+    line-height: 1.2;
+    list-style: none;
+    margin: 0;
+    font-size: .75rem;
 
-                &:hover {
-                    svg {
-                        fill: green!important;
-                    }
-                    color: green!important;
-                }
-				&:not(.button) {
-					color: #000;
-				}
-			}
+    a {
+        @include uni;
+        display: inline-block;
+        font-size: rem-calc(18);
+        padding: 16px 16px 14px 16px;
+
+        &:hover {
+            svg {
+                fill: green!important;
+            }
+            color: green!important;
+        }
+        &:not(.button) {
+            color: #000;
+        }
+    }
 }
