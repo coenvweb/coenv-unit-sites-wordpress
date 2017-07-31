@@ -273,8 +273,10 @@
             <div class="page-title"><h1><span>
                 <?php if ((!is_single()) && (!is_page_template( 'templates/news.php' ) )) {
             echo the_title();
-      } else {
-            echo '<a href="/about/news-events/" title="News & Events">News & Events</a>';
+      } elseif(is_singular('faculty')){
+            echo '<a href="/about/faculty/">Faculty</a>';
+      }else {
+            echo '<a href="/about/news-events/">News & Events</a>';
       };?></span></h1></div>
         </div>
     </div>
