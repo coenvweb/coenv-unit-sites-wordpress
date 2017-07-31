@@ -19,7 +19,29 @@ $faculty_pubs = $faculty_fields["selected_publications"];
 $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
 ?>
 <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
-    <div class="columns medium-4 faculty-info left">
+    <div class="columns large-12">
+    <header class="article__header">
+        <div class="faculty-title">
+            <h1 class="article__title single-title">
+            <?php if ( is_page() || is_single()) : ?>
+                <?php the_title() ?>
+            <?php else : ?>
+                <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a>
+            <?php endif ?>
+            </h1>
+            <?php
+            if( have_rows('job_titles') ) {
+                while ( have_rows('job_titles') ) : the_row();
+                    echo '<p class="job-titles">';
+                    the_sub_field('job_title');
+                    echo '</p>';
+                endwhile;
+            }
+            ?>
+        </div>
+    </header>
+    </div>
+    <div class="columns medium-12 large-4 faculty-info left">
         <?php echo $faculty_img; ?>
         <?php echo '<ul class="side-nav faculty_contact_fields">';
         if ($faculty_email_address) {
@@ -68,27 +90,7 @@ $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
         } ?>
         </ul>		
     </div>
-<div class="columns medium-8 right">
-<header class="article__header">
-    <div class="faculty-title">
-        <h1 class="article__title single-title">
-        <?php if ( is_page() || is_single()) : ?>
-            <?php the_title() ?>
-        <?php else : ?>
-            <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a>
-        <?php endif ?>
-        </h1>
-        <?php
-        if( have_rows('job_titles') ) {
-            while ( have_rows('job_titles') ) : the_row();
-                echo '<p class="job-titles">';
-                the_sub_field('job_title');
-                echo '</p>';
-            endwhile;
-        }
-        ?>
-    </div>
-</header>
+<div class="columns large-8 medium-12 right">
 <section class="article__content">
     <?php the_content() ?>
     <?php if ($faculty_pubs): ?>
