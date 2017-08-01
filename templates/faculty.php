@@ -67,8 +67,8 @@ $wp_query = new WP_Query( $query_args );
 		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" class="left" alt="' . get_the_title() . '" /></a>';
 		echo '<a href="' . get_the_permalink() . '"><h3>' . get_the_title() . '</h3>';
         echo '<h4>' . $first_faculty_title . '</h4></a>';
-        echo '<p>' . $first_faculty_phone . '</p>';
-        echo '<p><a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a></p>';
+        echo '<a href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
+        echo '<a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
 		echo '</li>';
 		endwhile;
 		?>
