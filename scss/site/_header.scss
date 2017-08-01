@@ -218,6 +218,9 @@
                 color: $accent;
             }
         }
+        @media #{$medium-only} {
+            font-size: 1.75rem!important;
+        }
         
         @media #{$xlarge-up} {
             top: 32px;

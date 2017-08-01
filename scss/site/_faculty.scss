@@ -29,11 +29,7 @@
         }
     }
     .faculty-name {
-        @media #{$large-up} {
-            position: relative;
-            top: 50%;
-            transform: translateY(50%);
-        }
+
     }
 }
 
@@ -44,10 +40,6 @@
     margin: 0 0 1rem 0;
     padding: 0;
     list-style: none;
-
-    @media #{$large-up} {
-        max-width: calc(31% - 2px);
-    }
     .faculty_contact_fields {
         padding: 0;
         ul {
