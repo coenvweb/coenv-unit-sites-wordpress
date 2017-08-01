@@ -54,23 +54,23 @@ $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
             echo $faculty_email_address . '</a></li>';
         }
         if( have_rows('phone_number')) {
-            echo '<li class="phone-numbers">';
+            echo '<ul class="phone-numbers">';
             while ( have_rows('phone_number') ) : the_row();
                 $phone = get_sub_field('number');
                 echo '<li><a href=tel:+1' . $phone . ' title="Call this faculty member">';
                 get_template_part('assets/img/icons/inline', 'phone-arrow.svg');
                 echo $phone . '</a></li>';
             endwhile;
-            echo '</li>';
+            echo '</ul>';
         }
         if( have_rows('locations')) {
-            echo '<li class="locations">';
+            echo '<ul class="locations">';
             while ( have_rows('locations') ) : the_row();
                 $building = urlencode(get_sub_field('building'));
                 $room_number = get_sub_field('room_number');
                 echo '<li><a href="http://washington.edu/maps/?' . $building . '" target="_blank" title="Find this faculty member">';
                 get_template_part('assets/img/icons/inline', 'home.svg');
-                echo $building . ' ' . $room_number . '</a></li>';
+                echo $building . ' ' . $room_number . '</a></ul>';
             endwhile;
             echo '</li>';
         }

@@ -395,6 +395,8 @@
     .page-title {
         float: left;
         padding-right: rem-calc(30);
+        margin-bottom: 1px;
+        height: calc(4.2vw - 1px);
         
         h1, h2,{
             @extend .uw-unskew;
