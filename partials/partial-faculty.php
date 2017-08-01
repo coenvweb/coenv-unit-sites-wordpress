@@ -57,7 +57,7 @@ $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
             echo '<li class="phone-numbers">';
             while ( have_rows('phone_number') ) : the_row();
                 $phone = get_sub_field('number');
-                echo '<li><a href=tel:' . $phone . ' title="Call this faculty member">';
+                echo '<li><a href=tel:+1' . $phone . ' title="Call this faculty member">';
                 get_template_part('assets/img/icons/inline', 'phone-arrow.svg');
                 echo $phone . '</a></li>';
             endwhile;
