@@ -254,9 +254,10 @@ color: #b6a47c;
        line-height: 1.25;
            }
            .stat-label {
-color: $white;
-       font-size: rem-calc(23);
-       text-transform: uppercase;
+                color: $white;
+                font-size: rem-calc(23);
+                text-transform: uppercase;
+                margin-bottom: 1rem;
            }
        }
 
@@ -496,7 +497,7 @@ color: $white;
         .facebook-tile {
             margin-left: 3% !important;
             .tile-wrapper {
-                background:rgba(59,89,152,0.8);
+                background:rgba(0,0,0,0.9);
             }
         }
         .nwcsc-tile {

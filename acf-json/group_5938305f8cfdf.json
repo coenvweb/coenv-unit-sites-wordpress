@@ -247,6 +247,30 @@
                     "mime_types": ""
                 },
                 {
+                    "key": "field_5980940a8c29d",
+                    "label": "Tile Image",
+                    "name": "tile_image",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
                     "key": "field_594be608d3e48",
                     "label": "Tile Title",
                     "name": "tile_title",
@@ -617,7 +641,7 @@
             "label": "Facebook Tile",
             "name": "facebook_tile",
             "type": "repeater",
-            "instructions": "Homepage tile for directing users to Facebook. Background image will be given a Facebook brand blue overlay",
+            "instructions": "Homepage tile for directing users to Facebook. (or other purpose)",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -645,6 +669,30 @@
                         "id": ""
                     },
                     "return_format": "url",
+                    "preview_size": "medium",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_598094348c29e",
+                    "label": "Tile Image",
+                    "name": "tile_image",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
                     "preview_size": "medium",
                     "library": "all",
                     "min_width": "",
@@ -863,5 +911,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1499115580
+    "modified": 1501598805
 }

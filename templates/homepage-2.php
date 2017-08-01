@@ -39,12 +39,15 @@ foreach($heroes as $hero) {
         <div class="row">
             <?php
                 $tiles = get_field('action_tiles');
+                $buttons = array();
                 foreach($tiles as $tile) {
+                    $button = '<a href="'.$tile['page_link'].'" class="button">'.$tile['link_text'].'</a>';
+                    $buttons[] = $button;
             ?>
                     <div class="action-tile small-12 medium-4 columns">
                         <h2 class="action-title"><?=$tile['title']?></h2>
                         <p class="action-text"><?=$tile['description']?></p>
-                        <a href="<?=$tile['page_link']?>" class="button"><?=$tile['link_text']?></a>
+                        <?php echo $button; ?>
                     </div>
             <?php
                 }
@@ -199,10 +202,12 @@ foreach($heroes as $hero) {
                     </div>
                     <?php
                         $nwcsc_tile = get_field('nwcsc_tile')[0];
+                        $tile_image_src = $nwcsc_tile['tile_image']['url'];
+                        $tile_image_alt = $nwcsc_tile['tile_image']['alt'];
                     ?>
                     <div class="small-6 nwcsc-tile" style="background-image: url(<?=$nwcsc_tile['tile_background_image']?>)">
                        <div class="tile-wrapper">
-                            <div class="tile-img-blank"></div>
+                            <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
                             <h3 class="tile-title">
                                 <a href="<?=$nwcsc_tile['tile_link_url']?>"><?=$nwcsc_tile['tile_title']?></a>
                             </h3>
@@ -248,6 +253,8 @@ foreach($heroes as $hero) {
                 <?php
                     $twitter_tile = get_field('twitter_tile')[0];
                     $facebook_tile = get_field('facebook_tile')[0];
+                    $tile_image_src = $facebook_tile['tile_image']['url'];
+                    $tile_image_alt = $facebook_tile['tile_image']['alt'];
                 ?>
                 <div class="small-tiles">
                     <div class="small-6 twitter-tile" style="background-image: url(<?=$twitter_tile['tile_background_image']?>)">
@@ -268,7 +275,7 @@ foreach($heroes as $hero) {
                     <div class="small-6 facebook-tile" style="background-image: url(<?=$facebook_tile['tile_background_image']?>)">
                         <?php if($facebook_tile['tile_link_url'] && $facebook_tile['tile_link_text'] && $facebook_tile['tile_title']) { ?>
                             <div class="tile-wrapper">
-                                    <img class="tile-img" src="<?=get_template_directory_uri()?>/assets/img/facebook-like.png" alt="Facebook Like Icon" />
+                                    <img class="tile-img" src="<?=$tile_image_src?>" alt="<?=$tile_image_alt?>" />
                                     <h3 class="tile-title">
                                         <a href="<?=$facebook_tile['tile_link_url']?>"><?=$facebook_tile['tile_title']?></a>
                                     </h3>
@@ -289,16 +296,21 @@ foreach($heroes as $hero) {
                 <div class="large-12">
                     <h2>Stats &amp; Info</h2>
                     <div class="row stats">
-                        <?php while(have_rows('statistics')): the_row(); ?>
+                        <?php 
+                        $count = 0;
+                        while(have_rows('statistics')): the_row(); 
+                            $button = $buttons[$count];
+                        ?>
                         <div class="large-4 medium-4 small-12 columns">
                             <div class="stat-value"><?php echo get_sub_field('value'); ?></div>
                             <div class="stat-label"><?php echo get_sub_field('label'); ?></div>
+                            <?php echo $button; ?>
                         </div>
-                        <?php endwhile; ?>
+                        <?php 
+                            $count++;
+                        endwhile;
+                        ?>
                     </div>
-                    <?php while(have_rows('statistics_link')): the_row(); ?>
-                        <div class="large-12 text-center"><a class="button" href="<?php echo get_sub_field('link_url'); ?>"><?php echo get_sub_field('link_text'); ?></a></div>
-                    <?php endwhile; ?>
                 </div>
             </div>
         </div>
