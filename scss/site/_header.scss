@@ -400,6 +400,8 @@
         padding-right: rem-calc(30);
         margin-bottom: 1px;
         height: calc(4.2vw - 1px);
+        border-left: 5rem white solid;
+        margin-left: -5rem;
         
         h1, h2,{
             @extend .uw-unskew;
