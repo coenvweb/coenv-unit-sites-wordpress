@@ -398,10 +398,15 @@
     .page-title {
         float: left;
         padding-right: rem-calc(30);
-        margin-bottom: 1px;
-        height: calc(4.2vw - 1px);
         border-left: 5rem white solid;
         margin-left: -5rem;
+        @media #{$large-up} {
+            margin-bottom: 0;
+            height: 4.2vw;
+        }
+        
+        margin-bottom: -2px;
+        height: calc(4.2vw + 5px);
         
         h1, h2,{
             @extend .uw-unskew;
