@@ -10,6 +10,8 @@ function FoundationPress_theme_support() {
     add_theme_support('post-thumbnails');
     // set_post_thumbnail_size(150, 150, false);
 
+    add_image_size('people-grid', 170, 170, true);
+
         // Add media sizes
         // thumbnail: 200x200 square crop
         update_option( 'thumbnail_size_w', 200 );
@@ -109,12 +111,12 @@ function coenv_get_ancestor($attr = 'ID') {
         return false;
     }
 
-    if ( ($post->post_type == 'post' || is_archive() || is_search()) && !is_post_type_archive( array( 'faculty' ) ) ) {
+    if ( ($post->post_type == 'post' || is_archive() || is_search()) ) {
 
-        $page_for_posts = get_option( 'page_for_posts' );
-
-        if ( $page_for_posts == 0 ) {
-            return false;
+        if(get_option('page_for_posts')) {
+            $page_for_posts = get_option( 'page_for_posts' );
+        } else {
+            $page_for_posts = NEWS_PARENT_ID;
         }
 
         $ancestor = get_post( $page_for_posts );
@@ -180,12 +182,7 @@ function coenv_banner() {
     $banner = false;
 
     $ancestor_id = coenv_get_ancestor('ID');
-    
-    if ( is_singular( 'post' )) { //change news pages' section titles
-        unset ($ancestor_id);
-        $ancestor_id = 7;
-    }
-    
+
     if ( has_post_thumbnail( $ancestor_id ) ) {
         $page_id = $ancestor_id;
     }
@@ -215,17 +212,13 @@ function coenv_banner() {
 function coenv_base_section_title($id) {
 
     $coenv_post = get_post($id);
-    $coenv_post_section = get_post(array_pop(get_post_ancestors($id)));
+    $coenv_post_section = get_post(coenv_get_ancestor('ID'));
 
     if (is_404()):
         $section_title = '<div class="section-title"><h2>Not Found (404)</h2></div>';
     elseif (is_search()):
         $section_title = '<div class="section-title"><h2>Search</h2></div>';
-     elseif ( $coenv_post->post_type == 'publications' ):
-        $section_title = '<div class="section-title"><h2><a href="/resources/">Resources</a></h2></div>';
-     elseif ( $coenv_post->post_type == 'datasets' ):
-        $section_title = '<div class="section-title"><h2><a href="/resources/">Datasets</a></h2></div>';
-    elseif (coenv_base_post_parent($id)):
+    elseif ($coenv_post_section):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
     elseif (!is_front_page()):
         $section_title = '<div class="section-title"><h2><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></h2></div>';
@@ -233,3 +226,26 @@ function coenv_base_section_title($id) {
         
         echo $section_title;
     }
+
+add_action('save_post', 'single_sticky_only');
+add_action('publish_post', 'single_sticky_only');
+add_action('publish_future_post', 'single_sticky_only');
+
+function single_sticky_only($post_id) {
+    $upd_post = get_post($post_id);
+    // if this is published and a sticky or becoming a sticky
+    if($upd_post->post_status == 'publish' && (is_sticky($post_id) || ( isset($_POST['sticky']) && $_POST['sticky'] == true))) {
+        $stickies = get_option('sticky_posts');
+        $newSticky = array();
+        foreach($stickies as $sticky) {
+            $sticky = get_post($sticky);
+            //the current update, or non published stickies
+            if( $sticky->post_status != 'publish' || $sticky == $post_id ) { 
+                $newSticky[] = $sticky->ID;
+            }   
+        }   
+        //overwrite stickies - can only have one published sticky
+        update_option('sticky_posts', $newSticky);
+    }   
+}
+

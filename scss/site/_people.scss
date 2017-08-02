@@ -1,0 +1,206 @@
+article.type-people {
+    .people-header {
+        .people-meta {
+            .people-photo {
+                border-left: 5px solid #4b2e83;
+                background-image: url("../assets/img/blockquote-top.png");
+                background-repeat: no-repeat;
+                background-position: top left;
+                padding-top: 5px;
+            }
+            .people-title {
+                margin-bottom: .5rem;
+                line-height: 2rem;
+                font-size: 2rem;
+                background-image: none;
+                padding-bottom: 0rem;
+            }
+            .titles {
+                margin-bottom: 1rem;
+                background-image: url('/wp-content/themes/coenv-cig/assets/img/rule-purple.svg');
+                background-position: bottom left;
+                background-repeat: no-repeat;
+                padding-bottom: 1rem;
+                .job_title {
+                    display: block;
+                    font-size: 1.1rem;
+                    .org {
+                        display: block;
+                        @include o_sans_bold;
+                        text-transform: uppercase;
+                        font-size: .65rem;
+                    }
+                }
+            }
+            .person_contact {
+                margin-left: 0px;
+                border-left: 5px solid #4b2e83;
+                list-style-type: none;
+                background-image: url("../assets/img/blockquote-top.png");
+                background-repeat: no-repeat;
+                background-position: top left;
+                padding-top: 5px;
+                background-color: #ebebeb;
+                li {
+                    background-image: url("../assets/img/blockquote-top.png");
+                    background-repeat: no-repeat;
+                    background-position: bottom left;
+                    padding-left: 0.25rem;
+                    margin-bottom: 0rem;
+                    &:hover {
+                        background-image: url("../assets/img/blockquote-top-gold.png");
+                    }
+                    a {
+                        width: 100%;
+                        padding-top: .5rem;
+                        padding-bottom: 1rem;
+                        display: inline-block;
+                        color: #000;
+                        text-decoration: none;
+                        &:hover {
+                            text-decoration: none;
+                        }
+                        &.email {
+                            background-image: url('../assets/img/icon-fac-mail.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            padding-left: 40px;
+                            background-size: 27px 19px;
+                        }
+                        &.phone {
+                            background-image: url('../assets/img/icon-fac-phone.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.Twitter {
+                            background-image: url('../assets/img/icon-fac-twitter.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.SciVal {
+                            background-image: url('../assets/img/icon-fac-scival.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.YouTube {
+                            background-image: url('../assets/img/icon-fac-link.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.ResearchGate {
+                            background-image: url('../assets/img/icon-fac-link.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.Google {
+                            background-image: url('../assets/img/icon-fac-google-scholar.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                        &.cv {
+                            background-image: url('../assets/img/icon-fac-google-scholar.svg');
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 27px 19px;
+                            padding-left: 40px;
+                        }
+                    }
+                }
+            }
+
+            .expertise_title {
+                margin-bottom: .5rem;
+                margin-top: 1.5rem;
+                font-size: 1.25rem;
+            }
+            .expertise {
+                margin-bottom: 1rem;
+                span.area {
+                    @include o_sans_bold;
+                    font-size: rem-calc(14);
+                    margin-bottom: 6px;
+                    text-transform: uppercase;
+                    display: block;
+                }
+            }
+            .mission {
+                p {
+                    margin-bottom: 0.5rem;
+                }
+            }
+            h2 {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+
+.people_index {
+
+    .people-list {
+        .people-list-item {
+            &:hover {
+                img {
+                    -webkit-transform:scale(1.05);
+                    -moz-transform:scale(1.05);
+                    -ms-transform:scale(1.05);
+                    -o-transform:scale(1.05);
+                     transform:scale(1.05);
+                }   
+            }   
+
+            overflow: hidden;
+            img {
+                border: 5px solid #ebebec;
+                -webkit-transition: all .2s ease;
+                -moz-transition: all .2s ease;
+                -o-transition: all .2s ease;
+                -ms-transition: all .2s ease;
+                transition: all .2s ease;
+                width: 100%;
+                margin: auto;
+            }   
+            h3 {
+                @include o_sans_bold;
+                font-size: 1rem;
+                line-height: 1.25rem;
+                margin-top: .5rem;
+                text-align: center;
+                a {
+                    color: #000;
+                    text-decoration: none;
+                }   
+            }   
+        }
+    }
+}
+
+
+/* Why was this is a faculty file? */
+#sidebar .widget {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+.article__categories {
+    margin-bottom: 1rem;
+}
+.article__categories h2 {
+    @include rem('font-size', 1);
+    line-height: 1;
+    @include sans;
+    padding: 0;
+    margin: 0 0 .5rem 0;
+}

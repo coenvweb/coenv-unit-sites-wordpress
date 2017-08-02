@@ -30,6 +30,30 @@ jQuery(function ($) {
         
     }
 
+	var run = false;
+
+	if($('.home')) {
+		$(window).on("scroll", function() {
+			var scrollPosition = scrollY || pageYOffset;
+
+			if (scrollPosition > $(".full-stats").position().top - $(window).height() && run == false) {
+				run = true;
+				$('.stat-value').each(function () {
+					$(this).prop('Counter',0).animate({
+						Counter: $(this).text()
+					}, {
+						duration: 2000,
+						easing: 'swing',
+						step: function (now) {
+							$(this).text(Math.ceil(now).toLocaleString());
+						}
+					});
+				});
+			}
+		});
+	}
+	
+
     // Category filter for custom post type indicies
     $("select.select-category").on( 'change', function () {
         //alert('This changed!');

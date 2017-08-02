@@ -51,6 +51,9 @@ require_once('library/taxonomies.php');
 // Publications functions
 require_once('library/publications.php');
 
+// url rewrite functions
+require_once('library/rewrites.php');
+
 // Need to be sorted into includes
 
 
@@ -62,7 +65,7 @@ require_once('library/publications.php');
 
 add_image_size( 'med_sq', '240', '240', true );
 add_image_size( 'sm_sq', '120', '120', true );
-add_image_size( 'home_news', '525', '394', true );
+add_image_size( 'home_news', '525', '394', false);
 
 /**
  * Gets the top-level ancestor for pages, posts and custom post types
@@ -226,51 +229,57 @@ $tax_obj = get_taxonomy($tax);
 $tax_str = $tax_obj->labels->name;
 
 $cats_args  = array(
-	'orderby' => 'term_order',
-	'taxonomy' => $tax
+    'orderby' => 'name',
+    'order' => 'ASC',
+    'taxonomy' => $tax
 );
 $cats = get_categories($cats_args);
-	if ($cats) {
-		echo '<select name="select-category" class="select-category">';
-		echo '<option class="level-0" value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All ' . $tax_str . '</option>';
-		foreach($cats as $cat) { 
-			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
-			echo '<option value="?tax=' . $tax . '&term=' . $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
-		}
-		echo '</select>';
-	}
+    if($tax == 'author') {
+        $tax = 'publication_author';
+    }
+    if ($cats) {
+        echo '<label class="visuallyhidden" for="select-category">Select a '.$tax_str.':</label>';
+        echo '<select name="select-category" class="select-category" id="select-category">';
+        	echo '<option class="level-0" value="">All ' . $tax_str . '</option>';
+        	foreach($cats as $cat) {
+            	$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+            	echo '<option value="' . $tax . '/' . $cat->slug . '/"' . $selected . '>' . $cat->name . '</option>';
+        	}
+        echo '</select>';
+    }
 }
 
-/* 
+/*
  * Date filters for WPQuery templates (blog, publications, faculty, etc.)
  */
 function coenv_base_date_filter($post_type,$coenv_month,$coenv_year) {
-	$counter = 0;
-	$ref_month = '';
-	$monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'	=> $post_type));
-	echo '<select name="select-category" class="select-category">';
-	echo '<option value="' . strtok($_SERVER['REQUEST_URI'],'?') . '">All Dates</option>';
-	if( $monthly->have_posts() ) :
-		while( $monthly->have_posts() ) : $monthly->the_post();
-		    if( get_the_date('mY') != $ref_month ) {
-		    	$month_num = get_the_date('m');
-		    	$month_str = get_the_date('F');
-		    	$year_num = get_the_date('Y');
-		    	if ($year_num == $coenv_year && $month_num == $coenv_month) {
-		    	 $selected = ' selected="selected"';
-		    	} else {
-		    		$selected = '';
-		    	}
-		    	echo '<option value="page/1/?coenv-year=' . $year_num . '&coenv-month=' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
-		       // echo "\n".get_the_date('F Y');
-		        $ref_month = get_the_date('mY');
-		        $counter = 0;
-		    }
-		endwhile; 
-	endif;
-	echo '</select>';
-	wp_reset_postdata();
-	wp_reset_query();
+    $counter = 0;
+    $ref_month = '';
+    $monthly = new WP_Query(array('posts_per_page' => -1, 'post_type'   => $post_type));
+    echo '<label class="visuallyhidden" for="select-month">Choose a month</label>';
+    echo '<select name="select-month" class="select-category" id="select-month">';
+    echo '<option value="">All Dates</option>';
+    if( $monthly->have_posts() ) :
+        while( $monthly->have_posts() ) : $monthly->the_post();
+            if( get_the_date('mY') != $ref_month ) {
+                $month_num = get_the_date('m');
+                $month_str = get_the_date('F');
+                $year_num = get_the_date('Y');
+                if ($year_num == $coenv_year && $month_num == $coenv_month) {
+                 $selected = ' selected="selected"';
+                } else {
+                    $selected = '';
+                }
+                echo '<option value="coenv-year/' . $year_num . '/coenv-month/' . $month_num  . '"' . $selected . '>' . $month_str . ' ' . $year_num . '</option>';
+               // echo "\n".get_the_date('F Y');
+                $ref_month = get_the_date('mY');
+                $counter = 0;
+            }
+        endwhile;
+    endif;
+    echo '</select>';
+    wp_reset_postdata();
+    wp_reset_query();
 }
 
 function remove_plaintext_email($emailAddress) {
@@ -318,5 +327,6 @@ function my_remove_meta_boxes() {
     remove_meta_box( 'featured-video-plus-box', 'features', 'side' );
     remove_meta_box( 'featured-video-plus-box', 'datasets', 'side' );
     remove_meta_box( 'featured-video-plus-box', 'publications', 'side' );
+    remove_meta_box( 'featured-video-plus-box', 'people', 'side' );
 }
 add_action( 'add_meta_boxes', 'my_remove_meta_boxes');

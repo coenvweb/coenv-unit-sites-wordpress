@@ -24,68 +24,83 @@
 	margin-bottom: 2rem;
 	
 }
-#after-content .widget_custom_post_widget {
-	background-image: url('/wp-content/themes/coenv-cig/assets/img/blockquote-top.png');
-	background-position: top left;
-	background-repeat: no-repeat;
-	float: left;
-	max-width: 775px;
-	padding-top: rem-calc(50);
 
-}
-#after-content .widget_custom_post_widget {
-	margin-bottom: 1.5rem;
+#after-content {
+    @media #{$large-up} {
+        padding-right: rem-calc(75);
+    }
+    .widget_custom_post_widget {
+        background-image: url('/wp-content/themes/coenv-cig/assets/img/blockquote-top.png');
+        background-position: top left;
+        background-repeat: no-repeat;
+        padding-top: rem-calc(50);
+    }
 
+    .widget_custom_post_widget {
+        margin-bottom: 1.5rem;
+        h2 {
+            background-image: none;
+            font-size: 30px;
+            padding-bottom: 0;
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+    .widget_content {
+        @media #{$small-up} {
+            @include grid-column(12);
+        }
+        @media #{$large-up} {
+            @include grid-column(8);
+        }
 
-	h2 {
-	background-image: none;
-	font-size: 26px;
-	padding-bottom: 0;
-	}
-}
-#after-content .widget_content {
-	float: left;
-	padding-left: rem-calc(40);
-	width: 80%;
+        p {
+            margin-bottom: 0;
+        }
+    }
+    ul.widget_links {
+        margin-left: 0;
+        margin-top: 30px;
+        padding-left: 0;
 
-	p {
-	margin-bottom: 0;
-	}
-}
-#after-content ul.widget_links {
-	float: left;
-	margin-left: 0;
-	margin-top: 30px;
-	padding-left: 0;
-	width: 80%;
+        li {
+            list-style: none;
+        }
+    }
+    .widget_links li a {
+        width: auto;
 
-	li {
-		list-style: none;
-	}
-}
-#after-content .widget_links li a {
-	width: auto;
-
-	margin: 0;
-	&:first-child {
-        margin-right: rem-calc(10);
-	}
-}
-#after-content .widget_img {
-	float: left;
-	width: 20%;
+        margin: 0;
+        &:first-child {
+            margin-right: rem-calc(10);
+        }
+    }
+    .widget_img {
+        @media #{$small-up} {
+            @include grid-column(12);
+        }
+        @media #{$large-up} {
+            @include grid-column(4);
+        }
+    }
 }
 
 #twitter {
-    
+
     background-image: url('../assets/img/side-nav-top-2.png');
     background-repeat: no-repeat;
     background-position: top left;
     margin: .5rem 0rem;
-    background-color: #e8e3d3;
+    background-color: #ebebeb;
 
     .at_title {
-        font-size: 1rem;
+        .twitter-logo {
+            font-size: 2rem;
+            margin-right: 1rem;
+            margin-bottom: -1rem;
+        }
+        font-size: 1.5rem;
         font-weight: 800;
         vertical-align: middle;
         padding: .75rem;
@@ -93,7 +108,7 @@
     }
 
     .tweet {
-        background-color: #e8e3d3;
+        background-color: #ebebeb;
         margin: 0.75rem 0rem;
         &:first-of-type {
             margin-top: 0;
@@ -101,6 +116,7 @@
         &:nth-of-type(2n+3) {
             clear: both;
         }
+        border-bottom: 1px solid #cccccc;
     }
 
     .tweet-wrapper {

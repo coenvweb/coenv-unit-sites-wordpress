@@ -5,12 +5,12 @@
 
  .post-meta {
     @include o_sans_bold;
-    float: left;
     font-size: rem-calc(14);
     line-height: 2rem;
     margin-bottom: 12px;
     text-transform: uppercase;
     width: 100%;
+    overflow: hidden;
 
     .left {
         padding-top: rem-calc(10);
@@ -18,15 +18,11 @@
     time {
         float: left;
     }
-     a {
-     }
     .terms {
-        border-left: solid 2px #000;
-        color: #595959;
-        float: left;
+        color: #000000;
         font-size: rem-calc(14);
-        margin-left: 5px;
-        padding-left: 6px;
+        display: inline-block;
+        margin-left: .4rem;
         position: relative;
 
         a {

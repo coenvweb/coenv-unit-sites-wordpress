@@ -21,7 +21,7 @@
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
     <meta name="description" content="<?php
-    wp_reset_query();   
+    wp_reset_query();
     if (have_posts()) : while(have_posts()) the_post();
         if (!is_front_page() ) {
             $advancedExcerpt = strip_tags(get_the_excerpt());
@@ -151,32 +151,30 @@
   <nav id="top-nav" class="show-for-medium-up">
     <div class="row">
       <div class="top-menu normal-top-menu">
+        <div class="el-logo">
+            EarthLab <span class="light">Member Organization</span>
+        </div>
+        <div class="el-divider">
+        </div>
         <?php wp_nav_menu(array(
           'theme_location' => 'uw-links',
           'depth' => 1,
           'menu_id' => 'menu-university',
           'container' => false,
           'fallback_cb' => false
-        )) ?> 
-        
-          <?php wp_nav_menu(array(
-          'theme_location' => 'top-links', 
-          'depth' => 1,
-          'menu_id' => 'menu-top',
-          'container' => false, 
-          'walker' => new CoEnv_Top_Menu_Walker(),
-          'fallback_cb' => false
-        )); ?>
+        )) ?>
 
-        <?php get_search_form() ?>
+        <div class="show-for-large-up">
+            <?php get_search_form() ?>
 
-        <?php wp_nav_menu(array(
-          'theme_location' => 'top-buttons', 
-          'depth' => 1, 
-          'menu_id' => 'menu-buttons',
-          'container' => false,
-          'fallback_cb' => false
-        )); ?>
+            <?php wp_nav_menu(array(
+              'theme_location' => 'top-buttons', 
+              'depth' => 1, 
+              'menu_id' => 'menu-buttons',
+              'container' => false,
+              'fallback_cb' => false
+            )); ?>
+        </div>
 
       </div><!-- .top-menu -->
     </div><!-- .row -->
@@ -250,45 +248,10 @@
         $banner_class = $banner ? 'has-banner' : '';
         $banner_class .= ' template-print';
 ?>
-    <?php if (($banner) && (!is_single())) {
+    <?php if ($banner) {
             echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $banner['url'] . ');">';
             echo '<div class="section-title-wrapper">';
         }
-     ?>
-     <?php if ( (empty($banner)) || (is_single()) ) {
-
-
-      if ( 'post' == get_post_type()) :
-        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_3.jpg';
-      
-      elseif ('datasets' == get_post_type()) :
-        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_2.jpg';
-
-      else :
-
-        $stupid_banner_url = '/wp-content/uploads/sites/2/2014/11/CIG_PageImages_3.jpg';
-
-
-
-
-
-
-      endif;
-
-
-
-
-
-
-            echo '<div class="page-row mini section-wrapper" style="background-image: url(' . $stupid_banner_url . ');">';
-            echo '<div class="section-title-wrapper">';
-
-
-
-
-
-
-     }
      ?>
     <div class="section-row row">
         <div class="columns large-8 section-title"><?php echo coenv_base_section_title($post->ID); ?></div>
