@@ -141,7 +141,7 @@ blockquote {
 
 h1 {
     @include uni;
-    font-size: rem-calc(26)!important;
+    font-size: rem-calc(26);
     line-height: rem-calc(30);
     font-weight: 400;
 
