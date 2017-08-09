@@ -119,6 +119,11 @@
                     &.current_page_item.page-item-55 > a, &.page-item-55 > a:hover {
                         background-position-x: 99%;
                     }
+                    
+                    &.page-item-24521 > .dropdown {
+                        left: inherit;
+                        right: 0;
+                    }
 
                     &.current_page_item > a, & > a:hover{
                             color: $accent-green-acc;

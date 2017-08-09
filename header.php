@@ -245,7 +245,7 @@
                       $exclude = implode(',',coenv_base_menu_exclude());
                       add_filter( 'page_css_class', 'add_parent_class', 10, 4 );
                       wp_list_pages( array(
-                          'depth' => 0,
+                          'depth' => 2,
                           'walker' => new top_bar_new_walker(),
                           'title_li' => false,
                           'sort_column' => 'menu_order, post_title',
