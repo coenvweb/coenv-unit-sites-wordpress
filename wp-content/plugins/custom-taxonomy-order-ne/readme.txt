@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: mpol
-Tags: order, ordering, sorting, terms, term order, term ordering, terms order, terms ordering, categories, category order, category ordering, categories order, categories ordering, custom taxonomies, taxonomy order, taxonomy ordering, taxonomies order, taxonomies ordering
+Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 4.8
-Stable tag: 2.9.0
+Stable tag: 2.9.1
 License: GPLv2 or later
 
 
@@ -85,6 +85,11 @@ If it is a custom taxonomy, you can also use a filter:
 There is a bug with the the_tags function, where it will sort according to the setting for categories.
 This happens in the 'customtaxorder_apply_order_filter' function where the $args has two taxonomies but only one orderby can be returned.
 
+= I use WooCommerce Attributes. =
+
+This plugin only supports sorting the attributes/terms. These are the items like S, M and L.
+For sorting the taxonomies like 'size', you need to sort them on Woo's attributes page.
+
 = What capabilities are needed? =
 
 For sorting the terms you need the manage_categories capability.
@@ -131,6 +136,10 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.9.1 =
+* 2017-08-04
+* Set Woo attribute terms to public.
 
 = 2.9.0 =
 * 2017-07-10
