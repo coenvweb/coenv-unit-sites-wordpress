@@ -170,13 +170,18 @@
             });
 
             $(document).on("click touchend", function(e) { // hide menu when clicked away from
-                if (!dragging && plugin.settings.document_click === "collapse" && ! $(e.target).closest(".mega-menu li").length ) {
+                if (!dragging && plugin.settings.document_click === "collapse" && ! $(e.target).closest(".mega-menu li").length && ! $(e.target).closest(".mega-menu-toggle").length ) {
                     plugin.hideAllPanels();
                 }
                 dragging = false;
             });
 
             $("> a.mega-menu-link", items_with_submenus).on("click.megamenu touchend.megamenu", function(e) {
+                if (e.type === 'touchend') {
+                    // prevent mouseenter events once touch has been detected
+                    plugin.unbindHoverEvents();
+                    plugin.unbindHoverIntentEvents();
+                }
                 if (plugin.isDesktopView() && $(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed")) {
                     e.preventDefault();
                     return;
@@ -206,13 +211,13 @@
 
         var bindHoverEvents = function() {
             items_with_submenus.on({
-                mouseenter: function() {
+                "mouseenter.megamenu" : function() {
                     plugin.unbindClickEvents();
                     if (! $(this).hasClass("mega-toggle-on")) {
                         plugin.showPanel($(this).children("a.mega-menu-link"));
                     }
                 },
-                mouseleave: function() {
+                "mouseleave.megamenu" : function() {
                     if ($(this).hasClass("mega-toggle-on") && ! $(this).parent().parent().hasClass("mega-menu-tabbed")) {
                         plugin.hidePanel($(this).children("a.mega-menu-link"), false);
                     }
@@ -281,8 +286,28 @@
         };
 
         plugin.unbindClickEvents = function() {
-            $("a.mega-menu-link", menu).off("click.megamenu touchend.megamenu");
+            $("> a.mega-menu-link", items_with_submenus).off("click.megamenu touchend.megamenu");
         };
+
+        plugin.unbindHoverEvents = function() {
+            items_with_submenus.unbind("mouseenter.megamenu mouseleave.megamenu");
+        };
+
+        plugin.unbindHoverIntentEvents = function() {
+            items_with_submenus.unbind("mouseenter mouseleave").removeProp('hoverIntent_t').removeProp('hoverIntent_s'); // hoverintent does not allow namespaced events
+        };
+
+        plugin.unbindMegaMenuEvents = function() {
+            if (plugin.settings.event === "hover_intent") {
+                plugin.unbindHoverIntentEvents();
+            }
+
+            if (plugin.settings.event === "hover") {
+                plugin.unbindHoverEvents();
+            }
+
+            plugin.unbindClickEvents();
+        }
 
         plugin.bindMegaMenuEvents = function() {
             if (plugin.isDesktopView() && plugin.settings.event === "hover_intent") {
@@ -335,14 +360,14 @@
         };
 
         plugin.switchToMobile = function() {
-            plugin.unbindAllEvents();
+            plugin.unbindMegaMenuEvents();
             plugin.bindMegaMenuEvents();
             plugin.reverseRightAlignedItems();
             plugin.hideAllPanels();
         };
 
         plugin.switchToDesktop = function() {
-            plugin.unbindAllEvents();
+            plugin.unbindMegaMenuEvents();
             plugin.bindMegaMenuEvents();
             plugin.reverseRightAlignedItems();
             plugin.hideAllPanels();

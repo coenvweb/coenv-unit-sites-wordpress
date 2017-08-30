@@ -850,10 +850,10 @@
         outline: none;
 
         @include mobile {
-            display: block;
-
             @if $disable_mobile_toggle == on {
                 display: none;
+            } @else {
+                display: block;
             }
         }
 
@@ -879,12 +879,14 @@
             margin-right: 6px;
         }
 
+
         @include mobile {
             + #{$menu} {
-                display: none;
 
                 @if $disable_mobile_toggle == on {
-                    display: block;
+                    display: block; 
+                } @else {
+                    display: none;
                 }
 
                 li.mega-menu-item > ul.mega-sub-menu {

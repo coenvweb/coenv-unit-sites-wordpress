@@ -150,7 +150,7 @@ jQuery(function ($) {
             var value = $(this).val();
 
             if ( ( validation == 'int' && Math.floor(value) != value )
-              || ( validation == 'px' && ! ( value.substr(value.length - 2) == 'px' || value.substr(value.length - 2) == 'em' || value.substr(value.length - 2) == 'pt' || value.substr(value.length - 3) == 'rem' || value.substr(value.length - 1) == '%' ) && value != 0 )
+              || ( validation == 'px' && ! ( value.substr(value.length - 2) == 'px' || value.substr(value.length - 2) == 'em' || value.substr(value.length - 2) == 'vh' || value.substr(value.length - 2) == 'vw' || value.substr(value.length - 2) == 'pt' || value.substr(value.length - 3) == 'rem' || value.substr(value.length - 1) == '%' ) && value != 0 )
               || ( validation == 'float' && ! $.isNumeric(value) ) ) {
                 label.addClass('mega-error');
                 error_message.show();
