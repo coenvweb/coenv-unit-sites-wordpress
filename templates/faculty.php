@@ -55,16 +55,16 @@ $wp_query = new WP_Query( $query_args );
 		$first_faculty_title_row = $faculty_title_rows[0];
 		$first_faculty_title = $first_faculty_title_row['job_title'];
 		$faculty_img = get_the_post_thumbnail($post->ID, 'thumbnail', array( 'class' => 'left' ));
-		if (!$faculty_img) {
-		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
+		if (empty($faculty_img)) {
+		$faculty_img = '<img width="200" height="200" class="left wp-post-image" src="' . get_template_directory_uri() . '/assets/img/blank-153x153.jpg' . '">';
 		}
-        echo '<li class="faculty-list-item" data-equalizer-watch>';
-		echo '<a href="' . $faculty_link . '">' . $faculty_img . '</a>';
-		echo '<a href="' . get_the_permalink() . '"><h3 class="faculty-name">' . get_the_title() . '</h3>';
-        echo '<h4>' . $first_faculty_title . '</h4></a>';
+        echo '<li class="faculty-list-item" data-equalizer-watch><a href="' . $faculty_link . '">';
+		echo $faculty_img;
+		echo '<h3 class="faculty-name">' . get_the_title() . '</h3>';
+        echo '<h4>' . $first_faculty_title . '</h4>';
         echo '<a href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
         echo '<a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
-		echo '</li>';
+		echo '</a></li>';
 		endwhile;
 		?>
 	<?php endif; ?>

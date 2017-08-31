@@ -12,13 +12,33 @@
         img {
             margin-right: 1rem;
             max-width: 150px;
+            z-index: 2;
+            position: relative;
         }
         .faculty-name {
             line-height: 3.5rem;
             margin-bottom: -.25rem;
+            position: relative;
+            z-index: 1;
+            &:after {
+                content: '';
+                position: absolute;
+                display: block;
+                background-color: $accent-teal-lt;
+                @extend .uw-skew;
+                height: 3rem;
+                width: 80%;
+                right: 0;
+                top: .25rem;
+                z-index: -1;
+            }
+            &:hover {
+                &:after {
+                    background-color: lighten($accent-teal-lt, 5%);
+                }
+            }
         }
         h4 {
-            
             font-size: 1.2rem!important;
         }
     }
