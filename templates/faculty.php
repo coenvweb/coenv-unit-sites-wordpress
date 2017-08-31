@@ -62,8 +62,12 @@ $wp_query = new WP_Query( $query_args );
 		echo $faculty_img;
 		echo '<h3 class="faculty-name">' . get_the_title() . '</h3>';
         echo '<h4>' . $first_faculty_title . '</h4>';
-        echo '<a href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
-        echo '<a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
+        if (!empty($first_faculty_phone)) {
+            echo '<a href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
+        }
+        if (!empty($faculty_email)) {
+            echo '<a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
+        }
 		echo '</a></li>';
 		endwhile;
 		?>
