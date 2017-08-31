@@ -1,36 +1,46 @@
 .page-template-faculty {
     li.faculty-list-item {
         background-color: $text-very-lt;
-        padding: 1rem;
-        min-height: 178px;
+        min-height: 170px;
+        padding: 0;
         &:nth-child(odd) {
-            border-right: .5rem solid white;
+            border-right: 1rem solid white;
         }
         &:nth-child(even) {
-            border-left: .5rem solid white;
+            border-left: 1rem solid white;
         }
         img {
             margin-right: 1rem;
-            max-width: 150px;
+            max-width: 170px;
             z-index: 2;
             position: relative;
         }
         .faculty-name {
             line-height: 3.5rem;
-            margin-bottom: -.25rem;
+            padding-top: 0;
+            margin-top: 0;
             position: relative;
             z-index: 1;
+            background-color: $accent-teal;
             &:after {
                 content: '';
                 position: absolute;
                 display: block;
                 background-color: $accent-teal-lt;
-                @extend .uw-skew;
-                height: 3rem;
-                width: 80%;
-                right: 0;
-                top: .25rem;
+                @extend .uw-unskew;
+                height: 3.5rem;
+                top: 0;
+                width: 60%;
+                right: 3rem;
                 z-index: -1;
+            }
+            &:before {
+                content: '»';
+                position: absolute;
+                display: block;
+                z-index: 5;
+                right: 1rem;
+                color: lighten($accent-teal-lt, 15%);
             }
             &:hover {
                 &:after {
