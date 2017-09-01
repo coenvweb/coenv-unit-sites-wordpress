@@ -3,6 +3,7 @@
         background-color: $text-very-lt;
         min-height: 170px;
         padding: 0;
+        overflow: hidden;
         &:nth-child(odd) {
             border-right: 1rem solid white;
         }
@@ -14,6 +15,9 @@
             max-width: 170px;
             z-index: 2;
             position: relative;
+            @media #{$large-up} {
+                float: left;
+            }
         }
         .faculty-name {
             line-height: 3.5rem;
@@ -22,6 +26,7 @@
             position: relative;
             z-index: 1;
             background-color: $accent-teal;
+            padding-left: .5rem;
             &:after {
                 content: '';
                 position: absolute;
@@ -30,7 +35,7 @@
                 @extend .uw-unskew;
                 height: 3.5rem;
                 top: 0;
-                width: 60%;
+                width: 100%;
                 right: 3rem;
                 z-index: -1;
             }
@@ -50,6 +55,12 @@
         }
         h4 {
             font-size: 1.2rem!important;
+        }
+        h4, p, a {
+            padding-left: .5rem;
+            @media #{$large-up} {
+                padding-left: 0;
+            }
         }
     }
 }

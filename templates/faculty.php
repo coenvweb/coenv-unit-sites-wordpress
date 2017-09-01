@@ -54,9 +54,9 @@ $wp_query = new WP_Query( $query_args );
 		$faculty_title_rows = get_field('job_titles' );
 		$first_faculty_title_row = $faculty_title_rows[0];
 		$first_faculty_title = $first_faculty_title_row['job_title'];
-		$faculty_img = get_the_post_thumbnail($post->ID, 'thumbnail', array( 'class' => 'left' ));
+		$faculty_img = get_the_post_thumbnail($post->ID, 'thumbnail' );
 		if (empty($faculty_img)) {
-		$faculty_img = '<img width="200" height="200" class="left wp-post-image" src="' . get_template_directory_uri() . '/assets/img/blank-153x153.jpg' . '">';
+		$faculty_img = '<img width="200" height="200" class="wp-post-image" src="' . get_template_directory_uri() . '/assets/img/blank-153x153.jpg' . '">';
 		}
         echo '<li class="faculty-list-item" data-equalizer-watch><a href="' . $faculty_link . '">';
 		echo $faculty_img;
