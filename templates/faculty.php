@@ -39,7 +39,7 @@ $wp_query = new WP_Query( $query_args );
 
 ?>
 	<?php if ($wp_query->have_posts()): ?>
-	<ul class="faculty-list-teach clearfix small-block-grid-2" data-equalizer>
+	<ul class="faculty-list-teach clearfix large-block-grid-2  small-block-grid-2" data-equalizer>
 
 		<?php
 		# The Loop
@@ -59,14 +59,14 @@ $wp_query = new WP_Query( $query_args );
 		$faculty_img = '<img width="200" height="200" class="wp-post-image" src="' . get_template_directory_uri() . '/assets/img/blank-153x153.jpg' . '">';
 		}
         echo '<li class="faculty-list-item" data-equalizer-watch><a href="' . $faculty_link . '">';
-		echo $faculty_img;
+		echo '<div class="image-float">' . $faculty_img . '</div>';
 		echo '<h3 class="faculty-name">' . get_the_title() . '</h3>';
         echo '<h4>' . $first_faculty_title . '</h4>';
         if (!empty($first_faculty_phone)) {
-            echo '<a href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
+            echo '<a class="phone" href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
         }
         if (!empty($faculty_email)) {
-            echo '<a href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
+            echo '<a class="email" href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
         }
 		echo '</a></li>';
 		endwhile;
