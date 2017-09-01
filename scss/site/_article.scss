@@ -28,7 +28,7 @@
 		margin-top: 0;
 		@include rem('padding-bottom', 1);
 		@include serif;
-		@include font-size(18);
+		@include font-size(24);
 		@include line-height(30);
 		font-weight: 400;
 		border-bottom: 2px solid $border;
