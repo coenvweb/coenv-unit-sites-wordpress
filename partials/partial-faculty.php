@@ -79,11 +79,6 @@ $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
                 if ($faculty_twitter_url) {
                     echo '<li class="faculty-twitter"><a href="' . $faculty_twitter_url . '" title="See Twitter profile">Twitter' . $svg_arrow . '</a></li>';
                 }
-                if ($faculty_scival_url) {
-                    echo '<li class="faculty-scival"><a href="' . $faculty_scival_url . '" title="See SciVal profile">';
-                    get_template_part('assets/img/icons/inline', 'bar-chart.svg');
-                    echo 'SciVal</a></li>';
-                }
                 if ($faculty_cv) {
                     echo '<li class="cv"><a href="' . $faculty_cv . '" title="See CV">';
                     get_template_part('assets/img/icons/inline', 'cv.svg');
