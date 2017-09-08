@@ -230,6 +230,8 @@ function coenv_base_section_title($id) {
         $section_title = '<div class="section-title"><h2><a href="/about">About</a></h2></div>';
     elseif (is_singular('pi')):
         $section_title = '<div class="section-title"><h2><a href="/research">Research</a></h2></div>';
+    elseif (is_singular('intern')):
+        $section_title = '<div class="section-title"><h2><a href="/internships">Internships</a></h2></div>';
     elseif (coenv_base_post_parent($id)):
         $section_title = '<div class="section-title"><a href="/' . $coenv_post_section->post_name . '">' . $coenv_post_section->post_title . '</a></div>';
     elseif (!is_front_page()):

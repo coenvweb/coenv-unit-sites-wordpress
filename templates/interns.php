@@ -41,21 +41,6 @@ Template Name: Intern Index
                              include( locate_template( 'partials/partial-intern.php', false, false ));
                         endwhile;
                         
-
-                        // Last Name Alpha Query
-                        $args = array(
-                            'post_type'     =>  'intern',
-                            'post_status'   =>  'publish',
-                            'order'			=>  'ASC',
-                            'posts_per_page' => -1,
-                            'years'          =>  $term->slug,
-                        );
-                        $query = new WP_Query( $args );
-                
-                        while ( $query->have_posts() ) : $query->the_post();
-                            include( locate_template( 'partials/partial-intern.php', false, false ));
-                            $i++;
-                        endwhile;
                         wp_reset_postdata();
                     } ?>
 		
