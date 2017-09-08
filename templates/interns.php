@@ -13,65 +13,51 @@ Template Name: Intern Index
 	<div class="small-12 medium-9 columns right" role="main" id="main-col">
         <div class="entry-content">
 
-<?php
-
-$temp = $wp_query;
-$wp_query = null;
-$wp_query = new WP_Query();
-$wp_query->query;
-
-/**
-* Faculty loop
-*/
-$query_args = array(
-	'post_type'	=> 'intern',
-	'post_status' => 'publish',
-	'posts_per_page' => -1,
-	'meta_key' => 'last_name',
-	'orderby' => 'meta_value',
-	'order' => 'ASC',
-	'paged' => $paged,
-);
-
-$wp_query = new WP_Query( $query_args );
-
-?>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="faculty-list-teach clearfix">
+	<div class="article__content clearfix">
 
 
 		<?php
-		# The Loop
-		while ( $wp_query->have_posts() ) :
-		$wp_query->the_post();
-		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'faculty_sm');
-		$faculty_link = get_the_permalink();
-		$faculty_phone_rows = get_field('phone_number');
-		$faculty_email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
-		$first_faculty_phone_row = $faculty_phone_rows[0];
-		$first_faculty_phone = $first_faculty_phone_row['number' ];
-		$faculty_title_rows = get_field('job_titles' );
-		$first_faculty_title_row = $faculty_title_rows[0];
-		$first_faculty_title = $first_faculty_title_row['job_title'];
-		$faculty_img_src = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
-		if (!$faculty_img_src) {
-		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
-		}
-		echo '<div class="faculty-list-item">';
-		echo '<a href="' . $faculty_link . '"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></a>';
-		echo '<h3><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></h3>';
-		echo '</div>';
-		endwhile;
-		?>
-				<div class="pager">
-					<?php /* Display navigation to next/previous pages when applicable */ ?>
-	<?php if ( function_exists('FoundationPress_pagination') ) { FoundationPress_pagination(); } else if ( is_paged() ) { ?>
-		<nav id="post-nav">
-			<div class="post-previous"><?php next_posts_link( __( '&larr; Older posts', 'FoundationPress' ) ); ?></div>
-			<div class="post-next"><?php previous_posts_link( __( 'Newer posts &rarr;', 'FoundationPress' ) ); ?></div>
-		</nav>
-	<?php } ?>
-  </div>
+                        $terms = get_terms( 'years', array(
+                        'hide_empty' => 0
+                    ) );
+                $i = 0;
+
+                    foreach( $terms as $term ) {
+                        
+                        // First Placement Query
+                        $args = array(
+                            'post_type'     =>  'intern',
+                            'post_status'   =>  'publish',
+                            'order'			=>  'ASC',
+                            'posts_per_page' => -1,
+                            'years'          =>  $term->slug
+                        );
+                        $query = new WP_Query( $args );
+
+                        echo '<h2>' . $term->name . ' Interns</h2>';
+                
+                        while ( $query->have_posts() ) : $query->the_post();
+                             include( locate_template( 'partials/partial-intern.php', false, false ));
+                        endwhile;
+                        
+
+                        // Last Name Alpha Query
+                        $args = array(
+                            'post_type'     =>  'intern',
+                            'post_status'   =>  'publish',
+                            'order'			=>  'ASC',
+                            'posts_per_page' => -1,
+                            'years'          =>  $term->slug,
+                        );
+                        $query = new WP_Query( $args );
+                
+                        while ( $query->have_posts() ) : $query->the_post();
+                            include( locate_template( 'partials/partial-intern.php', false, false ));
+                            $i++;
+                        endwhile;
+                        wp_reset_postdata();
+                    } ?>
 		
 
 	</div>
