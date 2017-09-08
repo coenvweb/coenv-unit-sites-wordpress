@@ -26,6 +26,26 @@ function coenv_base_post_types_init() {
     )
 
   );
+  register_post_type( 'intern',
+    array(
+      'labels' => array(    
+      'name' => __( 'Interns' ),
+      'singular_name' => __( 'Intern' ),
+      'add_new_item' => __( 'Add Intern'),
+      'edit_item' => __( 'Edit Intern'),
+      'new_item' => __( 'New Intern'),
+      ),
+    //'hierarchical' => true,
+    'taxonomies' => array('year'),
+    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+    'public' => true,
+    'has_archive' => false,
+    'show_ui' => true,
+    'rewrite' => array('slug' => '/internships/interns'),
+    'menu_icon' => 'dashicons-groups',
+    )
+
+  );
 }
 
 add_action( 'init', 'coenv_base_post_types_init' );
