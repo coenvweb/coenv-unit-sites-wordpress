@@ -60,7 +60,7 @@ $wp_query = new WP_Query( $query_args );
 		}
         echo '<li class="faculty-list-item" data-equalizer-watch><a href="' . $faculty_link . '">';
 		echo '<div class="image-float">' . $faculty_img . '</div>';
-		echo '<h3 class="faculty-name">' . get_the_title() . '</h3>';
+		echo '<h3 class="faculty-name">' . get_the_title() . '</h3></a>';
         echo '<h4>' . $first_faculty_title . '</h4>';
         if (!empty($first_faculty_phone)) {
             echo '<a class="phone" href="tel:+1'.$first_faculty_phone . '">' . $first_faculty_phone . '</a><br />';
@@ -68,7 +68,7 @@ $wp_query = new WP_Query( $query_args );
         if (!empty($faculty_email)) {
             echo '<a class="email" href="mailto:'.$faculty_email . '">' . $faculty_email . '</a>';
         }
-		echo '</a></li>';
+		echo '</li>';
 		endwhile;
 		?>
 	<?php endif; ?>
