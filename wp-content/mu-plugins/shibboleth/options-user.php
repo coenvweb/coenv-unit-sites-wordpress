@@ -30,7 +30,7 @@ function shibboleth_admin_footer_profile() {
 		<script type="text/javascript">
 			jQuery(function() {
 				jQuery("' . $selectors . '").attr("disabled", true);
-				jQuery("#first_name").parents(".form-table").before("<div class=\"updated fade\"><p>' 
+				jQuery("#first_name").parents(".form-table").before("<div class=\"updated fade\"><p>'
 					. __('Some profile fields cannot be changed from WordPress.', 'shibboleth') . '</p></div>");
 				jQuery("form#your-profile").submit(function() {
 					jQuery("' . $selectors . '").attr("disabled", false);
@@ -42,7 +42,7 @@ function shibboleth_admin_footer_profile() {
 
 
 /**
- * For WordPress accounts that were created by Shibboleth, warn the admin of 
+ * For WordPress accounts that were created by Shibboleth, warn the admin of
  * Shibboleth managed attributes.
  */
 function shibboleth_admin_footer_edit_user() {
@@ -69,7 +69,7 @@ function shibboleth_admin_footer_edit_user() {
 				jQuery(function() {
 					jQuery("' . implode(',', $selectors) . '").before("<span style=\"color: #F00; font-weight: bold;\">*</span> ");
 					jQuery("#first_name").parents(".form-table")
-						.before("<div class=\"updated fade\"><p><span style=\"color: #F00; font-weight: bold;\">*</span> ' 
+						.before("<div class=\"updated fade\"><p><span style=\"color: #F00; font-weight: bold;\">*</span> '
 						. __('Starred fields are managed by Shibboleth and should not be changed from WordPress.', 'shibboleth') . '</p></div>");
 				});
 			</script>';
@@ -89,7 +89,7 @@ function shibboleth_show_user_profile() {
 	<table class="form-table">
 		<tr>
 			<th><?php _e('Change Password') ?></th>
-			<td><a href="<?php echo esc_url($password_change_url); ?>" target="_blank"><?php 
+			<td><a href="<?php echo esc_url($password_change_url); ?>" target="_blank"><?php
 				_e('Change your password', 'shibboleth'); ?></a></td>
 		</tr>
 	</table>
@@ -99,7 +99,7 @@ function shibboleth_show_user_profile() {
 
 
 /**
- * Ensure profile data isn't updated by the user.  This only applies to accounts that were 
+ * Ensure profile data isn't updated by the user.  This only applies to accounts that were
  * provisioned through Shibboleth, and only for those user fields marked as 'managed'.
  */
 function shibboleth_personal_options_update() {
@@ -129,4 +129,3 @@ function shibboleth_personal_options_update() {
 		}
 	}
 }
-

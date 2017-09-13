@@ -3,13 +3,13 @@
  Plugin Name: Shibboleth
  Plugin URI: http://wordpress.org/extend/plugins/shibboleth
  Description: Easily externalize user authentication to a <a href="http://shibboleth.internet2.edu">Shibboleth</a> Service Provider
- Author: Will Norris, mitcho (Michael 芳貴 Erlewine)
- Version: 1.7
+ Author: Will Norris, mitcho (Michael 芳貴 Erlewine), Michael McNeill
+ Version: 1.8.1
  License: Apache 2 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
 define ( 'SHIBBOLETH_PLUGIN_REVISION', preg_replace( '/\$Rev: (.+) \$/', '\\1',
-	'$Rev: 1375073 $') ); // this needs to be on a separate line so that svn:keywords can work its magic
+	'$Rev$') ); // this needs to be on a separate line so that svn:keywords can work its magic
 
 
 // run activation function if new revision of plugin
@@ -24,30 +24,32 @@ if ($shibboleth_plugin_revision === false || SHIBBOLETH_PLUGIN_REVISION != $shib
  */
 function shibboleth_getenv( $var ) {
     $var_under = str_replace('-', '_', $var);
-		$var_upper = strtoupper($var);
-		$var_under_upper = strtoupper($var_under);
+    $var_upper = strtoupper($var);
+    $var_under_upper = strtoupper($var_under);
+
     $check_vars = array(
         $var => TRUE,
         'REDIRECT_' . $var => TRUE,
-				'HTTP_' . $var => TRUE,
+	'HTTP_' . $var => TRUE,
         $var_under => TRUE,
         'REDIRECT_' . $var_under => TRUE,
         'HTTP_' . $var_under => TRUE,
         $var_upper => TRUE,
         'REDIRECT_' . $var_upper => TRUE,
-				'HTTP_' . $var_upper => TRUE,
-				$var_under_upper => TRUE,
+	'HTTP_' . $var_upper => TRUE,
+	$var_under_upper => TRUE,
         'REDIRECT_' . $var_under_upper => TRUE,
         'HTTP_' . $var_under_upper => TRUE,
     );
+
     foreach ($check_vars as $check_var => $true) {
-        if ( ($result = getenv($check_var)) !== FALSE ) {
+        if ( isset($_SERVER[$check_var]) && ($result = $_SERVER[$check_var]) !== FALSE ) {
             return $result;
         }
     }
+
     return FALSE;
 }
-
 
 /**
  * Perform automatic login. This is based on the user not being logged in,
@@ -70,8 +72,8 @@ function shibboleth_auto_login() {
 add_action('init', 'shibboleth_auto_login');
 
 /**
- * Activate the plugin.  This registers default values for all of the 
- * Shibboleth options and attempts to add the appropriate mod_rewrite rules to 
+ * Activate the plugin.  This registers default values for all of the
+ * Shibboleth options and attempts to add the appropriate mod_rewrite rules to
  * WordPress's .htaccess file.
  */
 function shibboleth_activate_plugin() {
@@ -116,7 +118,7 @@ function shibboleth_activate_plugin() {
 
 	if ( function_exists('restore_current_blog') ) restore_current_blog();
 }
-register_activation_hook('shibboleth/shibboleth.php', 'shibboleth_activate_plugin');
+register_activation_hook(__FILE__, 'shibboleth_activate_plugin');
 
 
 /**
@@ -125,7 +127,7 @@ register_activation_hook('shibboleth/shibboleth.php', 'shibboleth_activate_plugi
 function shibboleth_deactivate_plugin() {
 	shibboleth_remove_htaccess();
 }
-register_deactivation_hook('shibboleth/shibboleth.php', 'shibboleth_deactivate_plugin');
+register_deactivation_hook(__FILE__, 'shibboleth_deactivate_plugin');
 
 
 /**
@@ -156,9 +158,9 @@ function shibboleth_migrate_old_data() {
 }
 
 /**
- * Load Shibboleth admin hooks only on admin page loads.  
+ * Load Shibboleth admin hooks only on admin page loads.
  *
- * 'admin_init' is actually called *after* 'admin_menu', so we have to hook in 
+ * 'admin_init' is actually called *after* 'admin_menu', so we have to hook in
  * to the 'init' action for this.
  */
 function shibboleth_admin_hooks() {
@@ -176,12 +178,12 @@ add_action('init', 'shibboleth_admin_hooks');
  * @return boolean if session is active
  * @uses apply_filters calls 'shibboleth_session_active' before returning final result
  */
-function shibboleth_session_active() { 
+function shibboleth_session_active() {
 	$active = false;
 
 	if ( shibboleth_getenv('Shib-Session-ID') ) {
 		$active = true;
- 	}
+	}
 
 	$active = apply_filters('shibboleth_session_active', $active);
 	return $active;
@@ -189,9 +191,9 @@ function shibboleth_session_active() {
 
 
 /**
- * Authenticate the user using Shibboleth.  If a Shibboleth session is active, 
- * use the data provided by Shibboleth to log the user in.  If a Shibboleth 
- * session is not active, redirect the user to the Shibboleth Session Initiator 
+ * Authenticate the user using Shibboleth.  If a Shibboleth session is active,
+ * use the data provided by Shibboleth to log the user in.  If a Shibboleth
+ * session is not active, redirect the user to the Shibboleth Session Initiator
  * URL to initiate the session.
  */
 function shibboleth_authenticate($user, $username, $password) {
@@ -210,7 +212,7 @@ function shibboleth_authenticate($user, $username, $password) {
 
 
 /**
- * When wp-login.php is loaded with 'action=shibboleth', hook Shibboleth 
+ * When wp-login.php is loaded with 'action=shibboleth', hook Shibboleth
  * into the WordPress authentication flow.
  */
 function shibboleth_login_form_shibboleth() {
@@ -220,14 +222,14 @@ add_action('login_form_shibboleth', 'shibboleth_login_form_shibboleth');
 
 
 /**
- * If a Shibboleth user requests a password reset, and the Shibboleth password 
+ * If a Shibboleth user requests a password reset, and the Shibboleth password
  * reset URL is set, redirect the user there.
  */
 function shibboleth_retrieve_password( $user_login ) {
 	$password_reset_url = shibboleth_get_option('shibboleth_password_reset_url');
 
 	if ( !empty($password_reset_url) ) {
-		$user = get_userdatabylogin($user_login);
+		$user = get_user_by( 'login', $user_login );
 		if ( $user && get_user_meta($user->ID, 'shibboleth_account') ) {
 			wp_redirect($password_reset_url);
 			exit;
@@ -238,7 +240,7 @@ add_action('retrieve_password', 'shibboleth_retrieve_password');
 
 
 /**
- * If Shibboleth is the default login method, add 'action=shibboleth' to the 
+ * If Shibboleth is the default login method, add 'action=shibboleth' to the
  * WordPress login URL.
  */
 function shibboleth_login_url($login_url) {
@@ -252,7 +254,7 @@ add_filter('login_url', 'shibboleth_login_url');
 
 
 /**
- * If the Shibboleth logout URL is set and the user has an active Shibboleth 
+ * If the Shibboleth logout URL is set and the user has an active Shibboleth
  * session, log the user out of Shibboleth after logging them out of WordPress.
  */
 function shibboleth_logout() {
@@ -275,8 +277,8 @@ add_action('wp_logout', 'shibboleth_logout', 20);
  */
 function shibboleth_session_initiator_url($redirect = null) {
 
-	// first build the target URL.  This is the WordPress URL the user will be returned to after Shibboleth 
-	// is done, and will handle actually logging the user into WordPress using the data provdied by Shibboleth 
+	// first build the target URL.  This is the WordPress URL the user will be returned to after Shibboleth
+	// is done, and will handle actually logging the user into WordPress using the data provdied by Shibboleth
     if ( function_exists('switch_to_blog') ) {
         if ( is_multisite() ) switch_to_blog($GLOBALS['current_blog']->blog_id);
         else switch_to_blog($GLOBALS['current_site']->blog_id);
@@ -324,6 +326,23 @@ function shibboleth_authenticate_user() {
 	}
 
 	$username = shibboleth_getenv($shib_headers['username']['name']);
+
+	/**
+	 * Allows a bypass mechanism for native Shibboleth authentication.
+	 *
+	 * Returning a non-null value from this filter will result in your value being
+	 * returned to WordPress. You can prevent a user from being authenticated
+	 * by returning a WP_Error object.
+	 *
+	 * @param null   $auth
+	 * @param string $username
+	 */
+	$authenticate = apply_filters( 'shibboleth_authenticate_user', null, $username );
+	if ( null !== $authenticate ) {
+		return $authenticate;
+	}
+
+
 	$user = get_user_by('login', $username);
 
 	if ( $user->ID ) {
@@ -347,7 +366,7 @@ function shibboleth_authenticate_user() {
 	}
 
 	// update user data
-	update_usermeta($user->ID, 'shibboleth_account', true);
+	update_user_meta($user->ID, 'shibboleth_account', true);
 	shibboleth_update_user_data($user->ID);
 	if ( shibboleth_get_option('shibboleth_update_roles') ) {
 		$user->set_role($user_role);
@@ -371,18 +390,13 @@ function shibboleth_create_new_user($user_login) {
 	require_once( ABSPATH . WPINC . '/registration.php' );
 	$user_id = wp_insert_user(array('user_login'=>$user_login));
 	$user = new WP_User($user_id);
-	update_usermeta($user->ID, 'shibboleth_account', true);
+	update_user_meta($user->ID, 'shibboleth_account', true);
 
 	// always update user data and role on account creation
 	shibboleth_update_user_data($user->ID, true);
 	$user_role = shibboleth_get_user_role();
 	$user->set_role($user_role);
 	do_action( 'shibboleth_set_user_roles', $user );
-
-    //add them to the requested blog
-    if(!is_user_member_of_blog($user_id, $GLOBALS['current_blog']->blog_id)) {
-        add_user_to_blog($GLOBALS['current_blog']->blog_id, $user_id, 'subscriber');
-    }
 
 	return $user;
 }
@@ -433,7 +447,7 @@ function shibboleth_get_managed_user_fields() {
 	$managed = array();
 
 	foreach ($headers as $name => $value) {
-		if ( isset($value['managed']) ) {
+		if (isset($value['managed'])) {
 			if ( $value['managed'] ) {
 				$managed[] = $name;
 			}
@@ -445,17 +459,18 @@ function shibboleth_get_managed_user_fields() {
 
 
 /**
- * Update the user data for the specified user based on the current Shibboleth headers.  Unless 
- * the 'force_update' parameter is true, only the user fields marked as 'managed' fields will be 
+ * Update the user data for the specified user based on the current Shibboleth headers.  Unless
+ * the 'force_update' parameter is true, only the user fields marked as 'managed' fields will be
  * updated.
  *
  * @param int $user_id ID of the user to update
  * @param boolean $force_update force update of user data, regardless of 'managed' flag on fields
- * @uses apply_filters() Calls 'shibboleth_user_*' before setting user attributes, 
- *       where '*' is one of: login, nicename, first_name, last_name, 
+ * @uses apply_filters() Calls 'shibboleth_user_*' before setting user attributes,
+ *       where '*' is one of: login, nicename, first_name, last_name,
  *       nickname, display_name, email
  */
 function shibboleth_update_user_data($user_id, $force_update = false) {
+
 	$shib_headers = shibboleth_get_option('shibboleth_headers');
 
 	$user_fields = array(
@@ -471,7 +486,7 @@ function shibboleth_update_user_data($user_id, $force_update = false) {
 	$user_data = array(
 		'ID' => $user_id,
 	);
-	
+
 	foreach ($user_fields as $field => $header) {
 		$managed = false;
 		if (isset($shib_headers[$header]['managed'])) {
@@ -483,22 +498,21 @@ function shibboleth_update_user_data($user_id, $force_update = false) {
 		}
 	}
 
-
 	wp_update_user($user_data);
 }
 
 
 /**
- * Sanitize the nicename using sanitize_user
+ * Sanitize the nicename using sanitize_title
  * See discussion: http://wordpress.org/support/topic/377030
- * 
+ *
  * @since 1.4
  */
-add_filter( 'shibboleth_user_nicename', 'sanitize_user' );
+add_filter( 'shibboleth_user_nicename', 'sanitize_title' );
 
 /**
- * Add a "Login with Shibboleth" link to the WordPress login form.  This link 
- * will be wrapped in a <p> with an id value of "shibboleth_login" so that 
+ * Add a "Login with Shibboleth" link to the WordPress login form.  This link
+ * will be wrapped in a <p> with an id value of "shibboleth_login" so that
  * deployers can style this however they choose.
  */
 function shibboleth_login_form() {
@@ -513,7 +527,8 @@ add_action('login_form', 'shibboleth_login_form');
  * Insert directives into .htaccess file to enable Shibboleth Lazy Sessions.
  */
 function shibboleth_insert_htaccess() {
-	if ( got_mod_rewrite() ) {
+	$disabled = defined( 'SHIBBOLETH_DISALLOW_FILE_MODS' ) && SHIBBOLETH_DISALLOW_FILE_MODS;
+	if ( got_mod_rewrite() && ! $disabled ) {
 		$htaccess = get_home_path() . '.htaccess';
 		$rules = array('AuthType shibboleth', 'Require shibboleth');
 		insert_with_markers($htaccess, 'Shibboleth', $rules);
@@ -525,7 +540,8 @@ function shibboleth_insert_htaccess() {
  * Remove directives from .htaccess file to enable Shibboleth Lazy Sessions.
  */
 function shibboleth_remove_htaccess() {
-	if ( got_mod_rewrite() ) {
+	$disabled = defined( 'SHIBBOLETH_DISALLOW_FILE_MODS' ) && SHIBBOLETH_DISALLOW_FILE_MODS;
+	if ( got_mod_rewrite() && ! $disabled ) {
 		$htaccess = get_home_path() . '.htaccess';
 		insert_with_markers($htaccess, 'Shibboleth', array());
 	}
