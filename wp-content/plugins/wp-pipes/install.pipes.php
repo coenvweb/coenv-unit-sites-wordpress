@@ -33,6 +33,7 @@ foreach ( $users as $user ) {
 
 
 if ( $wpdb->has_cap( 'collation' ) ) {
+	$collation = '';
 	if ( ! empty( $wpdb->charset ) ) {
 		$collation .= "DEFAULT CHARACTER SET $wpdb->charset";
 	}

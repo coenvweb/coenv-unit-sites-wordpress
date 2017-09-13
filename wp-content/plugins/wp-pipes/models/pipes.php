@@ -52,6 +52,12 @@ class PIPESModelPipes extends Model {
 			if ( is_file( $path ) ) {
 				$folder = dirname( $path );
 				unlink( $path );
+				$dir = opendir( $folder );
+				while ( $item = readdir( $dir ) ) {
+					if ( is_file( $folder . DS . $item ) ) {
+						unlink( $folder . DS . $item );
+					}
+				}
 				rmdir( $folder );
 			}
 		}

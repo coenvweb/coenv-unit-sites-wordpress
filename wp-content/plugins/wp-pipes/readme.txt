@@ -148,6 +148,11 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.28 =
+* Fix: bug when delete pipes - the related cache files were not deleted.
+* Fix: bug with installing WPPipes - $collation was not declared.
+* Improve: Possible to add date field into RSS feeds with RSS Source add-on.
+
 = 1.27 =
 * Fix: bug with GMT datetime issue which causes the posts come to schedule when importing posts by Post Destination add-on.
 * Change: update new description about MagWP theme.

@@ -123,7 +123,7 @@ class WPPipesAdapter_rss
 	 */
 	public static function getDataFields($param = false) {
 		$data	= new stdClass();
-		$inputs	= 'title,link,description,author,pubDate';
+		$inputs	= 'title,link,description,author,date';
 		$data->input	= explode(',',$inputs);
 		return $data;
 	}
@@ -167,7 +167,7 @@ class WPPipesAdapter_rss
 			$feed_item->enclosure->type='audio/x-mpeg';
 			
 			 */
-			$date = isset($item->date)?$item->date:'';
+			$date = isset($item->date) ? intval(strtotime($item->date)) : 0;
 			if(!$date){
 				$date = '';
 			}
