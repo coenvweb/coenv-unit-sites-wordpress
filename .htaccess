@@ -51,11 +51,8 @@ RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} uwpcc.washington.edu [NC]
 RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
 
-RewriteCond %{HTTP_HOST} ^qrc.uw.edu [NC]
-RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
-
 RewriteCond %{HTTP_HOST} ^qrc.washington.edu [NC]
-RewriteRule ^(.*)$ http://depts.washington.edu/qrc/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://qrc.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^fhl.washington.edu [NC]
 RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R=301,NC,L]
@@ -279,6 +276,17 @@ RewriteRule ^facMap.html https://fhl.uw.edu/about/campus-map/ [R=301,L]
 RewriteRule ^facilities.html https://fhl.uw.edu/facilities-resources/ [R=301,L]
 RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,L]
 RewriteRule ^discover/?$ https://www.youtube.com/watch?v=_ZqX2GRDO6M [R=301,L]
+
+# QRC Redirects
+RewriteCond %{HTTP_HOST} !^qrc.uw\.edu [NC]
+RewriteRule .? - [S=7]
+RewriteRule ^about.html https://qrc.uw.edu/about/overview/ [R=301,L]
+RewriteRule ^people.html https://qrc.uw.edu/people/members/ [R=301,L]
+RewriteRule ^research.html https://qrc.uw.edu/research/overview/ [R=301,L]
+RewriteRule ^journal.html https://qrc.uw.edu/journal/ [R=301,L]
+RewriteRule ^library.html https://qrc.uw.edu/resources/conference-rooms/ [R=301,L]
+RewriteRule ^events.html https://qrc.uw.edu/about/events/ [R=301,L]
+RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
