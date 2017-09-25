@@ -26,7 +26,7 @@ function coenv_base_hierarchical_submenu_get_children($post, $current_page, $pos
         'parent' => $post->ID,
         'offset' => 0,
         'post_type' => $post_type,
-        'post_status' => 'publish',
+        'post_status' => array('publish', 'private'),
         'exclude' => $exclude
     ); 
     $children = get_pages($args);
