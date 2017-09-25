@@ -38,7 +38,7 @@ function coenv_base_sidebar_widgets() {
   foreach( $pages as $page ) {
     // remove specific pages
     if( !in_array( $page->ID, $pages_to_remove ) ) {
-      register_sidebar( array(
+     register_sidebar( array(
         'id' => 'sidebar-' . $page->ID,
         'name' => 'Sidebar / ' . $page->post_title,
         'description' => __('Drag widgets to this container.', 'foundationpress'),
@@ -46,9 +46,19 @@ function coenv_base_sidebar_widgets() {
         'after_widget'  => $after_widget,
         'before_title'  => $before_title,
         'after_title' => $after_title
-      ) );
+      ) ); 
     }
   }
+
+  register_sidebar( array(
+    'id' => 'sidebar-intranet',
+    'name' => 'Sidebar / Intranet',
+    'description' => __('Drag widgets to this container.', 'foundationpress'),
+    'before_widget' => $before_widget,
+    'after_widget'  => $after_widget,
+    'before_title'  => $before_title,
+    'after_title' => $after_title
+  ));
 
   register_sidebar(array(
       'id' => 'before-content',
