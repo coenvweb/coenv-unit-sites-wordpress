@@ -10,6 +10,9 @@
         &:nth-child(even) {
             border-left: 1rem solid white;
         }
+        @media #{$medium-only} {
+            padding-bottom: 1rem;
+        }
         @media #{$small-only} {
             padding-bottom: .5rem;
         }
