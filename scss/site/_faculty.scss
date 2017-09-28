@@ -36,7 +36,7 @@
             }
         }
         .faculty-name {
-            padding: .75rem 1.5rem .75rem 1.5rem;
+            padding: .75rem 1.5rem .75rem 2.5rem;
             margin-top: 0;
             margin-left: -1rem;
             position: relative;
@@ -97,6 +97,9 @@
 }
 
 .faculty {
+  .faculty-title {
+      margin-bottom: 1.5rem;
+  }
     .faculty_contact_fields {
         svg {
             position: relative;
@@ -106,9 +109,13 @@
             margin-right: 3px;
         }
     }
-    .faculty-name {
+}
 
-    }
+p.job-titles {
+  margin-bottom: .5rem;
+  font-size: 1.5rem;
+  color: #737373;
+  font-weight: 600 !important;
 }
 
 .faculty-info {

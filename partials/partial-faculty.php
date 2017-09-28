@@ -77,7 +77,9 @@ $faculty_img = get_the_post_thumbnail(get_the_ID(), 'med');
                     echo '</li>';
                 }
                 if ($faculty_twitter_url) {
-                    echo '<li class="faculty-twitter"><a href="' . $faculty_twitter_url . '" title="See Twitter profile">Twitter' . $svg_arrow . '</a></li>';
+                    echo '<li class="faculty-twitter"><a href="' . $faculty_twitter_url . '" title="See Twitter profile">';
+                    get_template_part('assets/img/icons/inline', 'twitter-circle.svg');
+                    echo 'Twitter</a></li>';
                 }
                 if ($faculty_cv) {
                     echo '<li class="cv"><a href="' . $faculty_cv . '" title="See CV">';
