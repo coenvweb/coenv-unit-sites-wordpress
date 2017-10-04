@@ -265,7 +265,7 @@ function netid_login_form() {
 add_action('login_form', 'netid_login_form');
 
 function netid_login_styles() {
-    if(!strpos($_SERVER['HTTP_HOST'],'.dev')) {
+    if(!strpos($_SERVER['HTTP_HOST'],'.local') || !strpos($_SERVER['HTTP_HOST'],'.dev')) {
         wp_enqueue_style('netid_login', plugins_url( 'coenv-login.css', __FILE__ ), false, '1.0.0');
     }
 }
