@@ -69,16 +69,7 @@ if($content_areas) {
             <div class="home-content-container large-4 columns">
                 <?php
                 if( $content_area['home_content_image'] ) {
-                    echo '<a href="' . $first_link . '">';
-                    echo wp_get_attachment_image( $content_area['home_content_image'], 'thumbnail', "", array( "class" => "home-content-image" ) );
-                    echo '</a>';
-                }
-                ?>
-                <div class="home-content">
-                    <a href="<?php echo $first_link ?>"><h2><?php echo $content_area['home_content_title']; ?></h2></a>
-                    <p class="home-content-content"><?php echo $content_area['home_content_content']; ?></p>
-                    <?php $buttons = $content_area['home_content_links'];
-
+                    $buttons = $content_area['home_content_links'];
                     if( !empty( $buttons ) )  {
                         $done_buttons = '<ul class="home-content-links">';
                         $first = true;
@@ -90,9 +81,19 @@ if($content_areas) {
                                 }
                             }
                         $done_buttons .= '</ul>';
-                        echo $done_buttons;
-                    } ?>
+                    };
+                    echo '<a href="' . $first_link . '">';
+                    echo wp_get_attachment_image( $content_area['home_content_image'], 'thumbnail', "", array( "class" => "home-content-image" ) );
+                    echo '</a>';
+                }
+                ?>
+                <div class="home-content">
+                    <a href="<?php echo $first_link ?>"><h2><?php echo $content_area['home_content_title']; ?></h2></a>
+                    <p class="home-content-content"><?php echo $content_area['home_content_content']; ?></p>
+                    <?php
 
+                    echo $done_buttons;
+                ?>
                 </div><!-- .feature-info -->
 
             </div><!-- .feature-info-container -->
@@ -121,7 +122,7 @@ if($content_areas) {
     <div class="home-news-section clearfix">
         <div>
             <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">News</h2>
-            <a class="button columns large-3 right" href="/news-and-events">More News</a>
+            <a class="button columns large-3 right" href="/about/news">More News</a>
         </div>
         <?php
         # The Loop
@@ -156,7 +157,7 @@ if($content_areas) {
         <hr />
             <div>
                 <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">Spotlight</h2>
-                <a class="button columns large-3 right" href="/news-and-events">More Spotlights</a>
+                <a class="button columns large-3 right" href="/about/news/category/spotlight/">More Spotlights</a>
             </div>
             <?php
             # The Loop
