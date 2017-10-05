@@ -35,11 +35,12 @@ Template Name: Intern Index
                         );
                         $query = new WP_Query( $args );
 
-                        echo '<h2>' . $term->name . ' Interns</h2>';
+                        echo '<div class="row"><h2>' . $term->name . ' Interns</h2>';
                 
                         while ( $query->have_posts() ) : $query->the_post();
                              include( locate_template( 'partials/partial-intern.php', false, false ));
                         endwhile;
+                        echo '</div>';
                         
                         wp_reset_postdata();
                     } ?>

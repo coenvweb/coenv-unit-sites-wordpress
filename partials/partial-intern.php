@@ -12,7 +12,7 @@ if( !empty($image) ) {
 
 
 ?>
-<div class="intern-list-item large-6 columns intern-list-item--<?php the_ID() ?> <?php if (is_singular()) { echo 'large-12'; }else{ echo 'large-6'; }?>" id="<?php the_ID() ?>">
+<div class="intern-list-item large-6 columns intern-list-item--<?php the_ID() ?> <?php if (is_singular('intern')) { echo 'large-12'; }else{ echo 'large-6'; }?>" id="<?php the_ID() ?>">
 	
 	<a href="<?php the_permalink() ?>" class="intern-list-item-inner" title="<?php the_title() ?>">
         
@@ -28,7 +28,7 @@ if( !empty($image) ) {
 
 </div><!-- .Faculty-list-item -->
 
-<?php if (is_singular()) {
+<?php if (is_singular('intern')) {
   echo '<div class="large-12 content">';
     the_content();
   echo '</div>';
