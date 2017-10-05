@@ -180,7 +180,7 @@ if($content_areas) {
     <div class="home-news-section clearfix">
         <div>
             <h2 class="large-9 left" style="margin-top: 0; padding-top: 0;">Upcoming Events</h2>
-            <a class="button columns large-3 right" href="/news-and-events">More Events</a>
+            <a class="button columns large-3 right" href="/outreach-and-events">More Events</a>
         </div>
         </div>
         
