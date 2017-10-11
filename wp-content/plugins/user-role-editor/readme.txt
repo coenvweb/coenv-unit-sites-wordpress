@@ -79,9 +79,12 @@ https://translate.wordpress.org/projects/wp-plugins/user-role-editor/
 
 == Changelog =
 
+<<<<<<< HEAD
 = [4.36.1] 02.10.2017 =
 * Update: Direct access to the global $current_user variable was excluded. Current user data is initialized via WordPress core functions wp_get_current_user() or get_current_user_id().
 
+=======
+>>>>>>> 3fee7ec51849e583bd4c7184f059767be424db4d
 = [4.36] 19.09.2017 =
 * New: It's possible to set any URE's option value programmatically: use custom filter 'ure_get_option_<option_name>'. It takes a single parameter with current/default value for required options.
   Full list of User Role Editor options is available here: https://www.role-editor.com/documentation/options-list
