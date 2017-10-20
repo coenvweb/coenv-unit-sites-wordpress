@@ -14,23 +14,23 @@
 					</div>
 					<h2><?php bloginfo('name') ?></h2>
 					<div class="unit-contact">
-						<?php if (get_option('mail_address')) { ?><p><a href="http://maps.google.com/?q=<?php echo get_option('mail_address'); ?>" title="Google Maps link"><?php echo get_option('mail_address'); ?></a></p><?php } ?>
-						<?php if (get_option('public_email_address')) { ?><p><a href="mailto:<?php echo antispambot(get_option('public_email_address')); ?>" title="Send us an Email"><?php echo antispambot(get_option('public_email_address')); } ?></a>
-						<?php if (get_option('phone')) { ?> | <?php echo get_option('phone'); ?></p><?php } ?>
+						<?php if (get_field('mail_address', 'option')) { ?><p><a href="http://maps.google.com/?q=<?php echo get_field('mail_address', 'option'); ?>" title="Google Maps link"><?php echo get_field('mail_address', 'option'); ?></a></p><?php } ?>
+						<?php if (get_field('public_email_address', 'option')) { ?><p><a href="mailto:<?php echo antispambot(get_field('public_email_address', 'option')); ?>" title="Send us an Email"><?php echo antispambot(get_field('public_email_address', 'option')); } ?></a>
+						<?php if (get_field('phone', 'option')) { ?> | <?php echo get_field('phone', 'option'); ?></p><?php } ?>
 					</div>
 					<div class="footer__info">
 						<?php get_search_form() ?>
 						<div class="social-buttons">
-							<?php if (get_option('facebook')) { ?>
-							<a class="facebook button" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook">
+							<?php if (get_field('facebook', 'option')) { ?>
+							<a class="facebook button" href="<?php echo get_field('facebook', 'option'); ?>" title="Join us on Facebook">
 								<i class="fi-social-facebook"></i>
 							</a><?php } ?>
-							<?php if (get_option('twitter')) { ?>
-							<a class="twitter button" href="<?php echo 'http://twitter.com/' . get_option('twitter'); ?>" data-site-twitter="<?php echo get_option('twitter'); ?>" title="Join us on Twitter">
+							<?php if (get_field('twitter', 'option')) { ?>
+							<a class="twitter button" href="<?php echo 'http://twitter.com/' . get_field('twitter', 'option'); ?>" data-site-twitter="<?php echo get_field('twitter', 'option'); ?>" title="Join us on Twitter">
 								<i class="fi-social-twitter"></i>
 							</a><?php } ?>
-							<?php if (get_option('youtube')) { ?>
-							<a class="youtube button" href="<?php echo get_option('youtube'); ?>" title="Join us on YouTube">
+							<?php if (get_field('youtube', 'option')) { ?>
+							<a class="youtube button" href="<?php echo get_field('youtube', 'option'); ?>" title="Join us on YouTube">
 								<i class="fi-social-youtube"></i>
 							</a><?php } ?>
 						</div>
