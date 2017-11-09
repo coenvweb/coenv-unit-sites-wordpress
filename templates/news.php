@@ -98,10 +98,10 @@ if(isset($wp_query->query_vars['category'])){
 		$terms = wp_list_filter($terms, array('slug'=>'uncategorized'),'NOT');
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
-            $post_link = '<p><a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a></p>';
+            $post_link = '<a class="button" href="' . $post_link_url . '"' . $post_link_target . '>' . get_field('story_source_name') . '</a>';
         } else {
         	$post_link_url = get_the_permalink();
-            $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+            $post_link = '<a class="button" href="' . $post_link_url . '">Read more</a>';
         }
 		?>
 		<article class="blog-list-item post-<?php the_ID() ?> clearfix">
@@ -126,6 +126,7 @@ if(isset($wp_query->query_vars['category'])){
 		</header>   
 			<div class="small-12 left">
 				<?php echo the_excerpt(); ?>
+                <?=$post_link?>
 			</div>
 	</article>
 	<?php } ?>
