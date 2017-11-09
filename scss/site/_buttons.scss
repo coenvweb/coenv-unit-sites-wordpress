@@ -29,6 +29,7 @@
 } // .button
 
 .home .feature-content .button,
+.home .home-news-section .small-news .button,
 .article__content .blog-list-item .button,
 #after-content .solid-widget .button {
 	background-color: $teal;
@@ -47,6 +48,7 @@
 	}
 }
 
+.home .home-news-section .small-news .button,
 .page-template-news .article__content .blog-list-item .button {
 	@media #{$medium-up} {
 		margin-bottom: rem-calc(0);
