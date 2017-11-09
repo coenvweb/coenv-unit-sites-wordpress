@@ -36,12 +36,21 @@
 	color: $black;
 	text-decoration: none;
 
+	@media #{$medium-up} {
+		margin-bottom: rem-calc(25);
+	}
+
 	&:hover {
 		background-color: $teal-dk;
 		border-color: $teal-med;
 		color: $white;
 	}
+}
 
+.page-template-news .article__content .blog-list-item .button {
+	@media #{$medium-up} {
+		margin-bottom: rem-calc(0);
+	}
 }
 
 .home .full-student-faculty .button {
