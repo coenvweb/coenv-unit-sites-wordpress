@@ -31,6 +31,7 @@ class Mega_Menu_Widget_Manager {
         add_action( 'wp_ajax_mm_delete_widget', array( $this, 'ajax_delete_widget' ) );
         add_action( 'wp_ajax_mm_add_widget', array( $this, 'ajax_add_widget' ) );
         add_action( 'wp_ajax_mm_reorder_items', array( $this, 'ajax_reorder_items' ) );
+        add_action( 'wp_ajax_mm_save_grid_data', array( $this, 'ajax_save_grid_data' ) );
 
         add_filter( 'widget_update_callback', array( $this, 'persist_mega_menu_widget_settings'), 10, 4 );
 
@@ -184,8 +185,9 @@ class Mega_Menu_Widget_Manager {
         $id_base = sanitize_text_field( $_POST['id_base'] );
         $menu_item_id = absint( $_POST['menu_item_id'] );
         $title = sanitize_text_field( $_POST['title'] );
+        $is_grid_widget = isset( $_POST['is_grid_widget'] ) && $_POST['is_grid_widget'] == 'true';
 
-        $added = $this->add_widget( $id_base, $menu_item_id, $title );
+        $added = $this->add_widget( $id_base, $menu_item_id, $title, $is_grid_widget );
 
         if ( $added ) {
             $this->send_json_success( $added );
@@ -243,6 +245,39 @@ class Mega_Menu_Widget_Manager {
 
     }
 
+    /**
+     * Moves a widget to a new position
+     *
+     * @since 2.4
+     */
+    public function ajax_save_grid_data() {
+
+        check_ajax_referer( 'megamenu_edit' );
+
+        $grid = isset( $_POST['grid'] ) ? $_POST['grid'] : false;
+        $parent_menu_item_id = absint( $_POST['parent_menu_item'] );
+
+        $saved = true;
+
+        $existing_settings = get_post_meta( $parent_menu_item_id, '_megamenu', true);
+
+        if ( is_array( $grid ) ) {
+
+            $submitted_settings = array_merge( $existing_settings, array('grid' => $grid ) );
+
+        }
+
+        update_post_meta( $parent_menu_item_id, '_megamenu', $submitted_settings );
+
+
+        if ( $saved ) {
+            $this->send_json_success( sprintf( __( "Saved (%s)", "megamenu"), json_encode( $grid ) ) );
+        } else {
+            $this->send_json_error( sprintf( __( "Didn't save", "megamenu"), json_encode( $grid ) ) );
+        }
+
+    }
+
 
     /**
      * Returns an object representing all widgets registered in WordPress
@@ -269,13 +304,6 @@ class Mega_Menu_Widget_Manager {
 
             }
 
-        }
-
-        if ( ! is_plugin_active('image-widget-deluxe/image-widget-deluxe.php') && ! is_plugin_active('image-widget/image-widget.php') ) {
-            $widgets[] = array(
-                'text' => __("Image Widget", "megamenu"),
-                'value' => "not_installed_image_widget"
-            );
         }
 
         uasort( $widgets, array( $this, 'sort_by_text' ) );
@@ -375,7 +403,7 @@ class Mega_Menu_Widget_Manager {
 
                 $settings = $this->get_settings_for_widget_id( $widget_id );
 
-                if ( isset( $settings['mega_menu_parent_menu_id'] ) && $settings['mega_menu_parent_menu_id'] == $parent_menu_item_id ) {
+                if ( ! isset( $settings['mega_menu_is_grid_widget'] ) && isset( $settings['mega_menu_parent_menu_id'] ) && $settings['mega_menu_parent_menu_id'] == $parent_menu_item_id ) {
 
                     $name = $this->get_name_for_widget_id( $widget_id );
 
@@ -410,6 +438,7 @@ class Mega_Menu_Widget_Manager {
     public function get_widgets_and_menu_items_for_menu_id( $parent_menu_item_id, $menu_id ) {
 
         $menu_items = $this->get_second_level_menu_items( $parent_menu_item_id, $menu_id );
+
         $widgets = $this->get_widgets_for_menu_id( $parent_menu_item_id, $menu_id );
 
         $items = array_merge( $menu_items, $widgets );
@@ -439,6 +468,156 @@ class Mega_Menu_Widget_Manager {
         return $items;
     }
 
+    /**
+     * Return a sorted array of grid data representing rows, columns and items within each column.
+     *
+     * @param int $parent_menu_item_id
+     * @param int $menu_id
+     * @since 2.4
+     * @return array
+     */
+    public function get_grid_widgets_and_menu_items_for_menu_id( $parent_menu_item_id, $menu_id ) {
+
+        $meta = get_post_meta($parent_menu_item_id, '_megamenu', true);
+
+        $saved_grid = array();
+        
+        if ( isset( $meta['grid'] ) ) {
+            $saved_grid = $this->populate_saved_grid_data( $parent_menu_item_id, $menu_id, $meta['grid'] );
+        } else {
+            // return empty row
+            $saved_grid[0]['columns'][0]['meta']['span'] = 3;
+            $saved_grid = $this->populate_saved_grid_data( $parent_menu_item_id, $menu_id, $saved_grid );
+
+        }
+
+        return $saved_grid;
+    }
+
+
+    /**
+     * Ensure the widgets that are within the grid data still exist and have not been deleted (through the Widgets screen)
+     * Ensure second level menu items saved within the grid data are still actually second level menu itms within the menu structure
+     *
+     * @param $saved_grid - array representing rows, columns and widgets/menu items within each column
+     * @param $second_level_menu_items - array of second level menu items beneath the current menu item
+     * @since 2.4
+     * @return array
+     */
+    public function populate_saved_grid_data( $parent_menu_item_id, $menu_id, $saved_grid ) {
+
+        $second_level_menu_items = $this->get_second_level_menu_items( $parent_menu_item_id, $menu_id );
+
+        $menu_items_included = array();
+
+        foreach ($saved_grid as $row => $row_data ) {
+            if ( isset( $row_data['columns'] ) ) {
+                foreach ( $row_data['columns'] as $col => $col_data ) {
+                    if ( isset ( $col_data['items'] ) ) {
+                        foreach ( $col_data['items'] as $key => $item ) {
+                            if ( $item['type'] == 'item' ) {
+                                $menu_items_included[] = $item['id'];
+                                $is_child_of_parent = false;
+
+                                foreach ( $second_level_menu_items as $menu_item ) {
+                                    if ( $menu_item['id'] == $item['id'] ) {
+                                        $is_child_of_parent = true;
+                                    }
+                                }
+
+                                if ( ! $is_child_of_parent ) {
+                                    unset( $saved_grid[$row]['columns'][$col]['items'][$key] ); // menu item has been deleted or moved
+                                }
+                            } else {
+                                if ( ! $this->get_name_for_widget_id( $item['id'] ) ) {
+                                    unset( $saved_grid[$row]['columns'][$col]['items'][$key] ); // widget no longer exists
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Find any second level menu items that have been added to the menu but are not yet within the grid data
+        $orphaned_items = array();
+
+        foreach ( $second_level_menu_items as $menu_item ) {
+            if ( ! in_array($menu_item['id'], $menu_items_included ) ) {
+                $orphaned_items[] = $menu_item;
+            }
+        }
+
+        if ( ! isset( $saved_grid[0]['columns'][0]['items'][0])) {
+            $index = 0; // grid is empty
+        } else {
+            $index = 999; // create new row
+        }
+
+        foreach ($orphaned_items as $key => $menu_item) {
+            $saved_grid[$index]['columns'][0]['meta']['span'] = 3;
+            $saved_grid[$index]['columns'][0]['items'][$key] = array(
+                'id' => $menu_item['id'], 
+                'type'=> 'item', 
+                'title' => $menu_item['title'],
+                'description' => __("Menu Item", "megamenu")
+            );
+        }
+
+        if ( is_admin() ) {
+            $saved_grid = $this->populate_grid_menu_item_titles( $saved_grid, $menu_id );
+        }
+
+        return $saved_grid;
+    }
+
+
+    /**
+     * Loop through the grid data and apply titles and labels to each menu item and widget.
+     *
+     * @param array $saved_grid
+     * @param int $menu_id
+     * @since 2.4
+     * @return array
+     */
+    public function populate_grid_menu_item_titles( $saved_grid, $menu_id ) {
+
+        $menu_items = wp_get_nav_menu_items( $menu_id );
+
+        $menu_item_title_map = array();
+
+        foreach ( $menu_items as $item ) {
+            $menu_item_title_map[ $item->ID ] = $item->title;
+        }
+
+        foreach ($saved_grid as $row => $row_data ) {
+            if ( isset( $row_data['columns'] ) ) {
+                foreach ( $row_data['columns'] as $col => $col_data ) {
+                    if ( isset ( $col_data['items'] ) ) {
+                        foreach ( $col_data['items'] as $key => $item ) {
+                            if ( $item['type'] == 'item' ) {
+                                
+                                if ( isset( $menu_item_title_map[$item['id']] ) ) {
+                                    $title = $menu_item_title_map[$item['id']];
+                                } else {
+                                    $title = __("(no label)");
+                                }
+                                
+                                $saved_grid[$row]['columns'][$col]['items'][$key]['title'] = $title;
+                                $saved_grid[$row]['columns'][$col]['items'][$key]['description'] = __("Menu Item", "megamenu");
+                            } else {
+                                $saved_grid[$row]['columns'][$col]['items'][$key]['title'] = $this->get_title_for_widget_id($item['id']);
+                                $saved_grid[$row]['columns'][$col]['items'][$key]['description'] = $this->get_name_for_widget_id($item['id']);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $saved_grid;
+    }
+
 
     /**
      * Returns the widget data as stored in the options table
@@ -462,7 +641,6 @@ class Mega_Menu_Widget_Manager {
 
     }
 
-
     /**
      * Returns the widget ID (number)
      *
@@ -478,15 +656,19 @@ class Mega_Menu_Widget_Manager {
 
     }
 
-
     /**
      * Returns the name/title of a Widget
      *
      * @since 1.0
      * @param $widget_id - id_base-ID (eg meta-3)
+     * @return string e.g. "Custom HTML" or "Text"
      */
     public function get_name_for_widget_id( $widget_id ) {
         global $wp_registered_widgets;
+
+        if ( ! isset( $wp_registered_widgets[$widget_id] ) ) {
+            return false;
+        }
 
         $registered_widget = $wp_registered_widgets[$widget_id];
 
@@ -494,6 +676,23 @@ class Mega_Menu_Widget_Manager {
 
     }
 
+
+    /**
+     * Returns the title of a Widget
+     *
+     * @since 2.4
+     * @param $widget_id - id_base-ID (eg meta-3)
+     */
+    public function get_title_for_widget_id( $widget_id ) {
+        $instance = $this->get_settings_for_widget_id( $widget_id );
+
+        if ( isset( $instance['title'] ) && strlen( $instance['title'] ) ) {
+            return $instance['title'];
+        }
+
+        return $this->get_name_for_widget_id( $widget_id );
+
+    }
 
     /**
      * Returns the id_base value for a Widget ID
@@ -514,7 +713,6 @@ class Mega_Menu_Widget_Manager {
         return $id_base;
 
     }
-
 
     /**
      * Returns the HTML for a single widget instance.
@@ -583,11 +781,11 @@ class Mega_Menu_Widget_Manager {
         ?>
 
         <form method='post'>
-            <input type="hidden" name="widget-id" class="widget-id" value="<?php echo $widget_id ?>" />
+            <input type="hidden" name="widget-id" class="widget-id" value="<?php echo esc_attr( $widget_id ); ?>" />
             <input type='hidden' name='action'    value='mm_save_widget' />
-            <input type='hidden' name='id_base'   class="id_base" value='<?php echo $id_base; ?>' />
-            <input type='hidden' name='widget_id' value='<?php echo $widget_id ?>' />
-            <input type='hidden' name='_wpnonce'  value='<?php echo $nonce ?>' />
+            <input type='hidden' name='id_base'   class="id_base" value='<?php echo esc_attr( $id_base ); ?>' />
+            <input type='hidden' name='widget_id' value='<?php echo esc_attr( $widget_id ) ?>' />
+            <input type='hidden' name='_wpnonce'  value='<?php echo esc_attr( $nonce ) ?>' />
             <div class='widget-content'>
                 <?php
                     if ( is_callable( $control['callback'] ) ) {
@@ -647,26 +845,35 @@ class Mega_Menu_Widget_Manager {
      * @param int $menu_item_id
      * @param string $title
      */
-    public function add_widget( $id_base, $menu_item_id, $title ) {
+    public function add_widget( $id_base, $menu_item_id, $title, $is_grid_widget ) {
 
         require_once( ABSPATH . 'wp-admin/includes/widgets.php' );
 
         $next_id = next_widget_id_number( $id_base );
 
-        $this->add_widget_instance( $id_base, $next_id, $menu_item_id );
+        $this->add_widget_instance( $id_base, $next_id, $menu_item_id, $is_grid_widget );
 
         $widget_id = $this->add_widget_to_sidebar( $id_base, $next_id );
 
         $return  = '<div class="widget" title="' . esc_attr( $title ) . '" data-columns="2" id="' . $widget_id . '" data-type="widget" data-id="' . $widget_id . '">';
         $return .= '    <div class="widget-top">';
         $return .= '        <div class="widget-title-action">';
-        $return .= '            <a class="widget-option widget-contract" title="' . esc_attr( __("Contract", "megamenu") ) . '"></a>';
-        $return .= '            <span class="widget-cols"><span class="widget-num-cols">2</span><span class="widget-of">/</span><span class="widget-total-cols">X</span></span>';
-        $return .= '            <a class="widget-option widget-expand" title="' . esc_attr( __("Expand", "megamenu") ) . '"></a>';
+
+        if ( ! $is_grid_widget ) {
+            $return .= '            <a class="widget-option widget-contract" title="' . esc_attr( __("Contract", "megamenu") ) . '"></a>';
+            $return .= '            <span class="widget-cols"><span class="widget-num-cols">2</span><span class="widget-of">/</span><span class="widget-total-cols">X</span></span>';
+            $return .= '            <a class="widget-option widget-expand" title="' . esc_attr( __("Expand", "megamenu") ) . '"></a>';
+        }
+
         $return .= '            <a class="widget-option widget-action" title="' . esc_attr( __("Edit", "megamenu") ) . '"></a>';
         $return .= '        </div>';
         $return .= '        <div class="widget-title">';
         $return .= '            <h4>' . esc_html( $title ) . '</h4>';
+        
+        if ( $is_grid_widget ) {
+            $return .= '            <span class="widget-desc">' .  esc_html( $title ) . '</span>';
+        }
+
         $return .= '        </div>';
         $return .= '    </div>';
         $return .= '    <div class="widget-inner widget-inside"></div>';
@@ -685,7 +892,7 @@ class Mega_Menu_Widget_Manager {
      * @param int $next_id
      * @param int $menu_item_id
      */
-    private function add_widget_instance( $id_base, $next_id, $menu_item_id ) {
+    private function add_widget_instance( $id_base, $next_id, $menu_item_id, $is_grid_widget ) {
 
         $current_widgets = get_option( 'widget_' . $id_base );
 
@@ -693,6 +900,12 @@ class Mega_Menu_Widget_Manager {
             "mega_menu_columns" => 2,
             "mega_menu_parent_menu_id" => $menu_item_id
         );
+
+        if ( $is_grid_widget ) {
+            $current_widgets[ $next_id ] = array(
+                "mega_menu_is_grid_widget" => 'true'
+            );
+        }
 
         update_option( 'widget_' . $id_base, $current_widgets );
 

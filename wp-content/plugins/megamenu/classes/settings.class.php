@@ -77,7 +77,14 @@ class Mega_Menu_Settings {
 
             $preselected_theme = isset( $this->themes[ $last_updated ] ) ? $last_updated : 'default';
 
-            $this->id = isset( $_GET['theme'] ) ? $_GET['theme'] : $preselected_theme;
+            $theme_id = isset( $_GET['theme'] ) ? sanitize_text_field( $_GET['theme'] ) : $preselected_theme;
+
+            if ( isset( $this->themes[ $theme_id ] ) ) {
+                $this->id = $theme_id;
+            } else {
+                $this->id = $preselected_theme;
+            }
+
             $this->active_theme = $this->themes[$this->id];
 
         }
@@ -602,7 +609,6 @@ class Mega_Menu_Settings {
 
         $menus = get_registered_nav_menus();
 
-
         $theme_in_use_locations = array();
 
         if ( count( $locations ) ) {
@@ -671,7 +677,7 @@ class Mega_Menu_Settings {
 
         ?>
 
-        <div class='menu_settings'>
+        <div class='menu_settings menu_settings_general_settings'>
 
             <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
                 <input type="hidden" name="action" value="megamenu_save_settings" />
@@ -799,7 +805,7 @@ class Mega_Menu_Settings {
                                         <?php if (max_mega_menu_is_enabled($location)): ?>
                                             <?php $active_instance = isset($saved_settings['instances'][$location]) ? $saved_settings['instances'][$location] : 0; ?>
                                             <tr>
-                                                <td><?php echo $description; ?></td><td><input type='text' name='settings[instances][<?php echo $location ?>]' value='<?php echo $active_instance; ?>' /></td>
+                                                <td><?php echo $description; ?></td><td><input type='text' name='settings[instances][<?php echo $location ?>]' value='<?php echo esc_attr( $active_instance ); ?>' /></td>
                                             </tr>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
@@ -828,8 +834,26 @@ class Mega_Menu_Settings {
     public function menu_locations_page( $saved_settings ) {
 
         $all_locations = get_registered_nav_menus();
-        $locations = array();
 
+        // PolyLang - remove auto created/translated menu locations
+        if ( function_exists( 'pll_default_language' ) ) {
+            $default_lang = pll_default_language( 'name' );
+
+            foreach ( $all_locations as $loc => $description ) {
+                if ( false !== strpos( $loc, '___' ) ) {
+                    // Remove locations created by Polylang
+                    unregister_nav_menu( $loc );
+                } else {
+                    // Remove the language name appended to the original locations
+                    register_nav_menu( $loc, str_replace( ' ' . $default_lang, '', $description ) );
+                }
+            }
+
+            $all_locations = get_registered_nav_menus();      
+        }
+
+        $locations = array();
+        
         if ( count( $all_locations ) ) {
 
             $megamenu_locations = array();
@@ -850,7 +874,7 @@ class Mega_Menu_Settings {
 
         ?>
 
-        <div class='menu_settings'>
+        <div class='menu_settings menu_settings_menu_locations'>
 
             <form action="<?php echo admin_url('admin-post.php'); ?>" method="post">
                 <input type="hidden" name="action" value="megamenu_save_settings" />
@@ -867,18 +891,11 @@ class Mega_Menu_Settings {
                         <td class='mega-value'>
                             <p>
                                 <?php
-                                    $none = __("Your theme does not natively support menus, but you can add a new menu location using Max Mega Menu and display the menu using the Max Mega Menu widget or shortcode.", "megamenu");
-                                    $one = __("Your theme supports one menu location.", "megamenu");
-                                    $some = __("Your theme supports {number} menu locations.", "megamenu");
-
                                     if ( ! count($locations)) {
-                                        echo $none;
-                                    } else if ( count($locations) == 1) {
-                                        echo $one;
+                                        _e("Your theme does not natively support menus, but you can add a new menu location using Max Mega Menu and display the menu using the Max Mega Menu widget or shortcode.", "megamenu");
                                     } else {
-                                        echo str_replace( "{number}", count( $locations ), $some );
+                                        echo sprintf( _n("Your theme supports %s menu location.", "Your theme supports %s menu locations.", count($locations), "megamenu"), count($locations) );
                                     }
-
                                 ?>
                             </p>
 
@@ -901,7 +918,7 @@ class Mega_Menu_Settings {
                                     <li class='control-section accordion-section mega-location'>
                                         <h4 class='accordion-section-title hndle'>
 
-                                            <?php echo $description ?>
+                                            <?php echo esc_attr( $description ) ?>
 
                                             <?php
 
@@ -916,6 +933,10 @@ class Mega_Menu_Settings {
                                         </h4>
                                         <div class='accordion-section-content'>
 
+                                            <?php if ( ! max_mega_menu_is_enabled( $location ) ): ?>
+                                                <div class='notice fail'><p><?php _e("Max Mega Menu is not enabled for this menu location. If you wish to use Max Mega Menu for this location you must enable it under Appearance > Menus.", "megamenu"); ?></p></div>
+                                            <?php endif; ?>
+
                                             <table>
                                                 <?php if ( $is_custom_location ) : ?>
                                                     <tr>
@@ -924,7 +945,7 @@ class Mega_Menu_Settings {
                                                             <div class='mega-description'><?php _e("Change the name of the location.", "megamenu"); ?></div>
                                                         </td>
                                                         <td class='mega-value wide'>
-                                                            <input type='text' name='location[<?php echo $location ?>]' value='<?php echo $description; ?>' />
+                                                            <input type='text' name='location[<?php echo $location ?>]' value='<?php echo esc_attr( $description ); ?>' />
                                                         </td>
                                                     </tr>
                                                 <?php endif; ?>
@@ -1074,7 +1095,7 @@ class Mega_Menu_Settings {
 
         ?>
 
-        <div class='menu_settings'>
+        <div class='menu_settings menu_settings_tools'>
 
             <h3 class='first'><?php _e("Tools", "megamenu"); ?></h3>
 
@@ -1161,8 +1182,8 @@ class Mega_Menu_Settings {
                                 echo "</select>";
 
                                 echo "<h4>" . __("Export Format", "megamenu") . "</h4>";
-                                echo "<input value='json' type='radio' checked='checked' name='format'>" . __("JSON - I want to import this theme into another site I'm developing", "megamenu") . "<br />";
-                                echo "<input value='php' type='radio' name='format'>" . __("PHP - I want to distribute this Menu Theme in a WordPress Theme I'm developing", "megamenu") . "<br />";
+                                echo "<label><input value='json' type='radio' checked='checked' name='format'>" . __("JSON - I want to import this theme into another site I'm developing", "megamenu") . "</label>";
+                                echo "<label><input value='php' type='radio' name='format'>" . __("PHP - I want to distribute this Menu Theme in a WordPress Theme I'm developing", "megamenu") . "<label>";
 
                                 echo "<input type='submit' name='export' class='button button-secondary' value='" . __("Export Theme", "megamenu") . "' />";
 
@@ -1247,6 +1268,14 @@ class Mega_Menu_Settings {
         ) );
 
         if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
+
+            //$header_links['rate_us'] = array(
+            //    'url' => 'https://wordpress.org/support/plugin/megamenu/reviews/#new-post',
+            //    'text' => __("If you like this plugin, please vote and support us!", "megamenu"),
+            //    'target' => '_blank',
+            //    'class' => 'mega-star'
+            //);
+
             $header_links['pro'] = array(
                 'url' => 'https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
@@ -1379,43 +1408,53 @@ class Mega_Menu_Settings {
         }
 
         if ( isset( $_GET['clear_css_cache'] ) && $_GET['clear_css_cache'] == 'true' ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("CSS cache cleared", "megamenu") . "</p>";
+            echo "<p class='success'>";
+            echo __("The cache has been cleared and the menu CSS has been regenerated.", "megamenu");
+
+            $active_plugins = max_mega_menu_get_active_caching_plugins();
+
+            if ( count( $active_plugins ) ) {
+                echo "<br /><br />";
+                echo __("You may also need to clear the cache for any Caching, Minification or CDN plugin you have installed.", "megamenu");
+            }
+
+            echo "</p>";
         }
 
         if ( isset( $_GET['delete_data'] ) && $_GET['delete_data'] == 'true' ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("All plugin data removed", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("All plugin data removed", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['deleted'] ) && $_GET['deleted'] == 'true' ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Theme Deleted", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Theme Deleted", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['duplicated'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Theme Duplicated", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Theme Duplicated", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['saved'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Changes Saved", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Changes Saved", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['reverted'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Theme Reverted", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Theme Reverted", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['created'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("New Theme Created", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("New Theme Created", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['add_location'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("New Menu Location Created", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("New Menu Location Created", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['delete_location'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Menu Location Deleted", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Menu Location Deleted", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['theme_imported'] ) && $_GET['theme_imported'] == 'true' ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Theme Imported", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Theme Imported", "megamenu") . "</p>";
         }
 
         if ( isset( $_GET['theme_imported'] ) && $_GET['theme_imported'] == 'false' ) {
@@ -1423,7 +1462,7 @@ class Mega_Menu_Settings {
         }
 
         if ( isset( $_POST['theme_export'] ) ) {
-            echo "<p class='success'><i class='dashicons dashicons-yes'></i>" . __("Theme Exported", "megamenu") . "</p>";
+            echo "<p class='success'>" . __("Theme Exported", "megamenu") . "</p>";
         }
 
         do_action("megamenu_print_messages");
@@ -1523,7 +1562,7 @@ class Mega_Menu_Settings {
 
         ?>
 
-        <div class='menu_settings'>
+        <div class='menu_settings menu_settings_menu_themes'>
 
             <div class='theme_selector'>
                 <?php _e("Select theme to edit", "megamenu"); ?> <?php echo $this->theme_selector(); ?> <?php _e("or", "megamenu"); ?>
@@ -1545,7 +1584,7 @@ class Mega_Menu_Settings {
             ?>
 
             <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="theme_editor">
-                <input type="hidden" name="theme_id" value="<?php echo $this->id; ?>" />
+                <input type="hidden" name="theme_id" value="<?php echo esc_attr( $this->id ); ?>" />
                 <input type="hidden" name="action" value="megamenu_save_theme" />
                 <?php wp_nonce_field( 'megamenu_save_theme' ); ?>
 
@@ -3061,8 +3100,8 @@ class Mega_Menu_Settings {
                                     )
                                 ),
                                 'disable_mobile_toggle' => array(
-                                    'priority' => 25,
-                                    'title' => __( "Disable Mobile Toggle", "megamenu" ),
+                                    'priority' => 28,
+                                    'title' => __( "Disable Mobile Toggle Bar", "megamenu" ),
                                     'description' => __( "Hide the toggle bar and display the menu in it's open state by default.", "megamenu" ),
                                     'settings' => array(
                                         array(
@@ -3073,9 +3112,9 @@ class Mega_Menu_Settings {
                                     )
                                 ),
                                 'responsive_breakpoint' => array(
-                                    'priority' => 17,
+                                    'priority' => 3,
                                     'title' => __( "Responsive Breakpoint", "megamenu" ),
-                                    'description' => __( "Set the width at which the menu turns into a mobile menu. Set to 0px to disable responsive menu.", "megamenu" ),
+                                    'description' => __( "The menu will be converted to a mobile menu when the browser width is below this value.", "megamenu" ),
                                     'settings' => array(
                                         array(
                                             'title' => "",
@@ -3084,6 +3123,16 @@ class Mega_Menu_Settings {
                                             'validation' => 'px'
                                         )
                                     ),
+                                ),
+                                'responsive_breakpoint_disabled' => array(
+                                    'priority' => 4,
+                                    'title' => __( "The 'Responsive Breakpoint' option has been set to 0px. The desktop version of the menu will be displayed for all browsers (regardless of the browser width), so the following options are disabled.", "megamenu" ),
+                                    'description' => '',
+                                ),
+                                'mobile_toggle_disabled' => array(
+                                    'priority' => 5,
+                                    'title' => __( "The 'Disable Mobile Toggle Bar' option has been enabled. The following options are disabled as the mobile toggle bar will not be displayed.", "megamenu" ),
+                                    'description' => '',
                                 ),
                                 'mobile_columns' => array(
                                     'priority' => 30,
@@ -3194,10 +3243,18 @@ class Mega_Menu_Settings {
 
                     echo "</h2>";
 
+                    $is_first = true;
 
                     foreach ( $settings as $section_id => $section ) {
 
-                        echo "        <div class='mega-tab-content mega-tab-content-{$section_id}'>";
+                       if ($is_first) {
+                            $display = 'block';
+                            $is_first = false;
+                        } else {
+                            $display = 'none';
+                        }
+
+                        echo "        <div class='mega-tab-content mega-tab-content-{$section_id}' style='display: {$display}'>";
                         echo "            <table class='{$section_id}'>";
 
                         // order the fields by priority
@@ -3324,15 +3381,55 @@ class Mega_Menu_Settings {
                         <?php if ( $this->string_contains( $this->id, array("custom") ) ) : ?>
                             <a class='delete confirm' href='<?php echo $delete_url; ?>'><?php _e("Delete Theme", "megamenu"); ?></a>
                         <?php else : ?>
-                            <a class='revert confirm' href='<?php echo $revert_url; ?>'><?php _e("Revert Theme", "megamenu"); ?></a>
+                            <a class='confirm' href='<?php echo $revert_url; ?>'><?php _e("Revert Theme", "megamenu"); ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <?php $this->show_cache_warning(); ?>
             </form>
         </div>
 
         <?php
 
+    }
+
+
+    /**
+     * Check for installed caching/minification/CDN plugins and output a warning if one is found to be
+     * installed and activated
+     */ 
+    private function show_cache_warning() {
+
+        $active_plugins = max_mega_menu_get_active_caching_plugins();
+
+        if ( count( $active_plugins ) ):
+
+        ?>
+
+        <hr />
+
+        <div>
+
+            <h3><?php _e("Changes not showing up?", "megamenu"); ?></h3>
+
+            <p><?php echo _n("We have detected the following plugin that may prevent changes made within the theme editor from being applied to the menu.", "We have detected the following plugins that may prevent changes made within the theme editor from being applied to the menu.", count( $active_plugins), "megamenu"); ?></p>
+
+            <ul class='ul-disc'>
+                <?php
+                    foreach ( $active_plugins as $name ) {
+                        echo "<li>" . $name . "</li>";
+                    }
+                ?>
+            </ul>
+
+            <p><?php echo _n("Try clearing the cache of the above plugin if your changes are not being applied to the menu.", "Try clearing the caches of the above plugins if your changes are not being applied to the menu.", count( $active_plugins), "megamenu"); ?></p>
+
+        </div>
+
+        <?php
+
+        endif;
     }
 
 
@@ -3723,20 +3820,27 @@ class Mega_Menu_Settings {
         wp_enqueue_script('accordion');
 
         wp_enqueue_style( 'spectrum', MEGAMENU_BASE_URL . 'js/spectrum/spectrum.css', false, MEGAMENU_VERSION );
-        wp_enqueue_style( 'mega-menu-settings', MEGAMENU_BASE_URL . 'css/admin/settings.css', false, MEGAMENU_VERSION );
-        wp_enqueue_style( 'codemirror', MEGAMENU_BASE_URL . 'js/codemirror/codemirror.css', false, MEGAMENU_VERSION );
+        wp_enqueue_style( 'mega-menu-settings', MEGAMENU_BASE_URL . 'css/admin/admin.css', false, MEGAMENU_VERSION );
+        wp_deregister_style('codemirror');
+        wp_enqueue_style( 'mega-menu-codemirror', MEGAMENU_BASE_URL . 'js/codemirror/codemirror.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'select2', MEGAMENU_BASE_URL . 'js/select2/select2.css', false, MEGAMENU_VERSION );
 
-
         wp_enqueue_script( 'spectrum', MEGAMENU_BASE_URL . 'js/spectrum/spectrum.js', array( 'jquery' ), MEGAMENU_VERSION );
-        wp_enqueue_script( 'codemirror', MEGAMENU_BASE_URL . 'js/codemirror/codemirror.js', array(), MEGAMENU_VERSION );
+        wp_deregister_script('codemirror');
+        wp_enqueue_script( 'mega-menu-codemirror', MEGAMENU_BASE_URL . 'js/codemirror/codemirror.js', array(), MEGAMENU_VERSION );
         wp_enqueue_script( 'mega-menu-select2', MEGAMENU_BASE_URL . 'js/select2/select2.min.js', array(), MEGAMENU_VERSION );
-        wp_enqueue_script( 'mega-menu-theme-editor', MEGAMENU_BASE_URL . 'js/settings.js', array( 'jquery', 'spectrum', 'codemirror' ), MEGAMENU_VERSION );
+        wp_enqueue_script( 'mega-menu-theme-editor', MEGAMENU_BASE_URL . 'js/settings.js', array( 'jquery', 'spectrum', 'mega-menu-codemirror' ), MEGAMENU_VERSION );
 
         wp_localize_script( 'mega-menu-theme-editor', 'megamenu_settings',
             array(
                 'confirm' => __("Are you sure?", "megamenu"),
-                "theme_save_error" => __("Error saving theme, please try refreshing the page. Server response:", "megamenu")
+                "theme_save_error" => __("Error saving theme.", "megamenu"),
+                "theme_save_error_refresh" => __("Please try refreshing the page.", "megamenu"),
+                "theme_save_error_exhausted" => __("The server ran out of memory whilst trying to regenerate the menu CSS.", "megamenu"),
+                "theme_save_error_memory_limit" => __("Try disabling unusued plugins to increase the available memory. Alternatively, for details on how to increase your server memory limit see:", "megamenu"),
+                "theme_save_error_500" => __("The server returned a 500 error. The server did not provide an error message (you should find details of the error in your server error log), but this is usually due to your server memory limit being reached.", "megamenu"),
+                "increase_memory_limit_url" => "http://www.wpbeginner.com/wp-tutorials/fix-wordpress-memory-exhausted-error-increase-php-memory/",
+                "increase_memory_limit_anchor_text" => "How to increase the WordPress memory limit"
             )
         );
 

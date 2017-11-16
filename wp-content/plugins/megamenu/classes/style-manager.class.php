@@ -973,8 +973,10 @@ final class Mega_Menu_Style_Manager {
      */
     public function head_css() {
 
-        if ( in_array( $this->get_css_output_method(), array( 'disabled', 'fs' ) ) ) {
-            echo "<style type=\"text/css\">/** Mega Menu CSS Disabled **/</style>\n";
+        $method = $this->get_css_output_method();
+        
+        if ( in_array( $method, array( 'disabled', 'fs' ) ) ) {
+            echo "<style type=\"text/css\">/** Mega Menu CSS: {$method} **/</style>\n";
             return;
         }
 

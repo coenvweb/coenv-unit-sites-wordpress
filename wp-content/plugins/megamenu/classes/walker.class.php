@@ -73,7 +73,9 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 		// Item Class
         $classes = empty( $item->classes ) ? array() : (array) $item->classes;
 
-        $classes[] = 'menu-item-' . $item->ID;
+		if ( is_array( $item->classes ) && ! in_array( "menu-column", $item->classes ) && ! in_array( "menu-row", $item->classes ) ) {
+			$classes[] = 'menu-item-' . $item->ID;
+		}
 
         $class = join( ' ', apply_filters( 'megamenu_nav_menu_css_class', array_filter( $classes ), $item, $args ) );
 
@@ -81,7 +83,13 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
         $class = str_replace( "mega-menu-widget-class-", "", $class );
 
 		// Item ID
-		$id = esc_attr( apply_filters( 'megamenu_nav_menu_item_id', "mega-menu-item-{$item->ID}", $item, $args ) );
+		if ( is_array( $item->classes ) && ! in_array( "menu-column", $item->classes ) && ! in_array( "menu-row", $item->classes ) ) {
+			$id = "mega-menu-item-{$item->ID}";
+		} else {
+			$id = "mega-menu-{$item->ID}";
+		}
+
+		$id = esc_attr( apply_filters( 'megamenu_nav_menu_item_id', $id, $item, $args ) );
 
 		$output .= "<li class='{$class}' id='{$id}'>";
 
@@ -153,12 +161,16 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 				$item_output .= $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after;
 			}
 
-			if ( in_array('icon-top', $classes ) ) {
+			if ( is_array( $classes ) && in_array('icon-top', $classes ) ) {
 				$item_output .= "</span>";
 			}
 
 			$item_output .= '</a>';
 			$item_output .= $args->after;
+
+			if ( is_array( $item->classes ) && in_array( "menu-column", $item->classes ) || in_array( "menu-row", $item->classes ) ) {
+				$item_output = "";
+			}
 
 		}
 

@@ -29,136 +29,16 @@ class Mega_Menu_Menu_Item_Manager {
 	public function __construct() {
 
 		add_action( 'wp_ajax_mm_get_lightbox_html', array( $this, 'ajax_get_lightbox_html' ) );
+        add_action( 'wp_ajax_mm_get_empty_grid_column', array( $this, 'ajax_get_empty_grid_column' ) );
+        add_action( 'wp_ajax_mm_get_empty_grid_row', array( $this, 'ajax_get_empty_grid_row' ) );
+
 		add_action( 'wp_ajax_mm_save_menu_item_settings', array( $this, 'ajax_save_menu_item_settings') );
 
         add_filter( 'megamenu_tabs', array( $this, 'add_mega_menu_tab'), 10, 5 );
         add_filter( 'megamenu_tabs', array( $this, 'add_general_settings_tab'), 10, 5 );
         add_filter( 'megamenu_tabs', array( $this, 'add_icon_tab'), 10, 5 );
-        //add_filter( 'megamenu_tabs', array( $this, 'add_custom_styling_tab'), 10, 5 );
-        //add_filter( 'megamenu_tabs', array( $this, 'add_roles_tab'), 10, 5 );
-        //add_filter( 'megamenu_tabs', array( $this, 'add_replacements_tab'), 10, 5 );
 
 	}
-
-    /**
-     * Return the HTML to display in the 'Styling' tab
-     *
-     * @since 1.7
-     * @return array
-     */
-    public function add_custom_styling_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
-
-        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
-            return $tabs;
-        }
-
-        $return = '<h4 class="first">' . __("Custom Item Styling", "megamenu") . '</h4>';
-        $return .= "<p class='tab-description'>" . __("Customize the styling of this menu item only.", "megamenu_pro") . "</p>";
-        $return .= "<p class='tab-description'>" . __("Set custom sub menu widths, font colors, font size, icon styling, sub menu background images and lots more.", "megamenu_pro") . "</p>";
-
-        $return .= $this->get_pro_upgrade_text();
-
-        $tabs['pro_custom_styling'] = array(
-            'title' => __('Styling', 'megamenu'),
-            'content' => $return
-        );
-
-        return $tabs;
-
-    }
-
-    /**
-     * Return the HTML to display in the 'Roles' tab
-     *
-     * @since 2.2.3.2
-     * @return array
-     */
-    public function add_roles_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
-
-        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
-            return $tabs;
-        }
-
-        $return = '<h4 class="first">' . __("Roles & Restrictions", "megamenu") . '</h4>';
-        $return .= "<p class='tab-description'>" . __("Restrict the display of this menu item to users with a specific role, or by logged in status.", "megamenu_pro") . "</p>";
-        $return .= $this->get_pro_upgrade_text();
-
-        $tabs['pro_roles'] = array(
-            'title' => __('Roles', 'megamenu'),
-            'content' => $return
-        );
-
-        return $tabs;
-
-    }
-
-
-    /**
-     * Return the HTML to display in the 'Replacements' tab
-     *
-     * @since 2.2.3.2
-     * @return array
-     */
-    public function add_replacements_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
-
-        if ( $this->nags_are_hidden() || is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
-            return $tabs;
-        }
-
-        $return  = '<h4 class="first">' . __("Replacements", "megamenu") . '</h4>';
-        $return .= '<p class="tab-description">' . __("Replace this menu item with something else: a logo, a search box, WooCommerce cart total, Easy Digital Downloads cart total, custom HTML or a shortcode", "megamenu_pro") . "</p>";
-        $return .= $this->get_pro_upgrade_text();
-
-
-        $tabs['pro_replacements'] = array(
-            'title' => __('Replacements', 'megamenu'),
-            'content' => $return
-        );
-
-        return $tabs;
-
-    }
-
-
-    /**
-     * Return the text for displaying go pro nag
-     *
-     * @since 2.2.3.2
-     * @return string
-     */
-    private function get_pro_upgrade_text() {
-
-        $return  = '<div class="in-pro">';
-        $return .= "<p>This functionality is available in <a href='https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=lightbox&amp;utm_campaign=pro' target='_blank'>Max Mega Menu Pro</a><span class='dashicons dashicons-migrate'></span></p>";
-        $return .= '<p><a class="hide-pro-nags">Hide this notice for 90 days</a></p>';
-        $return .= '</div>';
-
-        return $return;
-
-    }
-
-
-    /**
-     * Returns true if nags have been hidden within the past 90 days
-     * (I really wish I did not have to put in nags, but development and support is entirely funded
-     * by upgrades)
-     *
-     * @since 2.2.3.2
-     * @return bool
-     */
-    private function nags_are_hidden() {
-        $transient = get_transient('megamenu_nag');
-
-        if ( ! $transient ) {
-            return false;
-        }
-
-        if ( strtotime("+90 days", $transient) > time() ) {
-            return true;
-        }
-
-        return false;
-    }
 
 
     /**
@@ -323,13 +203,10 @@ class Mega_Menu_Menu_Item_Manager {
             return $tabs;
         }
 
-		$widget_manager = new Mega_Menu_Widget_Manager();
-
-		$all_widgets = $widget_manager->get_available_widgets();
-
         $submenu_options = apply_filters("megamenu_submenu_options", array(
             'flyout' => __("Flyout Menu", "megamenu"),
-            'megamenu' => __("Mega Menu", "megamenu")
+            'megamenu' => __("Mega Menu - Standard Layout", "megamenu"),
+            'grid' => __("Mega Menu - Grid Layout", "megamenu") . " " . __("(Beta)", "megamenu")
         ), $menu_item_meta);
 
         $return = "<label for='mm_enable_mega_menu'>" . __("Sub menu display mode", "megamenu") . "</label>";
@@ -341,32 +218,304 @@ class Mega_Menu_Menu_Item_Manager {
         }
         $return .= "</select>";
 
-        $return .= "<select id='mm_number_of_columns' name='settings[panel_columns]'>";
-        $return .= "    <option value='1' " . selected( $menu_item_meta['panel_columns'], 1, false ) . ">1 " . __("column", "megamenu") . "</option>";
-        $return .= "    <option value='2' " . selected( $menu_item_meta['panel_columns'], 2, false ) . ">2 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='3' " . selected( $menu_item_meta['panel_columns'], 3, false ) . ">3 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='4' " . selected( $menu_item_meta['panel_columns'], 4, false ) . ">4 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='5' " . selected( $menu_item_meta['panel_columns'], 5, false ) . ">5 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='6' " . selected( $menu_item_meta['panel_columns'], 6, false ) . ">6 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='7' " . selected( $menu_item_meta['panel_columns'], 7, false ) . ">7 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='8' " . selected( $menu_item_meta['panel_columns'], 8, false ) . ">8 " . __("columns", "megamenu") . "</option>";
-        $return .= "    <option value='9' " . selected( $menu_item_meta['panel_columns'], 9, false ) . ">9 " . __("columns", "megamenu") . "</option>";
-        $return .= "</select>";
+        $widget_manager = new Mega_Menu_Widget_Manager();
 
-        $return .= "<select id='mm_widget_selector'>";
-        $return .= "    <option value='disabled'>" . __("Select a Widget to add to the panel", "megamenu") . "</option>";
+        $all_widgets = $widget_manager->get_available_widgets();
+
+        $display = $menu_item_meta['type'] == 'grid' ? 'none' : 'block';
+
+        $return .= "<div class='mm_panel_options'>";
+        $return .= "    <select id='mm_number_of_columns' name='settings[panel_columns]' style='display: {$display}'>";
+        $return .= "        <option value='1' " . selected( $menu_item_meta['panel_columns'], 1, false ) . ">1 " . __("column", "megamenu") . "</option>";
+        $return .= "        <option value='2' " . selected( $menu_item_meta['panel_columns'], 2, false ) . ">2 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='3' " . selected( $menu_item_meta['panel_columns'], 3, false ) . ">3 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='4' " . selected( $menu_item_meta['panel_columns'], 4, false ) . ">4 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='5' " . selected( $menu_item_meta['panel_columns'], 5, false ) . ">5 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='6' " . selected( $menu_item_meta['panel_columns'], 6, false ) . ">6 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='7' " . selected( $menu_item_meta['panel_columns'], 7, false ) . ">7 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='8' " . selected( $menu_item_meta['panel_columns'], 8, false ) . ">8 " . __("columns", "megamenu") . "</option>";
+        $return .= "        <option value='9' " . selected( $menu_item_meta['panel_columns'], 9, false ) . ">9 " . __("columns", "megamenu") . "</option>";
+        $return .= "    </select>";
+
+        $return .= "    <select id='mm_widget_selector'>";
+        $return .= "        <option value='disabled'>" . __("Select a Widget to add to the panel", "megamenu") . "</option>";
 
         foreach ( $all_widgets as $widget ) {
-            $return .= "<option value='" . $widget['value'] . "'>" . $widget['text'] . "</option>";
+            $return .= "    <option value='" . $widget['value'] . "'>" . $widget['text'] . "</option>";
         }
 
-        $return .= "</select>";
+        $return .= "    </select>";
+        $return .= "</div>";
+
+        $return .= $this->get_megamenu_html( $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
+
+        $return .= $this->get_megamenu_grid_html( $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta );
+
+        $tabs['mega_menu'] = array(
+            'title' => __('Mega Menu', 'megamenu'),
+            'content' => $return
+        );
+
+        return $tabs;
+	}
+
+
+    /**
+     * Return the HTML for the grid layout
+     *
+     * @since 2.4
+     * @return string
+     */
+    public function get_megamenu_grid_html( $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
+
+        $class = $menu_item_meta['type'] == 'grid' ? 'enabled' : 'disabled';
+        $display = $menu_item_meta['type'] == 'grid' ? 'block' : 'none';
+
+        $css_version = get_transient("megamenu_css_version");
+
+        $return .= "<div id='megamenu-grid' class='{$class}' style='display: {$display}'>";
+
+        if ( version_compare( '2.3.9', $css_version, '>' ) ) {
+            $link = "<a href='" . esc_attr( admin_url( 'admin.php?page=maxmegamenu_tools' ) ) . "'>" . __("Mega Menu") . " > " . __("Tools") . "</a>";
+            $return .= "<div class='notice notice-success'><p>";
+            $return .= sprintf( __("Your menu CSS needs to be updated first. Please go to %s and Clear the CSS Cache (you will only need to do this once).", "megamenu") , $link);
+            $return .= "</p></div>";
+            $return .= "</div>";
+
+            return $return;
+        }
+
+        $widget_manager = new Mega_Menu_Widget_Manager();
+
+        $grid = $widget_manager->get_grid_widgets_and_menu_items_for_menu_id( $menu_item_id, $menu_id );
+
+        if ( count ( $grid ) ) {
+
+            foreach ( $grid as $row => $row_data ) {
+
+                $column_html = "";
+
+                if ( isset( $row_data['columns'] ) && count( $row_data['columns'] ) ) {
+
+                    foreach ( $row_data['columns'] as $col => $col_data ) {
+                        $column_html .= $this->get_grid_column( $col_data );
+                    }
+                    
+                }
+
+                $return .= $this->get_grid_row( $row_data, $column_html );
+
+            }
+
+        }
+
+        $return .= "   <button class='button button-primary mega-add-row'><span class='dashicons dashicons-plus'></span>" . __("Row", "megamenu") . "</button>";
+        $return .= "</div>";
+
+        return $return;
+
+    }
+
+    /**
+     * Return the HTML to display in the Lightbox
+     *
+     * @since 2.4
+     * @return string
+     */
+    public function ajax_get_empty_grid_column() {
+
+        check_ajax_referer( 'megamenu_edit' );
+
+        $return = $this->get_grid_column();
+
+        if ( ob_get_contents() ) ob_clean(); // remove any warnings or output from other plugins which may corrupt the response
+
+        wp_send_json_success( $return );
+    }
+
+    /**
+     * Return the HTML to display in the Lightbox
+     *
+     * @since 2.4
+     * @return string
+     */
+    public function ajax_get_empty_grid_row() {
+
+        check_ajax_referer( 'megamenu_edit' );
+
+        $column_html = $this->get_grid_column();
+
+        $return = $this->get_grid_row( false, $column_html );
+
+        if ( ob_get_contents() ) ob_clean(); // remove any warnings or output from other plugins which may corrupt the response
+
+        wp_send_json_success( $return );
+    }
+
+    /**
+     * Return the HTML for a single row
+     *
+     * @param array $row_data
+     * @param string $column_html
+     * @since 2.4
+     * @return string
+     */
+    public function get_grid_row( $row_data = false, $column_html = false ) {
+
+        $hide_on_desktop_checked = "false";
+        $hide_on_desktop = 'mega-enabled';
+
+        if ( isset( $row_data['meta']['hide-on-desktop'] ) && $row_data['meta']['hide-on-desktop'] == 'true' ) {
+            $hide_on_desktop = 'mega-disabled';
+            $hide_on_desktop_checked = "true";
+        }
+
+        $hide_on_mobile_checked = "false";
+        $hide_on_mobile = 'mega-enabled';
+
+        if ( isset( $row_data['meta']['hide-on-mobile'] ) && $row_data['meta']['hide-on-mobile'] == 'true' ) {
+            $hide_on_mobile = 'mega-disabled';
+            $hide_on_mobile_checked = "true";
+        }
+
+        $desktop_tooltip_visible = __("Row", "megamenu") . ": " . __("Visible on desktop", "megamenu");
+        $desktop_tooltip_hidden = __("Row", "megamenu") . ": " . __("Hidden on desktop", "megamenu");
+        $mobile_tooltip_visible = __("Row", "megamenu") . ": " . __("Visible on mobile", "megamenu");
+        $mobile_tooltip_hidden = __("Row", "megamenu") . ": " . __("Hidden on mobile", "megamenu");
+
+        $row_class = isset( $row_data['meta']['class'] ) ? $row_data['meta']['class'] : "";
+
+        $return  = "<div class='mega-row'>";
+        $return .= "    <div class='mega-row-header'>";
+        $return .= "        <div class='mega-row-actions'>";
+        $return .= "            <span class='dashicons dashicons-sort'></span>";
+        $return .= "            <span class='dashicons dashicons-admin-generic'></span>";
+        $return .= "            <span class='mega-tooltip {$hide_on_desktop}' data-tooltip-enabled='{$desktop_tooltip_visible}' data-tooltip-disabled='{$desktop_tooltip_hidden}'><span class='dashicons dashicons-desktop'></span></span>";
+        $return .= "            <span class='mega-tooltip {$hide_on_mobile}' data-tooltip-enabled='{$mobile_tooltip_visible}' data-tooltip-disabled='{$mobile_tooltip_hidden}'><span class='dashicons dashicons-smartphone'></span></span>";
+        $return .= "            <span class='dashicons dashicons-trash'></span>";
+        $return .= "        </div>";
+        $return .= "        <div class='mega-row-settings'>";
+        $return .= "            <input name='mega-hide-on-mobile' type='hidden' value='{$hide_on_mobile_checked}' />";
+        $return .= "            <input name='mega-hide-on-desktop' type='hidden' value='{$hide_on_desktop_checked}'/>";
+        $return .= "            <label>" . __('Row class', 'megamenu') . "</label>";
+        $return .= "            <input class='mega-row-class' type='text' value='{$row_class}' />";
+        $return .= "            <button class='button button-primary mega-save-row-settings' type='submit'>" . __('Save', 'megamenu') . "</button>";
+        $return .= "        </div>";
+        $return .= "        <button class='button button-primary mega-add-column'><span class='dashicons dashicons-plus'></span>" . __("Column", "megamenu") . "</button>";
+        $return .= "    </div>";
+
+        $return .= $column_html;
+
+        $return .= "</div>";
+
+        return $return;
+    }
+
+    /**
+     * Return the HTML for an individual grid column
+     *
+     * @param array $col_data
+     * @since 2.4
+     * @return string
+     */
+    public function get_grid_column( $col_data = false ) {
+
+        $col_span = 3;
+
+        if ( isset( $col_data['meta']['span'] ) ) {
+            $col_span = $col_data['meta']['span'];
+        }
+
+        $hide_on_desktop_checked = "false";
+        $hide_on_desktop = 'mega-enabled';
+
+        if ( isset( $col_data['meta']['hide-on-desktop'] ) && $col_data['meta']['hide-on-desktop'] == 'true' ) {
+            $hide_on_desktop = 'mega-disabled';
+            $hide_on_desktop_checked = "true";
+            
+        }
+
+        $hide_on_mobile_checked = "false";
+        $hide_on_mobile = 'mega-enabled';
+
+        if ( isset( $col_data['meta']['hide-on-mobile'] ) && $col_data['meta']['hide-on-mobile'] == 'true' ) {
+            $hide_on_mobile = 'mega-disabled';
+            $hide_on_mobile_checked = "true";
+        }
+
+        $desktop_tooltip_visible = __("Column", "megamenu") . ": " . __("Visible on desktop", "megamenu");
+        $desktop_tooltip_hidden = __("Column", "megamenu") . ": " . __("Hidden on desktop", "megamenu");
+        $mobile_tooltip_visible = __("Column", "megamenu") . ": " . __("Visible on mobile", "megamenu");
+        $mobile_tooltip_hidden = __("Column", "megamenu") . ": " . __("Hidden on mobile", "megamenu");
+
+        $col_class = isset( $col_data['meta']['class'] ) ? $col_data['meta']['class'] : "";
+
+        $return .= "<div class='mega-col' data-span='{$col_span}'>";
+        $return .= "    <div class='mega-col-wrap'>";
+        $return .= "        <div class='mega-col-header'>";
+        $return .= "            <div class='mega-col-description'>";
+        $return .= "                <span class='dashicons dashicons-move'></span>";
+        $return .= "                <span class='dashicons dashicons-admin-generic'></span>";
+        $return .= "                <span class='mega-tooltip {$hide_on_desktop}' data-tooltip-enabled='{$desktop_tooltip_visible}' data-tooltip-disabled='{$desktop_tooltip_hidden}'><span class='dashicons dashicons-desktop'></span></span>";
+        $return .= "                <span class='mega-tooltip {$hide_on_mobile}' data-tooltip-enabled='{$mobile_tooltip_visible}' data-tooltip-disabled='{$mobile_tooltip_hidden}'><span class='dashicons dashicons-smartphone'></span></span>";
+        $return .= "                <span class='dashicons dashicons-trash'></span>";
+        $return .= "            </div>";
+        $return .= '            <div class="mega-col-actions">';
+        $return .= '                <a class="mega-col-option mega-col-contract" title="' . esc_attr( __("Contract", "megamenu") ) . '"><span class="dashicons dashicons-arrow-left-alt2"></span></a>';
+        $return .= "                <span class='mega-col-cols'><span class='mega-num-cols'>{$col_span}</span><span class='mega-of'>/12</span></span>";
+        $return .= '                <a class="mega-col-options mega-col-expand" title="' . esc_attr( __("Expand", "megamenu") ) . '"><span class="dashicons dashicons-arrow-right-alt2"></span></a>';
+        $return .= '            </div>';
+        $return .= "        </div>";
+        $return .= "        <div class='mega-col-settings'>";
+        $return .= "            <input name='mega-hide-on-mobile' type='hidden' value='{$hide_on_mobile_checked}' />";
+        $return .= "            <input name='mega-hide-on-desktop' type='hidden' value='{$hide_on_desktop_checked}'/>";
+        $return .= "            <label>" . __('Column class', 'megamenu') . "</label>";
+        $return .= "            <input class='mega-column-class' type='text' value='{$col_class}' />";
+        $return .= "            <button class='button button-primary mega-save-column-settings' type='submit'>" . __('Save', 'megamenu') . "</button>";
+        $return .= "        </div>";
+        $return .= "        <div class='mega-col-widgets'>";
+
+        if ( isset( $col_data['items'] ) && count( $col_data['items'] ) ) {
+            foreach ( $col_data['items'] as $item ) {
+                $return .= '<div class="widget" title="' . esc_attr( $item['title'] ) . '" id="' . esc_attr( $item['id'] ) . '" data-type="' . esc_attr( $item['type'] ) . '" data-id="' . esc_attr( $item['id'] ) . '">';
+                $return .= '    <div class="widget-top">';
+                $return .= '        <div class="widget-title">';
+                $return .= '            <h4>' .  esc_html( $item['title'] ) . '</h4>';
+                $return .= '            <span class="widget-desc">' .  esc_html( $item['description'] ) . '</span>';                
+                $return .= '        </div>';
+                $return .= '        <div class="widget-title-action">';
+                $return .= '            <a class="widget-option widget-action" title="' . esc_attr( __("Edit", "megamenu") ) . '"></a>';
+                $return .= '        </div>';
+                $return .= '    </div>';
+                $return .= '    <div class="widget-inner widget-inside"></div>';
+                $return .= '</div>';
+            }
+        }
+
+        $return .= "        </div>";
+        $return .= "    </div>";
+        $return .= "</div>";
+
+        return $return;
+    }
+
+
+    /**
+     * Return the HTML for the standard (non grid) mega menu builder
+     *
+     * @return string
+     */
+    public function get_megamenu_html( $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
+
+        $widget_manager = new Mega_Menu_Widget_Manager();
 
         $class = $menu_item_meta['type'] == 'megamenu' ? 'enabled' : 'disabled';
+        $display = $menu_item_meta['type'] == 'grid' ? 'none' : 'block';
 
-        $return .= "<div id='widgets' class='{$class}' data-columns='{$this->menu_item_meta['panel_columns']}'>";
 
-        $items = $widget_manager->get_widgets_and_menu_items_for_menu_id( $menu_item_id, $this->menu_id );
+        $return .= "<div id='widgets' class='{$class}' style='display: {$display}' data-columns='{$menu_item_meta['panel_columns']}'>";
+
+        $items = $widget_manager->get_widgets_and_menu_items_for_menu_id( $menu_item_id, $menu_id );
 
         if ( count ( $items ) ) {
 
@@ -393,14 +542,8 @@ class Mega_Menu_Menu_Item_Manager {
 
         $return .= "</div>";
 
-        $tabs['mega_menu'] = array(
-            'title' => __('Mega Menu', 'megamenu'),
-            'content' => $return
-        );
-
-        return $tabs;
-	}
-
+        return $return;
+    }
 
 	/**
 	 * Return the HTML to display in the 'General Settings' tab
@@ -411,7 +554,7 @@ class Mega_Menu_Menu_Item_Manager {
 	public function add_general_settings_tab( $tabs, $menu_item_id, $menu_id, $menu_item_depth, $menu_item_meta ) {
 
 		$return  = '<form>';
-        $return .= '    <input type="hidden" name="menu_item_id" value="' . $menu_item_id . '" />';
+        $return .= '    <input type="hidden" name="menu_item_id" value="' . esc_attr( $menu_item_id ) . '" />';
         $return .= '    <input type="hidden" name="action" value="mm_save_menu_item_settings" />';
         $return .= '    <input type="hidden" name="_wpnonce" value="' . wp_create_nonce('megamenu_edit') . '" />';
         $return .= '    <input type="hidden" name="tab" value="general_settings" />';
@@ -610,9 +753,9 @@ class Mega_Menu_Menu_Item_Manager {
             $display = $icon_tab['active'] ? "block" : "none";
 
             $return .= "<div class='mm_tab_{$id}' style='display: {$display}'>";
-            $return .= "    <form class='icon_selector'>";
+            $return .= "    <form class='icon_selector icon_selector_{$id}'>";
             $return .= "        <input type='hidden' name='_wpnonce' value='" . wp_create_nonce('megamenu_edit') . "' />";
-            $return .= "        <input type='hidden' name='menu_item_id' value='{$menu_item_id}' />";
+            $return .= "        <input type='hidden' name='menu_item_id' value='" . esc_attr( $menu_item_id ) . "' />";
             $return .= "        <input type='hidden' name='action' value='mm_save_menu_item_settings' />";
             $return .=          $icon_tab['content'];
             $return .= "    </form>";

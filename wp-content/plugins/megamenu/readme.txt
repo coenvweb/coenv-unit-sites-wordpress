@@ -2,8 +2,8 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 2.3.7.1
+Tested up to: 4.9
+Stable tag: 2.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Max Mega Menu will automatically convert your existing menu or menus into a mega
 
 https://www.youtube.com/watch?v=44dJwP1AXT8
 
-Documentation & Demo: https://www.megamenu.com
+Documentation & Demo: [https://www.megamenu.com](https://www.megamenu.com)
 
 ###Features:
 
@@ -60,21 +60,33 @@ Max Mega Menu is developed with a focus on code quality, performance and usabili
 > * Automatic updates
 > * Priority Support
 >
-> Find out more: https://www.megamenu.com/upgrade/
+> Find out more: [https://www.megamenu.com/upgrade/](https://www.megamenu.com/upgrade/)
 
 == Frequently Asked Questions ==
 
-Troubleshooting:
+= Where do I start? =
+[https://www.megamenu.com/documentation/installation/](https://www.megamenu.com/documentation/installation/)
 
-https://www.megamenu.com/articles/troubleshooting/
+= It’s not working at all =
+[https://www.megamenu.com/documentation/not-working-at-all/](https://www.megamenu.com/documentation/not-working-at-all/)
 
-Getting started:
+= It works but somethings not right =
+[https://www.megamenu.com/documentation/it-works-but-somethings-not-right/](https://www.megamenu.com/documentation/it-works-but-somethings-not-right/)
 
-https://www.megamenu.com/documentation/installation/
+= The mobile menu is visible but nothing happens when I click it =
+[https://www.megamenu.com/documentation/the-mobile-menu-is-visible-but-nothing-happens-when-i-click-it/](https://www.megamenu.com/documentation/the-mobile-menu-is-visible-but-nothing-happens-when-i-click-it/)
 
-Not working with your theme? Mobile menu not working? Multiple mobile menu toggle icons?
+= The mobile menu is completely hidden =
+[https://www.megamenu.com/documentation/the-mobile-menu-is-completely-hidden/](https://www.megamenu.com/documentation/the-mobile-menu-is-completely-hidden/)
 
-https://www.megamenu.com/documentation/removing-residual-styling/
+= I see two mobile toggle buttons =
+[https://www.megamenu.com/documentation/i-see-two-mobile-toggle-buttons/](https://www.megamenu.com/documentation/i-see-two-mobile-toggle-buttons/)
+
+= A blank screen appears when I click the blue ‘Mega Menu’ button =
+[https://www.megamenu.com/documentation/blank-screen-when-clicking-blue-mega-menu/](https://www.megamenu.com/documentation/blank-screen-when-clicking-blue-mega-menu/)
+
+= Changes I make in the Theme Editor aren’t being applied to the menu =
+[https://www.megamenu.com/documentation/theme-editor-not-working/](https://www.megamenu.com/documentation/theme-editor-not-working/)
 
 == Installation ==
 
@@ -96,6 +108,18 @@ See https://www.megamenu.com for more screenshots
 
 == Changelog ==
 
+= 2.4 [17/10/17] =
+
+* New (BETA): Grid Layout Option for Mega Menus
+* Fix: Keyboard navigation for mobile menu
+* Improvement: Grey out mobile toggle options when "Disable mobile toggle" is checked
+* Improvement: Grey out all mobile options when "Responsive Breakpoint" is set to 0px
+* Improvement: Warn users that menu theme edits may not show up when caching, CDN or minification plugins are installed
+* Improvement: Better warning/error messages when theme changes fail to save
+* Refactor: CSS and general behind the scenes improvements
+* Fix: jQuery Migrate notices (admin)
+* Fix: Authenticated XSS issue. Thanks to detectify.com for discovering it and pluginvulnerabilities.com for reporting it!
+
 = 2.3.8 [25/08/17] =
 
 * Fix: Compatibility fix for Reamaze plugin
@@ -103,11 +127,11 @@ See https://www.megamenu.com for more screenshots
 * Improvement: Add support for vh/vw units in theme editor
 * Change: Don't close open sub menus when mobile toggle is clicked
 
-= 2.3.7.1 [06/07/17]=
+= 2.3.7.1 [06/07/17] =
 
 * Fix: Conflict with Site Origin Page Builder
 
-= 2.3.7 [06/07/17]=
+= 2.3.7 [06/07/17] =
 
 * Compatibility with WordPress 4.8 Text and Media Widgets
 * Fix: Compatiblity with SiteOrigin Page Builder Layout builder

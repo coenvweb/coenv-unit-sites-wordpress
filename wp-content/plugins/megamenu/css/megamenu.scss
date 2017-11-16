@@ -61,6 +61,12 @@
     @include background($container_background_from, $container_background_to);
     @include border-radius($container_border_radius_top_left, $container_border_radius_top_right, $container_border_radius_bottom_right, $container_border_radius_bottom_left);
 
+    &.mega-keyboard-navigation .mega-menu-toggle:focus,
+    &.mega-keyboard-navigation #{$menu} a:focus,
+    &.mega-keyboard-navigation #{$menu} input:focus {
+        @include box-shadow(inset 0px 0px 3px 1px #00FFFF);
+    }
+
     #{$menu} {
         visibility: visible;
         text-align: $menu_item_align;
@@ -156,12 +162,6 @@
             cursor: pointer;
         }
 
-        &.mega-keyboard-navigation + .mega-menu-toggle.mega-menu-open,
-        &.mega-keyboard-navigation a:focus,
-        &.mega-keyboard-navigation input:focus {
-            @include box-shadow(inset 0px 0px 3px 1px #00FFFF);
-        }
-
         p {
             margin-bottom: 10px;
         }
@@ -169,6 +169,11 @@
         input,
         img {
             max-width: 100%;
+        }
+
+        .widget_media_image figure,
+        .widget_media_image .wp-caption {
+            width: auto !important;
         }
 
         li.mega-menu-item > ul.mega-sub-menu {
@@ -424,6 +429,48 @@
 
         }
 
+        // sub menu items (grid)
+        li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-row {
+            width: 100%;
+            float: left;
+
+            .mega-menu-column {
+                float: left;
+                min-height: 1px;
+            }
+
+            @include desktop {
+                @for $col from 1 through 12 {
+                    > ul.mega-sub-menu > li.mega-menu-columns-#{$col}-of-12 {
+                        width: (100% / 12) * $col;
+                    }
+                }
+            }
+
+            @include mobile {
+                @if $mobile_columns == 2 {
+                    > ul.mega-sub-menu > li.mega-menu-column {
+                        width: 50%;
+                    }
+
+                    > ul.mega-sub-menu > li.mega-menu-column.mega-menu-clear {
+                        clear: left;
+                    }
+                } @else {
+                    > ul.mega-sub-menu > li.mega-menu-column {
+                        width: 100%;
+                        clear: both;
+                    }
+                }
+            }
+
+
+            .mega-menu-column > ul.mega-sub-menu > li.mega-menu-item {
+                padding: $panel_widget_padding_top $panel_widget_padding_right $panel_widget_padding_bottom $panel_widget_padding_left;
+                width: 100%;
+            }
+        }
+
         // sub menu items (megamenu)
         > li.mega-menu-megamenu > ul.mega-sub-menu {
             z-index: $z_index;
@@ -436,6 +483,7 @@
             border-left: $panel_border_left solid $panel_border_color;
             border-right: $panel_border_right solid $panel_border_color;
             border-bottom: $panel_border_bottom solid $panel_border_color;
+            max-width: none;
 
             @if unit($panel_width) == '%' {
                 left: 0;
@@ -482,7 +530,8 @@
                 }
             }
 
-            > li.mega-menu-item {
+            > li.mega-menu-item,
+            li.mega-menu-column > ul.mega-sub-menu > li.mega-menu-item {
                 color: $panel_font_color;
                 font-family: $panel_font_family;
                 font-size: $panel_font_size;
@@ -622,6 +671,7 @@
             border-bottom: $flyout_border_bottom solid $flyout_border_color;
             padding: $flyout_padding_top $flyout_padding_right $flyout_padding_bottom $flyout_padding_left;
             @include background($flyout_menu_background_from, $flyout_menu_background_to);
+            max-width: none;
 
             @if $shadow == 'on' {
                 @include box-shadow($shadow_horizontal $shadow_vertical $shadow_blur $shadow_spread $shadow_color);
@@ -818,15 +868,15 @@
         }
 
         @include mobile {
-            li.mega-menu-item.mega-hide-on-mobile,
-            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-item.mega-hide-on-mobile {
+            li.mega-hide-on-mobile,
+            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-hide-on-mobile {
                 display: none;
             }
         }
 
         @include desktop {
-            li.mega-menu-item.mega-hide-on-desktop,
-            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-item.mega-hide-on-desktop {
+            li.mega-hide-on-desktop,
+            > li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-hide-on-desktop {
                 display: none;
             }
         }

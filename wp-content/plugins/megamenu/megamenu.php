@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.3.8
+ * Version:     2.4
  * Author:      Tom Hemsley
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -26,7 +26,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.3.8';
+    public $version = '2.4';
 
 
     /**
@@ -63,7 +63,8 @@ final class Mega_Menu {
 
         add_filter( 'wp_nav_menu_args', array( $this, 'modify_nav_menu_args' ), 99999 );
         add_filter( 'wp_nav_menu', array( $this, 'add_responsive_toggle' ), 10, 2 );
-        add_filter( 'wp_nav_menu_objects', array( $this, 'add_widgets_to_menu' ), 10, 2 );
+
+        add_filter( 'wp_nav_menu_objects', array( $this, 'add_widgets_to_menu' ), apply_filters("megamenu_wp_nav_menu_objects_priority", 10), 2 );
         add_filter( 'megamenu_nav_menu_objects_before', array( $this, 'setup_menu_items' ), 5, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'reorder_menu_items_within_megamenus' ), 6, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'apply_classes_to_menu_items' ), 7, 2 );
@@ -440,6 +441,14 @@ final class Mega_Menu {
                     break;
                 }
 
+                if ( in_array( $class, array( 'menu-column', 'menu-row', 'hide-on-mobile', 'hide-on-desktop') ) ) { // these are always prefixed
+                    continue;
+                }
+
+                if ( strpos( $class, "menu-columns-" ) !== FALSE ) { // mega-menu-columns-X-of-Y are always prefixed
+                    continue;
+                }
+
                 $return[] = $class;
             }
         }
@@ -497,10 +506,14 @@ final class Mega_Menu {
 
         $widget_manager = new Mega_Menu_Widget_Manager();
 
+        $rolling_dummy_id = 999999999;
+
+        $items_to_move = array();
+
         foreach ( $items as $item ) {
 
-            // only look for widgets on top level items
-            if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'megamenu' || $item->depth === 1 && $item->parent_submenu_type == 'tabbed' ) {
+            // populate standard (non-grid) sub menus
+            if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'megamenu' || ( $item->depth === 1 && $item->parent_submenu_type == 'tabbed' && $item->megamenu_settings['type'] != 'grid' ) ) {
 
                 $panel_widgets = $widget_manager->get_widgets_for_menu_id( $item->ID, $args->menu );
 
@@ -508,7 +521,7 @@ final class Mega_Menu {
 
                     $widget_position = 0;
                     $total_widgets_in_menu = count( $panel_widgets );
-                    $next_order = $this->menu_order_of_next_top_level_item( $item->ID, $items);
+                    $next_order = $this->menu_order_of_next_top_level_item( $item->ID, $items );
 
                     if ( ! in_array( 'menu-item-has-children', $item->classes ) ) {
                         $item->classes[] = 'menu-item-has-children';
@@ -542,6 +555,144 @@ final class Mega_Menu {
 
                         $widget_position++;
                     }
+                }
+            }
+
+            // populate grid sub menus
+            if ( $item->depth === 0 && $item->megamenu_settings['type'] == 'grid' || ( $item->depth === 1 && $item->parent_submenu_type == 'tabbed' && $item->megamenu_settings['type'] == 'grid' ) ) {
+
+                $saved_grid = $widget_manager->get_grid_widgets_and_menu_items_for_menu_id( $item->ID, $args->menu->term_id );
+
+                $next_order = $this->menu_order_of_next_top_level_item( $item->ID, $items) - 999;
+
+                foreach ( $saved_grid as $row => $row_data ) {
+
+                    $rolling_dummy_id++;
+                    $next_order++;
+                    
+                    if ( isset( $row_data['columns'] ) ) {
+
+                        if ( ! in_array( 'menu-item-has-children', $item->classes ) ) {
+                            $item->classes[] = 'menu-item-has-children';
+                        }
+
+                        if ( ! in_array( 'menu-megamenu', $item->classes ) ) {
+                            $item->classes[] = 'menu-megamenu';
+                        }
+
+                        $classes = array("menu-row");
+
+                        if ( isset( $row_data['meta']['class'] ) ) {
+                            $classes = array_merge( $classes, array_unique( explode( " ", $row_data['meta']['class'] ) ) );
+                        }
+                        
+                        $row_item = array(
+                            'menu_item_parent'      => $item->ID,
+                            'type'                  => 'mega_row',
+                            'title'                 => 'Custom Row',
+                            'parent_submenu_type'   => '',
+                            'menu_order'            => $next_order,
+                            'depth'                 => 0,
+                            'ID'                    => "{$item->ID}-{$row}",
+                            'megamenu_settings'     => Mega_Menu_Nav_Menus::get_menu_item_defaults(),
+                            'db_id'                 => $rolling_dummy_id,
+                            'classes'               => $classes
+                        );
+
+                        $items[] = (object) $row_item;
+
+                        $row_dummy_id = $rolling_dummy_id;
+
+                        foreach ( $row_data['columns'] as $col => $col_data ) {
+
+                            $rolling_dummy_id++;
+                            $next_order++;
+
+                            $classes = array("menu-column");
+
+                            if ( isset( $col_data['meta']['class'] ) ) {
+                                $classes = array_merge( $classes, array_unique( explode( " ", $col_data['meta']['class'] ) ) );
+                            }
+
+                            if ( isset( $col_data['meta']['span'] ) ) {
+                                $classes[] = "menu-columns-{$col_data['meta']['span']}-of-12";
+                            }
+
+                            if ( isset( $col_data['meta']['hide-on-mobile'] ) && $col_data['meta']['hide-on-mobile'] == 'true' ) {
+                                $classes[] = "hide-on-mobile";
+                            }
+
+                            if ( isset( $col_data['meta']['hide-on-mobile'] ) && $col_data['meta']['hide-on-desktop'] == 'true' ) {
+                                $classes[] = "hide-on-desktop";
+                            }
+
+                            $col_item = array(
+                                'menu_item_parent'     => $row_dummy_id,
+                                'type'                 => 'mega_column',
+                                'title'                => 'Custom Column',
+                                'parent_submenu_type'  => '',
+                                'menu_order'           => $next_order,
+                                'depth'                => 0,
+                                'ID'                   => "{$item->ID}-{$row}-{$col}",
+                                'megamenu_settings'    => Mega_Menu_Nav_Menus::get_menu_item_defaults(),
+                                'db_id'                => $rolling_dummy_id,
+                                'classes'              => $classes
+                            );
+
+                            $items[] = (object) $col_item;
+
+                            if ( isset( $col_data['items'] ) ) {
+
+                                foreach ( $col_data['items'] as $key => $block ) {
+
+                                    $next_order++;
+
+                                    if ( $block['type'] == 'widget' ) {
+
+                                        $widget_settings = array_merge( Mega_Menu_Nav_Menus::get_menu_item_defaults() );
+
+                                        $menu_item = array(
+                                            'type'                  => 'widget',
+                                            'parent_submenu_type'   => '',
+                                            'title'                 => '',
+                                            'content'               => $widget_manager->show_widget( $block['id'] ),
+                                            'menu_item_parent'      => $rolling_dummy_id,
+                                            'db_id'                 => 0, // This menu item does not have any childen
+                                            'ID'                    => $block['id'],
+                                            'menu_order'            => $next_order,
+                                            'megamenu_order'        => 0,
+                                            'megamenu_settings'     => $widget_settings,
+                                            'depth'                 => 1,
+                                            'classes'               => array(
+                                                "menu-item",
+                                                "menu-item-type-widget",
+                                                "menu-widget-class-" . $widget_manager->get_widget_class( $block['id'] )
+                                            )
+                                        );
+
+                                        $items[] = (object) $menu_item;
+
+                                    } else {
+                                        // mark this menu item to be moved into a new position
+                                        $items_to_move[$block['id']] = array('new_parent' => $rolling_dummy_id, 'new_order' => $next_order);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( count( $items_to_move ) ) {
+            foreach ( $items_to_move as $id => $new_parent ) {
+                $items_to_find[] = $id;
+            }
+
+            foreach ( $items as $item ) {
+                if ( in_array( $item->ID, $items_to_find ) ) {
+                    $item->menu_item_parent = $items_to_move[ $item->ID ]['new_parent'];
+                    $item->menu_order = $items_to_move[ $item->ID ]['new_order'];
                 }
             }
         }
@@ -626,7 +777,6 @@ final class Mega_Menu {
                 }
             }
         }
-
 
         // apply saved metadata to each menu item
         foreach ( $items as $item ) {
@@ -734,46 +884,47 @@ final class Mega_Menu {
 
         foreach ( $items as $item ) {
 
-            if ( $item->depth === 0 ) {
-                $item->classes[] = 'align-' . $item->megamenu_settings['align'];
-                $item->classes[] = 'menu-' . $item->megamenu_settings['type'];
-            }
+            if ( ! in_array("menu-row", $item->classes) && ! in_array("menu-column", $item->classes) ) {
+                if ( $item->depth === 0 ) {
+                    $item->classes[] = 'align-' . $item->megamenu_settings['align'];
+                    $item->classes[] = 'menu-' . $item->megamenu_settings['type'];
+                }
 
-            if ( $item->megamenu_settings['hide_arrow'] == 'true' ) {
-                $item->classes[] = 'hide-arrow';
-            }
+                if ( $item->megamenu_settings['hide_arrow'] == 'true' ) {
+                    $item->classes[] = 'hide-arrow';
+                }
 
+                if ( $item->megamenu_settings['icon'] != 'disabled' ) {
+                    $item->classes[] = 'has-icon';
+                }
 
-            if ( $item->megamenu_settings['icon'] != 'disabled' ) {
-                $item->classes[] = 'has-icon';
-            }
+                if ( $item->megamenu_settings['icon_position'] != 'left' ) {
+                    $item->classes[] = "icon-" . $item->megamenu_settings['icon_position'];
+                }
 
-            if ( $item->megamenu_settings['icon_position'] != 'left' ) {
-                $item->classes[] = "icon-" . $item->megamenu_settings['icon_position'];
-            }
+                if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth === 0 ) {
+                    $item->classes[] = 'hide-text';
+                }
 
-            if ( $item->megamenu_settings['hide_text'] == 'true' && $item->depth === 0 ) {
-                $item->classes[] = 'hide-text';
-            }
+                if ( $item->megamenu_settings['item_align'] != 'left' && $item->depth === 0 ) {
+                    $item->classes[] = 'item-align-' . $item->megamenu_settings['item_align'];
+                }
 
-            if ( $item->megamenu_settings['item_align'] != 'left' && $item->depth === 0 ) {
-                $item->classes[] = 'item-align-' . $item->megamenu_settings['item_align'];
-            }
+                if ( $item->megamenu_settings['hide_on_desktop'] == 'true' ) {
+                    $item->classes[] = 'hide-on-desktop';
+                }
 
-            if ( $item->megamenu_settings['hide_on_desktop'] == 'true' ) {
-                $item->classes[] = 'hide-on-desktop';
-            }
+                if ( $item->megamenu_settings['hide_on_mobile'] == 'true' ) {
+                    $item->classes[] = 'hide-on-mobile';
+                }
 
-            if ( $item->megamenu_settings['hide_on_mobile'] == 'true' ) {
-                $item->classes[] = 'hide-on-mobile';
-            }
+                if ( $item->megamenu_settings['hide_sub_menu_on_mobile'] == 'true' ) {
+                    $item->classes[] = 'hide-sub-menu-on-mobile';
+                }
 
-            if ( $item->megamenu_settings['hide_sub_menu_on_mobile'] == 'true' ) {
-                $item->classes[] = 'hide-sub-menu-on-mobile';
-            }
-
-            if ( $item->megamenu_settings['disable_link'] == 'true') {
-                $item->classes[] = 'disable-link';
+                if ( $item->megamenu_settings['disable_link'] == 'true') {
+                    $item->classes[] = 'disable-link';
+                }
             }
 
             // add column classes for second level menu items displayed in mega menus
@@ -828,7 +979,7 @@ final class Mega_Menu {
             return $args;
         }
 
-        // internal filter
+        // internal action to use as a counter
         do_action('megamenu_instance_counter_' . $args['theme_location']);
 
         $num_times_called = did_action('megamenu_instance_counter_' . $args['theme_location']);
@@ -897,7 +1048,6 @@ final class Mega_Menu {
                 }
             }
 
-
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
                 "id" => '%1$s',
                 "class" => '%2$s mega-no-js',
@@ -965,14 +1115,7 @@ final class Mega_Menu {
         if ( did_action('megamenu_after_install') === 1 ) :
 
         ?>
-        <div class="updated">
-            <?php
 
-                $link = "<a href='" . admin_url("nav-menus.php?mmm_get_started") . "'>" . __( "click here", 'megamenu' ) . "</a>";
-
-            ?>
-            <p><?php echo sprintf( __( 'Thanks for installing Max Mega Menu! Please %s to get started.', 'megamenu' ), $link); ?></p>
-        </div>
         <?php
 
         endif;
@@ -1258,5 +1401,53 @@ if ( ! function_exists('max_mega_menu_delete_themes') ) {
 
         return delete_site_option( "megamenu_themes" );
 
+    }
+}
+
+if ( ! function_exists('max_mega_menu_get_active_caching_plugins') ) {
+
+    /**
+     * Return list of active caching/CDN/minification plugins
+     *
+     * @since 2.4
+     * @return array
+     */
+    function max_mega_menu_get_active_caching_plugins() {
+
+        $caching_plugins = apply_filters("megamenu_caching_plugins", array(
+            'litespeed-cache/litespeed-cache.php',
+            'js-css-script-optimizer/js-css-script-optimizer.php',
+            'merge-minify-refresh/merge-minify-refresh.php',
+            'minify-html-markup/minify-html.php',
+            'simple-cache/simple-cache.php',
+            'w3-total-cache/w3-total-cache.php',
+            'wp-fastest-cache/wpFastestCache.php',
+            'wp-speed-of-light/wp-speed-of-light.php',
+            'wp-super-cache/wp-cache.php',
+            'wp-super-minify/wp-super-minify.php',
+            'autoptimize/autoptimize.php',
+            'bwp-minify/bwp-minify.php',
+            'cache-enabler/cache-enabler.php',
+            'cloudflare/cloudflare.php',
+            'comet-cache/comet-cache.php',
+            'css-optimizer/bpminifycss.php',
+            'fast-velocity-minify/fvm.php',
+            'hyper-cache/plugin.php',
+            'remove-query-strings-littlebizzy/remove-query-strings.php',
+            'remove-query-strings-from-static-resources/remove-query-strings.php',
+            'query-strings-remover/query-strings-remover.php',
+            'wp-rocket/wp-rocket.php'
+        ));
+
+        $active_plugins = array();
+
+        foreach ( $caching_plugins as $plugin_path ) {
+            if ( is_plugin_active( $plugin_path ) ) {
+                $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_path );
+                $active_plugins[] = $plugin_data['Name'];
+            }
+        }
+
+        return $active_plugins;
     }
 }

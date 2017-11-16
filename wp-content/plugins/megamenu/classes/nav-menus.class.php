@@ -46,9 +46,8 @@ class Mega_Menu_Nav_Menus {
     public function __construct() {
 
         add_action( 'admin_init', array( $this, 'register_nav_meta_box' ), 9 );
-        add_action( 'megamenu_nav_menus_scripts', array( $this, 'enqueue_menu_page_scripts' ), 9 );
+        add_action( 'megamenu_nav_menus_scripts', array( $this, 'enqueue_menu_page_scripts' ), 10 );
         add_action( 'wp_ajax_mm_save_settings', array($this, 'save') );
-        add_action( 'wp_ajax_mm_hide_nags', array($this, 'set_nag_transient') );
         add_filter( 'hidden_meta_boxes', array( $this, 'show_mega_menu_metabox' ) );
 
         add_filter('siteorigin_panels_is_admin_page', array( $this, 'enable_site_origin_page_builder' ) );
@@ -128,14 +127,8 @@ class Mega_Menu_Nav_Menus {
 
         if ( 'nav-menus.php' == $pagenow ) {
 
-            if ( isset( $_GET['mmm_get_started'] ) &&  ( ! isset( $_POST ) || ! count( $_POST ) ) ) {
-                $class = 'mega_menu_meta_box mmm_get_started';
-            } else {
-                $class = 'mega_menu_meta_box';
-            }
-
             add_meta_box(
-                $class,
+                'mega_menu_meta_box',
                 __("Max Mega Menu Settings", "megamenu"),
                 array( $this, 'metabox_contents' ),
                 'nav-menus',
@@ -189,7 +182,7 @@ class Mega_Menu_Nav_Menus {
 
 
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
-        wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/menus.css', false, MEGAMENU_VERSION );
+        wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/admin.css', false, MEGAMENU_VERSION );
 
         wp_enqueue_script( 'mega-menu', MEGAMENU_BASE_URL . 'js/admin.js', array(
             'jquery',
@@ -207,7 +200,6 @@ class Mega_Menu_Nav_Menus {
         wp_localize_script( 'mega-menu', 'megamenu',
             array(
                 'debug_launched' => __("Launched for Menu ID", "megamenu"),
-                'get_started' => __("Use these settings to enable Max Mega Menu", "megamenu"),
                 'launch_lightbox' => __("Mega Menu", "megamenu"),
                 'is_disabled_error' => __("Please enable Max Mega Menu using the settings on the left of this page.", "megamenu"),
                 'save_menu' => __("Please save the menu structure to enable this option.", "megamenu"),
@@ -216,7 +208,7 @@ class Mega_Menu_Nav_Menus {
                 'nonce_check_failed' => __("Oops. Something went wrong. Please reload the page.", "megamenu"),
                 'css_prefix' => $prefix,
                 'css_prefix_message' => __("Custom CSS Classes will be prefixed with 'mega-'", "megamenu"),
-                'not_installed_image_widget' => __("Image Widget not installed. Please go to Plugins > Add New and search for 'Image Widget' to enable this option.", "megamenu")
+                'row_is_full' => __("There is not enough space in this row to add a new column. Make space by reducing the width of the columns within the row or create a new row.", "megamenu")
             )
         );
 
@@ -237,20 +229,6 @@ class Mega_Menu_Nav_Menus {
 
     }
 
-    /**
-     * Set a transient to note the time at which the 'Hide go pro nag' link was clicked
-     *
-     * @since 2.2.3.2
-     */
-    public function set_nag_transient() {
-
-        check_ajax_referer( 'megamenu_edit', 'nonce' );
-
-        set_transient('megamenu_nag', time() );
-
-        wp_die(__("No problem! This tab will be hidden for the next 90 days.", "megamenu"));
-
-    }
 
     /**
      * Save the mega menu settings (submitted from Menus Page Meta Box)

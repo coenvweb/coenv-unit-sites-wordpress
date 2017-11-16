@@ -99,6 +99,12 @@ class Mega_Menu_Widget extends WP_Widget {
 				</p>
 				<label for="<?php echo $this->get_field_id( 'location' ); ?>"><?php _e( 'Menu Location:', 'megamenu' ); ?></label>
 				<select id="<?php echo $this->get_field_id( 'location' ); ?>" name="<?php echo $this->get_field_name( 'location' ); ?>">
+					<?php 
+						if ( $selected_location === 0 ) {
+							echo "<option selected='true' disabled='disabled'>" . __("Select location", "megamenu") ."</option>"; 
+						}
+					?>
+
 					<?php
 						foreach ( $locations as $location => $description ) {
 							echo "<option value='{$location}'" . selected($location, $selected_location) . ">{$description}</option>";

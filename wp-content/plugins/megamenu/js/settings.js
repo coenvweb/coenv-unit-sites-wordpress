@@ -6,6 +6,30 @@
 jQuery(function ($) {
     "use strict";
 
+    if ($('input.mega-setting-responsive_breakpoint').val() == '0px') {
+        $('.mega-tab-content-mobile_menu').addClass('mega-mobile-disabled');
+    }
+
+    $('input.mega-setting-responsive_breakpoint').on("keyup", function() {
+        if ( $(this).val() == '0px') {
+            $('.mega-tab-content-mobile_menu').addClass('mega-mobile-disabled');
+        } else {
+            $('.mega-tab-content-mobile_menu').removeClass('mega-mobile-disabled');
+        }
+    });
+
+    if ($('input[name="settings[disable_mobile_toggle]"]').is(":checked")) {
+        $('.mega-tab-content-mobile_menu').addClass('mega-toggle-disabled');
+    }
+
+    $('input[name="settings[disable_mobile_toggle]"]').on("change", function() {
+        if ( $(this).is(":checked")) {
+            $('.mega-tab-content-mobile_menu').addClass('mega-toggle-disabled');
+        } else {
+            $('.mega-tab-content-mobile_menu').removeClass('mega-toggle-disabled');
+        }
+    });
+
     if ($('#codemirror').length) {
         var codeMirror = CodeMirror.fromTextArea(document.getElementById('codemirror'), {
             tabMode: 'indent',
@@ -18,9 +42,9 @@ jQuery(function ($) {
         });
     }
 
-    $('.mega-custom_styling > h4').on('click', function() {
+    $('[data-tab="mega-tab-content-custom_styling"]').on('click', function() {
         setTimeout( function() {
-            $('.mega-custom_styling').find('.CodeMirror').each(function(key, value) {
+            $('.mega-tab-content-custom_styling').find('.CodeMirror').each(function(key, value) {
                 value.CodeMirror.refresh();
             });
         }, 160);
@@ -44,7 +68,7 @@ jQuery(function ($) {
         }
     });
 
-    $(".mega-copy_color span").live('click', function() {
+    $(".mega-copy_color span").on('click', function() {
         var from = $(this).parent().parent().children(":first").find("input");
         var to = $(this).parent().parent().children(":last").find("input");
 
@@ -56,7 +80,7 @@ jQuery(function ($) {
         return confirm(megamenu_settings.confirm);
     });
 
-    $('#theme_selector').bind('change', function () {
+    $('#theme_selector').on('change', function () {
         var url = $(this).val();
         if (url) {
             window.location = url;
@@ -83,8 +107,6 @@ jQuery(function ($) {
         }
     });
 
-
-
     $('.mega-tab-content').each(function() {
         if (!$(this).hasClass('mega-tab-content-general')) {
             $(this).hide();
@@ -105,25 +127,51 @@ jQuery(function ($) {
         $(".theme_result_message").remove();
         $(".spinner").css('visibility', 'visible').css('display', 'block');
         $("input#submit").attr('disabled', 'disabled');
-        var data = $(this).serialize();
+        var memory_limit_link = $("<a>").attr('href', megamenu_settings.increase_memory_limit_url).html(megamenu_settings.increase_memory_limit_anchor_text);
 
-        $.post(ajaxurl, data, function (message) {
-            $(".spinner").css('display', 'none');
-            $("input#submit").removeAttr('disabled');
-            if (message.success !== true) {
-                var error = $("<p>").addClass('fail theme_result_message').html(message.data);
+        $.ajax({
+            url:ajaxurl,
+            async: true,
+            data: $(this).serialize(),
+            type: 'POST',
+            success: function(message) {
+                if (message.success == true) { //Theme saved successfully
+                    var success = $("<p>").addClass('saved theme_result_message');
+                    var icon = $("<span>").addClass('dashicons dashicons-yes');
+                    $('.megamenu_submit .mega_left').append(success.html(icon).append(message.data));
+                } else if (message.success == false) { // Errors in scss
+                    var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + " ").append(megamenu_settings.theme_save_error_refresh).append("<br /><br />").append(message.data);
+                    $('.megamenu_submit').after(error);
+                } else {
+                    if (message.indexOf("exhausted") >= 0) {
+                        var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + " ").append(megamenu_settings.theme_save_error_exhausted + " ").append(megamenu_settings.theme_save_error_memory_limit + " ").append(memory_limit_link).append("<br />").append(message);
+                    } else {
+                        var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + "<br />").append(message);
+                    }
+                    $('.megamenu_submit').after(error);
+                }
+            },
+            error: function(message) {
+                if(message.status == 500) { // 500 error with no response from server
+                    var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error_500 + " ").append(megamenu_settings.theme_save_error_memory_limit + " ").append(memory_limit_link);
+                } else {
+                    if (message.responseText == "-1") { // nonce check failed
+                        var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + " " + megamenu_settings.theme_save_error_nonce_failed );
+                    }
+                }
                 $('.megamenu_submit').after(error);
-            } else {
-                var success = $("<p>").addClass('success theme_result_message');
-                var icon = $("<span>").addClass('dashicons dashicons-yes');
-                $('.megamenu_submit .mega_left').append(success.html(icon).append(message.data));
-            }
 
-        }).fail(function(message) {
-            var error = $("<p>").addClass('fail theme_result_message').html(megamenu_settings.theme_save_error + "<br /><br />" + message.responseText );
-            $('.megamenu_submit').after(error);
+            },
+            complete: function() {
+                $(".spinner").hide();
+                $("input#submit").removeAttr('disabled');
+            }
         });
-    }).on("change", function(e) {
+
+    });
+
+
+    $(".theme_editor").on("change", function(e) {
         $(".theme_result_message").css('visibility', 'hidden');
     });;
 
