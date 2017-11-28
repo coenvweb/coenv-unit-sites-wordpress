@@ -68,8 +68,14 @@ add_image_size( 'news_small', '250', '188', true );
 add_image_size( 'news_medium', '370', '276', true );
 add_image_size( 'news_large', '425', '317', true );
 
-
-
+add_filter('image_size_names_choose', 'add_custom_sizes');
+function add_custom_sizes($sizes) {
+    return array_merge($sizes, array(
+        'news_small' => __('4:3 Small'),
+        'news_medium' => __('4:3 Medium'),
+        'news_large' => __('4:3 Large'),
+    ));
+}
 
 /**
  * Gets the top-level ancestor for pages, posts and custom post types
