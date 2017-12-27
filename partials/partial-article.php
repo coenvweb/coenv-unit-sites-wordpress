@@ -11,10 +11,10 @@
                 <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
 				<?php
 				$terms = wp_get_post_terms( get_the_ID(), 'category');
-				$termlist = ''; 
+				$termlist = '';
                 foreach ($terms as $term) {
                     if ( $term->slug != 'uncategorized') {
-                        $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                        $termlist .= '<a href="/news-and-events/'. $term->taxonomy . '/' . $term->slug . '">' . $term->name . '</a>, ';
                     }
                 }
                 $termlist = rtrim($termlist,', ');
