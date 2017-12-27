@@ -84,7 +84,7 @@ function coenv_base_get_ancestor($attr = 'ID') {
 		return false;
 	}
 
-	if ( ($post->post_type == 'post' || is_archive() || is_search())) {
+	if ( (is_archive() || is_search())) {
 
 		$page_for_posts = get_option( 'page_for_posts' );
 
@@ -97,7 +97,7 @@ function coenv_base_get_ancestor($attr = 'ID') {
 	}
 
 	// test for pages
-	if ( $post->post_type == 'page' ) {
+	if ( $post->post_type == 'page' || $post->post_type == 'post' ) {
 
 		// test for top-level pages
 		if ( $post->post_parent == 0 ) {

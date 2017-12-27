@@ -9,12 +9,19 @@
         <div class="row">
             <div class="columns medium-6 left post-meta">
                 <time class="article__time" datetime="<?php echo get_the_date('Y-m-d h:i:s') ?>"><?php echo get_the_date('M j, Y') ?></time> 
-                <?php $categories = get_the_category_list(' ') ?>
-                <?php if ( $categories ) : ?>
-                <div class="article__categories">
-                    | <?php echo $categories ?>
-                </div>
-                <?php endif; ?>
+				<?php
+				$terms = wp_get_post_terms( get_the_ID(), 'category');
+				$termlist = ''; 
+                foreach ($terms as $term) {
+                    if ( $term->slug != 'uncategorized') {
+                        $termlist .= '<a href="' . $url_current . '?tax='. $term->taxonomy . '&term=' . $term->slug . '">' . $term->name . '</a>, ';
+                    }
+                }
+                $termlist = rtrim($termlist,', ');
+                if($termlist) {
+                echo '<div class="article__categories"> | ' . $termlist . '</div>';
+                }
+				?>
             </div>
             <div class="columns medium-6 sharer">
                  <?php $title = rawurlencode(get_the_title());
