@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 4.0
-Tested up to: 4.8
-Stable tag: 3.0.2
+Tested up to: 4.9
+Stable tag: 3.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,9 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 3.0.3 =
+Added the option to show the featured image in when using the shortcode. Add featured_image=yes to the shortcode to show it: `[content_block featured_image=yes]`. By default the medium image size is displayed, you can change it like this: `[content_block featured_image=yes featured_image_size=full]`.
 
 = 3.0.2 =
 Tested for WordPress 4.8 compatibility.

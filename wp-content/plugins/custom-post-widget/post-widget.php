@@ -173,6 +173,8 @@ function custom_post_widget_shortcode( $atts ) {
 		'slug' => '',
 		'class' => 'content_block',
 		'suppress_content_filters' => 'no',
+		'featured_image' => 'no',
+		'featured_image_size' => 'medium',
 		'title' => 'no',
 		'title_tag' => 'h3'
 	), $atts ) );
@@ -195,14 +197,17 @@ function custom_post_widget_shortcode( $atts ) {
 		$content_post = get_posts( $args );
 
 		foreach( $content_post as $post ) :
-			$content .= '<div class="'. esc_attr($class) .'" id="custom_post_widget-' . $id . '">';
+			$content .= '<div class="'. esc_attr( $class ) .'" id="custom_post_widget-' . $id . '">';
 			if ( $title === 'yes' ) {
-				$content .= '<' . esc_attr( $title_tag ) . '>' . $post->post_title . '</' . esc_attr( $title_tag ) . '>';
+				$content .= '<' . esc_attr( $title_tag ) . '>' . $post -> post_title . '</' . esc_attr( $title_tag ) . '>';
+			}
+			if ( $featured_image === 'yes' ) {
+				$content .= get_the_post_thumbnail( $post -> ID, $featured_image_size );
 			}
 			if ( $suppress_content_filters === 'no' ) {
-				$content .= apply_filters( 'the_content', $post->post_content);
+				$content .= apply_filters( 'the_content', $post -> post_content );
 			} else {
-				$content .= $post->post_content;
+				$content .= $post -> post_content;
 			}
 			$content .= '</div>';
 		endforeach;
