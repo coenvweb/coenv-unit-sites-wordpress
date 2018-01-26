@@ -74,3 +74,51 @@ function tableau_func( $atts ) {
 }
 
 add_shortcode( 'tableau', 'tableau_func' );
+
+function tile_func($atts, $content = null) {
+    $attributes = shortcode_atts( array(
+        'id' => '', 
+    ), $atts);
+
+    $tiles = get_field('tiles');
+
+	
+	if($attributes['id'] && $tiles[$attributes['id']]) {
+		$tiles = array($tiles[$attributes['id']]);
+	}
+
+    $output = '<div class="tiles-container">';
+        if($tiles)  {
+            foreach($tiles as $tile) {
+
+                if($tile['links']) {
+                    $links = '';
+                    foreach($tile['links'] as $link) {
+                        $links .= '<a class="tile-link button" href="'.$link['url'].'" target="'.(strpos($link['url'], $_SERVER['HTTP_HOST']) ? '' : '_blank').'">'.$link['link_text'].'</a>';
+                    }
+                }
+
+                $output .= "<div class='page-tile' style='background-image: url(".$tile['image']['sizes']['medium'].");'>";
+                    if($img_tag) {
+                        $output .= $img_tag;
+                    }
+                    $output .= '<div class="content-wrap">';
+                        $output .= "<h3 class='title'>".$tile['title']."</h3>";
+                        if($tile['body_content']) {
+                            $output .= "<div class='body'>".$tile['content']."</div>";
+                        }
+                        if($links) {
+                            $output .= $links;
+                        }
+                    $output .= "</div>";
+                $output .= "</div>";
+            }
+        }
+        if(count($tiles) >= 2) {
+            $output .= "<div style='clear:both'></div>";
+        }
+    $output .= '</div>';
+    return $output;
+}
+add_shortcode('page-tiles', 'tile_func');
+
