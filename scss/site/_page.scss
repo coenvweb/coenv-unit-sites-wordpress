@@ -13,6 +13,7 @@
 }
 
 .tiles-container {
+    margin-bottom: 1rem;
 	@media #{$small-only} {
 		&:nth-child(even) {
 			clear: right;
@@ -69,9 +70,9 @@
 			}
 		}
 		.title {
-			width: 83%;
+			width: 90%;
 			margin: auto;
-			margin-bottom: 1rem;
+			margin-bottom: .5rem;
 		}
 		.tile-img {
 		}
