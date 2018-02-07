@@ -203,14 +203,14 @@ class AppRequirements {
 	function displayResults() {
 		?>
 
-		<h3><?php echo __( 'WPPipes Requirements' ); ?></h3>
-		<div><?php echo __( 'If any of the items below are highlighted in red, you should try to correct them. Failure to do so could lead to your WPPipes operation not functioning correctly.' ); ?></div>
+		<h3><?php _e( 'WPPipes Requirements' ); ?></h3>
+		<div><?php _e( 'If any of the items below are highlighted in red, you should try to correct them. Failure to do so could lead to your WPPipes operation not functioning correctly.' ); ?></div>
 		<table class="adminlist table table-bordered" width="100%">
 			<thead>
 			<tr>
-				<th class="title"><?php echo __( 'Requirement' ); ?></th>
-				<th width="20%"><?php echo __( 'Status' ); ?></th>
-				<th width="60%"><?php echo __( 'Info' ); ?></th>
+				<th class="title"><?php _e( 'Requirement' ); ?></th>
+				<th width="20%"><?php _e( 'Status' ); ?></th>
+				<th width="60%"><?php _e( 'Info' ); ?></th>
 			</tr>
 			</thead>
 			<tfoot>
@@ -223,8 +223,8 @@ class AppRequirements {
 			<tbody>
 			<?php
 			foreach ( $this->_required_results as $i => $req ) : ?>
-				<tr <?php echo ( $i ++ % 2 ) ? 'class="alternate"' : ''; ?>>
-					<td class="key"><?php echo $req['name']; ?></td>
+				<tr <?php _e(( $i ++ % 2 ) ? 'class="alternate"' : ''); ?>>
+					<td class="key"><?php _e($req['name']); ?></td>
 					<td style="text-align: center;">
 						<?php $style = $req['status'] ? 'font-weight: bold; color: green;' : 'font-weight: bold; color: red;'; ?>
 
@@ -235,7 +235,7 @@ class AppRequirements {
 						<?php endif; ?>
 					</td>
 					<td>
-						<span><?php echo $req['status'] ? '' : __( $req['info'] ); ?></span>
+						<span><?php _e($req['status'] ? '' : __( $req['info'] )); ?></span>
 					</td>
 				</tr>
 			<?php endforeach; ?>

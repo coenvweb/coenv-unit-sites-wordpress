@@ -28,10 +28,10 @@ $siteurl = get_site_url();
 ?>
 <script type="text/javascript">
 	<!--
-	var siteurl = "<?php echo $siteurl; ?>";
-	var ogb_ops = <?php echo $ops_js; ?>;
-	var ogb_ips = <?php echo $ips_js; ?>;
-	var ogb_pipes = <?php echo $pipes_js; ?>;
+	var siteurl = "<?php _e($siteurl); ?>";
+	var ogb_ops = <?php _e($ops_js); ?>;
+	var ogb_ips = <?php _e($ips_js); ?>;
+	var ogb_pipes = <?php _e($pipes_js); ?>;
 	var ogb_id;
 	var ogb_change_field = null;
 	var ogb_order = 'a';
@@ -114,9 +114,9 @@ $siteurl = get_site_url();
 <h2>
 	<?php
 	if ( ! $item->id ) { // New Pipe
-		echo __( 'Add New Pipe', 'pipes' );
+		_e( 'Add New Pipe', 'pipes' );
 	} else { // Edit a Pipe
-		echo __( 'Edit Pipe', 'pipes' );
+		_e( 'Edit Pipe', 'pipes' );
 		$other_pipes = $this->other_pipes;
 		?>
 		<select name="surf"
@@ -125,12 +125,12 @@ $siteurl = get_site_url();
 			<option value="1">- switch to other pipe -</option>
 			<?php foreach ( $other_pipes as $other ): ?>
 				<option
-					value="admin.php?page=pipes.pipe&id=<?php echo $other['id']; ?>"><?php echo $other['id'] . ' - ' . $other['name']; ?></option>
+					value="admin.php?page=pipes.pipe&id=<?php _e($other['id']); ?>"><?php _e($other['id'] . ' - ' . $other['name']); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<?php echo __( '- or -' ); ?>
+		<?php _e( '- or -' ); ?>
 		<?php
-		echo ' <a class="add-new-h2" href="admin.php?page=pipes.pipe">' . __( 'Add New', 'pipes' ) . '</a>';
+		_e(' <a class="add-new-h2" href="admin.php?page=pipes.pipe">' . __( 'Add New', 'pipes' ) . '</a>');
 	}
 	?>
 </h2>
@@ -140,7 +140,7 @@ $siteurl = get_site_url();
 <div class="foobla" style="padding-top:15px;">
 	<div class="alert alert-info alert-dismissable hidden">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<h3><?php echo __( 'The first time here?', 'pipes' ); ?></h3>
+		<h3><?php _e( 'The first time here?', 'pipes' ); ?></h3>
 
 		<div class="row">
 			<div class="col-md-4">
@@ -174,27 +174,27 @@ $siteurl = get_site_url();
 <?php
 // Show arrow instruction for [Test this Pipe] button
 if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messages'] ) ) {
-	echo '<img src="' . plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/test-pipe.png" width="300" height="83" style="position:absolute;right:50px;top:45px;" />';
+	_e('<img src="' . plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/test-pipe.png" width="300" height="83" style="position:absolute;right:50px;top:45px;" />');
 }
 ?>
 
-<?php echo PIPES::show_message(); ?>
+<?php _e(PIPES::show_message()); ?>
 
 <div id="container-collapse" class="container-collapse"></div>
 
 <div class="row" style="padding-bottom: 20px;">
 	<!-- Pipe Title & Publish Status -->
 	<div class="col-md-6">
-		<a href="#" style="display:none;"><?php echo __( 'none' ); ?></a>
+		<a href="#" style="display:none;"><?php _e( 'none' ); ?></a>
 
 		<div class="input-group input-group-lg col-xs-12">
-			<span class="input-group-addon"><?php echo sprintf( __( 'Pipe#%s' ), $item->id ); ?></span>
-			<input placeholder="<?php echo __( 'Give this Pipe a name, whatever, just a name' ); ?>"
+			<span class="input-group-addon"><?php _e(sprintf( __( 'Pipe#%s' ), $item->id )); ?></span>
+			<input placeholder="<?php _e( 'Give this Pipe a name, whatever, just a name' ); ?>"
 			       onfocus="this.select();" type="text" class="form-control" id="pipe_title" required="true"
-			       value="<?php echo $item->name; ?>" id="jform_title" name="jform[name]" />
+			       value="<?php esc_html_e($item->name); ?>" id="jform_title" name="jform[name]" />
 				<span class="input-group-addon">
 					<input type="checkbox" name="jform[published]" value="1" <?php if ( $item->published == 1 ) {
-						echo 'checked="checked"';
+						esc_html_e('checked="checked"');
 					} ?>/>
 				</span>
 		</div>
@@ -214,7 +214,7 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 					} else{
 						$schedule = "0";
 					}
-					echo '<select name="adapter[params][schedule]" class="chosen-select" id="adapter_params_schedule">
+					_e('<select name="adapter[params][schedule]" class="chosen-select" id="adapter_params_schedule">
                     	<option value="">--Set schedule this pipe--</option>
                         <option ' . ( ( !$schedule ) ? 'selected="selected"' : '' ) . ' value="0">Global</option>
                         <option ' . ( ( $schedule === 'i1' ) ? 'selected="selected"' : '' ) . ' value="i1">1 minutes</option>
@@ -240,24 +240,24 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 				<div class="btn-group">
 					<button onclick="submitbutton(this.form,'apply')" class="btn btn-default btn-lg">
 						<span class="fa fa-save"></span>
-						<?php echo __( 'Save' ); ?>
+						<?php _e( 'Save' ); ?>
 					</button>
 					<button type="button" class="btn btn-default  btn-lg dropdown-toggle" data-toggle="dropdown">
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="admin.php?page=<?php echo PIPES::$__page_prefix ?>.pipes&task=export_to_share&id=<?php echo $item->id; ?>"
+							<a href="admin.php?page=<?php _e(PIPES::$__page_prefix); ?>.pipes&task=export_to_share&id=<?php _e($item->id); ?>"
 							   class="btn-pipes-export">
 								<span class="fa fa-download"></span>
-								<?php echo __( 'Export to .pipe file' ); ?>
+								<?php _e( 'Export to .pipe file' ); ?>
 							</a>
 						</li>
 						<li>
-							<a href="admin.php?page=<?php echo PIPES::$__page_prefix ?>.pipes&task=export_to_share&set_template=1&id=<?php echo $item->id; ?>"
+							<a href="admin.php?page=<?php _e(PIPES::$__page_prefix); ?>.pipes&task=export_to_share&set_template=1&id=<?php _e($item->id); ?>"
 							   class="btn-pipes-export">
 								<span class="fa fa-save"></span>
-								<?php echo __( 'Export as a template' ); ?>
+								<?php _e( 'Export as a template' ); ?>
 							</a>
 						</li>
 					</ul>
@@ -266,23 +266,23 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 			<div class="btn-wrapper" id="toolbar-postu">
 				<div class="btn-group">
 					<button id="openBtn"
-					        href="admin.php?page=<?php echo PIPES::$__page_prefix ?>.pipe&task=post&id=<?php echo $item->id; ?>"
+					        href="admin.php?page=<?php _e(PIPES::$__page_prefix); ?>.pipe&task=post&id=<?php _e($item->id); ?>"
 					        class="btn btn-default btn-lg btn-pipes-post">
-						<i class="fa fa-flask" title=""></i> <?php echo __( 'Test this Pipe' ); ?>
+						<i class="fa fa-flask" title=""></i> <?php _e( 'Test this Pipe' ); ?>
 					</button>
 					<button type="button" class="btn btn-default btn-lg dropdown-toggle" data-toggle="dropdown">
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li>
-							<a href="admin.php?page=<?php echo PIPES::$__page_prefix ?>.pipe&task=post&id=<?php echo $item->id; ?>&u=1"
+							<a href="admin.php?page=<?php _e(PIPES::$__page_prefix); ?>.pipe&task=post&id=<?php _e($item->id); ?>&u=1"
 							   class="btn-pipes-post">
-								<span class="fa fa-flask" title=""></span> <?php echo __( 'Test in Update mode' ); ?>
+								<span class="fa fa-flask" title=""></span> <?php _e( 'Test in Update mode' ); ?>
 							</a>
 						</li>
 						<!--							<li>-->
 						<!--								<p class="alert alert-info" style="margin: 0 10px;">-->
-						<!--									--><?php //echo __( 'These buttons are for testing purpose only. The cronjob/schedule will handle this action automatically for you.' ); ?>
+						<!--									--><?php //_e(__( 'These buttons are for testing purpose only. The cronjob/schedule will handle this action automatically for you.' ); ?>
 						<!--									<br />-->
 						<!--									--><?php //echo __( 'Both Test this Pipe & Test in Update mode will run the Pipe. The Test in Update mode will overwrite existing data (if any).' ); ?>
 						<!--									<br />-->
@@ -329,29 +329,29 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 		<i class="fa fa-chevron-right fa-2x"></i></div>
 	<!-- Engine / Source -->
 	<div class="col-md-6">
-		<img src="<?php echo plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-2.png'; ?>"
+		<img src="<?php _e(plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-2.png'); ?>"
 		     width="145" height="83" />
 
 		<div class="panel panel-success" style="position: relative;">
 			<div class="panel-heading">
 				<ul class="nav nav-pills pull-right" id="engineTab">
-					<li class="active"><a href="#engine-basic" data-toggle="tab"><?php echo __( 'Options' ); ?></a></li>
-					<li><a href="#engine-advanced" data-toggle="tab"><?php echo __( 'More Options' ); ?></a></li>
+					<li class="active"><a href="#engine-basic" data-toggle="tab"><?php _e( 'Options' ); ?></a></li>
+					<li><a href="#engine-advanced" data-toggle="tab"><?php _e( 'More Options' ); ?></a></li>
 					<!--						<li><a href="#engine-help" data-toggle="tab"><i class="fa fa-question-circle"></i></a></li>-->
 				</ul>
 				<div class="clearfix"></div>
 			</div>
 			<div class="panel-body">
 				<div class="form-inline input-lg" style="float:none;position: absolute;left: 0px;top: 0px;">
-					<?php echo $item->engines; ?>
+					<?php _e($item->engines); ?>
 				</div>
 
 				<div id="ogb-engine-param">
 					<?php
 					if ( $item->engine != '' ) {
-						echo $item->eParams;
+						_e($item->eParams);
 					} else {
-						echo __( 'Please select a Source. After that, specific fields will be displayed in the <span class="label label-success">Source Output</span> area.' );
+						_e( 'Please select a Source. After that, specific fields will be displayed in the <span class="label label-success">Source Output</span> area.' );
 					}
 					?>
 				</div>
@@ -361,30 +361,30 @@ if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messa
 
 	<!-- Adapter / Destination -->
 	<div class="col-md-6">
-		<img src="<?php echo plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-3.png'; ?>"
+		<img src="<?php _e(plugin_dir_url( PIPES_MAIN_FILE_PATH ) . '/assets/images/pipe-step-3.png'); ?>"
 		     height="83" width="145" />
 
 		<div class="panel panel-warning" style="position: relative;">
 			<div class="panel-heading">
 				<ul class="nav nav-pills pull-right" id="adapterTab">
-					<li class="active"><a href="#adapter-basic" data-toggle="tab"><?php echo __( 'Options' ); ?></a>
+					<li class="active"><a href="#adapter-basic" data-toggle="tab"><?php _e( 'Options' ); ?></a>
 					</li>
-					<li><a href="#adapter-advanced" data-toggle="tab"><?php echo __( 'More Options' ); ?></a></li>
+					<li><a href="#adapter-advanced" data-toggle="tab"><?php _e( 'More Options' ); ?></a></li>
 					<!--						<li><a href="#adapter-help" data-toggle="tab"><i class="fa fa-question-circle"></i></a></li>-->
 				</ul>
 				<div class="clearfix"></div>
 			</div>
 			<div class="panel-body">
 				<div class="form-inline input-lg" style="float:none;position: absolute;left: 0px;top: 0px;">
-					<?php echo $item->adapters; ?>
+					<?php _e($item->adapters); ?>
 				</div>
 
 				<div id="ogb-adapter-param">
 					<?php
 					if ( $item->adapter != '' ) {
-						echo $item->aParams;
+						_e($item->aParams);
 					} else {
-						echo __( 'Please <strong>select a Destination</strong>. After that, specific fields will be displayed in the <span class="label label-warning">Destination Input</span> area.' );
+						_e( 'Please <strong>select a Destination</strong>. After that, specific fields will be displayed in the <span class="label label-warning">Destination Input</span> area.' );
 					}
 					?>
 				</div>
@@ -411,7 +411,7 @@ if ( $item->inherit > 0 ) {
 <div id="fields_matching" class="col-md-12">
 <div class="text-center">
 	<h3 style="margin-top:0;">
-		<?php echo __( 'Fields Matching' ); ?>
+		<?php _e( 'Fields Matching' ); ?>
 		<?php /* @TODO: Tung - because of this function is not really work for now, I have to hide it ?>
 		 * <fieldset style="visibility:<?php echo ( $item->engine == 'rssreader' AND ( $item->adapter == 'post' OR $item->adapter == 'content' ) ) ? 'visible' : 'hidden'; ?>;display: inline-block;" rel="tooltip" data-original-title="Default set of processors: slug, duplicate, get_fulltext, image, cut_introtext, get_meta" id="jform_set_default_obg" class="radio btn-group btn-group-yesno">
 		 * <input type="radio" id="jform_set_default_obg_<?php echo $item->id; ?>" name="jform[input_default]" value="slug-duplicate-get_fulltext-image-cut_introtext" />
@@ -421,19 +421,19 @@ if ( $item->inherit > 0 ) {
 		?>
 		<?php if ( count( $templates ) > 0 ): ?>
 			<div class="btn-group dropup">
-				<button type="button" class="btn btn-default"><?php echo __( 'Set template' ); ?></button>
+				<button type="button" class="btn btn-default"><?php _e( 'Set template' ); ?></button>
 				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 					<span class="caret"></span>
-					<span class="sr-only"><?php echo __( 'Libraries' ); ?></span>
+					<span class="sr-only"><?php _e( 'Libraries' ); ?></span>
 				</button>
 				<ul class="dropdown-menu pull-right">
 					<?php foreach ( $templates as $template ): ?>
 						<li>
 							<a style="display: inline;" onclick="set_template(this);" class="use_this_template" href="#"
-							   data-href="admin.php?page=pipes.pipes&task=import_from_file&file_name=<?php echo $template->filename; ?>&id=<?php echo $item->id; ?>">
-								<?php echo '<strong>' . $template->filename . '</strong> <small>(' . __( 'Engine' ) . ': ' . $template->engine . ', ' . __( 'Adapter' ) . ': ' . $template->adapter . ')</small>'; ?>
+							   data-href="admin.php?page=pipes.pipes&task=import_from_file&file_name=<?php _e($template->filename); ?>&id=<?php _e($item->id); ?>">
+								<?php _e('<strong>' . $template->filename . '</strong> <small>(' . __( 'Engine' ) . ': ' . $template->engine . ', ' . __( 'Adapter' ) . ': ' . $template->adapter . ')</small>'); ?>
 							</a>
-									<span style="cursor: pointer; text-indent: -20px;" onclick="delete_template(this,'<?php echo $template->filename; ?>');">
+									<span style="cursor: pointer; text-indent: -20px;" onclick="delete_template(this,'<?php _e($template->filename); ?>');">
 										<i class="fa fa-trash-o" style="color:#b94a48"></i>
 									</span>
 						</li>
@@ -456,14 +456,14 @@ if ( $item->inherit > 0 ) {
 		<div class="panel panel-success">
 			<div class="panel-heading engine_output_class">
 				<?php if ( $item->engine != '' ) {
-					echo '<a class="preview_engine btn-pipes-preview" title="Click here to preview how the source\'s output fields of the first item look!" href="admin.php?page=' .PIPES::$__page_prefix . '.pipe&task=preview_engine&id=' . $item->id . '"><i rel="tooltip" class="fa fa-eye fa-2x"></i></a>';
+					_e('<a class="preview_engine btn-pipes-preview" title="Click here to preview how the source\'s output fields of the first item look!" href="admin.php?page=' .PIPES::$__page_prefix . '.pipe&task=preview_engine&id=' . $item->id . '"><i rel="tooltip" class="fa fa-eye fa-2x"></i></a>');
 				}?>
-				<h4><?php echo __( 'Source Output' ); ?></h4>
+				<h4><?php _e( 'Source Output' ); ?></h4>
 			</div>
 
 			<div class="panel-body">
 				<ul class="unstyled oblistfield" id="ob-oe">
-					<li><?php echo __( 'Please <span class="label label-success">select a Source</span>. After that, specific fields from the selected Source will be displayed here.' ); ?></li>
+					<li><?php _e( 'Please <span class="label label-success">select a Source</span>. After that, specific fields from the selected Source will be displayed here.' ); ?></li>
 				</ul>
 			</div>
 
@@ -480,16 +480,16 @@ if ( $item->inherit > 0 ) {
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h4>
-					<?php echo __( 'Processors' ); ?>
-					<small><?php echo __( 'Cooking fields with processors' ); ?>
+					<?php _e( 'Processors' ); ?>
+					<small><?php _e( 'Cooking fields with processors' ); ?>
 						<a href="http://thimpress.com/forums/forum/plugins/forum-pipes/" target="_blank" rel="tooltip"
-						   data-original-title="<?php echo __( 'Understanding processors' ); ?>"><i
+						   data-original-title="<?php _e( 'Understanding processors' ); ?>"><i
 								class="fa fa-question-circle"></i></a>
 					</small>
 					<p class="text-right pull-right">
 						<a onclick="refresh_mapping();" class="btn btn-danger btn-xs">
 							<span class="fa fa-refresh"></span>
-							<?php echo __( 'Clear added processors' ); ?>
+							<?php _e( 'Clear added processors' ); ?>
 						</a>
 					</p>
 				</h4>
@@ -498,10 +498,10 @@ if ( $item->inherit > 0 ) {
 			<ul id="ogb_list_processor" class="list-group">
 				<!-- PROCESSORS LIST HEADER -->
 				<li class="list-group-item">
-					<div class="col-md-4"><span><strong><?php echo __( 'Input Fields' ); ?></strong></span>
+					<div class="col-md-4"><span><strong><?php _e( 'Input Fields' ); ?></strong></span>
 					</div>
-					<div class="col-md-5"><span><strong><?php echo __( 'Processor' ); ?></strong></span></div>
-					<div class="col-md-3"><span><strong><?php echo __( 'Output Fields' ); ?></strong></span>
+					<div class="col-md-5"><span><strong><?php _e( 'Processor' ); ?></strong></span></div>
+					<div class="col-md-3"><span><strong><?php _e( 'Output Fields' ); ?></strong></span>
 					</div>
 					<div class="clearfix"></div>
 				</li>
@@ -512,48 +512,48 @@ if ( $item->inherit > 0 ) {
 					$pipe = $pipes[$i];
 					$t    = ( $t + 1 ) % 2;
 					?>
-					<li class="list-group-item" id="pipes_processor-<?php echo $pipe->id; ?>">
+					<li class="list-group-item" id="pipes_processor-<?php _e($pipe->id); ?>">
 						<div class="col-md-4">
-							<ul class="unstyled" id="ob-ip-<?php echo $i; ?>">
-								<li><i><? echo __( 'Loading' ); ?></i></li>
+							<ul class="unstyled" id="ob-ip-<?php _e($i); ?>">
+								<li><i><? _e( 'Loading' ); ?></i></li>
 							</ul>
 						</div>
 						<div class="col-md-5">
 									<span style="float: left;"><a href="javascript:void(0);" title="Settings"
-									                              onclick="showParams(this,<?php echo $pipe->id; ?>);"><i
+									                              onclick="showParams(this,<?php _e($pipe->id); ?>);"><i
 												class="fa fa-expand"></i></a>
 									&nbsp;</span>
-							<strong style="color:#006600;"><?php echo $pipe->name; ?></strong>
+							<strong style="color:#006600;"><?php _e($pipe->name); ?></strong>
 							<span>
-									<a class="preview_engine btn-pipes-preview" title="Click here to preview how the processor's output fields of the first item look!" href="admin.php?page=<?php echo PIPES::$__page_prefix; ?>.pipe&task=preview_processor&pipe_id=<?php echo $pipe->id?>&id=<?php echo $item->id;?>&ordering=<?php echo $i?>"><i rel="tooltip" class="fa fa-eye"></i></a>
+									<a class="preview_engine btn-pipes-preview" title="Click here to preview how the processor's output fields of the first item look!" href="admin.php?page=<?php _e(PIPES::$__page_prefix); ?>.pipe&task=preview_processor&pipe_id=<?php _e($pipe->id);?>&id=<?php _e($item->id);?>&ordering=<?php _e($i);?>"><i rel="tooltip" class="fa fa-eye"></i></a>
 							</span>
                                     <span style="float: left;">&nbsp;<a href="javascript:void(0);" title="Help"
-                                                                        onclick="showHelps(this,<?php echo $pipe->id; ?>);"><i
+                                                                        onclick="showHelps(this,<?php _e($pipe->id); ?>);"><i
 			                                    class="fa fa-question-circle"></i></a>
                                     &nbsp;</span>
 									<span style="float:right">
 									<a href="javascript:void(0);" title="Remove"
-									   onclick="remove_pipe(<?php echo $pipe->id; ?>)"><i class="fa fa-trash-o"
+									   onclick="remove_pipe(<?php _e($pipe->id); ?>)"><i class="fa fa-trash-o"
 									                                                      style="color:#b94a48"></i></a>
 									</span>
 							</br>
 							<textarea class="form-control input-sm" name="note" rows="1"
-							          id="note_<?php echo $pipe->id; ?>"
-							          onblur="savenote(<?php echo $pipe->id; ?>)"
-							          placeholder="Write note here!"><?php echo $pipe->note; ?></textarea>
+							          id="note_<?php _e($pipe->id); ?>"
+							          onblur="savenote(<?php _e($pipe->id); ?>)"
+							          placeholder="Write note here!"><?php _e($pipe->note); ?></textarea>
 						</div>
 						<div class="col-md-3">
-							<ul class="unstyled" id="ob-op-<?php echo $i; ?>">
-								<li><i><? echo __( 'Loading' ); ?></i></li>
+							<ul class="unstyled" id="ob-op-<?php _e($i); ?>">
+								<li><i><? _e( 'Loading' ); ?></i></li>
 							</ul>
 						</div>
 						<div class="col-md-12 well well-small" style="display:none; margin-left:0;"
-						     id="ob-param-<?php echo $pipe->id; ?>">
-							<i><? echo __( 'Loading' ); ?></i>
+						     id="ob-param-<?php _e($pipe->id); ?>">
+							<i><? _e( 'Loading' ); ?></i>
 						</div>
 						<div class="col-md-12 well well-small" style="display:none; margin-left:0;"
-						     id="ob-param-help-<?php echo $pipe->id; ?>">
-							<i><? echo __( 'Loading' ); ?></i>
+						     id="ob-param-help-<?php _e($pipe->id); ?>">
+							<i><? _e( 'Loading' ); ?></i>
 						</div>
 						<div class="clearfix"></div>
 					</li>
@@ -564,7 +564,7 @@ if ( $item->inherit > 0 ) {
 				<!-- NEW PROCESSOR DROPDOWN BOX -->
 				<li class="list-group-item">
 					<?php //echo $this->getPMode($item); ?>
-					<?php echo $item->processors; ?>
+					<?php _e($item->processors); ?>
 					<span style="display:none;">
 								<b>Order:</b> <input type="text" id="npp_order" name="npp_order" size="3"
 								                     value="<?php echo( $cpp > 0 ? $cpp : 0 ); ?>" style="float:none;"
@@ -593,12 +593,12 @@ if ( $item->inherit > 0 ) {
 	<div class="col-md-3">
 		<div class="panel panel-warning">
 			<div class="panel-heading">
-				<h4><?php echo __( 'Destination Input' ); ?></h4>
+				<h4><?php _e( 'Destination Input' ); ?></h4>
 			</div>
 
 			<div class="panel-body">
 				<ul class="unstyled" id="ob-ia">
-					<li><?php echo __( 'Please <span class="label label-warning">select a Destination</span>. After that, specific fields from the selected Destination will be displayed here.' ); ?></li>
+					<li><?php _e( 'Please <span class="label label-warning">select a Destination</span>. After that, specific fields from the selected Destination will be displayed here.' ); ?></li>
 				</ul>
 			</div>
 
@@ -619,11 +619,11 @@ if ( $item->inherit > 0 ) {
                     <span class="ogb-close hasTip" title="close this box" onclick="ogb_closeListOp()"><i
 		                    class="fa fa-times-circle fa-lg"></i></span>
 			<strong>
-                        <span id="change-field" onclick="ogb_update_field('','');">[ <?php echo __( 'Leave blank' ); ?>
+                        <span id="change-field" onclick="ogb_update_field('','');">[ <?php _e( 'Leave blank' ); ?>
 	                        ]</span>
 			</strong>
 
-			&nbsp;- or <?php echo __( 'Select a field to map with this field.' ); ?>
+			&nbsp;- or <?php _e( 'Select a field to map with this field.' ); ?>
 		</div>
 		<div class="panel-body">
 			<div id="ob-oelist" style="">
@@ -644,7 +644,7 @@ if ( $item->inherit > 0 ) {
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="myModalLabel">
-					<?php echo sprintf( __( 'Pipe#%s: Manually Running Pipe Now...' ), $item->id ); ?><br />
+					<?php _e(sprintf( __( 'Pipe#%s: Manually Running Pipe Now...' ), $item->id )); ?><br />
 				</h4>
 			</div>
 			<div class="modal-body">
@@ -663,7 +663,7 @@ if ( $item->inherit > 0 ) {
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabel_preview">
-						<?php echo sprintf( __( 'Pipe#%s: Checking how the output fields of the first item from the source look...' ), $item->id ); ?><br />
+						<?php _e(sprintf( __( 'Pipe#%s: Checking how the output fields of the first item from the source look...' ), $item->id )); ?><br />
 					</h4>
 </div>
 				<div class="modal-body">

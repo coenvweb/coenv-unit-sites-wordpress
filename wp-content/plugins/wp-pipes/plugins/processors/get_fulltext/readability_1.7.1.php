@@ -224,7 +224,7 @@ class Readability {
 	 */
 	protected function dbg( $msg ) {
 		if ( $this->debug ) {
-			echo '* ', $msg, "\n";
+			_e('* ', $msg, "\n");
 		}
 	}
 

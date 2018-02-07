@@ -44,8 +44,8 @@ class Lo_Items_List_Table extends WP_List_Table {
 	function column_title( $item ) {
 		//Build row actions
 		$actions = array(
-			'edit'   => sprintf( '<a href="?page=%s&task=%s&id=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id'] ),
-			'delete' => sprintf( '<a href="?page=%s&task=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id'] ),
+			'edit'   => sprintf( '<a href="?page=%s&task=%s&id=%s">Edit</a>', sanitize_text_field($_REQUEST['page']), 'edit', $item['id'] ),
+			'delete' => sprintf( '<a href="?page=%s&task=%s&id=%s">Delete</a>', sanitize_text_field($_REQUEST['page']), 'delete', $item['id'] ),
 		);
 
 		//Return the title contents
@@ -87,12 +87,12 @@ class Lo_Items_List_Table extends WP_List_Table {
 			return;
 		}
 
-		echo "<ul class='subsubsub'>\n";
+		_e("<ul class='subsubsub'>\n");
 		foreach ( $views as $class => $view ) {
 			$views[$class] = "\t<li class='$class'>$view";
 		}
-		echo implode( " |</li>\n", $views ) . "</li>\n";
-		echo "</ul>";
+		_e(implode( " |</li>\n", $views ) . "</li>\n");
+		_e("</ul>");
 	}
 
 	function get_views() {
@@ -112,7 +112,7 @@ class Lo_Items_List_Table extends WP_List_Table {
 
 	function extra_tablenav( $which ) {
 		if ( 'top' == $which ) {
-			echo '<div class="alignleft actions">';
+			_e('<div class="alignleft actions">');
 			$dropdown_adapters = array(
 				'selected'        => 'Adapter',
 				'name'            => 'adapter',
@@ -137,7 +137,7 @@ class Lo_Items_List_Table extends WP_List_Table {
 			$this->render_list_plugins( $dropdown_adapters ); //var_dump($this->get_list_adapter( $dropdown_adapters ));
 
 			submit_button( __( 'Filter' ), 'button', false, false, array( 'id' => 'post-query-submit' ) );
-			echo '</div>';
+			_e('</div>');
 		}
 	}
 
@@ -164,7 +164,7 @@ class Lo_Items_List_Table extends WP_List_Table {
 				<option value="">' . $render['show_option_all'] . '</option>' . $options . '
 				</select>';
 		$output = apply_filters( 'wp_dropdown_cats', $output );
-		echo $output;
+		_e($output);
 
 		return $output;
 	}
@@ -215,8 +215,8 @@ class Lo_Items_List_Table extends WP_List_Table {
 
 	function prepare_items() {
 		global $mode, $status; //This is used only if making any database queries
-		$mode      = empty( $_REQUEST['mode'] ) ? 'excerpt' : $_REQUEST['mode'];
-		$status    = empty( $_REQUEST['post_status'] ) ? 'all' : $_REQUEST['post_status'];
+		$mode      = empty( $_REQUEST['mode'] ) ? 'excerpt' : sanitize_text_field($_REQUEST['mode']);
+		$status    = empty( $_REQUEST['post_status'] ) ? 'all' : sanitize_text_field($_REQUEST['post_status']);
 		$condition = $this->buildquery_condition();
 		/**
 		 * REQUIRED. Now we need to define our column headers. This includes a complete
@@ -298,13 +298,13 @@ class Lo_Items_List_Table extends WP_List_Table {
 			$where[] = ' `published` = 1';
 		}
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			$where[] = ' `name` LIKE "%' . $_REQUEST['s'] . '%"';
+			$where[] = ' `name` LIKE "%' . sanitize_text_field($_REQUEST['s']) . '%"';
 		}
 		if ( ! empty( $_REQUEST['adapter'] ) ) {
-			$where[] = ' `adapter` LIKE "' . $_REQUEST['adapter'] . '"';
+			$where[] = ' `adapter` LIKE "' . sanitize_text_field($_REQUEST['adapter']) . '"';
 		}
 		if ( ! empty( $_REQUEST['engine'] ) ) {
-			$where[] = ' `engine` LIKE "' . $_REQUEST['engine'] . '"';
+			$where[] = ' `engine` LIKE "' . sanitize_text_field($_REQUEST['engine']) . '"';
 		}
 		$where_str = ( count( $where ) > 0 ) ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
@@ -315,9 +315,9 @@ class Lo_Items_List_Table extends WP_List_Table {
 		global $wpdb;
 
 
-		$orderby     = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'id'; //If no sort, default to title
-		$order       = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : 'asc'; //If no order, default to asc
-		$paged       = ( ! empty( $_REQUEST['paged'] ) ) ? $_REQUEST['paged'] : 1;
+		$orderby     = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field($_REQUEST['orderby']) : 'id'; //If no sort, default to title
+		$order       = ( ! empty( $_REQUEST['order'] ) ) ? sanitize_text_field($_REQUEST['order']) : 'asc'; //If no order, default to asc
+		$paged       = ( ! empty( $_REQUEST['paged'] ) ) ? (int) sanitize_text_field($_REQUEST['paged']) : 1;
 		$limit_start = ( $this->per_page * ( $paged - 1 ) );
 		$sql         = "SELECT `id`, `name`, `engine`, `adapter`, `engine_params`, `adapter_params`, `published`
 				FROM `" . $wpdb->prefix . "wppipes_items` $condition
@@ -381,50 +381,50 @@ class Lo_Items_List_Table extends WP_List_Table {
 			$attributes = "$class$style";
 
 			if ( 'cb' == $column_name ) {
-				echo "<th scope='row' class='check-column'>";
-				echo sprintf( '<input id="cb-select-%s" type="checkbox" name="id[]" value="%s" />', $item['id'], $item['id'] );
-				echo "</th>";
+				_e("<th scope='row' class='check-column'>");
+				_e(sprintf( '<input id="cb-select-%s" type="checkbox" name="id[]" value="%s" />', $item['id'], $item['id'] ));
+				_e("</th>");
 			} elseif ( 'name' == $column_name ) {
-				echo "<td $attributes>";
+				_e("<td $attributes>");
 
-				echo '<strong>';
-				echo '
-					<a class="row-title" id="row_title_' . $item['id'] . '" href="' . sprintf( '?page=%s&task=%s&id=%s"', $_REQUEST['page'], 'edit', $item['id'] ) . '>'
+				_e('<strong>');
+				_e('
+					<a class="row-title" id="row_title_' . $item['id'] . '" href="' . sprintf( '?page=%s&task=%s&id=%s"', sanitize_text_field($_REQUEST['page']), 'edit', $item['id'] ) . '>'
 					. sprintf( 'Pipe#%s', $item['id'] ) . ' - ' . $item['name'] . '
 					</a>
-				';
+				');
 
 				// If the Pipe is unpublished, show it as Draft
 				if ( $item['published'] == 0 ) {
-					echo '<span class="post-state">' . __( ' - Draft' ) . '</span>';
+					_e('<span class="post-state">' . __( ' - Draft' ) . '</span>');
 				}
-				echo '</strong>';
+				_e('</strong>');
 
-				echo ( 'excerpt' == $mode && $more_display != '' ) ? '</br><span>' . $more_display . '</span></br>' : '';
+				_e(( 'excerpt' == $mode && $more_display != '' ) ? '</br><span>' . $more_display . '</span></br>' : '');
 
-				echo "<div class='row-actions'><span class='edit'>";
-				echo sprintf( '<a href="?page=%s&task=%s&id=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id'] );
-				echo "</span> | <span class='quickedit'>";
-				echo '<span class="quick_edit_link" onclick="display_quick_edit(this,'. $item['id'] .');">Quick Edit</span>';
-				echo "</span> | <span class='trash'>";
-				echo sprintf( '<a href="?page=%s&task=%s&id=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id'] );
-				echo "</span> | <span class='post'>";
-				echo sprintf( '<a data-id="%s" class="btn-pipes-post" href="?page=%s&task=%s&id=%s">Test</a>', $item['id'], PIPES::$__page_prefix . '.pipe', 'post', $item['id'] );
-				echo "</span> | <span class='postupdate'>";
-				echo sprintf( '<a data-id="%s" class="btn-pipes-post" href="?page=%s&task=%s&id=%s&u=1">Test in Update mode</a>', $item['id'], PIPES::$__page_prefix . '.pipe', 'post', $item['id'] );
-				echo "</span> | <span class='export'>";
-				echo sprintf( '<a data-id="%s" class="btn-pipes-export" href="?page=%s&task=%s&id=%s">Export</a>', $item['id'], PIPES::$__page_prefix . '.pipes', 'export_to_share', $item['id'] );
-				echo "</span></div></td>";
+				_e("<div class='row-actions'><span class='edit'>");
+				_e(sprintf( '<a href="?page=%s&task=%s&id=%s">Edit</a>', sanitize_text_field($_REQUEST['page']), 'edit', $item['id'] ));
+				_e("</span> | <span class='quickedit'>");
+				_e('<span class="quick_edit_link" onclick="display_quick_edit(this,'. $item['id'] .');">Quick Edit</span>');
+				_e("</span> | <span class='trash'>");
+				_e(sprintf( '<a href="?page=%s&task=%s&id=%s">Delete</a>', sanitize_text_field($_REQUEST['page']), 'delete', $item['id'] ));
+				_e("</span> | <span class='post'>");
+				_e(sprintf( '<a data-id="%s" class="btn-pipes-post" href="?page=%s&task=%s&id=%s">Test</a>', $item['id'], PIPES::$__page_prefix . '.pipe', 'post', $item['id'] ));
+				_e("</span> | <span class='postupdate'>");
+				_e(sprintf( '<a data-id="%s" class="btn-pipes-post" href="?page=%s&task=%s&id=%s&u=1">Test in Update mode</a>', $item['id'], PIPES::$__page_prefix . '.pipe', 'post', $item['id'] ));
+				_e("</span> | <span class='export'>");
+				_e(sprintf( '<a data-id="%s" class="btn-pipes-export" href="?page=%s&task=%s&id=%s">Export</a>', $item['id'], PIPES::$__page_prefix . '.pipes', 'export_to_share', $item['id'] ));
+				_e("</span></div></td>");
 			} else {
-				echo "<td $attributes>";
-				echo $this->column_default( $item, $column_name );
-				echo "</td>";
+				_e("<td $attributes>");
+				_e($this->column_default( $item, $column_name ));
+				_e("</td>");
 			}
 
 		}
 		$select = $item['published'] == 1 ? 'selected' : '';
-		echo "<tr id='quickeditpipe_" . $item['id'] . "' style='display:none;' class='quick_edit_pipe inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor'>";
-		echo "<td colspan=\"4\">
+		_e("<tr id='quickeditpipe_" . $item['id'] . "' style='display:none;' class='quick_edit_pipe inline-edit-row inline-edit-row-post inline-edit-post quick-edit-row quick-edit-row-post inline-edit-post inline-editor'>");
+		_e("<td colspan=\"4\">
 			<fieldset class=\"inline-edit-col-left\">
 				<div class=\"inline-edit-col\">
 					<h4>Quick Edit</h4>
@@ -439,12 +439,12 @@ class Lo_Items_List_Table extends WP_List_Table {
 				<div class=\"inline-edit-col\">
 					<span class=\"title inline-edit-categories-label\">Status</span>
 					<select name=\"pipe_status\">
-						<option value=\"1\" ";
-		echo $item['published'] == 1 ? 'selected' : '';
-		echo ">Published</option>
-						<option value=\"0\" ";
-		echo $item['published'] == 0 ? 'selected' : '';
-		echo ">Draft</option>
+						<option value=\"1\" ");
+		_e($item['published'] == 1 ? 'selected' : '');
+		_e(">Published</option>
+						<option value=\"0\" ");
+		_e($item['published'] == 0 ? 'selected' : '');
+		_e(">Draft</option>
 					</select>
 
 				</div>
@@ -454,8 +454,8 @@ class Lo_Items_List_Table extends WP_List_Table {
 				<span accesskey=\"s\" onclick=\"display_quick_edit(this, {$item['id']}, 2);\" class=\"button-primary save alignright\">Update</span>
 				<br class=\"clear\">
 			</p>
-		</td>";
-		echo "</tr>";
+		</td>");
+		_e("</tr>");
 	}
 
 }

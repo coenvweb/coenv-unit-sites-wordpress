@@ -19,7 +19,7 @@ defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 		$scope.searchFish   = '';     // set the default search/filter term
 
 		// create the list of sushi rolls 
-		$scope.plugins_avaiable = <?php echo json_encode($this->data['avaiable']); ?>;
+		$scope.plugins_avaiable = <?php _e(json_encode($this->data['avaiable'])); ?>;
 		$scope.renderPluginThumbnail = function(plugin) {
 			return $sce.trustAsHtml(plugin.img);
 		};
@@ -28,7 +28,7 @@ defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 			return $sce.trustAsHtml(plugin.description);
 		};
 		
-		$scope.plugins_installed = <?php echo json_encode($this->data['installed']); ?>;
+		$scope.plugins_installed = <?php _e(json_encode($this->data['installed'])); ?>;
 		$scope.issetAddonStatus =function( addon_status ) {
 			return $scope.addon_status == addon_status;
 		}
@@ -83,7 +83,7 @@ defined( 'PIPES_CORE' ) or die( 'Restricted access' );
 			<li class="plugin-install ng-class:{ 'current': issetAddonStatus(0) }"><a href ng-click="setAddonStatus(0)"><?php _e('Available','wp-pipes');?></a> </li>
 			<li class="plugin-install ng-class:{ 'current': issetAddonStatus(1) }"><a href ng-click="setAddonStatus(1)"><?php _e('Installed','wp-pipes');?>
 				<?php if($this->data['update_count']):?>
-					<span class="update-addon"><span class="addon-count"><?php echo esc_html($this->data['update_count']);?></span></span>
+					<span class="update-addon"><span class="addon-count"><?php esc_html_e($this->data['update_count']);?></span></span>
 				<?php endif;?></a></li>
 							
 		</ul>

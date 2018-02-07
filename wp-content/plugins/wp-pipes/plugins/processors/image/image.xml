@@ -61,6 +61,18 @@
 					   description="Use only with input as enclosure, set value following the format: min_width;max_width"/>
 				<field name="default_img" type="text" class="fullwidth" default="" label="Default Image"
 					   description="The link to default image in case there is not any images in the original source"/>
+				<field name="curl_method"
+					   type="list"
+					   default="0"
+					   label="cURL mode"
+					   description="Sometimes you will need to try with each below method to get content of images.">
+					<option value="0">Auto</option>
+					<option value="1">Method 1</option>
+					<option value="2">Method 2</option>
+					<option value="3">Method 3</option>
+					<option value="4">Method 4</option>
+					<option value="5">Method 5</option>
+				</field>
 				<field name="note" type="hidden" default=""/>
 			</fieldset>
 		</fields>

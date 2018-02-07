@@ -69,12 +69,12 @@ class WPPipesAdapter_post {
 	static function store( $data, $params ) {
 
 		if ( isset( $_GET['a'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			ogb_show( $data->excerpt, 'Excerpt: ' );
 			ogb_show( $data->content, 'Content: ' );
 		}
 		if ( isset( $_GET['a1'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			ogb_pr( $params, 'Params: ' );
 			ogb_pr( $data, 'Data: ' );
 		}
@@ -104,11 +104,11 @@ class WPPipesAdapter_post {
 		$id   = $save->id;
 
 		if ( isset( $_GET['a1'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
-			echo 'Saved result: ';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
+			_e('Saved result: ');
 			print_r( $save );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		if ( (int)$id > 0 ) {
@@ -241,7 +241,7 @@ class WPPipesAdapter_post {
 
 		$image_data = file_get_contents( $image_url, true ); // Get image data
 		if ( false === $image_data ) {
-			echo '<pre>';
+			_e('<pre>');
 			print_r( 'invalid url of image, could not get image from ' );
 		} else {
 			file_put_contents( $file, $image_data );
@@ -282,7 +282,7 @@ class WPPipesAdapter_post {
 	 * @return stdClass
 	 */
 	public static function getDataFields( $param = false ) {
-		if ( isset($_GET['arg2']) && $_GET['arg2'] == 1 ) {
+		if ( isset($_GET['arg2']) && (int) sanitize_text_field($_GET['arg2']) == 1 ) {
 			$custom_fields = self::get_all_post_custom();
 			$custom_fields = str_replace('-', '__', $custom_fields);
 		} else {

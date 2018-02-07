@@ -20,7 +20,7 @@ class PIPESControllerPlugins extends Controller {
 
 	public function uninstall(){
 		$mod = $this->getModel( 'plugins' );
-		$addon  = isset( $_GET['addon'] ) ? $_GET['addon'] : '';
+		$addon  = isset( $_GET['addon'] ) ? sanitize_text_field($_GET['addon']) : '';
 		$res = $mod->uninstall($addon);
 		PIPES::add_message( $res );
 		$url = remove_query_arg( array( 'element', 'addon', 'action', 'action2' ), $_SERVER['HTTP_REFERER'] );

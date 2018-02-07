@@ -23,36 +23,36 @@ class ogbPost {
 //		$id = JRequest::getInt('id',0);
 		$id = filter_input( INPUT_GET, 'id' );
 		if ( $id < 1 ) {
-			echo '{"error":"1","msg":"id=0","found":0}';
+			_e('{"error":"1","msg":"id=0","found":0}');
 			exit();
 		}
 		$start = date( 'Y-m-d H:i:s' );
 		$grab  = new obGrab;
 		$res   = $grab->start( $id );
 
-		echo '<p>[ Started: ' . $start . ' ][ Source found: ' . $res->total . ' items ]</p>';
-		echo '<input type="hidden" id="ogb-' . $id . '-efound" name="ogb-' . $id . '-efound" value="' . $res->total . '"/>';
+		_e('<p>[ Started: ' . $start . ' ][ Source found: ' . $res->total . ' items ]</p>');
+		_e('<input type="hidden" id="ogb-' . $id . '-efound" name="ogb-' . $id . '-efound" value="' . $res->total . '"/>');
 
 		if ( $res->total > 0 ) {
-			echo '
+			_e('
 				<div class="progress progress-striped" id="ogb-' . $id . '-res-bar">
 					<div class="progress-bar bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; height: 100%">
 						<small>0% Complete (success)</small>
 					</div>
 				</div>
-			';
-			echo '<ol id="ogb-' . $id . '-get-rows">&nbsp;</ol>';
+			');
+			_e('<ol id="ogb-' . $id . '-get-rows">&nbsp;</ol>');
 		} else {
-			echo '
+			_e('
 				<p class="alert alert-danger">No data found from the SOURCE.</p>
-			';
+			');
 		}
 		//echo $res->json;	
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $res );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		exit();
 	}
@@ -66,7 +66,7 @@ class ogbPost {
 
 		$res = $grab->storeItems( $id, $row );
 		$log = self::makeInfo( $res );
-		echo $log;
+		_e($log);
 		exit();
 	}
 

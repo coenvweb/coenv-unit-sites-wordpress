@@ -24,7 +24,7 @@ class PIPESModelPipe extends Model {
 	public function getItem() {
 		global $wpdb;
 
-		$id = isset( $_REQUEST['id'] ) ? $_REQUEST['id'] : null;
+		$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : null;
 		if ( $id ) {
 			$sql  = 'SELECT * FROM `' . $wpdb->prefix . 'wppipes_items` WHERE `id`=' . $id;
 			$item = $wpdb->get_row( $sql );
@@ -65,20 +65,20 @@ class PIPESModelPipe extends Model {
 		$item = $wpdb->loadObject();
 
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $item );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		$item->name .= ' ( copy )';
 		unset( $item->id );
 		$row = JTable::getInstance( 'Pipes', 'wppipesTable' );
 		if ( ! $row->bind( $item ) ) {
-			echo $row->getError();
+			_e($row->getError());
 		}
 		if ( ! $row->store() ) {
-			echo $row->getError();
+			_e($row->getError());
 		}
 		$copy_id = $row->id;
 
@@ -86,7 +86,7 @@ class PIPESModelPipe extends Model {
 		$wpdb->setQuery( $qry );
 		$pipes = $wpdb->loadObjectList();
 
-		echo '<br />count($pipes): ' . count( $pipes ) . '<br /><br />QRY: ' . $qry;
+		_e('<br />count($pipes): ' . count( $pipes ) . '<br /><br />QRY: ' . $qry);
 
 		//`id`,`code`,`name`,`item_id`,`input`,`params`,`output`,`ordering`
 		for ( $i = 0; $i < count( $pipes ); $i ++ ) {
@@ -96,11 +96,11 @@ class PIPESModelPipe extends Model {
 
 			$wpdb->setQuery( $qry );
 			if ( ! $wpdb->query() ) {
-				echo $wpdb->getQuery();
-				echo '<br />Error: ' . $wpdb->getErrorMsg();
+				_e($wpdb->getQuery());
+				_e('<br />Error: ' . $wpdb->getErrorMsg());
 				$error = true;
 			} elseif ( isset( $_GET['x'] ) ) {
-				echo '<br /><br />' . $qry;
+				_e('<br /><br />' . $qry);
 			}
 		}
 		if ( $error || isset( $_GET['x'] ) ) {
@@ -240,8 +240,8 @@ class PIPESModelPipe extends Model {
 		}
 		if ( ! $render ) {
 			if ( isset( $_GET['x'] ) ) {
-				echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"; //exit();
-				echo $values;
+				_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"); //exit();
+				_e($values);
 			}
 			$params = json_decode( $values );
 
@@ -808,10 +808,10 @@ class PIPESModelPipe extends Model {
 		}
 
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $ILove );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 //		$ILove = $addons;
@@ -1076,9 +1076,9 @@ class PIPESModelPipe extends Model {
 		$res = new stdClass();
 		$res->err = '';
 		if ( isset( $_POST ) ) {
-			$res->title = $_POST['title'];
-			$id = $_POST['id'];
-			$res->status = $_POST['status'];
+			$res->title = sanitize_text_field($_POST['title']);
+			$id = (int) sanitize_text_field($_POST['id']);
+			$res->status = (int) sanitize_text_field($_POST['status']);
 			$sql = "UPDATE `{$wpdb->prefix}wppipes_items` SET `name` = '{$res->title}', `published` = '{$res->status}' WHERE `id` = {$id}";
 
 			if ( ! $wpdb->query( $sql ) ) {

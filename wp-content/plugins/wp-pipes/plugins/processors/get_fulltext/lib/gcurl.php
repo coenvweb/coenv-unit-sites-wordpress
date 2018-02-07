@@ -107,19 +107,19 @@ class ogb_cache {
 		$cache_mtime = filemtime( $path );
 		$diff        = time() - $cache_mtime;
 		if ( isset( $_GET['gc'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'Path: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('Path: ');
 			var_dump( $path );
-			echo '<br />Last Update  - s: ';
+			_e('<br />Last Update  - s: ');
 			var_dump( $diff );
 			if ( $diff > 60 ) {
 				$a = $diff / 60;
-				echo ' - m: ';
+				_e(' - m: ');
 				var_dump( $a );
 			}
 			if ( $a > 60 ) {
 				$a = $a / 60;
-				echo ' - h: ';
+				_e(' - h: ');
 				var_dump( $a );
 			}
 		}
@@ -137,8 +137,8 @@ class ogb_get_CURL extends ogb_cache {
 		$url = 'http://kha.thimpress.com/html_parser/cache/urldata/';
 		$url .= date( 'Y-m' ) . "/{$md5}.html";
 
-		echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"; //exit();
-		echo "URL: <a href=\"{$url}\">{$url}</a>";
+		_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"); //exit();
+		_e("URL: <a href=\"{$url}\">{$url}</a>");
 
 		return $url;
 	}
@@ -214,14 +214,14 @@ class ogb_get_CURL extends ogb_cache {
 		if ( ! isset( $_GET['x11'] ) ) {
 			return;
 		}
-		echo '<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-		echo "LV {$lv} - Loop: {$loop}<br />";
-		echo '<pre>';
+		_e('<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+		_e("LV {$lv} - Loop: {$loop}<br />");
+		_e('<pre>');
 		print_r( $response );
-		echo "</pre>\n";
+		_e("</pre>\n");
 		if ( isset( $_GET['x12'] ) && $_GET['x12'] == $loop ) {
 			$html = $html != '' ? "\n{$html}\n" : 'None';
-			echo "--->|{$html}|<---\n";
+			_e("--->|{$html}|<---\n");
 			if ( ! isset( $_GET['x13'] ) ) {
 				exit();
 			}

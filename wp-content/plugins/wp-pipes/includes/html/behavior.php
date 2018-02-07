@@ -398,7 +398,7 @@ abstract class JHtmlBehavior
 		// Attach modal behavior to document
 		$document
 			->addScriptDeclaration(
-				"
+			"
 		jQuery(function($) {
 			SqueezeBox.initialize(" . $options . ");
 			SqueezeBox.assign($('" . $selector . "').get(), {
@@ -423,7 +423,7 @@ abstract class JHtmlBehavior
 			};
 		}
 		"
-			);
+		);
 
 		// Set static array
 		static::$loaded[__METHOD__][$sig] = true;
@@ -506,7 +506,7 @@ abstract class JHtmlBehavior
 		$opt['onExpand'] = (array_key_exists('onExpand', $params)) ? '\\' . $params['onExpand'] : null;
 		$opt['onSelect'] = (array_key_exists('onSelect', $params)) ? '\\' . $params['onSelect'] : null;
 		$opt['onClick']  = (array_key_exists('onClick', $params)) ? '\\' . $params['onClick']
-			: '\\function(node){  window.open(node.data.url, node.data.target != null ? node.data.target : \'_self\'); }';
+		: '\\function(node){  window.open(node.data.url, node.data.target != null ? node.data.target : \'_self\'); }';
 
 		$options = JHtml::getJSObject($opt);
 
@@ -911,11 +911,11 @@ abstract class JHtmlBehavior
 		);
 
 		return 'Calendar._DN = ' . json_encode($weekdays_full) . ';'
-		. ' Calendar._SDN = ' . json_encode($weekdays_short) . ';'
-		. ' Calendar._FD = 0;'
-		. ' Calendar._MN = ' . json_encode($months_long) . ';'
-		. ' Calendar._SMN = ' . json_encode($months_short) . ';'
-		. ' Calendar._TT = ' . json_encode($text) . ';';
+			. ' Calendar._SDN = ' . json_encode($weekdays_short) . ';'
+			. ' Calendar._FD = 0;'
+			. ' Calendar._MN = ' . json_encode($months_long) . ';'
+			. ' Calendar._SMN = ' . json_encode($months_short) . ';'
+			. ' Calendar._TT = ' . json_encode($text) . ';';
 	}
 
 	/**

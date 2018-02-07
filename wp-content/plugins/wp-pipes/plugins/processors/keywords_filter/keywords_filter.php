@@ -12,13 +12,13 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class WPPipesPro_keywords_filter {
 	public static function process( $data, $params ) {
 		if ( isset( $_GET['pkey'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Params: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Params: ');
 			print_r( $params );
-			echo 'Data: ';
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		$valid = self::check( $data->html, $params->keywords );
 		$stop  = new stdClass();
@@ -143,31 +143,31 @@ class WPPipesPro_keywords_filter {
 		}
 
 		if ( isset( $_GET['k'] ) ) {
-			echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-			echo 'Keywords: ' . $aaa;
-			echo '<hr />' . $content;
-			echo '<pre>';
+			_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+			_e('Keywords: ' . $aaa);
+			_e('<hr />' . $content);
+			_e('<pre>');
 			print_r( $keywords );
 
-			echo '<br />kExists: <br />';
+			_e('<br />kExists: <br />');
 			print_r( $kExists );
 
-			echo '</pre>';
-			echo '<br />tmust: ';
+			_e('</pre>');
+			_e('<br />tmust: ');
 			var_dump( $tmust );
-			echo '<br />must: ';
+			_e('<br />must: ');
 			var_dump( $must );
-			echo '<br />twhile: ';
+			_e('<br />twhile: ');
 			var_dump( $twhile );
-			echo '<br />while: ';
+			_e('<br />while: ');
 			var_dump( $while );
-			echo '<br />tblack: ';
+			_e('<br />tblack: ');
 			var_dump( $tblack );
-			echo '<br />black: ';
+			_e('<br />black: ');
 			var_dump( $black );
-			echo '<br />-----<br />Result: ';
+			_e('<br />-----<br />Result: ');
 			var_dump( $res );
-			echo '<br />';
+			_e('<br />');
 		}
 
 		return $res;

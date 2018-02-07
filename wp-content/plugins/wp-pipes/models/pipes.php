@@ -21,8 +21,8 @@ class PIPESModelPipes extends Model {
 		//Fetch, prepare, sort, and filter our data...
 		if ( isset( $_POST['wp_screen_options']['option'] ) && $_POST['wp_screen_options']['option'] == 'pipes_per_page' ) {
 // get the current admin screen
-			$option = $_POST['wp_screen_options']['option'];
-			$value  = $_POST['wp_screen_options']['value'];
+			$option = sanitize_text_field($_POST['wp_screen_options']['option']);
+			$value  = sanitize_text_field($_POST['wp_screen_options']['value']);
 
 			update_user_meta( $user, $option, $value );
 		}
@@ -95,10 +95,10 @@ class PIPESModelPipes extends Model {
 				$qry .= "\n VALUES (NULL, '{$item->code}', '{$item->name}', {$new_temp_id}, '" . addslashes( $item->params ) . "', '{$item->ordering}')";
 
 				if ( ! $wpdb->query( $qry ) ) {
-					echo '<br />Error: ' . $wpdb->last_error;
+					_e('<br />Error: ' . $wpdb->last_error);
 					$error = true;
 				} elseif ( isset( $_GET['x'] ) ) {
-					echo '<br /><br />' . $qry;
+					_e('<br /><br />' . $qry);
 				}
 			}
 		}
@@ -114,10 +114,10 @@ class PIPESModelPipes extends Model {
 		$sql_ins = "UPDATE `{$wpdb->prefix}wppipes_items` SET `published` = {$status} WHERE `id` IN ( {$str_id} )";
 
 		if ( ! $wpdb->query( $sql_ins ) ) {
-			echo '<br />Error: ' . $wpdb->last_error;
+			_e('<br />Error: ' . $wpdb->last_error);
 			$error = true;
 		} elseif ( isset( $_GET['x'] ) ) {
-			echo '<br /><br />' . $sql_ins;
+			_e('<br /><br />' . $sql_ins);
 		}
 		$message = ( $status ) ? $count . ' pipe(s) been published!' : $count . ' pipe(s) been drafted!';
 
@@ -198,10 +198,10 @@ class PIPESModelPipes extends Model {
 			$sql_ins = "UPDATE `{$wpdb->prefix}wppipes_items` SET {$insert_str} WHERE `id` = {$id}";
 		}
 		if ( ! $wpdb->query( $sql_ins ) ) {
-			echo '<br />Error: ' . $wpdb->last_error;
+			_e('<br />Error: ' . $wpdb->last_error);
 			$error = true;
 		} elseif ( isset( $_GET['x'] ) ) {
-			echo '<br /><br />' . $sql_ins;
+			_e('<br /><br />' . $sql_ins);
 		}
 		$new_temp_id = $wpdb->insert_id;
 		if ( $item->current_id > 0 ) {
@@ -212,10 +212,10 @@ class PIPESModelPipes extends Model {
 			$qry = "INSERT INTO `{$wpdb->prefix}wppipes_pipes` (`id`,`code`,`name`,`item_id`,`params`,`ordering`)";
 			$qry .= "\n VALUES (NULL, '{$pipe->code}', '{$pipe->name}', {$new_temp_id}, '" . addslashes( $pipe->params ) . "', '{$pipe->ordering}')";
 			if ( ! $wpdb->query( $qry ) ) {
-				echo '<br />Error: ' . $wpdb->last_error;
+				_e('<br />Error: ' . $wpdb->last_error);
 				$error = true;
 			} elseif ( isset( $_GET['x'] ) ) {
-				echo '<br /><br />' . $qry;
+				_e('<br /><br />' . $qry);
 			}
 		}
 
@@ -241,7 +241,7 @@ class PIPESModelPipes extends Model {
 		global $wpdb;
 		$qry = "DELETE FROM `{$wpdb->prefix}wppipes_pipes` WHERE `item_id` = {$item_id}";
 		if ( ! $wpdb->query( $qry ) ) {
-			echo '<br />Error: ' . $wpdb->last_error;
+			_e('<br />Error: ' . $wpdb->last_error);
 		}
 	}
 }

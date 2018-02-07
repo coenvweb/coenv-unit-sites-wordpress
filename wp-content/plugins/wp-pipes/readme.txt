@@ -3,7 +3,7 @@ Contributors: thimpress, thongta, phamtungpth, tunnhn
 Donate link: http://thimpress.com/
 Tags: pipes, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, autoblog, autoblogging, curating, curation, curated content, content curation, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.8
+Tested up to: 4.9.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -148,6 +148,11 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.29 =
++ Improve: added more method to read data from original images before download.
++ Improve: used security code of wordpress with input and output data.
++ Fix: avoid storing image file with invalid extension type.
+
 = 1.28 =
 * Fix: bug when delete pipes - the related cache files were not deleted.
 * Fix: bug with installing WPPipes - $collation was not declared.

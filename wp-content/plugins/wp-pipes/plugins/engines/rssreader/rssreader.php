@@ -14,7 +14,7 @@ require_once dirname( __FILE__ ) . DS . 'helpers' . DS . 'autoloader.php';
 class WPPipesEngine_rssreader {
 	public static function getData( $params ) {
 		if ( isset( $_GET['e'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			ogb_pr( $params, 'Params: ' );
 		}
 		$urls  = explode( "\nhttp", $params->feed_url );
@@ -32,8 +32,8 @@ class WPPipesEngine_rssreader {
 			}
 		}
 		if ( isset( $_GET['e1'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'Total: ' . count( $data );
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('Total: ' . count( $data ));
 			ogb_pr( $data, 'Data: ' );
 		}
 
@@ -98,17 +98,17 @@ class WPPipesEngine_rssreader {
 		$cache_mtime = filemtime( $path );
 		$diff        = time() - $cache_mtime;
 		if ( isset( $_GET['x'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'last Update  - s: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('last Update  - s: ');
 			var_dump( $diff );
 			if ( $diff > 600 ) {
 				$a = $diff / 60;
-				echo ' - m: ';
+				_e(' - m: ');
 				var_dump( $a );
 			}
 			if ( $a > 60 ) {
 				$a = $diff / 60;
-				echo ' - h: ';
+				_e(' - h: ');
 				var_dump( $a );
 			}
 		}
@@ -144,14 +144,14 @@ class WPPipesEngine_rssreader {
 		$feed->set_url_replacements( array() );
 		$result = $feed->init();
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo "<p>URL: [{$url}]</p>";
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e("<p>URL: [{$url}]</p>");
+			_e("<p>Error: [{$feed->error}]</p>");
 		}
 		$items   = $feed->get_items();
 		$c_items = count( $items );
 		if ( $c_items == 0 ) {
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("<p>Error: [{$feed->error}]</p>");
 
 			return array();
 		}
@@ -210,8 +210,8 @@ class WPPipesEngine_rssreader {
 			$obtl ++;
 		}
 		$tl = count( $rows );
-		echo "\n<p>URL: " . '<a href="' . $url . '" target="_blank">' . $url . '</a>';
-		echo "\n<br />[ Found: " . $c_items . ' ][ +' . $tl . ' ][ ' . $obtl . '/' . $limit . ' ]' . "</p>\n";
+		_e("\n<p>URL: " . '<a href="' . $url . '" target="_blank">' . $url . '</a>');
+		_e("\n<br />[ Found: " . $c_items . ' ][ +' . $tl . ' ][ ' . $obtl . '/' . $limit . ' ]' . "</p>\n");
 
 		return $rows;
 	}
@@ -240,14 +240,14 @@ class WPPipesEngine_rssreader {
 		$feed->set_url_replacements( array() );
 		$result = $feed->init();
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo "<p>URL: [{$value_default}]</p>";
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e("<p>URL: [{$value_default}]</p>");
+			_e("<p>Error: [{$feed->error}]</p>");
 		}
 		$items   = $feed->get_items();
 		$c_items = count( $items );
 		if ( $c_items == 0 ) {
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("<p>Error: [{$feed->error}]</p>");
 
 			return array();
 		}
@@ -272,7 +272,7 @@ class WPPipesEngine_rssreader {
 
 		if ( isset( $_GET['x2'] ) ) {
 			//echo "\n\n<br /><i><b>File:</b>".__FILE__.' <b>Line:</b>'.__LINE__."</i><br />\n\n";
-			echo '<br>Path: ' . $path;
+			_e('<br>Path: ' . $path);
 		}
 		ogbFile::write( $path, $cache );
 		exit();

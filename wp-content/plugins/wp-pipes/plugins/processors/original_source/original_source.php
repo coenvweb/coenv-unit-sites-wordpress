@@ -11,13 +11,13 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class WPPipesPro_original_source {
 	public static function process( $data, $params ) {
 		if ( isset( $_GET['pos'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Params: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Params: ');
 			print_r( $params );
-			echo 'Data: ';
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>'; //exit();
+			_e('</pre>'); //exit();
 		}
 		if(!$params->text){
 			$params->text = 'Original Source';

@@ -26,7 +26,7 @@ if ( $pipe_help_box == 1 ) {
 <!-- toolbar -->
 <h2>
 	<!-- toolbar title -->
-	<?php echo __( 'Pipes', 'pipes' ); ?>
+	<?php _e( 'Pipes', 'pipes' ); ?>
 	<!-- buttons -->
 	<a class="add-new-h2" href="admin.php?page=pipes.pipe">Add New</a>
 	- or -
@@ -37,21 +37,21 @@ if ( $pipe_help_box == 1 ) {
 	<div class="import-content">
 		<div class="postbox-container">
 			<form method="post" enctype="multipart/form-data" class="wp-upload-form" action="">
-				<strong><?php echo __( 'Import single or multiple Pipe(s) in .pipe format' ); ?></strong>
+				<strong><?php _e( 'Import single or multiple Pipe(s) in .pipe format' ); ?></strong>
 
-				<p class="install-help"><?php echo __( ' If you have a pipe or multiple pipes in a .pipe format, you may install it by uploading it here.' ); ?></p>
+				<p class="install-help"><?php _e( ' If you have a pipe or multiple pipes in a .pipe format, you may install it by uploading it here.' ); ?></p>
 				<input type="file" id="file_import" name="file_import" />
 				<input type="hidden" name="task" value="import_from_file" />
 				<input type="submit" name="install-plugin-submit" id="install-plugin-submit" class="button"
-					   value="<?php echo __( 'Import' ); ?>" disabled="" />
+					   value="<?php _e( 'Import' ); ?>" disabled="" />
 			</form>
 		</div>
 		<div class="postbox-container">
 			<div class="pipe-infobox">
-				<?php echo __( '.pipe file is exported pipe(s). You can get .pipe file from:' ); ?><br />
-				* <?php echo __( 'Export single or multiple pipes by yourself. <a href="#" onclick="jQuery(\'#contextual-help-link\').click();jQuery(\'#tab-link-my_help_tab1 a\').click();">Find out how</a>.' ); ?>
+				<?php _e( '.pipe file is exported pipe(s). You can get .pipe file from:' ); ?><br />
+				* <?php _e( 'Export single or multiple pipes by yourself. <a href="#" onclick="jQuery(\'#contextual-help-link\').click();jQuery(\'#tab-link-my_help_tab1 a\').click();">Find out how</a>.' ); ?>
 				<br />
-				* <?php echo __( 'Get it from <a href="http://foob.la/pipestore" target="_blank">Pipes Marketplace</a> (both free & paid available).' ); ?>
+				* <?php _e( 'Get it from <a href="http://foob.la/pipestore" target="_blank">Pipes Marketplace</a> (both free & paid available).' ); ?>
 			</div>
 		</div>
 	</div>
@@ -59,7 +59,7 @@ if ( $pipe_help_box == 1 ) {
 </div>
 
 <?php
-echo PIPES::show_message();
+_e(PIPES::show_message());
 ?>
 
 <div class="clear">
@@ -86,12 +86,12 @@ $this->itemsTable->views();
 	<?php
 	$this->itemsTable->display();
 	?>
-	<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+	<input type="hidden" name="page" value="<?php _e( sanitize_text_field($_REQUEST['page']), 'wppipes' ) ?>" />
 </form>
 <script type="text/javascript">
 	//<![CDATA[
 	jQuery(document).ready(function ($) {
-		var pipe_help = <?php echo $check; ?>;
+		var pipe_help = <?php _e($check); ?>;
 		if (!pipe_help) {
 			$('#pipes-items-helpbox-1').css('display', 'none');
 			$('#pipes-items-helpbox-1-hide').prop("checked", false);
@@ -109,8 +109,8 @@ $this->itemsTable->views();
 
 		})
 		function ajax_update_meta(selected) {
-			var user_id = <?php echo $user;?>;
-			var url = '<?php echo admin_url() . 'admin.php?page=' . PIPES::$__page_prefix . '.pipes&task=update_meta';?>';
+			var user_id = <?php _e($user);?>;
+			var url = '<?php _e(admin_url() . 'admin.php?page=' . PIPES::$__page_prefix . '.pipes&task=update_meta');?>';
 			$.ajax({
 				url    : url,
 				type   : 'POST',
@@ -134,7 +134,7 @@ $this->itemsTable->views();
 		// close postboxes that should be closed
 		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 		// postboxes setup
-		postboxes.add_postbox_toggles('<?php echo $screen->id; ?>');
+		postboxes.add_postbox_toggles('<?php _e($screen->id); ?>');
 
 	});
 	//]]>

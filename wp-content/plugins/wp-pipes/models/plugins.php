@@ -21,8 +21,8 @@ class PIPESModelPlugins extends Model {
 		//Fetch, prepare, sort, and filter our data...
 		if ( isset( $_POST['wp_screen_options']['option'] ) && $_POST['wp_screen_options']['option'] == 'addons_per_page' ) {
 // get the current admin screen
-			$option = $_POST['wp_screen_options']['option'];
-			$value  = $_POST['wp_screen_options']['value'];
+			$option = sanitize_text_field($_POST['wp_screen_options']['option']);
+			$value  = sanitize_text_field($_POST['wp_screen_options']['value']);
 
 			update_user_meta( $user, $option, $value );
 		}

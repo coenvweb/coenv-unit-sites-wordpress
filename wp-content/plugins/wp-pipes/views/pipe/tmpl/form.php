@@ -100,8 +100,8 @@ $action = 'admin.php?page=' . PIPES::$__page_prefix . '.pipe';
 		min-width: 135px;
 	}
 </style>
-<form action="<?php echo $action; ?>" method="post" name="adminForm" id="adminForm">
-	<?php echo $this->loadTemplate( $name ); ?>
-	<input name="jform[id]" type="hidden" id="ogb_id" value="<?php echo $item->id; ?>" />
+<form action="<?php esc_html_e($action); ?>" method="post" name="adminForm" id="adminForm">
+	<?php _e($this->loadTemplate( $name )); ?>
+	<input name="jform[id]" type="hidden" id="ogb_id" value="<?php esc_html_e($item->id); ?>" />
 	<input name="task" id="task" type="hidden" value="" />
 </form>

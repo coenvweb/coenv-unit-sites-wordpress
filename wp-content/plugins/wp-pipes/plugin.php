@@ -40,7 +40,7 @@ class pipes_system {
 			global $ogbConStop;
 			$ogbConStop = true;
 			ogbPlugCron::checkRun();
-			echo '{ogb-res:' . ( $ogbConStop ? '1' : '0' ) . '}';
+			_e('{ogb-res:' . ( $ogbConStop ? '1' : '0' ) . '}');
 		}
 		exit();
 	}

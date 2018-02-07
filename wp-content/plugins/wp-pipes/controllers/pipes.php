@@ -19,14 +19,14 @@ class PIPESControllerPipes extends Controller {
 	}
 
 	public function edit() {
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		$url = admin_url() . 'admin.php?page=' . PIPES::$__page_prefix . '.pipe&id=' . $id;
 		header( 'Location: ' . $url );
 	}
 
 	public function delete() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -41,7 +41,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function copy() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -56,7 +56,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function publish() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -177,7 +177,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function move_to_draft() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -192,8 +192,8 @@ class PIPESControllerPipes extends Controller {
 
 	public function update_meta() {
 		if ( isset( $_POST['uid'] ) ) {
-			$user  = $_POST['uid'];
-			$value = $_POST['select'];
+			$user  = sanitize_text_field($_POST['uid']);
+			$value = sanitize_text_field($_POST['select']);
 			update_user_meta( $user, 'pipes_help_box', $value );
 
 			return 'Success!';
@@ -202,14 +202,14 @@ class PIPESControllerPipes extends Controller {
 
 	public function export_to_share() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? $_GET['id'] : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
 		if ( $id == '' ) {
 			PIPES::add_message( "Please pick up at least 1 pipe first!" );
 			$url = remove_query_arg( array( 'id', 'action', 'action2' ), $_SERVER['HTTP_REFERER'] );
 			header( 'Location: ' . $url );
 			exit();
 		}
-		$set_template = isset( $_GET['set_template'] ) ? $_GET['set_template'] : 0;
+		$set_template = isset( $_GET['set_template'] ) ? sanitize_text_field($_GET['set_template']) : 0;
 		$res          = $mod->export_to_share( $id );
 		//PIPES::add_message($res->msg);
 		if ( count( $res->result ) == 1 ) {
@@ -250,12 +250,12 @@ class PIPESControllerPipes extends Controller {
 	public function import_from_file() {
 		$upload_dir = wp_upload_dir();
 		$mod        = $this->getModel( 'pipes' );
-		$id         = isset( $_GET['id'] ) ? $_GET['id'] : 0;
-		$file_name  = isset( $_GET['file_name'] ) ? $_GET['file_name'] : '';
+		$id         = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : 0;
+		$file_name  = isset( $_GET['file_name'] ) ? sanitize_text_field($_GET['file_name']) : '';
 		if ( isset ( $_FILES["file_import"]["name"] ) ) {
 			$filename = $_FILES["file_import"]["tmp_name"];
 		} elseif ( isset( $_GET['url'] ) ) {
-			$filename = $_GET['url'];
+			$filename = sanitize_text_field($_GET['url']);
 		} elseif ( is_file( $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . $file_name ) ) {
 			$filename = $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . $file_name;
 		}

@@ -116,19 +116,19 @@ class CronLog {
 		//echo $style;
 		//$st	='background:#f8f8f8;border:1px solid #ddd;float:left;height:400px;overflow:auto;padding:5px;margin-left:5px;';
 		$com_url = 'index.php?option=com_wppipes&controller=items&task=viewlog';
-		echo '
+		_e('
 			<div class="foobla">
 				<div class="row">
-		';
-		echo '
+		');
+		_e('
 				<div class="col-md-3 well well-small">
 					<h3 class="text-error">Cron-Job work</h3>
-		';
+		');
 		if ( $lastestlog == - 1 ) {
-			echo '<span style="color:#666666;"><i>No Logs available: To enable Cronjob you need to open Options > Cronjob > Enable: Yes</i></span>';
+			_e('<span style="color:#666666;"><i>No Logs available: To enable Cronjob you need to open Options > Cronjob > Enable: Yes</i></span>');
 			//return ;
 		} else {
-			echo "<ol>";
+			_e("<ol>");
 			$k = 1;
 			for ( $i = $lastestlog; $i > - 1; $i -- ) {
 				if ( $k < 101 ) {
@@ -141,18 +141,18 @@ class CronLog {
 					if ( $logN == $logName[$i] ) {
 						$fileZise = CronLog::getCByte( filesize( OGRAB_CACHE_LOG . DS . $logName[$i] ) );
 						$size     = " <i>({$fileZise})</i>";
-						echo "<li><b style=\"color:#444444;\">{$logName[$i]}</b>{$size}</li>";
+						_e("<li><b style=\"color:#444444;\">{$logName[$i]}</b>{$size}</li>");
 					} else {
-						echo "<li><a href=\"{$com_url}&name={$logName[$i]}&type=log\">{$logName[$i]}</a>{$size}</li>";
+						_e("<li><a href=\"{$com_url}&name={$logName[$i]}&type=log\">{$logName[$i]}</a>{$size}</li>");
 					}
 				} else {
 					JFile::delete( OGRAB_CACHE_LOG . DS . $logName[$i] );
 				}
 				$k ++;
 			}
-			echo "</ol>";
+			_e("</ol>");
 		}
-		echo "</div>";
+		_e("</div>");
 		$logSave = JRequest::getVar( 'type', 'saved' ) == 'saved';
 		if ( $logSave ) {
 			$logF = JPath::clean( OGRAB_CACHE_SAVED . $logN );
@@ -168,29 +168,29 @@ class CronLog {
 		} else {
 			$logC = '<i>No exist Log!</i>';
 		}
-		echo "<div class=\"col-md-6 well well-small\"><h3 style=\"color:#009900\">Logs Details</h3>$logC</div>";
-		echo "<div class=\"col-md-3 well well-small\"><h3 style=\"color:#ff6600;\">Saved items</h3>";
+		_e("<div class=\"col-md-6 well well-small\"><h3 style=\"color:#009900\">Logs Details</h3>$logC</div>");
+		_e("<div class=\"col-md-3 well well-small\"><h3 style=\"color:#ff6600;\">Saved items</h3>");
 		if ( $saveds->total > 0 ) {
-			echo '<ol>';
+			_e('<ol>');
 			$k = 1;
 			for ( $i = ( $saveds->total - 1 ); $i > - 1; $i -- ) {
 				if ( $k < 101 ) {
 					if ( $logN == $items[$i] ) {
 						$fileZise = CronLog::getCByte( filesize( OGRAB_CACHE_SAVED . $items[$i] ) );
-						echo "<li><b>{$items[$i]}</b> <i>({$fileZise})</i></li>";
+						_e("<li><b>{$items[$i]}</b> <i>({$fileZise})</i></li>");
 					} else {
-						echo "<li><a href=\"{$com_url}&name={$items[$i]}&type=saved\">{$items[$i]}</a></li>";
+						_e("<li><a href=\"{$com_url}&name={$items[$i]}&type=saved\">{$items[$i]}</a></li>");
 					}
 				} else {
 					JFile::delete( OGRAB_CACHE_SAVED . $items[$i] );
 				}
 				$k ++;
 			}
-			echo '</ol>';
+			_e('</ol>');
 		} else {
-			echo '<i>None saved</i>';
+			_e('<i>None saved</i>');
 		}
-		echo '</div></div></div>';
+		_e('</div></div></div>');
 
 		return;
 	}

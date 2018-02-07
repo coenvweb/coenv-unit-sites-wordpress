@@ -49,7 +49,7 @@ abstract class Application {
 
 	public function display() {
 		require_once dirname( __FILE__ ) . DS . 'view.php';
-		$page = $_REQUEST['page'];
+		$page = sanitize_text_field($_REQUEST['page']);
 		list( $page_prefix, $type ) = explode( '.', $page );
 		$view = View::getInstance( $type, $this->_prefix . 'View' );
 		$view->display();
@@ -57,7 +57,7 @@ abstract class Application {
 
 	public function on_load_page() {
 		require_once dirname( __FILE__ ) . DS . 'view.php';
-		$page = $_REQUEST['page'];
+		$page = sanitize_text_field($_REQUEST['page']);
 		list( $page_prefix, $type ) = explode( '.', $page );
 		$view = View::getInstance( $type, $this->_prefix . 'View' );
 		if ( method_exists( $view, 'on_load_page' ) ) {
@@ -73,10 +73,10 @@ abstract class Application {
 
 	public function execute() {
 		require_once dirname( __FILE__ ) . DS . 'controller.php';
-		$page    = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : '';
-		$task    = isset( $_REQUEST['task'] ) ? $_REQUEST['task'] : '';
-		$action  = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
-		$action2 = isset( $_REQUEST['action2'] ) ? $_REQUEST['action2'] : '';
+		$page    = isset( $_REQUEST['page'] ) ? sanitize_text_field($_REQUEST['page']) : '';
+		$task    = isset( $_REQUEST['task'] ) ? sanitize_text_field($_REQUEST['task']) : '';
+		$action  = isset( $_REQUEST['action'] ) ? sanitize_text_field($_REQUEST['action']) : '';
+		$action2 = isset( $_REQUEST['action2'] ) ? sanitize_text_field($_REQUEST['action2']) : '';
 		if ( $action && $action != - 1 ) {
 			$task = $action;
 		}

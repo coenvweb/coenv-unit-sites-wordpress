@@ -202,15 +202,15 @@ class WPPipesAdapter_rss
 		$feed->force_feed(true);
 		$result = $feed->init();
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo "<p>URL: [{$url}]</p>";
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e("<p>URL: [{$url}]</p>");
+			_e("<p>Error: [{$feed->error}]</p>");
 		}
 		$items   = $feed->get_items();
 
 		$c_items = count( $items );
 		if ( $c_items == 0 ) {
-			echo "<p>Error: [{$feed->error}]</p>";
+			_e("<p>Error: [{$feed->error}]</p>");
 
 			return array();
 		}

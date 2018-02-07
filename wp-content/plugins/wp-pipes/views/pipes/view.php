@@ -64,7 +64,7 @@ class PIPESViewPipes extends View {
 
 
 		if ( isset( $_POST['wp_screen_options'] ) && is_array( $_POST['wp_screen_options'] ) ) {
-			$default = $_POST['wp_screen_options']['value'];
+			$default = sanitize_text_field($_POST['wp_screen_options']['value']);
 			update_user_meta( $user, 'pipes_per_page', $default );
 		} else {
 			$default = 10;
@@ -113,7 +113,7 @@ class PIPESViewPipes extends View {
 						<p class="hide-if-no-customize">
 							or
 						</p>
-						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=<?php echo plugins_url(); ?>/pipes/sample_pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
+						<a href="admin.php?page=pipes.pipes&task=import_from_file&url=<?php _e(plugins_url()); ?>/wp-pipes/sample_pipes/sample-with-techcrunch.pipe" class="button button-primary button-default">Import Sample Pipe</a>
 						<?php if($exist_db): ?>
 							<p style="color: red;">
 								Notice: the install process was not completed! Please click below button to create necessary tables.

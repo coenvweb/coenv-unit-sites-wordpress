@@ -73,8 +73,8 @@ class PIPESControllerPipe extends Controller {
 	}
 
 	function cfdf() {
-		echo '<pre>';
-		print_r( $_REQUEST );
+		_e('<pre>');
+		//print_r( $_REQUEST );
 		exit();
 	}
 
@@ -133,7 +133,7 @@ class PIPESControllerPipe extends Controller {
 		$params = $mod->getAddonParam( $type, $name, $id, false );
 		$res    = $mod->getIOaddon( $type, $name, $params );
 		$txt    = json_encode( $res );
-		echo $txt;
+		_e($txt);
 		exit();
 	}
 
@@ -143,7 +143,7 @@ class PIPESControllerPipe extends Controller {
 		$count = filter_input( INPUT_GET, 'count', FILTER_VALIDATE_INT );
 		$mod   = $this->getModel( 'pipe' );
 		$msg   = $mod->removePipe( $pid, $itid );
-		echo $count;
+		_e($count);
 		exit();
 	}
 
@@ -155,7 +155,7 @@ class PIPESControllerPipe extends Controller {
 		$mod  = $this->getModel( 'pipe' );
 		$res  = $mod->addProcess( $code, $id, $ordering );
 		$json = json_encode( $res );
-		echo $json;
+		_e($json);
 		exit();
 	}
 
@@ -166,7 +166,7 @@ class PIPESControllerPipe extends Controller {
 
 		$mod = $this->getModel( 'pipe' );
 		$txt = $mod->getAddonParam( $type, $name, $id );
-		echo $txt;
+		_e($txt);
 		exit();
 	}
 
@@ -241,20 +241,20 @@ class PIPESControllerPipe extends Controller {
 
 	function savenote() {
 		global $mainframe, $option;
-		$new_note = empty( $_REQUEST['new_note'] ) ? '' : $_REQUEST['new_note'];
-		$id       = empty( $_REQUEST['id'] ) ? 0 : $_REQUEST['id'];
+		$new_note = empty( $_REQUEST['new_note'] ) ? '' : sanitize_text_field($_REQUEST['new_note']);
+		$id       = empty( $_REQUEST['id'] ) ? 0 : (int) sanitize_text_field($_REQUEST['id']);
 
 		$mod  = $this->getModel( 'pipe' );
 		$res  = $mod->savenote( $id, $new_note );
 		$json = json_encode( $res );
-		echo $json;
+		_e($json);
 		exit();
 	}
 
 	function save_b4_post() {
 		$mod = $this->getModel( 'pipe' );
 		$res = $mod->save_b4_post();
-		echo json_encode( $res );
+		_e(json_encode( $res ));
 		exit();
 	}
 
@@ -337,7 +337,7 @@ class PIPESControllerPipe extends Controller {
 		$cache = serialize( $test_default );
 		$path  = OGRAB_EDATA . 'item-' . $id . DS . 'row-default.dat';
 		ogbFile::write( $path, $cache );
-		echo json_encode( $test_default->po[$ordering] );
+		_e(json_encode( $test_default->po[$ordering] ));
 		exit();
 		/*echo '<pre>';print_r( $current_default );die;
 		$pipe   = $mod->get_one_pipe( $processor_id );
@@ -348,11 +348,11 @@ class PIPESControllerPipe extends Controller {
 	}
 
 	function execaddonmethod() {
-		$type        = filter_input( INPUT_POST, 'type' )?filter_input( INPUT_POST, 'type' ):filter_input( INPUT_GET, 'type' );
-		$name        = filter_input( INPUT_POST, 'name' )?filter_input( INPUT_POST, 'name' ):filter_input( INPUT_GET, 'name' );
-		$id          = filter_input( INPUT_POST, 'id' )?filter_input( INPUT_POST, 'id' ):filter_input( INPUT_GET, 'id' );
-		$ajax        = filter_input( INPUT_POST, 'ajax' )?filter_input( INPUT_POST, 'ajax' ):filter_input( INPUT_GET, 'ajax' );
-		$method      = filter_input( INPUT_POST, 'method' )?filter_input( INPUT_POST, 'method' ):filter_input( INPUT_GET, 'method' );
+		$type        = filter_input( INPUT_POST, 'type' ) ? filter_input( INPUT_POST, 'type' ) : filter_input( INPUT_GET, 'type' );
+		$name        = filter_input( INPUT_POST, 'name' ) ? filter_input( INPUT_POST, 'name' ) : filter_input( INPUT_GET, 'name' );
+		$id          = filter_input( INPUT_POST, 'id' ) ? filter_input( INPUT_POST, 'id' ) : filter_input( INPUT_GET, 'id' );
+		$ajax        = filter_input( INPUT_POST, 'ajax' ) ? filter_input( INPUT_POST, 'ajax' ) : filter_input( INPUT_GET, 'ajax' );
+		$method      = filter_input( INPUT_POST, 'method' ) ? filter_input( INPUT_POST, 'method' ) : filter_input( INPUT_GET, 'method' );
 		$res         = new stdClass();
 		$path        = PIPES_PATH . DS . 'plugins' . DS . $type . 's' . DS . $name . DS . $name . '.php';
 		$path_plugin = OB_PATH_PLUGIN . $name . DS . $name . '.php';
@@ -367,7 +367,7 @@ class PIPESControllerPipe extends Controller {
 				$class = 'WPPipesAdapter_';
 				break;
 			default:
-				echo "Unknow addon type [{$type} {$name}]";
+				_e("Unknow addon type [{$type} {$name}]");
 				exit();
 		}
 		if ( is_file( $path ) ) {
@@ -404,19 +404,19 @@ class PIPESControllerPipe extends Controller {
 	public function delete_template() {
 		$upload_dir = wp_upload_dir();
 		if ( isset( $_POST['filename'] ) ) {
-			$path = $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . $_POST['filename'];
+			$path = $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . sanitize_text_field($_POST['filename']);
 			if ( ! is_file( $path ) ) {
-				echo 'File not exists!';
+				_e('File not exists!');
 				exit();
 			} else {
 				unlink( $path );
 				//print_r(error_get_last());
-				echo 'The template remove success!';
+				_e('The template remove success!');
 				exit();
 				//echo '<pre>';print_r($_POST['filename']);die;
 			}
 		} else {
-			echo 'false';
+			_e('false');
 			exit();
 		}
 	}
@@ -424,7 +424,7 @@ class PIPESControllerPipe extends Controller {
 	public function quick_edit(){
 		$mod = $this->getModel( 'pipe' );
 		$res = $mod->quick_edit_pipe();
-		echo json_encode( $res );
+		_e(json_encode( $res ));
 		exit();
 	}
 
@@ -433,14 +433,14 @@ class PIPESControllerPipe extends Controller {
 		$grab  = new obGrab;
 		$style = $this->set_style_preview();
 		if(!isset($_GET['id'])){
-			echo 'The pipe does not existed!';
+			_e('The pipe does not existed!');
 			exit();
 		}
-		$pipe_id = $_GET['id'];
+		$pipe_id = (int) sanitize_text_field($_GET['id']);
 		$pipe = $grab->getItemInfo( $pipe_id );
 		$oeData = $grab->getEngineData( $pipe->engine, $pipe->engine_params );
 		if(count($oeData) < 1){
-			echo 'There is not any items found!';
+			_e('There is not any items found!');
 			exit();
 		}
 		$html = '<h2 class="ob_preview_title">' . sprintf( 'The output fields\'s value of %s. This is the stream #%d.', 'source', 1) . '</h2>';
@@ -453,7 +453,7 @@ class PIPESControllerPipe extends Controller {
 				$html .= '<li><h4>' . $key_oe . ':</h4> <pre class="ob_preview_value">' . print_r($value_oe, true) . '</pre></li>';
 			}
 			$html .= '</ul>';
-			echo $style . $html;
+			_e($style . $html);
 		}
 		exit();
 	}
@@ -488,21 +488,21 @@ class PIPESControllerPipe extends Controller {
 		$grab  = new obGrab;
 		$style = $this->set_style_preview();
 		if(!isset($_GET['id'])){
-			echo 'The pipe does not exist!';
+			_e('The pipe does not exist!');
 			exit();
 		}
 		if(!isset($_GET['pipe_id']) || ! isset($_GET['ordering'])){
-			echo 'The processor does not exist!';
+			_e('The processor does not exist!');
 			exit();
 		}
-		$pipe_id = $_GET['id'];
-		$ordering = $_GET['ordering'];
+		$pipe_id = (int) sanitize_text_field($_GET['id']);
+		$ordering = sanitize_text_field($_GET['ordering']);
 		$item    = $grab->getItemInfo( $pipe_id );
 		$processors   = $grab->getPipes( $item );
 		$pipes = $grab->importProcess( $processors );
 		$oeData = $grab->getEngineData( $item->engine, $item->engine_params );
 		if(count($oeData) < 1){
-			echo JText::_( 'There is not any items found' );
+			_e(JText::_( 'There is not any items found' ));
 			exit();
 		}
 		$data         = array();
@@ -518,7 +518,7 @@ class PIPESControllerPipe extends Controller {
 			$html .= '<li><h4>' . $key_oe . ': <h4><pre class="ob_preview_value">' . print_r($value_oe, true) . '</pre></li>';
 		}
 		$html .= '</ul>';
-		echo $style . $html;
+		_e($style . $html);
 		exit();
 	}
 }

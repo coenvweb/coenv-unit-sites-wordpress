@@ -765,7 +765,7 @@ class FeedCreator extends HtmlDescribable {
 		}
 		$res = $this->createFeed();
 		if ( !ogbFile::write( $filename, $res ) ) {
-			echo "<br /><b>Error creating feed file, please check write permissions.</b><br />";
+			_e("<br /><b>Error creating feed file, please check write permissions.</b><br />");
 		} else {
 			if ( $displayContents ) {
 				$this->_redirect( $filename );
@@ -792,7 +792,7 @@ class FeedCreator extends HtmlDescribable {
 	 * still missing: proper header output - currently you have to add it manually
 	 */
 	function outputFeed() {
-		echo $this->createFeed();
+		_e($this->createFeed());
 	}
 
 	function setEncoding( $encoding = "utf-8" ) {

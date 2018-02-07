@@ -25,12 +25,12 @@ class PIPES_Plugins_List_Table extends WP_List_Table {
 				'engines'    => __( 'Sources' ),
 				'processors' => __( 'Processors' ),
 			) );
-			echo '<select name="addon_type">
-				<option value="">' . __( 'Show all addon types' ) . '</option>';
+			_e('<select name="addon_type">
+				<option value="">' . __( 'Show all addon types' ) . '</option>');
 			foreach ( $addon_types as $type => $label ) {
-				echo "\t<option value='" . esc_attr( $type ) . "'" . selected( $addon_type, $type, false ) . ">$label</option>\n";
+				_e("\t<option value='" . esc_attr( $type ) . "'" . selected( $addon_type, $type, false ) . ">$label</option>\n");
 			}
-			echo '</select>';
+			_e('</select>');
 			submit_button( __( 'Filter' ), 'button', false, false, array( 'id' => 'post-query-submit' ) );
 		}
 	}
@@ -264,7 +264,7 @@ class PIPES_Plugins_List_Table extends WP_List_Table {
 	 **************************************************************************/
 	function prepare_items() {
 		global $wpdb, $addon_type; //This is used only if making any database queries
-		$addon_type = ! empty( $_REQUEST['addon_type'] ) ? $_REQUEST['addon_type'] : '';
+		$addon_type = ! empty( $_REQUEST['addon_type'] ) ? sanitize_text_field($_REQUEST['addon_type']) : '';
 		/**
 		 * First, lets decide how many records per page to show
 		 */
@@ -318,8 +318,8 @@ class PIPES_Plugins_List_Table extends WP_List_Table {
 		 * sorting technique would be unnecessary.
 		 */
 		function usort_reorder( $a, $b ) {
-			$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'name'; //If no sort, default to title
-			$order   = ( ! empty( $_REQUEST['order'] ) ) ? $_REQUEST['order'] : 'asc'; //If no order, default to asc
+			$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? sanitize_text_field($_REQUEST['orderby']) : 'name'; //If no sort, default to title
+			$order   = ( ! empty( $_REQUEST['order'] ) ) ? sanitize_text_field($_REQUEST['order']) : 'asc'; //If no order, default to asc
 			$result  = strcmp( $a[$orderby], $b[$orderby] ); //Determine sort order
 			return ( $order === 'asc' ) ? $result : - $result; //Send final sort direction to usort
 		}

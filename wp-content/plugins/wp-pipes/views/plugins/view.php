@@ -28,7 +28,7 @@ class PIPESViewPlugins extends View {
 		$user             = get_current_user_id();
 		//$screen           = get_current_screen();
 		if ( isset( $_POST['wp_screen_options'] ) && is_array( $_POST['wp_screen_options'] ) ) {
-			$default = $_POST['wp_screen_options']['value'];
+			$default = sanitize_text_field($_POST['wp_screen_options']['value']);
 			update_user_meta( $user, 'addons_per_page', $default );
 		} else {
 			$default = 10;

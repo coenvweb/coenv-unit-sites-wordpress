@@ -35,7 +35,7 @@ class PIPESModelSettings extends Model {
 			foreach ( $_POST as $key => $value ) {
 				if ( $key != 'task' && $key != 'submit' ) {
 					if ( 'pipes_start_at' == $key ) {
-						$value .= ' ' . ( ( $_POST['pipes_hh'] != '' ) ? $_POST['pipes_hh'] : '00' ) . ':' . ( ( $_POST['pipes_mn'] != '' ) ? $_POST['pipes_mn'] : '00' );
+						$value .= ' ' . ( ( sanitize_text_field($_POST['pipes_hh']) != '' ) ? sanitize_text_field($_POST['pipes_hh']) : '00' ) . ':' . ( ( $_POST['pipes_mn'] != '' ) ? sanitize_text_field($_POST['pipes_mn']) : '00' );
 						$value = strtotime( $value );
 					}
 					update_option($key, $value);

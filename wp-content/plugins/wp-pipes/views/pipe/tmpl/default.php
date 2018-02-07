@@ -29,9 +29,9 @@ Item</h2>
 						<h3><b>Connection Info</b></h3>
 						<div class="inside">
 							<p><b>Title: </b><br>
-							<input type="text" name="title" size="60" value="<?php echo $this->item->title; ?>"></p>
+							<input type="text" name="title" size="60" value="<?php _e($this->item->title); ?>"></p>
 							<p><b>Description: </b><br>
-							<textarea name="description" rows="5" cols="52"><?php echo $this->item->description; ?></textarea></p>
+							<textarea name="description" rows="5" cols="52"><?php _e($this->item->description); ?></textarea></p>
 							<p><b>Published:</b> 
 							<select name="published">
 								<option value="0">No</option>
@@ -50,10 +50,10 @@ Item</h2>
 // 							print_r($this);
 							$fieldsets = $this->form->getFieldsets('params');
 							foreach ($fieldsets as $name => $fieldset) :
-								echo '<div class="tab-pane" id="options-'.$name.'">';
+								_e('<div class="tab-pane" id="options-'.$name.'">');
 								$label = !empty($fieldset->label) ? $fieldset->label : 'COM_MODULES_'.$name.'_FIELDSET_LABEL';
 								if (isset($fieldset->description) && trim($fieldset->description)) :
-									echo '<p class="tip">'.JText::_($fieldset->description).'</p>';
+									_e('<p class="tip">'.JText::_($fieldset->description).'</p>');
 								endif;
 								?>
 											<?php $hidden_fields = ''; ?>
@@ -61,19 +61,19 @@ Item</h2>
 												<?php if (!$field->hidden) : ?>
 												<div class="control-group">
 													<div class="control-label">
-														<?php echo $field->label; ?>
+														<?php _e($field->label); ?>
 													</div>
 													<div class="controls">
-														<?php echo $field->input; ?>
+														<?php _e($field->input); ?>
 													</div>
 												</div>
 												<?php else :?>
 												<?php $hidden_fields .= $field->input; ?>
 												<?php endif; ?>
 											<?php endforeach; ?>
-											<?php echo $hidden_fields; ?>
+											<?php _e($hidden_fields); ?>
 										
-											<?php echo '</div>'; // .tab-pane div ?>
+											<?php _e('</div>'); // .tab-pane div ?>
 										<?php 
 							endforeach;
 						?>

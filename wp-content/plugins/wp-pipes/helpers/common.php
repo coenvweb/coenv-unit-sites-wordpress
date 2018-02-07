@@ -51,16 +51,16 @@ class ogb_common {
 		$temp->loadArray( $values );
 
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			$file = $xml_dir . DS . $file . '.xml';
-			echo '<br />' . $file . ' [ XML file ]';
+			_e('<br />' . $file . ' [ XML file ]');
 			$a = is_file( $file );
-			echo "[ file exist: ";
+			_e("[ file exist: ");
 			var_dump( $a );
-			echo " ]";
-			echo '<pre>';
+			_e(" ]");
+			_e('<pre>');
 			print_r( $temp );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		$form->bind( $temp );
@@ -448,10 +448,10 @@ class ogbFile {
 		curl_exec( $ch );
 		if ( isset( $_GET['x11'] ) ) {
 			$info = curl_getinfo( $ch );
-			echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-			echo '<pre>';
+			_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+			_e('<pre>');
 			print_r( $info );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		curl_close( $ch );
 
@@ -576,14 +576,14 @@ class ogbFile {
 		if ( ! isset( $_GET['x11'] ) ) {
 			return;
 		}
-		echo '<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-		echo "LV {$lv} - Loop: {$loop}<br />";
-		echo '<pre>';
+		_e('<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+		_e("LV {$lv} - Loop: {$loop}<br />");
+		_e('<pre>');
 		print_r( $response );
-		echo "</pre>\n";
+		_e("</pre>\n");
 		if ( isset( $_GET['x12'] ) && $_GET['x12'] == $loop ) {
 			$html = $html != '' ? "\n{$html}\n" : 'None';
-			echo "--->|{$html}|<---\n";
+			_e("--->|{$html}|<---\n");
 			if ( ! isset( $_GET['x13'] ) ) {
 				exit();
 			}
@@ -744,24 +744,24 @@ class ogbDb {
 function obg_sbug( $file, $line, $stime = false, $msg = '', $microtime = false ) {
 	$smtime = $microtime ? '[' . microtime() . ']' : '';
 	$time   = $stime ? "[" . date( 'Y-m-d H:i:s' ) . "]" : '';
-	echo "\n\n<br />" . $time . $smtime . "<i>[ <b>File:</b>" . $file . ' ][ <b>Line:</b>' . $line . "]</i><br />\n\n";
+	_e("\n\n<br />" . $time . $smtime . "<i>[ <b>File:</b>" . $file . ' ][ <b>Line:</b>' . $line . "]</i><br />\n\n");
 	if ( $msg != '' ) {
-		echo '<br />' . $msg . "<br />\n";
+		_e('<br />' . $msg . "<br />\n");
 	}
 }
 
 function ogb_show( $text, $desc = '', $width = 900, $mheight = 600 ) {
 	$style = "margin:5px auto;background:#f8f8f8;border: 2px solid #009900;max-height: {$mheight}px;overflow: auto;padding: 5px;width: {$width}px;";
-	echo '<div style="' . $style . '">';
-	echo "<b><i>{$desc}</i></b><hr />" . $text;
-	echo '</div>';
+	_e('<div style="' . $style . '">');
+	_e("<b><i>{$desc}</i></b><hr />" . $text);
+	_e('</div>');
 
 }
 
 function ogb_pr( $arr, $desc = '', $width = 1200, $mheight = 600 ) {
 	$style = "background:#f8f8f8;border: 2px solid #009900;max-height: {$mheight}px;overflow: auto;padding: 5px;width: {$width}px;";
-	echo '<pre style="' . $style . '">';
-	echo $desc;
+	_e('<pre style="' . $style . '">');
+	_e($desc);
 	print_r( $arr );
-	echo '</pre>';
+	_e('</pre>');
 }

@@ -12,11 +12,11 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class WPPipesPro_duplicate {
 	public static function process( $data, $params ) {
 		if ( isset( $_GET['p'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
 			print_r( $params );
 			print_r( $data );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		$stop        = new stdClass();

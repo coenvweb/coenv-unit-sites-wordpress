@@ -27,15 +27,15 @@ require_once OBGRAB_SITE . 'grab.php';
 class ogbDebug {
 	public static function out( $msg = '', $line = 0 ) {
 		if ( filter_input( INPUT_GET, "obDebug" ) == 1 ) {
-			echo "\n\n<br /><b>obDebug </b>";
+			_e("\n\n<br /><b>obDebug </b>");
 			if ( $line != 0 ) {
-				echo " <b>Line:</b>{$line} ";
+				_e(" <b>Line:</b>{$line} ");
 			}
-			echo '<b>Time: </b>' . date( "Y-m-d H:i:s" ) . "\n";
+			_e('<b>Time: </b>' . date( "Y-m-d H:i:s" ) . "\n");
 			if ( $msg != '' ) {
-				echo "<br /><b>Msg: </b>{$msg}";
+				_e("<br /><b>Msg: </b>{$msg}");
 			}
-			echo "<hr />\n";
+			_e("<hr />\n");
 		}
 	}
 
@@ -71,12 +71,12 @@ class ogbCronCallAIO {
 		$runTime = $stop - $start;
 		$time    = ogbDebug::getHMS( $runTime );
 
-		echo $res . "\n<hr />";
+		_e($res . "\n<hr />");
 		if ( $stop - $start > 1 ) {
 			$msg = self::getMsgRun( $stop, $start );
-			echo $msg;
+			_e($msg);
 		} else {
-			echo "{$start}: " . date( 'Y-m-d H:i:s', $start );
+			_e("{$start}: " . date( 'Y-m-d H:i:s', $start ));
 		}
 		if ( $x ) {
 			$mstop = microtime();
@@ -88,9 +88,9 @@ class ogbCronCallAIO {
 			} else {
 				$g = $f + $b[0] - $a[0];
 			}
-			echo "\n\n<hr /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n";
-			echo $mstart . "<br />\n" . $g . "<br />\n" . $mstop;
-			echo "\n<br />url-cron: " . $url;
+			_e("\n\n<hr /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n");
+			_e($mstart . "<br />\n" . $g . "<br />\n" . $mstop);
+			_e("\n<br />url-cron: " . $url);
 		}
 	}
 
@@ -133,11 +133,11 @@ class ogbCronCallAIO {
 		curl_exec( $ch );
 
 		if ( isset( $_GET['x2'] ) ) {
-			echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
+			_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
 			$info = curl_getinfo( $ch );
-			echo '<pre>';
+			_e('<pre>');
 			print_r( $info );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		curl_close( $ch );
 
@@ -151,8 +151,8 @@ class ogbCronCallAIO {
 		$res = self::ob_get_curl( $url );
 		set_time_limit( 0 );
 		if ( isset( $_GET['x'] ) ) {
-			echo '<hr />' . date( 'Y-m-d H:i:s' ) . ' - ' . microtime() . ' - limit: ' . $limit;
-			echo '<br />' . $res;
+			_e('<hr />' . date( 'Y-m-d H:i:s' ) . ' - ' . microtime() . ' - limit: ' . $limit);
+			_e('<br />' . $res);
 		}
 		if ( $limit < 1 ) {
 			return $res;
@@ -183,7 +183,7 @@ class ogbCronCallAIO {
 	public static function isNextCall( $text ) {
 		$step = isset( $_GET['step'] ) ? (int) $_GET['step'] : 1;
 		if ( isset( $_GET['x5'] ) && $step < 20 ) {
-			echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
+			_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
 
 			return true;
 		}
@@ -204,10 +204,10 @@ class ogbCronCallAIO {
 
 	public static function getRealIpAddr() {
 		if ( isset( $_GET['x12'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"; //exit();
-			echo '<pre>$_SERVER:';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n"); //exit();
+			_e('<pre>$_SERVER:');
 			print_r( $_SERVER );
-			echo '</pre>';
+			_e('</pre>');
 			exit();
 		}
 		global $ogb_ip;
@@ -292,8 +292,8 @@ class ogbPlugCron {
 		}
 		$maxtime = 300;
 		if ( isset( $_GET['mt'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'setCanRun';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('setCanRun');
 			self::setCanRun();
 
 			return true;
@@ -306,8 +306,8 @@ class ogbPlugCron {
 			return false;
 		}
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo "isRunning: start: " . date( 'Y-m-d H:i:s' ) . " [ {$run} ] - Delay:{$delay}";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e("isRunning: start: " . date( 'Y-m-d H:i:s' ) . " [ {$run} ] - Delay:{$delay}");
 		}
 
 		return true;
@@ -355,10 +355,10 @@ class ogbPlugCron {
 		/*Get global config*/
 		$gbParams = self::getGbParams();
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $gbParams );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		$active   = $gbParams->active;
 		$start    = $gbParams->start_at;
@@ -369,12 +369,12 @@ class ogbPlugCron {
 				self::setDone( '1' );
 			}
 			ogbDebug::out( "The Cronjob is not active.", __LINE__ );
-			echo "The Cronjob is not active.";
+			_e("The Cronjob is not active.");
 
 			return;
 		}
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 		}
 		/*Check delay*/
 		if ( self::isRuning() ) {
@@ -416,11 +416,11 @@ class ogbPlugCron {
 		/*Get Pie's next time', schedule from cache. File name: cronlogitem.info*/
 		$items = self::getPiesItems();
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $gbParams );
-			echo '</pre>';
-			echo $info->nextRun;
+			_e('</pre>');
+			_e($info->nextRun);
 
 
 		}
@@ -471,23 +471,23 @@ class ogbPlugCron {
 		ogbDebug::write( OGRAB_CACHE_LOG_ITEM_INFO, json_encode( $info_items ) );
 
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $info_items );
-			echo '</pre>';
-			echo date( 'Y-m-d H:i:s' ) . ' [ Now ]<br />';
+			_e('</pre>');
+			_e(date( 'Y-m-d H:i:s' ) . ' [ Now ]<br />');
 
 			foreach ( $info_items as $k => $info_item ) {
-				echo date( 'Y-m-d H:i:s', $info_item->nextRun ) . ' [ nextRun' . $k . ' ]<br />';
+				_e(date( 'Y-m-d H:i:s', $info_item->nextRun ) . ' [ nextRun' . $k . ' ]<br />');
 			}
 		}
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $info );
-			echo '</pre>';
-			echo date( 'Y-m-d H:i:s' ) . ' [ Now ]<br />';
-			echo date( 'Y-m-d H:i:s', $info->nextRun ) . ' [ nextRun ]';
+			_e('</pre>');
+			_e(date( 'Y-m-d H:i:s' ) . ' [ Now ]<br />');
+			_e(date( 'Y-m-d H:i:s', $info->nextRun ) . ' [ nextRun ]');
 		}
 
 		/*Check next time of global*/
@@ -546,11 +546,11 @@ class ogbPlugCron {
 		$info->nextRun = $nextRun;
 
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $info );
-			echo '</pre>';
-			echo 'nextRun: ' . $info->nextRun . ' : ' . date( 'Y-m-d H:i:s', $info->nextRun );
+			_e('</pre>');
+			_e('nextRun: ' . $info->nextRun . ' : ' . date( 'Y-m-d H:i:s', $info->nextRun ));
 		}
 
 		$logName       = date( 'Y.m.d_H.i.s', $rtime );
@@ -608,9 +608,9 @@ class ogbPlugCron {
 //		$db->setQuery( $qry );
 		$id = (int) $wpdb->get_var( $qry );
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo $qry;
-			echo '<br />' . $wpdb->print_error();
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e($qry);
+			_e('<br />' . $wpdb->print_error());
 		}
 
 		return $id;
@@ -687,7 +687,7 @@ class ogbPlugCron {
 			return false;
 		}
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			var_dump( $info_items );
 		}
 		if ( count( $info_items ) > 0 ) {
@@ -726,8 +726,8 @@ class ogbPlugCron {
 		} else {
 			$run_info = self::get_content( OGRAB_CACHE_DATA_RUNING );
 			if ( isset( $_GET['x'] ) ) {
-				echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-				echo '$run_info: ';
+				_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+				_e('$run_info: ');
 				var_dump( $run_info );
 
 
@@ -745,8 +745,8 @@ class ogbPlugCron {
 			$run_id        = self::getNextRunId( $run_id );
 			$run_item_time = self::getTimeSchedule( $run_id );
 			if ( isset( $_GET['x'] ) ) {
-				echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-				echo 'run time: ' . $run_item_time;
+				_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+				_e('run time: ' . $run_item_time);
 			}
 			if ( $run_id == 0 ) {
 				self::set_data_run( "0:0:0" );
@@ -765,14 +765,14 @@ class ogbPlugCron {
 		$grab = new obGrab;
 		$info = '';
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<br />New start:' . $new_start;
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<br />New start:' . $new_start);
 		}
 		if ( $new_start ) {
 			/*Check time for each pie. If pie's nextime less now. Pie will run'*/
 			if ( $run_item_time < $start ) {
 				if ( isset( $_GET['x'] ) ) {
-					echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+					_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 
 				}
 				$res = $grab->start( $run_id );
@@ -783,13 +783,13 @@ class ogbPlugCron {
 			self::set_data_run( "{$run_id}:{$crun}:{$mrun}" );
 
 			if ( isset( $_GET['x'] ) ) {
-				echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-				echo '$new_start: ';
+				_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+				_e('$new_start: ');
 				var_dump( $new_start );
-				echo '<pre>';
+				_e('<pre>');
 				print_r( $res );
-				echo '</pre>';
-				echo "{$run_id}:{$crun}:{$mrun}";
+				_e('</pre>');
+				_e("{$run_id}:{$crun}:{$mrun}");
 			}
 
 			$edit_url = "admin.php?page=pipes.pipe&id={$run_id}";
@@ -813,8 +813,8 @@ class ogbPlugCron {
 			$savedInfo .= self::makeLogSave( $info );
 			$log .= self::makeLogCron( $info );
 			if ( isset( $_GET['x'] ) ) {
-				echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-				echo 'crun: ' . $i;
+				_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+				_e('crun: ' . $i);
 			}
 			if ( self::outTime( $start ) || isset( $_GET['st'] ) ) {
 				$i ++;
@@ -884,9 +884,9 @@ class ogbPlugCron {
 
 	public static function addLog2( $path, $info, $a = true ) {
 		if ( isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo $info;
-			echo '<hr />logPath: ' . $path;
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e($info);
+			_e('<hr />logPath: ' . $path);
 		}
 		if ( is_file( $path ) ) {
 			$old = self::get_content( $path );

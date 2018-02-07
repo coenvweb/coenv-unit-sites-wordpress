@@ -21,6 +21,7 @@ class WPPipesPro_image {
 		$df->ignore_check_mime = 1;
 		$df->number_imgs = 1;
 		$df->remove      = 0;
+		$df->curl_method = 0;
 
 		foreach ( $df as $key => $val ) {
 			if ( ! isset( $params->$key ) ) {
@@ -40,7 +41,7 @@ class WPPipesPro_image {
 
 		// Debug
 		if ( $x1 ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
 			ogb_pr( $params, 'Params: ' );
 			ogb_pr( $data, 'Data: ' );
 		}
@@ -76,7 +77,7 @@ class WPPipesPro_image {
 
 		// Debug
 		if ( $x ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
 			//ogb_show($data->html,'data->html: ');
 		}
 
@@ -94,7 +95,7 @@ class WPPipesPro_image {
 			$res = self::make_list( $html, $params );
 			// Debug
 			if ( $x ) {
-				echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
+				_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
 				ogb_pr( $res, 'Imgs: ' );
 			}
 		}
@@ -257,8 +258,13 @@ class WPPipesPro_image {
 			if ( ! in_array( 'image', $temp_arr ) && $params->ignore_check_mime ) { //check is image or not
 				continue;
 			}
+			$pattern_mime = '/image\/([^;\s]*)/';
+			preg_match( $pattern_mime, $mime, $matches, PREG_OFFSET_CAPTURE );
+			if ( ! isset( $matches[1][0] ) || ( isset( $params->force_ext ) && $params->force_ext != '' ) ) {
+				$matches[1][0] = 'jpg';
+			}
 
-			$filename = substr( md5( $source_urls[$i] ), - 10 ) . '.' . end( $temp_arr );
+			$filename = substr( md5( $source_urls[$i] ), - 10 ) . '.' . $matches[1][0];
 
 			$success = false;
 
@@ -273,22 +279,22 @@ class WPPipesPro_image {
 				// Debug
 				if ( isset( $_GET['i'] ) ) {
 					$img_info = array();
-					echo '<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-					echo '[ url_path ]: ';
+					_e('<hr /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+					_e('[ url_path ]: ');
 					var_dump( $url_path );
-					echo '<br />[ <a href="' . $s . '" target="_blank">source_urls</a> ]: ' . $s;
-					echo '<br />[ <a href="' . $url_path . '/' . $filename . '" target="_blank">dest_path</a> ]: ' . $d;
+					_e('<br />[ <a href="' . $s . '" target="_blank">source_urls</a> ]: ' . $s);
+					_e('<br />[ <a href="' . $url_path . '/' . $filename . '" target="_blank">dest_path</a> ]: ' . $d);
 					if ( isset( $_GET['y'] ) ) {
-						echo '<br /><br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
+						_e('<br /><br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
 						if ( $success ) {
 							$success = false;
 							$k       = unlink( $d );
-							echo 'Unlink: ';
+							_e('Unlink: ');
 							var_dump( $k );
 						} else {
-							echo 'File not exist';
+							_e('File not exist');
 						}
-						echo 'dest_path:';
+						_e('dest_path:');
 						var_dump( $k );
 					}
 				}
@@ -296,9 +302,36 @@ class WPPipesPro_image {
 				if ( ! $success ) {
 					$aa = ogbFolder::create( $dest_path );
 					if ( $aa ) {
-
-						$img_c = ogbFile::get_curl( trim( $s ) );
-
+						$s = trim($s);
+						$img_c = ogbFile::get_curl( $s );//if(isset($_GET['pvt'])){echo'<pre>Debug: ';print_r(ogbFile::get_curl4( $s ));die;}
+						if ( $img_c == '' || $params->curl_method != 0 ) {
+							if( $params->curl_method == 0 ) {
+								$img_content = ogbFile::get_curl2( $s );
+								$img_c = $img_content[1];
+							}else{
+								switch( $params->curl_method ){
+									case 1:
+										$img_content = ogbFile::get_curl1( $s );
+										$img_c = $img_content[1];
+										break;
+									case 3:
+										$img_content = ogbFile::get_curl3( $s );
+										$img_c = $img_content[1];
+										break;
+									case 4:
+										$img_content = ogbFile::get_curl4( $s );
+										$img_c = $img_content[1];
+										break;
+									case 5:
+										$img_c = ogbFile::get_curl5( $s, 'custom_ck' );
+										break;
+									default:
+										$img_content = ogbFile::get_curl2( $s );
+										$img_c = $img_content[1];
+										break;
+								}
+							}
+						}
 						$a = ogbFile::write( $d, $img_c );
 
 						//$a = copy($s, $d);
@@ -327,19 +360,19 @@ class WPPipesPro_image {
 
 						// Debug
 						if ( isset( $_GET['i'] ) ) {
-							echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-							echo 'copy image Success: ';
+							_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+							_e('copy image Success: ');
 							var_dump( $a );
-							echo '<br />file image exist: ';
+							_e('<br />file image exist: ');
 							var_dump( $success );
-							echo '<br />Size: ';
+							_e('<br />Size: ');
 							var_dump( $size );
-							echo '<br />Unlink:';
+							_e('<br />Unlink:');
 							var_dump( $unlink );
-							echo '<pre>';
+							_e('<pre>');
 							print_r( $iMin );
 							print_r( $img_info );
-							echo '</pre>';
+							_e('</pre>');
 						}
 					}
 				}
@@ -366,16 +399,16 @@ class WPPipesPro_image {
 
 		// Debug
 		if ( isset( $_GET['i2'] ) ) {
-			echo '<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n";
-			echo '$itemLink: ';
+			_e('<br /><i><b>File:</b>' . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br /> \n");
+			_e('$itemLink: ');
 			var_dump( $itemLink );
-			echo '<pre>';
-			echo 'searches:';
+			_e('<pre>');
+			_e('searches:');
 			print_r( $searches );
-			echo 'replaces:';
+			_e('replaces:');
 			print_r( $replaces );
-			echo '</pre>';
-			echo '<hr />' . $contents;
+			_e('</pre>');
+			_e('<hr />' . $contents);
 			exit();
 		}
 

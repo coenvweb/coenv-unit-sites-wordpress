@@ -39,9 +39,9 @@ class View {
 		$res = ob_get_contents();
 		ob_end_clean();
 
-		echo '<div class="wrap">';
-		echo $res;
-		echo '</div>';
+		_e('<div class="wrap">');
+		_e($res);
+		_e('</div>');
 	}
 
 	public function getModel( $name = '', $prefix = '', $config = array() ) {

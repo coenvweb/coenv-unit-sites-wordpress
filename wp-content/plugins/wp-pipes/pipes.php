@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.28
+Version: 1.29
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -137,7 +137,7 @@ class PIPES extends Application {
 		wp_enqueue_script( 'pipes-chosen' );
 		wp_enqueue_script( 'pipes-ads-js' );
 		//wp_enqueue_script( 'pipes-angular' );
-		$page = isset($_GET['page'])?$_GET['page']:'';
+		$page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
 		if( $page == 'pipes.plugins' ) {
 			wp_enqueue_script( 'pipes-angular' );
 		}
@@ -210,9 +210,9 @@ function mywppipes_enqueue( $hook ) {
 }
 
 function ts_js() {
-	echo '<script type="text/javascript">
+	_e('<script type="text/javascript">
 		var obHost ="' . get_site_url() . '/";
-		</script>';
+		</script>');
 }
 
 if ( ! is_admin() ) {
@@ -258,7 +258,7 @@ if (!class_exists('Ob_Advertisment')) {
 					'name' => 'Education WordPress Theme | Education WP',
 					'url' => 'http://themeforest.net/item/education-wordpress-theme-education-wp/14058034',
 					'demo' => 'http://educationwp.thimpress.com',
-					'img' => 'https://image-tf.s3.envato.com/files/225684161/01_preview.__large_preview-3.__large_preview.jpg',
+					'img' => 'https://s3.envato.com/files/237805781/eduma_preview.__large_preview-3.__large_preview.__large_preview.jpg',
 					'description' => 'Education WordPress Theme – Education WP is made for educational web, LMS, Training Center, Courses Hub, College, Academy, University, School, Kindergarten. Education WP 2.7 newly released: Seamless lesson design, LearnPress 2.0, new Ivy League Demos, Visual Coposer, faster, stable, scalable, more light weight. See changelog. Complete Education WordPress Theme Based on our experience of building LMS with our previous theme eLearning WP - Education WP is the next generation and one of the best education WordPress themes around, containing all the strength of eLearning WP but with a better UI/UX. This WordPress educational theme has been developed based on the #1 LMS plugin on the official WordPress Plugins directory',
 				),
 				array(
@@ -301,19 +301,19 @@ if (!class_exists('Ob_Advertisment')) {
 
 					<div class="item">
 						<div class="theme-thumbnail">
-							<a href="<?php echo esc_url( $theme['url'] ); ?>">
-								<img src="<?php echo esc_url( $theme['img'] ) ?>" />
+							<a href="<?php _e(esc_url( $theme['url'] )); ?>">
+								<img src="<?php _e(esc_url( $theme['img'] )) ?>" />
 							</a>
 						</div>
 
 						<div class="theme-detail">
-							<h2><a href="<?php echo esc_url( $theme['url'] ); ?>"><?php echo $theme['name']; ?></a></h2>
+							<h2><a href="<?php _e(esc_url( $theme['url'] )); ?>"><?php _e($theme['name']); ?></a></h2>
 							<p class="ob-description">
-								<?php echo wp_kses_post( $theme['description'] ); ?>
+								<?php _e(wp_kses_post( $theme['description'] )); ?>
 							</p>
 							<p class="theme-controls">
-								<a href="<?php echo esc_url( $theme['url'] ); ?>" class="button button-primary" target="_blank">Read More</a>
-								<a href="<?php echo esc_url( $url_demo ); ?>" class="button" target="_blank">View Demo</a>
+								<a href="<?php _e(esc_url( $theme['url'] )); ?>" class="button button-primary" target="_blank">Read More</a>
+								<a href="<?php _e(esc_url( $url_demo )); ?>" class="button" target="_blank">View Demo</a>
 							</p>
 						</div>
 

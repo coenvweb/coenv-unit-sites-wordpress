@@ -62,24 +62,24 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 
 		$params = self::check_params_df( $params );
 		if ( isset( $_GET['php1'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Params: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Params: ');
 			print_r( $params );
-			echo 'Data: ';
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>'; //exit();
+			_e('</pre>'); //exit();
 		}
 		$url = str_replace( '&amp;', '&', @$data->url );
 		$res = new stdclass();
 		if ( $params->input == 0 && $url != '' ) {
 			if ( isset( $_GET['curl'] ) ) {
-				echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-				echo '- param: ';
+				_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+				_e('- param: ');
 				var_dump( $params->curl );
-				echo '- GET: ';
+				_e('- GET: ');
 				var_dump( $_GET['curl'] );
-				$params->curl = (int) $_GET['curl'];
+				$params->curl = (int) sanitize_text_field($_GET['curl']);
 				$times        = array();
 				$times[]      = date( 'Y-m-d H:i:s' ) . ' - ' . microtime();
 			}
@@ -92,11 +92,11 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 			$html = self::getCURL( $url, $params );
 
 			if ( isset( $_GET['curl'] ) ) {
-				echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
+				_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
 				$times[] = date( 'Y-m-d H:i:s' ) . ' - ' . microtime();
-				echo '<pre>Time get CURL:';
+				_e('<pre>Time get CURL:');
 				print_r( $times );
-				echo '</pre>';
+				_e('</pre>');
 			}
 			if ( $html[0] == 200 ) {
 				$html = $html[1];
@@ -113,9 +113,9 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 		}
 		$fullhtml = $html;
 		if ( isset( $_GET['php2'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'URL: ' . $url;
-			echo $html;
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('URL: ' . $url);
+			_e($html);
 			exit();
 		}
 		$tags = $params->clear_tags;
@@ -123,8 +123,8 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 			$html = self::clear_tags( $html, $tags );
 		}
 		if ( isset( $_GET['php'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo $html;
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e($html);
 			exit();
 		}
 		if ( $params->clear_space == 1 ) {
@@ -158,8 +158,8 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 			}
 		}
 		if ( isset( $_GET['php4'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo $res->fulltext;
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e($res->fulltext);
 			exit();
 		}
 		$res->fulltext = self::process_atag( $res->fulltext, $params, $url );
@@ -168,8 +168,8 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 			$res->fulltext = $html[0];
 		}
 		if ( isset( $_GET['php41'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo $res->fulltext;
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e($res->fulltext);
 			exit();
 		}
 
@@ -179,11 +179,11 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 		}
 
 		if ( isset( $_GET['comment'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo "orin:";
-			echo "<pre>";
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e("orin:");
+			_e("<pre>");
 			print_r( $res->fulltext );
-			echo "</pre>";
+			_e("</pre>");
 		}
 
 		$res->full_html = $fullhtml;

@@ -12,13 +12,13 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class WPPipesPro_slug {
 	public static function process( $data, $params ) {
 		if ( isset( $_GET['pal'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Params: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Params: ');
 			print_r( $params );
-			echo 'Data: ';
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		$res        = new stdClass();
 		$res->slug = '';
@@ -30,8 +30,8 @@ class WPPipesPro_slug {
 		$slug = self::replace_chars( $slug, $params );
 
 		if ( isset( $_GET['pslug'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'Alias: ' . $slug . '<br />';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('Alias: ' . $slug . '<br />');
 		}
 		$slug = wp_strip_all_tags($slug);
 		/*$slug = preg_replace( '/[^a-zA-Z0-9\-\s]/', '', $slug );
@@ -41,8 +41,8 @@ class WPPipesPro_slug {
 		$slug = strtolower( $slug );
 
 		if ( isset( $_GET['pslug'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'Alias: ' . $slug . '<br />';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('Alias: ' . $slug . '<br />');
 		}
 
 		$res->slug = $slug;
@@ -67,11 +67,11 @@ class WPPipesPro_slug {
 			}
 		}
 		if ( isset( $_GET['pal1'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Chars: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Chars: ');
 			print_r( $chars );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		return $slug;

@@ -42,61 +42,61 @@ $requirements->checkRequirements();
 	}
 </style>
 
-<h2><?php echo __( 'WP Pipes plugin Settings' ); ?></h2>
+<h2><?php _e( 'WP Pipes plugin Settings' ); ?></h2>
 
 <?php
-echo PIPES::show_message( false );
+_e(PIPES::show_message( false ));
 ?>
 <div class="foobla" style="padding-top:15px;">
 	<form method="post" action="">
 		<table class="form-table">
 			<?php
 			foreach ( $this->configs->items as $setting ) {
-				echo '<tr valign="top"';
+				_e('<tr valign="top"');
 				// Start at settings seems to be not necessary
 				if ($setting->option_name == 'pipes_start_at') {
-					echo ' class="hidden"';
+					_e(' class="hidden"');
 				}
-				echo '>';
+				_e('>');
 
 				switch ( $setting->option_name ) {
 					case 'pipes_cronjob_active':
-						echo '<th scope="row">' . __( 'Cronjob Active' ) . '</th>';
-						echo '<td>';
+						_e('<th scope="row">' . __( 'Cronjob Active' ) . '</th>');
+						_e('<td>');
 
-						echo '<fieldset><legend class="screen-reader-text"><span>Cronjob Active</span></legend>
+						_e('<fieldset><legend class="screen-reader-text"><span>Cronjob Active</span></legend>
 									<label title="Yes"><input type="radio" name="' . $setting->option_name . '" value="1" ' . ( ( $setting->option_value == 1 ) ? 'checked="checked"' : '' ) . '>
 									<span>Yes, I want to run my Pipes automatically when someone access my Wordpress site.</span></label><br>
 									<label title="No"><input type="radio" name="' . $setting->option_name . '" value="0" ' . ( ( $setting->option_value == 0 ) ? 'checked="checked"' : '' ) . '>
 									<span>No, I will create a cronjob task myself to run the script <a href="'.get_site_url().'/?pipes=cron&task=callaio" target="_blank">'.get_site_url().'/?pipes=cron&task=callaio</a>. More instruction can be found at <a href="http://thimpress.com/schedule-auto-posting-pipes-cron-job/" target="_blank">this cronjob guideline</a></span>.</label><br />
-									</fieldset>';
+									</fieldset>');
 						if($this->area != '' && $this->area != 'Vietnam'){
-							echo '<span style="color:red;">One of our partners released a plugin for you setting up cronjob with any specific pipes. Check it out at <a href="http://virtualstuff.info/product/cronjob-single-pipe/" alt="cronjob single pipe">http://virtualstuff.info/product/cronjob-single-pipe/</a></span>';
+							_e('<span style="color:red;">One of our partners released a plugin for you setting up cronjob with any specific pipes. Check it out at <a href="http://virtualstuff.info/product/cronjob-single-pipe/" alt="cronjob single pipe">http://virtualstuff.info/product/cronjob-single-pipe/</a></span>');
 						}
-						echo '</td>';
+						_e('</td>');
 						break;
 					case 'pipes_active':
-						//						echo '<div class="alert alert-info">There are two methods to execute WPPipes Pipes automatically.
+						//						_e('<div class="alert alert-info">There are two methods to execute WPPipes Pipes automatically.
 						//								<ol>
 						//									<li>Activating "Auto Run" below to execute Pipes over your Joomla site. By using this method, your Pipes will be executed every time your Joomla site get accessed over Site or Admin area.</li>
 						//									<li>Create a cronjob task to the URL: http://yourjoomlasite.com/wp-admin/pipes.xyz&amp;task=callaio<br>Details instruction can be found <a href="http://thimpress.com/kb/wppipes/4983-setup-server-side-cronjob-for-wppipes" target="_blank">here</a></li>
 						//								</ol>
-						//							</div>';
-						echo '<th scope="row">' . __( 'Allow Auto Run' ) . '</th>';
-						echo '<td>';
+						//							</div>');
+						_e('<th scope="row">' . __( 'Allow Auto Run' ) . '</th>');
+						_e('<td>');
 
-						echo '<fieldset><legend class="screen-reader-text"><span>Auto Run</span></legend>
+						_e('<fieldset><legend class="screen-reader-text"><span>Auto Run</span></legend>
 									<label title="Yes"><input type="radio" name="' . $setting->option_name . '" value="1" ' . ( ( $setting->option_value == 1 ) ? 'checked="checked"' : '' ) . '>
 									<span>Yes, I want to run my Pipes in both manually and automatically methods.</span></label><br>
 									<label title="No"><input type="radio" name="' . $setting->option_name . '" value="0" ' . ( ( $setting->option_value == 0 ) ? 'checked="checked"' : '' ) . '>
 									<span>No, I want to run my Pipes manually.</span></label><br>
-									</fieldset>';
-						echo '</td>';
+									</fieldset>');
+						_e('</td>');
 						break;
 					case 'pipes_schedule':
-						echo '<th scope="row" style="display:none;"><label for="' . $setting->option_name . '">Run every</label></th>';
-						echo '<td style="display:none;">';
-						echo '<select name="' . $setting->option_name . '" id="' . $setting->option_name . '">
+						_e('<th scope="row" style="display:none;"><label for="' . $setting->option_name . '">Run every</label></th>');
+						_e('<td style="display:none;">');
+						_e('<select name="' . $setting->option_name . '" id="' . $setting->option_name . '">
 										<option ' . ( ( $setting->option_value == 'i5' ) ? 'selected="selected"' : '' ) . ' value="i5">5 minutes</option>
 										<option ' . ( ( $setting->option_value == 'i10' ) ? 'selected="selected"' : '' ) . ' value="i10">10 minutes</option>
 										<option ' . ( ( $setting->option_value == 'i15' ) ? 'selected="selected"' : '' ) . ' value="i15">15 minutes</option>
@@ -111,8 +111,8 @@ echo PIPES::show_message( false );
 										<option ' . ( ( $setting->option_value == 'h8' ) ? 'selected="selected"' : '' ) . ' value="h8">8 hours</option>
 										<option ' . ( ( $setting->option_value == 'h12' ) ? 'selected="selected"' : '' ) . ' value="h12">12 hours</option>
 										<option ' . ( ( $setting->option_value == 'h24' ) ? 'selected="selected"' : '' ) . ' value="h24">24 hours</option>
-									</select>';
-						echo '</td>';
+									</select>');
+						_e('</td>');
 						break;
 					case 'pipes_start_at':
 						if ( '' == $setting->option_value ) {
@@ -121,35 +121,35 @@ echo PIPES::show_message( false );
 						$date   = date( 'Y-m-d');
 						$hour   = 0;
 						$minute = 0;
-						echo '<th scope="row"><label for="' . $setting->option_name . '">' . __( 'Start from' ) . '</label></th>';
-						echo '<td>';
-						echo '<input style="max-width: 250px" name="' . $setting->option_name . '" type="text" id="' . $setting->option_name . '" value="' . $date . '" class="regular-text">';
-						echo ' at <input type="number" min="0" max="23" id="pipes_hh" name="pipes_hh" value="' . $hour . '" size="2" maxlength="2" autocomplete="off">
-										 : <input type="number" min="0" max="59" id="pipes_mn" name="pipes_mn" value="' . $minute . '" size="2" maxlength="2" autocomplete="off"></td>';
-						echo "<script>
+						_e('<th scope="row"><label for="' . $setting->option_name . '">' . __( 'Start from' ) . '</label></th>');
+						_e('<td>');
+						_e('<input style="max-width: 250px" name="' . $setting->option_name . '" type="text" id="' . $setting->option_name . '" value="' . $date . '" class="regular-text">');
+						_e(' at <input type="number" min="0" max="23" id="pipes_hh" name="pipes_hh" value="' . $hour . '" size="2" maxlength="2" autocomplete="off">
+										 : <input type="number" min="0" max="59" id="pipes_mn" name="pipes_mn" value="' . $minute . '" size="2" maxlength="2" autocomplete="off"></td>');
+						_e("<script>
 								jQuery(document).ready(function() {
 									jQuery('#" . $setting->option_name . "').datepicker({
 									dateFormat : 'yy-mm-dd'
 									});
 								});
-								</script>";
+								</script>");
 					case 'pipes_not_use_cache':
-						echo '<th scope="row">' . __( 'Not Use Cache' ) . '</th>';
-						echo '<td>';
+						_e('<th scope="row">' . __( 'Not Use Cache' ) . '</th>');
+						_e('<td>');
 
-						echo '<fieldset><legend class="screen-reader-text"><span>Not Use Cache</span></legend>
+						_e('<fieldset><legend class="screen-reader-text"><span>Not Use Cache</span></legend>
 									<label title="Yes"><input type="radio" name="' . $setting->option_name . '" value="1" ' . ( ( $setting->option_value == 1 ) ? 'checked="checked"' : '' ) . '>
 									<span>Yes, I want the cronjob will be executed getting data directly from the source, not from Cache.</span></label><br>
 									<label title="No"><input type="radio" name="' . $setting->option_name . '" value="0" ' . ( ( $setting->option_value == 0 ) ? 'checked="checked"' : '' ) . '>
 									<span>No, cronjob will get data from the cache if the cache is not expired</span>.</label><br />
-									</fieldset>';
-						echo '</td>';
+									</fieldset>');
+						_e('</td>');
 						break;
 					default:
 						break;
 				}
 
-				echo '</tr>';
+				_e('</tr>');
 			}
 			?>
 		</table>

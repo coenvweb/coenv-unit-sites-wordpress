@@ -27,13 +27,13 @@ class WPPipesPro_change_time {
 	public static function process( $data, $params ) {
 		$params = self::check_params_df( $params );
 		if ( isset( $_GET['pct'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Params: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Params: ');
 			print_r( $params );
-			echo 'Data: ';
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>'; //exit();
+			_e('</pre>'); //exit();
 		}
 		if ( $data->time == '' ) {
 			$data->time = date( 'Y-m-d H:i:s', time() );
@@ -57,11 +57,11 @@ class WPPipesPro_change_time {
 		$res->publish_up = $publish_up;
 		$res->pub_down   = $publish_down;
 		if ( isset( $_GET['pct_after'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '<pre>';
-			echo 'Data: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('<pre>');
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>';
+			_e('</pre>');
 			die;
 		}
 

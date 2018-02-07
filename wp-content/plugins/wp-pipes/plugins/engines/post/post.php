@@ -12,7 +12,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 class WPPipesEngine_post {
 	public static function getData( $params ) {
 		if ( isset( $_GET['e'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
 			ogb_pr( $params, 'Params: ' );
 		}
 		$data = self::getItemsPost( $params );
@@ -30,8 +30,8 @@ class WPPipesEngine_post {
 			$datas[]					= $data[$key];
 		}
 		if ( isset( $_GET['e1'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'Total: ' . count( $datas );
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('Total: ' . count( $datas ));
 			ogb_pr( $datas, 'Data: ' );
 		}
 

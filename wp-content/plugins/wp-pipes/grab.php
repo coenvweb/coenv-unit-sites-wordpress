@@ -15,7 +15,7 @@ if ( isset( $_GET['x1'] ) ) {
 	if ( $c == 1 ) {
 		$c = 'utf-8';
 	}
-	echo '<meta http-equiv="content-type" content="text/html; charset=' . $c . '"/>';
+	_e('<meta http-equiv="content-type" content="text/html; charset=' . $c . '"/>');
 }
 require_once OBGRAB_HELPERS . 'common.php';
 require_once OBGRAB_SITE . 'cronjob.php';
@@ -44,7 +44,7 @@ class obGrab {
 			$path  = OGRAB_EDATA . 'item-' . $item->id . DS . 'row-' . $i . '.dat';
 			if ( isset( $_GET['x2'] ) ) {
 				//echo "\n\n<br /><i><b>File:</b>".__FILE__.' <b>Line:</b>'.__LINE__."</i><br />\n\n";
-				echo '<br>Path: ' . $path;
+				_e('<br>Path: ' . $path);
 			}
 			ogbFile::write( $path, $cache );
 		}
@@ -87,11 +87,11 @@ class obGrab {
 		}
 		$row = unserialize( $row );
 		if ( isset( $_GET['x2'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<br />get_cache_oeData() <br />path: ' . $path;
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<br />get_cache_oeData() <br />path: ' . $path);
+			_e('<pre>');
 			print_r( $row );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		return $row;
@@ -150,17 +150,17 @@ class obGrab {
 		$diff        = time() - $cache_mtime;
 
 		if ( isset( $_GET['x'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'Engine lats run  - s: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('Engine lats run  - s: ');
 			var_dump( $diff );
 			if ( $diff > 600 ) {
 				$a = $diff / 60;
-				echo ' - m: ';
+				_e(' - m: ');
 				var_dump( $a );
 			}
 			if ( $a > 60 ) {
 				$a = $diff / 60;
-				echo ' - h: ';
+				_e(' - h: ');
 				var_dump( $a );
 			}
 		}
@@ -199,14 +199,14 @@ class obGrab {
 		$json = '{"error":"0","msg":"","found":' . $total . '}';
 
 		if ( isset( $_GET['json'] ) ) {
-			echo $res->json;
+			_e($res->json);
 		}
 		if ( isset( $_GET['x'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'get Data Engine Info: ' . $info;
-			echo '<br />new_data: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('get Data Engine Info: ' . $info);
+			_e('<br />new_data: ');
 			var_dump( $new_data );
-			echo '<br />' . $json;
+			_e('<br />' . $json);
 		}
 		$limit = self::getItemInfo( $id );
 		$limit = json_decode( $limit->engine_params );
@@ -224,7 +224,7 @@ class obGrab {
 		$res->log   = '';
 
 		if ( isset( $_GET['json'] ) ) {
-			echo $json;
+			_e($json);
 		}
 
 		return $res;
@@ -252,7 +252,7 @@ class obGrab {
 		$adapter = $this->getAdapter( $item->adapter, $item->adapter_params );
 		if ( $adapter->error != '' ) {
 			$msg = "<h3>ERROR adapter: {$adapter->error}</h3>";
-			echo $msg;
+			_e($msg);
 
 			return $adapter->error;
 		}
@@ -299,7 +299,7 @@ class obGrab {
 		$eclass = 'WPPipesEngine_' . $name;
 		$error  = $this->importAddon( $name, OBGRAB_ENGINES, $eclass );
 		if ( $error != '' ) {
-			echo "<h3>ERROR Engine: {$error}</h3>";
+			_e("<h3>ERROR Engine: {$error}</h3>");
 
 			return array();
 		}
@@ -312,14 +312,14 @@ class obGrab {
 		//$rows		= $eclass::getData($eParams);
 
 		if ( isset( $_GET['x2'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'getEngineData: ';
-			echo '<pre>';
-			echo 'eParams: ';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('getEngineData: ');
+			_e('<pre>');
+			_e('eParams: ');
 			print_r( $eParams );
-			echo 'rows: ';
+			_e('rows: ');
 			print_r( $rows );
-			echo '</pre>';
+			_e('</pre>');
 			//exit('<h4>stop</h4>');
 		}
 
@@ -361,22 +361,22 @@ class obGrab {
 
 	function saveLogGen( $info ) {
 		if ( isset( $_GET['x2'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'saveLogGen()';
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('saveLogGen()');
+			_e('<pre>');
 			print_r( $info );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 	}
 
 	function saveLogStore( $store ) {
 		if ( isset( $_GET['x2'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo 'saveLogStore()';
-			echo '<hr /><pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('saveLogStore()');
+			_e('<hr /><pre>');
 			print_r( $store );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 	}
@@ -405,21 +405,21 @@ class obGrab {
 		}
 
 		if ( isset( $_GET['x5'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
 			$time[] = date( 'Y-m-d H:i:s' ) . ' - ' . microtime() . " - end";
-			echo '<pre>';
-			echo 'Time Run processors: ';
+			_e('<pre>');
+			_e('Time Run processors: ');
 			print_r( $time );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		if ( isset( $_GET['x3'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'Before store()';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('Before store()');
 
-			echo '<pre>';
-			echo 'Data: ';
+			_e('<pre>');
+			_e('Data: ');
 			print_r( $data );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		if ( $stop->state ) {
 			$store           = new stdClass();
@@ -451,15 +451,15 @@ class obGrab {
 		$store->item_id = $item->id;
 
 		if ( isset( $_GET['x'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo 'After store()<br />';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('After store()<br />');
 			$viewLink = get_site_url() . $store->viewLink;
-			echo 'View result: [ <a href="' . $viewLink . '" target="_blank">' . $store->name . ' Item - ' . $store->id . '</a> ]<br />';
-			echo 'View source: [ <a href="' . $src_url . '" target="_blank">' . $src_name . '</a> ]<br />';
-			echo '<pre>';
-			echo 'Store result: ';
+			_e('View result: [ <a href="' . $viewLink . '" target="_blank">' . $store->name . ' Item - ' . $store->id . '</a> ]<br />');
+			_e('View source: [ <a href="' . $src_url . '" target="_blank">' . $src_name . '</a> ]<br />');
+			_e('<pre>');
+			_e('Store result: ');
 			print_r( $store );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		return $store;
@@ -473,12 +473,12 @@ class obGrab {
 		}
 
 		if ( isset( $_GET['x3'] ) ) {
-			echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-			echo '$aclass: ' . $aclass;
-			echo '<pre>';
-			echo 'Input Adapter: ';
+			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+			_e('$aclass: ' . $aclass);
+			_e('<pre>');
+			_e('Input Adapter: ');
 			print_r( $ia );
-			echo '</pre>';
+			_e('</pre>');
 		}
 		$store = ogbLib::call_method( $aclass, 'store', array( $ia, $this->_aparams ) );
 
@@ -504,10 +504,10 @@ class obGrab {
 			}
 		}
 		if ( count( $errPipes ) > 0 && isset( $_GET['x'] ) ) {
-			echo "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n";
-			echo '<pre>';
+			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e('<pre>');
 			print_r( $errPipes );
-			echo '</pre>';
+			_e('</pre>');
 		}
 
 		return $nPipes;
@@ -531,11 +531,11 @@ class obGrab {
 		if ( $key == 'ia' ) {
 			$ip = $this->_inputs->$key;
 			if ( isset( $_GET['x4'] ) ) {
-				echo '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n";
-				echo '<pre>';
-				echo 'IP: ';
+				_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
+				_e('<pre>');
+				_e('IP: ');
 				print_r( $ip );
-				echo '</pre>';
+				_e('</pre>');
 			}
 		} elseif ( isset( $this->_inputs->ip[$key] ) ) {
 			$ip = $this->_inputs->ip[$key];
