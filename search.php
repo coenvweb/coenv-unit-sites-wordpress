@@ -30,7 +30,6 @@
 		
 		<?php else : ?>
 			<?php get_template_part( 'content', 'none' ); ?>
-		
 	<?php endif;?>
 	
 	<?php do_action('foundationPress_before_pagination'); ?>
@@ -45,6 +44,7 @@
 
 	<?php do_action('foundationPress_after_content'); ?>
 
+	    </div>	
 	</div>
 		
 <?php get_footer(); ?>
