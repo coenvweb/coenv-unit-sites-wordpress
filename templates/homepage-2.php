@@ -317,4 +317,5 @@ foreach($heroes as $hero) {
     </div>
 <?php } ?>
 </div>
+</div>
 <?php get_footer(); ?>
