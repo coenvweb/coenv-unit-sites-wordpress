@@ -338,7 +338,7 @@ ExpiresByType image/x-icon "access plus 1 year"
 ExpiresByType video/mp4  "access plus 1 year"
 ExpiresByType video/ogg  "access plus 1 year"
 ExpiresByType video/webm  "access plus 1 year"
-ExpiresDefault "access plus 12 hours"
+ExpiresDefault "access plus 2 days"
 </IfModule>
 ## EXPIRES CACHING ##
 
