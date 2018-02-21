@@ -205,8 +205,8 @@ class Mega_Menu_Menu_Item_Manager {
 
         $submenu_options = apply_filters("megamenu_submenu_options", array(
             'flyout' => __("Flyout Menu", "megamenu"),
-            'megamenu' => __("Mega Menu - Standard Layout", "megamenu"),
-            'grid' => __("Mega Menu - Grid Layout", "megamenu") . " " . __("(Beta)", "megamenu")
+            'grid' => __("Mega Menu - Grid Layout", "megamenu"),
+            'megamenu' => __("Mega Menu - Standard Layout", "megamenu")
         ), $menu_item_meta);
 
         $return = "<label for='mm_enable_mega_menu'>" . __("Sub menu display mode", "megamenu") . "</label>";
@@ -273,7 +273,7 @@ class Mega_Menu_Menu_Item_Manager {
 
         $css_version = get_transient("megamenu_css_version");
 
-        $return .= "<div id='megamenu-grid' class='{$class}' style='display: {$display}'>";
+        $return = "<div id='megamenu-grid' class='{$class}' style='display: {$display}'>";
 
         if ( version_compare( '2.3.9', $css_version, '>' ) ) {
             $link = "<a href='" . esc_attr( admin_url( 'admin.php?page=maxmegamenu_tools' ) ) . "'>" . __("Mega Menu") . " > " . __("Tools") . "</a>";
@@ -298,7 +298,7 @@ class Mega_Menu_Menu_Item_Manager {
                 if ( isset( $row_data['columns'] ) && count( $row_data['columns'] ) ) {
 
                     foreach ( $row_data['columns'] as $col => $col_data ) {
-                        $column_html .= $this->get_grid_column( $col_data );
+                        $column_html .= $this->get_grid_column( $row_data, $col_data );
                     }
                     
                 }
@@ -378,6 +378,12 @@ class Mega_Menu_Menu_Item_Manager {
             $hide_on_mobile_checked = "true";
         }
 
+        $row_columns = 12;
+
+        if ( isset( $row_data['meta']['columns'] ) ) {
+            $row_columns = intval( $row_data['meta']['columns'] );
+        }
+
         $desktop_tooltip_visible = __("Row", "megamenu") . ": " . __("Visible on desktop", "megamenu");
         $desktop_tooltip_hidden = __("Row", "megamenu") . ": " . __("Hidden on desktop", "megamenu");
         $mobile_tooltip_visible = __("Row", "megamenu") . ": " . __("Visible on mobile", "megamenu");
@@ -385,7 +391,7 @@ class Mega_Menu_Menu_Item_Manager {
 
         $row_class = isset( $row_data['meta']['class'] ) ? $row_data['meta']['class'] : "";
 
-        $return  = "<div class='mega-row'>";
+        $return  = "<div class='mega-row' data-available-cols='{$row_columns}'>";
         $return .= "    <div class='mega-row-header'>";
         $return .= "        <div class='mega-row-actions'>";
         $return .= "            <span class='dashicons dashicons-sort'></span>";
@@ -397,11 +403,36 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= "        <div class='mega-row-settings'>";
         $return .= "            <input name='mega-hide-on-mobile' type='hidden' value='{$hide_on_mobile_checked}' />";
         $return .= "            <input name='mega-hide-on-desktop' type='hidden' value='{$hide_on_desktop_checked}'/>";
-        $return .= "            <label>" . __('Row class', 'megamenu') . "</label>";
-        $return .= "            <input class='mega-row-class' type='text' value='{$row_class}' />";
+        $return .= "            <div class='mega-settings-row'>";
+        $return .= "                <label>" . __('Row class', 'megamenu') . "</label>";
+        $return .= "                <input class='mega-row-class' type='text' value='{$row_class}' />";
+        $return .= "            </div>";
+        $return .= "            <div class='mega-settings-row'>";
+        $return .= "                <label>" . __('Row columns', 'megamenu') . "</label>";
+        $return .= "                <select class='mega-row-columns'>";
+        $return .= "                    <option value='1' " . selected( $row_columns, 1, false ) . ">1 " . __("column", "megamenu") . "</option>";
+        $return .= "                    <option value='2' " . selected( $row_columns, 2, false ) . ">2 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='3' " . selected( $row_columns, 3, false ) . ">3 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='4' " . selected( $row_columns, 4, false ) . ">4 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='5' " . selected( $row_columns, 5, false ) . ">5 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='6' " . selected( $row_columns, 6, false ) . ">6 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='7' " . selected( $row_columns, 7, false ) . ">7 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='8' " . selected( $row_columns, 8, false ) . ">8 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='9' " . selected( $row_columns, 9, false ) . ">9 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='10' " . selected( $row_columns, 10, false ) . ">10 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='11' " . selected( $row_columns, 11, false ) . ">11 " . __("columns", "megamenu") . "</option>";
+        $return .= "                    <option value='12' " . selected( $row_columns, 12, false ) . ">12 " . __("columns", "megamenu") . "</option>";
+        $return .= "                </select>";
+        $return .= "            </div>";
         $return .= "            <button class='button button-primary mega-save-row-settings' type='submit'>" . __('Save', 'megamenu') . "</button>";
         $return .= "        </div>";
         $return .= "        <button class='button button-primary mega-add-column'><span class='dashicons dashicons-plus'></span>" . __("Column", "megamenu") . "</button>";
+        $return .= "    </div>";
+        $return .= "    <div class='error notice is-dismissible mega-too-many-cols'>";
+        $return .= "        <p>" . __( 'You should rearrange the content of this row so that all columns fit onto a single line.', 'megamenu' ) . "</p>";
+        $return .= "    </div>";
+        $return .= "    <div class='error notice is-dismissible mega-row-is-full'>";
+        $return .= "        <p>" . __( 'There is not enough space on this row to add a new column.', 'megamenu' ) . "</p>";
         $return .= "    </div>";
 
         $return .= $column_html;
@@ -418,9 +449,14 @@ class Mega_Menu_Menu_Item_Manager {
      * @since 2.4
      * @return string
      */
-    public function get_grid_column( $col_data = false ) {
+    public function get_grid_column( $row_data = false, $col_data = false ) {
 
         $col_span = 3;
+        $row_columns = 12;
+
+        if ( isset( $row_data['meta']['columns'] ) ) {
+            $row_columns = intval( $row_data['meta']['columns'] );
+        }
 
         if ( isset( $col_data['meta']['span'] ) ) {
             $col_span = $col_data['meta']['span'];
@@ -432,7 +468,6 @@ class Mega_Menu_Menu_Item_Manager {
         if ( isset( $col_data['meta']['hide-on-desktop'] ) && $col_data['meta']['hide-on-desktop'] == 'true' ) {
             $hide_on_desktop = 'mega-disabled';
             $hide_on_desktop_checked = "true";
-            
         }
 
         $hide_on_mobile_checked = "false";
@@ -462,7 +497,7 @@ class Mega_Menu_Menu_Item_Manager {
         $return .= "            </div>";
         $return .= '            <div class="mega-col-actions">';
         $return .= '                <a class="mega-col-option mega-col-contract" title="' . esc_attr( __("Contract", "megamenu") ) . '"><span class="dashicons dashicons-arrow-left-alt2"></span></a>';
-        $return .= "                <span class='mega-col-cols'><span class='mega-num-cols'>{$col_span}</span><span class='mega-of'>/12</span></span>";
+        $return .= "                <span class='mega-col-cols'><span class='mega-num-cols'>{$col_span}</span><span class='mega-of'>/</span><span class='mega-num-total-cols'>" . $row_columns . "</span></span>";
         $return .= '                <a class="mega-col-options mega-col-expand" title="' . esc_attr( __("Expand", "megamenu") ) . '"><span class="dashicons dashicons-arrow-right-alt2"></span></a>';
         $return .= '            </div>';
         $return .= "        </div>";
@@ -513,7 +548,7 @@ class Mega_Menu_Menu_Item_Manager {
         $display = $menu_item_meta['type'] == 'grid' ? 'none' : 'block';
 
 
-        $return .= "<div id='widgets' class='{$class}' style='display: {$display}' data-columns='{$menu_item_meta['panel_columns']}'>";
+        $return = "<div id='widgets' class='{$class}' style='display: {$display}' data-columns='{$menu_item_meta['panel_columns']}'>";
 
         $items = $widget_manager->get_widgets_and_menu_items_for_menu_id( $menu_item_id, $menu_id );
 

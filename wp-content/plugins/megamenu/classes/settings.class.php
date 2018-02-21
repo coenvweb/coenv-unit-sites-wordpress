@@ -332,9 +332,12 @@ class Mega_Menu_Settings {
             update_option( 'megamenu_locations', $new_locations );
         }
 
+        delete_transient('megamenu_failed_to_write_css_to_filesystem');
+
         do_action("megamenu_after_save_general_settings");
 
         do_action("megamenu_delete_cache");
+
 
         $url = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : admin_url( "admin.php?page=maxmegamenu&saved=true" );
 
@@ -615,7 +618,7 @@ class Mega_Menu_Settings {
 
             foreach ( $locations as $location => $menu_id ) {
 
-                if ( has_nav_menu( $location ) && isset( $settings[ $location ]['theme'] ) && $settings[ $location ]['theme'] == $theme ) {
+                if ( has_nav_menu( $location ) && max_mega_menu_is_enabled( $location ) && isset( $settings[ $location ]['theme'] ) && $settings[ $location ]['theme'] == $theme ) {
                     $theme_in_use_locations[] = isset( $menus[ $location ] ) ? $menus[ $location ] : $location;
                 }
 
@@ -726,7 +729,13 @@ class Mega_Menu_Settings {
                         </td>
                         <td class='mega-value'>
                             <select name='settings[css]' id='mega_css'>
-                                <option value='fs' <?php echo selected( $css == 'fs'); ?>><?php _e("Save to filesystem", "megamenu"); ?></option>
+                                <option value='fs' <?php echo selected( $css == 'fs'); ?>><?php _e("Save to filesystem", "megamenu"); ?>
+                                    <?php 
+                                        if ( get_transient('megamenu_failed_to_write_css_to_filesystem') ) {
+                                            echo " " . __("(Action required: Check upload folder permissions)", "megamenu");
+                                        }
+                                    ?>
+                                </option>
                                 <option value='head' <?php echo selected( $css == 'head'); ?>><?php _e("Output in &lt;head&gt;", "megamenu"); ?></option>
                                 <option value='disabled' <?php echo selected( $css == 'disabled'); ?>><?php _e("Don't output CSS", "megamenu"); ?></option>
                             <select>
@@ -853,6 +862,12 @@ class Mega_Menu_Settings {
         }
 
         $locations = array();
+
+        $custom_locations = get_option( 'megamenu_locations' );
+
+        if ( is_array( $custom_locations ) ) {
+            $all_locations = array_merge( $custom_locations, $all_locations );
+        }
         
         if ( count( $all_locations ) ) {
 
@@ -2786,7 +2801,10 @@ class Mega_Menu_Settings {
                                     'priority' => 20,
                                     'title' => __( "Menu Width", "megamenu" ),
                                     'description' => __( "The width of each flyout menu. This must be a fixed pixel value.", "megamenu" ),
-                                    'info' => array( __( "Set this value to the width of your longest menu item title to stop menu items wrapping onto 2 lines.", "megamenu" ) ),
+                                    'info' => array( 
+                                        __( "Set this value to the width of your longest menu item title to stop menu items wrapping onto 2 lines.", "megamenu" ),
+                                        __( "Experimental: Set this value to 'auto' to use a flexible width.", "megamenu" )
+                                    ),
                                     'settings' => array(
                                         array(
                                             'title' => "",

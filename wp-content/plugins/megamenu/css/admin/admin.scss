@@ -133,6 +133,11 @@ $green: #46b450;
 				font-size: 1.3em;
 				line-height: 75px;
 				float: left;
+
+				br {
+					display: none;
+
+				}
 			}
 
 			.mm_saving {
@@ -168,7 +173,7 @@ $green: #46b450;
 			width: 15%;
 			float: left;
 			position: relative;
-			height: 554px;
+			height: 504px;
 			background: white;
 			-webkit-box-shadow: inset -10px 0px 7px -12px rgba(0, 0, 0, 0.2);
 			-moz-box-shadow: inset -10px 0px 7px -12px rgba(0, 0, 0, 0.2);
@@ -216,7 +221,7 @@ $green: #46b450;
 		.mm_content_container {
 			padding: 20px;
 			float: right;
-			height: 554px;
+			height: 504px;
 			width: 85%;
 			overflow: auto;
 			box-sizing: border-box;
@@ -271,6 +276,10 @@ $green: #46b450;
 							opacity: 1;
 						}
 
+						.dashicons.mega-settings-open {
+							opacity: 1;
+						}
+
 						.dashicons {
 							opacity: 0.2;
 							transition: opacity 0.5s;
@@ -295,12 +304,47 @@ $green: #46b450;
 						}
 					}
 
-					&[data-total-cols='0'] {
+					&[data-used-cols='0'] {
 						.mega-row-header .mega-row-actions .dashicons-trash {
 							display: inline-block;
 							opacity: 1;
 						}
 					}
+
+					.mega-too-many-cols {
+						display: none;
+					}
+
+					&[data-too-many-cols='true'] {
+						.mega-too-many-cols {
+							display: block;
+						}
+					}
+
+					.mega-row-is-full {
+						display: none;
+					}
+
+					&[data-row-is-full='true'] .mega-col-expand,
+					.mega-col[data-span='1'] .mega-col-contract {
+						pointer-events: none;
+						color: $grey;
+					}
+					
+					&[data-row-is-full='true'] {
+						.mega-col-expand {
+							pointer-events: none;
+							color: $grey;
+						}
+					}
+
+	                @for $of from 1 through 12 {
+	                    @for $cols from 1 through $of {
+	                        &[data-available-cols='#{$of}'] .mega-col[data-span='#{$cols}'] {
+	                            width: (100% / $of) * $cols;
+	                        }
+	                    }
+	                }
 
 					.notice {
 						margin: 10px 5px;
@@ -314,26 +358,13 @@ $green: #46b450;
 					vertical-align: top;
 					float: left;
 					transition: width 0.1s;
+					width: 100%;
 
 					.mega-col-wrap {
 						background-color: $white;
 						border: 1px solid $grey;
 						margin: 3px;
 						padding: 8px;
-					}
-
-					&[data-span='1'] {
-						.mega-col-contract,
-						.widget-title {
-							display: none;
-						}
-					}
-
-					&[data-span='1'] {
-						.mega-col-header .mega-col-actions {
-							float: left;
-							clear: both;
-						}
 					}
 
 					.mega-col-widgets {
@@ -405,6 +436,10 @@ $green: #46b450;
 						.mega-disabled .dashicons {
 							opacity: 1;
 						}
+
+						.dashicons.mega-settings-open {
+							opacity: 1;
+						}
 						
 						.dashicons {
 							opacity: 0.2;
@@ -450,14 +485,6 @@ $green: #46b450;
 
 					}
 
-	                @for $of from 1 through 12 {
-	                    @for $cols from 1 through $of {
-	                        &[data-span='#{$cols}'] {
-	                            width: (100% / $of) * $cols;
-	                        }
-	                    }
-	                }
-
 				}
 
 				button.mega-add-column {
@@ -470,17 +497,13 @@ $green: #46b450;
 					margin-top: 20px;
 				}
 
-
-				.mega-row-settings,
 				.mega-col-settings {
 					float: left;
 					width: 100%;
 					display: none;
 					margin: 5px 0 20px;
-					background: $light_grey;
 					padding: 10px;
 					box-sizing: border-box;
-					border: 1px solid $grey;
 
 					label {
 						width: 100%;
@@ -503,9 +526,34 @@ $green: #46b450;
 				}
 
 				.mega-row-settings {
-					margin: 10px 0;
-					background: white;
+					float: left;
+					width: 100%;
+					display: none;
+					margin: 5px 0 20px;
+					padding: 10px;
+					box-sizing: border-box;
+
+					.mega-settings-row {
+						margin-bottom: 5px;
+					}
+
+					label {
+						width: 150px;
+						font-size: 11px;
+						text-transform: uppercase;
+						display: inline-block;
+					}
+
+					input,
+					select {
+						font-size: 11px;
+					}
+
+					button {
+						display: block;
+					}
 				}
+
 				.dashicons {
 					font-size: 13px;
 					width: 17px;
@@ -520,13 +568,6 @@ $green: #46b450;
 				.mega-disabled .dashicons {
 					&:before {
 						color: $red;
-					}
-				}
-
-				.mega-row[data-total-cols='12'] {
-					.mega-col-expand {
-						pointer-events: none;
-						color: $grey;
 					}
 				}
 
@@ -1535,7 +1576,7 @@ $green: #46b450;
 	clear: both;
 }
 
-body[class*='mega-menu_page_maxmegamenu_'],
+body[class*='_page_maxmegamenu_'],
 body.toplevel_page_maxmegamenu {
 
 	.megamenu_outer_wrap {
@@ -1883,6 +1924,10 @@ body.toplevel_page_maxmegamenu {
 
 		.theme_selector {
 			margin-bottom: 20px;
+
+			select {
+				max-width: 500px;
+			}
 		}
 
 		h2.nav-tab-wrapper {
@@ -1914,6 +1959,7 @@ body.toplevel_page_maxmegamenu {
 
 				td.mega-name {
 					padding-left: 10px;
+					font-size: 14px;
 				}
 
 				h5 {
@@ -2134,7 +2180,7 @@ body.toplevel_page_maxmegamenu {
 				td.mega-name .mega-description,
 				td.mega-value .mega-description {
 					font-size: 0.9em;
-					color: #aaa;
+					color: #777;
 					line-height: 1.5em;
 				}
 
@@ -2154,7 +2200,7 @@ body.toplevel_page_maxmegamenu {
 				}
 
 				label.mega-toggle_blocks {
-					width: 100%;
+					width: 99%;
 					cursor: auto;
 
 					.mega-value {
@@ -2166,130 +2212,140 @@ body.toplevel_page_maxmegamenu {
 					    width: 100%;
 					    margin-top: 20px;
 					}
+
+	 				.toggle-bar-designer {
+
+	 					.mega-blocks {
+	 						display: flex;
+	 						box-sizing: border-box;
+	 					}
+
+						.mega-blocks .mega-left,
+						.mega-blocks .mega-center,
+						.mega-blocks .mega-right {
+						    box-sizing: border-box;
+						    border: 1px solid #ccc;
+						    background: #f7f7f7;
+						    height: 60px;
+						    padding: 10px;
+						    margin-top: 15px;
+						    display: flex;
+						    flex-basis: 33.3333%;
+						}
+						.mega-blocks .mega-left {
+							border-right: 0px;
+							flex: 1;
+						}
+						.mega-blocks .mega-center {
+						    border-left: 1px dashed #ccc;
+						    border-right: 1px dashed #ccc;
+						    justify-content: center;
+						}
+						.mega-blocks .mega-right {
+						    border-left: 0px;
+						    flex: 1;
+						    justify-content: flex-end;
+						}
+						.mega-blocks .mega-right .block {
+						    float: right;
+						    margin: 0 0 0 5px;
+						}
+						.mega-blocks .block.mega-open .block-title {
+						    border-bottom: 1px solid white;
+						    border-radius: 3px 3px 0 0;
+						}
+						.mega-blocks .block .block-title {
+						    padding: 0 10px;
+						    display: inline-block;
+						    height: 35px;
+						    line-height: 35px;
+						    font-size: 0.9em;
+						    background: white;
+						    color: $text_grey;
+						    cursor: move;
+						    border: 1px solid #ccc;
+						    position: relative;
+						    z-index: 2;
+						    border-radius: 3px;
+						    text-align: left;
+						    box-sizing: border-box;
+						    white-space: nowrap;
+						}
+
+						.mega-blocks .block.ui-sortable-helper {
+						    width: auto !important;
+						}
+
+						.mega-blocks .block .block-title .dashicons {
+						    line-height: 35px;
+						    cursor: pointer;
+						    font-size: 20px;
+						}
+
+						.mega-blocks .block .block-settings {
+						    padding: 10px;
+						    display: none;
+						    width: 300px;
+						    vertical-align: top;
+						    background: white;
+						    text-align: left;
+						    color: #ccc;
+						    position: absolute;
+						    left: 0px;
+						    top: 34px;
+						    z-index: 1;
+						    border: 1px solid #ccc;
+						}
+
+						.mega-blocks .mega-right .block .block-settings {
+						    left: auto;
+						    right: 0;
+						}
+
+						.mega-blocks .block h3 {
+						    margin-top: 5px;
+						    border-bottom: 1px solid #ccc;
+						    padding-bottom: 10px;
+						}
+
+						.block-settings label {
+						    width: 100%;
+						    clear: both;
+						    color: $text_grey;
+						    font-size: 1em;
+						}
+
+						.block-settings label input,
+						.block-settings label select,
+						.block-settings label input,
+						.block-settings label .icon_dropdown {
+							float: right;
+							font-size: 0.9em;
+						}
+
+						.toggle-left {
+							border-right: 1px dashed #ccc;
+						}
+
+						.toggle-right {
+						    border-left: 0px solid #ccc;
+						    text-align: right;
+
+						}
+
+						.mega-blocks .block {
+						    position: relative;
+						    display: inline-block;
+						    vertical-align: top;
+						    margin: 0 5px 0 0;
+
+						    input[type=text] {
+							    width: 50%;
+							}
+						}
+	 				}
 				}
 
- 				.toggle-bar-designer {
-
-					.mega-blocks .mega-left,
-					.mega-blocks .mega-center,
-					.mega-blocks .mega-right {
-					    box-sizing: border-box;
-					    border: 1px solid #ccc;
-					    background: #f7f7f7;
-					    width: 33%;
-					    height: 60px;
-					    padding: 10px;
-					    margin-top: 15px;
-					    float: left;
-					}
-					.mega-blocks .mega-left {
-						border-right: 0px;
-					}
-					.mega-blocks .mega-center {
-					    border-left: 1px dashed #ccc;
-					    border-right: 1px dashed #ccc;
-					    text-align: center;
-					}
-					.mega-blocks .mega-right {
-					    border-left: 0px;
-					}
-					.mega-blocks .mega-right .block {
-					    float: right;
-					    margin: 0 0 0 5px;
-					}
-					.mega-blocks .block.mega-open .block-title {
-					    border-bottom: 1px solid white;
-					    border-radius: 3px 3px 0 0;
-					}
-					.mega-blocks .block .block-title {
-					    padding: 0 10px;
-					    display: inline-block;
-					    height: 35px;
-					    line-height: 35px;
-					    font-size: 0.9em;
-					    background: white;
-					    color: $text_grey;
-					    cursor: move;
-					    border: 1px solid #ccc;
-					    position: relative;
-					    z-index: 2;
-					    border-radius: 3px;
-					    text-align: left;
-					    box-sizing: border-box;
-					}
-
-					.mega-blocks .block.ui-sortable-helper {
-					    width: auto !important;
-					}
-
-					.mega-blocks .block .block-title .dashicons {
-					    line-height: 35px;
-					    cursor: pointer;
-					    font-size: 20px;
-					}
-
-					.mega-blocks .block .block-settings {
-					    padding: 10px;
-					    display: none;
-					    width: 300px;
-					    vertical-align: top;
-					    background: white;
-					    text-align: left;
-					    color: #ccc;
-					    position: absolute;
-					    left: 0px;
-					    top: 36px;
-					    z-index: 1;
-					    border: 1px solid #ccc;
-					}
-
-					.mega-blocks .mega-right .block .block-settings {
-					    left: auto;
-					    right: 0;
-					}
-
-					.mega-blocks .block h3 {
-					    margin-top: 5px;
-					    border-bottom: 1px solid #ccc;
-					    padding-bottom: 10px;
-					}
-
-					.block-settings label {
-					    width: 100%;
-					    clear: both;
-					    color: $text_grey;
-					    font-size: 1em;
-					}
-
-					.block-settings label input,
-					.block-settings label select,
-					.block-settings label input,
-					.block-settings label .icon_dropdown {
-						float: right;
-						font-size: 0.9em;
-					}
-
-					.toggle-left {
-						border-right: 1px dashed #ccc;
-					}
-
-					.toggle-right {
-					    border-left: 0px solid #ccc;
-					    text-align: right;
-
-					}
-
-					.mega-blocks .block {
-					    position: relative;
-					    display: inline-block;
-					    vertical-align: top;
-					    margin: 0 5px 0 0;
-
-					    input[type=text] {
-						    width: 50%;
-						}
-					}
- 				}
 
 				.mega-validation-message {
 				    display: none;

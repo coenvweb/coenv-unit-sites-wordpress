@@ -36,9 +36,9 @@
                 initialWidth: "75%",
                 scrolling: true,
                 fixed: true,
-                top: "10%",
-                initialHeight: "602",
-                maxHeight: "630"
+                top: "50px",
+                initialHeight: "552",
+                maxHeight: "570",
             });
 
             $.ajax({
@@ -285,21 +285,32 @@
             // Add Column
             grid.on("click", ".mega-add-column", function() {
                 var button = $(this);
+                var row = button.parent().parent();
+                var used_cols = parseInt(row.attr('data-used-cols'));
+                var available_cols = parseInt(row.attr('data-available-cols'));
+
+                row.find(".mega-row-is-full").hide();
+
+                if ( used_cols + 1 > available_cols ) {
+                    row.find(".mega-row-is-full").slideDown().delay(2000).slideUp();
+                    return;
+                }
+
+                var space_left_on_row = available_cols - used_cols;
+
                 var data = {
                     action: "mm_get_empty_grid_column",
                     _wpnonce: megamenu.nonce
                 };
 
                 $.post(ajaxurl, data, function(response) {
+                    var column = $(response.data);
 
-                    var row_total_cols = parseInt(button.closest(".mega-row").attr("data-total-cols"), 10);
-
-                    if (row_total_cols + 3 > 12) {
-                        grid.trigger("show_alert", [button, megamenu.row_is_full]);
-                        return;
+                    if (space_left_on_row < 3) {
+                        column.attr('data-span', space_left_on_row);
+                        column.find('.mega-num-cols').html(space_left_on_row);
                     }
 
-                    var column = $(response.data);
                     button.parent().parent().append(column);
 
                     grid.trigger("make_columns_sortable");
@@ -308,21 +319,6 @@
                     grid.trigger("update_row_column_count");
                     grid.trigger("update_column_block_count");
                 });
-            });
-
-            grid.on("show_alert", function(event, context, message) {
-
-                $(".notice", grid).remove();
-
-                var dismiss = $("<button type='button' class='notice-dismiss'></button>").on('click', function() {
-                    $(".notice", grid).remove();
-                });
-
-                var notice = $("<div>").addClass("notice notice-success is-dismissible").html("<p>" + message + "</p>").append(dismiss).hide();
-
-                $(context).closest(".mega-row").find(".mega-row-header").after(notice);
-
-                notice.slideDown().delay(8000).slideUp();
             });
 
             // Delete Column
@@ -495,11 +491,13 @@
 
             // Contract Column
             grid.on("click", ".mega-col-header .dashicons-admin-generic", function() {
+                $(this).toggleClass('mega-settings-open');
                 $(this).closest(".mega-col").find(".mega-col-settings").slideToggle();
             });
 
 
             grid.on("click", ".mega-row-header .dashicons-admin-generic", function() {
+                $(this).toggleClass('mega-settings-open');
                 $(this).closest(".mega-row").find(".mega-row-settings").slideToggle();
             });
 
@@ -552,6 +550,12 @@
                 grid.trigger("save_grid_data");
             });
 
+            grid.on("click", ".mega-save-row-settings", function() {
+                grid.trigger("update_total_columns_in_row");
+            });
+
+            
+
 
             grid.on("check_widget_inner_position", function(event, widget_inner) {
                 var widget_inner_right_edge = widget_inner.offset().left + widget_inner.width();
@@ -575,12 +579,14 @@
                     var row_hide_on_desktop = $(this).find("input[name='mega-hide-on-desktop']").val();
                     var row_hide_on_mobile = $(this).find("input[name='mega-hide-on-mobile']").val();
                     var row_class = $(this).find("input.mega-row-class").val();
+                    var row_columns = $(this).find("select.mega-row-columns").val();
 
                     rows[row_index] = {
                         "meta": {
                             "class": row_class,
                             "hide-on-desktop": row_hide_on_desktop,
-                            "hide-on-mobile": row_hide_on_mobile
+                            "hide-on-mobile": row_hide_on_mobile,
+                            "columns": row_columns
                         },
                         "columns": []
                     };
@@ -592,7 +598,7 @@
                     var col_span = $(this).attr("data-span");
                     var col_hide_on_desktop = $(this).find("input[name='mega-hide-on-desktop']").val();
                     var col_hide_on_mobile = $(this).find("input[name='mega-hide-on-mobile']").val();
-                    var col_class = $(this).find("input.mega-column-class ").val();
+                    var col_class = $(this).find("input.mega-column-class").val();
 
                     rows[row_index]["columns"][col_index] = {
                         "meta": {
@@ -629,20 +635,52 @@
                 }, function(move_response) {
                     end_saving();
                 });
+
+                grid.trigger("update_row_column_count");
+
             });
 
 
-            grid.on("update_row_column_count", function() {
+            grid.on("update_total_columns_in_row", function() {
                 $(".mega-row", grid).each(function() {
                     var row = $(this);
-                    var total_cols = 0;
+                    var total_cols = $(this).find("select.mega-row-columns").val();
+                    $(this).attr('data-available-cols', total_cols);
+                    
+                    $(".mega-col", row).not(".ui-sortable-helper").each(function() {
+                        var col = $(this);
+                        
+                        $(this).find('.mega-num-total-cols').html(total_cols);
+                    });
+                });
+            });
+
+            grid.on("update_row_column_count", function() {
+
+                grid.trigger("update_total_columns_in_row");
+
+                $(".mega-row", grid).each(function() {
+                    var row = $(this);
+                    var used_cols = 0;
+                    var available_cols = row.attr("data-available-cols");
 
                     $(".mega-col", row).not(".ui-sortable-helper").each(function() {
                         var col = $(this);
-                        total_cols = total_cols + parseInt(col.attr("data-span"), 10);
+                        used_cols = used_cols + parseInt(col.attr("data-span"), 10);
                     });
 
-                    row.attr("data-total-cols", total_cols);
+                    row.attr("data-used-cols", used_cols);
+
+                    row.removeAttr("data-too-many-cols");
+                    row.removeAttr("data-row-is-full");
+
+                    if ( used_cols > available_cols ) {
+                        row.attr("data-too-many-cols", "true");
+                    }
+
+                    if ( used_cols == available_cols ) {
+                        row.attr("data-row-is-full", "true");
+                    }
                 });
             });
 
@@ -725,15 +763,7 @@
                         grid.trigger("update_row_column_count");
                     },
                     stop: function(event, ui) {
-                        var row_total_cols = parseInt(ui.item.parent().attr("data-total-cols"), 10);
-                        var col_total_cols = parseInt(ui.item.attr("data-span"), 10);
-
-                        if (row_total_cols + col_total_cols > 12) {
-                            grid.trigger("show_alert", [ui.item, megamenu.row_is_full]);
-                            $(this).sortable("cancel");
-                        } else {
-                            grid.trigger("save_grid_data");
-                        }
+                        grid.trigger("save_grid_data");
 
                         // clean up
                         ui.item.removeAttr("style");

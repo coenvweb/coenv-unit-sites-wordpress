@@ -502,7 +502,7 @@ final class Mega_Menu_Style_Manager {
             $settings['css'] = 'head';
             update_option( 'megamenu_settings', $settings );
             $this->settings = get_option( "megamenu_settings" );
-
+            set_transient( 'megamenu_failed_to_write_css_to_filesystem', 'true', 0 );
         }
 
     }

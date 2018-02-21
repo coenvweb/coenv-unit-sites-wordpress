@@ -1,5 +1,4 @@
 #{$wrap} .mega-menu-toggle {
-
     @each $item in $menu_toggle_blocks {
         $id: nth($item, 1);
         $align: nth($item, 2);
@@ -10,36 +9,62 @@
         $text_color: nth($item, 7);
         $icon_color: nth($item, 8);
         $icon_position: nth($item, 9);
+        $text_size: nth($item, 10);
+        $icon_size: nth($item, 11);
 
         @if type-of($id) == number {
 
-            .mega-toggle-block-#{$id}:before {
-                content: $closed_icon;
-                font-family: 'dashicons';
-                font-size: 24px;
-                margin: 0 0 0 5px;
-                color: $icon_color;
-            }
+            .mega-toggle-block-#{$id} {
 
-            &.mega-menu-open .mega-toggle-block-#{$id}:before {
-                content: $open_icon;
-            }
+                &:before {
+                    content: $closed_icon;
+                    font-family: 'dashicons';
+                    font-size: $icon_size;
+                    color: $icon_color;
 
-            .mega-toggle-block-#{$id}:after {
-                content: $closed_text;
-                color: $text_color;
-                float: left;
+                    @if $icon_position == before {
+                        margin: 0 5px 0 0;
+                    } @else {
+                        margin: 0 0 0 5px;
+                    }
+                }
 
-                @if $icon_position == before {
-                    float: right;
+                .mega-toggle-label {
+                    color: $text_color;
+                    font-size: $text_size;
+
+                    @if $icon_position == before {
+                        float: right;
+                    } @else {
+                        float: left;
+                    }
+
+                    .mega-toggle-label-open {
+                        display: none;
+                    }
+                    
+                    .mega-toggle-label-closed {
+                        display: inline;
+                    }
                 }
             }
 
-            &.mega-menu-open .mega-toggle-block-#{$id}:after {
-                content: $open_text;
+            &.mega-menu-open {
+
+                .mega-toggle-block-#{$id} {
+                    &:before {
+                        content: $open_icon;
+                    }
+
+                    .mega-toggle-label-open {
+                        display: inline;
+                    }
+                    .mega-toggle-label-closed {
+                        display: none;
+                    }
+                }
             }
         }
-
     }
 
     @each $item in $spacer_toggle_blocks {

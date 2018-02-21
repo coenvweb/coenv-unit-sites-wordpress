@@ -13,6 +13,8 @@
             event: $menu.attr("data-event"),
             effect: $menu.attr("data-effect"),
             effect_speed: parseInt($menu.attr("data-effect-speed")),
+            effect_mobile: $menu.attr("data-effect-mobile"),
+            effect_speed_mobile: parseInt($menu.attr("data-effect-speed-mobile")),
             panel_width: $menu.attr("data-panel-width"),
             panel_inner_width: $menu.attr("data-panel-inner-width"),
             second_click: $menu.attr("data-second-click"),
@@ -30,8 +32,13 @@
                                     "li.mega-menu-flyout li.mega-menu-item-has-children", menu);
 
         plugin.hidePanel = function(anchor, immediate) {
-            if (!immediate && plugin.settings.effect == 'slide') {
-                anchor.siblings(".mega-sub-menu").animate({"height":"hide"}, plugin.settings.effect_speed, function() {
+
+            anchor.parent().triggerHandler("before_close_panel");
+
+            if (!immediate && plugin.settings.effect == 'slide' || plugin.isMobileView() && plugin.settings.effect_mobile == 'slide') {
+                var speed = plugin.isMobileView() ? plugin.settings.effect_speed_mobile : plugin.settings.effect_speed;
+
+                anchor.siblings(".mega-sub-menu").animate({'height':'hide', 'paddingTop':'hide', 'paddingBottom':'hide', 'minHeight':'hide'}, speed, function() {
                     anchor.siblings(".mega-sub-menu").css("display", "");
                     anchor.parent().removeClass("mega-toggle-on").triggerHandler("close_panel");
                 });
@@ -90,6 +97,8 @@
         };
 
         plugin.showPanel = function(anchor) {
+            anchor.parent().triggerHandler("before_open_panel");
+
             $(".mega-animating").removeClass("mega-animating");
 
             if (plugin.isMobileView() && anchor.parent().hasClass("mega-hide-sub-menu-on-mobile")) {
@@ -107,16 +116,18 @@
             plugin.calculateDynamicSubmenuWidths(anchor);
 
             // apply jQuery transition (only if the effect is set to "slide", other transitions are CSS based)
-            if ( plugin.settings.effect == "slide" ) {
-                anchor.siblings(".mega-sub-menu").css("display", "none").animate({'height':'show'}, plugin.settings.effect_speed);
+            if ( plugin.settings.effect == "slide" || plugin.isMobileView() && plugin.settings.effect_mobile == 'slide') {
+                var speed = plugin.isMobileView() ? plugin.settings.effect_speed_mobile : plugin.settings.effect_speed;
+
+                anchor.siblings(".mega-sub-menu").css("display", "none").animate({'height':'show', 'paddingTop':'show', 'paddingBottom':'show', 'minHeight':'show'}, speed);
             }
 
             anchor.parent().addClass("mega-toggle-on").triggerHandler("open_panel");
         };
 
         plugin.calculateDynamicSubmenuWidths = function(anchor) {
-            // apply dynamic width and sub menu position
-            if (anchor.parent().hasClass("mega-menu-megamenu") && plugin.settings.panel_width && $(plugin.settings.panel_width).length > 0) {
+            // apply dynamic width and sub menu position (only to top level mega menus)
+            if (anchor.parent().hasClass("mega-menu-megamenu") && anchor.parent().parent().hasClass('mega-menu') && plugin.settings.panel_width && $(plugin.settings.panel_width).length > 0) {
                 if (plugin.isDesktopView()) {
                     var submenu_offset = $menu.offset();
                     var target_offset = $(plugin.settings.panel_width).offset();
@@ -134,7 +145,7 @@
             }
 
             // apply inner width to sub menu by adding padding to the left and right of the mega menu
-            if (anchor.parent().hasClass("mega-menu-megamenu") && plugin.settings.panel_inner_width && $(plugin.settings.panel_inner_width).length > 0) {
+            if (anchor.parent().hasClass("mega-menu-megamenu") && anchor.parent().parent().hasClass('mega-menu') && plugin.settings.panel_inner_width && $(plugin.settings.panel_inner_width).length > 0) {
                 var target_width = 0;
 
                 if ($(plugin.settings.panel_inner_width).length) {
@@ -182,17 +193,23 @@
                     plugin.unbindHoverEvents();
                     plugin.unbindHoverIntentEvents();
                 }
-                if (plugin.isDesktopView() && $(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed")) {
-                    e.preventDefault();
-                    return;
+
+                if (plugin.isDesktopView() && $(this).parent().hasClass("mega-toggle-on") && $(this).parent().parent().parent().hasClass("mega-menu-tabbed") ) {
+                    if (plugin.settings.second_click === "go") {
+                        return;
+                    } else {
+                        e.preventDefault();
+                        return;
+                    }
                 }
+
                 if (dragging) {
                     return;
                 }
                 if (plugin.isMobileView() && $(this).parent().hasClass("mega-hide-sub-menu-on-mobile")) {
                     return; // allow all clicks on parent items when sub menu is hidden on mobile
                 }
-                if (plugin.settings.second_click === "go" || $(this).parent().hasClass("mega-click-click-go")) { // check for second click
+                if ((plugin.settings.second_click === "go" || $(this).parent().hasClass("mega-click-click-go")) && $(this).attr('href') !== undefined) { // check for second click
                     if (!$(this).parent().hasClass("mega-toggle-on")) {
                         e.preventDefault();
                         plugin.showPanel($(this));
@@ -391,7 +408,10 @@
 
             // mobile menu
             $menu.siblings(".mega-menu-toggle").on("click", function(e) {
-                if ( $(e.target).is(".mega-menu-toggle-block, .mega-menu-toggle") ) {
+                if ( $(e.target).is(".mega-menu-toggle-block, .mega-toggle-blocks-left, .mega-toggle-blocks-center, .mega-toggle-blocks-right, .mega-toggle-label, .mega-toggle-label span") ) {
+                    if (plugin.settings.effect_mobile == 'slide') {
+                        $menu.slideToggle(plugin.settings.effect_speed_mobile);
+                    }
                     $(this).toggleClass("mega-menu-open");
                 }
             });

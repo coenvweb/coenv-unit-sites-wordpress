@@ -197,6 +197,12 @@ jQuery(function ($) {
 
             var value = $(this).val();
 
+            if (label.hasClass('mega-flyout_width') && value == 'auto') {
+                label.removeClass('mega-error');
+                label.siblings( '.mega-validation-message-' + label.attr('class') ).hide();
+                return;
+            }
+
             if ( ( validation == 'int' && Math.floor(value) != value )
               || ( validation == 'px' && ! ( value.substr(value.length - 2) == 'px' || value.substr(value.length - 2) == 'em' || value.substr(value.length - 2) == 'vh' || value.substr(value.length - 2) == 'vw' || value.substr(value.length - 2) == 'pt' || value.substr(value.length - 3) == 'rem' || value.substr(value.length - 1) == '%' ) && value != 0 )
               || ( validation == 'float' && ! $.isNumeric(value) ) ) {

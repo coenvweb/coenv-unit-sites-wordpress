@@ -2,7 +2,7 @@
     #{$wrap} #{$menu} ul,
     #{$wrap} #{$menu} li,
     #{$wrap} #{$menu} p,
-    #{$wrap} #{$menu} img,
+    #{$wrap} #{$menu} img:not('.mega-menu-logo'),
     #{$wrap} #{$menu} div,
     #{$wrap} #{$menu} a {
         color: $panel_font_color;

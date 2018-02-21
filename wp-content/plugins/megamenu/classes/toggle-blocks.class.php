@@ -25,6 +25,8 @@ class Mega_Menu_Toggle_Blocks {
 
         add_action( 'wp_ajax_mm_get_toggle_block_menu_toggle', array( $this, 'output_menu_toggle_block_html' ) );
         add_action( 'megamenu_output_admin_toggle_block_menu_toggle', array( $this, 'output_menu_toggle_block_html'), 10, 2 );
+        add_action( 'megamenu_output_public_toggle_block_menu_toggle', array( $this, 'output_menu_public_toggle_block_html'), 10, 2 );
+
         add_action( 'wp_ajax_mm_get_toggle_block_spacer', array( $this, 'output_spacer_block_html' ) );
         add_action( 'megamenu_output_admin_toggle_block_spacer', array( $this, 'output_spacer_block_html'), 10, 2 );
 
@@ -38,6 +40,32 @@ class Mega_Menu_Toggle_Blocks {
 
     }
 
+
+    /**
+     * Output the menu toggle block (front end)
+     *
+     * @since 2.4.1
+     * @param string $html
+     * @param array $settings
+     * @return string
+     */
+    public function output_menu_public_toggle_block_html( $html, $settings ) {
+
+        $css_version = get_transient("megamenu_css_version");
+
+        // only use HTML version of toggle block if CSS version is above 2.4.0.2
+        if ( version_compare( '2.4.0.2', $css_version, '>=' ) ) {
+            return "";
+        }
+
+        $closed_text = isset( $settings['closed_text'] ) ? do_shortcode( $settings['closed_text'] ) : "MENU";
+        $open_text = isset( $settings['open_text'] ) ? do_shortcode( $settings['open_text'] ) : "MENU";
+
+        $html = "<span class='mega-toggle-label'><span class='mega-toggle-label-closed'>{$closed_text}</span><span class='mega-toggle-label-open'>{$open_text}</span></span>";
+
+        return apply_filters("megamenu_toggle_menu_toggle_html", $html);
+
+    }
 
     /**
      * Return the saved toggle blocks for a specified theme
@@ -88,7 +116,9 @@ class Mega_Menu_Toggle_Blocks {
             'open_icon' => 'dash-f153',
             'icon_position' => 'after',
             'text_color' => isset($menu_theme['toggle_font_color']) ? $menu_theme['toggle_font_color'] : '#fff',
-            'icon_color' => isset($menu_theme['toggle_font_color']) ? $menu_theme['toggle_font_color'] : '#fff'
+            'icon_color' => isset($menu_theme['toggle_font_color']) ? $menu_theme['toggle_font_color'] : '#fff',
+            'text_size' => '14px',
+            'icon_size' => '24px'
         );
 
         return $defaults;
@@ -112,49 +142,14 @@ class Mega_Menu_Toggle_Blocks {
         $blocks_html = "";
 
         if ( is_array( $toggle_blocks ) ) {
-            foreach ( $toggle_blocks as $block_id => $block ) {
 
-                if ( isset( $block['type'] ) ) {
-                    $class = "mega-" . str_replace("_", "-", $block['type']) . "-block";
-                } else {
-                    $class = "";
-                }
+            $css_version = get_transient("megamenu_css_version");
 
-                if ( isset( $block['align'] ) ) {
-                    $align = "mega-toggle-block-" . $block['align'];
-                } else {
-                    $align = "mega-toggle-block-left";
-                }
-
-                // @todo remove ID once MMM Pro has been updated to use classes
-                $id = apply_filters('megamenu_toggle_block_id', 'mega-toggle-block-' . $block_id);
-
-                $attributes = apply_filters('megamenu_toggle_block_attributes', array(
-                    "class" => "mega-toggle-block {$class} {$align} mega-toggle-block-{$block_id}",
-                    "id" => "mega-toggle-block-{$block_id}"
-                ), $block, $content, $nav_menu, $args, $theme_id);
-
-                /**
-                 *
-                 * function remove_ids_from_toggle_blocks($attributes, $block, $content, $nav_menu, $args, $theme_id) {
-                 *    if (isset($attributes['id'])) {
-                 *        unset($attributes['id']);
-                 *    }
-                 *    return $attributes;
-                 * }
-                 * add_filter('megamenu_toggle_block_attributes', 'remove_ids_from_toggle_blocks');
-                 *
-                 */
-
-                $blocks_html .= "<div";
-
-                foreach ( $attributes as $attribute => $val ) {
-                    $blocks_html .= " " . $attribute . "='" . esc_attr( $val ) . "'";
-                }
-
-                $blocks_html .= ">";
-                $blocks_html .= apply_filters("megamenu_output_public_toggle_block_{$block['type']}", "", $block);
-                $blocks_html .= "</div>";
+            // only use Flex layout version of toggle blocks if CSS version is above 2.4.0.2
+            if ( version_compare($css_version, '2.4.0.2') >= 0 ) {
+                $blocks_html = $this->get_flex_blocks_html($toggle_blocks, $content, $nav_menu, $args, $theme_id);
+            } else {
+                $blocks_html = $this->get_backwards_compatibility_blocks_html($toggle_blocks, $content, $nav_menu, $args, $theme_id);
             }
         }
 
@@ -162,6 +157,156 @@ class Mega_Menu_Toggle_Blocks {
 
         return $content;
 
+    }
+
+    /**
+     * Sort the toggle blocks into 3 divs (left, center, right) to be aligned using flex CSS.
+     *
+     * @param array $toggle_blocks
+     * @since 2.4.1
+     * @return string html
+     */
+    private function get_flex_blocks_html( $toggle_blocks, $content, $nav_menu, $args, $theme_id ) {
+
+        $sorted_blocks = array();
+
+        /** Sort blocks into left, center, right array **/
+        foreach ( $toggle_blocks as $block_id => $block ) {
+            if ( isset( $block['align'] ) ) {
+                $sorted_blocks[$block['align']][$block_id] = $block;
+            } else {
+                $sorted_blocks['left'][$block_id] = $block;
+            }
+        }
+
+        $blocks_html = '<div class="mega-toggle-blocks-left">';
+
+        if ( isset( $sorted_blocks['left'] ) ) {
+            foreach ( $sorted_blocks['left'] as $block_id => $block ) {
+                $blocks_html .= $this->get_toggle_block_html($block_id, $block, $content, $nav_menu, $args, $theme_id);
+            }
+        }
+
+        $blocks_html .= "</div>";
+
+        $blocks_html .= '<div class="mega-toggle-blocks-center">';
+
+        if ( isset( $sorted_blocks['center'] ) ) {
+            foreach ( $sorted_blocks['center'] as $block_id => $block ) {
+                $blocks_html .= $this->get_toggle_block_html($block_id, $block, $content, $nav_menu, $args, $theme_id);
+            }
+        }
+
+        $blocks_html .= "</div>";
+
+        $blocks_html .= '<div class="mega-toggle-blocks-right">';
+
+        if ( isset( $sorted_blocks['right'] ) ) {
+            foreach ( $sorted_blocks['right'] as $block_id => $block ) {
+                $blocks_html .= $this->get_toggle_block_html($block_id, $block, $content, $nav_menu, $args, $theme_id);
+            }
+        }
+
+        $blocks_html .= "</div>";
+
+        return $blocks_html;
+    }
+
+    /** 
+     * Generate the HTML for a single toggle block
+     *
+     * @since 2.4.1
+     * @param string block_id
+     * @param array $block
+     * @return string
+     */
+    private function get_toggle_block_html($block_id, $block, $content, $nav_menu, $args, $theme_id) {
+        $block_html = "";
+
+        if ( isset( $block['type'] ) ) {
+            $class = "mega-" . str_replace("_", "-", $block['type']) . "-block";
+        } else {
+            $class = "";
+        }
+
+        $id = apply_filters('megamenu_toggle_block_id', 'mega-toggle-block-' . $block_id);
+
+        $attributes = apply_filters('megamenu_toggle_block_attributes', array(
+            "class" => "mega-toggle-block {$class} mega-toggle-block-{$block_id}",
+            "id" => "mega-toggle-block-{$block_id}"
+        ), $block, $content, $nav_menu, $args, $theme_id);
+
+        $block_html .= "<div";
+
+        foreach ( $attributes as $attribute => $val ) {
+            $block_html .= " " . $attribute . "='" . esc_attr( $val ) . "'";
+        }
+
+        $block_html .= ">";
+        $block_html .= apply_filters("megamenu_output_public_toggle_block_{$block['type']}", "", $block);
+        $block_html .= "</div>";
+
+        return $block_html;
+    }
+
+
+    /**
+     * Return a flat HTML list of menu toggle blocks. Only used when CSS version has not been updated to 2.4.1+
+     *
+     * @param array $toggle_blocks
+     * @since 2.4.1
+     * @return string html
+     */
+    private function get_backwards_compatibility_blocks_html( $toggle_blocks, $content, $nav_menu, $args, $theme_id ) {
+
+        $blocks_html = "";
+        
+        foreach ( $toggle_blocks as $block_id => $block ) {
+
+            if ( isset( $block['type'] ) ) {
+                $class = "mega-" . str_replace("_", "-", $block['type']) . "-block";
+            } else {
+                $class = "";
+            }
+
+            if ( isset( $block['align'] ) ) {
+                $align = "mega-toggle-block-" . $block['align'];
+            } else {
+                $align = "mega-toggle-block-left";
+            }
+
+            // @todo remove ID once MMM Pro has been updated to use classes
+            $id = apply_filters('megamenu_toggle_block_id', 'mega-toggle-block-' . $block_id);
+
+            $attributes = apply_filters('megamenu_toggle_block_attributes', array(
+                "class" => "mega-toggle-block {$class} {$align} mega-toggle-block-{$block_id}",
+                "id" => "mega-toggle-block-{$block_id}"
+            ), $block, $content, $nav_menu, $args, $theme_id);
+
+            /**
+             *
+             * function remove_ids_from_toggle_blocks($attributes, $block, $content, $nav_menu, $args, $theme_id) {
+             *    if (isset($attributes['id'])) {
+             *        unset($attributes['id']);
+             *    }
+             *    return $attributes;
+             * }
+             * add_filter('megamenu_toggle_block_attributes', 'remove_ids_from_toggle_blocks');
+             *
+             */
+
+            $blocks_html .= "<div";
+
+            foreach ( $attributes as $attribute => $val ) {
+                $blocks_html .= " " . $attribute . "='" . esc_attr( $val ) . "'";
+            }
+
+            $blocks_html .= ">";
+            $blocks_html .= apply_filters("megamenu_output_public_toggle_block_{$block['type']}", "", $block);
+            $blocks_html .= "</div>";
+        }
+
+        return $blocks_html;
     }
 
 
@@ -217,7 +362,7 @@ class Mega_Menu_Toggle_Blocks {
     public function add_toggle_designer_to_theme_editor( $settings ) {
 
         $settings['mobile_menu']['settings']['toggle_blocks'] = array(
-            'priority' => 5,
+            'priority' => 6,
             'title' => __( "Toggle Bar Designer", "megamenu" ),
             'description' => __( "Configure the contents of the mobile toggle bar", "megamenu" ),
             'settings' => array(
@@ -327,7 +472,9 @@ class Mega_Menu_Toggle_Blocks {
                         'open_icon' => $open_icon != 'disabled' ? "'\\" . $open_icon . "'" : "''",
                         'text_color' => isset($settings['text_color']) ? $settings['text_color'] : '#fff',
                         'icon_color' => isset($settings['icon_color']) ? $settings['icon_color'] : '#fff',
-                        'icon_position' => isset($settings['icon_position']) ? "'" . $settings['icon_position'] . "'" : 'after'
+                        'icon_position' => isset($settings['icon_position']) ? "'" . $settings['icon_position'] . "'" : 'after',
+                        'text_size' => isset($settings['text_size']) && strlen($settings['text_size']) ? $settings['text_size'] : '14px',
+                        'icon_size' => isset($settings['icon_size']) && strlen($settings['icon_size']) ? $settings['icon_size'] : '24px'
                     );
 
                     $menu_toggle_blocks[ $index ] = $styles;
@@ -607,6 +754,12 @@ class Mega_Menu_Toggle_Blocks {
                 <label>
                     <?php _e("Text Color", "megamenu") ?>
                     <?php $this->print_toggle_color_option( 'text_color', $block_id, $settings['text_color'] ); ?>
+                </label>
+                <label>
+                    <?php _e("Text Size", "megamenu") ?><input type='text' class='text_size' name='toggle_blocks[<?php echo $block_id; ?>][text_size]' value='<?php echo stripslashes( esc_attr( $settings['text_size']  ) ) ?>' />
+                </label>
+                <label>
+                    <?php _e("Icon Size", "megamenu") ?><input type='text' class='icon_size' name='toggle_blocks[<?php echo $block_id; ?>][icon_size]' value='<?php echo stripslashes( esc_attr( $settings['icon_size']  ) ) ?>' />
                 </label>
                 <label>
                     <?php _e("Icon Color", "megamenu") ?>

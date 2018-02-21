@@ -180,6 +180,9 @@ class Mega_Menu_Nav_Menus {
         wp_deregister_script('jquery-colorbox');
         wp_deregister_style('colorbox-css');
 
+        // Compatibility fix for WP Disquz media uploader
+        wp_deregister_script('wmu-colorbox-js');
+        wp_deregister_style('wmu-colorbox-css');
 
         wp_enqueue_style( 'colorbox', MEGAMENU_BASE_URL . 'js/colorbox/colorbox.css', false, MEGAMENU_VERSION );
         wp_enqueue_style( 'mega-menu', MEGAMENU_BASE_URL . 'css/admin/admin.css', false, MEGAMENU_VERSION );
@@ -433,6 +436,53 @@ class Mega_Menu_Nav_Menus {
                         $selected = isset( $settings[$location]['effect_speed'] ) ? $settings[$location]['effect_speed'] : '200';
 
                         $options = apply_filters("megamenu_effect_speed", array(
+                            "600" => __("Slow", "megamenu"),
+                            "400" => __("Med", "megamenu"),
+                            "200" => __("Fast", "megamenu")
+                        ), $selected );
+
+                        ksort($options);
+
+                        foreach ( $options as $key => $value ) {
+                            ?><option value='<?php echo $key ?>' <?php selected( $key == $selected ); ?>><?php echo $value ?></option><?php
+                        }
+
+                    ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><?php _e("Effect (Mobile)", "megamenu") ?></td>
+                <td>
+                    <select name='megamenu_meta[<?php echo $location ?>][effect_mobile]'>
+                    <?php
+
+                        $selected = isset( $settings[$location]['effect_mobile'] ) ? $settings[$location]['effect_mobile'] : 'disabled';
+
+                        $options = apply_filters("megamenu_transition_effects_mobile", array(
+                            "disabled" => array(
+                                'label' => __("None", "megamenu"),
+                                'selected' => $selected == 'disabled',
+                            ),
+                            "slide" => array(
+                                'label' => __("Slide", "megamenu"),
+                                'selected' => $selected == 'slide',
+                            )
+                        ), $selected );
+
+                        foreach ( $options as $key => $value ) {
+                            ?><option value='<?php echo $key ?>' <?php selected( $value['selected'] ); ?>><?php echo $value['label'] ?></option><?php
+                        }
+
+                    ?>
+                    </select>
+
+                    <select name='megamenu_meta[<?php echo $location ?>][effect_speed_mobile]'>
+                    <?php
+
+                        $selected = isset( $settings[$location]['effect_speed_mobile'] ) ? $settings[$location]['effect_speed_mobile'] : '200';
+
+                        $options = apply_filters("megamenu_effect_speed_mobile", array(
                             "600" => __("Slow", "megamenu"),
                             "400" => __("Med", "megamenu"),
                             "200" => __("Fast", "megamenu")

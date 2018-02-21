@@ -4,11 +4,11 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: Easy to use drag & drop WordPress Mega Menu plugin. Create Mega Menus using Widgets. Responsive, retina & touch ready.
- * Version:     2.4
+ * Version:     2.4.1.2
  * Author:      Tom Hemsley
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
- * Copyright:   2017 Tom Hemsley (https://www.megamenu.com)
+ * Copyright:   2018 Tom Hemsley (https://www.megamenu.com)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,13 +26,13 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.4';
+    public $version = '2.4.1.2';
 
 
     /**
      * @var string
      */
-    public $scss_last_updated = '2.3.1';
+    public $scss_last_updated = '2.4.1.2';
 
 
     /**
@@ -510,6 +510,7 @@ final class Mega_Menu {
 
         $items_to_move = array();
 
+
         foreach ( $items as $item ) {
 
             // populate standard (non-grid) sub menus
@@ -521,7 +522,7 @@ final class Mega_Menu {
 
                     $widget_position = 0;
                     $total_widgets_in_menu = count( $panel_widgets );
-                    $next_order = $this->menu_order_of_next_top_level_item( $item->ID, $items );
+                    $next_order = $this->menu_order_of_next_sibling( $item->ID, $item->menu_item_parent,  $items );
 
                     if ( ! in_array( 'menu-item-has-children', $item->classes ) ) {
                         $item->classes[] = 'menu-item-has-children';
@@ -563,7 +564,7 @@ final class Mega_Menu {
 
                 $saved_grid = $widget_manager->get_grid_widgets_and_menu_items_for_menu_id( $item->ID, $args->menu->term_id );
 
-                $next_order = $this->menu_order_of_next_top_level_item( $item->ID, $items) - 999;
+                $next_order = $this->menu_order_of_next_sibling( $item->ID, $item->menu_item_parent, $items) - 999;
 
                 foreach ( $saved_grid as $row => $row_data ) {
 
@@ -614,8 +615,14 @@ final class Mega_Menu {
                                 $classes = array_merge( $classes, array_unique( explode( " ", $col_data['meta']['class'] ) ) );
                             }
 
+                            if ( isset( $row_data['meta']['columns'] ) ) {
+                                $row_columns = $row_data['meta']['columns'];
+                            } else {
+                                $row_columns = 12;
+                            }
+
                             if ( isset( $col_data['meta']['span'] ) ) {
-                                $classes[] = "menu-columns-{$col_data['meta']['span']}-of-12";
+                                $classes[] = "menu-columns-{$col_data['meta']['span']}-of-{$row_columns}";
                             }
 
                             if ( isset( $col_data['meta']['hide-on-mobile'] ) && $col_data['meta']['hide-on-mobile'] == 'true' ) {
@@ -704,9 +711,11 @@ final class Mega_Menu {
 
 
     /**
-     * Return the menu order of the next top level menu item.
+     * Return the menu order of the next sibling menu item.
      * Eg, given A as the $item_id, the menu order of D will be returned
-     *
+     * Eg, given B as the $item_id, the menu order of C will be returned
+     * Eg, given D as the $item_id, the menu order of D + 1000 will be returned
+     * 
      * - A
      * --- B
      * --- C
@@ -717,13 +726,13 @@ final class Mega_Menu {
      * @param array $items
      * @return int
      */
-    private function menu_order_of_next_top_level_item( $item_id, $items ) {
+    private function menu_order_of_next_sibling( $item_id, $menu_item_parent, $items ) {
 
-        $get_next_parent = false;
+        $get_order_of_next_item = false;
 
         foreach ( $items as $key => $item ) {
 
-            if ( $item->menu_item_parent != 0 ) {
+            if ( $menu_item_parent != $item->menu_item_parent ) {
                 continue;
             }
 
@@ -731,20 +740,21 @@ final class Mega_Menu {
                 continue;
             }
 
-            if ( $get_next_parent ) {
+            if ( $get_order_of_next_item ) {
                 return $item->menu_order;
             }
 
             if ( $item->ID == $item_id ) {
-                $get_next_parent = true;
+                $get_order_of_next_item = true;
             }
 
             if ( isset( $item->menu_order ) ) {
                 $rolling_last_menu_order = $item->menu_order;
             }
+
         }
 
-        // there isn't a next top level menu item
+        // there isn't a next sibling
         return $rolling_last_menu_order + 1000;
 
     }
@@ -1054,6 +1064,8 @@ final class Mega_Menu {
                 "data-event" => $event,
                 "data-effect" => $effect,
                 "data-effect-speed" => isset( $menu_settings['effect_speed'] ) ? $menu_settings['effect_speed'] : '200',
+                "data-effect-mobile" => isset( $menu_settings['effect_mobile'] ) ? $menu_settings['effect_mobile'] : 'disabled',
+                "data-effect-speed-mobile" => isset( $menu_settings['effect_speed_mobile'] ) ? $menu_settings['effect_speed_mobile'] : '200',
                 "data-panel-width" => preg_match('/^\d/', $menu_theme['panel_width']) !== 1 ? $menu_theme['panel_width'] : '',
                 "data-panel-inner-width" => substr( $menu_theme['panel_inner_width'], -1 ) !== '%' ? $menu_theme['panel_inner_width'] : '',
                 "data-second-click" => $second_click,

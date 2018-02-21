@@ -114,16 +114,20 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 				$atts['tabindex'] = 0;
 			}
 
-			if ( isset( $settings['icon']) && $settings['icon'] != 'disabled' ) {
+			if ( isset( $settings['icon']) && $settings['icon'] != 'disabled' && $settings['icon'] != 'custom' ) {
 				$atts['class'] = $settings['icon'];
+			}
+
+			if ( isset( $settings['icon']) && $settings['icon'] == 'custom' ) {
+				$atts['class'] = 'mega-custom-icon';
 			}
 
 			$atts = apply_filters( 'megamenu_nav_menu_link_attributes', $atts, $item, $args );
 
 			if ( strlen( $atts['class'] ) ) {
-				$atts['class'] = $atts['class'] . ' mega-menu-link';
+			    $atts['class'] = $atts['class'] . ' mega-menu-link';
 			} else {
-				$atts['class'] = 'mega-menu-link';
+			    $atts['class'] = 'mega-menu-link';
 			}
 
 			// required for Surface/Win10/Edge
@@ -149,20 +153,12 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			$item_output = $args->before;
 			$item_output .= '<a'. $attributes .'>';
 
-			if ( in_array('icon-top', $classes ) ) {
-				$item_output .= "<span class='mega-title-below'>";
-			}
-
 			if ( $settings['hide_text'] == 'true' ) {
 				/** This filter is documented in wp-includes/post-template.php */
 			} else if ( property_exists( $item, 'mega_description' ) && strlen( $item->mega_description ) ) {
 		        $item_output .= '<span class="mega-description-group"><span class="mega-menu-title">' . $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after . '</span><span class="mega-menu-description">' . $item->description . '</span></span>';
 		    } else {
 				$item_output .= $args->link_before . apply_filters( 'megamenu_the_title', $item->title, $item->ID ) . $args->link_after;
-			}
-
-			if ( is_array( $classes ) && in_array('icon-top', $classes ) ) {
-				$item_output .= "</span>";
 			}
 
 			$item_output .= '</a>';
