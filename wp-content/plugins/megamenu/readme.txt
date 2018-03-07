@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.9
-Stable tag: 2.4.1.1
+Stable tag: 2.4.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,18 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.4.1.4 =
+
+* Fix: Issue with "Reset Widget Styling" option not working correctly. Thanks to fsminoz for reporting this!
+
+= 2.4.1.3 =
+
+* Fix: Revert/Back out CSS which changed how menu item descriptions and top aligned icons. Restore related CSS to how it was in v2.4.
+* Fix: Mobile Toggle Blocks wrapping onto 2 lines
+* Fix: Mobile Toggle Icon Position before/after setting
+* Fix: Grid sub menu styling in Twenty Sixteen
+* Change: Fallback to using Flex Layout (rather than backwards compatible layout) if the css_version transient is missing
 
 = 2.4.1.2 [20/02/18] =
 

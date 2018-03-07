@@ -92,84 +92,52 @@
                 -o-transition: background 200ms linear, color 200ms linear;
                 transition: background 200ms linear, color 200ms linear;
             }
-        }
 
-        &.mega-menu-horizontal > li.mega-menu-flyout.mega-align-bottom-right ul.mega-sub-menu li.mega-menu-item {
-            @include desktop {
-                &.mega-has-description .mega-description-group {
-                    order: 2;
+            .mega-description-group {
+                vertical-align: middle;
+                display: inline-block;
+
+                .mega-menu-title,
+                .mega-menu-description {
+                    line-height: 1.5;
+                    display: block;
+                }
+
+                .mega-menu-description {
+                    font-style: italic;
+                    font-size: 0.8em;
+                    text-transform: none;
+                    font-weight: normal;
                 }
             }
         }
 
-        li.mega-menu-item.mega-has-description {
-            > a.mega-menu-link {
-                display: flex;
 
-                .mega-description-group {
-                    display: flex;
-                    flex-direction: column;
-                    flex-grow: 1;
-                    justify-content: center;
-
-                    .mega-menu-title,
-                    .mega-menu-description {
-                        line-height: 1.5;
-                    }
-
-                    .mega-menu-description {
-                        font-style: italic;
-                        font-size: 0.8em;
-                        text-transform: none;
-                        font-weight: normal;
-                    }
-                }
-
-                &:before {
-                    align-items: center;
-                    flex-grow: 0;
-                    line-height: normal;
-                    display: inline-flex;
-                }
-            }
-
-            &.mega-icon-right > a.mega-menu-link {
-                &:before {
-                    order: 3;
-                }
-            }
-
-            &.mega-menu-item-has-children {
-                > a.mega-menu-link {
-                    &:after {
-                        align-items: center;
-                        flex-grow: 0;
-                        line-height: normal;
-                        display: inline-flex;
-                    }
-                }
-
-                li.mega-menu-item .mega-description-group {
-                    flex-basis: 1%;
-                    width: 100%;
-                }
-            }
-        }
-
-        li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item.mega-icon-top > a.mega-menu-link,
         li.mega-menu-item.mega-icon-top > a.mega-menu-link {
-            @include desktop {
-                display: flex;
-                line-height: normal;
-                flex-wrap: wrap;
-                align-items: center;
-                align-content: center;
+            display: table-cell;
+            vertical-align: middle;
+            line-height: initial;
+            
+            &:before {
+                display: block;
+                margin: 0 0 6px 0;
+                text-align: center;
+            }
+
+            > span.mega-title-below {
+                display: inline-block;
+            }
+        }
+
+        @include mobile {
+            > li.mega-menu-item.mega-icon-top > a.mega-menu-link {
+                display: block;
+                line-height: $mobile_menu_item_height;
                 
                 &:before {
-                    justify-content: space-around;
-                    flex-basis: 100%;
-                    margin: 0 0 6px 0;
-                    display: inline-flex;
+                    display: inline-block;
+                    margin: 0 6px 0 0;
+                    text-align: left;
                 }
             }
         }
@@ -212,6 +180,7 @@
 
         @include desktop {
             &[data-effect="fade"] {
+
                 li.mega-menu-item > ul.mega-sub-menu {
                     opacity: 0;
                     transition-duration: $effect_speed;
@@ -221,13 +190,17 @@
 
                 &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
                 &.mega-no-js li.mega-menu-item:focus > ul.mega-sub-menu,
-                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu {
+                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu,
+                li.mega-menu-item.mega-menu-megamenu.mega-toggle-on ul.mega-sub-menu {
                     opacity: 1;
                 }
+
             }
 
             &[data-effect="fade_up"] {
-                li.mega-menu-item > ul.mega-sub-menu {
+
+                li.mega-menu-item.mega-menu-megamenu > ul.mega-sub-menu,
+                li.mega-menu-item.mega-menu-flyout ul.mega-sub-menu {
                     opacity: 0;
                     margin-top: 10px;
                     transition-duration: $effect_speed;
@@ -237,14 +210,18 @@
 
                 &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
                 &.mega-no-js li.mega-menu-item:focus > ul.mega-sub-menu,
-                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu {
+                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu,
+                li.mega-menu-item.mega-menu-megamenu.mega-toggle-on ul.mega-sub-menu {
                     opacity: 1;
                     margin-top: 0;
                 }
+
             }
 
             &[data-effect="slide_up"] {
-                li.mega-menu-item > ul.mega-sub-menu {
+
+                li.mega-menu-item.mega-menu-megamenu > ul.mega-sub-menu,
+                li.mega-menu-item.mega-menu-flyout ul.mega-sub-menu {
                     margin-top: 10px;
                     transition-duration: $effect_speed;
                     transition-timing-function: ease-in;
@@ -253,9 +230,11 @@
 
                 &.mega-no-js li.mega-menu-item:hover > ul.mega-sub-menu,
                 &.mega-no-js li.mega-menu-item:focus > ul.mega-sub-menu,
-                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu {
+                li.mega-menu-item.mega-toggle-on > ul.mega-sub-menu,
+                li.mega-menu-item.mega-menu-megamenu.mega-toggle-on ul.mega-sub-menu {
                     margin-top: 0;
                 }
+
             }
         }
 
@@ -450,10 +429,14 @@
         li.mega-menu-megamenu > ul.mega-sub-menu > li.mega-menu-row {
             width: 100%;
             float: left;
+            background: transparent;
+            border: 0;
 
             .mega-menu-column {
                 float: left;
                 min-height: 1px;
+                background: transparent;
+                border: 0;
             }
 
             @include desktop {
@@ -604,16 +587,6 @@
                     border-bottom: $panel_second_level_border_bottom solid $panel_second_level_border_color;
                 }
 
-                &.mega-icon-top > a.mega-menu-link,
-                &.mega-has-description > a.mega-menu-link {
-                    display: flex;
-
-                    &:before {
-                        align-items: flex-start;
-                        line-height: inherit;
-                    }
-                }
-
                 // Second level menu item hover
                 > a.mega-menu-link:hover,
                 > a.mega-menu-link:focus {
@@ -636,11 +609,6 @@
                         padding: $panel_third_level_padding_top $panel_third_level_padding_right $panel_third_level_padding_bottom $panel_third_level_padding_left;
                         vertical-align: top;
                         display: block;
-                    }
-
-                    &.mega-icon-top > a.mega-menu-link,
-                    &.mega-has-description > a.mega-menu-link {
-                        display: flex;
                     }
                 }
 
@@ -772,10 +740,6 @@
                     text-decoration: $flyout_link_text_decoration;
                     text-transform: $flyout_link_text_transform;
                     vertical-align: baseline;
-                }
-
-                &.mega-has-description > a.mega-menu-link {
-                    display: flex;
                 }
 
                 &:first-child > a.mega-menu-link {
@@ -955,6 +919,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         outline: none;
+        white-space: nowrap;
 
         img {
             max-width: 100%;

@@ -16,15 +16,20 @@
 
             .mega-toggle-block-#{$id} {
 
-                &:before {
-                    content: $closed_icon;
-                    font-family: 'dashicons';
-                    font-size: $icon_size;
-                    color: $icon_color;
-
-                    @if $icon_position == before {
+                @if $icon_position == before {
+                    &:before {
+                        content: $closed_icon;
+                        font-family: 'dashicons';
+                        font-size: $icon_size;
+                        color: $icon_color;
                         margin: 0 5px 0 0;
-                    } @else {
+                    }
+                } @else {
+                    &:after {
+                        content: $closed_icon;
+                        font-family: 'dashicons';
+                        font-size: $icon_size;
+                        color: $icon_color;
                         margin: 0 0 0 5px;
                     }
                 }
@@ -32,12 +37,6 @@
                 .mega-toggle-label {
                     color: $text_color;
                     font-size: $text_size;
-
-                    @if $icon_position == before {
-                        float: right;
-                    } @else {
-                        float: left;
-                    }
 
                     .mega-toggle-label-open {
                         display: none;
@@ -52,8 +51,14 @@
             &.mega-menu-open {
 
                 .mega-toggle-block-#{$id} {
-                    &:before {
-                        content: $open_icon;
+                    @if $icon_position == before {
+                        &:before {
+                            content: $open_icon;
+                        }
+                    } @else {
+                        &:after {
+                            content: $open_icon;
+                        }
                     }
 
                     .mega-toggle-label-open {

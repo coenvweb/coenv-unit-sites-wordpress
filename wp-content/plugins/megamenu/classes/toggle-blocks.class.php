@@ -54,14 +54,15 @@ class Mega_Menu_Toggle_Blocks {
         $css_version = get_transient("megamenu_css_version");
 
         // only use HTML version of toggle block if CSS version is above 2.4.0.2
-        if ( version_compare( '2.4.0.2', $css_version, '>=' ) ) {
-            return "";
+        // if transient is missing, assume the latest version of the CSS is present and use Flex layout
+        if ( ! $css_version || version_compare($css_version, '2.4.0.2') >= 0 ) {
+            $closed_text = isset( $settings['closed_text'] ) ? do_shortcode( $settings['closed_text'] ) : "MENU";
+            $open_text = isset( $settings['open_text'] ) ? do_shortcode( $settings['open_text'] ) : "MENU";
+
+            $html = "<span class='mega-toggle-label'><span class='mega-toggle-label-closed'>{$closed_text}</span><span class='mega-toggle-label-open'>{$open_text}</span></span>";
+        } else {
+            $html = "";
         }
-
-        $closed_text = isset( $settings['closed_text'] ) ? do_shortcode( $settings['closed_text'] ) : "MENU";
-        $open_text = isset( $settings['open_text'] ) ? do_shortcode( $settings['open_text'] ) : "MENU";
-
-        $html = "<span class='mega-toggle-label'><span class='mega-toggle-label-closed'>{$closed_text}</span><span class='mega-toggle-label-open'>{$open_text}</span></span>";
 
         return apply_filters("megamenu_toggle_menu_toggle_html", $html);
 
@@ -146,7 +147,8 @@ class Mega_Menu_Toggle_Blocks {
             $css_version = get_transient("megamenu_css_version");
 
             // only use Flex layout version of toggle blocks if CSS version is above 2.4.0.2
-            if ( version_compare($css_version, '2.4.0.2') >= 0 ) {
+            // if transient is missing, assume the latest version of the CSS is present and use Flex layout
+            if ( ! $css_version || version_compare($css_version, '2.4.0.2') >= 0 ) {
                 $blocks_html = $this->get_flex_blocks_html($toggle_blocks, $content, $nav_menu, $args, $theme_id);
             } else {
                 $blocks_html = $this->get_backwards_compatibility_blocks_html($toggle_blocks, $content, $nav_menu, $args, $theme_id);
