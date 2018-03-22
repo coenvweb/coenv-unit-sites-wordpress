@@ -7,4 +7,29 @@ function gCalendar_func($atts) {
 }
 add_shortcode('gCalendar', 'gCalendar_func');
 
+function marketo_signup_form($atts) {
+    remove_filter( 'the_content', 'eae_encode_emails', EAE_FILTER_PRIORITY );
+    remove_filter( 'the_content', 'remove_plaintext_email', 20);
+    $mkto = shortcode_atts( array(
+        'subid' => 306, 
+        'fromname' => 'UW Email Sign Up',
+        'fromemail' => 'advsti@uw.edu',
+        'showplaceholders' => 0,
+        'hidelabels' => 0,
+        'returnurl' => '', 
+    ), $atts);
+    $output = '<div style="margin:0px;padding:0px;overflow:hidden;height:100%;" ><script type="text/javascript" src="https://subscribe.gifts.washington.edu/Scripts/SubManBuilder/submanbuilder.js" id="uwSubscriptionManager"></script>
+    <script type="text/javascript">
+        SUBMANBUILDER.makeIframe({
+            subscriptionID: '.$mkto['subid'].',
+            fromName: "'.$mkto['fromname'].'",
+            fromEmail: "'.$mkto['fromemail'].'",
+            showPlaceHolders: '.$mkto['showplaceholders'].',
+            hideLabels: '.$mkto['hidelabels'].',
+            returnURL: "'.$mkto['returnurl'].'"
+        });
+    </script></div>';
+    return $output;
+}
+add_shortcode('mkto_signup','marketo_signup_form');
 ?>
