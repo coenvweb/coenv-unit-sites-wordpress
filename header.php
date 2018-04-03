@@ -264,7 +264,7 @@ Focus your college education with our innovative academic programs.';
             </nav>
         </div>
 
-<?php if (!is_front_page() && !is_search() && !is_404()) : ?>
+<?php if (!is_front_page() && !is_search() && !is_404() && !is_page_template('templates/homepage-2.php')) : ?>
 <div class="container" role="document">
     <?php if (($banner) && ( $post->post_parent==0 ) && (!is_single() && (!is_page_template( 'templates/faculty.php' ))  )) {
             echo '<div class="page-row"';

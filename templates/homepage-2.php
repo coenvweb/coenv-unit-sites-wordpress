@@ -4,6 +4,7 @@ Template Name: Homepage Phase 2
 */
 ?>
 <?php get_header(); ?>
+<div class="home">
 <div role="main" id="main-col">
     
     <?php do_action('foundationPress_before_content'); ?>
@@ -288,6 +289,7 @@ Template Name: Homepage Phase 2
 </div>
 </div>
 <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
+</div>
 </div>
 </div>
 <?php get_footer(); ?>
