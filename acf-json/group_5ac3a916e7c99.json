@@ -1,0 +1,61 @@
+{
+    "key": "group_5ac3a916e7c99",
+    "title": "Homepage - Events Options",
+    "fields": [
+        {
+            "key": "field_5ac3a92887ad4",
+            "label": "Events Feed",
+            "name": "events_feed",
+            "type": "url",
+            "instructions": "RSS feed url from trumba",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "66",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "https:\/\/www.trumba.com\/calendars\/sea_marinebio.rss",
+            "placeholder": ""
+        },
+        {
+            "key": "field_5ac3ac6a87ad5",
+            "label": "Number of Events",
+            "name": "num_events",
+            "type": "number",
+            "instructions": "The number of events to display on the homepage",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 3,
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "min": "",
+            "max": "",
+            "step": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_template",
+                "operator": "==",
+                "value": "templates\/homepage-2.php"
+            }
+        ]
+    ],
+    "menu_order": 3,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1522775211
+}

@@ -1,0 +1,68 @@
+{
+    "key": "group_5ac3ac8a79883",
+    "title": "Homepage - Block Fields",
+    "fields": [
+        {
+            "key": "field_5ac3adaa13f7f",
+            "label": "FHL Block",
+            "name": "fhl_block",
+            "type": "post_object",
+            "instructions": "Which content block should be displayed in the FHL space?",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "content_block"
+            ],
+            "taxonomy": [],
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        },
+        {
+            "key": "field_5ac3add813f80",
+            "label": "Adviser Block",
+            "name": "adviser_block",
+            "type": "post_object",
+            "instructions": "Which content block should be displayed in the Adviser info space?",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "content_block"
+            ],
+            "taxonomy": [],
+            "allow_null": 0,
+            "multiple": 0,
+            "return_format": "id",
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_template",
+                "operator": "==",
+                "value": "templates\/homepage-2.php"
+            }
+        ]
+    ],
+    "menu_order": 5,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1522775197
+}

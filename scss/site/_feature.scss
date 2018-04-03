@@ -75,19 +75,25 @@
 		
 		.button {
             position: relative;
+            display: block;
             z-index: 1;
 			padding-left: 4rem;
             margin-left: -2rem;
             margin-top: -1.6rem;
             font-size: 1rem;
+            width: 15rem;
             @media #{$small-only} {
                 padding-left: 2rem;
+                width: 10rem;
             }
             @media #{$xlarge-up} {
                 margin-top: -1.8rem;
             }
             .oldie & {
                 bottom: -2.2rem!important;
+            }
+            &:nth-of-type(2) {
+                margin-top: -1.5rem;
             }
 		}
 		
