@@ -912,7 +912,7 @@
         @include border-radius(2px, 2px, 2px, 2px);
         line-height: $toggle_bar_height;
         height: $toggle_bar_height;
-        text-align: center;
+        text-align: left;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         -khtml-user-select: none;
@@ -923,6 +923,7 @@
 
         img {
             max-width: 100%;
+            padding: 0;
         }
 
         .mega-search-wrap {
@@ -974,6 +975,7 @@
         .mega-toggle-block {
             display: flex;
             height: 100%;
+            flex-shrink: 0;
         }
 
         @include mobile {

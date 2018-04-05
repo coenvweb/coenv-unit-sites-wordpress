@@ -131,6 +131,10 @@ RewriteCond %{HTTP_HOST} ^botanicgardens.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
 
+RewriteCond %{HTTP_HOST} ^botanicgardens.washington\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
+
 RewriteCond %{HTTP_HOST} ^fhl.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R,L]

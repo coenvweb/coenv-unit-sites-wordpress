@@ -75,6 +75,13 @@
 					   default="3600"
 					   label="Cache time"
 					   description="Cache time"/>
+				<field name="separate_character"
+					   type="text"
+					   size="8"
+					   class="form-control"
+					   default="|"
+					   label="Separate Character"
+					   description="You could use this option to define the sparate point between categories if the feed's item has multiple categories. For example: if you put comma (,) here, the [so] category will be category#A, category#B,...,category#n"/>
 				<field name="order_by_date"
 					   type="list"
 					   default="0"

@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 3.8
 Tested up to: 4.9
-Stable tag: 2.4.1.3
+Stable tag: 2.4.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,12 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.4.1.5 =
+
+* Improvement: Detect Hummingbird as a caching plugin
+* Improvement: Accessbility - add aria-label attribute to links where "Hide text" has been enabled
+* Fix: Mobile toggle block logo width
 
 = 2.4.1.4 =
 

@@ -19,14 +19,14 @@ class PIPESControllerPipes extends Controller {
 	}
 
 	public function edit() {
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field( $_GET['id'] ) : '';
 		$url = admin_url() . 'admin.php?page=' . PIPES::$__page_prefix . '.pipe&id=' . $id;
 		header( 'Location: ' . $url );
 	}
 
 	public function delete() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? array_map( 'sanitize_text_field', $_GET['id'] ) : 0;
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -41,7 +41,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function copy() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? array_map( 'sanitize_text_field', $_GET['id'] ) : 0;
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -56,7 +56,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function publish() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? array_map( 'sanitize_text_field', $_GET['id'] ) : 0;
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -69,7 +69,7 @@ class PIPESControllerPipes extends Controller {
 		//$this->display();
 	}
 
-	public function create_tables(){
+	public function create_tables() {
 		global $wpdb;
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -138,7 +138,7 @@ class PIPESControllerPipes extends Controller {
 
 	public function pipes_restore_default_options() {
 		global $pipes_settings;
-		include_once( dirname(dirname( __FILE__ )) . DS . 'settings-init.php' );
+		include_once( dirname( dirname( __FILE__ ) ) . DS . 'settings-init.php' );
 		foreach ( $pipes_settings as $section ) {
 			foreach ( $section as $value ) {
 				if ( isset( $value['default'] ) && isset( $value['id'] ) ) {
@@ -150,34 +150,34 @@ class PIPESControllerPipes extends Controller {
 		exit();
 	}
 
-	public function delete_cache_folder(){
+	public function delete_cache_folder() {
 		$dirPath = OGRAB_CACHE;
-		$this->deleteDirCache($dirPath);
+		$this->deleteDirCache( $dirPath );
 		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
 		exit();
 	}
 
-	function deleteDirCache($dirPath){
-		if (! is_dir($dirPath)) {
-			throw new InvalidArgumentException("$dirPath must be a directory");
+	function deleteDirCache( $dirPath ) {
+		if ( ! is_dir( $dirPath ) ) {
+			throw new InvalidArgumentException( "$dirPath must be a directory" );
 		}
-		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+		if ( substr( $dirPath, strlen( $dirPath ) - 1, 1 ) != '/' ) {
 			$dirPath .= '/';
 		}
-		$files = glob($dirPath . '*', GLOB_MARK);
-		foreach ($files as $file) {
-			if (is_dir($file)) {
-				self::deleteDirCache($file);
+		$files = glob( $dirPath . '*', GLOB_MARK );
+		foreach ( $files as $file ) {
+			if ( is_dir( $file ) ) {
+				self::deleteDirCache( $file );
 			} else {
-				unlink($file);
+				unlink( $file );
 			}
 		}
-		rmdir($dirPath);
+		rmdir( $dirPath );
 	}
 
 	public function move_to_draft() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? array_map( 'sanitize_text_field', $_GET['id'] ) : 0;
 		if ( $id == '' ) {
 			$res = "Please pick up at least 1 pipe first!";
 		} else {
@@ -192,8 +192,8 @@ class PIPESControllerPipes extends Controller {
 
 	public function update_meta() {
 		if ( isset( $_POST['uid'] ) ) {
-			$user  = sanitize_text_field($_POST['uid']);
-			$value = sanitize_text_field($_POST['select']);
+			$user  = sanitize_text_field( $_POST['uid'] );
+			$value = sanitize_text_field( $_POST['select'] );
 			update_user_meta( $user, 'pipes_help_box', $value );
 
 			return 'Success!';
@@ -202,14 +202,14 @@ class PIPESControllerPipes extends Controller {
 
 	public function export_to_share() {
 		$mod = $this->getModel( 'pipes' );
-		$id  = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : '';
+		$id  = isset( $_GET['id'] ) ? ( is_array( $_GET['id'] ) ? array_map( 'sanitize_text_field', $_GET['id'] ) : $_GET['id'] ) : 0;
 		if ( $id == '' ) {
 			PIPES::add_message( "Please pick up at least 1 pipe first!" );
 			$url = remove_query_arg( array( 'id', 'action', 'action2' ), $_SERVER['HTTP_REFERER'] );
 			header( 'Location: ' . $url );
 			exit();
 		}
-		$set_template = isset( $_GET['set_template'] ) ? sanitize_text_field($_GET['set_template']) : 0;
+		$set_template = isset( $_GET['set_template'] ) ? sanitize_text_field( $_GET['set_template'] ) : 0;
 		$res          = $mod->export_to_share( $id );
 		//PIPES::add_message($res->msg);
 		if ( count( $res->result ) == 1 ) {
@@ -224,38 +224,43 @@ class PIPESControllerPipes extends Controller {
 				ogbFolder::create( $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' );
 			}
 		}
-		$fp = fopen( $file_name, 'w' );
+		/*$fp = fopen( $file_name, 'w' );
 		foreach ( $res->result as $result ) {
 			fwrite( $fp, json_encode( $result ) . "\n" );
 		}
 //var_dump(filesize("$file_name"));die;
-		fclose( $fp );
+		fclose( $fp );*/
+		$output_content = '';
+		foreach ( $res->result as $result ) {
+			$output_content .= json_encode( $result ) . "\n";
+		}
 		if ( $set_template ) {
 			PIPES::add_message( $res->msg );
 			$url = admin_url() . 'admin.php?page=' . PIPES::$__page_prefix . '.pipe&id=' . $id;
 			header( 'Location: ' . $url );
 		}
+		ob_start();
 		header( "Cache-Control: public" );
 		header( "Content-Description: File Transfer" );
-		header( "Content-Length: " . filesize( "$file_name" ) . ";" );
+		//header( "Content-Length: " . filesize( "$file_name" ) . ";" );
 		header( "Content-Disposition: attachment; filename=$file_name" );
 		header( "Content-Transfer-Encoding: binary" );
 
-		readfile( $file_name );
-		/*$url = remove_query_arg(array('id', 'task', 'action', 'action2'), $_SERVER['HTTP_REFERER']);
-		header('Location: ' . $url);*/
+		//readfile( $file_name );
+		echo $output_content;
+		ob_end_flush();
 		exit();
 	}
 
 	public function import_from_file() {
 		$upload_dir = wp_upload_dir();
 		$mod        = $this->getModel( 'pipes' );
-		$id         = isset( $_GET['id'] ) ? (int) sanitize_text_field($_GET['id']) : 0;
-		$file_name  = isset( $_GET['file_name'] ) ? sanitize_text_field($_GET['file_name']) : '';
+		$id         = isset( $_GET['id'] ) ? (int) sanitize_text_field( $_GET['id'] ) : 0;
+		$file_name  = isset( $_GET['file_name'] ) ? sanitize_text_field( $_GET['file_name'] ) : '';
 		if ( isset ( $_FILES["file_import"]["name"] ) ) {
 			$filename = $_FILES["file_import"]["tmp_name"];
 		} elseif ( isset( $_GET['url'] ) ) {
-			$filename = sanitize_text_field($_GET['url']);
+			$filename = sanitize_text_field( $_GET['url'] );
 		} elseif ( is_file( $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . $file_name ) ) {
 			$filename = $upload_dir['basedir'] . DS . 'wppipes' . DS . 'templates' . DS . $file_name;
 		}

@@ -139,6 +139,10 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 				$atts['tabindex'] = "0";
 			}
 
+			if ( $settings['hide_text'] == 'true' ) {
+				$atts['aria-label'] = $item->title;
+			}
+
 			$attributes = '';
 
 			foreach ( $atts as $attr => $value ) {
