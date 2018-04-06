@@ -148,6 +148,7 @@ add_filter( 'img_caption_shortcode', 'jk_img_caption_shortcode_filter', 10, 3 );
 if ( function_exists( 'add_image_size' ) ) {
 	add_image_size( 'med-sidecap', 350 ); //(cropped)
 	add_image_size( 'large-sidecap', 435 ); //(cropped)
+    add_image_size( 'lrg_sq', '360', '360', true );
 }
 add_filter('image_size_names_choose', 'my_image_sizes');
 function my_image_sizes($sizes) {
