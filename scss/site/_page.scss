@@ -142,6 +142,12 @@
         &.active {
             width: 100%;
             margin: 0px 0px 1rem 0px;
+            .top-wrap .title-wrap h3.title {
+                font-size: 1.8rem;
+            }
+            .top-wrap .title-wrap p.sub-title {
+                font-size: 1.2rem;
+            }
         }   
         overflow: hidden;
         .top-wrap {
@@ -166,8 +172,14 @@
                 align-self: center;
                 margin-left: 1rem;
                 h3.title {
-                    margin-top: 0px;
+                    margin-top: 5px;
+                    transition: font-size .5s;
+                    font-size: 1.1rem;
                 }   
+                p.sub-title {
+                    font-size: .9rem;
+                    margin-bottom: 5px;
+                }
             }   
         }   
         .content-wrap {
