@@ -27,6 +27,23 @@ jQuery(function ($) {
             var $this = $(this);
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
+
+        $('.datatable table').addClass('row-border stripe').css('width', '100%');
+        $('.datatable.no-search table').DataTable({
+            paging: false,
+            "sDom": '<"top">rt<"bottom"l><"clear">',
+            scrollX: true,
+            scrollCollapse: true,
+            order: [],
+        });
+        
+        $('.datatable.search table').DataTable({
+            paging: false,
+            "sDom": '<"top"if>rt<"bottom"lp><"clear">',
+            scrollX: true,
+            scrollCollapse: true,
+            order: [],
+        }); 
         
         if ($('body').hasClass('home')) {
 

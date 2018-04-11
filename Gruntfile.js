@@ -67,6 +67,7 @@ module.exports = function(grunt) {
           'js/wp-menufix.js',
           'js/isotope2.js',
           'js/imagesloaded.pkgd.min.js',
+          'js/datatables/datatables.min.js',
         ],
 
         dest: 'js/app.js',
