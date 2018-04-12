@@ -1,4 +1,12 @@
 # BEGIN WordPress
+
+# More post requests throttling from single IP
+<Limit POST>
+    Order Allow,Deny
+    Deny from 115.192.64.31
+    Allow from all
+</Limit>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
@@ -37,11 +45,12 @@ RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
 RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
 RewriteRule .* - [F,L]
 
-# Increasing limits for giant menus
-php_value max_input_vars 3000
-php_value suhosin.get.max_vars 3000
-php_value suhosin.post.max_vars 3000
-php_value suhosin.request.max_vars 3000
+# Increasing limits for giant menus - removed (4/12/18 - cbessee)
+# php_value max_input_vars 3000
+# php_value suhosin.get.max_vars 3000
+# php_value suhosin.post.max_vars 3000
+# php_value suhosin.request.max_vars 3000
+
 
 # Site redirects
 
