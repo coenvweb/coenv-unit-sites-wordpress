@@ -3,8 +3,8 @@
 # More post requests throttling from single IP
 <Limit POST>
     Order Allow,Deny
-    Deny from 115.192 115.206 116.89
     Allow from all
+    Deny from 115.192 115.206 116.89
 </Limit>
 
 <IfModule mod_rewrite.c>
