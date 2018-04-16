@@ -265,7 +265,7 @@ d=c?e.S(c).closest("["+this.attr_name()+"]"):e.S("["+this.attr_name()+"]");var f
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
 
-        $('.datatable table').addClass('row-border stripe').css('width', '100%');
+        $('.datatable table').addClass('row-border').css('width', '100%');
         $('.datatable.no-search table').DataTable({
             paging: false,
             "sDom": '<"top">rt<"bottom"l><"clear">',

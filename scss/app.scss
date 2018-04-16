@@ -45,3 +45,9 @@
 html .mceContentBody {
 	padding: 2rem !important;
 }
+
+table.dataTable {
+    tr:nth-of-type(even) {
+        background: #efefef;
+    }
+}
