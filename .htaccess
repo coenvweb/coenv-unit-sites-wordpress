@@ -1,4 +1,12 @@
 # BEGIN WordPress
+
+# More post requests throttling from single IP
+<Limit POST>
+    Order Allow,Deny
+    Allow from all
+    Deny from 115.192 115.206 116.89
+</Limit>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
@@ -37,11 +45,12 @@ RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
 RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
 RewriteRule .* - [F,L]
 
-# Increasing limits for giant menus
+# Increasing limits for giant menus - removed (4/12/18 - cbessee)
 php_value max_input_vars 3000
 php_value suhosin.get.max_vars 3000
 php_value suhosin.post.max_vars 3000
 php_value suhosin.request.max_vars 3000
+
 
 # Site redirects
 
@@ -128,6 +137,10 @@ RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://pcc.uw.edu/$1 [R,L]
 
 RewriteCond %{HTTP_HOST} ^botanicgardens.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^botanicgardens.washington\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
 

@@ -1,1 +1,3 @@
-User-Agent: *
+User-Agent: BaiduSpider
+User-agent: BUbiNG
+Disallow: /

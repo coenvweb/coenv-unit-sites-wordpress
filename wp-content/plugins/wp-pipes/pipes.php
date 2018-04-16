@@ -3,7 +3,7 @@
 Plugin Name: WP Pipes
 Plugin URI: http://thimpress.com/shop/pipes/
 Description: WP Pipes plugin works the same way as Yahoo Pipes or Zapier does, give your Pipes input and get output as your needs.
-Version: 1.29
+Version: 1.31
 Author: ThimPress
 Author URI: http://thimpress.com
 */
@@ -90,13 +90,28 @@ class PIPES extends Application {
 //			$icon_url  = plugins_url( basename( dirname( __FILE__ ) ) ) . '/assets/images/menu_icon_core.png';
 			$icon_url = 'dashicons-editor-justify';
 			$position = $this->get_free_menu_position( 5 );
-			add_menu_page( __( "Pipes", "pipes" ), __( "Pipes", "pipes" ), "manage_options", $this->_page_prefix . ".pipes", array( $this, 'display' ), $icon_url, $position );
+			add_menu_page( __( "Pipes", "pipes" ), __( "Pipes", "pipes" ), "manage_options", $this->_page_prefix . ".pipes", array(
+				$this,
+				'display'
+			), $icon_url, $position );
 			if ( function_exists( "add_submenu_page" ) ) {
 //				add_submenu_page( $this->_page_prefix . '.pipes', __( 'Dashboard', 'cpanel' ), __( 'Dashboard', 'cpanel' ), "manage_options", $this->_page_prefix . ".cpanel", array( $this, 'display' ) );
-				$items_page = add_submenu_page( $this->_page_prefix . '.pipes', __( 'All Pipes', 'pipes' ), __( 'All Pipes', 'pipes' ), "manage_options", $this->_page_prefix . ".pipes", array( $this, 'display' ) );
-				$item_page  = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Add New Pipe', 'add_new' ), __( 'Add New', 'add_new' ), "manage_options", $this->_page_prefix . ".pipe", array( $this, 'display' ) );
-				$addon_page = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Addons', 'plugins' ), __( 'Addons', 'plugins' ), "manage_options", $this->_page_prefix . ".plugins", array( $this, 'display' ) );
-				$setting_page = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Settings', 'settings' ), __( 'Settings', 'settings' ), "manage_options", $this->_page_prefix . ".settings", array( $this, 'display' ) );
+				$items_page   = add_submenu_page( $this->_page_prefix . '.pipes', __( 'All Pipes', 'pipes' ), __( 'All Pipes', 'pipes' ), "manage_options", $this->_page_prefix . ".pipes", array(
+					$this,
+					'display'
+				) );
+				$item_page    = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Add New Pipe', 'add_new' ), __( 'Add New', 'add_new' ), "manage_options", $this->_page_prefix . ".pipe", array(
+					$this,
+					'display'
+				) );
+				$addon_page   = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Addons', 'plugins' ), __( 'Addons', 'plugins' ), "manage_options", $this->_page_prefix . ".plugins", array(
+					$this,
+					'display'
+				) );
+				$setting_page = add_submenu_page( $this->_page_prefix . '.pipes', __( 'Settings', 'settings' ), __( 'Settings', 'settings' ), "manage_options", $this->_page_prefix . ".settings", array(
+					$this,
+					'display'
+				) );
 				add_action( 'admin_print_styles-' . $item_page, array( $this, 'admin_style_item' ) );
 				add_action( 'admin_print_styles-' . $items_page, array( $this, 'admin_style_item' ) );
 				add_action( 'admin_print_styles-' . $addon_page, array( $this, 'admin_enqueue_addon_page' ) );
@@ -137,15 +152,15 @@ class PIPES extends Application {
 		wp_enqueue_script( 'pipes-chosen' );
 		wp_enqueue_script( 'pipes-ads-js' );
 		//wp_enqueue_script( 'pipes-angular' );
-		$page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
-		if( $page == 'pipes.plugins' ) {
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		if ( $page == 'pipes.plugins' ) {
 			wp_enqueue_script( 'pipes-angular' );
 		}
 		//js for input tags
 		//wp_enqueue_script( 'pipes-bootstrap-tagsinput' );
 
 	}
-	
+
 	public function admin_enqueue_addon_page() {
 		wp_enqueue_style( 'pipes-bootstrap-min' );
 		wp_enqueue_script( 'pipes-angular' );
@@ -161,12 +176,14 @@ class PIPES extends Application {
 	public static function show_message( $bootstrap = false ) {
 		if ( isset( $_SESSION['PIPES']['messages'] ) && count( $_SESSION['PIPES']['messages'] ) ) {
 			$msgs    = $_SESSION['PIPES']['messages'];
-			$classes = array( 'message' => 'info',
-							  'error'   => 'danger',
-							  'warning' => 'warning' );
+			$classes = array(
+				'message' => 'info',
+				'error'   => 'danger',
+				'warning' => 'warning'
+			);
 			$out     = array();
 			foreach ( $msgs as $msg ) {
-				$msg_class = isset( $classes[$msg['type']] ) ? $classes[$msg['type']] : $classes['message'];
+				$msg_class = isset( $classes[ $msg['type'] ] ) ? $classes[ $msg['type'] ] : $classes['message'];
 				if ( $bootstrap ) {
 					$out[] = '<div class="alert alert-' . $msg_class . ' fade in">
 								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -210,9 +227,9 @@ function mywppipes_enqueue( $hook ) {
 }
 
 function ts_js() {
-	_e('<script type="text/javascript">
+	_e( '<script type="text/javascript">
 		var obHost ="' . get_site_url() . '/";
-		</script>');
+		</script>' );
 }
 
 if ( ! is_admin() ) {
@@ -227,10 +244,11 @@ add_action( 'wppipes_loaded_ads', 'ob_advertisment' );
 function ob_advertisment() {
 	new Ob_Advertisment();
 }
+
 define( 'OB_ADVERTISMENT_URL', plugin_dir_url( __FILE__ ) );
 define( 'OB_ADVERTISMENT_VER', '1.0' );
 
-if (!class_exists('Ob_Advertisment')) {
+if ( ! class_exists( 'Ob_Advertisment' ) ) {
 
 	class Ob_Advertisment {
 
@@ -242,10 +260,10 @@ if (!class_exists('Ob_Advertisment')) {
 		/**
 		 * Ob_Advertisment constructor.
 		 */
-		public function __construct () {
+		public function __construct() {
 
 			//add_action('admin_enqueue_scripts', array( $this, 'admin_enqueue_script'));
-			add_action( 'admin_footer', array($this, 'ob_advertisment'), -10 );
+			add_action( 'admin_footer', array( $this, 'ob_advertisment' ), - 10 );
 		}
 
 		/**
@@ -255,32 +273,32 @@ if (!class_exists('Ob_Advertisment')) {
 
 			$list_themes = array(
 				array(
-					'name' => 'Education WordPress Theme | Education WP',
-					'url' => 'http://themeforest.net/item/education-wordpress-theme-education-wp/14058034',
-					'demo' => 'http://educationwp.thimpress.com',
-					'img' => 'https://s3.envato.com/files/237805781/eduma_preview.__large_preview-3.__large_preview.__large_preview.jpg',
+					'name'        => 'Education WordPress Theme | Education WP',
+					'url'         => 'http://themeforest.net/item/education-wordpress-theme-education-wp/14058034',
+					'demo'        => 'http://educationwp.thimpress.com',
+					'img'         => 'https://s3.envato.com/files/237805781/eduma_preview.__large_preview-3.__large_preview.__large_preview.jpg',
 					'description' => 'Education WordPress Theme – Education WP is made for educational web, LMS, Training Center, Courses Hub, College, Academy, University, School, Kindergarten. Education WP 2.7 newly released: Seamless lesson design, LearnPress 2.0, new Ivy League Demos, Visual Coposer, faster, stable, scalable, more light weight. See changelog. Complete Education WordPress Theme Based on our experience of building LMS with our previous theme eLearning WP - Education WP is the next generation and one of the best education WordPress themes around, containing all the strength of eLearning WP but with a better UI/UX. This WordPress educational theme has been developed based on the #1 LMS plugin on the official WordPress Plugins directory',
 				),
 				array(
-					'name' => 'Speaker and Life Coach WordPress Theme | Coaching WP',
-					'url' => 'http://themeforest.net/item/speaker-and-life-coach-wordpress-theme-coaching-wp/17097658',
-					'demo' => 'http://live2.thimpress.com/?item=coaching',
-					'img' => 'https://0.s3.envato.com/files/221054929/01_preview.__large_preview.png',
+					'name'        => 'Speaker and Life Coach WordPress Theme | Coaching WP',
+					'url'         => 'http://themeforest.net/item/speaker-and-life-coach-wordpress-theme-coaching-wp/17097658',
+					'demo'        => 'http://live2.thimpress.com/?item=coaching',
+					'img'         => 'https://0.s3.envato.com/files/221054929/01_preview.__large_preview.png',
 					'description' => 'Speaker & Life Coach WordPress Theme (Coaching WP) is a stunning, flexible and multipurpose WP theme for speakers, mentors, trainers, therapists, and coaches. Its ultimate aim is to help individuals and businesses in the coaching industry promote their speeches, services, and consultancies to the world easier. Coaching WP’s uniqueness is due to its amazingly beautiful designs and easy to use Website template solution that maximizes user satisfaction. The Speaker and Coaching Theme made ONLY FOR YOU. Do you want to help people and inspire others? Are you an Entrepreneur, a Public speaker, a Mentor, a Fitness trainer, a doctor, a health coach, a physical therapist, a nutritionist, a personal trainer, a f',
 				)
 			);
 
 			shuffle( $list_themes );
-			array_unshift($list_themes, array(
-				'name' => 'MagWP - The Complete Magazine WordPress Theme ',
-				'url' => 'https://themeforest.net/item/magazine-wordpress-theme-mag-wp/19305239?utm_source=wporg&utm_medium=pipes&ref=thimpress&utm_campaign=magwp',
-				'demo' => 'https://magwp.thimpress.com/',
-				'img' => 'https://thimpress.com/wp-content/uploads/2017/06/mag.__large_preview.png',
+			array_unshift( $list_themes, array(
+				'name'        => 'MagWP - The Complete Magazine WordPress Theme ',
+				'url'         => 'https://themeforest.net/item/magazine-wordpress-theme-mag-wp/19305239?utm_source=wporg&utm_medium=pipes&ref=thimpress&utm_campaign=magwp',
+				'demo'        => 'https://magwp.thimpress.com/',
+				'img'         => 'https://thimpress.com/wp-content/uploads/2017/06/mag.__large_preview.png',
 				'description' => 'MagWP is a WordPress theme that lets you write articles and blog posts with ease. We offer great support, awesome designs (10 website demos in 1 theme), and friendly help!',
-			));
+			) );
 
 			?>
-			<div id="ob-advertisment" class="ob-advertisment">
+            <div id="ob-advertisment" class="ob-advertisment">
 				<?php
 				foreach ( $list_themes as $theme ) {
 					$theme['url'] = add_query_arg( array(
@@ -299,29 +317,32 @@ if (!class_exists('Ob_Advertisment')) {
 					$theme['description'] = implode( " ", $theme['description'] ) . " ...";
 					?>
 
-					<div class="item">
-						<div class="theme-thumbnail">
-							<a href="<?php _e(esc_url( $theme['url'] )); ?>">
-								<img src="<?php _e(esc_url( $theme['img'] )) ?>" />
-							</a>
-						</div>
+                    <div class="item">
+                        <div class="theme-thumbnail">
+                            <a href="<?php _e( esc_url( $theme['url'] ) ); ?>">
+                                <img src="<?php _e( esc_url( $theme['img'] ) ) ?>"/>
+                            </a>
+                        </div>
 
-						<div class="theme-detail">
-							<h2><a href="<?php _e(esc_url( $theme['url'] )); ?>"><?php _e($theme['name']); ?></a></h2>
-							<p class="ob-description">
-								<?php _e(wp_kses_post( $theme['description'] )); ?>
-							</p>
-							<p class="theme-controls">
-								<a href="<?php _e(esc_url( $theme['url'] )); ?>" class="button button-primary" target="_blank">Read More</a>
-								<a href="<?php _e(esc_url( $url_demo )); ?>" class="button" target="_blank">View Demo</a>
-							</p>
-						</div>
+                        <div class="theme-detail">
+                            <h2><a href="<?php _e( esc_url( $theme['url'] ) ); ?>"><?php _e( $theme['name'] ); ?></a>
+                            </h2>
+                            <p class="ob-description">
+								<?php _e( wp_kses_post( $theme['description'] ) ); ?>
+                            </p>
+                            <p class="theme-controls">
+                                <a href="<?php _e( esc_url( $theme['url'] ) ); ?>" class="button button-primary"
+                                   target="_blank">Read More</a>
+                                <a href="<?php _e( esc_url( $url_demo ) ); ?>" class="button" target="_blank">View
+                                    Demo</a>
+                            </p>
+                        </div>
 
-					</div>
+                    </div>
 					<?php
 				}
 				?>
-			</div>
+            </div>
 			<?php
 		}
 	}

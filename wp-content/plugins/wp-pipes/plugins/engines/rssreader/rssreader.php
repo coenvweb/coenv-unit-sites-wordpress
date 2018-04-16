@@ -14,7 +14,7 @@ require_once dirname( __FILE__ ) . DS . 'helpers' . DS . 'autoloader.php';
 class WPPipesEngine_rssreader {
 	public static function getData( $params ) {
 		if ( isset( $_GET['e'] ) ) {
-			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
+			_e( "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n" );
 			ogb_pr( $params, 'Params: ' );
 		}
 		$urls  = explode( "\nhttp", $params->feed_url );
@@ -22,7 +22,7 @@ class WPPipesEngine_rssreader {
 		$a     = 0;
 		$data  = array();
 		for ( $i = 0; $i < count( $urls ); $i ++ ) {
-			$url = trim( $urls[$i] );
+			$url = trim( $urls[ $i ] );
 			if ( $i > 0 ) {
 				$url = 'http' . $url;
 			}
@@ -32,8 +32,8 @@ class WPPipesEngine_rssreader {
 			}
 		}
 		if ( isset( $_GET['e1'] ) ) {
-			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
-			_e('Total: ' . count( $data ));
+			_e( "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n" );
+			_e( 'Total: ' . count( $data ) );
 			ogb_pr( $data, 'Data: ' );
 		}
 
@@ -42,7 +42,7 @@ class WPPipesEngine_rssreader {
 
 	public static function getDataFields() {
 		$data         = new stdClass();
-		$data->output = array( 'title', 'link', 'description', 'content', 'author', 'date', 'enclosures' );
+		$data->output = array( 'title', 'link', 'description', 'content', 'author', 'category', 'date', 'enclosures' );
 		$id           = filter_input( INPUT_GET, 'id' );
 		$path         = OGRAB_EDATA . 'item-' . $id . DS . 'row-default.dat';
 		if ( ! is_file( $path ) ) {
@@ -54,11 +54,11 @@ class WPPipesEngine_rssreader {
 		$default_oe = $default->so;
 		foreach ( $data->output as $key => $value ) {
 			if ( is_array( $default_oe->$value ) ) {
-				$data->output[$key] = $value . '<br /><p class="text-muted small">Array</p>';
+				$data->output[ $key ] = $value . '<br /><p class="text-muted small">Array</p>';
 			} else {
-				$default_oe->$value = str_replace( "'", "", $default_oe->$value );
-				$default_oe->$value = str_replace( '"', '', $default_oe->$value );
-				$data->output[$key] = $value . '<br /><p data-toggle="tooltip" data-original-title="' . ( $default_oe->$value != '' ? strip_tags( $default_oe->$value ) : 'null' ) . '" class="text-muted small">' . ( $default_oe->$value != '' ? strip_tags( $default_oe->$value ) . '</p>' : 'null</p>' );
+				$default_oe->$value   = str_replace( "'", "", $default_oe->$value );
+				$default_oe->$value   = str_replace( '"', '', $default_oe->$value );
+				$data->output[ $key ] = $value . '<br /><p data-toggle="tooltip" data-original-title="' . ( $default_oe->$value != '' ? strip_tags( $default_oe->$value ) : 'null' ) . '" class="text-muted small">' . ( $default_oe->$value != '' ? strip_tags( $default_oe->$value ) . '</p>' : 'null</p>' );
 			}
 		}
 
@@ -98,17 +98,17 @@ class WPPipesEngine_rssreader {
 		$cache_mtime = filemtime( $path );
 		$diff        = time() - $cache_mtime;
 		if ( isset( $_GET['x'] ) ) {
-			_e('<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n");
-			_e('last Update  - s: ');
+			_e( '<br /><br /><i><b>File</b> ' . __FILE__ . ' <b>Line</b> ' . __LINE__ . "</i><br />\n" );
+			_e( 'last Update  - s: ' );
 			var_dump( $diff );
 			if ( $diff > 600 ) {
 				$a = $diff / 60;
-				_e(' - m: ');
+				_e( ' - m: ' );
 				var_dump( $a );
 			}
 			if ( $a > 60 ) {
 				$a = $diff / 60;
-				_e(' - h: ');
+				_e( ' - h: ' );
 				var_dump( $a );
 			}
 		}
@@ -119,8 +119,8 @@ class WPPipesEngine_rssreader {
 
 	public static function get_items_feed( $url, $params ) {
 		$cache_path = self::getPath( $url );
-		if(is_file($cache_path) && !$params->cache){
-			unlink($cache_path);
+		if ( is_file( $cache_path ) && ! $params->cache ) {
+			unlink( $cache_path );
 		}
 		if ( ! self::need_update( $cache_path ) ) {
 			$rows = self::get_cache( $cache_path );
@@ -144,35 +144,46 @@ class WPPipesEngine_rssreader {
 		$feed->set_url_replacements( array() );
 		$result = $feed->init();
 		if ( isset( $_GET['x'] ) ) {
-			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
-			_e("<p>URL: [{$url}]</p>");
-			_e("<p>Error: [{$feed->error}]</p>");
+			_e( "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n" );
+			_e( "<p>URL: [{$url}]</p>" );
+			_e( "<p>Error: [{$feed->error}]</p>" );
 		}
 		$items   = $feed->get_items();
 		$c_items = count( $items );
 		if ( $c_items == 0 ) {
-			_e("<p>Error: [{$feed->error}]</p>");
+			_e( "<p>Error: [{$feed->error}]</p>" );
 
 			return array();
 		}
+		$separate_character = ( isset( $params->separate_character ) ) ? $params->separate_character : ',';
 
 		for ( $i = 0; $i < count( $items ); $i ++ ) {
 			$row              = new stdclass();
-			$row->title       = html_entity_decode( $items[$i]->get_title(), ENT_QUOTES, 'UTF-8' ); # the title for the post
-			$row->link        = $items[$i]->get_link(); # a single link for the post
-			$row->description = $items[$i]->get_description(); # the content of the post (prefers summaries)
-			$row->content 	  = $items[$i]->get_content(); # the content of the post (prefers <content:encoded>)
-			$row->author      = $items[$i]->get_author(); # a single author for the post
-			$row->date        = $items[$i]->get_date( 'Y-m-d H:i:s' );
-			$row->enclosures  = $items[$i]->get_enclosures();
-			$rows[]           = $row;
+			$row->title       = html_entity_decode( $items[ $i ]->get_title(), ENT_QUOTES, 'UTF-8' ); # the title for the post
+			$row->link        = $items[ $i ]->get_link(); # a single link for the post
+			$row->description = $items[ $i ]->get_description(); # the content of the post (prefers summaries)
+			$row->content     = $items[ $i ]->get_content(); # the content of the post (prefers <content:encoded>)
+			$row->author      = $items[ $i ]->get_author(); # a single author for the post
+			$categories_obj   = $items[ $i ]->get_categories();
+			$categories       = array();
+			if ( count( $categories_obj ) ) {
+				foreach ( $categories_obj as $category ) {
+					if ( $category->get_label() != '' ) {
+						$categories[] = $category->get_label();
+					}
+				}
+			}
+			$row->category   = implode( $separate_character, $categories );
+			$row->date       = $items[ $i ]->get_date( 'Y-m-d H:i:s' );
+			$row->enclosures = $items[ $i ]->get_enclosures();
+			$rows[]          = $row;
 		}
 //		var_dump($rows);
 		if ( $params->order_by_date && $params->order_by_date_follow ) {
 			$newrows = array();
 			if ( count( array_filter( $rows ) ) > 0 ) {
-				for ( $i = count( $rows ) - 1; $i >= 0;$i -- ) {
-					$newrows[] = $rows[$i];
+				for ( $i = count( $rows ) - 1; $i >= 0; $i -- ) {
+					$newrows[] = $rows[ $i ];
 				}
 				$rows = $newrows;
 			}
@@ -197,7 +208,7 @@ class WPPipesEngine_rssreader {
 			if ( $obtl >= $limit ) {
 				break;
 			}
-			$row           = $items[$i];
+			$row           = $items[ $i ];
 			$row->date     = self::fix_date( $row->date, $fix_time );
 			$row->src_url  = $row->link;
 			$row->title    = trim( $row->title );
@@ -210,13 +221,13 @@ class WPPipesEngine_rssreader {
 			$obtl ++;
 		}
 		$tl = count( $rows );
-		_e("\n<p>URL: " . '<a href="' . $url . '" target="_blank">' . $url . '</a>');
-		_e("\n<br />[ Found: " . $c_items . ' ][ +' . $tl . ' ][ ' . $obtl . '/' . $limit . ' ]' . "</p>\n");
+		_e( "\n<p>URL: " . '<a href="' . $url . '" target="_blank">' . $url . '</a>' );
+		_e( "\n<br />[ Found: " . $c_items . ' ][ +' . $tl . ' ][ ' . $obtl . '/' . $limit . ' ]' . "</p>\n" );
 
 		return $rows;
 	}
 
-	public static function fix_date( $time, $fix_time = -86400 ) {
+	public static function fix_date( $time, $fix_time = - 86400 ) {
 		$time = (int) strtotime( $time ) + $fix_time;
 
 		return date( 'Y-m-d H:i:s', $time );
@@ -240,14 +251,14 @@ class WPPipesEngine_rssreader {
 		$feed->set_url_replacements( array() );
 		$result = $feed->init();
 		if ( isset( $_GET['x'] ) ) {
-			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");
-			_e("<p>URL: [{$value_default}]</p>");
-			_e("<p>Error: [{$feed->error}]</p>");
+			_e( "\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n" );
+			_e( "<p>URL: [{$value_default}]</p>" );
+			_e( "<p>Error: [{$feed->error}]</p>" );
 		}
 		$items   = $feed->get_items();
 		$c_items = count( $items );
 		if ( $c_items == 0 ) {
-			_e("<p>Error: [{$feed->error}]</p>");
+			_e( "<p>Error: [{$feed->error}]</p>" );
 
 			return array();
 		}
@@ -255,16 +266,26 @@ class WPPipesEngine_rssreader {
 		$row->title       = html_entity_decode( $items[0]->get_title(), ENT_QUOTES, 'UTF-8' ); # the title for the post
 		$row->link        = $items[0]->get_link(); # a single link for the post
 		$row->description = $items[0]->get_description(); # the content of the post (prefers summaries)
-        $row->content 	  = $items[0]->get_content(); # the content of the post (prefers <content:encoded>)
+		$row->content     = $items[0]->get_content(); # the content of the post (prefers <content:encoded>)
 		$row->author      = $items[0]->get_author(); # a single author for the post
-		$row->date        = $items[0]->get_date( 'Y-m-d H:i:s' );
-		$row->enclosures  = $items[0]->get_enclosures();
+		$categories_obj   = $items[0]->get_categories();
+		$categories       = array();
+		if ( count( $categories_obj ) ) {
+			foreach ( $categories_obj as $category ) {
+				if ( $category->get_label() != '' ) {
+					$categories[] = $category->get_label();
+				}
+			}
+		}
+		$row->category   = implode( ', ', $categories );
+		$row->date       = $items[0]->get_date( 'Y-m-d H:i:s' );
+		$row->enclosures = $items[0]->get_enclosures();
 		if ( ! is_file( $path ) ) {
 			$source = new stdClass();
 		} else {
 			$source = ogb_common::get_default_data( '', $id );
 		}
-		if( !$source ) {
+		if ( ! $source ) {
 			$source = new stdClass();
 		}
 		$source->so = $row;
@@ -272,7 +293,7 @@ class WPPipesEngine_rssreader {
 
 		if ( isset( $_GET['x2'] ) ) {
 			//echo "\n\n<br /><i><b>File:</b>".__FILE__.' <b>Line:</b>'.__LINE__."</i><br />\n\n";
-			_e('<br>Path: ' . $path);
+			_e( '<br>Path: ' . $path );
 		}
 		ogbFile::write( $path, $cache );
 		exit();
