@@ -94,7 +94,7 @@ RewriteCond %{HTTP_HOST} ^poe.uw.edu [NC]
 RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
-RewriteRule ^(.*)$ https://jisao.uw.edu/ [R=301,NC]
+RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC]
 
 # SSL on each domain
 
