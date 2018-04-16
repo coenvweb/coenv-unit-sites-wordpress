@@ -331,7 +331,7 @@ RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L
 
 # JISAO Redirects
 RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=7]
+RewriteRule .? - [S=17]
 RewriteRule ^about-jisao/ https://jisao.uw.edu/about/ [R=301,NC,L]
 RewriteRule ^Directory-landing/ https://jisao.uw.edu/about/contact-us/ [R=301,NC,L]
 RewriteRule ^personnel/ https://jisao.uw.edu/about/staff-directory/ [R=301,NC,L]
