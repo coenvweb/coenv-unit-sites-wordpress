@@ -93,6 +93,12 @@ RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^poe.uw.edu [NC]
 RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
+RewriteRule ^(.*)$ https://jisao.uw.edu/ [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^jisao.uw.edu [NC]
+RewriteRule ^(.*)$ https://jisao.uw.edu/ [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -322,6 +328,27 @@ RewriteRule ^journal.html https://qrc.uw.edu/journal/ [R=301,L]
 RewriteRule ^library.html https://qrc.uw.edu/resources/conference-rooms/ [R=301,L]
 RewriteRule ^events.html https://qrc.uw.edu/about/events/ [R=301,L]
 RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L]
+
+# JISAO Redirects
+RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
+RewriteRule .? - [S=7]
+RewriteRule ^about-jisao/ https://jisao.uw.edu/about/ [R=301,NC,L]
+RewriteRule ^Directory-landing/ https://jisao.uw.edu/about/contact-us/ [R=301,NC,L]
+RewriteRule ^personnel/ https://jisao.uw.edu/about/staff-directory/ [R=301,NC,L]
+RewriteRule ^research-landing/ https://jisao.uw.edu/research/ [R=301,NC,L]
+RewriteRule ^research/postdocs/ https://jisao.uw.edu/postdoc-program/ [R=301,NC,L]
+RewriteRule ^grants-awards/ https://jisao.uw.edu/staff-resources/grant-and-budget-information/ [R=301,NC,L]
+RewriteRule ^publications-landing/ https://jisao.uw.edu/research/publications/obtain-a-contribution-number/ [R=301,NC,L]
+RewriteRule ^education/researchOps/ https://jisao.uw.edu/internships/ [R=301,NC,L]
+RewriteRule ^staffportal/administration/responsibilities/ https://jisao.uw.edu/staff-resources/ [R=301,NC,L]
+RewriteRule ^staff-portal/administration/signature_authority/ https://jisao.uw.edu/staff-resources/grant-and-budget-information/signature-authority/ [R=301,NC,L]
+RewriteRule ^staff-portal/forms/ https://jisao.uw.edu/staff-resources/forms/ [R=301,NC,L]
+RewriteRule ^staff-portal/payroll/ https://jisao.uw.edu/staff-resources/payroll-and-leave/ [R=301,NC,L]
+RewriteRule ^staff-portal/purchasing/ https://jisao.uw.edu/staff-resources/purchasing/ [R=301,NC,L]
+RewriteRule ^staff-portal/travel/ https://jisao.uw.edu/staff-resources/travel/ [R=301,NC,L]
+RewriteRule ^staff-portal/travel/guidelines/ https://jisao.uw.edu/staff-resources/travel/guidelines/ [R=301,NC,L]
+RewriteRule ^staff-portal/travel/foreign_travel/ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
+RewriteRule ^staff-portal/hr/hiring/ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
