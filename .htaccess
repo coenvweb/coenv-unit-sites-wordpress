@@ -351,7 +351,7 @@ RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resour
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
-RewriteRule ^pdo/$1  http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
+RewriteRule ^pdo/(.*)$  http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
 
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
