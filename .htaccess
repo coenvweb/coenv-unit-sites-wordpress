@@ -332,13 +332,12 @@ RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L
 
 # JISAO Redirects
 RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=21]
+RewriteRule .? - [S=20]
 RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
 RewriteRule ^pdo/(.*)$ http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
 RewriteRule ^data_sets/(.*)$ http://research.jisao.washington.edu/data_sets/$1 [R=301,NC,L]
 RewriteRule ^about-jisao/?$ https://jisao.uw.edu/about/ [R=301,NC,L]
 RewriteRule ^Directory-landing/?$ https://jisao.uw.edu/about/contact-us/ [R=301,NC,L]
-RewriteRule ^personnel/?$ https://jisao.uw.edu/about/staff-directory/ [R=301,NC,L]
 RewriteRule ^research-landing/?$ https://jisao.uw.edu/research/ [R=301,NC,L]
 RewriteRule ^research/postdocs/?$ https://jisao.uw.edu/postdoc-program/ [R=301,NC,L]
 RewriteRule ^grants-awards/?$ https://jisao.uw.edu/staff-resources/grant-and-budget-information/?$ [R=301,NC,L]
