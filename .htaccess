@@ -332,7 +332,7 @@ RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L
 
 # JISAO Redirects
 RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=20]
+RewriteRule .? - [S=21]
 RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
 RewriteRule ^pdo/(.*)$ http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
 RewriteRule ^data_sets/(.*)$ http://research.jisao.washington.edu/data_sets/$1 [R=301,NC,L]
@@ -353,8 +353,7 @@ RewriteRule ^staff-portal/travel/?$ https://jisao.uw.edu/staff-resources/travel/
 RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resources/travel/guidelines/ [R=301,NC,L]
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
-
-
+RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
