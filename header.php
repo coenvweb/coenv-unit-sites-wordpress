@@ -83,6 +83,7 @@
 
     ga('create', 'UA-25914371-2', 'auto');
     ga('send', 'pageview');
+    ga('set', 'anonymizeIp', true);
   </script>
   </head>
   <body <?php body_class($banner_class); ?>>
