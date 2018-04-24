@@ -66,6 +66,7 @@ Focus your college education with our innovative academic programs.';
 
     ga('create', 'UA-67870886-1', 'auto');
     ga('send', 'pageview');
+    ga('set', 'anonymizeIp', true);
   </script>
       
     <!--<script type="text/javascript" src="//use.typekit.net/dyq8fxo.js"></script>
