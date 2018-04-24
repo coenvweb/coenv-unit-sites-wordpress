@@ -58,6 +58,7 @@
 
       ga('create', 'UA-67450612-1', 'auto');
       ga('send', 'pageview');
+      ga('set', 'anonymizeIp', true);
       var trackOutboundLink = function(url) {
 		 ga('send', 'event', 'outbound', 'click', url, {
 			'transport': 'beacon',
