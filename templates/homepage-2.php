@@ -55,8 +55,16 @@ Template Name: Homepage Phase 2
                 </div>
             </div>
         </div>
+		
     </div>
-
+	<?php if(get_field('enable_announcement') && get_field('announcement') && get_field('announcement_placement') == 'top') { ?>
+		<div class="special-announcement columns large-12">
+			<div class="white-container">
+				<h4 class="announcement-title">Announcement</h4>
+				<?php the_widget('custom_post_widget', 'custom_post_id='.get_field('announcement')); ?>
+			</div>
+		</div>
+	<?php } ?>
     <div class="row programs">
         <?php
             $tiles = get_field('tiles');
@@ -214,20 +222,20 @@ Template Name: Homepage Phase 2
                 </div>
         <?php endif; ?>
         </div>
-		<?php
-			wp_reset_postdata();
-			wp_reset_query();
-		?>
+        <?php
+            wp_reset_postdata();
+            wp_reset_query();
+        ?>
 
-		
-		<?php if(get_field('enable_announcement') && get_field('announcement')) { ?>
-			<div class="special-announcement columns large-12">
-				<div class="white-container">
-					<h4 class="announcement-title">Announcement</h4>
-					<?php the_widget('custom_post_widget', 'custom_post_id='.get_field('announcement')); ?>
-				</div>
-			</div>
-		<?php } ?>
+        
+        <?php if(get_field('enable_announcement') && get_field('announcement') && get_field('announcement_placement') == 'bottom') { ?>
+            <div class="special-announcement columns large-12">
+                <div class="white-container">
+                    <h4 class="announcement-title">Announcement</h4>
+                    <?php the_widget('custom_post_widget', 'custom_post_id='.get_field('announcement')); ?>
+                </div>
+            </div>
+        <?php } ?>
     </div>
 
 
