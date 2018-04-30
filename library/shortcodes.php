@@ -77,15 +77,23 @@ add_shortcode( 'tableau', 'tableau_func' );
 
 function tile_func($atts, $content = null) {
     $attributes = shortcode_atts( array(
-        'id' => '', 
+        'ids' => '', 
     ), $atts);
 
-    $tiles = get_field('tiles');
-
-	
-	if($attributes['id'] && $tiles[$attributes['id']]) {
-		$tiles = array($tiles[$attributes['id']]);
-	}
+	if($attributes['ids']) {
+		$tiles = array($tiles[$attributes['ids']]);
+        $ids = explode(',', $attributes['ids']);
+        $tiles_acf = get_field('tiles');
+        $tiles = array();
+        foreach($ids as $id) {
+            $id = $id - 1;
+            if($tiles_acf[$id]) {
+                $tiles[] = $tiles_acf[$id];
+            }
+        }
+	} else {
+      $tiles = get_field('tiles');
+    }
 
     $output = '<div class="tiles-container">';
         if($tiles)  {
@@ -122,3 +130,75 @@ function tile_func($atts, $content = null) {
 }
 add_shortcode('page-tiles', 'tile_func');
 
+function tile_func_v2($atts, $content = null) {
+    $attributes = shortcode_atts( array(
+        'ids' => '',
+    ), $atts);
+        
+        
+    if($attributes['ids']) {
+        $ids = explode(',', $attributes['ids']);
+        $tiles_acf = get_field('tiles_v2');
+        $tiles = array();
+        foreach($ids as $id) {
+            $id = $id - 1;
+            if($tiles_acf[$id]) {
+                $tiles[] = $tiles_acf[$id];
+            }
+        }
+    } else {
+        $tiles = get_field('tiles_v2');
+    }       
+                
+    $output = '<div class="expandable-tiles-container">';
+        if($tiles)  {
+            $count = 1;
+            foreach($tiles as $tile) {
+                if($tile['image']) {
+                    $img_tag = '<img class="tile-image" src="'.$tile['image']['sizes']['med_sq'].'" alt="'.$tile['image']['alt'].'" />';
+                }       
+                    
+                if($tile['links']) {
+                    $links = '';
+                    foreach($tile['links'] as $link) {
+                        $links .= '<a class="tile-link button" href="'.$link['url'].'" target="'.(strpos($link['url'], $_SERVER['HTTP_HOST']) ? '' : '_blank').'">'.$link['link_text'].'</a>';
+                    }   
+                }           
+                        
+                $output .= "<div class='page-tile'>";
+                    $output .= '<div class="top-wrap">';
+                        if($img_tag) {
+                            $output .= $img_tag;
+                        }   
+                        $output .= '<div class="title-wrap">';
+                            $output .= "<h3 class='title'>".$tile['title']."</h3>";
+                            if($tile['sub_title']) {
+                                $output .= "<p class='sub-title'>".$tile['sub_title']."</p>";
+                            }
+
+                        $output .= '</div>';
+                        if($tile['body_content'] || $links) {
+                            $output .= '<i class="fi-arrows-expand"></i>';
+                        }
+                    $output .= '</div>';
+                    if($tile['body_content']) {
+                        $output .= '<div class="content-wrap">';
+                            $output .= "<div class='body'>".$tile['body_content']."</div>";
+                    }   
+                            if($links) {
+                                $output .= $links;
+                            } 
+                    if($tile['body_content']) {
+                        $output .= "</div>";
+                    }
+                $output .= "</div>";
+                if($count % 2 == 0) {
+                    $output .= "<br style='clear:both;' />";
+                }
+				$count++;
+            }
+        }
+    $output .= '</div><br style="clear:both;" />';
+    return $output;
+}
+add_shortcode('expandable-tiles', 'tile_func_v2');

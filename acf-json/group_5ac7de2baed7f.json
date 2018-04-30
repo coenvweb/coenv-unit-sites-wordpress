@@ -1,9 +1,9 @@
 {
-    "key": "group_5a6b68f038a26",
+    "key": "group_5ac7de2baed7f",
     "title": "Page Tiles",
     "fields": [
         {
-            "key": "field_5a6b6994dd577",
+            "key": "field_5ac7de5c86611",
             "label": "Tiles",
             "name": "tiles",
             "type": "repeater",
@@ -18,11 +18,11 @@
             "collapsed": "",
             "min": 0,
             "max": 0,
-            "layout": "table",
-            "button_label": "Add Content Tile",
+            "layout": "block",
+            "button_label": "Add Tile",
             "sub_fields": [
                 {
-                    "key": "field_5a6b69b2dd578",
+                    "key": "field_5ac7de7f86612",
                     "label": "Title",
                     "name": "title",
                     "type": "text",
@@ -41,7 +41,7 @@
                     "maxlength": ""
                 },
                 {
-                    "key": "field_5a6b69bcdd57a",
+                    "key": "field_5ac7de8e86613",
                     "label": "Links",
                     "name": "links",
                     "type": "repeater",
@@ -55,12 +55,12 @@
                     },
                     "collapsed": "",
                     "min": 1,
-                    "max": 1,
+                    "max": 2,
                     "layout": "table",
                     "button_label": "Add Link",
                     "sub_fields": [
                         {
-                            "key": "field_5a6b69cbdd57b",
+                            "key": "field_5ac7dea386614",
                             "label": "Link Text",
                             "name": "link_text",
                             "type": "text",
@@ -79,7 +79,7 @@
                             "maxlength": ""
                         },
                         {
-                            "key": "field_5a6b69d5dd57c",
+                            "key": "field_5ac7deaa86615",
                             "label": "URL",
                             "name": "url",
                             "type": "url",
@@ -97,7 +97,7 @@
                     ]
                 },
                 {
-                    "key": "field_5a6b69f1dd57d",
+                    "key": "field_5ac7def786617",
                     "label": "Image",
                     "name": "image",
                     "type": "image",
@@ -105,7 +105,7 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "100",
                         "class": "",
                         "id": ""
                     },
@@ -132,7 +132,7 @@
             }
         ]
     ],
-    "menu_order": 10,
+    "menu_order": 0,
     "position": "normal",
     "style": "default",
     "label_placement": "top",
@@ -140,5 +140,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1516992953
+    "modified": 1523048792
 }

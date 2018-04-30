@@ -52,6 +52,12 @@ jQuery(function ($) {
 			}
 		});
 	}
+
+	$('.expandable-tiles-container .page-tile .top-wrap').on('click', function() {
+        $(this).siblings('.content-wrap').toggleClass('active');
+        $(this).find('i').toggleClass('fi-arrows-compress').toggleClass('fi-arrows-expand');
+        $(this).parent('.page-tile').toggleClass('active');
+    });
 	
 
     // Category filter for custom post type indicies
