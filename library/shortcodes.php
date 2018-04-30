@@ -77,14 +77,11 @@ add_shortcode( 'tableau', 'tableau_func' );
 
 function tile_func($atts, $content = null) {
     $attributes = shortcode_atts( array(
-        'id' => '', 
+        'ids' => '', 
     ), $atts);
 
-    $tiles = get_field('tiles');
-
-	
-	if($attributes['id'] && $tiles[$attributes['id']]) {
-		$tiles = array($tiles[$attributes['id']]);
+	if($attributes['ids']) {
+		$tiles = array($tiles[$attributes['ids']]);
         $ids = explode(',', $attributes['ids']);
         $tiles_acf = get_field('tiles');
         $tiles = array();
@@ -94,7 +91,9 @@ function tile_func($atts, $content = null) {
                 $tiles[] = $tiles_acf[$id];
             }
         }
-	}
+	} else {
+      $tiles = get_field('tiles');
+    }
 
     $output = '<div class="tiles-container">';
         if($tiles)  {
