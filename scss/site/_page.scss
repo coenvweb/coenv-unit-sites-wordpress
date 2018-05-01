@@ -194,7 +194,9 @@
                 align-self: center;
                 margin-left: .5rem;
                 h3.title {
-                    margin-top: 5px;
+                    @media #{$large-up} {
+                        margin-top: 8px;
+                    }
                     transition: font-size .5s;
                     font-size: 1rem;
                     line-height: 1rem;
