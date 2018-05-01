@@ -135,6 +135,7 @@
     .page-tile {
         transition: .5s;
         float: left;
+        margin-bottom: 1rem;
         @media (max-width: 500px) {
             max-height: 121px;
         }
