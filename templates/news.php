@@ -94,7 +94,7 @@ if(isset($wp_query->query_vars['category'])){
 		$wp_query->the_post();
 		$rows = get_field('blog_link');
 		$terms = wp_get_post_terms( get_the_ID(), 'category');
-		$terms = wp_list_filter($terms, array('slug'=>'featured'),'NOT');
+		//$terms = wp_list_filter($terms, array('slug'=>'featured'),'NOT');
 		$terms = wp_list_filter($terms, array('slug'=>'uncategorized'),'NOT');
 		if (get_field('story_link_url')) {
 			$post_link_url = get_field('story_link_url');
