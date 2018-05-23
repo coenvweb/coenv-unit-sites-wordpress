@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: News
+Template Name: News Page
 */
 
 $url_current = $url = preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI']);
