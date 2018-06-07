@@ -1009,7 +1009,7 @@ if ( ! function_exists( 'wpuxss_eml_print_network_settings' ) ) {
 
                                         </table>
 
-                                        <?php submit_button( __( 'Save Changes' ), 'primary', 'submit', true, array( 'id' => 'eml-submit-network-settings' ) ); ?>
+                                        <?php submit_button( __( 'Save Changes' ), 'primary', 'eml-submit-network-settings', true ); ?>
 
                                     </form>
 
@@ -1103,7 +1103,7 @@ if ( ! function_exists( 'wpuxss_eml_update_network_settings' ) ) {
 
     function wpuxss_eml_update_network_settings() {
 
-        if ( ! isset($_POST['submit']) )
+        if ( ! isset($_POST['eml-submit-network-settings']) )
             return;
 
         check_admin_referer( 'eml-network-settings-options' );

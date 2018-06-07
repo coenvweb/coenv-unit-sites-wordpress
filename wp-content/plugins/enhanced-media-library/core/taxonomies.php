@@ -495,8 +495,8 @@ if ( ! function_exists( 'wpuxss_eml_dropdown_cats' ) ) {
 /**
  *  wpuxss_eml_parse_tax_query
  *
- *  @since    2.0.4
- *  @created  19/02/15
+ *  @since    2.6.4
+ *  @created  23/05/18
  */
 
 add_action( 'parse_tax_query', 'wpuxss_eml_parse_tax_query' );
@@ -505,18 +505,63 @@ if ( ! function_exists( 'wpuxss_eml_parse_tax_query' ) ) {
 
     function wpuxss_eml_parse_tax_query( $query ) {
 
+        if ( ! $query->is_main_query() ) {
+            return;
+        }
+
+
+        $wpuxss_eml_tax_options = get_option( 'wpuxss_eml_tax_options', array() );
+
+        if ( (bool) $wpuxss_eml_tax_options['tax_archives'] ) {
+
+            $wpuxss_eml_lib_options = get_option( 'wpuxss_eml_lib_options', array() );
+
+            foreach ( get_option('wpuxss_eml_taxonomies', array() ) as $taxonomy => $params ) {
+
+                if ( (bool) $params['assigned'] && (bool) $params['eml_media'] && is_tax( $taxonomy ) ) {
+
+                    $query->tax_query->queries[0]['include_children'] = (bool) $wpuxss_eml_lib_options['include_children'];
+                }
+            }
+        }
+    }
+}
+
+
+
+/**
+ *  wpuxss_eml_backend_parse_tax_query
+ *
+ *  @since    2.6.4
+ *  @created  23/05/18
+ */
+
+add_action( 'parse_tax_query', 'wpuxss_eml_backend_parse_tax_query' );
+
+if ( ! function_exists( 'wpuxss_eml_backend_parse_tax_query' ) ) {
+
+    function wpuxss_eml_backend_parse_tax_query( $query ) {
+
         global $current_screen;
 
 
-        if ( ! is_admin() || ! isset( $current_screen ) ) {
+        if ( ! is_admin() ) {
+            return;
+        }
+
+
+        if ( ! isset( $current_screen ) || 'upload' !== $current_screen->base ) {
+            return;
+        }
+
+        if ( ! $query->is_main_query() ) {
             return;
         }
 
 
         $media_library_mode = get_user_option( 'media_library_mode' ) ? get_user_option( 'media_library_mode' ) : 'grid';
 
-
-        if ( 'upload' !== $current_screen->base || 'list' !== $media_library_mode ) {
+        if (  'list' !== $media_library_mode ) {
             return;
         }
 
@@ -1334,6 +1379,7 @@ if ( ! function_exists( 'wpuxss_eml_the_posts' ) ) {
  *  wpuxss_eml_pre_get_posts
  *
  *  Taxonomy archive specific query (front-end)
+ *  Ensure correct items order
  *
  *  @since    1.0
  *  @created  03/08/13
@@ -1361,6 +1407,7 @@ if ( ! function_exists('wpuxss_eml_pre_get_posts') ) {
         }
 
 
+        // front-end only
         if ( ! is_admin() ) {
 
             $wpuxss_eml_tax_options = get_option('wpuxss_eml_tax_options');
@@ -1381,66 +1428,27 @@ if ( ! function_exists('wpuxss_eml_pre_get_posts') ) {
         }
 
 
+        // both front-end and back-end
         if ( 'attachment' !== $query->get('post_type') ) {
             return;
         }
 
 
-        if ( empty( $query_orderby ) && empty( $query_order ) ) {
+        $query_orderby = $query->get('orderby');
+        $query_order = $query->get('order');
 
-            $wpuxss_eml_lib_options = get_option('wpuxss_eml_lib_options');
-
-            $query_orderby = $query->get('orderby');
-            $query_order = $query->get('order');
-
-            $orderby = ( 'menuOrder' === $wpuxss_eml_lib_options['media_orderby'] ) ? 'menu_order' : $wpuxss_eml_lib_options['media_orderby'];
-            $order = $wpuxss_eml_lib_options['media_order'];
-
-            $query->set('orderby', $orderby );
-            $query->set('order', $order );
-        }
-
-
-    }
-}
-
-
-
-/**
- *  wpuxss_eml_parse_tax_query
- *
- *  @since    2.6
- *  @created  05/05/18
- */
-
-add_action( 'parse_tax_query', 'wpuxss_eml_parse_tax_query' );
-
-if ( ! function_exists( 'wpuxss_eml_parse_tax_query' ) ) {
-
-    function wpuxss_eml_parse_tax_query( $query ) {
-
-        if ( ! $query->is_main_query() ) {
+        if ( $query_orderby && $query_order ) {
             return;
         }
 
 
-        if ( ! is_admin() ) {
+        $wpuxss_eml_lib_options = get_option( 'wpuxss_eml_lib_options', array() );
 
-            $wpuxss_eml_tax_options = get_option('wpuxss_eml_tax_options');
+        $orderby = ( 'menuOrder' === $wpuxss_eml_lib_options['media_orderby'] ) ? 'menu_order' : esc_attr( $wpuxss_eml_lib_options['media_orderby'] );
+        $order = esc_attr( $wpuxss_eml_lib_options['media_order'] );
 
-            if ( (bool) $wpuxss_eml_tax_options['tax_archives'] ) {
-
-                $wpuxss_eml_lib_options = get_option('wpuxss_eml_lib_options');
-
-                foreach ( get_option('wpuxss_eml_taxonomies', array() ) as $taxonomy => $params ) {
-
-                    if ( (bool) $params['assigned'] && (bool) $params['eml_media'] && is_tax( $taxonomy ) ) {
-
-                        $query->tax_query->queries[0]['include_children'] = (bool) $wpuxss_eml_lib_options['include_children'];
-                    }
-                }
-            }
-        }
+        $query->set('orderby', $orderby );
+        $query->set('order', $order );
     }
 }
 

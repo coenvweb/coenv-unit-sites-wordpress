@@ -3,9 +3,9 @@
 Plugin Name: Page Links To
 Plugin URI: http://txfx.net/wordpress-plugins/page-links-to/
 Description: Allows you to point WordPress pages or posts to a URL of your choosing.  Good for setting up navigational links to non-WP sections of your site or to off-site resources.
-Version: 2.9.10
+Version: 2.10.1
 Author: Mark Jaquith
-Author URI: http://coveredwebservices.com/
+Author URI: http://coveredweb.com/
 Text Domain: page-links-to
 Domain Path: /languages
 */
@@ -38,7 +38,9 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	const TARGET_META_KEY = '_links_to_target';
 	const VERSION_KEY = 'txfx_plt_schema_version';
 	const FILE = __FILE__;
-	const CSS_JS_VERSION = '2.9.8';
+	const CSS_JS_VERSION = '2.10.1';
+
+	protected $replace = true;
 
 	function __construct() {
 		self::$instance = $this;
@@ -71,14 +73,10 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 
 		// Non-standard priority hooks
 		$this->hook( 'do_meta_boxes', 20 );
-		// $this->hook( 'wp_enqueue_scripts', 'start_buffer', -9999 );
 		$this->hook( 'wp_enqueue_scripts' );
-		// $this->hook( 'wp_enqueue_scripts', 'jquery_protection', 9999 );
-		// $this->hook( 'wp_head', 'end_buffer', 9999 );
 
 		// Non-standard callback hooks
-		$this->hook( 'load-post.php',      'load_post'  );
-		$this->hook( 'wp_default_scripts', 'log_jquery' );
+		$this->hook( 'load-post.php', 'load_post'  );
 
 		// Standard hooks
 		$this->hook( 'wp_list_pages'       );
@@ -123,61 +121,10 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	}
 
 	/**
-	 * Logs data about core's jQuery
-	 */
-	public function log_jquery( $wp_scripts ) {
-		$this->jquery      = $wp_scripts->registered['jquery'];
-		$this->jquery_core = $wp_scripts->registered['jquery-core'];
-	}
-
-	/**
-	 * Prevents jQuery from being incorrectly overwritten
-	 */
-	public function jquery_protection() {
-		global $wp_scripts;
-
-		if ( $wp_scripts->registered['jquery-core'] !== $this->jquery_core ) {
-			$wp_scripts->registered['jquery-core'] = $this->jquery_core;
-		}
-
-		if ( $wp_scripts->registered['jquery'] !== $this->jquery ) {
-			$wp_scripts->registered['jquery'] = $this->jquery;
-		}
-	}
-
-	/**
 	 * Enqueues front end scripts
 	 */
 	function wp_enqueue_scripts() {
-		wp_enqueue_script( 'page-links-to', $this->get_url() . 'js/new-tab.min.js', array( 'jquery' ), self::CSS_JS_VERSION, true );
-	}
-
-	/**
-	 * Starts a buffer, for rescuing the jQuery object
-	 */
-	function start_buffer() {
-		ob_start( array( $this, 'buffer_callback' ) );
-	}
-
-	/**
-	 * Collects the buffer, and injects a `jQueryWP` JS object as a
-	 * copy of `jQuery`, so that dumb themes and plugins can't hurt it
-	 *
-	 * @return string the modified buffer
-	 */
-	function buffer_callback( $content ) {
-		$pattern = "#wp-includes/js/jquery/jquery\.js\?ver=([^']+)'></script>#";
-		if ( preg_match( $pattern, $content ) ) {
-			$content = preg_replace( $pattern, '$0<script>jQueryWP = jQuery;</script>', $content );
-		}
-		return $content;
-	}
-
-	/**
-	 * Flushes the buffer
-	 */
-	function end_buffer() {
-		ob_end_flush();
+		wp_enqueue_script( 'page-links-to', $this->get_url() . 'js/new-tab.min.js', array(), self::CSS_JS_VERSION, true );
 	}
 
 	/**
@@ -291,7 +238,7 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		$url = $this->get_link( $post->ID );
 		if ( ! $url ) {
 			$linked = false;
-			$url = 'http://';
+			$url = '';
 		} else {
 			$linked = true;
 		}
@@ -300,7 +247,7 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 		<p><label><input type="radio" id="cws-links-to-choose-wp" name="cws_links_to_choice" value="wp" <?php checked( !$linked ); ?> /> <?php _e( 'Its normal WordPress URL', 'page-links-to' ); ?></label></p>
 		<p><label><input type="radio" id="cws-links-to-choose-custom" name="cws_links_to_choice" value="custom" <?php checked( $linked ); ?> /> <?php _e( 'A custom URL', 'page-links-to' ); ?></label></p>
 		<div style="webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin-left: 30px;" id="cws-links-to-custom-section" class="<?php echo ! $linked ? 'hide-if-js' : ''; ?>">
-			<p><input name="cws_links_to" type="text" style="width:75%" id="cws-links-to" value="<?php echo esc_attr( $url ); ?>" /></p>
+			<p><input placeholder="http://" name="cws_links_to" type="text" style="width:75%" id="cws-links-to" value="<?php echo esc_attr( $url ); ?>" /></p>
 			<p><label for="cws-links-to-new-tab"><input type="checkbox" name="cws_links_to_new_tab" id="cws-links-to-new-tab" value="_blank" <?php checked( (bool) $this->get_target( $post->ID ) ); ?>> <?php _e( 'Open this link in a new tab', 'page-links-to' ); ?></label></p>
 		</div>
 		<script src="<?php echo $this->get_url() . 'js/page-links-to.min.js?v=' . self::CSS_JS_VERSION; ?>"></script>
@@ -461,18 +408,34 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 	 * @return string output URL
 	 */
 	function link( $link, $post ) {
-		$post = get_post( $post );
+		if ( $this->replace ) {
+			$post = get_post( $post );
 
-		$meta_link = $this->get_link( $post->ID );
+			$meta_link = $this->get_link( $post->ID );
 
-		if ( $meta_link ) {
-			$link = esc_url( $meta_link );
-			if ( ! is_admin() && $this->get_target( $post->ID ) ) {
-				$link .= '#new_tab';
+			if ( $meta_link ) {
+				$link = esc_url( $meta_link );
+				if ( ! is_admin() && $this->get_target( $post->ID ) ) {
+					$link .= '#new_tab';
+				}
 			}
 		}
 
 		return $link;
+	}
+
+	/**
+	 * Returns the original URL of the post.
+	 *
+	 * @param null|int|WP_Post $post The post to fetch.
+	 * @return string The post's original URL.
+	 */
+	function original_link( $post = null ) {
+		$this->replace = false;
+		$url = get_permalink( $post );
+		$this->replace = true;
+
+		return $url;
 	}
 
 	/**
@@ -635,3 +598,13 @@ class CWS_PageLinksTo extends WP_Stack_Plugin {
 
 // Bootstrap everything
 new CWS_PageLinksTo;
+
+/**
+ * Returns the original URL of the post.
+ *
+ * @param null|int|WP_Post $post The post to fetch.
+ * @return string The post's original URL.
+ */
+function plt_get_original_permalink( $post = null ) {
+	return CWS_PageLinksTo::$instance->original_link( $post );
+}

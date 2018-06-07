@@ -54,6 +54,13 @@ php_value suhosin.request.max_vars 3000
 
 # Site redirects
 
+#6/5 test to force non-www
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#/test
+
 RewriteCond %{HTTP_HOST} cig.washington.edu [NC]
 RewriteRule ^(.*)$ http://cig.uw.edu/$1 [R=301,NC]
 

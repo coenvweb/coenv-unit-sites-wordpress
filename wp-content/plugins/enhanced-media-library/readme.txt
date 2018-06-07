@@ -3,7 +3,7 @@ Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 4.5
 Tested up to: 4.9.6
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,30 +170,18 @@ Additional comfort and even more convenient way to organize WordPress media libr
 
 ## Changelog ##
 
-### 2.6.3 ###
-*Release Date - May 22, 2018*
+### 2.6.4 ###
+*Release Date - May 23, 2018*
+*Addresses various issues of all previous 2.6.x versions*
 
 = Bugfixes =
-* Various multisite bugs fixed
-* A bug causing admin crash fixed
-
-
-### 2.6.2 ###
-*Release Date - May 20, 2018*
-
-= Bugfixes =
-* A few bugs of v2.6 and v2.6.1 preventing admin area from working fixed
-
-
-### 2.6.1 ###
-*Release Date - May 20, 2018*
+* Various multisite bugs fixed, including the user deletion bug
+* A bug causing memory leak on websites with thousands of users fixed
+* A few bugs causing admin crash in PHP less than 5.5 fixed
+* PRO only: a few update issues fixed including persistent update message bug
 
 = Improvements =
 * Elementor CSS-compatibility added (a temporary solution, we are still working on the full compatibility)
-
-= Bugfixes =
-* PRO only: persistent update message bug fixed
-* Not updating plugin options (in some cases) causing admin errors bug fixed
 
 
 ### 2.6 ###

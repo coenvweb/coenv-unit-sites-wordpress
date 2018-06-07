@@ -5,9 +5,9 @@
 Contributors: markjaquith  
 Donate link: http://txfx.net/wordpress-plugins/donate  
 Tags: page, redirect, link, external link, repoint  
-Requires at least: 3.9.2  
-Tested up to: 4.9.4  
-Stable tag: 2.9.10  
+Requires at least: 4.8  
+Tested up to: 4.9.6  
+Stable tag: 2.10.1  
 
 Lets you make a WordPress page (or other content type) link to an external URL of your choosing, instead of its WordPress URL.
 
@@ -62,6 +62,14 @@ Yes. Linking to `/my-photos.php` is a good idea, as it'll still work if you move
 You can contribute (or report bugs) on [Github](https://github.com/markjaquith/page-links-to/).
 
 == Changelog ==
+
+= 2.10.1 =
+* Version bump
+
+= 2.10.0 =
+* Switch to ES6 and Babel from CoffeeScript
+* Remove jQuery as front-end requirement
+* Bump supported version
 
 = 2.9.10 =
 * Bump supported version
