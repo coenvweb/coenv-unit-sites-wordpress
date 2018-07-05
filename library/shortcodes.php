@@ -202,3 +202,23 @@ function tile_func_v2($atts, $content = null) {
     return $output;
 }
 add_shortcode('expandable-tiles', 'tile_func_v2');
+
+
+//iframe support
+
+function fb_change_mce_options( $initArray ) {
+    // Comma separated string od extendes tags
+    // Command separated string of extended elements
+    $ext = 'pre[id|name|class|style],iframe[align|longdesc|name|width|height|frameborder|scrolling|marginheight|marginwidth|src]';
+
+    if ( isset( $initArray['extended_valid_elements'] ) ) {
+        $initArray['extended_valid_elements'] .= ',' . $ext;
+    } else {
+        $initArray['extended_valid_elements'] = $ext;
+    }
+    // maybe; set tiny paramter verify_html
+    //$initArray['verify_html'] = false;
+
+    return $initArray;
+}
+add_filter( 'tiny_mce_before_init', 'fb_change_mce_options' );
