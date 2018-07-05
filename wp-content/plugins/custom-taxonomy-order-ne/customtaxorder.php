@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order NE
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.9.3
+Version: 2.9.4
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -40,7 +40,7 @@ Domain Path: /lang/
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.9.3');
+define('CUSTOMTAXORDER_VER', '2.9.4');
 
 
 function customtaxorder_register_settings() {
@@ -237,7 +237,7 @@ function customtaxorder_update_order() {
 /*
  * Flush object cache when order is changed in taxonomy ordering plugin.
  *
- * Since 2.7.8
+ * @since 2.7.8
  *
  */
 function customtaxorder_flush_cache() {
@@ -263,8 +263,7 @@ function customtaxorder_sub_query( $terms, $tax ) {
 
 
 /*
- * customtaxorder_apply_order_filter
- * Function to sort the standard WordPress Queries.
+ * Function to sort the standard WordPress Queries for terms.
  *
  * @return string t.orderby
  *
@@ -346,6 +345,8 @@ add_filter('get_terms_defaults', 'customtaxorder_get_terms_defaults', 10, 2);
 function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 	$options = customtaxorder_get_settings();
 
+	$terms_old_order = $terms;
+
 	if ( empty($terms) || ! is_array($terms) ) {
 		return $terms; // only work with an array of terms
 	}
@@ -390,6 +391,19 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		}
 
 		usort($terms, 'customtax_cmp');
+
+		$terms_new_order = $terms;
+		/*
+		* Fires after term array has been ordered with usort.
+		* Please be aware that this can be triggered multiple times during a request.
+		*
+		* @since 2.9.4
+		*
+		* @param array $terms_new_order ordered array with instances of WP_Term_Query.
+		* @param array $terms_old_order original array with instances of WP_Term_Query.
+		*/
+		do_action( 'customtaxorder_terms_ordered', $terms_new_order, $terms_old_order );
+
 		return $terms;
 	}
 	return $terms;
@@ -430,11 +444,26 @@ add_filter('acf/format_value_for_api', 'customtaxorder_wp_get_object_terms_order
 function customtaxorder_order_categories( $categories ) {
 	$options = customtaxorder_get_settings();
 
+	$terms_old_order = $categories;
+
 	if ( !isset ( $options['category'] ) ) {
 		$options['category'] = 0; // default if not set in options yet
 	}
-	if ( $options['category'] == 1 && !isset($_GET['orderby']) ) {
+	if ( $options['category'] == 1 && ! isset($_GET['orderby']) ) {
 		usort($categories, 'customtax_cmp');
+
+		$terms_new_order = $categories;
+		/*
+		* Fires after term array has been ordered with usort.
+		* Please be aware that this can be triggered multiple times during a request.
+		*
+		* @since 2.9.4
+		*
+		* @param array $terms_new_order ordered array with instances of WP_Term_Query.
+		* @param array $terms_old_order original array with instances of WP_Term_Query.
+		*/
+		do_action( 'customtaxorder_terms_ordered', $terms_new_order, $terms_old_order );
+
 		return $categories;
 	}
 	return $categories;

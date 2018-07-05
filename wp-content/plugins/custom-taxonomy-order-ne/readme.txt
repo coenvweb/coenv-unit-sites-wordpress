@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 4.9
-Stable tag: 2.9.3
+Stable tag: 2.9.4
 License: GPLv2 or later
 
 
@@ -112,14 +112,27 @@ The function requires a parameter with an array of taxonomy objects.
 
 = Is there an API? =
 
-There is an action that you can use with add_action. It is being run when saving the order of terms in the admin page.
+There are actions that you can use with add_action.
+
+'customtaxorder_update_order' is being run when saving the order of terms in the admin page.
 You could add the following example to your functions.php and work from there.
 
 	<?php
-	function custom_action($new_order) {
-		print_r($new_order);
+	function custom_action( $new_order ) {
+		print_r( $new_order );
 	}
 	add_action('customtaxorder_update_order', 'custom_action');
+	?>
+
+'customtaxorder_terms_ordered' is being run after term array has been ordered with usort.
+Please be aware that this can be triggered multiple times during a request.
+You could add the following example to your functions.php and work from there.
+
+	<?php
+	function custom_action( $terms_new_order, $terms_old_order ) {
+		print_r( $terms_new_order );
+	}
+	add_action('customtaxorder_terms_ordered', 'custom_action', 10, 2);
 	?>
 
 = How can I add my own translation? =
@@ -136,6 +149,10 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.9.4 =
+* 2018-07-02
+* Add action 'customtaxorder_terms_ordered'.
 
 = 2.9.3 =
 * 2018-02-16

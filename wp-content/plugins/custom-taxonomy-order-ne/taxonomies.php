@@ -115,7 +115,7 @@ function customtaxorder_update_taxonomies() {
  *
  * Returns: array with list of taxonomies, ordered correctly.
  *
- * Since: 2.7.0
+ * @since: 2.7.0
  *
  */
 function customtaxorder_sort_taxonomies( $taxonomies = array() ) {
