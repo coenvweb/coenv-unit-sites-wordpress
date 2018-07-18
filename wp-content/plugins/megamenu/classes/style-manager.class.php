@@ -812,7 +812,9 @@ final class Mega_Menu_Style_Manager {
 
         $js_path = MEGAMENU_BASE_URL . "js/maxmegamenu.js";
 
-        wp_enqueue_script( 'megamenu', $js_path, array('jquery', 'hoverIntent'), MEGAMENU_VERSION, true );
+        $dependencies = apply_filters("megamenu_javascript_dependencies", array('jquery', 'hoverIntent'));
+
+        wp_enqueue_script( 'megamenu', $js_path, $dependencies, MEGAMENU_VERSION, true );
 
         $params = apply_filters("megamenu_javascript_localisation",
             array(
