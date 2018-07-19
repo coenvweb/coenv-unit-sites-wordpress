@@ -4,7 +4,7 @@
 <Limit POST>
     Order Allow,Deny
     Allow from all
-    Deny from 115.192 115.206 116.89
+    Deny from 115.192 115.206 116.89 42.56 115.204 183.128
 </Limit>
 
 <IfModule mod_rewrite.c>
