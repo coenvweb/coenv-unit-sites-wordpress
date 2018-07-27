@@ -159,8 +159,8 @@ aside#sidebar .solid-widget {
 		background-repeat: no-repeat;
 		background-size: rem-calc(25) rem-calc(25);
 		list-style: none;
-		margin: 0 .5rem .5rem 0;
-		padding: .2rem 0 0 3rem;
+		margin: 0 0 .5rem 0;
+		padding: .2rem .5rem 0 3rem;
 		text-transform: uppercase;
         &.active {
 		    background-image: url('/wp-content/themes/coenv-fish/assets/img/filter-selecter-active.svg');
@@ -172,6 +172,7 @@ aside#sidebar .solid-widget {
 
 		&:hover {
 			background-color: #ebebeb;
+      cursor: pointer;
 		}
 
 	}
