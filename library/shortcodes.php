@@ -75,6 +75,19 @@ function tableau_func( $atts ) {
 
 add_shortcode( 'tableau', 'tableau_func' );
 
+function gmap_func( $atts ) {
+    $gmap = shortcode_atts( array(
+        'src' => 'http://myserver.com',
+        'width' => 795,
+        'height' => 480,
+        
+    ), $atts );
+
+    return '<iframe src="' . $gmap['src'] . '" width="' . $gmap['width'] . '" height="' . $gmap['height'] . '"></iframe>'; 
+}
+
+add_shortcode( 'gmap', 'gmap_func' );
+
 function tile_func($atts, $content = null) {
     $attributes = shortcode_atts( array(
         'ids' => '', 
