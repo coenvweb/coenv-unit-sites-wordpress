@@ -235,7 +235,7 @@ class WPPipesPro_get_fulltext extends ogb_get_CURL {
 
 	public static function get_auto_fulltext( &$res, $html ) {
 		require_once 'readability.php';
-		$html = obgrabArticle( $html, true );
+		$html = ob_grabArticle( $html, true );
 		if ( isset( $html[1] ) ) {
 			self::setStop( $res, $html[1] );
 		} else {

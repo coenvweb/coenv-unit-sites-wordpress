@@ -8,7 +8,7 @@
 // License: Apache License, Version 2.0
 // Requires: PHP5
 
-// Usage: include readability.php in your script and pass your HTML content to grabArticleHtml() for a string, grabArticle() for a DOMElement object
+// Usage: include readability.php in your script and pass your HTML content to ob_grabArticleHtml() for a string, grabArticle() for a DOMElement object
 
 // Alternative usage (uncomment the lines below)
 // Usage: call readability.php in your browser passing it the URL of the page you'd like content from:
@@ -22,18 +22,18 @@ if (!isset($_GET['url']) || $_GET['url'] == '') {
 }
 $url = $_GET['url'];
 $html = file_get_contents($url);
-echo grabArticleHtml($html);
+echo ob_grabArticleHtml($html);
 */
 
 // returns XHTML
-function grabArticleHtml( $html, $with_title = true ) {
+function ob_grabArticleHtml( $html, $with_title = true ) {
 	$contentNode = grabArticle( $html, $with_title );
 
 	return $contentNode->ownerDocument->saveXML( $contentNode );
 }
 
 // returns DOMElement object
-function obgrabArticle( $html, $with_title = true ) {
+function ob_grabArticle( $html, $with_title = true ) {
 	// Replace all doubled-up <BR> tags with <P> tags, and remove fonts.
 	$html     = preg_replace( '!<br ?/?>[ \r\n\s]*<br ?/?>!', '</p><p>', $html );
 	$html     = preg_replace( '!</?font[^>]*>!', '', $html );
@@ -72,10 +72,10 @@ function obgrabArticle( $html, $with_title = true ) {
 			$readability->value = 0;
 			$parentNode->appendChild( $readability );
 			// Look for a special classname
-			if ( classNameMatch( $parentNode, '/(comment|meta|footer|footnote)/' ) ) {
+			if ( ob_classNameMatch( $parentNode, '/(comment|meta|footer|footnote)/' ) ) {
 				$readability->value -= 50;
 			} else {
-				if ( classNameMatch( $parentNode, '/((^|\s)(post|hentry|entry[-]?(content|text|body)?|article[-]?(content|text|body)?)(\s|$))/' ) ) {
+				if ( ob_classNameMatch( $parentNode, '/((^|\s)(post|hentry|entry[-]?(content|text|body)?|article[-]?(content|text|body)?)(\s|$))/' ) ) {
 					$readability->value += 25;
 				}
 			}
@@ -115,17 +115,17 @@ function obgrabArticle( $html, $with_title = true ) {
 		$res = array( '', "Can't auto get fulltext. please use Parser Code!" );
 	} else {
 		$topDiv->removeAttribute( "style" );
-		cleanStyles( $topDiv ); // Removes all style attributes
-		$topDiv = killBreaks( $topDiv ); // Removes any consecutive <br />'s into just one <br />
+		ob_cleanStyles( $topDiv ); // Removes all style attributes
+		$topDiv = ob_killBreaks( $topDiv ); // Removes any consecutive <br />'s into just one <br />
 
 		// Cleans out junk from the topDiv just in case:
-		$topDiv = clean( $topDiv, 'form' );
-		$topDiv = clean( $topDiv, 'object' );
-		//$topDiv = clean($topDiv, 'table', 250);
-		$topDiv = clean( $topDiv, 'h1' );
-		//$topDiv = clean($topDiv, 'h2');
-		$topDiv = clean( $topDiv, 'iframe' );
-		$topDiv = clean( $topDiv, 'script' );
+		$topDiv = ob_clean_func( $topDiv, 'form' );
+		$topDiv = ob_clean_func( $topDiv, 'object' );
+		//$topDiv = ob_clean_func($topDiv, 'table', 250);
+		$topDiv = ob_clean_func( $topDiv, 'h1' );
+		//$topDiv = ob_clean_func($topDiv, 'h2');
+		$topDiv = ob_clean_func( $topDiv, 'iframe' );
+		$topDiv = ob_clean_func( $topDiv, 'script' );
 
 		$articleContent->appendChild( $topDiv );
 		$html = $articleContent->ownerDocument->saveXML( $articleContent->lastChild );
@@ -135,7 +135,7 @@ function obgrabArticle( $html, $with_title = true ) {
 	return $res;
 }
 
-function classNameMatch( $node, $pattern ) {
+function ob_classNameMatch( $node, $pattern ) {
 	if ( ! $node->hasAttribute( 'class' ) ) {
 		return false;
 	}
@@ -144,7 +144,7 @@ function classNameMatch( $node, $pattern ) {
 	return preg_match( $pattern, $class );
 }
 
-function classNameHas( $node, $classNames ) {
+function ob_classNameHas( $node, $classNames ) {
 	if ( ! $node->hasAttribute( 'class' ) ) {
 		return false;
 	}
@@ -159,14 +159,14 @@ function classNameHas( $node, $classNames ) {
 	return false;
 }
 
-function cleanStyles( $node ) {
+function ob_cleanStyles( $node ) {
 	$elems = $node->getElementsByTagName( '*' );
 	foreach ( $elems as $elem ) {
 		$elem->removeAttribute( 'style' );
 	}
 }
 
-function killDivs( $node ) {
+function ob_killDivs( $node ) {
 	$divsList     = $node->getElementsByTagName( 'div' );
 	$curDivLength = $divsList->length;
 
@@ -192,7 +192,7 @@ function killDivs( $node ) {
 	return $node;
 }
 
-function killBreaks( $node ) {
+function ob_killBreaks( $node ) {
 	$pattern = '!(<br\s*/?>(\s|&nbsp;)*){1,}!';
 	$xml     = $node->ownerDocument->saveXML( $node );
 	$xml     = preg_replace( $pattern, '<br />', $xml );
@@ -203,7 +203,7 @@ function killBreaks( $node ) {
 	return $node;
 }
 
-function clean( $node, $tag, $minWords = 1000000 ) {
+function ob_clean_func( $node, $tag, $minWords = 1000000 ) {
 	$targetList = $node->getElementsByTagName( $tag );
 	$_len       = $targetList->length;
 

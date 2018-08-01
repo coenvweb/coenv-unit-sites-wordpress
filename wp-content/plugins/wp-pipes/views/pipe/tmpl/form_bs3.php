@@ -514,7 +514,7 @@ if ( $item->inherit > 0 ) {
 					?>
 					<li class="list-group-item" id="pipes_processor-<?php _e($pipe->id); ?>">
 						<div class="col-md-4">
-							<ul class="unstyled" id="ob-ip-<?php _e($i); ?>">
+							<ul class="unstyled" id="ob-ip-<?php echo $i; ?>">
 								<li><i><? _e( 'Loading' ); ?></i></li>
 							</ul>
 						</div>
@@ -543,7 +543,7 @@ if ( $item->inherit > 0 ) {
 							          placeholder="Write note here!"><?php _e($pipe->note); ?></textarea>
 						</div>
 						<div class="col-md-3">
-							<ul class="unstyled" id="ob-op-<?php _e($i); ?>">
+							<ul class="unstyled" id="ob-op-<?php echo $i; ?>">
 								<li><i><? _e( 'Loading' ); ?></i></li>
 							</ul>
 						</div>
