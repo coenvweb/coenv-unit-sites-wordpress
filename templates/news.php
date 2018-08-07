@@ -125,6 +125,7 @@ if(isset($wp_query->query_vars['category'])){
         	<h2 class="small-12 left article__title"><a href="<?php echo get_the_permalink(); ?>"><?php echo get_the_title(); ?></a></h2>
 		</header>   
 			<div class="small-12 left">
+          <div class="coenv-thumb"><a style="float: right;" href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'thumbnail' ) ?></a></div>
 				<?php echo the_excerpt(); ?>
                 <?=$post_link?>
 			</div>

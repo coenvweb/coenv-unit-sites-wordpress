@@ -20,7 +20,9 @@ if ( !empty($terms) ) {
 ?>
 
 <div class="small-news col-1">
+    <div class="coenv-thumb"><a style="float: right;" href="<?php the_permalink() ?>"><?php the_post_thumbnail( 'thumbnail' ) ?></a></div>
 	<h3><a href="<?php echo get_the_permalink(); ?>"><?php echo get_the_title(); ?></a></h3>
+    
 
 	<span class="show-for-medium-up"><?php strip_tags(the_advanced_excerpt('length=15&finish=sentence'),''); ?></span>
 
