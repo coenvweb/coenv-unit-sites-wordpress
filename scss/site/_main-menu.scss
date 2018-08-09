@@ -45,7 +45,7 @@
     a {
         @include o_sans_bold();
         @media #{$large-up} {
-            font-size: rem-calc(14);
+            font-size: rem-calc(16);
         }
         @media #{$medium-only} {
             background-image: none!important;
@@ -55,7 +55,7 @@
         background-position: right center;
         background-repeat: no-repeat;
         color: $accent;
-        font-size: rem-calc(14);
+        font-size: rem-calc(16);
         line-height: 52px;
         padding-left: rem-calc(20);
         text-align: left;

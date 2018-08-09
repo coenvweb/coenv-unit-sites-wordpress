@@ -1,10 +1,4 @@
-/*!
- * jQuery Placeholder Plugin v2.3.1
- * https://github.com/mathiasbynens/jquery-placeholder
- *
- * Copyright 2011, 2015 Mathias Bynens
- * Released under the MIT license
- */
+/*! http://mths.be/placeholder v2.1.3 by @mathias */
 (function(factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD
@@ -17,17 +11,10 @@
     }
 }(function($) {
 
-    /****
-     * Allows plugin behavior simulation in modern browsers for easier debugging. 
-     * When setting to true, use attribute "placeholder-x" rather than the usual "placeholder" in your inputs/textareas 
-     * i.e. <input type="text" placeholder-x="my placeholder text" />
-     */
-    var debugMode = false; 
-
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
     var isOperaMini = Object.prototype.toString.call(window.operamini) === '[object OperaMini]';
-    var isInputSupported = 'placeholder' in document.createElement('input') && !isOperaMini && !debugMode;
-    var isTextareaSupported = 'placeholder' in document.createElement('textarea') && !isOperaMini && !debugMode;
+    var isInputSupported = 'placeholder' in document.createElement('input') && !isOperaMini;
+    var isTextareaSupported = 'placeholder' in document.createElement('textarea') && !isOperaMini;
     var valHooks = $.valHooks;
     var propHooks = $.propHooks;
     var hooks;
@@ -50,9 +37,8 @@
             var defaults = {customClass: 'placeholder'};
             settings = $.extend({}, defaults, options);
 
-            return this.filter((isInputSupported ? 'textarea' : ':input') + '[' + (debugMode ? 'placeholder-x' : 'placeholder') + ']')
+            return this.filter((isInputSupported ? 'textarea' : ':input') + '[placeholder]')
                 .not('.'+settings.customClass)
-                .not(':radio, :checkbox, [type=hidden]')
                 .bind({
                     'focus.placeholder': clearPlaceholder,
                     'blur.placeholder': setPlaceholder
@@ -152,21 +138,9 @@
 
         // Clear placeholder values upon page reload
         $(window).bind('beforeunload.placeholder', function() {
-
-            var clearPlaceholders = true;
-
-            try {
-                // Prevent IE javascript:void(0) anchors from causing cleared values
-                if (document.activeElement.toString() === 'javascript:void(0)') {
-                    clearPlaceholders = false;
-                }
-            } catch (exception) { }
-
-            if (clearPlaceholders) {
-                $('.'+settings.customClass).each(function() {
-                    this.value = '';
-                });
-            }
+            $('.'+settings.customClass).each(function() {
+                this.value = '';
+            });
         });
     }
 
@@ -187,9 +161,9 @@
     function clearPlaceholder(event, value) {
         
         var input = this;
-        var $input = $(this);
+        var $input = $(input);
         
-        if (input.value === $input.attr((debugMode ? 'placeholder-x' : 'placeholder')) && $input.hasClass(settings.customClass)) {
+        if (input.value === $input.attr('placeholder') && $input.hasClass(settings.customClass)) {
             
             input.value = '';
             $input.removeClass(settings.customClass);
@@ -216,12 +190,22 @@
     function setPlaceholder(event) {
         var $replacement;
         var input = this;
-        var $input = $(this);
+        var $input = $(input);
         var id = input.id;
 
         // If the placeholder is activated, triggering blur event (`$input.trigger('blur')`) should do nothing.
-        if (event && event.type === 'blur' && $input.hasClass(settings.customClass)) {
-            return;
+        if (event && event.type === 'blur') {
+            
+            if ($input.hasClass(settings.customClass)) {
+                return;
+            }
+
+            if (input.type === 'password') {
+                $replacement = $input.prevAll('input[type="text"]:first');
+                if ($replacement.length > 0 && $replacement.is(':visible')) {
+                    return;
+                }
+            }
         }
 
         if (input.value === '') {
@@ -265,7 +249,7 @@
             }
 
             $input.addClass(settings.customClass);
-            $input[0].value = $input.attr((debugMode ? 'placeholder-x' : 'placeholder'));
+            $input[0].value = $input.attr('placeholder');
 
         } else {
             $input.removeClass(settings.customClass);

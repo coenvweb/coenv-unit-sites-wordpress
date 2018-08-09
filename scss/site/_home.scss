@@ -111,13 +111,13 @@
            }
 
        }
-       h1.hero-statement {
+       .hero-statement {
             @include encode_black;
             color: #fff;
-            font-size: rem-calc(60);
-            width: 90%;
+            font-size: rem-calc(64);
+            width: 80%;
             letter-spacing: .2rem;
-            line-height: 1.25;
+            line-height: 1.5;
             margin: 22px auto 23px auto;
             padding-bottom: rem-calc(12);
             text-shadow: 1px 1px 50px #000;

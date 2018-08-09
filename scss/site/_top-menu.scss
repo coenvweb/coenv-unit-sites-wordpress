@@ -23,7 +23,7 @@
 }
 
 #top-nav {
-	@include rem('padding', 0.35, 0, 0.45);
+	@include rem('padding', 0.45, 0, 0.45);
 	background-color: #363533;
     background-image: url('../assets/img/el-header-slant.svg');
     background-size: cover;
@@ -39,7 +39,7 @@
 	ul,
 	form {
 		display: inline-block;
-		@include rem('margin', 0, 0, 0, 0.3);
+		@include rem('margin-left', 0.3);
 		padding: 0;
 		font-size: 0;
 		vertical-align: top;
@@ -47,8 +47,12 @@
 
 	ul {
 		list-style: none;
+      @include rem('margin', 0, 0, 0, 0.3); 
 		padding-right: rem-calc(10);
 	}
+    #menu-university, .el-logo {
+        @include rem('margin', 0.2, 0, 0, 0.3); 
+    }
 
 	li,
 	input,
@@ -57,8 +61,8 @@
 		padding: 0;
 		margin: 0;
 		@include font-size(10);
-		@include rem('line-height', 1.8);
-		@include rem('height', 1.8);
+		@include rem('line-height', 2.3);
+		@include rem('height', 2.3);
 		vertical-align: top;
 	}
 
