@@ -54,6 +54,9 @@ require_once('library/publications.php');
 // url rewrite functions
 require_once('library/rewrites.php');
 
+// GDPR Compliance
+require_once('library/gdpr.php');
+
 // Need to be sorted into includes
 
 
