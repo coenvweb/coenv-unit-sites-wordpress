@@ -5,9 +5,12 @@
     "node-sass": "~0.7.0",
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-sass": "~1.0.0",
+    "grunt-sass": "^2.1.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.2.7"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1"
   }
 }
