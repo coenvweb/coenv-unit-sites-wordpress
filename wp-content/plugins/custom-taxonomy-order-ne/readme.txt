@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== Custom Taxonomy Order ===
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 4.9
-Stable tag: 2.9.4
+Stable tag: 2.9.5
 License: GPLv2 or later
 
 
@@ -11,7 +11,7 @@ Allows for the ordering of categories and custom taxonomy terms through a simple
 
 == Description ==
 
-Custom Taxonomy Order New Edition is a plugin for WordPress which allows for the ordering of taxonomy terms.
+Custom Taxonomy Order is a plugin for WordPress which allows for the ordering of taxonomy terms.
 
 It supports the following features:
 
@@ -24,8 +24,6 @@ It supports the following features:
 * Translated or translatable.
 * Custom functions to order the taxonomies themselves.
 * There is no Pro version, everything works in the Free version.
-
-It is a continuation (or fork) of Custom Taxonomy Order, which has been discontinued.
 
 
 == Installation ==
@@ -149,6 +147,10 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.9.5 =
+* 2018-09-07
+* Add support for Dark Mode beta plugin.
 
 = 2.9.4 =
 * 2018-07-02

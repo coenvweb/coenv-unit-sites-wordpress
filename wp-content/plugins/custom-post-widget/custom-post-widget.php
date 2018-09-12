@@ -3,16 +3,16 @@
  Plugin Name: Content Blocks (Custom Post Widget)
  Plugin URI: http://www.vanderwijk.com/wordpress/wordpress-custom-post-widget/?utm_source=wordpress&utm_medium=plugin&utm_campaign=custom_post_widget
  Description: Show the content of a custom post of the type 'content_block' in a widget or with a shortcode.
- Version: 3.0.3
+ Version: 3.0.4
  Author: Johan van der Wijk
  Author URI: http://vanderwijk.nl
  Text Domain: custom-post-widget
  Domain Path: /languages
  License: GPL2
 
- Release notes: You can now show the featured image when using the shortcode to display a content block.
+ Release notes: Added Gutenberg compatibility for editing content blocks
 
- Copyright 2017 Johan van der Wijk
+ Copyright 2018 Johan van der Wijk
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License, version 2, as

@@ -140,6 +140,7 @@ function cpw_post_type_init() {
 		'query_var' => true,
 		'rewrite' => true,
 		'capability_type' => 'post',
+		'show_in_rest' => true,
 		'hierarchical' => false,
 		'menu_icon' => 'dashicons-screenoptions',
 		'supports' => array( 'title','editor','revisions','thumbnail','author' )
