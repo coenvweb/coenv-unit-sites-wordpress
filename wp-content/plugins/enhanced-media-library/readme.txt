@@ -4,7 +4,7 @@ Tags: media library, media category, media categories, media gallery, gallery sh
 Requires at least: 4.5
 Tested up to: 4.9.9
 Requires PHP: 5.6
-Stable tag: 2.7.1
+Stable tag: 2.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,7 +118,7 @@ Additional comfort and even more convenient way to organize WordPress media libr
 ### Useful Links ###
 
 * [Where to Start?](https://wpuxsolutions.com/documents/enhanced-media-library/where-to-start)
-* [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library) (Is being updated after v2.6 chnages)
+* [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library) (Is being updated after v2.6 and v2.7 changes)
 * [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs)
 * [Contribute to Translation](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library)
 * [Enhanced Media Shortcode Possible Conflicts](https://www.wpuxsolutions.com/documents/enhanced-media-library/enhanced-media-shortcode-possible-conflicts)
@@ -172,13 +172,20 @@ Additional comfort and even more convenient way to organize WordPress media libr
 
 ## Changelog ##
 
+### 2.7.2 ###
+*Release Date - September 13, 2018*
+
+= Improvements =
+* Compatibility with Smush (WP SmushIt) plugin ensured
+
+
 ### 2.7.1 ###
 *Release Date - September 11, 2018*
 *v2.7 bugfixes*
 
 = Bugfixes =
 * `[playlist]` broken shortcode bug fixed
-* "Image not uploading", "Can't add featured image", "Media library right sidebar gone" and possibly some other situations common bug fixed. Please notice, for those who use Smush (WP Smush It) plugin the issue is not fixed because the fix requires a collaboration with the Smush author. Follow [Update Broke Uploader](https://wordpress.org/support/topic/update-broke-uploader/) support thread to know the temporary solution.
+* "Image not uploading", "Can't add featured image", "Media library right sidebar gone" and possibly some other situations common bug fixed.
 * PRO only: hidden filters bug fixed
 * A few minor bug fixed, some minor code improvements made
 

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Enhanced Media Library (Free & PRO)\n"
 "POT-Creation-Date: 2018-09-11 00:08+0300\n"
-"PO-Revision-Date: 2018-09-11 00:11+0300\n"
+"PO-Revision-Date: 2018-09-12 22:09+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -35,7 +35,7 @@ msgstr[1] " <span class=\"count\">(%s)</span>"
 #: core/options-pages.php:1694 core/options-pages.php:1952
 #: core/options-pages.php:2265 core/options-pages.php:2465
 msgid "Media Settings"
-msgstr "Medien-Einstellungen"
+msgstr "Medieneinstellungen"
 
 #: core/options-pages.php:106 core/options-pages.php:107
 #: core/options-pages.php:363 core/options-pages.php:1019
@@ -249,11 +249,11 @@ msgstr "Keine Angaben"
 
 #: core/options-pages.php:584
 msgid "Wrong Taxonomy Name"
-msgstr ""
+msgstr "Falscher Taxonomie Name"
 
 #: core/options-pages.php:585
 msgid "Wrong Slug"
-msgstr ""
+msgstr "Falsche Slug"
 
 #: core/options-pages.php:587
 msgid "Please choose Singular and Plural names for all new taxomonies."
@@ -265,25 +265,31 @@ msgstr "Bitte einen Singular Namen für alle neuen Taxonomien wählen."
 
 #: core/options-pages.php:589
 msgid "Please choose Plural name for all new taxomonies."
-msgstr ""
+msgstr "Bitte einen Plural Namen für alle neuen Taxonomien wählen."
 
 #: core/options-pages.php:591
 msgid ""
 "Taxonomy Name cannot be empty. If it was not generated from the Singular "
 "name please enter it manually."
 msgstr ""
+"Der Taxonomie Name darf nicht leer sein. Wenn er nicht aus dem Singular "
+"generiert wurde, bitte manuell eingeben."
 
 #: core/options-pages.php:592
 msgid ""
 "Taxonomy Name should only contain lowercase Latin letters, the underscore "
 "character ( _ ), and be 3-32 characters long."
 msgstr ""
+"Der Taxonomie Name sollte nur Kleinbuchstaben des lateinischen Alphabets "
+"oder den Unterstrich enthalten, sowie zwischen 2-32 Zeichen lang sein."
 
 #: core/options-pages.php:593
 msgid ""
 "Slug should only contain lowercase Latin letters, numbers, underscore ( _ ) "
 "or hyphen ( - ) characters."
 msgstr ""
+"Die Slug sollte nur Kleinbuchstaben des lateinischen Alphabets, Zahlen, den "
+"Unter- oder Bindestrich enthalten."
 
 #: core/options-pages.php:595 core/options-pages.php:644
 msgid "Ok"
@@ -330,7 +336,7 @@ msgstr "Wird wiederhergestellt…"
 
 #: core/options-pages.php:647
 msgid "MIME Types cannot be saved"
-msgstr ""
+msgstr "MIME Typen konnten nicht gespeichert werden"
 
 #: core/options-pages.php:648
 msgid "Please fill into all fields."
@@ -350,7 +356,7 @@ msgid ""
 "You are about to <strong style=\"text-transform:uppercase\">delete all "
 "plugin data</strong> from the database including backups."
 msgstr ""
-"Sämtliche  Plugin Daten in Datenbank, sowie Backups <strong style=\"text-"
+"Sämtliche  Plugin Daten in der Datenbank, sowie Backups <strong style=\"text-"
 "transform:uppercase\">werden gelöscht</strong>."
 
 #: core/options-pages.php:688
@@ -363,24 +369,24 @@ msgstr "Aufräumen…"
 
 #: core/options-pages.php:693 core/options-pages.php:996
 msgid "Unify Media Settings over Network"
-msgstr ""
+msgstr "Medieneinstellungen über das Netzwerk vereinheitlichen"
 
 #: core/options-pages.php:696 core/options-pages.php:700
 #: core/options-pages.php:704
 msgid "will be overwritten"
-msgstr ""
+msgstr "wird überschrieben"
 
 #: core/options-pages.php:706
 msgid "Apply"
-msgstr ""
+msgstr "Anwenden"
 
 #: core/options-pages.php:707
 msgid "Applying Settings..."
-msgstr ""
+msgstr "Einstellungen werden angewendet..."
 
 #: core/options-pages.php:746 core/options-pages.php:935
 msgid "Enhanced Media Library Utilities"
-msgstr ""
+msgstr "Enhanced Media Library Werkzeuge"
 
 #: core/options-pages.php:756
 msgid "Export"
@@ -388,27 +394,29 @@ msgstr "Exportieren"
 
 #: core/options-pages.php:761
 msgid "Plugin settings to export:"
-msgstr ""
+msgstr "Plugin Einstellungen, die exportiert werden:"
 
 #: core/options-pages.php:762 core/options-pages.php:789
 #: core/options-pages.php:829
 msgid "Settings > Media Library"
-msgstr ""
+msgstr "Einstellungen > Mediathek"
 
 #: core/options-pages.php:763 core/options-pages.php:790
 #: core/options-pages.php:830
 msgid "Settings > Media Taxonomies"
-msgstr ""
+msgstr "Einstellungen > Medien Taxonomien"
 
 #: core/options-pages.php:764 core/options-pages.php:791
 #: core/options-pages.php:831
 msgid "Settings > MIME Types"
-msgstr ""
+msgstr "Einstellungen > MIME Typen"
 
 #: core/options-pages.php:768
 msgid ""
 "Use generated JSON file to import the configuration into another website."
 msgstr ""
+"Eine generierte JSON Datei nutzen, um die Konfigurationen für eine andere "
+"Website zu importieren."
 
 #: core/options-pages.php:773
 msgid "Export Plugin Settings"
@@ -420,7 +428,7 @@ msgstr "Importieren"
 
 #: core/options-pages.php:788
 msgid "Plugin settings to import:"
-msgstr ""
+msgstr "Plugin Einstellungen, die importiert werden:"
 
 #: core/options-pages.php:794
 msgid ""
@@ -428,6 +436,9 @@ msgid ""
 "obtained by exporting the settings on another website using the export "
 "button above."
 msgstr ""
+"Die Plugin Einstellungen werden von einer Konfigurations-JSON Datei "
+"importiert. Diese Datei wird über den Export der Einstellungen einer anderen "
+"Website erzeugt, indem der obige Button genutzt wird."
 
 #: core/options-pages.php:795
 msgid ""
@@ -462,7 +473,7 @@ msgstr "Das Backup wurde automatisch vor der letzten Import-Aktion erstellt."
 
 #: core/options-pages.php:828
 msgid "Plugin settings to restore:"
-msgstr ""
+msgstr "Plugin Einstellungen, die wiederhergestellt werden:"
 
 #: core/options-pages.php:837
 msgid "Restore Settings from the Backup"
@@ -478,7 +489,7 @@ msgstr "Alle Plugin-Optionen"
 
 #: core/options-pages.php:866 core/options-pages.php:1089
 msgid "All plugin backups stored in the database"
-msgstr ""
+msgstr "Alle in der Datenbank gespeicherten Backups des Plugins"
 
 #: core/options-pages.php:870 core/options-pages.php:1093
 msgid "What will remain intact:"
@@ -497,12 +508,16 @@ msgid ""
 "The plugin cannot delete itself for security reasons. Please delete it "
 "manually from the plugin list after the cleanup is complete."
 msgstr ""
+"Aus Sicherheitsgründen wird das Plugin nicht automatisch gelöscht und muss "
+"nach dem Aufräumen manuell aus der Pluginliste entfernt werden."
 
 #: core/options-pages.php:877 core/options-pages.php:1100
 msgid ""
 "If you are not sure about this operation it's HIGHLY RECOMMENDED to create a "
 "backup of your database prior to cleanup!"
 msgstr ""
+"Bei Unsicherheiten bezüglich dieser Operation wird DRINGEND EMPFOHLEN vor "
+"dem Aufräumen ein Backup der Datenbank zu erstellen!"
 
 #: core/options-pages.php:882
 msgid "Delete All Data & Deactivate"
@@ -510,49 +525,60 @@ msgstr "Alle Daten löschen und deaktivieren"
 
 #: core/options-pages.php:945
 msgid "Network Settings"
-msgstr ""
+msgstr "Netzwerk Einstellungen"
 
 #: core/options-pages.php:952 core/options-pages.php:1003
 msgid "No settings available. The plugin is not network activated."
 msgstr ""
+"Keine Einstellungen verfügbar. Das Plugin ist nicht für ein Netzwerk "
+"aktiviert."
 
 #: core/options-pages.php:963
 msgid "Media Settings per site"
-msgstr ""
+msgstr "Medieneinstellungen pro Seite"
 
 #: core/options-pages.php:966
 msgid "Enable Media Settings"
-msgstr ""
+msgstr "Medieneinstellungen aktivieren"
 
 #: core/options-pages.php:967
 msgid "Allow an individual site admin to edit enhanced Media Settings"
 msgstr ""
+"Einem individuellen Site Admin erlauben, die erweiterten Medieneinstellungen "
+"zu bearbeiten"
 
 #: core/options-pages.php:968
 msgid ""
 "Otherwise, only a network (super) admin can see the menu and edit media "
 "settings."
 msgstr ""
+"Ansonsten kann nur eine Netzwerk (Super-) Admin das Menü sehen und die "
+"Medieneinstellungen bearbeiten."
 
 #: core/options-pages.php:974
 msgid "Plugin Utilities per site"
-msgstr ""
+msgstr "Plugin Werkzeuge pro Seite"
 
 #: core/options-pages.php:977
 msgid "Enable plugin Utilities"
-msgstr ""
+msgstr "Plugin Werkzeuge aktivieren"
 
 #: core/options-pages.php:978
 msgid ""
 "Allow an individual site admin to import / export / restore plugin settings "
 "and perform the complete cleanup for a specific site"
 msgstr ""
+"Einem individuellen Site Admin den Import / Export, die Wiederherstellung "
+"der Plugineinstellungen sowie das komplette Aufräumen einer bestimmten Seite "
+"erlauben"
 
 #: core/options-pages.php:979
 msgid ""
 "Otherwise, only a network (super) admin can see the menu and perform those "
 "actions."
 msgstr ""
+"Ansonsten kann nur eine Netzwerk (Super-) Admin das Menü sehen und diese "
+"Aktionen ausführen."
 
 #: core/options-pages.php:986 core/options-pages.php:1770
 #: core/options-pages.php:1824 core/options-pages.php:1861
@@ -564,46 +590,50 @@ msgstr "Änderungen speichern"
 
 #: core/options-pages.php:1012 core/options-pages.php:1015
 msgid "Media Library Settings"
-msgstr ""
+msgstr "Mediathek Einstellungen"
 
 #: core/options-pages.php:1016 core/options-pages.php:1030
 #: core/options-pages.php:1044
 msgid "Apply to ALL Network websites"
-msgstr ""
+msgstr "Auf ALLE Netzwerk Websites anwenden"
 
 #: core/options-pages.php:1026 core/options-pages.php:1029
 msgid "Media Taxonomies Settings"
-msgstr ""
+msgstr "Medien Taxonomien Einstellungen"
 
 #: core/options-pages.php:1040 core/options-pages.php:1043
 msgid "MIME Types Settings"
-msgstr ""
+msgstr "MIME Typen Einstellungen"
 
 #: core/options-pages.php:1087
 msgid "All plugin options on every site"
-msgstr ""
+msgstr "Alle Plugin Optionen auf jeder Seite"
 
 #: core/options-pages.php:1088
 msgid "Network settings"
-msgstr ""
+msgstr "Netzwerk Einstellungen"
 
 #: core/options-pages.php:1105
 msgid "Delete All Data & Network Deactivate"
-msgstr ""
+msgstr "Alle Daten löschen & Netzwerk deaktivieren"
 
 #: core/options-pages.php:1225
 msgid "Network settings saved."
-msgstr ""
+msgstr "Netzwerk Einstellungen gespeichert."
 
 #: core/options-pages.php:1319
 msgid "Settings cannot be imported. Please upload a file to import settings."
 msgstr ""
+"Einstellungen konnten nicht importiert werden. Bitte eine Datei hochladen, "
+"um Einstellungen zu importieren."
 
 #: core/options-pages.php:1340
 msgid ""
 "Settings cannot be imported. Please upload a correct JSON file to import "
 "settings."
 msgstr ""
+"Einstellungen konnten nicht importiert werden. Bitte eine korrekte JSON "
+"Datei hochladen, um Einstellungen zu importieren. "
 
 #: core/options-pages.php:1356
 msgid "Plugin settings imported."
@@ -615,7 +645,7 @@ msgstr "Plugin-Einstellungen aus dem Backup wiederhergestellt."
 
 #: core/options-pages.php:1714
 msgid "Filters"
-msgstr ""
+msgstr "Filter"
 
 #: core/options-pages.php:1723 core/options-pages.php:1726
 msgid "Force filters"
@@ -633,23 +663,23 @@ msgstr ""
 
 #: core/options-pages.php:1734 core/options-pages.php:1737
 msgid "Filters to show"
-msgstr ""
+msgstr "Angezeigte Filter"
 
 #: core/options-pages.php:1738
 msgid "Types"
-msgstr ""
+msgstr "Typen"
 
 #: core/options-pages.php:1739
 msgid "Can be disabled for Grid Mode only"
-msgstr ""
+msgstr "Kann nur für den Gitter Modus angestellt werden"
 
 #: core/options-pages.php:1740
 msgid "Dates"
-msgstr ""
+msgstr "Datum"
 
 #: core/options-pages.php:1741
 msgid "Authors"
-msgstr ""
+msgstr "Autoren"
 
 #: core/options-pages.php:1748 core/options-pages.php:1751
 msgid "Show count"
@@ -664,14 +694,16 @@ msgid ""
 "Disable this if it slows down your site admin. The problem is resolved in "
 "the upcoming major update v3.0"
 msgstr ""
+"Kann deaktiviert werden, wenn es die Admin Seite verlangsamt. Das Problem "
+"wird mit dem kommenden Update v3.0 gefixt."
 
 #: core/options-pages.php:1759 core/options-pages.php:1762
 msgid "Include children"
-msgstr ""
+msgstr "Untergeordnete Kategorien einbeziehen"
 
 #: core/options-pages.php:1763
 msgid "Show media items of child media categories as a result of filtering"
-msgstr ""
+msgstr "Zeige Medien aus untergeordneten Medienkategorien beim Filterergebnis"
 
 #: core/options-pages.php:1780
 msgid "Order"
@@ -702,6 +734,8 @@ msgstr "Für die Mediathek und Medien-Popups"
 msgid ""
 "Allows changing media items order by drag and drop with Custom Order value."
 msgstr ""
+"Medienreihenfolge kann per Drag & Drop mit benutzerdefinierten "
+"Ordnungswerten geändert werden."
 
 #: core/options-pages.php:1802
 msgid "Sort order"
@@ -717,41 +751,44 @@ msgstr "Absteigend"
 
 #: core/options-pages.php:1813 core/options-pages.php:1816
 msgid "Natural sort order"
-msgstr ""
+msgstr "Natürliche Sortierreihenfolge"
 
 #: core/options-pages.php:1817
 msgid "Apply human-friendly sort order to Media Library and Galleries"
 msgstr ""
+"Benutzerfreundliche Sortierreihenfolge für Mediathek und Gallerien verwenden."
 
 #: core/options-pages.php:1818
 msgid ""
 "Example: [1, 2, 3, 10, 18, 22, abc-2, abc-11] instead of [1, 10, 18, 2, 22, "
 "3, abc-11, abc-2]"
 msgstr ""
+"Zum Beispiel: [1, 2, 3, 10, 18, 22, abc-2, abc-11] anstatt [1, 10, 18, 2, "
+"22, 3, abc-11, abc-2]"
 
 #: core/options-pages.php:1831
 msgid "Grid Mode"
-msgstr ""
+msgstr "Raster Modus"
 
 #: core/options-pages.php:1840 core/options-pages.php:1843
 msgid "Show caption"
-msgstr ""
+msgstr "Beschriftung anzeigen"
 
 #: core/options-pages.php:1844
 msgid "Add text caption for media item thumbnails"
-msgstr ""
+msgstr "Textbeschriftung für Medien Thumbnails hinzufügen"
 
 #: core/options-pages.php:1850
 msgid "Caption type"
-msgstr ""
+msgstr "Beschriftungstyp"
 
 #: core/options-pages.php:1854
 msgid "Filename"
-msgstr ""
+msgstr "Dateiname"
 
 #: core/options-pages.php:1855 core/taxonomies.php:1666
 msgid "Caption"
-msgstr ""
+msgstr "Beschriftung"
 
 #: core/options-pages.php:1868
 msgid "Media Shortcodes"
@@ -783,7 +820,7 @@ msgstr "Beispiel Video Playlist"
 
 #: core/options-pages.php:1888
 msgid "Warning"
-msgstr ""
+msgstr "Warnung"
 
 #: core/options-pages.php:1891
 #, php-format
@@ -791,6 +828,8 @@ msgid ""
 "Incompatibility with other gallery plugins or themes possible! <a href=\"%s"
 "\">Learn more</a>."
 msgstr ""
+"Inkompatibilität mit anderen Gallerie-Plugins oder Themes möglich! <a href="
+"\"%s\">Erfahre mehr</a>."
 
 #: core/options-pages.php:1896
 #, php-format
@@ -998,7 +1037,7 @@ msgstr "Bitte"
 
 #: core/options-pages.php:2425
 msgid "vote for the plugin"
-msgstr "vote für das Plugin"
+msgstr "Plugin bewerten"
 
 #: core/options-pages.php:2425
 msgid "Thanks!"
@@ -1010,31 +1049,31 @@ msgstr "Weitere Plugins, die Dir gefallen könnten"
 
 #: core/options-pages.php:2469
 msgid "Utility"
-msgstr "Anwendung"
+msgstr "Werkzeuge"
 
 #: core/options-pages.php:2494
 msgid "Rate us:"
-msgstr ""
+msgstr "Bewertung abgeben:"
 
 #: core/options-pages.php:2494
 msgid "Poor"
-msgstr ""
+msgstr "Schlecht"
 
 #: core/options-pages.php:2494
 msgid "Works"
-msgstr ""
+msgstr "Ausreichend"
 
 #: core/options-pages.php:2494
 msgid "Good"
-msgstr ""
+msgstr "Gut"
 
 #: core/options-pages.php:2494
 msgid "Great"
-msgstr ""
+msgstr "Sehr gut"
 
 #: core/options-pages.php:2494
 msgid "Fantastic!"
-msgstr ""
+msgstr "Großartig!"
 
 #: core/taxonomies.php:101
 msgid "Media Taxonomies settings saved."
@@ -1046,11 +1085,11 @@ msgstr "Mediathek-Einstellungen gespeichert."
 
 #: core/taxonomies.php:353
 msgid "Filter by author"
-msgstr ""
+msgstr "Nach Autor filtern"
 
 #: core/taxonomies.php:357
 msgid "All Authors"
-msgstr ""
+msgstr "Alle Autoren"
 
 #: core/taxonomies.php:374 core/taxonomies.php:380
 #: enhanced-media-library.php:560
@@ -1063,7 +1102,7 @@ msgstr "Nicht in"
 
 #: core/taxonomies.php:721
 msgid "Add some"
-msgstr ""
+msgstr "Hinzufügen"
 
 #: core/taxonomies.php:1501
 msgid "Remove"
@@ -1091,56 +1130,56 @@ msgstr "Beschreibung dieser Medien-Datei&hellip;"
 
 #: core/taxonomies.php:1585
 msgid "Attachment Details"
-msgstr ""
+msgstr "Anhang Details"
 
 #: core/taxonomies.php:1588 enhanced-media-library.php:568
 msgid "Saved."
-msgstr ""
+msgstr "Gespeichert."
 
 #: core/taxonomies.php:1612
 msgid "Edit Image"
-msgstr ""
+msgstr "Bild bearbeiten"
 
 #: core/taxonomies.php:1617
 msgid "Length:"
-msgstr ""
+msgstr "Länge:"
 
 #: core/taxonomies.php:1623
 msgid "Untrash"
-msgstr ""
+msgstr "Wiederherstellen"
 
 #: core/taxonomies.php:1625
 msgctxt "verb"
 msgid "Trash"
-msgstr ""
+msgstr "Löschen"
 
 #: core/taxonomies.php:1628
 msgid "Delete Permanently"
-msgstr ""
+msgstr "Permanent Löschen"
 
 #: core/taxonomies.php:1632 enhanced-media-library.php:390
 msgid "More Details"
-msgstr ""
+msgstr "Mehr Details"
 
 #: core/taxonomies.php:1644
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: core/taxonomies.php:1656
 msgid "Artist"
-msgstr ""
+msgstr "Künstler"
 
 #: core/taxonomies.php:1657
 msgid "Album"
-msgstr ""
+msgstr "Album"
 
 #: core/taxonomies.php:1671
 msgid "Alt Text"
-msgstr ""
+msgstr "Alt Text"
 
 #: core/taxonomies.php:1676
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: enhanced-media-library.php:358 enhanced-media-library.php:559
 msgid "All Uncategorized"
@@ -1152,15 +1191,15 @@ msgstr "Alle Filter zurücksetzen"
 
 #: enhanced-media-library.php:391
 msgid "Less Details"
-msgstr ""
+msgstr "Weniger Details"
 
 #: enhanced-media-library.php:564
 msgid "author"
-msgstr ""
+msgstr "Autor"
 
 #: enhanced-media-library.php:565
 msgid "authors"
-msgstr ""
+msgstr "Autoren"
 
 #: enhanced-media-library.php:569
 msgid "Something went wrong."

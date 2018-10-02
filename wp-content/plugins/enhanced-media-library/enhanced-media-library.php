@@ -3,7 +3,7 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: http://wpUXsolutions.com
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.7.1
+Version: 2.7.2
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
@@ -26,7 +26,7 @@ global $wp_version,
 
 
 
-if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.7.1' );
+if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.7.2' );
 
 
 

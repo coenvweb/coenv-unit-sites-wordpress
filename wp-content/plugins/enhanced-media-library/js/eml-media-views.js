@@ -575,52 +575,8 @@ window.eml = window.eml || { l10n: {} };
      * wp.media.view.Attachment.Details
      *
      */
-    original.AttachmentDetails = {
-
-        initialize: media.view.Attachment.Details.prototype.initialize
-    };
 
     _.extend( media.view.Attachment.Details.prototype, {
-
-        initialize: function() {
-
-            original.AttachmentDetails.initialize.apply( this, arguments );
-
-            if ( 'edit-attachment' === this.controller._state ) {
-                return;
-            }
-
-
-            var toolbar = this.controller.toolbar.get();
-
-
-            toolbar.set( 'emlAttachmentSuccess', new media.view.emlAttachmentDetailsEditMessage({
-                text: eml.l10n.saveButton_success,
-                class: 'updated',
-                controller: this.controller,
-                priority:   200
-            }) );
-
-            toolbar.set( 'emlAttachmentError', new media.view.emlAttachmentDetailsEditMessage({
-                text: eml.l10n.saveButton_failure,
-                class: 'error',
-                controller: this.controller,
-                priority:   220
-            }) );
-
-            if ( this.controller.isModeActive( 'eml-grid' ) ) {
-                this.controller.browserView.toggleSidebar();
-            }
-        },
-
-        remove: function() {
-
-            if ( this.controller.isModeActive( 'eml-grid' ) ) {
-                this.controller.browserView.toggleSidebar();
-            }
-
-            return media.View.prototype.remove.apply( this, arguments );
-        },
 
         deleteAttachment: function( event ) {
             event.preventDefault();
@@ -647,7 +603,8 @@ window.eml = window.eml || { l10n: {} };
         initialize: media.view.AttachmentsBrowser.prototype.initialize,
         createToolbar: media.view.AttachmentsBrowser.prototype.createToolbar,
         createSidebar: media.view.AttachmentsBrowser.prototype.createSidebar,
-        createSingle: media.view.AttachmentsBrowser.prototype.createSingle
+        createSingle: media.view.AttachmentsBrowser.prototype.createSingle,
+        disposeSingle: media.view.AttachmentsBrowser.prototype.disposeSingle
     };
 
     _.extend( media.view.AttachmentsBrowser.prototype, {
@@ -1032,6 +989,25 @@ window.eml = window.eml || { l10n: {} };
                     priority: -40
                 }) );
             }
+
+            if ( 'edit-attachment' !== this.controller._state ) {
+
+                var toolbar = this.controller.toolbar.get();
+
+                toolbar.set( 'emlAttachmentSuccess', new media.view.emlAttachmentDetailsEditMessage({
+                    text: eml.l10n.saveButton_success,
+                    class: 'updated',
+                    controller: this.controller,
+                    priority:   200
+                }) );
+
+                toolbar.set( 'emlAttachmentError', new media.view.emlAttachmentDetailsEditMessage({
+                    text: eml.l10n.saveButton_failure,
+                    class: 'error',
+                    controller: this.controller,
+                    priority:   220
+                }) );
+            }
         },
 
         createSidebar: function() {
@@ -1044,7 +1020,9 @@ window.eml = window.eml || { l10n: {} };
 
         toggleSidebar: function() {
 
-            if ( this.sidebar.$el.hasClass( 'hidden' ) ) {
+            var selection = this.controller.state().get( 'selection' );
+
+            if ( selection.length ) {
                 this.sidebar.$el.removeClass( 'hidden' );
                 this.$el.children('.attachments').css( 'right', '300px' );
                 this.$el.children('.uploader-inline').css( 'right', '310px' );
@@ -1072,6 +1050,17 @@ window.eml = window.eml || { l10n: {} };
                         priority:   80
                     }) );
                 }
+
+                this.toggleSidebar();
+            }
+        },
+
+        disposeSingle: function() {
+
+            original.AttachmentsBrowser.disposeSingle.apply( this, arguments );
+
+            if ( this.controller.isModeActive( 'eml-grid' ) ) {
+                this.toggleSidebar();
             }
         },
 
