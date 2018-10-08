@@ -114,7 +114,7 @@
             <h1 class="title"><a href=""><?php bloginfo( 'name' ); ?></a></h1>
     </section>
     <section class="right-small">
-      <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+      <a class="right-off-canvas-toggle menu-icon" ><span><i></i></span></a>
     </section>
   </nav>
 
