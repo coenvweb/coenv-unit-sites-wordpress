@@ -103,6 +103,9 @@ RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
 RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^nwcasc.washington.edu [NC]
+RewriteRule ^(.*)$ https://nwcasc.uw.edu/$1 [R=301,NC,L]
+
 RewriteCond %{HTTP_HOST} ^www\.jisao.washington.edu [NC]
 RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
 
@@ -367,6 +370,27 @@ RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resour
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
+
+# Earthlab Redirects
+RewriteCond %{HTTP_HOST} !^earthlab.uw\.edu [NC]
+RewriteRule .? - [S=17]
+RewriteRule ^about/case-studies/$ projects/ [R=301,L]
+RewriteRule ^about/case-studies/combating-global-climate-change-is-fun-and-games-for-earthgamesuw/$ projects/ [R=301,L]
+RewriteRule ^about/case-studies/focus-area/ecosystems/$ projects/topic/ecosystems/ [R=301,L]
+RewriteRule ^about/case-studies/focus-area/hazards/$ projects/topic/hazards/ [R=301,L]
+RewriteRule ^about/case-studies/focus-area/oceans/$ projects/topic/oceans/ [R=301,L]
+RewriteRule ^about/case-studies/megaquakes-planning-for-the-next-big-one-in-cascadia/$ projects/ [R=301,L]
+RewriteRule ^about/case-studies/protecting-a-place-for-the-people-by-the-water/$ projects/ [R=301,L]
+RewriteRule ^about/case-studies/washington-meets-ocean-acidification-head-on/$ projects/ [R=301,L]
+RewriteRule ^about/contact-us/$ about/contact/ [R=301,L]
+RewriteRule ^about/leadership/$ about/people/ [R=301,L]
+RewriteRule ^about/news-and-events/focus-area/ecosystems/$ news-and-events/topic/ecosystems/ [R=301,L]
+RewriteRule ^about/news-and-events/focus-area/hazards/$ news-and-events/topic/hazards/ [R=301,L]
+RewriteRule ^about/news-and-events/focus-area/oceans/$ news-and-events/topic/oceans/ [R=301,L]
+RewriteRule ^building-climate-security-and-resilience/$ members-and-affiliates/climate-impacts-group/ [R=301,L]
+RewriteRule ^planning-wisely-for-natural-hazards/$ news-and-events/topic/hazards/ [R=301,L]
+RewriteRule ^protecting-ocean-health/$ members-and-affiliates/washington-ocean-acidification-center/ [R=301,L]
+RewriteRule ^sustaining-healthy-ecosystems/$ members-and-affiliates/doris-duke-conservation-scholars/ [R=301,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
