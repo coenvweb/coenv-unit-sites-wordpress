@@ -105,3 +105,7 @@ wp-content/object-cache.php
 
 # Ignore php temp and phpMyAdmin dirs
 php*
+
+#Ignoring htaccess now
+.htaccess
+.htaccess-dev
