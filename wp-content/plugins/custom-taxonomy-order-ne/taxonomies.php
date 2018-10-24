@@ -53,8 +53,8 @@ function custom_taxonomy_order() {
 							<ul id="custom-taxonomy-list">
 								<?php
 								foreach ( $taxonomies_ordered as $taxonomy ) { ?>
-									<li id="<?php echo $taxonomy->name; ?>" class="lineitem"><?php echo $taxonomy->name; ?></li>
-									<?php
+									<li id="<?php echo $taxonomy->name; ?>" class="lineitem"><?php echo  $taxonomy->label . ' &nbsp;(' . $taxonomy->name . ')';?></li>
+								<?php
 								} ?>
 							</ul>
 						</div>
@@ -142,3 +142,31 @@ function customtaxorder_sort_taxonomies( $taxonomies = array() ) {
 
 	return $taxonomies_ordered;
 }
+
+
+/*
+ * Sort the taxonomies for WooCommerce
+ *
+ * Parameter: $taxonomies, array with a list of taxonomy objects of WC_Product_Attribute.
+ *
+ * Returns: array with list of taxonomies, ordered correctly.
+ *
+ * @since: 2.10.0
+ *
+ */
+function customtaxorder_sort_woocommerce_taxonomies( $attributes ) {
+	if ( is_array( $attributes ) && ! empty( $attributes ) ) {
+		foreach ( $attributes as $attribute ) {
+			if ( is_object( $attribute ) && is_a( $attribute, 'WC_Product_Attribute' ) ) {
+				// nothing to do
+			} else {
+				return $attributes; // not an attribute we are looking for.
+			}
+		}
+		// We have the correct data.
+		$attributes = customtaxorder_sort_taxonomies( $attributes );
+	}
+
+	return $attributes;
+}
+add_filter( 'woocommerce_product_get_attributes', 'customtaxorder_sort_woocommerce_taxonomies' );

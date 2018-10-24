@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.9.5
+Version: 2.10.0
 Author: Marcel Pol
 Author URI: http://zenoweb.nl/
 License: GPLv2 or later
@@ -40,7 +40,7 @@ Domain Path: /lang/
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.9.5');
+define('CUSTOMTAXORDER_VER', '2.10.0');
 
 
 function customtaxorder_register_settings() {
@@ -61,6 +61,7 @@ function customtaxorder_update_settings() {
 
 
 /*
+ * Get settings for ordering this taxonomy.
  * $customtaxorder_settings is an array with key: $taxonomy->name and value: setting (0, 1, 2).
  */
 function customtaxorder_get_settings() {
@@ -104,13 +105,17 @@ function customtaxorder_taxonomies_validate($input) {
 	return $input;
 }
 
+
+/*
+ * Add all the admin menu pages.
+ */
 function customtaxorder_menu() {
 	$args = array( 'public' => true );
 	$output = 'objects';
 	$taxonomies = get_taxonomies($args, $output);
 
 	// Also make the link_category available if activated.
-	$linkplugin = "link-manager/link-manager.php";
+	$linkplugin = 'link-manager/link-manager.php';
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	if ( is_plugin_active($linkplugin) ) {
 		$args = array( 'name' => 'link_category' );
@@ -247,17 +252,16 @@ add_action( 'customtaxorder_update_order', 'customtaxorder_flush_cache' );
 
 
 /*
- * customtaxorder_sub_query
- * Function to give an option for the list of sub-taxonomies
+ * Function to give dropdown options for the list of sub-taxonomies.
  */
 function customtaxorder_sub_query( $terms, $tax ) {
 	$options = '';
-	foreach ( $terms as $term ) :
+	foreach ( $terms as $term ) {
 		$subterms = get_term_children( $term->term_id, $tax );
 		if ( $subterms ) {
 			$options .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
 		}
-	endforeach;
+	}
 	return $options;
 }
 
@@ -517,9 +521,7 @@ function customtaxorder_about() {
 
 
 /*
- * customtaxorder_links
  * Add Settings link to the main plugin page
- *
  */
 function customtaxorder_links( $links, $file ) {
 	if ( $file == plugin_basename( dirname(__FILE__).'/customtaxorder.php' ) ) {
@@ -540,7 +542,6 @@ add_action('plugins_loaded', 'customtaxorder_load_lang');
 
 
 /*
- * customtaxorder_activate
  * Function called at activation time.
  */
 function _customtaxorder_activate() {

@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 4.9
-Stable tag: 2.9.5
+Stable tag: 2.10.0
 License: GPLv2 or later
 
 
@@ -147,6 +147,11 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 2.10.0 =
+* 2018-10-17
+* Sort attributes for WooCommerce automatically.
+* Show name and label of taxonomy in the lists.
 
 = 2.9.5 =
 * 2018-09-07
