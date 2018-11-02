@@ -32,4 +32,24 @@ function marketo_signup_form($atts) {
     return $output;
 }
 add_shortcode('mkto_signup','marketo_signup_form');
+
+// iframe shortcode. ex. [iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src=""]
+add_shortcode( 'iframe' , 'coenv_shortcode_iframe' );
+function coenv_shortcode_iframe($args, $content) {
+    $keys = array("src", "width", "height", "scrolling", "marginwidth", "marginheight", "frameborder");
+    $arguments = coenv_extract_shortcode_arguments($args, $keys);
+    return '<iframe ' . $arguments . '></iframe>';
+}
+
+function coenv_extract_shortcode_arguments($args, $keys) {
+    $result = "";
+    foreach ($keys as $key) {
+        if (isset($args[$key])) {
+            $result .= $key . '="' . $args[$key] . '" ';
+        }
+    }
+    return $result;
+}
+
+
 ?>

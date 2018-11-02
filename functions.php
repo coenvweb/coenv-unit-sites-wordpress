@@ -51,6 +51,9 @@ require_once('library/rewrites.php');
 // Custom shortcodes
 require_once('library/shortcodes.php');
 
+// GDPR Compliance
+require_once('library/gdpr.php');
+
 // Need to be sorted into includes
 
 

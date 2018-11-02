@@ -86,22 +86,21 @@
                 border-bottom: #292827 1px solid;
                 border-top: #43423f 1px solid;
                 min-height: rem-calc(28);
+                &:last-child {
+                    border-bottom: none;
+                }
+                &:first-child {
+                    border-top: none;
+                }
                 &:nth-child(9) {
                     border-bottom: none;
-                }   
-                &:nth-child(17) {
-                    border-bottom: none;
-                }   
-                &:nth-child(18) {
-                    border-top: none;
-                    border-bottom: none;
-                }   
-                &:nth-child(1) {
-                    border-top: none;
-                }   
+                }
                 &:nth-child(10) {
                     border-top: none;
-                }   
+                }
+                &:nth-child(11) {
+                    padding-bottom: rem-calc(2);
+                } 
 			}
 
 			a {

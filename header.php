@@ -2,6 +2,7 @@
 <html class="no-js" <?php language_attributes(); ?> >
   <head>
     <meta charset="utf-8" />
+    <meta name="twitter:dnt" content="on">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php if (is_front_page()) {
       echo bloginfo( 'name' );
