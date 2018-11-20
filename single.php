@@ -49,6 +49,7 @@
         			<h2 class="small-12 left article__title"><a href="<?php echo $post_link_url; ?>" <?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
 				</header>
 				<div class="article__content">
+				<div class="clear"></div>
 					<?php 
 
 					echo the_content();
