@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Email Address Encoder
-Plugin URI: http://wordpress.org/plugins/email-address-encoder/
+Plugin URI: https://encoder.till.im/
 Description: A lightweight plugin to protect email addresses from email-harvesting robots by encoding them into decimal and hexadecimal entities.
-Version: 1.0.7
+Version: 1.0.9
 Author: Till Krüss
 Author URI: https://till.im/
 Text Domain: email-address-encoder
@@ -15,10 +15,18 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Define default filter-priority constant, unless it has already been defined.
+ * Load admin related code.
+ */
+require_once __DIR__ . '/includes/admin.php';
+
+/**
+ * Define filter-priority constant, unless it has already been defined.
  */
 if ( ! defined( 'EAE_FILTER_PRIORITY' ) ) {
-	define( 'EAE_FILTER_PRIORITY', 1000 );
+	define(
+        'EAE_FILTER_PRIORITY',
+        get_option( 'eae_filter_priority', 1000 )
+    );
 }
 
 /**
