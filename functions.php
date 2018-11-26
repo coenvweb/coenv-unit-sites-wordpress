@@ -2,6 +2,10 @@
 // Various clean up functions
 //require_once('library/cleanup.php');
 
+
+// Site Constants
+require_once('library/site-constants.php');
+
 // Required for Foundation to work properly
 require_once('library/breadcrumbs.php');
 
@@ -55,6 +59,9 @@ require_once('library/shortcodes.php');
 require_once('library/gdpr.php');
 
 // Need to be sorted into includes
+
+// Custom metas
+require_once('library/custom-metas.php');
 
 
 

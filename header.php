@@ -23,9 +23,9 @@
     } else {
       echo wp_title( ' | ', 'false', 'right' ); bloginfo( 'name' );
     } ?></title>
-    <meta name="description" content="We are dedicated to sustaining healthy marine and freshwater environments. Our faculty are recognized leaders in aquatic biology, sustainable fisheries management and aquatic resource conservation."></meta>
     
-  <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
+    <?php echo coenv_custom_metas(); ?>  
+   <script src="//www.washington.edu/static/alert.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri() ; ?>/css/app.css?time=<?php echo time(); ?>" />
       
     <link rel="apple-touch-icon" sizes="57x57" href="<?php echo get_template_directory_uri() ?>/assets/img/apple-icon-57x57.png">
