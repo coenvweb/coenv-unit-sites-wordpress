@@ -5,17 +5,32 @@ Tags: antispam, anti spam, spam, email, e-mail, mail, spider, crawler, harvester
 Requires at least: 2.0
 Tested up to: 5.0
 Requires PHP: 5.3
-Stable tag: 1.0.8
+Stable tag: 1.0.12
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-A lightweight plugin to protect email addresses from email-harvesting robots by encoding them into decimal and hexadecimal entities.
+A lightweight plugin that protects email addresses from email-harvesting robots, by encoding them into decimal and hexadecimal entities.
 
 
 == Description ==
 
-A lightweight plugin to protect plain email addresses and mailto links from email-harvesting robots by encoding them into decimal and hexadecimal entities. Has effect on the posts, pages, comments, excerpts, text widgets and other filtered content. Works without JavaScript — just simple spam protection.
+A lightweight plugin that protects plain email addresses and mailto links from email-harvesting robots, by encoding them into decimal and hexadecimal entities. Has an effect on the posts, pages, comments, excerpts, text widgets and other filtered content. Works without JavaScript — just simple spam protection.
 
+To see whether all your email addresses are properly protected, use the free [page scanner](https://encoder.till.im/scanner?utm_source=wp-plugin&amp;utm_medium=readme) tool.
+
+Other content (like phone numbers) can be protected using `[encode]` shortcode:
+
+`
+[encode]+1 (555) 123-4567[/encode]
+`
+
+= Premium Features =
+
+* **Full-page protection** that catches all email addresses
+* **Hardened protection** using JavaScript and CSS techniques
+* Built-in plugin support for **ACF**, **WooCommerce** and many others
+
+Check out the [Premium](https://encoder.till.im/scanner?utm_source=wp-plugin&amp;utm_medium=readme) version of Email Address Encoder.
 
 == Installation ==
 
@@ -36,14 +51,39 @@ Alternatively, you can use the `[encode]` shortcode: `[encode]+1 (555) 123-4567[
 
 = How can I make sure the plugin works? =
 
-You can use the "Page Scanner" found under _Settings -> Email Encoder_ to test if your email addresses are protected. Alternatively, you can look at the "page source" if your site. **Please note Chrome's Developer Tools, Safari's Web Inspector and others, because they decode decimal and hexadecimal entities into plain text.**
+You can use the "Page Scanner" found under _Settings -> Email Encoder_ to see whether all your email addresses are protected. Alternatively, you can manually look at the "page source" of your site.
+
+**Please note:** Chrome’s Developer Tools, Safari’s Web Inspector and others automatically decode decimal and hexadecimal entities. You need to look at the "plain HTML source code".
 
 = How can I filter other parts of my site? =
 
 [This guide](https://encoder.till.im/guide) will help you encode all email addresses that aren’t caught.
 
+== Screenshots ==
+
+1. Settings: Configure the plugin to your needs.
+2. Protection: This is how email addresses will look like under the hood.
+3. [Premium] Hardened protection: A preview of JavaScript and CSS based techniques
 
 == Changelog ==
+
+= 1.0.12 =
+
+* Avoid fatal error when using PHP 5.3 or lesser
+
+= 1.0.11 =
+
+* Added the ability to get notified when your site contains unprotected email addresses
+* Made `EAE_DISABLE_NOTICES` check stricter
+* Removed cross-promotion
+
+= 1.0.10 =
+
+* Added option to disable notices and promotions
+* Added activation and uninstall callbacks
+* Added `$hex` parameter to `eae_encode_str()` method
+* Added ability to turn off email encoding
+* Various code and UI improvements
 
 = 1.0.9 =
 
@@ -70,7 +110,7 @@ You can use the "Page Scanner" found under _Settings -> Email Encoder_ to test i
 
 = 1.0.5 =
 
-* Prevented error when `eae_encode_emails()` doesn't receive a `string`
+* Prevented error when `eae_encode_emails()` doesn’t receive a `string`
 
 = 1.0.4 =
 
@@ -96,6 +136,14 @@ You can use the "Page Scanner" found under _Settings -> Email Encoder_ to test i
 
 
 == Upgrade Notice ==
+
+= 1.0.11 =
+
+This release adds the ability to get notified when your site contains unprotected email addresses.
+
+= 1.0.10 =
+
+This release includes several improvements and new features.
 
 = 1.0.9 =
 
