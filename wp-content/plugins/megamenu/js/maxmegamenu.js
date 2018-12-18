@@ -373,7 +373,7 @@
                 plugin.switchToDesktop();
             }
 
-            plugin.calculateDynamicSubmenuWidths($("li.mega-menu-megamenu > a.mega-menu-link", $menu));
+            plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
         };
 
         plugin.reverseRightAlignedItems = function() {
@@ -490,7 +490,7 @@
             });
 
             $(window).on("load", function() {
-                plugin.calculateDynamicSubmenuWidths($("li.mega-menu-megamenu > a.mega-menu-link", $menu));
+                plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
             });
 
             plugin.bindMegaMenuEvents();
