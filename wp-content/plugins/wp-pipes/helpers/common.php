@@ -43,7 +43,11 @@ class ogb_common {
 		if ( JFolder::exists( $xml_dir . DS . 'fields' ) ) {
 			JForm::addFieldPath( $xml_dir . DS . 'fields' );
 		}
+
+		// load basic fieldset
+		$plugin_type = explode( ".", $type );
 		$form = JForm::getInstance( $name, $file, $options, false, $xpath );
+		$form = apply_filters( 'wppipes_form_instance', $form, $plugin_type );
 
 		$values = json_decode( $values );
 		$values = array( 'params' => $values );
@@ -80,8 +84,6 @@ class ogb_common {
 //		}
 
 		$element = '';
-		// load basic fieldset
-		$plugin_type = explode( ".", $type );
 //		$i           = 1;
 		foreach ( $form->getFieldset( 'basic' ) AS $field ) {
 			if ( $field->class == 'fullwidth' ) {

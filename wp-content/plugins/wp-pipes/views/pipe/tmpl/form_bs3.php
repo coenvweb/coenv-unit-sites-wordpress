@@ -40,7 +40,7 @@ $siteurl = get_site_url();
 	var ogb_loada = 1;
 	var pload = [];
 	var phload = [];
-
+	
 	jQuery(document).ready(function () {
 		ogb_id = obgid('ogb_id').value;
 		ogb_update_ips();

@@ -3,7 +3,7 @@ Contributors: thimpress, thongta, phamtungpth, tunnhn
 Donate link: http://thimpress.com/
 Tags: pipes, rss, syndicate, syndication, auto post, aggregation, aggregate, aggregator, autoblog, autoblogging, curating, curation, curated content, content curation, autopost, posts, seo, automation, automatic, import, export, migrate, migrator, migration, blogger, blogspot, feed to post, rss to post
 Requires at least: 3.8
-Tested up to: 4.9.7
+Tested up to: 5.0.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -148,6 +148,10 @@ Pipe Processor will process some input fields (depends on Processor) and provide
 4. Settings: where to configure cronjob.
 
 == Changelog ==
+= 1.33 =
++ Added hook to allow putting more configs of Post Destination with other plugins.
++ Added hook to allow triggering before the processing of Post Destination.
+
 = 1.32 =
 + Fix: the conflict issue with several other translate plugins.
 + Fix: bug when using both Get Fulltext processor and HTML Parser processor within PHP7+.

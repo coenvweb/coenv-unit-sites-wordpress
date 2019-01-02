@@ -4,7 +4,7 @@
  * Plugin URI: http://www.vivacityinfotech.net/
  * Description: Displays latest tweets from your Twitter account using Twitter oAuth API 1.1.
  * Author: Vivacity Infotech Pvt. Ltd.
- * Version: 1.4.9
+ * Version: 1.5
  * Author:       Vivacity Infotech Pvt. Ltd.
  * Author URI:   http://vivacityinfotech.net/
  * Author Email: support@vivacityinfotech.com

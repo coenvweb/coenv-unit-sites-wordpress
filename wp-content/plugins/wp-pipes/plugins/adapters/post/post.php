@@ -67,6 +67,7 @@ class WPPipesAdapter_post {
 	 * @return stdclass
 	 */
 	static function store( $data, $params ) {
+		do_action ( 'wppipes-before-store', $params);
 
 		if ( isset( $_GET['a'] ) ) {
 			_e("\n\n<br /><i><b>File:</b>" . __FILE__ . ' <b>Line:</b>' . __LINE__ . "</i><br />\n\n");

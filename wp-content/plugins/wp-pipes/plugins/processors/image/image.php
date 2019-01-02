@@ -59,14 +59,23 @@ class WPPipesPro_image {
 						continue;
 					}
 				}
-				if ( strpos( $enclosure['type'], 'image' ) !== false ) {
+                $imgExts = array( "gif", "jpg", "jpeg", "png", "tiff", "tif" );
+				$urlExt  = pathinfo( $enclosure['link'], PATHINFO_EXTENSION );
+				foreach ( $imgExts as $ext ) {
+					if ( strpos( $urlExt, $ext ) !== false ) {
+						$enclosure['link'] = str_replace($urlExt, $ext, $enclosure['link']);
+						$urlExt = $ext;
+						break;
+					}
+				}
+				if ( strpos( $enclosure['type'], 'image' ) !== false || in_array( strtolower( $urlExt ), $imgExts ) ) {
 					$html .= '<img src="' . $enclosure['link'] . '" title="' . $enclosure['title'] . '">';
 				}
 			}
 		} else {
 			$html = $data->html;
 		}
-
+		
 		if(filter_var($data->html, FILTER_VALIDATE_URL)){
 			$html .= '<img src="' . $data->html . '">';
 		}

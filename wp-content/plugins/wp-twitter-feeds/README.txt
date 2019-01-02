@@ -3,7 +3,8 @@ Contributors: vivacityinfotech.jaipur,planet-interactive
 Donate link: http://vivacityinfotech.net/paypal-donation/
 Tags:  wp twitter feeds,twitter feeds, twitter timeline,twitter widget,twitter widget for wordpress,wp twitter feeds widget,live tweets, live twitter feeds, tweets, feeds, wp twitter feeds plugin, twitter user tweets,  twitter 1.1, twitter api
 Requires at least: 3.5
-Tested up to: 4.5.2
+Tested up to: 5.0.2
+Stable tag: 1.5
 License: GPLv2 or later
 
 
@@ -94,6 +95,9 @@ Visit our <a href="http://vivacityinfotech.net/wordpress/plugins/wp-twitter-feed
 
 
 == Changelog ==
+= 1.5 =
+* Tested with the latest version for WordPress.
+
 = 1.4.9 =
 * Added language support.
 
