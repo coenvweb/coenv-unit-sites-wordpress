@@ -71,6 +71,14 @@ class ExactDN extends EWWWIO_Page_Parser {
 	public $allowed_domains = array();
 
 	/**
+	 * Path portion to remove at beginning of URL, usually for path-style S3 domains.
+	 *
+	 * @access public
+	 * @var string $remove_path
+	 */
+	private $remove_path = '';
+
+	/**
 	 * The ExactDN domain/zone.
 	 *
 	 * @access private
@@ -150,6 +158,9 @@ class ExactDN extends EWWWIO_Page_Parser {
 		add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
 		// Overrides for "pass through" images.
 		add_filter( 'exactdn_pre_args', array( $this, 'exactdn_remove_args' ), 10, 3 );
+		// Overrides for user exclusions.
+		add_filter( 'exactdn_skip_image', array( $this, 'exactdn_skip_user_exclusions' ), 9, 2 );
+		add_filter( 'exactdn_skip_for_url', array( $this, 'exactdn_skip_user_exclusions' ), 9, 2 );
 
 		// Responsive image srcset substitution.
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'filter_srcset_array' ), 1001, 5 );
@@ -180,11 +191,37 @@ class ExactDN extends EWWWIO_Page_Parser {
 		}
 
 		// Find the "local" domain.
-		$upload_dir          = wp_upload_dir( null, false );
-		$this->upload_domain = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? $this->parse_url( EXACTDN_LOCAL_DOMAIN, PHP_URL_HOST ) : $this->parse_url( $upload_dir['baseurl'], PHP_URL_HOST );
+		$s3_active = false;
+		if ( class_exists( 'Amazon_S3_And_CloudFront' ) ) {
+			global $as3cf;
+			$s3_region = $as3cf->get_setting( 'region' );
+			$s3_bucket = $as3cf->get_setting( 'bucket' );
+			$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
+			ewwwio_debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
+			if ( ! empty( $s3_domain ) ) {
+				$s3_active = true;
+			}
+		}
+
+		if ( $s3_active ) {
+			$upload_dir = array(
+				'baseurl' => 'https://' . $s3_domain,
+			);
+		} else {
+			$upload_dir = wp_upload_dir( null, false );
+		}
+		$upload_url_parts = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? $this->parse_url( EXACTDN_LOCAL_DOMAIN ) : $this->parse_url( $upload_dir['baseurl'] );
+		if ( empty( $upload_url_parts ) ) {
+			return;
+		}
+		$this->upload_domain = $upload_url_parts['host'];
 		ewwwio_debug_message( "allowing images from here: $this->upload_domain" );
+		if ( strpos( $this->upload_domain, 'amazonaws.com' ) && ! empty( $upload_url_parts['path'] ) ) {
+			$this->remove_path = rtrim( $upload_url_parts['path'], '/' );
+			ewwwio_debug_message( "removing this from urls: $this->remove_path" );
+		}
 		$this->allowed_domains[] = $this->upload_domain;
-		if ( strpos( $this->upload_domain, 'www' ) === false ) {
+		if ( ! $s3_active && strpos( $this->upload_domain, 'www' ) === false ) {
 			$this->allowed_domains[] = 'www.' . $this->upload_domain;
 		} else {
 			$nonwww = ltrim( 'www.', $this->upload_domain );
@@ -262,9 +299,26 @@ class ExactDN extends EWWWIO_Page_Parser {
 	 */
 	function activate_site() {
 		ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
-		$site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : get_home_url();
-		$url      = 'http://optimize.exactlywww.com/exactdn/activate.php';
-		$ssl      = wp_http_supports( array( 'ssl' ) );
+		$s3_active = false;
+		if ( class_exists( 'Amazon_S3_And_CloudFront' ) ) {
+			global $as3cf;
+			$s3_scheme = $as3cf->get_url_scheme();
+			$s3_region = $as3cf->get_setting( 'region' );
+			$s3_bucket = $as3cf->get_setting( 'bucket' );
+			$s3_domain = $as3cf->get_provider()->get_url_domain( $s3_bucket, $s3_region, null, array(), true );
+			ewwwio_debug_message( "found S3 domain of $s3_domain with bucket $s3_bucket and region $s3_region" );
+			if ( ! empty( $s3_domain ) ) {
+				$s3_active = true;
+			}
+		}
+
+		if ( $s3_active ) {
+			$site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : $s3_scheme . '://' . $s3_domain;
+		} else {
+			$site_url = defined( 'EXACTDN_LOCAL_DOMAIN' ) && EXACTDN_LOCAL_DOMAIN ? EXACTDN_LOCAL_DOMAIN : get_home_url();
+		}
+		$url = 'http://optimize.exactlywww.com/exactdn/activate.php';
+		$ssl = wp_http_supports( array( 'ssl' ) );
 		if ( $ssl ) {
 			$url = set_url_scheme( $url, 'https' );
 		}
@@ -285,6 +339,9 @@ class ExactDN extends EWWWIO_Page_Parser {
 		} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'domain' ) !== false ) {
 			$response = json_decode( $result['body'], true );
 			if ( ! empty( $response['domain'] ) ) {
+				if ( strpos( $site_url, 'amazonaws.com' ) || strpos( $site_url, 'digitaloceanspaces.com' ) ) {
+					$this->set_exactdn_option( 'verify_method', -1, false );
+				}
 				return $this->set_exactdn_domain( $response['domain'] );
 			}
 		} elseif ( ! empty( $result['body'] ) && strpos( $result['body'], 'error' ) !== false ) {
@@ -312,6 +369,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 		if ( ! empty( $last_checkin ) && $last_checkin > time() ) {
 			ewwwio_debug_message( 'not time yet: ' . $this->human_time_diff( $this->get_exactdn_option( 'checkin' ) ) );
 			if ( $this->get_exactdn_option( 'suspended' ) ) {
+				ewwwio_debug_message( 'suspended marker, returning false until next checkin' );
 				return false;
 			}
 			return true;
@@ -380,7 +438,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 		} elseif ( ! empty( $result['body'] ) ) {
 			$response      = json_decode( $result['body'], true );
 			$error_message = $response['error'];
-			ewwwio_debug_message( "exactdn activation request failed: $error_message" );
+			ewwwio_debug_message( "exactdn verification request failed: $error_message" );
 			$this->set_exactdn_option( 'suspended', 1 );
 			return false;
 		}
@@ -613,6 +671,13 @@ class ExactDN extends EWWWIO_Page_Parser {
 
 		$content = $this->filter_the_content( $content );
 
+		/**
+		 * Allow parsing the full page content after ExactDN is finished with it.
+		 *
+		 * @param string $content The fully-parsed HTML code of the page.
+		 */
+		$content = apply_filters( 'exactdn_the_page', $content );
+
 		$this->filtering_the_page = false;
 		ewwwio_debug_message( "parsing page took $this->elapsed_time seconds" );
 		return $content;
@@ -733,7 +798,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 				}
 
 				// Check for relative urls that start with a slash. Unlikely that we'll attempt relative urls beyond that.
-				if ( '/' === substr( $src, 0, 1 ) && '/' !== substr( $src, 1, 1 ) ) {
+				if ( '/' === substr( $src, 0, 1 ) && '/' !== substr( $src, 1, 1 ) && false === strpos( $this->upload_domain, 'amazonaws.com' ) && false === strpos( $this->upload_domain, 'digitaloceanspaces.com' ) ) {
 					$src = '//' . $this->upload_domain . $src;
 				}
 
@@ -1029,9 +1094,14 @@ class ExactDN extends EWWWIO_Page_Parser {
 					$content = preg_replace( '#(<use.+?href=["\'])(https?:)?//(?:www\.)?' . $escaped_upload_domain . '([^"\'?>]+?)/wp-content/#is', '$1$2//' . $this->upload_domain . '$3/?wpcontent-bypass?/', $content );
 				}
 				// Pre-empt rewriting of wp-includes and wp-content if the extension is not allowed by using a temporary placeholder.
-				$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '([^"\'?>]+?)?/wp-content/([^"\'?>]+?)\.(php|ashx|m4v|mov|wvm|qt|webm|ogv|mp4|m4p|mpg|mpeg|mpv)#i', '$1//' . $this->upload_domain . '$2/?wpcontent-bypass?/$3.$4', $content );
+				$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '([^"\'?>]+?)?/wp-content/([^"\'?>]+?)\.(htm|html|php|ashx|m4v|mov|wvm|qt|webm|ogv|mp4|m4p|mpg|mpeg|mpv)#i', '$1//' . $this->upload_domain . '$2/?wpcontent-bypass?/$3.$4', $content );
 				$content = str_replace( 'wp-content/themes/jupiter"', '?wpcontent-bypass?/themes/jupiter"', $content );
-				$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '/([^"\'?>]+?)?(nextgen-image|wp-includes|wp-content)/#i', '$1//' . $this->exactdn_domain . '/$2$3/', $content );
+				$content = str_replace( 'wp-content/plugins/anti-captcha/', '?wpcontent-bypass?/plugins/anti-captcha', $content );
+				if ( strpos( $this->upload_domain, 'amazonaws.com' ) || strpos( $this->upload_domain, 'digitaloceanspaces.com' ) ) {
+					$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . $this->remove_path . '/#i', '$1//' . $this->exactdn_domain . '/', $content );
+				} else {
+					$content = preg_replace( '#(https?:)?//(?:www\.)?' . $escaped_upload_domain . '/([^"\'?>]+?)?(nextgen-image|wp-includes|wp-content)/#i', '$1//' . $this->exactdn_domain . '/$2$3/', $content );
+				}
 				$content = str_replace( '?wpcontent-bypass?', 'wp-content', $content );
 			}
 		}
@@ -1042,7 +1112,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 		ewwwio_debug_message( "parsing the_content took $elapsed_time seconds" );
 		$this->elapsed_time += microtime( true ) - $started;
 		ewwwio_debug_message( "parsing the page took $this->elapsed_time seconds so far" );
-		if ( $this->elapsed_time > .5 ) {
+		if ( ! ewww_image_optimizer_get_option( 'exactdn_prevent_db_queries' ) && $this->elapsed_time > .5 ) {
 			ewww_image_optimizer_set_option( 'exactdn_prevent_db_queries', true );
 		}
 		return $content;
@@ -1170,6 +1240,10 @@ class ExactDN extends EWWWIO_Page_Parser {
 
 		// Get the image URL and proceed with ExactDN replacement if successful.
 		$image_url = wp_get_attachment_url( $attachment_id );
+		/** This filter is already documented in class-exactdn.php */
+		if ( apply_filters( 'exactdn_skip_image', false, $image_url, null ) ) {
+			return $image;
+		}
 		ewwwio_debug_message( $image_url );
 		ewwwio_debug_message( $attachment_id );
 		if ( is_string( $size ) || is_int( $size ) ) {
@@ -1647,7 +1721,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 				}
 				foreach ( $currentwidths as $currentwidth ) {
 					// If a new width would be within 50 pixels of an existing one or larger than the full size image, skip.
-					if ( abs( $currentwidth - $newwidth ) < 50 ) {
+					if ( 1 !== $multiplier && abs( $currentwidth - $newwidth ) < 50 ) {
 						continue 2; // Back to the foreach ( $multipliers as $multiplier ).
 					}
 				} // foreach ( $currentwidths as $currentwidth ){
@@ -2080,6 +2154,27 @@ class ExactDN extends EWWWIO_Page_Parser {
 	}
 
 	/**
+	 * Exclude images and other resources from being processed based on user specified list.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @param boolean $skip Whether ExactDN should skip processing.
+	 * @param string  $url Resource URL.
+	 * @return boolean True to skip the resource, unchanged otherwise.
+	 */
+	function exactdn_skip_user_exclusions( $skip, $url ) {
+		if ( $this->user_exclusions ) {
+			foreach ( $this->user_exclusions as $exclusion ) {
+				if ( false !== strpos( $url, $exclusion ) ) {
+					ewwwio_debug_message( "user excluded $url via $exclusion" );
+					return true;
+				}
+			}
+		}
+		return $skip;
+	}
+
+	/**
 	 * Converts a local script/css url to use ExactDN.
 	 *
 	 * @param string $url URL to the resource being parsed.
@@ -2092,20 +2187,27 @@ class ExactDN extends EWWWIO_Page_Parser {
 		ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 		$parsed_url = $this->parse_url( $url );
 
-		if ( $this->user_exclusions ) {
-			foreach ( $this->user_exclusions as $exclusion ) {
-				if ( false !== strpos( $url, $exclusion ) ) {
-					ewwwio_debug_message( "user excluded $url via $exclusion" );
-					return $url;
-				}
-			}
-		}
 		if ( false !== strpos( $url, 'wp-admin/' ) ) {
 			return $url;
 		}
 		if ( false !== strpos( $url, 'xmlrpc.php' ) ) {
 			return $url;
 		}
+		if ( strpos( $url, 'wp-content/plugins/anti-captcha/' ) ) {
+			return $url;
+		}
+		/**
+		 * Allow specific URLs to avoid going through ExactDN.
+		 *
+		 * @param bool false Should the URL be returned as is, without going through ExactDN. Default to false.
+		 * @param string $url Resource URL.
+		 * @param array|string $args Array of ExactDN arguments.
+		 * @param string|null $scheme URL scheme. Default to null.
+		 */
+		if ( true === apply_filters( 'exactdn_skip_for_url', false, $url, array(), null ) ) {
+			return $url;
+		}
+
 		// Unable to parse.
 		if ( ! $parsed_url || ! is_array( $parsed_url ) || empty( $parsed_url['host'] ) || empty( $parsed_url['path'] ) ) {
 			ewwwio_debug_message( 'src url no good' );
@@ -2179,12 +2281,12 @@ class ExactDN extends EWWWIO_Page_Parser {
 		}
 
 		/**
-		 * Allow specific image URls to avoid going through ExactDN.
+		 * Allow specific URLs to avoid going through ExactDN.
 		 *
-		 * @param bool false Should the image be returned as is, without going through ExactDN. Default to false.
-		 * @param string $image_url Image URL.
+		 * @param bool false Should the URL be returned as is, without going through ExactDN. Default to false.
+		 * @param string $image_url Resource URL.
 		 * @param array|string $args Array of ExactDN arguments.
-		 * @param string|null $scheme Image scheme. Default to null.
+		 * @param string|null $scheme URL scheme. Default to null.
 		 */
 		if ( true === apply_filters( 'exactdn_skip_for_url', false, $image_url, $args, $scheme ) ) {
 			return $image_url;
@@ -2274,6 +2376,9 @@ class ExactDN extends EWWWIO_Page_Parser {
 			return $image_url;
 		}
 
+		if ( $this->remove_path && 0 === strpos( $image_url_parts['path'], $this->remove_path ) ) {
+			$image_url_parts['path'] = substr( $image_url_parts['path'], strlen( $this->remove_path ) );
+		}
 		$domain      = 'http://' . $this->exactdn_domain . '/';
 		$exactdn_url = $domain . ltrim( $image_url_parts['path'], '/' );
 		ewwwio_debug_message( "bare exactdn url: $exactdn_url" );
