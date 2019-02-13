@@ -834,6 +834,10 @@ class ExactDN extends EWWWIO_Page_Parser {
 					}
 
 					list( $filename_width, $filename_height ) = $this->get_dimensions_from_filename( $src );
+					if ( false === $width && false === $height ) {
+						$width  = $filename_width;
+						$height = $filename_height;
+					}
 					// WP Attachment ID, if uploaded to this site.
 					preg_match( '#class=["|\']?[^"\']*wp-image-([\d]+)[^"\']*["|\']?#i', $images['img_tag'][ $index ], $attachment_id );
 					if ( ! ewww_image_optimizer_get_option( 'exactdn_prevent_db_queries' ) && empty( $attachment_id ) ) {
@@ -881,6 +885,7 @@ class ExactDN extends EWWWIO_Page_Parser {
 									if ( ( false !== $width && $width > $src_per_wp[1] ) || ( false !== $height && $height > $src_per_wp[2] ) ) {
 										$width  = false === $width ? false : min( $width, $src_per_wp[1] );
 										$height = false === $height ? false : min( $height, $src_per_wp[2] );
+										ewwwio_debug_message( "constrained to attachment dims, w=$width and h=$height" );
 									}
 
 									// If no width and height are found, max out at source image's natural dimensions.
@@ -889,8 +894,10 @@ class ExactDN extends EWWWIO_Page_Parser {
 										$width     = $src_per_wp[1];
 										$height    = $src_per_wp[2];
 										$transform = 'fit';
+										ewwwio_debug_message( "no dims, using attachment dims, w=$width and h=$height" );
 									} elseif ( isset( $size ) && array_key_exists( $size, $image_sizes ) && isset( $image_sizes[ $size ]['crop'] ) ) {
 										$transform = (bool) $image_sizes[ $size ]['crop'] ? 'resize' : 'fit';
+										ewwwio_debug_message( 'attachment size set to crop' );
 									}
 								}
 							} else {
@@ -1039,7 +1046,18 @@ class ExactDN extends EWWWIO_Page_Parser {
 							}
 						}
 					}
+				} elseif ( $lazy && ! empty( $placeholder_src ) && $this->validate_image_url( $placeholder_src ) ) {
+					$new_tag = $tag;
+					// If Lazy Load is in use, pass placeholder image through ExactDN.
+					$placeholder_src = $this->generate_url( $placeholder_src );
+					if ( $placeholder_src != $placeholder_src_orig ) {
+						$new_tag = str_replace( $placeholder_src_orig, str_replace( '&#038;', '&', esc_url( $placeholder_src ) ), $new_tag );
+						// Replace original tag with modified version.
+						$content = str_replace( $tag, $new_tag, $content );
+					}
+					unset( $placeholder_src );
 				} // End if().
+
 				// At this point, we discard the original src in favor of the ExactDN url.
 				if ( ! empty( $exactdn_url ) ) {
 					$src = $exactdn_url;
@@ -2150,6 +2168,9 @@ class ExactDN extends EWWWIO_Page_Parser {
 		if ( strpos( $image_url, 'lazy-load/images/' ) ) {
 			return array();
 		}
+		if ( strpos( $image_url, 'public/images/spacer.' ) ) {
+			return array();
+		}
 		return $args;
 	}
 
@@ -2318,15 +2339,6 @@ class ExactDN extends EWWWIO_Page_Parser {
 		 */
 		$image_url = apply_filters( 'exactdn_pre_image_url', $image_url, $args, $scheme );
 
-		/**
-		 * Filter the ExactDN image parameters before they are applied to an image.
-		 *
-		 * @param array|string $args Array of ExactDN arguments.
-		 * @param string $image_url Image URL.
-		 * @param string|null $scheme Image scheme. Default to null.
-		 */
-		$args = apply_filters( 'exactdn_pre_args', $args, $image_url, $scheme );
-
 		if ( empty( $image_url ) ) {
 			return $image_url;
 		}
@@ -2338,6 +2350,22 @@ class ExactDN extends EWWWIO_Page_Parser {
 			ewwwio_debug_message( 'src url no good' );
 			return $image_url;
 		}
+
+		if ( isset( $image_url_parts['scheme'] ) && 'https' == $image_url_parts['scheme'] ) {
+			if ( is_array( $args ) ) {
+				$args['ssl'] = 1;
+			}
+			$scheme = 'https';
+		}
+
+		/**
+		 * Filter the ExactDN image parameters before they are applied to an image.
+		 *
+		 * @param array|string $args Array of ExactDN arguments.
+		 * @param string $image_url Image URL.
+		 * @param string|null $scheme Image scheme. Default to null.
+		 */
+		$args = apply_filters( 'exactdn_pre_args', $args, $image_url, $scheme );
 
 		if ( is_array( $args ) ) {
 			// Convert values that are arrays into strings.
@@ -2408,11 +2436,6 @@ class ExactDN extends EWWWIO_Page_Parser {
 			}
 		}
 		ewwwio_debug_message( "exactdn url with args: $exactdn_url" );
-
-		if ( isset( $image_url_parts['scheme'] ) && 'https' == $image_url_parts['scheme'] ) {
-			$exactdn_url = add_query_arg( 'ssl', 1, $exactdn_url );
-			$scheme      = 'https';
-		}
 
 		return $this->url_scheme( $exactdn_url, $scheme );
 	}

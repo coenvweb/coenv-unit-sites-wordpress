@@ -483,6 +483,10 @@ function ewww_image_optimizer_bulk_script( $hook ) {
 	} else {
 		$attachment_count = ewww_image_optimizer_count_unscanned_attachments();
 	}
+	if ( empty( $attachment_count ) && ! ewww_image_optimizer_count_attachments() ) {
+		update_option( 'ewww_image_optimizer_bulk_resume', '' );
+		update_option( 'ewww_image_optimizer_aux_resume', '' );
+	}
 	wp_enqueue_script( 'ewwwbulkscript', plugins_url( '/includes/eio.js', __FILE__ ), array( 'jquery', 'jquery-ui-slider', 'jquery-ui-progressbar', 'postbox', 'dashboard' ), EWWW_IMAGE_OPTIMIZER_VERSION );
 	// Number of images in the ewwwio_table (previously optimized images).
 	$image_count = ewww_image_optimizer_aux_images_table_count();
@@ -680,7 +684,9 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 		$ewwwdb = $wpdb;
 	}
 	global $optimized_list;
-	/* $queued_ids            = array(); */
+	$queued_ids            = array();
+	$skipped_ids           = array();
+	$tiny_notice           = '';
 	$image_count           = 0;
 	$attachments_processed = 0;
 	$attachment_query      = '';
@@ -814,12 +820,15 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 			$remote_file = false;
 			if ( in_array( $selected_id, $bad_attachments ) ) { // a known broken attachment, which would mean we already tried this once before...
 				ewwwio_debug_message( "skipping bad attachment $selected_id" );
-				ewww_image_optimizer_delete_queued_image( $selected_id );
+				$skipped_ids[] = $selected_id;
 				continue;
 			}
-			if ( ! empty( $attachment_meta[ $selected_id ]['tinypng'] ) ) {
+			if ( ! empty( $attachment_meta[ $selected_id ]['tinypng'] ) && empty( $_REQUEST['ewww_force'] ) ) {
 				ewwwio_debug_message( "TinyPNG already compressed $selected_id" );
-				ewww_image_optimizer_delete_queued_image( $selected_id );
+				if ( ! $tiny_notice ) {
+					$tiny_notice = esc_html__( 'Images compressed by TinyJPG and TinyPNG have been skipped, refresh and use the Force Re-optimize option to override.', 'ewww-image-optimizer' );
+				}
+				$skipped_ids[] = $selected_id;
 				continue;
 			}
 			if ( empty( $attachment_meta[ $selected_id ]['meta'] ) ) {
@@ -863,7 +872,7 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 			}
 
 			if ( ! in_array( $mime, $enabled_types ) ) {
-				ewww_image_optimizer_delete_queued_image( $selected_id );
+				$skipped_ids[] = $selected_id;
 				continue;
 			}
 			ewwwio_debug_message( "id: $selected_id and type: $mime" );
@@ -887,13 +896,13 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 				ewwwio_debug_message( "remote file possible: $file_path" );
 				if ( ! $file_path ) {
 					ewwwio_debug_message( 'no file found on remote storage, bailing' );
-					ewww_image_optimizer_delete_queued_image( $selected_id );
+					$skipped_ids[] = $selected_id;
 					continue;
 				}
 				$remote_file = true;
 			} elseif ( ! $file_path ) {
 				ewwwio_debug_message( "no file path for $selected_id" );
-				ewww_image_optimizer_delete_queued_image( $selected_id );
+				$skipped_ids[] = $selected_id;
 				continue;
 			}
 			ewww_image_optimizer_debug_log();
@@ -1172,10 +1181,9 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 			if ( $pending ) {
 				ewwwio_debug_message( "$selected_id added to queue" );
 				ewww_image_optimizer_debug_log();
-				/* $queued_ids[] = $selected_id; */
-				ewww_image_optimizer_update_scanned_image( $selected_id );
+				$queued_ids[] = $selected_id;
 			} else {
-				ewww_image_optimizer_delete_queued_image( $selected_id );
+				$skipped_ids[] = $selected_id;
 			}
 			$attachment_images = array();
 			ewwwio_debug_message( 'checking for bad attachment' );
@@ -1193,21 +1201,11 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 		ewwwio_debug_message( 'finished foreach of attachment_ids' );
 		ewww_image_optimizer_debug_log();
 
-		/*
-		REMOVE
-		update_option( 'ewww_image_optimizer_scanning_attachments', $attachment_ids, false );
-		$attachments_queued = get_option( 'ewww_image_optimizer_bulk_attachments' );
-		if ( empty( $attachments_queued ) || ! is_array( $attachments_queued ) ) {
-			ewwwio_debug_message( 'storing queued attachments in bulk_attachments' );
-			ewww_image_optimizer_debug_log();
-			update_option( 'ewww_image_optimizer_bulk_attachments', $queued_ids, false );
-		} else {
-			ewwwio_debug_message( 'storing queued attachments in bulk_attachments, merged with existing' );
-			ewww_image_optimizer_debug_log();
-			update_option( 'ewww_image_optimizer_bulk_attachments', array_merge( $attachments_queued, $queued_ids ), false );
-		}
-		$queued_ids = array();
-		*/
+		ewww_image_optimizer_update_scanned_images( $queued_ids );
+		ewww_image_optimizer_delete_queued_images( $skipped_ids );
+		$queued_ids  = array();
+		$skipped_ids = array();
+
 		ewwwio_debug_message( 'finished a loop in the while, going back for more possibly' );
 		$attachment_ids = ewww_image_optimizer_get_unscanned_attachments( 'media', $max_query );
 		ewww_image_optimizer_debug_log();
@@ -1216,9 +1214,6 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 	ewww_image_optimizer_debug_log();
 	if ( ! empty( $images ) ) {
 		ewww_image_optimizer_mass_insert( $wpdb->ewwwio_images, $images, $field_formats );
-	}
-	if ( ! empty( $reset_images ) ) {
-		/* $ewwwdb->query( "UPDATE $ewwwdb->ewwwio_images SET pending = 1, updated = updated WHERE id IN (" . implode( ',', $reset_images ) . ')' ); */
 	}
 	ewww_image_optimizer_reset_images( $reset_images );
 	if ( 250 > $attachments_processed ) { // in-memory table is too slow.
@@ -1262,6 +1257,7 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 					'remaining'      => sprintf( esc_html__( 'Stage 1, %d images left to scan.', 'ewww-image-optimizer' ), $remaining ) . "&nbsp;<img src='$loading_image' />",
 					'notice'         => $notice,
 					'bad_attachment' => $bad_attachment,
+					'tiny_skip'      => $tiny_notice,
 				)
 			)
 		);
@@ -1273,6 +1269,7 @@ function ewww_image_optimizer_media_scan( $hook = '' ) {
 					'remaining'      => esc_html__( 'Stage 2, please wait.', 'ewww-image-optimizer' ) . "&nbsp;<img src='$loading_image' />",
 					'notice'         => $notice,
 					'bad_attachment' => $bad_attachment,
+					'tiny_skip'      => $tiny_notice,
 				)
 			)
 		);
@@ -1694,7 +1691,7 @@ function ewww_image_optimizer_bulk_loop( $hook = '', $delay = 0 ) {
 		}
 		// When an image (attachment) is done, pull the next attachment ID off the stack.
 		if ( ( 'full' == $next_image->resize || empty( $next_image->resize ) ) && ! empty( $attachment ) && $attachment != $next_image->attachment_id ) {
-			ewww_image_optimizer_delete_queued_image( $attachment );
+			ewww_image_optimizer_delete_queued_images( array( $attachment ) );
 			$attachment = (int) array_shift( $attachments ); // Pull the first image off the stack.
 			if ( ! empty( $attachments ) && is_array( $attachments ) ) {
 				$attachment = (int) $attachments[0]; // Then grab the next one (if any are left).
