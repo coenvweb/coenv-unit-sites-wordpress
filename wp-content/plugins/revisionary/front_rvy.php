@@ -2,7 +2,7 @@
 
 class RevisionaryFront {
 
-	function RevisionaryFront() {
+	function __construct() {
 		if ( ! defined('RVY_CONTENT_ROLES') || ! $GLOBALS['revisionary']->content_roles->is_direct_file_access() ) {
 			add_filter( 'posts_request', array( &$this, 'flt_view_revision' ) );
 			add_action( 'template_redirect', array( &$this, 'act_template_redirect' ) );
@@ -219,8 +219,8 @@ class RevisionaryFront {
 					add_action( 'wp_head', 'rvy_front_css' );
 	
 					$html = '<div class="rvy_view_revision rvy_view_' . $class . '">' . '<span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a><span class="rvy_rev_datemsg">'. "$date_msg</span></span></div>";
-	
-					add_action( 'wp_head', create_function( '', "echo('". $html . "');" ), 99 );	// this should be inserted at the top of <body> instead, but currently no way to do it 
+					
+					new RvyScheduledHtml( $html, 'wp_head', 99 );  // this should be inserted at the top of <body> instead, but currently no way to do it 
 				}
 				
 				$GLOBALS['revisionary']->skip_revision_allowance = $orig_skip;
@@ -238,7 +238,8 @@ class RevisionaryFront {
 				add_action( 'wp_head', 'rvy_front_css' );
 
 				$html = '<div class="preview_approval_rvy"><span class="rvy_preview_linkspan"><a href="' . $link . '">' . $link_caption . '</a></span></div>';
-				add_action( 'template_redirect', create_function( '', "echo('". $html . "');" ) );
+				
+				new RvyScheduledHtml( $html, 'template_redirect' );
 			}
 		// WP post/page preview passes this arg
 		} elseif ( ! empty( $_GET['preview_id'] ) ) {
@@ -272,6 +273,23 @@ class RevisionaryFront {
 
 }
 
+class RvyScheduledHtml {
+	var $html;
+	var $action;
+	var $priority;
+
+	function __construct( $html, $action, $priority = 10 ) {
+		$this->html = $html;
+		$this->priority = $priority;
+
+		add_action( $action, array( $this, 'echo_html', $priority ) );
+	}
+
+	function echo_html() {
+		echo $this->html;
+		remove_action( $action, array( $this, 'echo_html', $priority ) );
+	}
+}
 
 function rvy_front_css() {
 	$wp_content = ( is_ssl() || ( is_admin() && defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN ) ) ? str_replace( 'http:', 'https:', WP_CONTENT_URL ) : WP_CONTENT_URL;

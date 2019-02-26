@@ -28,14 +28,24 @@ add_filter( 'plugin_action_links', 'eae_plugin_actions_links', 10, 2 );
 add_action( 'admin_notices', 'eae_page_scanner_notice' );
 
 /**
+ * Register scripts callback.
+ */
+add_action( 'wp_enqueue_scripts', 'eae_enqueue_scripts' );
+
+/**
  * Register admin scripts callback.
  */
-add_action( 'admin_enqueue_scripts', 'eae_enqueue_script' );
+add_action( 'admin_enqueue_scripts', 'eae_enqueue_admin_scripts' );
 
 /**
  * Register callback to transmit email address to remote server.
  */
 add_action( 'load-settings_page_email-address-encoder', 'eae_transmit_email' );
+
+/**
+ * Register callback to clear page caches.
+ */
+add_action( 'load-options.php', 'eae_clear_caches' );
 
 /**
  * Register AJAX callback for "eae_dismiss_notice" action.
@@ -152,11 +162,64 @@ function eae_plugin_actions_links( $links, $file ) {
 }
 
 /**
+ * Callback to load email detector script.
+ *
+ * @return void
+ */
+function eae_enqueue_scripts() {
+    if ( ! is_admin_bar_showing() ) {
+        return;
+    }
+
+    if ( is_preview() ) {
+        return;
+    }
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    if ( defined( 'EAE_DISABLE_NOTICES' ) && EAE_DISABLE_NOTICES ) {
+        return;
+    }
+
+    if ( get_option( 'eae_notices', '0' ) == '1' ) {
+        return;
+    }
+
+    add_action( 'wp_footer', 'eae_adminbar_styles' );
+
+    wp_enqueue_script(
+        'email-detector',
+        plugins_url( 'email-detector.js', __FILE__ ),
+        null,
+        false,
+        true
+    );
+
+    wp_localize_script( 'email-detector', 'eaeDetectorL10n', array(
+        'one_email' => __( '1 Unprotected Email', 'email-address-encoder' ),
+        'many_emails' => __( '{number} Unprotected Emails', 'email-address-encoder' ),
+    ) );
+}
+
+/**
+ * Callback to load email detector script.
+ *
+ * @return void
+ */
+function eae_adminbar_styles() {
+    $styles = '#wp-admin-bar-eae > .ab-item:before { content: "\f534"; top: 2px; }';
+
+    echo "\n<style type=\"text/css\">{$styles}</style>\n";
+}
+
+/**
  * Callback to add dismissible notices script on Dashboard screen.
  *
  * @return void
  */
-function eae_enqueue_script() {
+function eae_enqueue_admin_scripts() {
     $screen = get_current_screen();
 
     if ( ! isset( $screen->id ) || $screen->id !== 'dashboard' ) {
@@ -210,7 +273,7 @@ function eae_page_scanner_notice() {
         return;
     }
 
-    if ( get_option( 'eae_notices', '0' ) === '1' ) {
+    if ( get_option( 'eae_notices', '0' ) == '1' ) {
         return;
     }
 
@@ -285,4 +348,39 @@ function eae_transmit_email() {
         __( 'You’ll receive a notification should your site contain unprotected email addresses.', 'email-address-encoder' ),
         'updated'
     );
+}
+
+/**
+ * Clear page caches caches.
+ *
+ * @return void
+ */
+function eae_clear_caches() {
+    if (
+        empty( $_POST ) ||
+        ! isset( $_POST[ 'option_page' ] ) ||
+        $_POST[ 'option_page' ] !== 'email-address-encoder'
+    ) {
+        return;
+    }
+
+    // W3 Total Cache
+    if ( function_exists( 'w3tc_flush_all' ) ) {
+        w3tc_flush_all();
+    }
+
+    // WP Rocket
+    if ( function_exists( 'rocket_clean_domain' ) ) {
+        rocket_clean_domain();
+    }
+
+    // JCH Optimize
+    if ( class_exists( 'JchPlatformCache' ) && method_exists( 'JchPlatformCache', 'deleteCache' ) ) {
+        JchPlatformCache::deleteCache( true );
+    }
+
+    // LiteSpeed Cache
+    if ( class_exists( 'LiteSpeed_Cache_API' ) && method_exists( 'LiteSpeed_Cache_API', 'purge_all' ) ) {
+        LiteSpeed_Cache_API::purge_all();
+    }
 }

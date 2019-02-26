@@ -1,31 +1,35 @@
 <?php
-/*
-Plugin Name: Revisionary
-Plugin URI: http://agapetry.net/
-Description: Enables qualified users to submit changes to currently published posts or pages.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
-Version: 1.1.13
-Author: Kevin Behrens
-Author URI: http://agapetry.net/
-Min WP Version: 3.0
-License: GPL version 2 - http://www.opensource.org/licenses/gpl-license.php
-*/
-
-/*
-Copyright (c) 2009-2015, Kevin Behrens.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-version 2 as published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+/**
+ * Plugin Name: Revisionary
+ * Plugin URI: https://publishpress.com/
+ * Description: Enables qualified users to submit changes to currently published posts or pages.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
+ * Author: PublishPress
+ * Author URI: https://publishpress.com
+ * Version: 1.2.5
+ * 
+ * Copyright (c) 2019 PublishPress
+ *
+ * GNU General Public License, Free Software Foundation <https://www.gnu.org/licenses/gpl-3.0.html>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package     Revisionary
+ * @category    Core
+ * @author      Revisionary
+ * @copyright   Copyright (C) 2019 PublishPress. All rights reserved.
+ *
+ */
 
 if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die( 'This page cannot be called directly.' );
@@ -41,12 +45,12 @@ if ( defined( 'RVY_VERSION' ) ) {
 		else
 			$message = sprintf( __( 'Another copy of Revisionary is already activated (version %1$s)', 'rvy' ), RVY_VERSION );
 		
-		die($message);
+		rvy_notice($message);
 	}
 	return;
 }
 
-define ('RVY_VERSION', '1.1.13');
+define ('RVY_VERSION', '1.2.5');
 
 define ('COLS_ALL_RVY', 0);
 define ('COL_ID_RVY', 1);
@@ -56,10 +60,6 @@ if ( defined('RS_DEBUG') ) {
 	add_action( 'admin_footer', 'rvy_echo_usage_message' );
 } else
 	include_once( dirname(__FILE__).'/lib/debug_shell.php');
-
-//if ( version_compare( phpversion(), '5.2', '<' ) )	// some servers (Ubuntu) return irregular version string format
-if ( ! function_exists("array_fill_keys") )
-	require_once( dirname(__FILE__).'/lib/php4support_rs.php');
 
 // === awp_is_mu() function definition and usage: must be executed in this order, and before any checks of IS_MU_RVY constant ===
 require_once( dirname(__FILE__).'/lib/agapetry_wp_core_lib.php');
@@ -97,28 +97,11 @@ if ( ! defined('WP_CONTENT_DIR') )
 
 define ('RVY_ABSPATH', WP_CONTENT_DIR . '/plugins/' . RVY_FOLDER);
 
-$bail = 0;
+require_once( dirname(__FILE__).'/defaults_rvy.php');
 
-if ( ! awp_ver('3.0') ) {
-	rvy_notice('Sorry, Revisionary requires WordPress 3.0 or higher.  Please upgrade Wordpress or use Revisionary 1.0.x');
-	$bail = 1;
-} else {	
-	global $wpdb;
+rvy_refresh_options_sitewide();
 
-	if ( ! $wpdb->has_cap( 'subqueries' ) ) {
-		rvy_notice('Sorry, Revisionary requires a database server that supports subqueries (such as MySQL 4.1+).  Please upgrade your server or deactivate Revisionary.');
-		$bail = 1;
-	}
-}
-
-if ( ! $bail ) {
-	require_once( dirname(__FILE__).'/defaults_rvy.php');
-
-	rvy_refresh_options_sitewide();
-	
-	// since sequence of set_current_user and init actions seems unreliable, make sure our current_user is loaded first
-	add_action('init', 'rvy_init', 1);
-	add_action('init', 'rvy_add_revisor_custom_caps', 99);
-}
-
+// since sequence of set_current_user and init actions seems unreliable, make sure our current_user is loaded first
+add_action('init', 'rvy_init', 1);
+add_action('init', 'rvy_add_revisor_custom_caps', 99);
 ?>

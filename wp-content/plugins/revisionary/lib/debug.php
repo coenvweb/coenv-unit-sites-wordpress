@@ -78,7 +78,7 @@ function rvy_log_mem_usage( $label, $display_total = true ) {
 // Inspired from:     PHP.net Contributions
 // Description: Helps with php debugging
 //
-// Revision by kevinB http://agapetry.net
+// Revision by PublishPress
 //		* display_objects optional arg 
 //		* htmlspecialchars filtering if variable is a string containing '<'
 //
@@ -123,15 +123,15 @@ function do_dump(&$var, $display_objects = true, $var_name = NULL, $indent = NUL
 
     if (is_array($var) && isset($var[$keyvar]))
     {
-        $real_var = &$var[$keyvar];
-        $real_name = &$var[$keyname];
+        $real_var = $var[$keyvar];
+        $real_name = $var[$keyname];
         $type = ucfirst(gettype($real_var));
         echo "$indent$var_name <span style='color:#a2a2a2'>$type</span> = <span style='color:#e87800;'>&amp;$real_name</span><br />";
     }
     else
     {
         $var = array($keyvar => $var, $keyname => $reference);
-        $avar = &$var[$keyvar];
+        $avar = $var[$keyvar];
    
         $type = ucfirst(gettype($avar));
         if($type == "String") $type_color = "<span style='color:green'>";
@@ -147,7 +147,7 @@ function do_dump(&$var, $display_objects = true, $var_name = NULL, $indent = NUL
             $keys = array_keys($avar);
             foreach($keys as $name)
             {
-                $value = &$avar[$name];
+                $value = $avar[$name];
                 do_dump($value, $display_objects, "['$name']", $indent.$do_dump_indent, $reference);
             }
             echo "$indent)<br />";

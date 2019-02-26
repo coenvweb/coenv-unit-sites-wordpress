@@ -3,13 +3,11 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die();
 
 /**
- * functions for the WordPress plugin Revisionary
- * defaults_rvy.php
- * 
- *
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2011-2013
- * 
+ * @package     Revisionary\RevisionaryOptions
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 
  

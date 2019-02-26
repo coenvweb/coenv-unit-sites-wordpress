@@ -9,7 +9,7 @@ class RevisionaryAdminFiltersItemUI {
 	var $future_revisions = array();
 	
 	// note: in current implementations, this must be instatiated on admin_head action
-	function RevisionaryAdminFiltersItemUI () {
+	function __construct () {
 		$this->add_js();
 		$this->add_meta_boxes();
 		$this->act_tweak_metaboxes();
@@ -70,20 +70,20 @@ div.num-revisions, #post-preview{ display:none; }
 		if ( rvy_get_option( 'pending_revisions' ) ) {
 			require_once( dirname(__FILE__).'/revision-ui_rvy.php' );
 			
-			add_meta_box( 'pending_revisions', __( 'Pending Revisions', 'revisionary'), create_function( '', "rvy_metabox_revisions('pending');"), $object_type );
+			add_meta_box( 'pending_revisions', __( 'Pending Revisions', 'revisionary'), 'rvy_metabox_revisions_pending', $object_type );
 			
 			$admin_notify = (string) rvy_get_option( 'pending_rev_notify_admin' );
 			$author_notify = (string) rvy_get_option( 'pending_rev_notify_author' );
 			
 			if ( ( '1' === $admin_notify ) || ( '1' === $author_notify ) ) {
-				add_meta_box( 'pending_revision_notify', __( 'Publishers to Notify of Your Revision', 'revisionary'), create_function( '', "rvy_metabox_notification_list('pending_revision');"), $object_type );
+				add_meta_box( 'pending_revision_notify', __( 'Publishers to Notify of Your Revision', 'revisionary'), 'rvy_metabox_notification_list', $object_type );
 			}
 		}
 			
 		if ( rvy_get_option( 'scheduled_revisions' ) ) {
 			require_once( dirname(__FILE__).'/revision-ui_rvy.php' );
 
-			add_meta_box( 'future_revisions', __( 'Scheduled Revisions', 'revisionary'), create_function( '', "rvy_metabox_revisions('future');"), $object_type );
+			add_meta_box( 'future_revisions', __( 'Scheduled Revisions', 'revisionary'), 'rvy_metabox_revisions_future', $object_type );
 		}
 	}
 	

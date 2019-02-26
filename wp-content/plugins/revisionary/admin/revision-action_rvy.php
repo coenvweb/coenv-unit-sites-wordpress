@@ -6,11 +6,11 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 add_action( '_wp_put_post_revision', 'rvy_review_revision' );
 	
 /**
- * revision-action_rvy.php
- * 
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2011-2015
- * 
+ * @package     Revisionary\RevisionaryAction
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 function rvy_revision_diff() {
 	require_once( ABSPATH . 'wp-admin/admin.php');
@@ -48,10 +48,10 @@ function rvy_revision_diff() {
 		}
 
 		if ( $left_revision->ID == $right_revision->post_parent ) // right is a revision of left
-			$post =& $left_revision;
+			$post = $left_revision;
 
 		elseif ( $left_revision->post_parent == $right_revision->ID ) // left is a revision of right
-			$post =& $right_revision;
+			$post = $right_revision;
 
 		elseif ( $left_revision->post_parent == $right_revision->post_parent ) // both are revisions of common parent
 			$post = get_post( $left_revision->post_parent );
@@ -120,6 +120,25 @@ function rvy_revision_approve() {
 				wp_restore_post_revision( $revision->ID );
 				$db_action = true;
 				
+				// restore original meta fields from published post
+				$stored_revision_fields = array();
+				if ( $postmeta = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id = '$revision_id'", ARRAY_A ) ) {
+					foreach( $postmeta as $row ) {
+						$stored_revision_fields[ $row['meta_key'] ] = true;
+									
+						$row['post_id'] = $revision->post_parent;					
+						
+						if ( is_array($row['meta_value']) && ( count($row['meta_value'] <= 1 ) ) )
+							$row['meta_value'] = maybe_unserialize($row['meta_value']);	
+						
+						if ( $meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d", $row['meta_key'], $revision->post_parent ) ) ) {						
+							$wpdb->update( $wpdb->postmeta, $row, array( 'meta_id' => $meta_id ) );					
+						} else {					
+							$wpdb->insert( $wpdb->postmeta, $row );					
+						}
+					}
+				}
+
 				rvy_format_content( $revision->post_content, $revision->post_content_filtered, $post->ID );
 				
 				clean_post_cache( $revision->ID );
@@ -382,7 +401,7 @@ function rvy_revision_bulk_delete() {
 
 function rvy_revision_edit() {
 	require_once( ABSPATH . 'wp-admin/admin.php');
-	$post_data = &$_POST;
+	$post_data = $_POST;
 	$revision_id = $post_data['revision_ID'];
 	$redirect = '';
 	
@@ -446,7 +465,9 @@ function rvy_revision_edit() {
 			$post_data['post_date_gmt'] = get_gmt_from_date( $post_data['post_date'] );
 		}
 
-		extract( $post_data );
+		foreach( array( 'post_date', 'post_date_gmt', 'post_content', 'post_title' ) as $var ) {
+			$$var = ( isset( $post_data[$var] ) ) ? $post_data[$var] : '';
+		}
 
 		// If the post date is empty, don't modify post date
 		if ( empty($post_date) || '0000-00-00 00:00:00' == $post_date || empty($post_date_gmt) || '0000-00-00 00:00:00' == $post_date_gmt ) {
@@ -546,29 +567,29 @@ function rvy_publish_scheduled_revisions() {
 	$skip_revision_ids = array();
 	$blogname = wp_specialchars_decode( get_option('blogname'), ENT_QUOTES );
 
+	$revised_uris = array();
+
 	if ( ! empty( $_GET['rs_debug'] ) )
 		echo "current time: $time_gmt";
 
 	if ( $results = $wpdb->get_results( "SELECT * FROM $wpdb->posts WHERE post_type = 'revision' AND post_status = 'future' AND post_date_gmt <= '$time_gmt' ORDER BY post_date_gmt DESC" ) ) {
 		foreach ( $results as $row ) {
 			if ( ! isset($restored_post_ids[$row->post_parent]) ) {
+				$revised_uris []= get_permalink( $row->ID );
 
 				// prep the revision to look like a normal one so WP doesn't reject it
-				$wpdb->query( "UPDATE $wpdb->posts SET post_status = 'inherit', post_date = '$row->post_modified', post_date_gmt = '$row->post_modified' WHERE post_type = 'revision' AND post_status = 'future' AND ID = '$row->ID'" );
-				$func = "rvy_do_revision_restore('{$row->ID}');";
-				
-				if ( is_admin() ) 
-					add_action( 'shutdown', create_function( '', $func ) );
-				else
-					add_action( 'shutdown', create_function( '', $func ) );
+				if ( ! $wpdb->query( "UPDATE $wpdb->posts SET post_status = 'inherit', post_date = '$row->post_modified', post_date_gmt = '$row->post_modified' WHERE post_type = 'revision' AND post_status = 'future' AND ID = '$row->ID'" ) ) {
+					continue;
+				}
+
+				new RvyScheduledQuery( $row, 'restore' );
 
 				if ( ! empty( $_GET['rs_debug'] ) )
 					echo '<br />' . "publishing revision $row->ID";
 
-				//add_action( 'template_redirect', create_function( '', $func ) );
 				$restored_post_ids[$row->post_parent] = true;
 				
-				$post =& get_post( $row->post_parent );
+				$post = get_post( $row->post_parent );
 				
 				$type_obj = get_post_type_object( $post->post_type );
 				$type_caption = $type_obj->labels->singular_name;
@@ -703,9 +724,11 @@ function rvy_publish_scheduled_revisions() {
 	rvy_update_next_publish_date();
 	
 	// if this was initiated by an asynchronous remote call, we're done.
-	if ( ! empty( $_GET['action']) && ( 'publish_scheduled' == $_GET['action'] ) )
+	if ( ! empty( $_GET['action']) && ( 'publish_scheduled' == $_GET['action'] ) ) {
 		exit( 0 );
-
+	} elseif ( in_array( $_SERVER['REQUEST_URI'], $revised_uris ) ) {
+		wp_redirect( $_SERVER['REQUEST_URI'] );  // if one of the revised pages is being accessed now, redirect back so revision is published on first access
+	}
 }
 
 function rvy_update_next_publish_date() {
@@ -734,8 +757,13 @@ function rvy_format_content( $content, $content_filtered, $post_id, $args = arra
 	$defaults = array( 'update_db' => true );
 	$args = array_merge( $defaults, $args );
 	$args = apply_filters( 'rvy_format_content_args', $args, $post_id );
-	extract( $args, EXTR_SKIP );
 	
+	foreach( array_keys( $defaults ) as $var ) {
+		if ( ! isset( $$var) ) {
+			$$var = ( isset( $args[$var] ) ) ? $args[$var] : $defaults[$var];
+		}
+	}
+
 	if ( ! $content_filtered )
 		$content_filtered = $content;
 	
@@ -758,4 +786,21 @@ function rvy_format_content( $content, $content_filtered, $post_id, $args = arra
 	
 	return $formatted_content;
 }
+
+
+class RvyScheduledQuery {
+	var $revision_id;
+
+	function __construct( $row, $query_type = 'restore' ) {
+		$this->revision_id = $row->ID;
+
+		add_action( 'shutdown', array( &$this, 'do_restore' ) );
+	}
+
+	// prep the revision to look like a normal one so WP doesn't reject it
+	function do_restore() {
+		rvy_do_revision_restore( $this->revision_id );
+	}
+}
+
 ?>

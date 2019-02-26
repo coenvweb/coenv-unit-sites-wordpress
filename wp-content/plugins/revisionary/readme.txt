@@ -1,10 +1,11 @@
 === Plugin Name ===
-Contributors: kevinB
-Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=JWZVFUDLLYQBA
+Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
-Requires at least: 3.0
-Tested up to: 4.2.2
-Stable Tag: 1.1.13
+Requires at least: 4.1
+Tested up to: 5.1
+Stable Tag: 1.2.5
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Moderated editing of published content.  Following approval by an editor, the revision can be published immediately or scheduled.
 
@@ -19,23 +20,13 @@ Revisionary enables qualified users to submit changes to currently published pos
 = Partial Feature List =
 * Pending Revisions allow designated users to suggest changes to a currently published post/page
 * Scheduled Revisions allow you to specify future changes to published content (either via Pending Revision approval or directly by fully qualified author/editor)
-* Enchanced Revision Management Form
+* Enhanced Revision Management Form
 * Front-end preview display of Pending / Scheduled Revisions with "Publish Now" link
 * New WordPress role, "Revisor" is a moderated Editor
-* Works with blog-wide WordPress Roles, or in conjunction with <a href="http://presspermit.com">Press Permit</a> or <a href="http://wordpress.org/extend/plugins/role-scoper/">Role Scoper</a>
+* Works with blog-wide WordPress Roles, or in conjunction with <a href="https://presspermit.com">Press Permit</a>.
 
 = Support =
-* Most Bug Reports and Plugin Compatibility issues addressed promptly following your <a href="http://agapetry.net/forum/">support forum</a> submission.
-* Author is available for professional consulting to meet your configuration, troubleshooting and customization needs.
-
-
-== Installation ==
-Revisionary can be installed automatically via the Plugins tab in your blog administration panel.
-
-= To install manually instead: =
-1. Upload `revisionary&#95;?.zip` to the `/wp-content/plugins/` directory
-1. Extract `revisionary&#95;?.zip` into the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
+* Revisionary is professionally supported by both the original author (Kevin Behrens) and the experienced <a href="https://publishpress.com">PublishPress</a> team.
 
 
 == Screenshots ==
@@ -51,6 +42,32 @@ Revisionary can be installed automatically via the Plugins tab in your blog admi
 
 
 == Changelog ==
+
+= 1.2.5 - 25 Feb 2019 =
+* Compat : TinyMCE Advanced - Failed to display editor on revision management screen
+* Compat : Multisite - Incorrect site switching, prevents Yoast SEO from saving post meta 
+
+= 1.2.4 - 20 Feb 2019 =
+* Compat : PublishPress - publish button was hidden
+* Change : Capitalize "Save as Pending Revision" checkbox caption
+* Lang : Update .po file
+
+= 1.2.3 - 19 Feb 2019 =
+* FIXED : Scheduled revision publication failure, massive redundant email notifications (since 1.2)
+
+= 1.2.2 - 19 Feb 2019 =
+* Fixed : Temporarily disable scheduled revision publication emails, due to recently reported issue
+* Compat : PHP / coding standards - removed needless byref variable assignments
+* Fixed : PHP notices when viewing revision differences
+
+= 1.2.1 - 14 Feb 2019 =
+* Compat : Fatal error when another plugin hooks into 'user_has_cap' filter
+
+= 1.2 - 13 Feb 2019 =
+* Compat : PHP 7.2
+* Compat : WordPress 5.0.3
+* Fixed : Revision approval reset page template setting to default
+* Team : Revisionary is now owned and developed by PublishPress. The original author (Kevin Behrens) is excited to join forces in building and supporting effective tools for publishing teams.
 
 = 1.1.13 - 13 May 2015 =
 * Fixed : Previewing a Page revision from Revisions Manager screen caused fatal error / white screen
@@ -280,6 +297,9 @@ Initial release.  Feature Changes and Bug Fixes are vs. Pending Revisions functi
 * Feature : If Role Scoper is active, Editors notification group can be customized via User Group
 
 == Upgrade Notice ==
+
+= 1.2.3 =
+Important Fix: Scheduled Revision publication failure with runaway email notifications (since 1.2)
 
 = 1.1.10 =
 <strong>SECURITY FIX:</strong> Revisions could be viewed by any registered user

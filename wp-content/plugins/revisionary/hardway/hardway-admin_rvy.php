@@ -30,14 +30,6 @@ if ( ! is_content_administrator_rvy() ) {
 } 	
 
 
-/**
- * RevisionaryAdminHardway PHP class for the WordPress plugin Revisionary
- * hardway-admin_rvy.php
- * 
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2009-2013
- *
- */
 class RevisionaryAdminHardway {
 	
 	public static function flt_include_pending_revisions($query) {

@@ -1,15 +1,6 @@
 <?php
 if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die();
-
-/**
- * RevisionaryAgentsChecklist PHP class for the WordPress plugin Revisionary
- * agents_checklist_rvy.php
- * 
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2009-2013
- * 
- */
  
 define ('CURRENT_ITEMS_RVY', 'current');
 define ('ELIGIBLE_ITEMS_RVY', 'eligible');
@@ -64,8 +55,10 @@ define ('ELIGIBLE_ITEMS_RVY', 'eligible');
 		'objtype_display_name' => '', 	'objtype_display_name_plural' => '',
 		'for_entity_ids' => '');
 
-		$args = array_merge( $defaults, (array) $args );
-		extract($args);
+		$args = (array) $args;
+		foreach( array_keys( $defaults ) as $var ) {
+			$$var = ( isset( $args[$var] ) ) ? $args[$var] : $defaults[$var];
+		}
 
 		global $is_IE;
 		$ie_checkbox_style = ( $is_IE ) ? "style='height:1em'" : '';

@@ -72,7 +72,7 @@ function rvy_admin_init() {
 								$_GET['post'] = array_diff( $_GET['post'], $remove_ids );
 						}
 						
-					} elseif ( $post =& get_post( $_GET['post'] ) ) {
+					} elseif ( $post = get_post( $_GET['post'] ) ) {
 						if ( 'revision' == $post->post_type ) {
 							$link = "admin.php?page=rvy-revisions&action=view&revision={$_GET['post']}&delete_request={$_GET['post']}";
 							wp_redirect( $link );

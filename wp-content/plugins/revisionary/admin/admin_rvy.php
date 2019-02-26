@@ -1,10 +1,10 @@
 <?php
 /**
- * admin_rvy.php
- * 
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2011-2015
- * 
+ * @package     Revisionary\RevisionaryAdmin
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 
 // menu icons by Jonas Rask: http://www.jonasraskdesign.com/
@@ -25,7 +25,7 @@ class RevisionaryAdmin
 	var $revision_save_in_progress;
 	var $impose_pending_rev;
 	
-	function RevisionaryAdmin() {
+	function __construct() {
 		add_action('admin_head', array(&$this, 'admin_head'));
 		
 		if ( ! defined('XMLRPC_REQUEST') && ! strpos($_SERVER['SCRIPT_NAME'], 'p-admin/async-upload.php' ) ) {
@@ -189,7 +189,7 @@ class RevisionaryAdmin
 				return;
 		}
 
-		$caption = __( 'save as pending revision', 'revisionary' );
+		$caption = __( 'Save as Pending Revision', 'revisionary' );
 		
 		$float = ( awp_ver('3.5') || $GLOBALS['is_IE'] ) ? '' : 'float:right; ';
 		echo "<div style='{$float}margin: 0.5em'><label for='rvy_save_as_pending_rev'><input type='checkbox' style='width: 1em; min-width: 1em; text-align: right;' name='rvy_save_as_pending_rev' value='1' id='rvy_save_as_pending_rev' /> $caption</label></div>";
@@ -209,8 +209,6 @@ class RevisionaryAdmin
 	// adds an Options link next to Deactivate, Edit in Plugins listing
 	function flt_plugin_action_links($links, $file) {
 		if ( $file == RVY_BASENAME ) {
-			$links[] = "<a href='http://agapetry.net/forum/'>" . __awp('Support Forum') . "</a>";
-			
 			$page = ( RVY_NETWORK ) ? 'rvy-site_options' : 'rvy-options';
 			$links[] = "<a href='admin.php?page=$page'>" . __awp('Options') . "</a>";
 		}
@@ -240,9 +238,6 @@ class RevisionaryAdmin
 	
 	function admin_head() {
 		echo '<link rel="stylesheet" href="' . RVY_URLPATH . '/admin/revisionary.css" type="text/css" />'."\n";
-
-		if ( false !== strpos(urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-about') )
-			echo '<link rel="stylesheet" href="' . RVY_URLPATH . '/admin/about/about.css" type="text/css" />'."\n";
 
 		add_filter( 'contextual_help_list', array(&$this, 'flt_contextual_help_list'), 10, 2 );
 		
@@ -288,7 +283,7 @@ class RevisionaryAdmin
 						
 						require_once( dirname(__FILE__).'/revision-ui_rvy.php' );
 						
-						add_filter( 'tiny_mce_before_init', 'rvy_log_tiny_mce_params', 1 );
+						add_filter( 'tiny_mce_before_init', 'rvy_log_tiny_mce_params', 1, 2 );
 						add_filter( 'tiny_mce_before_init', 'rvy_tiny_mce_params', 998 );	// this is only applied to revisionary admin URLs, so not shy about dropping the millennial hammer
 
 						if ( $read_only )
@@ -345,16 +340,14 @@ jQuery(document).ready( function($) {
 			if ( ! isset($help[$screen]) )
 				$help[$screen] = '';
 
-			//$help[$screen] .= sprintf(__('%1$s Revisionary Documentation%2$s', 'revisionary'), "<a href='http://agapetry.net/downloads/Revisionary_UsageGuide.htm#$link_section' target='_blank'>", '</a>')
-			$help[$screen] .= ' ' . sprintf(__('%1$s Revisionary Support Forum%2$s', 'revisionary'), "<a href='http://agapetry.net/forum/' target='_blank'>", '</a>');
-			
-			if ( current_user_can( 'manage_options' ) )
-				$help[$screen] .= ', ' . sprintf(__('%1$s About Revisionary%2$s', 'revisionary'), "<a href='admin.php?page=rvy-about' target='_blank'>", '</a>');
+			//$doc_url =
+			//$help[$screen] .= sprintf(__('%1$s Revisionary Documentation%2$s', 'revisionary'), "<a href='$doc_url' target='_blank'>", '</a>')
+			//$forum_url =
+			//$help[$screen] .= ' ' . sprintf(__('%1$s Revisionary Support Forum%2$s', 'revisionary'), "<a href='$forum_url' target='_blank'>", '</a>');
 		}
 
 		return $help;
 	}
-	
 
 	function build_menu() {
 		if ( strpos( $_SERVER['REQUEST_URI'], 'wp-admin/network/' ) )
@@ -364,21 +357,11 @@ jQuery(document).ready( function($) {
 
 		// For Revisions Manager access, satisfy WordPress' demand that all admin links be properly defined in menu
 		if ( false !== strpos( urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-revisions' ) ) {
-			$func_content = "include_once('$path/admin/revisions.php');";
-			$func = create_function( '', $func_content );
-			
-			add_submenu_page( 'none', __('Revisions', 'revisionary'), __('Revisions', 'revisionary'), 'read', 'rvy-revisions', $func );
+			add_submenu_page( 'none', __('Revisions', 'revisionary'), __('Revisions', 'revisionary'), 'read', 'rvy-revisions', 'rvy_include_admin_revisions' );
 		}
 
 		if ( ! current_user_can( 'manage_options' ) )
 			return;
-		
-		if ( false !== strpos( urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-about' ) ) {	
-			add_options_page( __('About Revisionary', 'revisionary'), __('About Revisionary', 'revisionary'), 'read', 'rvy-about');
-			
-			$func = "include_once('$path/admin/about.php');";
-			add_action( 'settings_page_rvy-about' , create_function( '', $func ) );
-		}
 
 		global $rvy_default_options, $rvy_options_sitewide;
 		
@@ -388,12 +371,10 @@ jQuery(document).ready( function($) {
 		// omit site-Specific Options menu item if all options are controlled network-wide
 		if ( ! RVY_NETWORK || ( count($rvy_options_sitewide) != count($rvy_default_options) ) ) {
 			add_options_page( __('Revisionary Options', 'revisionary'), __('Revisionary', 'revisionary'), 'read', 'rvy-options');
-
-			$func = "include_once( '$path/admin/options.php');rvy_options( false );";
-			add_action('settings_page_rvy-options', create_function( '', $func ) );	
+			add_action('settings_page_rvy-options', 'rvy_omit_site_options' );	
 		}
 	}
-	
+
 	function act_hide_quickedit_for_revisions() {
 		global $rvy_any_listed_revisions;
 		
@@ -468,8 +449,10 @@ jQuery(document).ready( function($) {
 
 	function convert_link( $link, $topic, $operation, $args = '' ) {
 		$defaults = array ( 'object_type' => '', 'id' => '' );
-		$args = array_merge( $defaults, (array) $args );
-		extract($args);
+		$args = (array) $args;
+		foreach( array_keys( $defaults ) as $var ) {
+			$$var = ( isset( $args[$var] ) ) ? $args[$var] : $defaults[$var];
+		}
 
 		global $pagenow;
 		
@@ -610,9 +593,19 @@ jQuery(document).ready( function($) {
 
 		$date_clause = ", post_modified = '" . current_time( 'mysql' ) . "', post_modified_gmt = '" . current_time( 'mysql', 1 ) . "'";  // make sure actual modification time is stored to revision
 		
+		$future_date = ( ! empty($post_arr['post_date']) && ( strtotime($post_arr['post_date_gmt'] ) > agp_time_gmt() ) );
+		
+		if ( $future_date ) {
+			// round down to zero seconds
+			$post_arr['post_date_gmt'] = date( 'Y-m-d H:i:00', strtotime( $post_arr['post_date_gmt'] ) );
+			$post_arr['post_date'] = date( 'Y-m-d H:i:00', strtotime( $post_arr['post_date'] ) );	
+		}
+		
+		// back up meta fields for restoration at revision approval
+		$stored_revision_fields = array();
+		$postmeta = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id = '{$this->impose_pending_rev}'", ARRAY_A );
+		
 		if ( $revision_id = wp_insert_post($post_arr) ) {
-			$future_date = ( ! empty($post_arr['post_date']) && ( strtotime($post_arr['post_date_gmt'] ) > agp_time_gmt() ) );
-			
 			$wpdb->query("UPDATE $wpdb->posts SET post_status = 'pending', post_parent = '$this->impose_pending_rev' $date_clause WHERE ID = '$revision_id'");
 			
 			$manage_link = $this->get_manage_link( $object_type );
@@ -627,11 +620,27 @@ jQuery(document).ready( function($) {
 			$msg .= '<br /><br /></li><li>';
 			
 			if ( $future_date ) {
-				$msg .= sprintf( '<a href="%s">' . __('Go back to Submit Another revision (possibly for a different publish date).', 'revisionary') . '</a>', "javascript:back();" );
+				$msg .= sprintf( '<a href="%s">' . __('Go back to Submit Another revision (possibly for a different publish date).', 'revisionary') . '</a>', "javascript:history.back(1);" );
 				$msg .= '<br /><br /></li><li>';
 			}
 			$msg .= sprintf( '<a href="%s">' . $manage_link->caption . '</a>', admin_url($manage_link->uri) );
 			$msg .= '</li></ul>';
+
+			$skip_meta_keys = apply_filters( 'rvy_ignore_meta_keys', array( '_edit_last', '_edit_lock' ) );
+			foreach( $postmeta as $row ) {
+				if ( in_array( $row['meta_key'], $skip_meta_keys ) ) continue;
+								
+				$row['post_id'] = $revision_id;					
+				
+				if ( is_array($row['meta_value']) && ( count($row['meta_value'] <= 1 ) ) )
+					$row['meta_value'] = maybe_unserialize($row['meta_value']);	
+				
+				if ( $meta_id = $wpdb->get_var( $wpdb->prepare( "SELECT meta_id FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d", $row['meta_key'], $revision_id ) ) ) {						
+					$wpdb->update( $wpdb->postmeta, $row, array( 'meta_id' => $meta_id ) );					
+				} else {					
+					$wpdb->insert( $wpdb->postmeta, $row );					
+				}
+			}
 
 		} else {
 			$msg = __('Sorry, an error occurred while attempting to save your modification for editorial review!', 'revisionary') . ' ';	
@@ -772,6 +781,10 @@ jQuery(document).ready( function($) {
 			$published_post = $this->get_published_post( $_POST['post_ID'] );
 		
 		if ( ! empty($post_arr['post_date_gmt']) && ( strtotime($post_arr['post_date_gmt'] ) > agp_time_gmt() ) ) {
+			// round down to zero seconds
+			$post_arr['post_date_gmt'] = date( 'Y-m-d H:i:00', strtotime( $post_arr['post_date_gmt'] ) );
+			$post_arr['post_date'] = date( 'Y-m-d H:i:00', strtotime( $post_arr['post_date'] ) );
+			
 			$parent_id = $post_arr['ID'];
 			
 			if ( $type_obj = get_post_type_object( $published_post->post_type ) ) {
@@ -819,7 +832,7 @@ jQuery(document).ready( function($) {
 			$msg .= '<ul><li>';
 			$msg .= sprintf( '<a href="%s">' . __('View it in Revisions Manager', 'revisionary') . '</a>', "admin.php?page=rvy-revisions&amp;revision=$revision_id&amp;action=view" );
 			$msg .= '<br /><br /></li><li>';
-			$msg .= sprintf( '<a href="%s">' . __('Go back to Schedule Another revision.', 'revisionary') . '</a>', "javascript:back();" );
+			$msg .= sprintf( '<a href="%s">' . __('Go back to Schedule Another revision.', 'revisionary') . '</a>', "javascript:history.back(1);" );
 			$msg .= '<br /><br /></li><li>';
 			$msg .= sprintf( '<a href="%s">' . $manage_link->caption . '</a>', admin_url($manage_link->uri) );
 			$msg .= '</li></ul>';

@@ -15,7 +15,7 @@ class RvyOptionUI {
 	var $def_otype_options;
 	var $display_hints = true;
 		
-	function RvyOptionUI( $sitewide, $customize_defaults ) {
+	function __construct( $sitewide, $customize_defaults ) {
 		$this->sitewide = $sitewide;
 		$this->customize_defaults = $customize_defaults;
 	}
@@ -381,7 +381,7 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 					if ( defined('RVY_CONTENT_ROLES') )
 						_e('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  Eligibile "Publisher" email recipients are members of the Pending Revision Monitors group who <strong>also</strong> have the ability to publish the revision.  If not explicitly defined, the Monitors group is all users with a primary WP role of Administrator or Editor.', 'revisionary');
 					else
-						printf( __('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  For more flexibility in moderation and notification, install the %1$s Press Permit%2$s %3$s Role Scoper%4$s plugin.', 'revisionary'), "<a href='http://presspermit.com'>", '</a>', "<a href='" . awp_plugin_info_url("role-scoper") . "'>", '</a>' );
+						printf( __('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  For more flexibility in moderation and notification, install the %1$s Press Permit%2$s plugin.', 'revisionary'), "<a href='https://presspermit.com'>", '</a>' );
 					echo '</span>';
 				}
 			}

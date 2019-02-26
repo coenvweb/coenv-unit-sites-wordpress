@@ -3,12 +3,11 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die( 'This page cannot be called directly.' );
 	
 /**
- * Revisionary PHP class for the WordPress plugin Revisionary
- * revisionary_main.php
- * 
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2009-2013
- * 
+ * @package     Revisionary\Revisionary
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 class Revisionary
 {		
@@ -18,7 +17,7 @@ class Revisionary
 	var $content_roles;			// object ref - instance of RevisionaryContentRoles subclass, set by external plugin
 	
 	// minimal config retrieval to support pre-init usage by WP_Scoped_User before text domain is loaded
-	function Revisionary() {
+	function __construct() {
 		rvy_refresh_options_sitewide();
 		
 		// NOTE: $_GET['preview'] and $_GET['post_type'] arguments are set by rvy_init() at response to ?p= request when the requested post is a revision.
@@ -245,4 +244,13 @@ class Revisionary
 	}
 	
 } // end Revisionary class
+
+// Disable Gutenberg, until Revisionary 1.3
+$post_types = get_post_types( array( 'public' => true ), 'object' );
+foreach( $post_types as $post_type => $type_obj ) {
+	//if ( ! defined( 'RVY_FORCE_BLOCKEDIT_' . strtoupper($post_type) ) && ( empty( $current_user->allcaps[$type_obj->cap->edit_published_posts] ) || empty( $current_user->allcaps[$type_obj->cap->edit_others_posts] ) ) ) {
+	if ( ! defined( 'RVY_FORCE_BLOCKEDIT_' . strtoupper($post_type) ) ) {
+		add_filter( "use_block_editor_for_{$post_type}", '__return_false', 10 );
+	}
+}
 ?>

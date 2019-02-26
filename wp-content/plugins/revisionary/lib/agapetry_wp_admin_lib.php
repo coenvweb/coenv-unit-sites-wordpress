@@ -25,4 +25,8 @@ function rvy_remote_fopen( $uri, $timeout = 10 ) {
 
 	return $response['body'];
 }
+
+function rvy_include_admin_revisions() {
+	include_once( RVY_ABSPATH . '/admin/revisions.php' );
+}
 ?>

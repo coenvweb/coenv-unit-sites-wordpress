@@ -4,13 +4,11 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die( 'This page cannot be called directly.' );
 	
 /**
- * revisions.php
- * 
- * Revisions Manager for Revisionary plugin, derived and heavily expanded from WP 2.8.4 core
- *
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2009-2015
- * 
+ * @package     Revisionary\RevisionManager
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 
 global $current_user, $revisionary; 

@@ -3,9 +3,9 @@ Contributors: tillkruess
 Donate link: https://www.paypal.me/tillkruss
 Tags: antispam, anti spam, spam, email, e-mail, mail, spider, crawler, harvester, robots, spambot, block, obfuscate, obfuscation, encode, encoder, encoding, encrypt, encryption, protect, protection
 Requires at least: 2.0
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.3
-Stable tag: 1.0.14
+Stable tag: 1.0.16
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -66,6 +66,19 @@ You can use the "Page Scanner" found under _Settings -> Email Encoder_ to see wh
 3. [Premium] Hardened protection: A preview of JavaScript and CSS based techniques
 
 == Changelog ==
+
+= 1.0.16 =
+
+* Avoid fatal error when using PHP 5.5 or lesser
+
+= 1.0.15 =
+
+* Added `EAE_REGEXP` constant
+* Added `eae_email_callback` filter
+* Added unprotected email detector to admin bar
+* Respect `eae_method` filter in shortcode
+* Fixed issue with notices not hiding in some cases
+* Flush page cache when saving settings (W3 Total Cache; WP Rocket; LiteSpeed Cache; JCH Optimize)
 
 = 1.0.14 =
 

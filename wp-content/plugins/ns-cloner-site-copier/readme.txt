@@ -1,9 +1,10 @@
-=== NS Cloner - Site Copier ===
+﻿=== NS Cloner - Site Copier ===
 Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.5
-Tested up to: 4.9.8
+Tested up to: 5.0.3
+Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,6 +19,8 @@ This is by far the easiest, fastest, and most user-friendly way you will ever cr
 
 The NS Cloner will take any existing site on your WordPress multisite network and clone it into a new site that is completely identical in theme & theme settings, plugins & plugin configurations, content, pictures, videos, and site settings. **Everything** is preserved and intelligent replacements are made so that the new site settings reflect your choices for the name and title of the new site as well as other automated background housekeeping to make sure the new site works exactly the same way as if you had taken the time to set it all up manually.
 
+[youtube https://www.youtube.com/watch?v=h9BRrOS6bLM]
+
 = V3 Features =
 * Advanced validation and preemptive issue detection
 * Robust system configuration and action logging to help with troubleshooting
@@ -28,7 +31,7 @@ The NS Cloner will take any existing site on your WordPress multisite network an
 If you want even more functionality, [check out NS Cloner Pro!](https://neversettle.it/buy/wordpress-plugins/ns-cloner-pro/)!
 
 = Standard Precautions and Notes =
-* Unlike other similar tools, the NS Cloner supports cloning the main root site at ID=1! But please be especially careful with this feature. Multisite plugins like BuddyPress add tables at the main (wp_) level of the database. There are also several global tables that apply to the network and NOT to the core site. The Cloner automatically excludes these global tables out of the gate so that they don't get cloned to all your new sites which will have wp_ID_ as a prefix instead of wp_. But tables for other network level plugins that don't apply to the clone could still get copied by the Cloner due to its automation and inability to be aware of the table structure of every plugin out there. Our Table Manager add-on is perfect for unique scenarios where you need total table-level cloning control.
+* Unlike other similar tools, the NS Cloner supports cloning the main root site at ID=1! But please be especially careful with this feature. Multisite plugins like BuddyPress add tables at the main (wp_) level of the database. There are also several global tables that apply to the network and NOT to the core site. The Cloner automatically excludes these global tables out of the gate so that they don't get cloned to all your new sites which will have wp_ID_ as a prefix instead of wp_. But tables for other network level plugins that don't apply to the clone could still get copied by the Cloner due to its automation and inability to be aware of the table structure of every plugin out there. The Clone Tables Pro feature is perfect for unique scenarios where you need total table-level cloning control.
 * We always try to help, but we cannot promise support to users for this Free version, especially related to cloning the root site do to the potential complexities involved from environment to environment.
 * We have used the NS Cloner on production systems for years without issues. That doesn't mean your scenario won't find some new condition that could cause you some headaches. Unlikely, but always possible. We recommend getting familiar with it on a test system before you deploy it to a critical network.
 * And for the love - backup your data. This plugin operates at the database level to work its magic. We've run it hundreds of times on our own sites and client sites, and tested it thoroughly. It's safe. But don't take our word for it.
@@ -61,7 +64,7 @@ Yes, it really is that easy.
 1. All new hook-rich cloning pipeline
 1. All new dynamic, responsive interface
 
-If you want even more fIf you want even more functionality, [check out NS Cloner Pro!](https://neversettle.it/buy/wordpress-plugins/ns-cloner-pro/)!
+If you want even more functionality, [check out NS Cloner Pro!](https://neversettle.it/buy/wordpress-plugins/ns-cloner-pro/)!
 
 == Installation ==
 
@@ -73,7 +76,7 @@ If you want even more fIf you want even more functionality, [check out NS Cloner
 == Frequently Asked Questions ==
 
 = How do I contact Support, provide Feedback, or make a Feature Request? =
-You can browse our Knowledge Base, add or vote on Feature Requests, or contact us with an issue at <a title="Never Settle Support and Feedback" href="http://support.neversettle.it" target="_blank">http://support.neversettle.it</a>
+You can browse our Knowledge Base, add or vote on Feature Requests, or contact us with an issue at <a title="Never Settle Support and Feedback" href="https://support.neversettle.it" target="_blank">https://support.neversettle.it</a>
 
 = Does the NS Cloner work on subdomain networks as well as subfolder networks? = 
 YES!
@@ -90,6 +93,9 @@ Usually this means that the clone operation did not complete successfully. The m
 2. All new Add-on manager
 
 == Changelog ==
+
+= 3.1.1 = 
+* Added Italian translation files provided by @stefanogaggiotti60
 
 = 3.1.0 =
 * Updated email subscription form service in sidebar

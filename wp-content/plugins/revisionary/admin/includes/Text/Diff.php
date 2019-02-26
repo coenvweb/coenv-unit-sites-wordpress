@@ -33,7 +33,7 @@ class Text_Diff {
      *                           Normally an array of two arrays, each
      *                           containing the lines from a file.
      */
-    function Text_Diff($engine, $params)
+    function __construct($engine, $params)
     {
         // Backward compatibility workaround.
         if (!is_string($engine)) {
@@ -304,23 +304,23 @@ class Text_MappedDiff extends Text_Diff {
      * @param array $mapped_to_lines    This array should have the same number
      *                                  of elements as $to_lines.
      */
-    function Text_MappedDiff($from_lines, $to_lines,
+    function __construct($from_lines, $to_lines,
                              $mapped_from_lines, $mapped_to_lines)
     {
-        assert(count($from_lines) == count($mapped_from_lines));
-        assert(count($to_lines) == count($mapped_to_lines));
+        //assert(count($from_lines) == count($mapped_from_lines));
+        //assert(count($to_lines) == count($mapped_to_lines));
 
         parent::Text_Diff($mapped_from_lines, $mapped_to_lines);
 
         $xi = $yi = 0;
         for ($i = 0; $i < count($this->_edits); $i++) {
-            $orig = &$this->_edits[$i]->orig;
+            $orig = $this->_edits[$i]->orig;
             if (is_array($orig)) {
                 $orig = array_slice($from_lines, $xi, count($orig));
                 $xi += count($orig);
             }
 
-            $final = &$this->_edits[$i]->final;
+            $final = $this->_edits[$i]->final;
             if (is_array($final)) {
                 $final = array_slice($to_lines, $yi, count($final));
                 $yi += count($final);
@@ -366,7 +366,7 @@ class Text_Diff_Op {
  */
 class Text_Diff_Op_copy extends Text_Diff_Op {
 
-    function Text_Diff_Op_copy($orig, $final = false)
+    function __construct($orig, $final = false)
     {
         if (!is_array($final)) {
             $final = $orig;
@@ -391,7 +391,7 @@ class Text_Diff_Op_copy extends Text_Diff_Op {
  */
 class Text_Diff_Op_delete extends Text_Diff_Op {
 
-    function Text_Diff_Op_delete($lines)
+    function __construct($lines)
     {
         $this->orig = $lines;
         $this->final = false;
@@ -413,7 +413,7 @@ class Text_Diff_Op_delete extends Text_Diff_Op {
  */
 class Text_Diff_Op_add extends Text_Diff_Op {
 
-    function Text_Diff_Op_add($lines)
+    function __construct($lines)
     {
         $this->final = $lines;
         $this->orig = false;
@@ -435,7 +435,7 @@ class Text_Diff_Op_add extends Text_Diff_Op {
  */
 class Text_Diff_Op_change extends Text_Diff_Op {
 
-    function Text_Diff_Op_change($orig, $final)
+    function __construct($orig, $final)
     {
         $this->orig = $orig;
         $this->final = $final;

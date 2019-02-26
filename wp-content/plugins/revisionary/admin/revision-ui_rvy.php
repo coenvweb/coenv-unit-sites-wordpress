@@ -1,12 +1,10 @@
 <?php
 /**
- * revision-ui_rvy.php
- * 
- * UI library for Revisions Manager, heavily expanded from WP 2.8.4 core
- *
- * @author 		Kevin Behrens
- * @copyright 	Copyright 2009-2013
- * 
+ * @package     Revisionary\RevisionManagerUI
+ * @author      PublishPress <help@publishpress.com>
+ * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @license     GPLv2 or later
+ * @since       1.0.0
  */
 
  // clear TinyMCE plugin conflicts (this is only applied for the Revision Manager url)
@@ -23,7 +21,7 @@ if( false !== strpos( urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-re
 	add_filter( 'mce_external_plugins', 'rvy_clear_mce_plugins', 99 );
 }
  
-function rvy_metabox_notification_list( $topic ) {
+function rvy_metabox_notification_list( $topic = 'pending_revision' ) {
 	if ( 'pending_revision' == $topic ) {	
 		global $revisionary;
 		
@@ -168,9 +166,16 @@ function rvy_metabox_revisions( $status ) {
 	}
 }
 
+function rvy_metabox_revisions_pending() {
+	rvy_metabox_revisions( 'pending' );
+}
+
+function rvy_metabox_revisions_future() {
+	rvy_metabox_revisions( 'future' );
+}
 
 // Work around conflict with WP Super Edit and any other plugins which wipe out default TinyMCE parameters
-function rvy_log_tiny_mce_params( $initArray ) {
+function rvy_log_tiny_mce_params( $initArray, $editor_id = '' ) {
 	global $rvy_tiny_mce_params;
 	$rvy_tiny_mce_params = $initArray;
 	return $initArray;
@@ -178,23 +183,25 @@ function rvy_log_tiny_mce_params( $initArray ) {
 
 
 // adjust TinyMCE parameters for Revision viewing / edit
-function rvy_tiny_mce_params( $initArray ) {
+function rvy_tiny_mce_params( $initArray, $editor_id = '' ) {
 	global $rvy_tiny_mce_params;
 	if ( ! empty($rvy_tiny_mce_params) && is_array($initArray) )	// Restore default TinyMCE parameters in case another plugin wiped them.  This is only done for the Revision Management form.
 		$initArray = array_merge($rvy_tiny_mce_params, $initArray);
 	else
 		$initArray = $rvy_tiny_mce_params;
-		
-	$mce_buttons_1 = apply_filters('mce_buttons', array('bold', 'italic', 'strikethrough', '|', 'bullist', 'numlist', 'blockquote', '|', 'justifyleft', 'justifycenter', 'justifyright', '|', 'link', 'unlink', 'wp_more', '|', 'spellchecker', 'fullscreen', 'wp_adv' ));
+	
+	// $editor_id: 'content' or 'classic-block'
+	
+	$mce_buttons_1 = apply_filters('mce_buttons', array('bold', 'italic', 'strikethrough', '|', 'bullist', 'numlist', 'blockquote', '|', 'justifyleft', 'justifycenter', 'justifyright', '|', 'link', 'unlink', 'wp_more', '|', 'spellchecker', 'fullscreen', 'wp_adv' ), $editor_id );
 	$mce_buttons_1 = implode($mce_buttons_1, ',');
 
-	$mce_buttons_2 = apply_filters('mce_buttons_2', array('formatselect', 'underline', 'justifyfull', 'forecolor', '|', 'pastetext', 'pasteword', 'removeformat', '|', 'media', 'charmap', '|', 'outdent', 'indent', '|', 'undo', 'redo', 'wp_help' ));
+	$mce_buttons_2 = apply_filters('mce_buttons_2', array('formatselect', 'underline', 'justifyfull', 'forecolor', '|', 'pastetext', 'pasteword', 'removeformat', '|', 'media', 'charmap', '|', 'outdent', 'indent', '|', 'undo', 'redo', 'wp_help' ), $editor_id );
 	$mce_buttons_2 = implode($mce_buttons_2, ',');
 
-	$mce_buttons_3 = apply_filters('mce_buttons_3', array());
+	$mce_buttons_3 = apply_filters('mce_buttons_3', array(), $editor_id );
 	$mce_buttons_3 = implode($mce_buttons_3, ',');
 
-	$mce_buttons_4 = apply_filters('mce_buttons_4', array());
+	$mce_buttons_4 = apply_filters('mce_buttons_4', array(), $editor_id );
 	$mce_buttons_4 = implode($mce_buttons_4, ',');
 	
 	$mce_locale = ( '' == get_locale() ) ? 'en' : strtolower( substr(get_locale(), 0, 2) ); // only ISO 639-1
@@ -243,7 +250,7 @@ function rvy_tiny_mce_params( $initArray ) {
 }
 
 
-function rvy_tiny_mce_readonly( $initArray ) {
+function rvy_tiny_mce_readonly( $initArray, $editor_id = '' ) {
 	$initArray[ 'readonly'] = 'readonly';
 	
 	return $initArray;
@@ -304,7 +311,7 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 
 
 /**
- * Display list of a post's revisions (modified by Kevin Behrens to include view links).
+ * Display list of a post's revisions (modified by PublishPress to include view links).
  *
  * Can output either a UL with edit links or a TABLE with diff interface, and
  * restore action links.
@@ -334,7 +341,13 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 		return;
 	
 	$defaults = array( 'parent' => false, 'right' => false, 'left' => false, 'format' => 'list', 'type' => 'all', 'echo' => true, 'date_field' => '', 'current_id' => 0 );
-	extract( wp_parse_args( $args, $defaults ), EXTR_SKIP );
+	$args = wp_parse_args( $args, $defaults );
+
+	foreach( array_keys( $defaults ) as $var ) {
+		if ( ! isset( $$var ) ) {
+			$$var = ( isset( $args[$var] ) ) ? $args[$var] : $defaults[$var];
+		}
+	}
 
 	// link to publish date in Edit Form metaboxes, but modification date in Revisions Manager table
 	if ( ! $date_field  ) {

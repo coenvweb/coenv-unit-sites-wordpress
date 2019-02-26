@@ -23,10 +23,7 @@ function rvy_add_revisor_custom_caps() {
 	}
 }
 
-
 function rvy_activate() {
-	rvy_add_revisor_role();
-	
 	// force this timestamp to be regenerated, in case something went wrong before
 	delete_option( 'rvy_next_rev_publish_gmt' );
 }
@@ -51,54 +48,32 @@ function rvy_detect_post_id() {
 function rvy_add_revisor_role( $requested_blog_id = '' ) {
 	global $wp_roles;
 	
-	$wp_role_name = 'revisor';
-	$display_name = __( 'Revisor', 'revisionary' );
-	
 	$wp_role_caps = array(
-			'read' => true,
-			'read_private_posts' => true,
-			'read_private_pages' => true,
-			'edit_posts' => true,
-			'delete_posts' => true,
-			'edit_others_posts' => true,
-			'edit_pages' => true,
-			'delete_pages' => true,
-			'edit_others_pages' => true,
-			'level_3' => true,
-			'level_2' => true,
-			'level_1' => true,
-			'level_0' => true
-		);
-	
-	// add the role for all blogs if RS role def is sitewide
-	if ( IS_MU_RVY ) {
-		global $wpdb, $blog_id;
+		'read' => true,
+		'read_private_posts' => true,
+		'read_private_pages' => true,
+		'edit_posts' => true,
+		'delete_posts' => true,
+		'edit_others_posts' => true,
+		'edit_pages' => true,
+		'delete_pages' => true,
+		'edit_others_pages' => true,
+		'level_3' => true,
+		'level_2' => true,
+		'level_1' => true,
+		'level_0' => true
+	);
 
-		if ( $requested_blog_id )
-			$blog_ids = (array) $requested_blog_id;
-		else
-			$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
-		
-		$orig_blog_id = $blog_id;	
-	} else
-		$blog_ids = array( '' );
-
-	foreach ( $blog_ids as $id ) {
-		if ( $id )
-			switch_to_blog( $id );
-	
-		if ( ! isset( $wp_roles->role_objects['revisor'] ) )
-			$wp_roles->add_role( $wp_role_name, $display_name, $wp_role_caps );
-	}
-	
-	if ( count($blog_ids) > 1 )
-		switch_to_blog( $orig_blog_id );	
+	$wp_roles->add_role( 'revisor', __( 'Revisor', 'revisionary' ), $wp_role_caps );
 }
 
 function rvy_init() {
-	if ( ! rvy_check_rs_version() )
-		return;
+	global $wp_roles;
 
+	if ( ! isset( $wp_roles->roles['revisor'] ) ) {
+		rvy_add_revisor_role();
+	}
+	
 	if ( is_admin() ) {
 		require_once( dirname(__FILE__).'/admin/admin-init_rvy.php' );
 		rvy_load_textdomain();
@@ -112,7 +87,7 @@ function rvy_init() {
 
 			if ( ! empty($_GET['p']) ) {
 				if ( rvy_get_option( 'scheduled_revisions' ) || rvy_get_option( 'pending_revisions' ) ) {
-					if ( $post =& get_post( $_GET['p'] ) ) {
+					if ( $post = get_post( $_GET['p'] ) ) {
 						if ( 'revision' == $post->post_type ) {
 							$_GET['preview'] = 1;
 							$_GET['post_type'] = 'revision';
@@ -344,7 +319,10 @@ function rvy_get_post_revisions($post_id, $status = 'inherit', $args = '' ) {
 	
 	$defaults = array( 'order' => 'DESC', 'orderby' => 'post_modified_gmt', 'use_memcache' => true, 'fields' => COLS_ALL_RVY, 'return_flipped' => false );
 	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
+	
+	foreach( array_keys( $defaults ) as $var ) {
+		$$var = ( isset( $args[$var] ) ) ? $args[$var] : $defaults[$var];
+	}
 	
 	if ( COL_ID_RVY == $fields ) {
 		// performance opt for repeated calls by user_has_cap filter
@@ -378,56 +356,6 @@ function rvy_get_post_revisions($post_id, $status = 'inherit', $args = '' ) {
 	return $revisions;
 }
 
-
-function rvy_check_rs_version() {
-	if ( defined( 'PP_VERSION' ) ) {
-		$min_pp_version = '0.9-beta2';
-
-		// Give a heads-up and download link if Role Scoper version is not compatible
-		if ( version_compare( PP_VERSION, $min_pp_version, '<' ) ) {
-			$err_msg = sprintf(__('Revisionary is not compatible with Press Permit versions prior to %1$s.  Please upgrade or deactivate.', 'revisionary'), $min_pp_version );
-		}
-	
-	} elseif ( defined( 'SCOPER_VERSION' ) ) {
-		$min_scoper_version = '1.3.47';
-
-		// Give a heads-up and download link if Role Scoper version is not compatible
-		if ( version_compare( SCOPER_VERSION, $min_scoper_version, '<' ) ) {
-			$active_scoper_file = false;
-			$plugins = get_option('active_plugins');
-			foreach ( $plugins as $plugin_file )
-				if ( false !== strpos($plugin_file, 'role-scoper') ) {
-					$active_scoper_file = $plugin_file;
-					break;	
-				}
-
-			$err_msg = sprintf(__('Revisionary is not compatible with Role Scoper versions prior to %1$s.  Please upgrade or deactivate %2$s Role Scoper%3$s.', 'revisionary'), $min_scoper_version, "<a href='__rs-update__'>", '</a>');
-		}
-	}
-	
-	if ( ! empty($err_msg) ) {
-		if ( is_admin() ) {
-			if ( ! empty($active_scoper_file) )
-				$func_body = '$msg = str_replace( "__rs-update__", awp_plugin_update_url("' . $active_scoper_file . '"), "' . $err_msg . '");';
-			else
-				$func_body = '$msg = ' . "'" . $err_msg . "';";
-
-			$func_body .= "echo '" 
-			. '<div id="message" class="error fade" style="color: black"><p><strong>' 
-			. "'" 
-			. ' . $msg . ' 
-			. "'</strong></p></div>';";
-			
-			$action = ( is_network_admin() ) ? 'network_admin_notices' : 'admin_notices';
-			add_action( $action, create_function('', $func_body) );
-		}
-		
-		return false;
-	}
-
-	return true;
-}
-
 function rvy_log_async_request($action) {						
 	// the function which performs requested action will clear this entry to confirm that the asynchronous call was effective 
 	$requested_actions = get_option( 'requested_remote_actions_rvy' );
@@ -451,11 +379,24 @@ function is_content_administrator_rvy() {
 	return current_user_can( $cap_name );
 }
 
+/*
 function rvy_notice($message) {
-	// slick method copied from NextGEN Gallery plugin			// TODO: why isn't there a class that can turn this text black?
-	add_action('admin_notices', create_function('', 'echo \'<div id="message" class="error fade" style="color: black">' . $message . '</div>\';'));
-	trigger_error("Revisionary internal notice: $message");
-	$err = new WP_Error('Revisionary', $message);
+	//add_action('admin_notices', create_function('', 'echo \'<div id="message" class="error fade" style="color: black">' . $message . '</div>\';'));
+	//trigger_error("Revisionary internal notice: $message");
+	//$err = new WP_Error('Revisionary', $message);
+}
+*/
+
+function rvy_notice( $message, $class = 'error fade' ) {
+	include_once( dirname(__FILE__).'/lib/error_rvy.php');
+	$rvy_err = new RvyError();
+	return $rvy_err->add_notice( $message, compact( 'class' ) );
+}
+
+function rvy_error( $err_slug, $arg2 = '' ) {
+	include_once( dirname(__FILE__).'/lib/error_rvy.php');
+	$rvy_err = new RvyError();
+	$rvy_err->error_notice( $err_slug );
 }
 
 function rvy_mail( $address, $title, $message ) {
@@ -472,4 +413,8 @@ function rvy_mail( $address, $title, $message ) {
 		@wp_mail( $address, $title, $message );
 }
 
+function rvy_omit_site_options() {
+	include_once( RVY_ABSPATH . '/admin/options.php' );
+	rvy_options( false );
+}
 ?>

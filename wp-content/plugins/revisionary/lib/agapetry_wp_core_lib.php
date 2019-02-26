@@ -149,7 +149,7 @@ function agp_user_can($reqd_caps, $object_id = 0, $user_id = 0, $args = array() 
 		$_args = ( 'blog' == $object_id ) ? array( $reqd_caps, $user->ID, 0 ) : array( $reqd_caps, $user->ID, $object_id );
 		
 		
-		$capabilities = apply_filters('user_has_cap', $user->allcaps, $reqd_caps, $_args);
+		$capabilities = apply_filters('user_has_cap', $user->allcaps, $reqd_caps, $_args, $current_user );
 		
 		if ( defined( 'PPC_VERSION' ) && ! empty($pp_user_workaround) ) { // temp workaround
 			wp_set_current_user( $buffer_user_id );
@@ -178,7 +178,7 @@ function agp_user_can($reqd_caps, $object_id = 0, $user_id = 0, $args = array() 
 						$cap_interceptor->flags['memcache_disabled'] = true;
 					}
 					
-					$capabilities = apply_filters('user_has_cap', $user->allcaps, array($alternate_cap_name), $_args);
+					$capabilities = apply_filters('user_has_cap', $user->allcaps, array($alternate_cap_name), $_args, $current_user );
 					
 					if( empty($capabilities[$alternate_cap_name]) || ! $capabilities[$alternate_cap_name] ) {
 						$GLOBALS['revisionary']->skip_revision_allowance = $orig_skip;
