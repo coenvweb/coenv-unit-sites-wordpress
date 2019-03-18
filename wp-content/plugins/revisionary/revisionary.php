@@ -5,7 +5,7 @@
  * Description: Enables qualified users to submit changes to currently published posts or pages.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
  * Author: PublishPress
  * Author URI: https://publishpress.com
- * Version: 1.2.5
+ * Version: 1.2.7
  * 
  * Copyright (c) 2019 PublishPress
  *
@@ -50,7 +50,7 @@ if ( defined( 'RVY_VERSION' ) ) {
 	return;
 }
 
-define ('RVY_VERSION', '1.2.5');
+define ('RVY_VERSION', '1.2.7');
 
 define ('COLS_ALL_RVY', 0);
 define ('COL_ID_RVY', 1);
@@ -76,6 +76,10 @@ if ( is_admin() || defined('XMLRPC_REQUEST') ) {
 		return;
 }
 
+// define URL
+define ('RVY_BASENAME', plugin_basename(__FILE__) );
+define ('RVY_FOLDER', dirname( plugin_basename(__FILE__) ) );
+
 require_once( dirname(__FILE__).'/rvy_init.php');	// Contains activate, deactivate, init functions. Adds mod_rewrite_rules.
 
 // register these functions before any early exits so normal activation/deactivation can still run with RS_DEBUG
@@ -84,10 +88,6 @@ register_activation_hook(__FILE__, 'rvy_activate');
 // avoid lockout in case of editing plugin via wp-admin
 if ( defined('RS_DEBUG') && is_admin() && ( strpos( urldecode($_SERVER['REQUEST_URI']), 'p-admin/plugin-editor.php' ) || strpos( urldecode($_SERVER['REQUEST_URI']), 'p-admin/plugins.php' ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'activate' ) )
 	return;
-
-// define URL
-define ('RVY_BASENAME', plugin_basename(__FILE__) );
-define ('RVY_FOLDER', dirname( plugin_basename(__FILE__) ) );
 
 if ( ! defined('WP_CONTENT_URL') )
 	define( 'WP_CONTENT_URL', site_url( 'wp-content', $scheme ) );

@@ -18,6 +18,7 @@ class RvyOptionUI {
 	function __construct( $sitewide, $customize_defaults ) {
 		$this->sitewide = $sitewide;
 		$this->customize_defaults = $customize_defaults;
+		$this->display_hints = rvy_get_option( 'display_hints' );
 	}
 	
 	function option_checkbox( $option_name, $tab_name, $section_name, $hint_text, $trailing_html, $args = '') {
@@ -72,7 +73,7 @@ rvy_refresh_default_options();
 
 $ui->all_options = array();
 
-$ui->tab_captions = array( 'features' => __( 'Features', 'revisionary' ), 'optscope' => __( 'Option Scope', 'revisionary' ) );
+$ui->tab_captions = array( 'features' => __( 'Settings', 'revisionary' ), 'optscope' => __( 'Setting Scope', 'revisionary' ) );
 
 $ui->section_captions = array(
 	'features' => array(
@@ -97,6 +98,7 @@ $ui->option_captions = array(
 	'publish_scheduled_notify_revisor' => __('Email the Revisor when a Scheduled Revision is published', 'revisionary'),
 	'revisor_role_add_custom_rolecaps' => __('Include capabilities for all custom post types in the WordPress Revisor role', 'revisionary' ),
 	'require_edit_others_drafts' => __('Prevent Revisors from editing other user&apos;s drafts', 'revisionary' ),
+	'display_hints' => __('Display Hints'),
 );
 
 if ( defined('RVY_CONTENT_ROLES') ) {
@@ -111,7 +113,7 @@ if ( defined('RVY_CONTENT_ROLES') ) {
 $ui->form_options = array( 
 'features' => array(
 	'role_definition' => 	array( 'revisor_role_add_custom_rolecaps', 'require_edit_others_drafts' ),
-	'revisions'		=>		array( 'scheduled_revisions', 'pending_revisions', 'revisor_lock_others_revisions', 'diff_display_strip_tags', 'async_scheduled_publish' ),
+	'revisions'		=>		array( 'scheduled_revisions', 'pending_revisions', 'revisor_lock_others_revisions', 'diff_display_strip_tags', 'async_scheduled_publish', 'display_hints' ),
 	'notification'	=>		array( 'pending_rev_notify_admin', 'pending_rev_notify_author', 'rev_approval_notify_author', 'rev_approval_notify_revisor', 'publish_scheduled_notify_admin', 'publish_scheduled_notify_author', 'publish_scheduled_notify_revisor' )
 )
 );
@@ -151,17 +153,17 @@ if ( $customize_defaults )
 ?>
 <table width = "100%"><tr>
 <td width = "90%">
-<h2><?php 
+<h1><?php 
 if ( $sitewide )
-	_e('Revisionary Network Options', 'revisionary');
+	_e('Revisionary Network Settings', 'revisionary');
 elseif ( $customize_defaults )
-	_e('Revisionary Default Site Options', 'revisionary');
+	_e('Revisionary Network Defaults', 'revisionary');
 elseif ( RVY_NETWORK )
-	_e('Revisionary Site Options', 'revisionary');
+	_e('Revisionary Site Settings', 'revisionary');
 else
-	_e('Revisionary Options', 'revisionary');
+	_e('Revisionary Settings', 'revisionary');
 ?>
-</h2>
+</h1>
 </td>
 <td>
 <div class="submit" style="border:none;float:right;margin:0;">
@@ -172,9 +174,6 @@ else
 <?php
 if ( $sitewide ) {
 	$color_class = 'rs-backgreen';
-	echo '<p style="margin-top:0">';
-	_e( 'These settings will be applied to all sites.', 'revisionary' );
-	echo '</p>';
 	
 } elseif ( $customize_defaults ) {
 	$color_class = 'rs-backgray';
@@ -185,24 +184,26 @@ if ( $sitewide ) {
 } else
 	$color_class = 'rs-backtan';
 
-$class_selected = "agp-selected_agent agp-agent $color_class";
-$class_unselected = "agp-unselected_agent agp-agent";
+if ( $sitewide || $customize_defaults ) {
+	$class_selected = "agp-selected_agent agp-agent $color_class";
+	$class_unselected = "agp-unselected_agent agp-agent";
 
-// todo: prevent line breaks in these links
-$js_call = "agp_swap_display('rs-features', 'rs-optscope', 'rvy_show_features', 'rvy_show_optscope', '$class_selected', '$class_unselected');";
-echo "<ul class='rs-list_horiz' style='margin-bottom:-0.1em'>"
-	. "<li class='$class_selected'>"
-	. "<a id='rvy_show_features' href='javascript:void(0)' onclick=\"$js_call\">" . $ui->tab_captions['features'] . '</a>'
-	. '</li>';
-
-if ( $sitewide ) {
-	$js_call = "agp_swap_display('rs-optscope', 'rs-features', 'rvy_show_optscope', 'rvy_show_features', '$class_selected', '$class_unselected');";
-	echo "<li class='$class_unselected'>"
-		. "<a id='rvy_show_optscope' href='javascript:void(0)' onclick=\"$js_call\">" . $ui->tab_captions['optscope'] . '</a>'
+	// todo: prevent line breaks in these links
+	$js_call = "agp_swap_display('rs-features', 'rs-optscope', 'rvy_show_features', 'rvy_show_optscope', '$class_selected', '$class_unselected');";
+	echo "<ul class='rs-list_horiz' style='margin-bottom:-0.1em'>"
+		. "<li class='$class_selected'>"
+		. "<a id='rvy_show_features' href='javascript:void(0)' onclick=\"$js_call\">" . $ui->tab_captions['features'] . '</a>'
 		. '</li>';
-}
 
-echo '</ul>';
+	if ( $sitewide ) {
+		$js_call = "agp_swap_display('rs-optscope', 'rs-features', 'rvy_show_optscope', 'rvy_show_features', '$class_selected', '$class_unselected');";
+		echo "<li class='$class_unselected'>"
+			. "<a id='rvy_show_optscope' href='javascript:void(0)' onclick=\"$js_call\">" . $ui->tab_captions['optscope'] . '</a>'
+			. '</li>';
+	}
+
+	echo '</ul>';
+}
 
 // ------------------------- BEGIN Features tab ---------------------------------
 
@@ -211,23 +212,29 @@ echo "<div id='rs-features' style='clear:both;margin:0' class='rs-options $color
 	
 if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 	echo '<div class="rs-optionhint">';
-	_e('This page enables <strong>optional</strong> adjustment of Revisionary\'s features. For most installations, the default settings are fine.', 'revisionary');
 	
+	if ( $sitewide ) {
+		global $rvy_options_sitewide, $rvy_default_options;
+		$site_defaults_caption = ( count( $rvy_options_sitewide ) < count( $rvy_default_options ) ) ? sprintf( __( 'You can also specify %1$sdefaults for site-specific settings%2$s.', 'revisionary' ), '<a href="admin.php?page=rvy-default_options">', '</a>' ) : '';
+		printf( __('Use this tab to make <strong>NETWORK-WIDE</strong> changes to Revisionary settings. %s', 'revisionary'), $site_defaults_caption );
+	} elseif ( $customize_defaults ) {
+		_e('Here you can change the default value for settings which are controlled separately on each site.', 'revisionary');
+	} else {
+		_e('This page enables <strong>optional</strong> adjustment of Revisionary\'s features. For most installations, the default settings are fine.', 'revisionary');
+	}
+
 	if ( RVY_NETWORK && is_super_admin() ) {
-		if ( $sitewide ) {
-			if ( ! $customize_defaults ) {
-				$link_open = "<a href='admin.php?page=rvy-options'>";
+		if ( ! $sitewide ) {
+			global $blog_id;
+			if ( 1 == $blog_id ) {
+				$link_open = "<a href='admin.php?page=rvy-site_options'>";
 				$link_close = '</a>';
-		
-				echo  ' ';
-				printf( __('Note that %1$s site-specific options%2$s may also be available.', 'revisionary'), $link_open, $link_close );
+			} else {
+				$link_open = '';
+				$link_close = '';
 			}
-		} else {
-			$link_open = "<a href='admin.php?page=rvy-site_options'>";
-			$link_close = '</a>';
-	
 			echo ' ';
-			printf( __('Note that %1$s network-wide options%2$s may also be available.', 'revisionary'), $link_open, $link_close );
+			printf( __('Note that %1$s network-wide settings%2$s may also be available.', 'revisionary'), $link_open, $link_close );
 		}
 	}
 	
@@ -265,7 +272,7 @@ $table_class = 'form-table rs-form-table';
 $pending_revisions_available = ! RVY_NETWORK || $sitewide || empty( $rvy_options_sitewide['pending_revisions'] ) || rvy_get_option( 'pending_revisions', true );
 $scheduled_revisions_available = ! RVY_NETWORK || $sitewide || empty( $rvy_options_sitewide['scheduled_revisions'] ) || rvy_get_option( 'scheduled_revisions', true );
 
-if ( 	// To avoid confusion, don't display any revision options in MS Site Options if pending revisions / scheduled revisions are unavailable
+if ( 	// To avoid confusion, don't display any revision settings if pending revisions / scheduled revisions are unavailable
 $pending_revisions_available || $scheduled_revisions_available ) :
 
 	$section = 'revisions';			// --- REVISIONS SECTION ---
@@ -292,6 +299,9 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 		
 		$hint = '';
 		$ui->option_checkbox( 'diff_display_strip_tags', $tab, $section, $hint, '' );
+
+		$hint = __( 'Show descriptive captions for Revisionary settings', 'revisionary' );
+		$ui->option_checkbox( 'display_hints', $tab, $section, $hint, '' );
 		?>
 		</td></tr>
 	<?php endif; // any options accessable in this section
@@ -408,12 +418,6 @@ if ( $sitewide ) : ?>
 <?php
 echo "<div id='rs-optscope' style='clear:both;margin:0' class='rs-options agp_js_hide $color_class'>";
 
-if ( $ui->display_hints ) {
-	echo '<div class="rs-optionhint">';
-	_e("Specify which Revisionary Options should be applied network-wide.", 'revisionary');
-	echo '</div><br />';
-}
-
 echo '<ul>';
 $all_movable_options = array();
 
@@ -422,18 +426,23 @@ $option_scope_stamp = __( 'network-wide control of "%s"', 'revisionary' );
 foreach ( $available_form_options as $tab_name => $sections ) {
 	echo '<li>';
 	
-	$explanatory_caption = __( 'Selected options will be controlled network-wide via <strong>Sites > Revisionary Options</strong>; unselected options can be set per-site via <strong>Settings > Revisionary</strong>', 'revisionary' );
-	
+	$explanatory_caption = __( 'Specify which Revisionary Settings to control network-wide. Unselected settings are controlled separately on each site.', 'revisionary' );
+
 	if ( isset( $ui->tab_captions[$tab_name] ) )
 		$tab_caption = $ui->tab_captions[$tab_name];
 	else
 		$tab_caption = $tab_name;
 
 	echo '<div style="margin:1em 0 1em 0">';
-	if ( $ui->display_hints )
-		printf( _x( '<span class="rs-h3text">%1$s</span> (%2$s)', 'option_tabname (explanatory note)', 'revisionary' ), $tab_caption, $explanatory_caption );
-	else
-		echo $tab_caption;
+	if ( count( $available_form_options ) > 1 ) {
+		if ( $ui->display_hints )
+			printf( _x( '<span class="rs-h3text">%1$s</span> (%2$s)', 'option_tabname (explanatory note)', 'revisionary' ), $tab_caption, $explanatory_caption );
+		else
+			echo $tab_caption;
+	} elseif ( $ui->display_hints ) {
+		echo $explanatory_caption;
+	}
+
 	echo '</div>';
 	
 	echo '<ul style="margin-left:2em">';
@@ -443,9 +452,9 @@ foreach ( $available_form_options as $tab_name => $sections ) {
 			continue;
 		
 		echo '<li><strong>';
-		
-		if ( isset( $section_captions[$tab_name][$section_name] ) )
-			echo $section_captions[$tab_name][$section_name];
+
+		if ( isset( $ui->section_captions[$tab_name][$section_name] ) )
+			echo $ui->section_captions[$tab_name][$section_name];
 		else
 			_e( $section_name );
 		
@@ -469,7 +478,7 @@ foreach ( $available_form_options as $tab_name => $sections ) {
 			}
 		}
 		
-		echo '</ul>';
+		echo '</ul><br />';
 	}
 	echo '</ul><br /><hr />';
 }

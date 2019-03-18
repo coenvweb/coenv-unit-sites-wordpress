@@ -2,6 +2,21 @@
 if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die();
 
+define( 'RVY_NETWORK', awp_is_mu() && rvy_plugin_active_for_network( RVY_BASENAME ) );
+
+// WP function is_plugin_active_for_network() is defined in admin
+function rvy_plugin_active_for_network( $plugin ) {
+	if ( ! is_multisite() ) {
+		return false;
+	}
+
+	$plugins = get_site_option( 'active_sitewide_plugins' );
+	if ( isset( $plugins[ $plugin ] ) ) {
+		return true;
+	}
+
+	return false;
+}
 
 // auto-define the Revisor role to include custom post type capabilities equivalent to those added for post, page in rvy_add_revisor_role()
 function rvy_add_revisor_custom_caps() {
@@ -157,7 +172,7 @@ function rvy_refresh_options() {
 }
 
 function rvy_refresh_options_sitewide() {
-	if ( ! IS_MU_RVY )
+	if ( ! RVY_NETWORK )
 		return;
 		
 	global $rvy_options_sitewide;
@@ -170,6 +185,8 @@ function rvy_refresh_options_sitewide() {
 
 		$rvy_options_sitewide = array_fill_keys( array_merge( $custom_options_sitewide, $unreviewed_default_sitewide ), true );
 	}
+
+	$rvy_options_sitewide = array_filter( $rvy_options_sitewide );
 }
 
 function rvy_refresh_default_options() {
@@ -177,7 +194,7 @@ function rvy_refresh_default_options() {
 
 	$rvy_default_options = apply_filters( 'default_options_rvy', rvy_default_options() );
 	
-	if ( IS_MU_RVY )
+	if ( RVY_NETWORK )
 		rvy_apply_custom_default_options();
 }
 
@@ -234,7 +251,7 @@ function rvy_retrieve_options( $sitewide = false ) {
 	global $wpdb;
 	
 	if ( $sitewide ) {
-		if ( ! IS_MU_RVY )
+		if ( ! RVY_NETWORK )
 			return;
 
 		global $rvy_site_options;

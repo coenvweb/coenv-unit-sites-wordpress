@@ -9,9 +9,8 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
  * @license     GPLv2 or later
  * @since       1.0.0
  */
-
  
-// indicates, for MU installations, which of the RS options (and OType options) should be controlled site-wide
+// Setting scope: For Network installations, which Revisionary options should default to site-wide control?
 function rvy_default_options_sitewide() {
 	$def = array(
 		'pending_revisions' => true,
@@ -28,11 +27,17 @@ function rvy_default_options_sitewide() {
 		'revisor_role_add_custom_rolecaps' => true,
 		'revisor_lock_others_revisions' => true,
 		'require_edit_others_drafts' => true,
+		'diff_display_strip_tags' => false,
 	);
+
+	if ( $other_options = array_diff_key( rvy_default_options(), $def ) ) {
+		$def = array_merge( $def, array_fill_keys( array_keys($other_options), true ) );
+	}
+
 	return $def;	
 }
  
-
+// Default values for Revisionary settings
 function rvy_default_options() {
 	$def = array(
 		'pending_revisions' => 1,
@@ -49,6 +54,7 @@ function rvy_default_options() {
 		'revisor_role_add_custom_rolecaps' => 1,
 		'revisor_lock_others_revisions' => 1,
 		'require_edit_others_drafts' => 1,
+		'diff_display_strip_tags' => 0,
 	);
 
 	return $def;

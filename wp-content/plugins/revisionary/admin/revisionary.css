@@ -119,7 +119,8 @@ margin: 0 0 0.5em 0;
 }
 
 .rs-agents_list_auto {
-margin: 0.5em 0 1em 0;
+margin-top: 0;
+margin-bottom: 5px;
 padding: 0;
 clear: both;
 float: left;
@@ -294,7 +295,7 @@ height: 1px;
 }
 
 .rvy-list-horiz {
-margin:0.3em 0 0 0;
+margin:5px 0 10px 0;
 }
 
 .rvy-available-agents {

@@ -15,9 +15,6 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 $wp_content = ( is_ssl() || ( is_admin() && defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN ) ) ? str_replace( 'http:', 'https:', WP_CONTENT_URL ) : WP_CONTENT_URL;
 define ('RVY_URLPATH', $wp_content . '/plugins/' . RVY_FOLDER);
 
-include_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-define( 'RVY_NETWORK', awp_is_mu() && is_plugin_active_for_network( RVY_BASENAME ) );
-
 class RevisionaryAdmin
 {
 	var $tinymce_readonly;
@@ -29,9 +26,11 @@ class RevisionaryAdmin
 		add_action('admin_head', array(&$this, 'admin_head'));
 		
 		if ( ! defined('XMLRPC_REQUEST') && ! strpos($_SERVER['SCRIPT_NAME'], 'p-admin/async-upload.php' ) ) {
-			if ( RVY_NETWORK ) {
+			global $blog_id;
+			if ( RVY_NETWORK && ( 1 == $blog_id ) ) {
 				require_once( dirname(__FILE__).'/admin_lib-mu_rvy.php' );
 				add_action('network_admin_menu', 'rvy_mu_site_menu' );
+				add_action('admin_menu', 'rvy_mu_site_menu' );
 			}
 			
 			add_action('admin_menu', array(&$this,'build_menu'));
@@ -125,12 +124,12 @@ class RevisionaryAdmin
 		if ( in_array( $GLOBALS['pagenow'], array( 'post.php', 'post-new.php' ) ) ) {
 			global $post;
 			if ( $post ) {
-				$status_obj = get_post_status_object( $post->post_status );
-
-				// only apply revisionary UI for currently published or scheduled posts
-				if ( $status_obj->public || $status_obj->private || ( 'future' == $post->post_status ) ) {
-					require_once( dirname(__FILE__).'/filters-admin-ui-item_rvy.php' );
-					$GLOBALS['revisionary']->filters_admin_item_ui = new RevisionaryAdminFiltersItemUI();
+				if ( $status_obj = get_post_status_object( $post->post_status ) ) {
+					// only apply revisionary UI for currently published or scheduled posts
+					if ( $status_obj->public || $status_obj->private || ( 'future' == $post->post_status ) ) {
+						require_once( dirname(__FILE__).'/filters-admin-ui-item_rvy.php' );
+						$GLOBALS['revisionary']->filters_admin_item_ui = new RevisionaryAdminFiltersItemUI();
+					}
 				}
 			}
 		}	
@@ -210,7 +209,7 @@ class RevisionaryAdmin
 	function flt_plugin_action_links($links, $file) {
 		if ( $file == RVY_BASENAME ) {
 			$page = ( RVY_NETWORK ) ? 'rvy-site_options' : 'rvy-options';
-			$links[] = "<a href='admin.php?page=$page'>" . __awp('Options') . "</a>";
+			$links[] = "<a href='admin.php?page=$page'>" . __awp('Settings') . "</a>";
 		}
 			
 		return $links;
@@ -369,8 +368,9 @@ jQuery(document).ready( function($) {
 			rvy_refresh_default_options();
 
 		// omit site-Specific Options menu item if all options are controlled network-wide
+		global $blog_id;
 		if ( ! RVY_NETWORK || ( count($rvy_options_sitewide) != count($rvy_default_options) ) ) {
-			add_options_page( __('Revisionary Options', 'revisionary'), __('Revisionary', 'revisionary'), 'read', 'rvy-options');
+			add_options_page( __('Revisionary Settings', 'revisionary'), __('Revisionary', 'revisionary'), 'read', 'rvy-options');
 			add_action('settings_page_rvy-options', 'rvy_omit_site_options' );	
 		}
 	}

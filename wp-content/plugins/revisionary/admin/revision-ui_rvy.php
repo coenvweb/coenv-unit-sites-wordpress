@@ -21,9 +21,10 @@ if( false !== strpos( urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-re
 	add_filter( 'mce_external_plugins', 'rvy_clear_mce_plugins', 99 );
 }
  
-function rvy_metabox_notification_list( $topic = 'pending_revision' ) {
-	if ( 'pending_revision' == $topic ) {	
+function rvy_metabox_notification_list() {
 		global $revisionary;
+		
+		$topic = 'pending_revision';
 		
 		$notify_editors = (string) rvy_get_option('pending_rev_notify_admin');
 		$notify_author = (string) rvy_get_option('pending_rev_notify_author');
@@ -137,7 +138,7 @@ function rvy_metabox_notification_list( $topic = 'pending_revision' ) {
 		
 		require_once('agents_checklist_rvy.php');
 		
-		echo("<div id='rvy_cclist_$topic'><br />");
+		echo("<div id='rvy_cclist_$topic'>");
 		
 		if ( $default_ids )
 			RevisionaryAgentsChecklist::agents_checklist( 'user', $post_publishers, $id_prefix, $default_ids );
@@ -149,7 +150,6 @@ function rvy_metabox_notification_list( $topic = 'pending_revision' ) {
 		}
 		
 		echo('</div>');
-	}
 }
 
 

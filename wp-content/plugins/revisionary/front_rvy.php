@@ -280,14 +280,15 @@ class RvyScheduledHtml {
 
 	function __construct( $html, $action, $priority = 10 ) {
 		$this->html = $html;
+		$this->action = $action;
 		$this->priority = $priority;
 
-		add_action( $action, array( $this, 'echo_html', $priority ) );
+		add_action( $action, array( $this, 'echo_html' ), $priority );
 	}
 
 	function echo_html() {
 		echo $this->html;
-		remove_action( $action, array( $this, 'echo_html', $priority ) );
+		remove_action( $this->action, array( $this, 'echo_html' ), $this->priority );
 	}
 }
 

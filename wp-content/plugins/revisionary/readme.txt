@@ -3,7 +3,7 @@ Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
 Requires at least: 4.1
 Tested up to: 5.1
-Stable Tag: 1.2.5
+Stable Tag: 1.2.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,12 +18,12 @@ Doesn't it seem like setting a published post/page to a future date should sched
 Revisionary enables qualified users to submit changes to currently published posts or pages.  Contributors also gain the ability to submit revisions to their own published content.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
 
 = Partial Feature List =
-* Pending Revisions allow designated users to suggest changes to a currently published post/page
-* Scheduled Revisions allow you to specify future changes to published content (either via Pending Revision approval or directly by fully qualified author/editor)
-* Enhanced Revision Management Form
-* Front-end preview display of Pending / Scheduled Revisions with "Publish Now" link
-* New WordPress role, "Revisor" is a moderated Editor
-* Works with blog-wide WordPress Roles, or in conjunction with <a href="https://presspermit.com">Press Permit</a>.
+* Pending Revisions allow designated users to suggest changes to a currently published post/page.
+* Scheduled Revisions allow you to specify future changes to published content (either via Pending Revision approval or directly by fully qualified author/editor).
+* Front-end preview display of Pending / Scheduled Revisions with "Publish Now" link.
+* New WordPress role, "Revisor" is a moderated Editor.
+* Works with site-wide WordPress Roles, or in conjunction with <a href="https://presspermit.com">Press Permit</a> for page-specific or category-specific permissions.
+* Gutenberg compatibility is under active development, coming soon.
 
 = Support =
 * Revisionary is professionally supported by both the original author (Kevin Behrens) and the experienced <a href="https://publishpress.com">PublishPress</a> team.
@@ -42,6 +42,18 @@ Revisionary enables qualified users to submit changes to currently published pos
 
 
 == Changelog ==
+
+= 1.2.7 - 13 Mar 2019 =
+* Fixed : Pending Revision Notification on Multisite installations. Due to failure to apply settings, e-mail notifications defaulted to "By default" option, which failed for Pending Revisions prior to version 1.2.6. (But notifications were still sent if the intended recipients are members of the Press Permit Pro "Pending Revision Monitors" group).
+* Fixed : Multisite - If network-activated, Revisionary settings screens unavailable. Last stored network-wide settings (or hardcoded defaults) applied instead.
+* Fixed : Multisite - If not network-activated, Revisionary settings screen was ineffective. Site-specific settings were stored, but network-wide settings or defaults applied instead.
+* Fixed : "Display Hints" setting had no checkbox on Settings screen
+* Change : Improved settings captions
+
+= 1.2.6 - 13 Mar 2019 =
+* Fixed : "Publishers to Notify" checkboxes were not displayed, and notifications not sent, if Email notification for Pending Revisions set to "By default"
+* Fixed : Revision previews - PHP Warning and failure to output "Publish Now" header
+* Change : Improved styling in "Publishers to Notify" metabox
 
 = 1.2.5 - 25 Feb 2019 =
 * Compat : TinyMCE Advanced - Failed to display editor on revision management screen
