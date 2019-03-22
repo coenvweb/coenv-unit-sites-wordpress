@@ -116,6 +116,9 @@ RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^www\.jisao.uw.edu [NC]
 RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^quantitative.washington.edu [NC]
+RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -186,6 +189,10 @@ RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R,L]
 RewriteCond %{HTTP_HOST} ^freshwater.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^quantitative.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R,L]
 
 
 RewriteCond %{HTTP_HOST} !^freshwater.uw\.edu [NC]
