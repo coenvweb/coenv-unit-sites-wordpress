@@ -43,19 +43,19 @@
                     <ul class="menu-footer-units">
                         <li><a target="_blank" href="http://fish.uw.edu/">Aquatic and Fishery Sciences</a></li>
                         <li><a target="_blank" href="http://atmos.uw.edu/">Atmospheric Sciences</a></li>
+                        <li><a target="_blank" href="https://quantitative.uw.edu/">Center for Quantitative Science</a></li>
                         <li><a target="_blank" href="http://cig.uw.edu/">Climate Impacts Group</a></li>
                         <li><a target="_blank" href="https://earthlab.uw.edu/">EarthLab</a></li>
                         <li><a target="_blank" href="http://www.ess.washington.edu/">Earth and Space Sciences</a></li>
                         <li><a target="_blank" href="http://sefs.uw.edu/">Environmental and Forest Sciences</a></li>
                         <li><a target="_blank" href="http://fhl.uw.edu/">Friday Harbor Laboratories</a></li>
-                        <li><a target="_blank" href="http://jisao.washington.edu/">Joint Institute for the Study of the Atmosphere and Ocean</a></li>
+                        <li><a target="_blank" href="http://jisao.uw.edu/">Joint Institute for the Study of the Atmosphere and Ocean</a></li>
                         <li><a target="_blank" href="https://smea.uw.edu">Marine and Environmental Affairs</a></li>
                         <li><a target="_blank" href="https://marinebiology.uw.edu/">Marine Biology</a></li>
                         <li><a target="_blank" href="http://www.ocean.washington.edu/">Oceanography</a></li>
                         <li><a target="_blank" href="http://pcc.uw.edu/">Program on Climate Change</a></li>
                         <li><a target="_blank" href="http://envstudies.uw.edu/">Program on the Environment</a></li>
-                        <li><a target="_blank" href="https://depts.washington.edu/qerm/">Quantitative Ecology and Resource Management</a></li>
-                        <li><a target="_blank" href="http://depts.washington.edu/qrc/">Quaternary Research Center</a></li>
+                        <li><a target="_blank" href="https://qrc.uw.edu/">Quaternary Research Center</a></li>
                         <li><a target="_blank" href="https://botanicgardens.uw.edu/">UW Botanic Gardens</a></li>
                         <li><a target="_blank" href="http://www.waspacegrant.org/">Washington NASA Space Grant</a></li>
                         <li><a target="_blank" href="http://wsg.washington.edu/">Washington Sea Grant</a></li>
