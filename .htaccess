@@ -386,7 +386,7 @@ RewriteRule ^pnwc/?$ learn/ [R=301,L]
 
 # Botanicgardens Redirects
 RewriteCond %{HTTP_HOST} !^botanicgardens.uw\.edu [NC]
-RewriteRule .? - [S=32]
+RewriteRule .? - [S=33]
 RewriteRule ^gardens/wpa.shtml https://botanicgardens.uw.edu/washington-park-arboretum/ [R=301,L]
 RewriteRule ^visit_hours.shtml https://botanicgardens.uw.edu/washington-park-arboretum/visit/ [R=301,L]
 RewriteRule ^visit/directions.shtml https://botanicgardens.uw.edu/directions/ [R=301,L]
@@ -419,6 +419,7 @@ RewriteRule ^ren/?$ https://botanicgardens.uw.edu/science-conservation/restorati
 RewriteRule ^map/?$ https://depts.washington.edu/uwbg/gardens/map.html [R=301,L]
 RewriteRule ^farm/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/garens/uw-farm/ [R=301,L]
 RewriteRule ^supportYFP/?$ https://www.washington.edu/giving/make-a-gift/?source_typ=3&source=WPAEDP [R=301,NC,L]
+RewriteRule ^tram-tours/?$ https://botanicgardens.uw.edu/washington-park-arboretum/activities/tours/ [R=302,NC,L]
 
 # Env Studies Redirects
 RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
