@@ -122,6 +122,12 @@ RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^sefs.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^www\.sefs.washington.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.cfr.uw.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 # RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
@@ -490,6 +496,14 @@ RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resour
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
+
+# SEFS Redirects
+RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
+RewriteRule .? - [S=4]
+RewriteRule ^courses/?.*$  https://sefs.uw.edu/students/undergraduate/esrm/esrm-courses/ [R=301,NC,L]
+RewriteRule ^academicPrograms/?.*$ https://sefs.uw.edu/students/ [R=301,NC,L]
+RewriteRule ^aboutTheSchool/?.*$ https://sefs.uw.edu/about/ [R=301,NC,L]
+RewriteRule ^contactUs/?.*$ https://sefs.uw.edu/about/contact [R=301,NC,L]
 
 # Earthlab Redirects
 RewriteCond %{HTTP_HOST} !^earthlab.uw\.edu [NC]
