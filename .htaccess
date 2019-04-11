@@ -499,13 +499,14 @@ RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,
 
 # SEFS Redirects
 RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
-RewriteRule .? - [S=6]
+RewriteRule .? - [S=7]
 RewriteRule ^courses/?.*$  https://sefs.uw.edu/students/undergraduate/esrm/esrm-courses/ [R=301,NC,L]
 RewriteRule ^academicPrograms/?.*$ https://sefs.uw.edu/students/ [R=301,NC,L]
 RewriteRule ^aboutTheSchool/?.*$ https://sefs.uw.edu/about/ [R=301,NC,L]
 RewriteRule ^contactUs/?.*$ https://sefs.uw.edu/about/contact [R=301,NC,L]
 RewriteRule ^tools/?.*$ https://sefs.uw.edu/intranet/ [R=301,NC,L]
 RewriteRule ^support/?.*$ https://sefs.uw.edu/alumni/giving/ [R=301,NC,L]
+RewriteRule ^centersPrograms/?.*$ https://sefs.uw.edu/research/research-centers-and-labs/ [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} !^www\.cfr.washington\.edu [NC]
 RewriteRule .? - [S=6]
