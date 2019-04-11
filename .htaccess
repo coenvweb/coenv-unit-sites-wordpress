@@ -125,7 +125,7 @@ RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^www\.sefs.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
-RewriteCond %{HTTP_HOST} ^www\.cfr.uw.edu [NC]
+RewriteCond %{HTTP_HOST} ^www\.cfr.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
 # SSL on each domain
