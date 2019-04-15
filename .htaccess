@@ -122,7 +122,7 @@ RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^sefs.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
-RewriteCond %{HTTP_HOST} ^.cfr.washington.edu [NC]
+RewriteCond %{HTTP_HOST} ^cfr.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.cfr.uw.edu [NC]
