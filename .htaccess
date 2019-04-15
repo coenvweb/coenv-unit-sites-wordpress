@@ -55,13 +55,6 @@ php_value suhosin.request.max_vars 3000
 
 # Site redirects
 
-#6/5 test to force non-www
-RewriteEngine On
-RewriteBase /
-RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
-#/test
-
 RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
 
@@ -127,6 +120,13 @@ RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.cfr.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+#6/5 test to force non-www
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#/test
 
 # SSL on each domain
 
