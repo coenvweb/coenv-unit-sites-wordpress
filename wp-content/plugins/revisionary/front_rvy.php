@@ -53,18 +53,24 @@ class RevisionaryFront {
 			if ( ! empty($wp_query->queried_object_id) )
 				$id = $wp_query->queried_object_id;
 		}
-	
-		if ( $revision = get_post( $id ) )
-			if ( $parent = get_post( $revision->post_parent ) )
+		
+		if ( empty($id) ) {
+			return;
+		}
+
+		if ( $revision = get_post( $id ) ) {
+			if ( $parent = get_post( $revision->post_parent ) ) {
 				if ( ( 'page' == $parent->post_type ) && ( $parent->post_name == $revision->post_name ) ) {
 					global $wp_query;
 					$wp_query->is_page = true;
 					$wp_query->is_single = false;
 
 					add_filter( 'page_template', array( &$this, 'flt_revision_page_template' ) );	// todo: pass parent ID so filter doesn't have to redetermine it
-				} else
+				} else {
 					add_filter( 'single_template', array( &$this, 'flt_revision_post_template' ) );	// todo: pass parent ID so filter doesn't have to redetermine it
-
+				}
+			}
+		}
 	}	
 	
 	function flt_revision_post_template( $single_template, $id = 0 ) {
@@ -155,7 +161,7 @@ class RevisionaryFront {
 			$revision_id = $_GET['p'];
 			if ( $revision = get_post( $revision_id ) ) {
 				
-				$datef = __awp( 'M j, Y @ G:i' );
+				$datef = __awp( 'M j, Y @ g:i a' );
 				$date = agp_date_i18n( $datef, strtotime( $revision->post_date ) );
 
 				$color = '#ccc';
@@ -185,8 +191,9 @@ class RevisionaryFront {
 					case 'pending' :
 						if ( strtotime( $revision->post_date_gmt ) > agp_time_gmt() ) {
 							$class = 'pending_future';
-							$date_msg = sprintf( __('(for publication on %s)', 'revisionary'), $date );
-							$link_caption = sprintf( __( 'Schedule this Pending Revision', 'revisionary' ), $date );
+							$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
+							$date_msg = sprintf( __('(for publication on %s%s%s)', 'revisionary'), "<a href='$edit_url'>", $date, '</a>' );
+							$link_caption = __( 'Schedule this Pending Revision', 'revisionary' );
 						} else {
 							$class = 'pending';
 							$date_msg = '';
@@ -196,8 +203,9 @@ class RevisionaryFront {
 						
 					case 'future' :
 						$class = 'future';
-						$date_msg = sprintf( __('(already scheduled for publication on %s)', 'revisionary'), $date );
-						$link_caption = sprintf( __( 'Publish now.', 'revisionary' ), $date );
+						$edit_url = 'wp-admin/' . "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision_id";
+						$date_msg = sprintf( __('(already scheduled for publication on %s%s%s)', 'revisionary'), "<a href='$edit_url'>", $date, '</a>' );
+						$link_caption = sprintf( __( 'Publish now', 'revisionary' ), $date );
 						break;
 	
 					case 'inherit' :
@@ -207,11 +215,13 @@ class RevisionaryFront {
 						break;
 					}
 
+					$redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect={$_REQUEST['rvy_redirect']}" : '';
+
 					if ( in_array( $revision->post_status, array( 'pending' ) ) ) {
-						$link = wp_nonce_url( 'wp-admin/' . "admin.php?page=rvy-revisions&amp;revision=$revision_id&amp;diff=false&amp;action=approve", "approve-post_$published_post_id|$revision_id" );
+						$link = wp_nonce_url( 'wp-admin/' . "admin.php?page=rvy-revisions&amp;revision=$revision_id&amp;diff=false&amp;action=approve$redirect_arg", "approve-post_$published_post_id|$revision_id" );
 					
 					} elseif ( in_array( $revision->post_status, array( 'inherit', 'future' ) ) ) {
-						$link = wp_nonce_url( 'wp-admin/' . "admin.php?page=rvy-revisions&amp;revision=$revision_id&amp;diff=false&amp;action=restore", "restore-post_$published_post_id|$revision_id" );
+						$link = wp_nonce_url( 'wp-admin/' . "admin.php?page=rvy-revisions&amp;revision=$revision_id&amp;diff=false&amp;action=restore$redirect_arg", "restore-post_$published_post_id|$revision_id" );
 					
 					} else
 						$link = '';
@@ -298,5 +308,3 @@ function rvy_front_css() {
 	
 	echo '<link rel="stylesheet" href="' . $path . '/revisionary-front.css" type="text/css" />'."\n";
 }
-
-?>

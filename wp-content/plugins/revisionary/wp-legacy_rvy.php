@@ -17,5 +17,3 @@ function get_post_type_object( $post_type ) {
 	return $wp_post_types[$post_type];
 }
 endif;
-
-?>

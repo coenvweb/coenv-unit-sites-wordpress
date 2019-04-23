@@ -4,6 +4,31 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 
 define( 'RVY_NETWORK', awp_is_mu() && rvy_plugin_active_for_network( RVY_BASENAME ) );
 
+add_action( 'rest_api_init', array( 'RVY_RestAPI', 'register_scheduled_rev_meta_field' ) );
+
+class RVY_RestAPI {
+    // register a postmeta field to flag the need for a redirect following scheduled revision creation
+    public static function register_scheduled_rev_meta_field() {
+			$post_types = get_post_types( array( 'public' => true ) );
+
+			foreach( $post_types as $post_type ) {
+				// Thanks to Josh Pollock for demonstrating this:
+				// https://torquemag.io/2015/07/working-with-post-meta-data-using-the-wordpress-rest-api/
+				register_rest_field( $post_type, 'new_scheduled_revision', array(
+					'get_callback' => array( 'RVY_RestAPI', 'get_new_scheduled_revision_flag' ),
+					'schema' => null,
+					)
+				);
+			}
+    }
+        
+    public static function get_new_scheduled_revision_flag( $object ) {
+		global $current_user;
+        return ( isset( $object['id'] ) ) ? get_post_meta( $object['id'], "_new_scheduled_revision_{$current_user->ID}", true ) : false;
+    }
+}
+
+
 // WP function is_plugin_active_for_network() is defined in admin
 function rvy_plugin_active_for_network( $plugin ) {
 	if ( ! is_multisite() ) {
@@ -43,8 +68,21 @@ function rvy_activate() {
 	delete_option( 'rvy_next_rev_publish_gmt' );
 }
 
+function rvy_detect_post_type() {
+	global $revisionary;
+	
+	if ( isset($revisionary) && $revisionary->doing_rest && $revisionary->rest->is_posts_request )
+		return $revisionary->rest->post_type;
+	else
+		return awp_post_type_from_uri();
+}
+
 function rvy_detect_post_id() {
-	if ( ! empty( $_GET['post'] ) )
+	global $revisionary;
+	
+	if ( isset($revisionary) && $revisionary->doing_rest && $revisionary->rest->is_posts_request )
+		$post_id = $revisionary->rest->post_id;
+	elseif ( ! empty( $_GET['post'] ) )
 		$post_id = $_GET['post'];
 	elseif ( ! empty( $_POST['post_ID'] ) )
 		$post_id = $_POST['post_ID'];
@@ -82,6 +120,12 @@ function rvy_add_revisor_role( $requested_blog_id = '' ) {
 	$wp_roles->add_role( 'revisor', __( 'Revisor', 'revisionary' ), $wp_role_caps );
 }
 
+// wrapper function for use with wp_cron hook
+function revisionary_publish_scheduled() {
+	require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
+	rvy_publish_scheduled_revisions();
+}
+
 function rvy_init() {
 	global $wp_roles;
 
@@ -89,12 +133,18 @@ function rvy_init() {
 		rvy_add_revisor_role();
 	}
 	
+	/*  // wp_cron hook @todo
+	if ( rvy_get_option( 'scheduled_revisions' ) ) {
+		add_action( 'publish_revision_rvy', 'revisionary_publish_scheduled' ); //wp-cron hook
+	}
+	*/
+
 	if ( is_admin() ) {
 		require_once( dirname(__FILE__).'/admin/admin-init_rvy.php' );
 		rvy_load_textdomain();
 		rvy_admin_init();
 
-	} else {
+	} else {		// @todo: fix links instead
 		// fill in the missing args for Pending / Scheduled revision preview link from Edit Posts / Pages
 		if ( isset($_SERVER['HTTP_REFERER']) 
 		&& ( false !== strpos( urldecode($_SERVER['HTTP_REFERER']),'p-admin/edit-pages.php') 
@@ -110,50 +160,48 @@ function rvy_init() {
 					}
 				}
 			}
-
-		} elseif( strpos( urldecode($_SERVER['REQUEST_URI']), 'index.php') ) {
-				
-			if ( ! empty($_GET['action']) && ('publish_scheduled' == $_GET['action']) ) {
+		// Is this an asynchronous request to publish scheduled revisions?
+		} elseif ( ! empty($_GET['action']) && ('publish_scheduled_revisions' == $_GET['action']) && rvy_get_option( 'scheduled_revisions' ) ) {
 				require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
 				add_action( 'rvy_init', 'rvy_publish_scheduled_revisions' );
-			
-			}
-		}	
+		}
 	}
 	
-	if ( empty( $_GET['action'] ) || ( 'publish_scheduled' != $_GET['action'] ) ) {
-		if ( ! strpos( $_SERVER['REQUEST_URI'], 'login.php' ) ) {
+	if ( empty( $_GET['action'] ) || ( 'publish_scheduled_revisions' != $_GET['action'] ) ) {
+		if ( ! strpos( $_SERVER['REQUEST_URI'], 'login.php' ) && rvy_get_option( 'scheduled_revisions' ) ) {
 		
 			// If a previously requested asynchronous request was ineffective, perform the actions now
-			// (this is not executed if the current URI has action=publish_scheduled)
+			// (this is not executed if the current URI is from a manual publication request with action=publish_scheduled_revisions)
 			$requested_actions = get_option( 'requested_remote_actions_rvy' );
 			if ( is_array( $requested_actions) && ! empty($requested_actions) ) {
-				if ( ! empty($requested_actions['publish_scheduled']) ) {
+				if ( ! empty($requested_actions['publish_scheduled_revisions']) ) {
 					require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
 					rvy_publish_scheduled_revisions();
-					unset( $requested_actions['publish_scheduled'] );
+					unset( $requested_actions['publish_scheduled_revisions'] );
 				}
 	
 				update_option( 'requested_remote_actions_rvy', $requested_actions );
 			}
 			
-			if ( rvy_get_option( 'scheduled_revisions' ) ) {
-
-				$next_publish = get_option( 'rvy_next_rev_publish_gmt' );
+			$next_publish = get_option( 'rvy_next_rev_publish_gmt' );
 			
-				if ( ! $next_publish || ( agp_time_gmt() >= strtotime( $next_publish ) ) ) {
-					if ( ini_get( 'allow_url_fopen' ) && rvy_get_option('async_scheduled_publish') ) {
-						// asynchronous secondary site call to avoid delays // TODO: pass site key here
-						rvy_log_async_request('publish_scheduled');
-						$url = site_url( 'index.php?action=publish_scheduled' );
-						wp_remote_post( $url, array('timeout' => 5, 'blocking' => false, 'sslverify' => apply_filters('https_local_ssl_verify', true)) );
-					} else {
+			// automatically publish any scheduled revisions whose time has come
+			if ( ! $next_publish || ( agp_time_gmt() >= strtotime( $next_publish ) ) ) {
+
+				if ( ini_get( 'allow_url_fopen' ) && rvy_get_option('async_scheduled_publish') ) {
+					// asynchronous secondary site call to avoid delays // TODO: pass site key here
+					rvy_log_async_request('publish_scheduled_revisions');
+					$url = site_url( 'index.php?action=publish_scheduled_revisions' );
+					wp_remote_post( $url, array('timeout' => 5, 'blocking' => false, 'sslverify' => apply_filters('https_local_ssl_verify', true)) );
+				} else {
+					// publish scheduled revision now
+					if ( ! defined('DOING_CRON') ) {
 						define( 'DOING_CRON', true );
-						require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
-						rvy_publish_scheduled_revisions();
 					}
-				}	
-			}
+					require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
+					rvy_publish_scheduled_revisions();
+				}
+			}	
 		}
 	}
 
@@ -238,11 +286,8 @@ function rvy_update_option( $option_basename, $option_val, $sitewide = -1 ) {
 	}
 		
 	if ( $sitewide ) {
-		//d_echo("<br />sitewide: $option_basename, value '$option_val'" );
-		//add_site_option( "rvy_$option_basename", $option_val );
 		update_site_option( "rvy_$option_basename", $option_val );
 	} else { 
-		//d_echo("<br />blogwide: $option_basename" );
 		update_option( "rvy_$option_basename", $option_val );
 	}
 }
@@ -396,14 +441,6 @@ function is_content_administrator_rvy() {
 	return current_user_can( $cap_name );
 }
 
-/*
-function rvy_notice($message) {
-	//add_action('admin_notices', create_function('', 'echo \'<div id="message" class="error fade" style="color: black">' . $message . '</div>\';'));
-	//trigger_error("Revisionary internal notice: $message");
-	//$err = new WP_Error('Revisionary', $message);
-}
-*/
-
 function rvy_notice( $message, $class = 'error fade' ) {
 	include_once( dirname(__FILE__).'/lib/error_rvy.php');
 	$rvy_err = new RvyError();
@@ -417,13 +454,6 @@ function rvy_error( $err_slug, $arg2 = '' ) {
 }
 
 function rvy_mail( $address, $title, $message ) {
-	//$blog_name = get_option( 'blogname' );
-	//$admin_email = get_option( 'admin_email' );
-	
-    //$headers = 'From: ' . $blog_name . ' <' . $admin_email . '>' . "\r\n";
-    //$headers .= 'Reply-To: ' . $blog_name . ' <'. $admin_email . '>' . "\r\n";
-	//$headers .= 'Return-Path: ' . $blog_name . ' <'. $admin_email . '>' . "\r\n";
-
 	if ( defined( 'RS_DEBUG' ) )
 		wp_mail( $address, $title, $message );
 	else
@@ -434,4 +464,53 @@ function rvy_omit_site_options() {
 	include_once( RVY_ABSPATH . '/admin/options.php' );
 	rvy_options( false );
 }
-?>
+
+function rvy_wp_api_request() {
+	return ( function_exists('wp_api_request') ) ? wp_api_request() : false;
+}
+
+function rvy_is_status_public( $status ) {
+	if ( $post_status_obj = get_post_status_object( $status ) ) {
+		return ! empty( $post_status_obj->public );
+	}
+
+	return false;
+}
+
+function rvy_is_status_private( $status ) {
+	if ( $post_status_obj = get_post_status_object( $status ) ) {
+		return ! empty( $post_status_obj->private );
+	}
+
+	return false;
+}
+
+function rvy_is_status_published( $status ) {
+	if ( $post_status_obj = get_post_status_object( $status ) ) {
+		return ! empty( $post_status_obj->public ) || ! empty( $post_status_obj->private );
+	}
+
+	return false;
+}
+
+function rvy_halt( $msg, $title = '' ) {
+	if ( ! $title ) {
+		$title = __( 'Revision Workflow', 'revisionary' );
+	}
+	wp_die( $msg, $title, array( 'response' => 200 ) );
+}
+
+function _revisionary_dashboard_dismiss_msg() {
+	$dismissals = get_option( 'revisionary_dismissals' );
+	if ( ! is_array( $dismissals ) )
+		$dismissals = array();
+
+	$msg_id = ( isset( $_REQUEST['msg_id'] ) ) ? $_REQUEST['msg_id'] : 'intro_revisor_role';
+	$dismissals[$msg_id] = true;
+	update_option( 'rvy_dismissals', $dismissals );
+}
+
+// thanks to GravityForms for the nifty dismissal script
+if ( in_array( basename($_SERVER['PHP_SELF']), array('admin.php', 'admin-ajax.php') ) ) {
+	add_action( 'wp_ajax_rvy_dismiss_msg', '_revisionary_dashboard_dismiss_msg' );
+}

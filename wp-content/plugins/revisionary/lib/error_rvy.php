@@ -3,9 +3,6 @@ class RvyError {
 	private $notices = array();
 
 	function error_notice( $err ) {
-		global $pp_plugin_page;
-		$is_pp_plugin_page = ( ! empty($pp_plugin_page) ) || ( isset($_REQUEST['page']) && 0 === strpos( $_REQUEST['page'], 'pp-' ) );
-		
 		/*
 		switch( $err ) {
 			case 'old_php' :

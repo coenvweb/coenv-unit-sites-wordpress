@@ -1,6 +1,11 @@
 /* Revisionary. Copyright (C) 2019, PublishPress
  * This file is licensed under the GNU GPL.
  */
+
+#submitdiv a.now-timestamp {
+margin-left:10px;
+}
+
 /* marker class used to trigger element hiding by javascript */
 .agp_js_hide {
 padding: default;
@@ -215,7 +220,9 @@ padding: 0;
 .rs-agents_list_30_5 li { width: 30.5em; }
 
 .rs-subtext {
-color: #393;
+color: #777;
+font-style:italic;
+margin-top:2px;
 }
 
 .rs-warning {
@@ -342,8 +349,12 @@ padding: 0;
 margin: 0;
 }
 
-.rvy-restore-link {
+span.rvy-restore-link {
 margin-left: 2em;	
+}
+
+div.rvy-restore-link {
+margin-top: 20px;	
 }
 
 .rvy-message {
@@ -426,4 +437,25 @@ table.diff .diff-deletedline del, table.diff .diff-addedline ins {
 
 div.rvy-glance-pending {
 padding-bottom: 6px;
+}
+
+span.rvy-revision-pubish-date {
+font-style: italic;
+}
+
+div.publishpress-headline {line-height:25px}
+span.publishpress-thanks{margin-left:5px;color:#655997;white-space:nowrap}
+span.publishpress-thanks,#akmin span.publishpress-thanks a,#akmin span.publishpress-thanks a:visited {color:#655997;font-weight:bold;}
+
+.rvy-admin-notice {
+padding:10px;
+line-height:18px;
+position:relative;
+}
+.rvy-admin-notice-plugin {
+margin-top:30px;
+margin-right:120px;
+}
+#rvy_dashboard_message, .rvy-admin-notice, .rvy-admin-notice-plugin{
+padding:10px;	
 }

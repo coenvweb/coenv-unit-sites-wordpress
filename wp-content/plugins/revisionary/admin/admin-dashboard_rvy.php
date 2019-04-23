@@ -65,5 +65,3 @@ function rvy_glance_pending() {
 		}
 	}
 }
-
-?>

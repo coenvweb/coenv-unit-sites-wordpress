@@ -212,7 +212,7 @@ default :
 				switch( $revision->post_status ) :
 				case 'future' :
 					$caption = str_replace( ' ', '&nbsp;', __('Publish Now', 'revisionary') );
-					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'restore' ) ), "restore-post_$rvy_post->ID|$revision->ID" );
+					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'restore', 'rvy_redirect' => 'manager' ) ), "restore-post_$rvy_post->ID|$revision->ID" );
 					break;
 				case 'pending' :
 					if ( strtotime($revision->post_date_gmt) > agp_time_gmt() ) {
@@ -221,11 +221,11 @@ default :
 						$caption = str_replace( ' ', '&nbsp;', __('Publish Now', 'revisionary') );
 					}
 					
-					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'approve' ) ), "approve-post_$rvy_post->ID|$revision->ID" );
+					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'approve', 'rvy_redirect' => 'manager' ) ), "approve-post_$rvy_post->ID|$revision->ID" );
 					break;
 				default :
 					$caption = str_replace( ' ', '&nbsp;', __('Restore Now', 'revisionary') );
-					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'restore' ) ), "restore-post_$rvy_post->ID|$revision->ID" );
+					$link = wp_nonce_url( add_query_arg( array( 'revision' => $revision->ID, 'diff' => false, 'action' => 'restore', 'rvy_redirect' => 'manager' ) ), "restore-post_$rvy_post->ID|$revision->ID" );
 				endswitch;
 		
 				$restore_link = '<a href="' . $link . '">' .$caption . "</a> ";
@@ -310,9 +310,12 @@ if ( 'diff' != $action ) {
 <h2><?php 
 
 echo $h2; 
-if ( ! empty($restore_link) )
-	echo "<span class='rs-revision_top_action rvy-restore-link'> $restore_link</span>";	
 ?></h2>
+
+<?php
+if ( ! empty($restore_link) )
+	echo "<div class='rs-revision_top_action rvy-restore-link'> $restore_link</div>";	
+?>
 
 <?php
 	$msg = '';
@@ -359,7 +362,7 @@ echo '<td class="rvy-date-selection">';
 	
 	// date stuff
 	// translators: Publish box date formt, see http://php.net/date
-	$datef = __awp( 'M j, Y @ G:i' );
+	$datef = __awp( 'M j, Y @ g:i a' );
 
 	if ( in_array( $revision->post_status, array( 'publish', 'private' ) ) )
 		$stamp = __('Published on: <strong>%1$s</strong>', 'revisionary');
@@ -375,7 +378,7 @@ echo '<td class="rvy-date-selection">';
 
 	$use_date = ( 'inherit' == $revision->post_status ) ? $revision->post_modified : $revision->post_date;
 	
-	$date = agp_date_i18n( $datef, strtotime( $use_date ) );
+	$date = str_replace( ' ', '&nbsp;', agp_date_i18n( $datef, strtotime( $use_date ) ) );
 	
 	echo '<div id="rvy_time" class="curtime clear"><span id="saved_timestamp">';
 	printf($stamp, $date);
@@ -394,7 +397,7 @@ echo '<td class="rvy-date-selection">';
 	if ( $can_edit && in_array( $revision->post_status, array( 'pending', 'future' ) ) ) {
 		echo '<div id="timestampdiv" class="hide-if-js clear">';
 		
-		global $post;	// touch_time function requires this as of WP 2.8
+		global $post;	// touch_time function requires this
 		$buffer_post = $post;
 		$post = $revision;
 		touch_time(($action == 'edit'),1,4);
@@ -446,12 +449,9 @@ echo '</table>';
 	
 	if ( ! user_can_richedit() )
 		$content = htmlentities($content);
-
-	if ( awp_ver( '3.3' ) )
-		wp_editor( $content, 'content', array( 'media_buttons' => false ) );
-	else
-		the_editor($content, 'content', 'title', false);
 	
+	wp_editor( $content, 'content', array( 'media_buttons' => false ) );
+
 	echo '</div>';
 	
 	do_action( 'rvy-revisions_sidebar' );
@@ -619,8 +619,6 @@ if ( $count < 2 ) {
 </div>
 
 <?php
-// WP 3.6 changed diff table format.  For now, just port text diff code from WP 3.5.
-
 /**
  * Displays a human readable HTML representation of the difference between two strings.
  *
@@ -699,4 +697,3 @@ function rvy_edit_content_filtered( $revision ) {
 	
 	return apply_filters( 'rvy_edit_content_filtered', $use_content_filtered, $revision );
 }
-?>

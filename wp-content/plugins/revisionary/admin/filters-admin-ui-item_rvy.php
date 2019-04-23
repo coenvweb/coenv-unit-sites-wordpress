@@ -16,48 +16,55 @@ class RevisionaryAdminFiltersItemUI {
 	}
 	
 	function add_js() {
-		$src_name = 'post';
-		
-		global $post;
-		if ( ! empty($post->post_type) )
-			$object_type = $post->post_type;
-		else
-			$object_type = awp_post_type_from_uri();
+		global $post, $revisionary;
 
-		$object_id = rvy_detect_post_id();
-		
-		if ( $type_obj = get_post_type_object( $object_type ) ) {
-			if ( ! $object_id || agp_user_can( $type_obj->cap->edit_post, $object_id, '', array( 'skip_revision_allowance' => true ) ) ) {
-				// for logged user who can fully edit a published post, clarify the meaning of setting future publish date
-				?>
-				<script type="text/javascript">
-				/* <![CDATA[ */
-				jQuery(document).ready( function($) {
-					postL10n.schedule = "<?php _e('Schedule Revision', 'revisionary' )?>";
-				});
-				/* ]]> */
-				</script>
-				<?php
-				
-				return;
+		if ( ! $revisionary->isBlockEditorActive() ) {
+			if ( ! empty($post->post_type) )
+				$object_type = $post->post_type;
+			else
+				$object_type = awp_post_type_from_uri();
+
+			$object_id = rvy_detect_post_id();
+			
+			if ( $type_obj = get_post_type_object( $object_type ) ) {
+				if ( ! $object_id || agp_user_can( $type_obj->cap->edit_post, $object_id, '', array( 'skip_revision_allowance' => true ) ) ) {
+					// for logged user who can fully edit a published post, clarify the meaning of setting future publish date
+					?>
+					<script type="text/javascript">
+					/* <![CDATA[ */
+					jQuery(document).ready( function($) {
+						postL10n.schedule = "<?php _e('Schedule Revision', 'revisionary' )?>";
+					});
+					/* ]]> */
+					</script>
+					<?php
+					
+					return;
+				}
 			}
 		}
-		
+
 		wp_deregister_script( 'autosave' );
 		wp_dequeue_script( 'autosave' );
 
 ?>
+
+<?php
+global $revisionary;
+if ( ! $revisionary->isBlockEditorActive() ) :?>
 <script type="text/javascript">
 /* <![CDATA[ */
 jQuery(document).ready( function($) {
 	$('#publish').val("<?php _e('Submit Revision', 'revisionary' )?>");
 	postL10n.update = "<?php _e('Submit Revision', 'revisionary' )?>";
 	postL10n.schedule = "<?php _e('Submit Scheduled Revision', 'revisionary' )?>";
-	
+	var rvyNowCaption = "<?php _e( 'Current Time', 'revisionary' );?>";
 	$('#publishing-action #publish').show();
 });
 /* ]]> */
 </script>
+<?php endif;?>
+
 <style>
 div.num-revisions, #post-preview{ display:none; }
 </style>
@@ -65,7 +72,7 @@ div.num-revisions, #post-preview{ display:none; }
 	}
 	
 	function add_meta_boxes() {
-		$object_type = awp_post_type_from_uri();
+		$object_type = rvy_detect_post_type();
 		
 		if ( rvy_get_option( 'pending_revisions' ) ) {
 			require_once( dirname(__FILE__).'/revision-ui_rvy.php' );
@@ -136,5 +143,3 @@ div.num-revisions, #post-preview{ display:none; }
 	}
 
 } // end class
-
-?>

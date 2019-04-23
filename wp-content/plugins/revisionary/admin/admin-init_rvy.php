@@ -1,4 +1,22 @@
 <?php
+global $pagenow, $revisionary;
+
+add_action( 'init', '_rvy_post_edit_ui' );
+
+if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php', 'plugins.php' ) ) ) { 
+	add_action( 'all_admin_notices', '_rvy_intro_notice' );
+}
+
+function _rvy_post_edit_ui() {
+	global $pagenow, $revisionary;
+
+	if ( in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+		if ( $revisionary->isBlockEditorActive() ) {
+			require_once( dirname(__FILE__).'/post-edit-block-ui_rvy.php' );
+		}
+	}
+}
+
 function rvy_load_textdomain() {
 	if ( defined('RVY_TEXTDOMAIN_LOADED') )
 		return;
@@ -85,5 +103,28 @@ function rvy_admin_init() {
 		
 	} // endif action arg passed
 }
-	
-?>
+
+function _rvy_intro_notice() {
+	if ( current_user_can( 'edit_users') ) {
+		$message = __( '<strong>Welcome to Revisionary!</strong> To allow a user to submit revisions to your published posts and pages, set their role to "Revisor"', 'revisionary' );
+		rvy_dismissable_notice( 'intro_revisor_role', $message );
+	}
+}
+
+function rvy_dismissable_notice( $msg_id, $message ) {
+	$dismissals = (array) rvy_get_option( 'dismissals' );
+
+	if ( ! isset( $dismissals[$msg_id] ) ) :
+		$class = 'rvy-admin-notice rvy-admin-notice-plugin';
+		?>
+		<div class='updated rvy-notice' class='<?php echo $class;?>' id='rvy_dashboard_message'><?php echo $message ?>&nbsp; &nbsp;
+			<span style="float:right"><a href="javascript:void(0);" onclick="RvyDismissNotice();"><?php _e("Dismiss", "pp") ?></a></span>
+		</div>
+		<script type="text/javascript">
+			function RvyDismissNotice(){
+				jQuery("#rvy_dashboard_message").slideUp();
+				jQuery.post(ajaxurl, {action:"rvy_dismiss_msg", msg_id:"<?php echo $msg_id ?>", cookie: encodeURIComponent(document.cookie)});
+			}
+		</script>
+	<?php endif;
+}

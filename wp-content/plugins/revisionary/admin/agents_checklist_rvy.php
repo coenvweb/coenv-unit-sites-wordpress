@@ -275,4 +275,3 @@ define ('ELIGIBLE_ITEMS_RVY', 'eligible');
 	}
 
 } // end class
-?>

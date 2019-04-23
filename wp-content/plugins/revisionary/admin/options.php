@@ -41,7 +41,7 @@ class RvyOptionUI {
 				. "</label>";
 				
 			if ( $hint_text && $this->display_hints )
-				echo "<br /><span class='rs-subtext'>" . $hint_text . "</span>";
+				echo "<div class='rs-subtext'>" . $hint_text . "</div>";
 				
 			if ( ! empty($args['subcaption']) )
 				echo $args['subcaption'];
@@ -91,6 +91,7 @@ $ui->option_captions = array(
 	'revisor_lock_others_revisions' => __("Prevent Revisors from editing others&apos; revisions", 'revisionary'),
 	'diff_display_strip_tags' => __('Strip html tags out of difference display', 'revisionary'),
 	'async_scheduled_publish' => __('Asynchronous Publishing', 'revisionary'),
+	'scheduled_revision_update_post_date' => __('Update Publish Date', 'revisionary'),
 	'pending_rev_notify_author' => __('Email original Author when a Pending Revision is submitted', 'revisionary'),
 	'rev_approval_notify_author' => __('Email the original Author when a Pending Revision is approved', 'revisionary'),
 	'rev_approval_notify_revisor' => __('Email the Revisor when a Pending Revision is approved', 'revisionary'),
@@ -113,7 +114,7 @@ if ( defined('RVY_CONTENT_ROLES') ) {
 $ui->form_options = array( 
 'features' => array(
 	'role_definition' => 	array( 'revisor_role_add_custom_rolecaps', 'require_edit_others_drafts' ),
-	'revisions'		=>		array( 'scheduled_revisions', 'pending_revisions', 'revisor_lock_others_revisions', 'diff_display_strip_tags', 'async_scheduled_publish', 'display_hints' ),
+	'revisions'		=>		array( 'scheduled_revisions', 'pending_revisions', 'revisor_lock_others_revisions', 'diff_display_strip_tags', 'async_scheduled_publish', 'scheduled_revision_update_post_date', 'display_hints' ),
 	'notification'	=>		array( 'pending_rev_notify_admin', 'pending_rev_notify_author', 'rev_approval_notify_author', 'rev_approval_notify_revisor', 'publish_scheduled_notify_admin', 'publish_scheduled_notify_author', 'publish_scheduled_notify_revisor' )
 )
 );
@@ -211,7 +212,7 @@ $tab = 'features';
 echo "<div id='rs-features' style='clear:both;margin:0' class='rs-options $color_class'>";
 	
 if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
-	echo '<div class="rs-optionhint">';
+	echo '<div class="rs-optionhint publishpress-headline"><span>';
 	
 	if ( $sitewide ) {
 		global $rvy_options_sitewide, $rvy_default_options;
@@ -220,7 +221,9 @@ if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 	} elseif ( $customize_defaults ) {
 		_e('Here you can change the default value for settings which are controlled separately on each site.', 'revisionary');
 	} else {
+		/*
 		_e('This page enables <strong>optional</strong> adjustment of Revisionary\'s features. For most installations, the default settings are fine.', 'revisionary');
+		*/
 	}
 
 	if ( RVY_NETWORK && is_super_admin() ) {
@@ -237,8 +240,14 @@ if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 			printf( __('Note that %1$s network-wide settings%2$s may also be available.', 'revisionary'), $link_open, $link_close );
 		}
 	}
-	
-	echo '</div>';
+	?>
+	</span>
+	<span class="publishpress-thanks"> <?php printf( __( 'Thanks for using the %1$sPublishPress%2$s family of professional publishing tools.', 'capsman-enhanced'), '<a href="https://publishpress.com/" target="_blank">', '</a>' );?></span>
+	</div>
+	<?php
+
+	$message = __( '<strong>Getting Started:</strong> To allow a user to submit Revisions to your published posts and pages, set their role to "Revisor"', 'revisionary' );
+	rvy_dismissable_notice( 'intro_revisor_role_settings', $message );
 }
 
 $table_class = 'form-table rs-form-table';
@@ -255,7 +264,7 @@ $table_class = 'form-table rs-form-table';
 		<tr valign="top"><th scope="row">
 		<?php echo $ui->section_captions[$tab][$section]; ?>
 		</th><td>
-
+		
 		<?php 
 		$ui->option_checkbox( 'revisor_role_add_custom_rolecaps', $tab, $section, '', '' );
 		?>
@@ -287,11 +296,14 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 		$ui->option_checkbox( 'scheduled_revisions', $tab, $section, $hint, '' );
 		
 		echo "<div style='display:margin-top: 1em;margin-left:2em;'>";	
-		$hint = __( 'Publish scheduled revisions asynchronously, via a secondary http request from the server.  This is normally preferable as it eliminates delay, but some servers do not support it.', 'revisionary' );
+		$hint = __( 'When a scheduled revision is published, also update the publish date.', 'revisionary' );
+		$ui->option_checkbox( 'scheduled_revision_update_post_date', $tab, $section, $hint, '' );
+
+		$hint = __( 'Publish scheduled revisions asynchronously, via a secondary http request from the server.  This is usually best since it eliminates delay, but some servers may not support it.', 'revisionary' );
 		$ui->option_checkbox( 'async_scheduled_publish', $tab, $section, $hint, '<br />' );
 		echo '</div>';
 		
-		$hint = __( 'Enable some users to submit a revision for an existing published post or page which they cannot otherwise edit.  Contributors can submit revisions to their own published content, and users who have the edit_others_ capability (but not edit_published_) can submit revisions to other user\'s content.<br /><br />These Pending Revisions are listed alongside regular pending content, but link to a Revisions management form.  There the pending revision can be viewed, compared to other revisions, and approved or deleted by qualified editors.  If the submitter set a future publish date, approval schedules delayed publication of the revised content.', 'revisionary' );
+		$hint = __( 'Enable some users to submit a revision for an existing published post or page which they cannot otherwise edit.  Contributors can submit revisions to their own published content, and users who have the edit_others (but not edit_published) capability for the post type can submit revisions to other user\'s content.<br /><br />These Pending Revisions are listed alongside regular pending content, but link to a Revisions management form.  There the pending revision can be viewed, compared to other revisions, and approved or deleted by qualified editors.  If the submitter set a future publish date, approval schedules delayed publication of the revised content.', 'revisionary' );
 		$ui->option_checkbox( 'pending_revisions', $tab, $section, $hint, '<br />' );
 		
 		$hint = '';
@@ -385,14 +397,13 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 		
 		if( $pending_revisions_available ) {
 			if ( in_array( 'pending_rev_notify_admin', $ui->form_options[$tab][$section] ) || in_array( 'pending_rev_notify_author', $ui->form_options[$tab][$section] ) ) {
-				echo '<br />';
 				if ( $ui->display_hints ) {
-					echo '<span class="rs-subtext">';
+					echo '<div class="rs-subtext">';
 					if ( defined('RVY_CONTENT_ROLES') )
 						_e('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  Eligibile "Publisher" email recipients are members of the Pending Revision Monitors group who <strong>also</strong> have the ability to publish the revision.  If not explicitly defined, the Monitors group is all users with a primary WP role of Administrator or Editor.', 'revisionary');
 					else
 						printf( __('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  For more flexibility in moderation and notification, install the %1$s Press Permit%2$s plugin.', 'revisionary'), "<a href='https://presspermit.com'>", '</a>' );
-					echo '</span>';
+					echo '</div>';
 				}
 			}
 		}
@@ -522,4 +533,3 @@ $js_call = "javascript:if (confirm('$msg')) {return true;} else {return false;}"
 
 <?php
 } // end function
-?>

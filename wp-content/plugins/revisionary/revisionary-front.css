@@ -5,9 +5,9 @@
 .rvy_view_revision {
 height: 40px; 
 width: 100%; 
-text-align: right;
+text-align: center;
 padding-right: 20px;
-font-size: 120%;
+font-size: 110%;
 }
 
 .rvy_view_revision a, .preview_approval_rvy a:link {
@@ -61,4 +61,8 @@ background-color: #080;
 .preview_approval_rvy a, .preview_approval_rvy a:link {
 color: white; 
 font-weight: bold;
+}
+
+span.rvy_preview_linkspan a, span.rvy_preview_linkspan a:visited {
+text-decoration:underline;
 }

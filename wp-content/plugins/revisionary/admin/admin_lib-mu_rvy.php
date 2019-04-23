@@ -35,5 +35,3 @@ function rvy_mu_include_options() {
 	include_once( RVY_ABSPATH . '/admin/options.php');
 	rvy_options( false, true );
 }
-
-?>

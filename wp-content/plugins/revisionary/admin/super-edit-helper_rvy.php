@@ -25,4 +25,3 @@ foreach( $buttons as $button ) {
 		$wp_super_edit->active_buttons[$button->name] = $button;
 	}
 }
-?>

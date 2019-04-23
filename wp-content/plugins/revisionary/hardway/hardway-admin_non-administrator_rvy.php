@@ -37,7 +37,7 @@ class RevisionaryAdminHardway_Ltd {
 						if ( ! isset( $private_stati ) )
 							$private_stati = get_post_stati( array( 'private' => true ) );
 						
-						foreach( $private_stati as $_status )  // as of WP 2.8.4, this substring is wrapped by parenthesis with nonstandard padding, so reduce chance of breakage by leaving them out of the replacement
+						foreach( $private_stati as $_status )  // this substring is wrapped by parenthesis with nonstandard padding, so reduce chance of breakage by leaving them out of the replacement
 							$query = str_replace( "post_status != '$_status' OR ( post_author = '{$current_user->ID}' AND post_status = '$_status' )", '1=1', $query);
 					}
 				}
@@ -48,4 +48,3 @@ class RevisionaryAdminHardway_Ltd {
 	} // end function flt_last_resort_query
 	
 } // end class
-?>

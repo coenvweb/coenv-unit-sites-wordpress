@@ -25,7 +25,7 @@ function rvy_metabox_notification_list() {
 		global $revisionary;
 		
 		$topic = 'pending_revision';
-		
+
 		$notify_editors = (string) rvy_get_option('pending_rev_notify_admin');
 		$notify_author = (string) rvy_get_option('pending_rev_notify_author');
 	
@@ -86,17 +86,8 @@ function rvy_metabox_notification_list() {
 				$recipients = array();
 				
 				foreach ( $use_wp_roles as $role_name ) {
-					if ( awp_ver( '3.1-beta' ) ) {
-						$search = new WP_User_Query( "search=&role=$role_name" );
-						$recipients = array_merge( $recipients, $search->results );
-					} else {
-						$search = new WP_User_Search( '', 0, $role_name );
-						$found_ids = $search->results;
-						
-						foreach ( $found_ids as $userid ) {
-							$recipients []= new WP_User($userid);
-						}
-					}
+					$search = new WP_User_Query( "search=&role=$role_name" );
+					$recipients = array_merge( $recipients, $search->results );
 				}
 				
 				foreach ( $recipients as $_user ) {	
@@ -193,20 +184,20 @@ function rvy_tiny_mce_params( $initArray, $editor_id = '' ) {
 	// $editor_id: 'content' or 'classic-block'
 	
 	$mce_buttons_1 = apply_filters('mce_buttons', array('bold', 'italic', 'strikethrough', '|', 'bullist', 'numlist', 'blockquote', '|', 'justifyleft', 'justifycenter', 'justifyright', '|', 'link', 'unlink', 'wp_more', '|', 'spellchecker', 'fullscreen', 'wp_adv' ), $editor_id );
-	$mce_buttons_1 = implode($mce_buttons_1, ',');
+	$mce_buttons_1 = implode(',', $mce_buttons_1);
 
 	$mce_buttons_2 = apply_filters('mce_buttons_2', array('formatselect', 'underline', 'justifyfull', 'forecolor', '|', 'pastetext', 'pasteword', 'removeformat', '|', 'media', 'charmap', '|', 'outdent', 'indent', '|', 'undo', 'redo', 'wp_help' ), $editor_id );
-	$mce_buttons_2 = implode($mce_buttons_2, ',');
+	$mce_buttons_2 = implode( ',', $mce_buttons_2);
 
 	$mce_buttons_3 = apply_filters('mce_buttons_3', array(), $editor_id );
-	$mce_buttons_3 = implode($mce_buttons_3, ',');
+	$mce_buttons_3 = implode( ',', $mce_buttons_3);
 
 	$mce_buttons_4 = apply_filters('mce_buttons_4', array(), $editor_id );
-	$mce_buttons_4 = implode($mce_buttons_4, ',');
+	$mce_buttons_4 = implode(',', $mce_buttons_4);
 	
 	$mce_locale = ( '' == get_locale() ) ? 'en' : strtolower( substr(get_locale(), 0, 2) ); // only ISO 639-1
 	
-	// note custom save_callback since WP 2.9-beta-1 removed default callback method from SwitchEditors
+	// note custom save_callback
 	$arr = array (
 		'mode' => 'specific_textareas',
 		'editor_selector' => 'theEditor',
@@ -270,7 +261,11 @@ function rvy_tiny_mce_readonly( $initArray, $editor_id = '' ) {
  * @param bool $link Optional, default is true. Link to revisions's page?
  * @return string i18n formatted datetimestamp or localized 'Current Revision'.
  */
-function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_date' ) {
+function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_date', $args = array() ) {
+	$defaults = array( 'post' => false, 'format' => 'list' );
+	$args = array_merge( $defaults, (array) $args );
+	foreach ( array_keys( $defaults ) as $var ) { $$var = $args[$var]; }
+	
 	if ( ! is_object($revision) )
 		if ( !$revision = get_post( $revision ) )
 			return $revision;
@@ -280,12 +275,12 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 	
 	if ( ! in_array( $revision->post_type, $public_types ) )
 		return false;
-	
+
 	/* translators: revision date format, see http://php.net/date */
-	$datef = _x( 'j F, Y @ G:i', 'revision date format', 'revisionary' );
+	$datef = _x( 'j F, Y @ g:i a', 'revision date format', 'revisionary' );
 	
 	$date = agp_date_i18n( $datef, strtotime( $revision->$date_field ) );
-
+	
 	// note: RS filter (un-requiring edit_published/private cap) will be applied to this cap check
 	
 	if ( $link ) { //&& current_user_can( 'edit_post', $revision->ID ) ) {    // revisions are listed in the Editor even if not editable / restorable / approvable
@@ -304,11 +299,24 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 		$autosavef = __( '%1$s (Autosave)', 'revisionary' );
 		$date = sprintf( $autosavef, $date );
 	}
+
+	if ( in_array( $revision->post_status, array( 'inherit', 'pending' ) ) && $post && ( 'list' == $format ) && ( 'post_modified' == $date_field ) ) {
+		if ( $post->post_date != $revision->post_date ) {
+			$datef = _x( 'j F, Y, g:i a', 'revision schedule date format', 'revisionary' );
+			$revision_date = agp_date_i18n( $datef, strtotime( $revision->post_date ) );
+		
+			if ( 'pending' == $revision->post_status ) {
+				$currentf  = __( '%1$s <span class="rvy-revision-pubish-date">(Requested publication: %2$s)</span>', 'revisionary' );
+			} else {
+				$currentf  = __( '%1$s <span class="rvy-revision-pubish-date">(Publish date: %2$s)</span>', 'revisionary' );
+			}
+
+			$date = sprintf( $currentf, $date, $revision_date );
+		}
+	}
 	
 	return $date;
 }
-
-
 
 /**
  * Display list of a post's revisions (modified by PublishPress to include view links).
@@ -352,7 +360,8 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 	// link to publish date in Edit Form metaboxes, but modification date in Revisions Manager table
 	if ( ! $date_field  ) {
 		if ( 'list' == $format ) {
-			$date_field = ( 'inherit' == $status ) ? 'post_modified' : 'post_date';
+			$date_field = ( in_array( $status, array( 'inherit', 'pending' ) ) ) ? 'post_modified' : 'post_date';
+			$date_field = 'post_modified';
 			$sort_field = $date_field;
 		} else {
 			$date_field = 'post_modified';
@@ -418,11 +427,13 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 		if ( $hide_others_revisions && ( 'revision' == $revision->post_type ) && ( $revision->post_author != $current_user->ID ) )
 			continue;
 
+
+			
 		// todo: set up buffering to restore this in case we (or some other plugin) impose revision-specific read capability
 		//if ( ! current_user_can( "read_{$post->post_type}", $revision->ID ) )
 		//	continue;
 
-		$date = rvy_post_revision_title( $revision, true, $date_field );
+		$date = rvy_post_revision_title( $revision, true, $date_field, compact( 'post', 'format' ) );
 
 		$name = get_the_author_meta( 'display_name', $revision->post_author );
 
@@ -449,10 +460,10 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 			else
 				$class = " class='rvy-revision-row alternate'"; 
 			
-			$datef = __awp( 'M j, Y @ G:i' );
+			$datef = __awp( 'M j, Y @ g:i a' );
 			
 			if ( $post->ID != $revision->ID ) {
-				$preview_link = '<a href="' . esc_url( add_query_arg( 'preview', '1', get_permalink( $revision->ID ) . '&post_type=revision' ) ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $revision->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
+				$preview_link = '<a href="' . esc_url( add_query_arg( 'preview', '1', get_post_permalink( $revision->ID ) . '&post_type=revision' ) ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $revision->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
 				
 				if ( $can_edit_post 
 				|| ( ( 'pending' == $status ) && ( $revision->post_author == $current_user->ID ) )	// allow submitters to delete their own still-pending revisions
@@ -635,5 +646,3 @@ var revL10n = {
 </script>
 <?php	
 } // end function rvy_revisions_js
-
-?>

@@ -92,4 +92,3 @@ class RevisionaryAdminHardway {
 		return $query;
 	}
 }
-?>

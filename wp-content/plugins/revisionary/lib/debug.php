@@ -191,5 +191,3 @@ function rvy_echo_usage_message( $translate = true ) {
 		define( 'AGP_USAGE_MESSAGE_DONE', true );
 	}
 }
-
-?>

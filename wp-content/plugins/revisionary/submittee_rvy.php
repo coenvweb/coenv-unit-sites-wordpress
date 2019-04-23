@@ -92,6 +92,3 @@ class Revisionary_Submittee {
 		}
 	}
 }
-	
-	
-?>

@@ -11,5 +11,3 @@ class RevisionaryContentRoles {
 	function set_hascap_flags( $flags ) { }
 	function is_direct_file_access() { return false; }
 }
-
-?>

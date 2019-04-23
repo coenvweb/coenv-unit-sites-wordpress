@@ -5,7 +5,10 @@
  * Description: Enables qualified users to submit changes to currently published posts or pages.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
  * Author: PublishPress
  * Author URI: https://publishpress.com
- * Version: 1.2.7
+ * Version: 1.3.5
+ * Text Domain: revisionary
+ * Domain Path: /languages/
+ * Min WP Version: 4.1
  * 
  * Copyright (c) 2019 PublishPress
  *
@@ -29,7 +32,7 @@
  * @author      Revisionary
  * @copyright   Copyright (C) 2019 PublishPress. All rights reserved.
  *
- */
+ **/
 
 if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die( 'This page cannot be called directly.' );
@@ -50,7 +53,10 @@ if ( defined( 'RVY_VERSION' ) ) {
 	return;
 }
 
-define ('RVY_VERSION', '1.2.7');
+define ('REVISIONARY_VERSION', '1.3.5');
+if ( ! defined( 'RVY_VERSION' ) ) {
+	define( 'RVY_VERSION', REVISIONARY_VERSION );  // back compat
+}
 
 define ('COLS_ALL_RVY', 0);
 define ('COL_ID_RVY', 1);
@@ -104,4 +110,3 @@ rvy_refresh_options_sitewide();
 // since sequence of set_current_user and init actions seems unreliable, make sure our current_user is loaded first
 add_action('init', 'rvy_init', 1);
 add_action('init', 'rvy_add_revisor_custom_caps', 99);
-?>

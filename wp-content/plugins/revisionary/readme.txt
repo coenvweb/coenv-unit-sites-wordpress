@@ -3,7 +3,7 @@ Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
 Requires at least: 4.1
 Tested up to: 5.1
-Stable Tag: 1.2.7
+Stable Tag: 1.3.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,12 +18,14 @@ Doesn't it seem like setting a published post/page to a future date should sched
 Revisionary enables qualified users to submit changes to currently published posts or pages.  Contributors also gain the ability to submit revisions to their own published content.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
 
 = Partial Feature List =
-* Pending Revisions allow designated users to suggest changes to a currently published post/page.
-* Scheduled Revisions allow you to specify future changes to published content (either via Pending Revision approval or directly by fully qualified author/editor).
-* Front-end preview display of Pending / Scheduled Revisions with "Publish Now" link.
+* Schedule or Request changes to published posts and pages using the Gutenberg Editor (or Classic Editor)
+* Supports Custom Post Types
+* Pending Revisions allow designated users to submit changes to currently published content.
+* Scheduled Revisions allow unrestricted editors to schedule changes, updating published content and date.
+* Pending Revisions can be published immediately, or scheduled.
+* Front-end preview display of Pending / Scheduled Revisions with "Publish Now" or "Schedule Now" link.
 * New WordPress role, "Revisor" is a moderated Editor.
 * Works with site-wide WordPress Roles, or in conjunction with <a href="https://presspermit.com">Press Permit</a> for page-specific or category-specific permissions.
-* Gutenberg compatibility is under active development, coming soon.
 
 = Support =
 * Revisionary is professionally supported by both the original author (Kevin Behrens) and the experienced <a href="https://publishpress.com">PublishPress</a> team.
@@ -31,20 +33,60 @@ Revisionary enables qualified users to submit changes to currently published pos
 
 == Screenshots ==
 
-1. Pending Revision Creation
-2. Pending Revision Confirmation
-3. Pending Revision Email Notification
-4. Dashboard Right Now Count
+1. Pending Revision Submission
+2. Email Notification Recipients
+3. Pending Revision Confirmation
+4. Pending Revisions in Dashboard Right Now Count
 5. Pending Revisions in Edit Pages Listing
-6. Editor / Administrator views submission in Revisions Manager
-7. Difference Display in Revisions Manager
-8. Editor / Administrator views preview of Pending Revision
-
+6. Pending Revision Preview / Approval
+7. Pending Revision Difference Display
+8. Scheduled Revision Creation (unrestricted editor)
+9. Scheduled Revision Confirmation
+10. Scheduled Revisions in Publishing Soon list
+11. Revisions Manager
 
 == Changelog ==
 
+= 1.3.5 - 3 Apr 2019 =
+* Fixed : With Classic Editor, Revision submission reset Page Template
+
+= 1.3.4 - 2 Apr 2019 =
+* Fixed : Pending Revision Notifications were not sent from Gutenberg editor if configured to send "by default" (selectable recipients)
+
+= 1.3.3 - 2 Apr 2019 =
+* Fixed : Scheduled Revision preview: "Publish Now" link failed with a fatal error
+* Change : Settings link in Plugins Row
+
+= 1.3.2 - 29 Mar 2019 =
+* Fixed : Email notifications were missing "Post" / "Page" caption
+* Fixed : PHP notices with Classic Editor
+* Fixed : With Classic Editor, revision approval from preview did not redirect back to Edit Posts / Pages screen
+* Fixed : In Classic Editor, setting a future date did not recaption Publish button to "Schedule Revision" if post has private visibility
+
+= 1.3.1 - 29 Mar 2019 =
+* Fixed : Scheduled Revision publication stripped out categories and tags, if "Update Publish Date" setting enabled
+* Fixed : Publish button was not recaptioned to Submit Revision under some conditions
+* Change : With Gutenberg active, revision approval defaults to front end preview
+* Feature : Better redirect logic following revision approval, scheduling or restoration (returns to screen that preview was linked from)
+* Feature : Preview link in Notification Emails
+* Feature : Previews of Scheduled Revisions and Pending Revisions with a future publish date include link to Revisions Manager to edit date
+* Change : Dismissable welcome message: To allow a user to submit Revisions to your published posts, set their role to "Revisor" 
+
+= 1.3.0 - 28 Mar 2019 =
+* Feature : Gutenberg editor compatibility for Pending Revision, Scheduled Revision creation
+* Feature : By default, Scheduled Revisions also update publish date. New checkbox on Revisions > Settings to restore previous behavior of leaving publish date unchanged.
+* Feature : List Scheduled Revisions of any post type on Publishing Soon list in Activity dashboard widget
+* Fixed : If Scheduled Revision was first site access after scheduled publication time, changes were not displayed until page reload
+* Fixed : Scheduled post Revisions on Publishing Soon list in Activity dashboard widget had incorrect link
+* Fixed : Past Revisions list on Revision Manager screen had invalid preview links
+* Fixed : Better formatting for Publish Now / Schedule Now link
+* Fixed : Editing revision publication date updated revision author, even if post content not changed
+* Change : Use 12 hour format for revision dates
+* Change : Pending Revision lists show submission date
+* Change : Pending Revision lists show requested publication date if applicable 
+
 = 1.2.7 - 13 Mar 2019 =
-* Fixed : Pending Revision Notification on Multisite installations. Due to failure to apply settings, e-mail notifications defaulted to "By default" option, which failed for Pending Revisions prior to version 1.2.6. (But notifications were still sent if the intended recipients are members of the Press Permit Pro "Pending Revision Monitors" group).
+* Fixed : Pending Revision Notification on Multisite installations. Due to failure to apply settings, e-mail notifications defaulted to "By default" option, which failed for Pending Revisions prior to version 1.2.6.  
 * Fixed : Multisite - If network-activated, Revisionary settings screens unavailable. Last stored network-wide settings (or hardcoded defaults) applied instead.
 * Fixed : Multisite - If not network-activated, Revisionary settings screen was ineffective. Site-specific settings were stored, but network-wide settings or defaults applied instead.
 * Fixed : "Display Hints" setting had no checkbox on Settings screen

@@ -28,6 +28,7 @@ function rvy_default_options_sitewide() {
 		'revisor_lock_others_revisions' => true,
 		'require_edit_others_drafts' => true,
 		'diff_display_strip_tags' => false,
+		'scheduled_revision_update_post_date' => true,
 	);
 
 	if ( $other_options = array_diff_key( rvy_default_options(), $def ) ) {
@@ -55,6 +56,7 @@ function rvy_default_options() {
 		'revisor_lock_others_revisions' => 1,
 		'require_edit_others_drafts' => 1,
 		'diff_display_strip_tags' => 0,
+		'scheduled_revision_update_post_date' => 1,
 	);
 
 	return $def;
@@ -63,4 +65,3 @@ function rvy_default_options() {
 function rvy_po_trigger( $string ) {
 	return $string;	
 }
-?>

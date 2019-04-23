@@ -69,7 +69,7 @@ function agp_time_gmt() {
 }
 }
 
-// date_i18n does not support pre-1970 dates, as of WP 2.8.4
+// date_i18n does not support pre-1970 dates
 if ( ! function_exists('agp_date_i18n') ) {
 function agp_date_i18n( $datef, $timestamp ) {
 	if ( $timestamp >= 0 )
@@ -229,5 +229,3 @@ function __awp( $string, $unused = '' ) {
 	return __( $string );		
 }
 }
-
-?>
