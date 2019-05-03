@@ -44,7 +44,7 @@
 
     } // .site-footer__header
 
-    .unit-contact {
+    .unit-contact, .photo-credit {
         @include rem('margin-bottom', 2);
         p {
             color: rgb(187, 187, 187);
@@ -54,7 +54,9 @@
 
             }
         }
-
+    }
+    .photo-credit p {
+        font-size: .8rem;
     }
     form.search-form,
     form.search-form .field-wrap {

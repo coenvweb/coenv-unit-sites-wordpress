@@ -19,6 +19,11 @@
                         </div>
                         <div class="footer__info">
                             <?php get_search_form() ?>
+                            <?php if(is_front_page()) : ?> 
+                            <div class="photo-credit">
+                            <p>Header photo courtesy of <a href="https://josephrocchiophotography.zenfolio.com/p737921033/h40EEC9B4#h40eec9b4">Joe Rocchio</a>.</p>
+                            </div>
+                            <?php endif; ?>
                             <div class="social-buttons">
                             <?php if (get_option('facebook')) { ?>
                                 <a class="facebook button" href="<?php echo get_option('facebook'); ?>" title="Join us on Facebook" target="_blank">
