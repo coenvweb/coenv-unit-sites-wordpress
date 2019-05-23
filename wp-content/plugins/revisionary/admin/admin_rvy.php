@@ -92,7 +92,7 @@ class RevisionaryAdmin
 
 		// low-level filtering for miscellaneous admin operations which are not well supported by the WP API
 		$hardway_uris = array(
-		'p-admin/index.php',		'p-admin/revision.php',			'admin.php?page=rvy-revisions',
+		'p-admin/index.php',		'p-admin/revision.php',		'admin.php?page=rvy-revisions',
 		'p-admin/post.php', 		'p-admin/post-new.php', 		'p-admin/page.php', 		'p-admin/page-new.php', 
 		'p-admin/link-manager.php', 'p-admin/edit.php', 			'p-admin/edit-pages.php', 	'p-admin/edit-comments.php', 
 		'p-admin/categories.php', 	'p-admin/link-category.php', 	'p-admin/edit-link-categories.php', 'p-admin/upload.php',
