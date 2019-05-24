@@ -103,8 +103,6 @@ wp-content/object-cache.php
 *.wmv
 *.avi
 
-# Ignore php temp and phpMyAdmin dirs
-php*
 
 #Ignoring htaccess now
 .htaccess
