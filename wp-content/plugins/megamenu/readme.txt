@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 4.9
 Tested up to: 5.1
-Stable tag: 2.5.3.2
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,8 @@ Documentation & Demo: [https://www.megamenu.com](https://www.megamenu.com)
 
 * Builds upon the standard WordPress menus system
 * Supports multiple menu locations each with their own configuration
-* Drag and Drop Mega Menu builder
+* Off canvas (slide in from left or right) or standard drop down mobile menu
+* Organise your sub menus into rows and columns using the Grid Layout builder
 * Display WordPress Widgets in your menu
 * Customise the styling of your menus using a built in theme editor
 * Supports Flyout (traditional) or Mega Menu sub menu styles
@@ -108,6 +109,35 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.7.1.1 =
+
+* Fix: Mega Menu Sub Menu - Box Shadow
+
+= 2.7.1 =
+
+* Fix: Mobile Sub Menu - Force Width setting
+
+= 2.7 =
+
+* Change: No longer use ":after" pseudo element to display arrows. Use 'span.mega-indicator' instead. This allows the arrows to control the sub menu independantly of the menu text. Custom CSS targeting `a.mega-menu-link:after` should be updated to target `a.mega-menu-link > span.mega-indicator:after`.
+
+* New: Off canvas mobile options under Appearance > Menus > Max Mega Menu Settings > Effect (Mobile). Remember to clear any CSS caching or minification plugins if you have problems activating this functionality.
+* New: "Collapse sub menu" option to hide third/fourth level items within mega menus
+* New: Option to distribute third level items over multiple columns within mega menus
+* New: Options in the theme editor: Border & Text Align options for Second & Third Level Menu Items, Mobile Sub Menu Padding, Toggle Bar Border Radius, Off Canvas Menu Width & Padding
+* New: 31 new Dashicons introduced in WordPress 5.2
+* Improvement: Allow comma separated values for Active Menu Instance
+* Improvement: Add checks around loading CodeMirror to avoid conflicts
+* Improvement: Allow Panel Width (Inner) to be specified in pixels (grid layout only)
+* Improvement: Default "Second Click Behaviour" to "First click opens sub menu, second click follows link"
+* Improvement: Add support for 'MEGA_MENU_HIDE_CSS_NAG' constant
+* Fix: Allow space in input boxes when using tab navigation
+* Fix: Very long titles make save button inaccessible in menu item options
+* Fix: Select2 conflict with WP Job Manager
+* Fix: Mobile sub menu animation sometimes "jumps" when using slide animation
+
+We hope you enjoy Max Mega Menu and the new updates. If you have a spare moment please leave us a quick [review](https://wordpress.org/support/plugin/megamenu/reviews/#new-post). Thanks!
 
 = 2.6 =
 

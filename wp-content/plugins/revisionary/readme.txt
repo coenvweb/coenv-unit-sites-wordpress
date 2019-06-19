@@ -3,7 +3,7 @@ Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, moderated editing, change submission, workflow, team publishing, access
 Requires at least: 4.1
 Tested up to: 5.2
-Stable Tag: 1.3.6
+Stable Tag: 1.3.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,6 +46,9 @@ Revisionary enables qualified users to submit changes to currently published pos
 11. Revisions Manager
 
 == Changelog ==
+
+= 1.3.7 - 24 May 2019 =
+* Feature : Filter 'revisionary_default_pending_revision', return true to select "Send to Approval Queue" in Classic Editor by default
 
 = 1.3.6 - 30 Apr 2019 =
 * Fixed : Scheduled Revision publication updated post date even if "Update Publish Date" option disabled

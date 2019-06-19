@@ -192,7 +192,7 @@ class Mega_Menu_Walker extends Walker_Nav_Menu {
 			$item_output .= '</a>';
 			$item_output .= $args->after;
 
-			if ( is_array( $item->classes ) && in_array( "menu-column", $item->classes ) || in_array( "menu-row", $item->classes ) ) {
+			if ( is_array( $item->classes ) && ( in_array( "menu-column", $item->classes ) || in_array( "menu-row", $item->classes ) ) ) {
 				$item_output = "";
 			}
 

@@ -177,7 +177,8 @@ function custom_post_widget_shortcode( $atts ) {
 		'featured_image' => 'no',
 		'featured_image_size' => 'medium',
 		'title' => 'no',
-		'title_tag' => 'h3'
+		'title_tag' => 'h3',
+		'markup' => 'div'
 	), $atts ) );
 
 	if ( $slug ) {
@@ -198,7 +199,7 @@ function custom_post_widget_shortcode( $atts ) {
 		$content_post = get_posts( $args );
 
 		foreach( $content_post as $post ) :
-			$content .= '<div class="'. esc_attr( $class ) .'" id="custom_post_widget-' . $id . '">';
+			$content .= '<' . esc_attr( $markup ) . ' class="'. esc_attr( $class ) .'" id="custom_post_widget-' . $id . '">';
 			if ( $title === 'yes' ) {
 				$content .= '<' . esc_attr( $title_tag ) . '>' . $post -> post_title . '</' . esc_attr( $title_tag ) . '>';
 			}
@@ -210,7 +211,7 @@ function custom_post_widget_shortcode( $atts ) {
 			} else {
 				$content .= $post -> post_content;
 			}
-			$content .= '</div>';
+			$content .= '</' .  esc_attr( $markup ) . '>';
 		endforeach;
 	}
 
