@@ -540,7 +540,7 @@ RewriteRule ^building-climate-security-and-resilience/$ members-and-affiliates/c
 RewriteRule ^planning-wisely-for-natural-hazards/$ news-and-events/topic/hazards/ [R=301,L]
 RewriteRule ^protecting-ocean-health/$ members-and-affiliates/washington-ocean-acidification-center/ [R=301,L]
 RewriteRule ^sustaining-healthy-ecosystems/$ members-and-affiliates/doris-duke-conservation-scholars/ [R=301,L]
-RewriteRule ^walker2019/$ news-and-events/walker-lecture-series/ [R=302,L]
+RewriteRule ^walker2019 news-and-events/walker-lecture-series/ [R=302,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
