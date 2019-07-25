@@ -520,8 +520,7 @@
         plugin.initToggleBar = function() {
             // mobile menu
             $toggle_bar.on("click", function(e) {
-                if ( $(e.target).is(".mega-menu-toggle, .mega-menu-toggle-block, .mega-menu-toggle-animated-block, .mega-menu-toggle-animated-block *, .mega-toggle-blocks-left, .mega-toggle-blocks-center, .mega-toggle-blocks-right, .mega-toggle-label, .mega-toggle-label span") ) {
-                    if ($(this).hasClass("mega-menu-open")) {
+                if ( $(e.target).is(".mega-menu-toggle, .mega-menu-toggle-block, .mega-menu-toggle-animated-block, .mega-menu-toggle-animated-block *, .mega-toggle-blocks-left, .mega-toggle-blocks-center, .mega-toggle-blocks-right, .mega-toggle-label, .mega-toggle-label span") ) {                    if ($(this).hasClass("mega-menu-open")) {
                         plugin.hideMobileMenu();
                     } else {
                         plugin.showMobileMenu();

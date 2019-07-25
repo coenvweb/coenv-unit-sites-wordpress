@@ -1,32 +1,48 @@
 <?php
-$last_clone_report = get_site_transient('ns_cloner_report_'.get_current_user_id());
-if( $last_clone_report != false ){
+/**
+ * Template to report the results of a cloning operation (loaded by ajax).
+ *
+ * @package NS_Cloner
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+$reports = ns_cloner()->report->get_all_reports();
+// If page gets reloaded while in progress, don't show and clear report.
+if ( ! empty( $reports ) && ! ns_cloner()->process_manager->is_in_progress() ) {
 	?>
-	<div class="ns-cloner-report">
 		<div class="ns-cloner-report-content">
-			<h5><?php echo $last_clone_report['_message']; ?></h5>
-			<?php if( isset($last_clone_report['_warning']) ): ?>
-				<span class="ns-cloner-error-message"><?php echo $last_clone_report['_warning']; ?></span>
+			<?php if ( isset( $reports['_error'] ) ) : ?>
+				<span class="ns-cloner-error-message"><?php echo esc_html( $reports['_error'] ); ?></span>
+			<?php elseif ( isset( $reports['_message'] ) ) : ?>
+				<h5><?php echo esc_html( $reports['_message'] ); ?></h5>
 			<?php endif; ?>
-			<?php foreach( $last_clone_report as $label => $value ): ?>
+			<?php if ( isset( $reports['_notices'] ) ) : ?>
+				<?php foreach ( $reports['_notices'] as $notice ) : ?>
+				<span class="ns-cloner-warning-message"><?php echo esc_html( $notice ); ?></span>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			<?php foreach ( $reports as $label => $value ) : ?>
 				<?php
-				// skip special/hidden messages
-				if( in_array( $label, array('_message','_warning') ) ) continue;
-				// format links - for logs just display the last 
-				if( preg_match('/^http/',$value) ){
-					$value = "<a href='$value' target='_blank'>".str_replace(NS_CLONER_V3_PLUGIN_URL,'',$value)."</a>";
+				// Skip special/hidden messages that start with underscore.
+				if ( strpos( $label, '_' ) === 0 ) {
+					continue;
+				}
+				// Format links - for logs just display the last.
+				if ( preg_match( '/^http/', $value ) ) {
+					$value = "<a href='$value' target='_blank'>" . str_replace( NS_CLONER_V4_PLUGIN_URL, '', $value ) . '</a>';
 				}
 				?>
 				<div class="ns-cloner-report-item">
-					<div class="ns-cloner-report-item-label"><?php echo $label; ?>:</div>
-					<div class="ns-cloner-report-item-value"><?php echo $value; ?></div>
+					<div class="ns-cloner-report-item-label"><?php echo esc_html( $label ); ?>:</div>
+					<div class="ns-cloner-report-item-value"><?php echo wp_kses( $value, ns_wp_kses_allowed() ); ?></div>
 				</div>
 			<?php endforeach; ?>
-			<br/><br/>
-			<input type="button" class="button button-primary ns-cloner-close-report" value="<?php _e("OK, Close Report",'ns-cloner'); ?>" />
 		</div>
-	</div>
 	<?php
-	delete_site_transient('ns_cloner_report_'.get_current_user_id());
+	// Clear now that they've been displayed once.
+	ns_cloner()->report->clear_all_reports();
 }
 ?>

@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copy Tables Background Process
+ *
+ * @package NS_Cloner
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
+ * NS_Cloner_Tables_Process class.
+ *
+ * Processes a queue of tables, and delegates and dispatches a new row process for each one.
+ */
+class NS_Cloner_Tables_Process extends NS_Cloner_Process {
+
+	/**
+	 * Ajax action hook
+	 *
+	 * @var string
+	 */
+	protected $action = 'tables_process';
+
+	/**
+	 * Initialize and set label
+	 */
+	public function __construct() {
+		parent::__construct();
+		$this->report_label = __( 'Tables', 'ns-cloner' );
+	}
+
+	/**
+	 * Task
+	 *
+	 * Override this method to perform any actions required on each
+	 * queue item. Return the modified item for further processing
+	 * in the next pass through. Or, return false to remove the
+	 * item from the queue.
+	 *
+	 * @param mixed $item Queue item to iterate over.
+	 *
+	 * @return mixed
+	 */
+	protected function task( $item ) {
+
+		$rows_process  = ns_cloner()->get_process( 'rows' );
+		$source_prefix = ns_cloner()->db->get_blog_prefix( $item['source_id'] );
+		$target_prefix = ns_cloner()->db->get_blog_prefix( $item['target_id'] );
+		$source_table  = $item['source_table'];
+		$target_table  = $item['target_table'];
+
+		// Implement filter to enable leaving a target table in place, if needed.
+		// Otherwise, target table will be dropped and replaced.
+		if ( apply_filters( 'ns_cloner_do_drop_target_table', true, $target_table ) ) {
+			$drop_query  = "DROP TABLE IF EXISTS `$target_table`";
+			$drop_result = ns_cloner()->db->query( $drop_query );
+			ns_cloner()->log->handle_any_db_errors();
+			$create_query  = ns_sql_create_table_query( $source_table, $target_table, $source_prefix, $target_prefix );
+			$create_result = ns_cloner()->db->query( $create_query );
+			ns_cloner()->log->handle_any_db_errors();
+			// Abandon this item if table could not be created -
+			// don't mark complete by calling parent::task(), or queue rows.
+			if ( false === $create_result ) {
+				ns_cloner()->log->log( "SKIPPING TABLE *$source_table*. Could not create table." );
+				return false;
+			}
+		}
+
+		// Save row process batches that will actually do the cloning queries.
+		// Note that it saves but doesn't dispatch here, because that would cause
+		// multiple async requests for this same process, and race conditions.
+		// Instead, we'll dispatch it once at the end in the complete() method.
+		$count_rows = ns_cloner()->db->get_var( "SELECT COUNT(*) rows_qty FROM `$source_table`" );
+		if ( $count_rows > 0 ) {
+			for ( $i = 0; $i < $count_rows; $i++ ) {
+				$row_data = [
+					'row_num'      => $i,
+					'source_table' => $source_table,
+					'target_table' => $target_table,
+					'source_id'    => $item['source_id'],
+					'target_id'    => $item['target_id'],
+				];
+				$rows_process->push_to_queue( $row_data );
+			}
+			$rows_process->save();
+			ns_cloner()->log->log( "QUEUEING *$count_rows* rows from *$source_table* to *$target_table*" );
+		} else {
+			ns_cloner()->log->log( "SKIPPING TABLE *$source_table*, 0 rows found." );
+		}
+
+		return parent::task( $item );
+
+	}
+
+}
