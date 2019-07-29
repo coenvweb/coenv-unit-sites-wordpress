@@ -897,8 +897,8 @@
             }
 
             > a.mega-menu-link > span.mega-indicator {
-                float: right;
-                height: auto;
+                display: inline-block;
+                height: 100%;
                 width: auto;
                 background: transparent;
                 position: relative;
@@ -908,6 +908,11 @@
                 line-height: inherit;
                 color: inherit;
                 font-size: inherit;
+                padding: 0;
+            }
+
+            li.mega-menu-item-has-children > a.mega-menu-link > span.mega-indicator {
+                float: right;
             }
 
             &.mega-collapse-children.mega-toggle-on > a.mega-menu-link > span.mega-indicator:after {
@@ -915,6 +920,10 @@
             }
 
             @include mobile {
+                > a.mega-menu-link > span.mega-indicator {
+                    float: right;
+                }
+
                 &.mega-toggle-on > a.mega-menu-link > span.mega-indicator:after {
                     content: $arrow_up;
                 }
@@ -998,6 +1007,9 @@
 
             &.mega-menu-accordion {
                 // Arrows
+                > li.mega-menu-item-has-children > a.mega-menu-link > span.mega-indicator {
+                    float: right;
+                }
                 li.mega-menu-item-has-children.mega-toggle-on > a.mega-menu-link > span.mega-indicator:after {
                     content: $arrow_up;
                 }
