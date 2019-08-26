@@ -35,6 +35,64 @@ function coenv_base_post_types_init() {
     )
 
   );
+  register_post_type( 'student-profiles',
+    array(
+      'labels' => array(    
+		  'name' => __( 'Student Profiles' ),
+		  'singular_name' => __( 'Student Profile' ),
+		  'add_new_item' => __( 'Add Student Profile'),
+		  'edit_item' => __( 'Edit Student Profile'),
+		  'new_item' => __( 'New Student Profile'),
+		),
+		//'hierarchical' => true,
+		'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+		'public' => true,
+		'has_archive' => false,
+		'show_ui' => true,
+		'rewrite' => array('slug' => 'student-profile'),
+		'menu_icon' => 'dashicons-smiley',
+		'capabilities' => array(
+			'edit_post' => 'edit_student_profile',
+			'edit_posts' => 'edit_student_profiles',
+			'edit_others_posts' => 'edit_other_student_profiles',
+			'publish_posts' => 'publish_student_profiles',
+			'read_post' => 'read_student_profile',
+			'read_private_posts' => 'read_private_student_profiles',
+			'delete_post' => 'delete_student_profile'
+		),
+		'map_meta_cap' => true,
+    )
+
+  );
+  register_post_type( 'courses',
+    array(
+      'labels' => array(    
+		  'name' => __( 'Courses' ),
+		  'singular_name' => __( 'Course' ),
+		  'add_new_item' => __( 'Add Course'),
+		  'edit_item' => __( 'Edit Course'),
+		  'new_item' => __( 'New Course'),
+		),
+		//'hierarchical' => true,
+		'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+		'public' => true,
+		'has_archive' => false,
+		'show_ui' => true,
+		'rewrite' => array('slug' => 'course'),
+		'menu_icon' => 'dashicons-welcome-learn-more',
+		'capabilities' => array(
+			'edit_post' => 'edit_course',
+			'edit_posts' => 'edit_courses',
+			'edit_others_posts' => 'edit_other_courses',
+			'publish_posts' => 'publish_courses',
+			'read_post' => 'read_student_course',
+			'read_private_posts' => 'read_private_courses',
+			'delete_post' => 'delete_course'
+		),
+		'map_meta_cap' => true,
+    )
+
+  );
   register_post_type( 'features',
     array(
       'labels' => array(    
@@ -51,24 +109,6 @@ function coenv_base_post_types_init() {
     'show_ui' => true,
     //'rewrite' => array('slug' => 'features'),
   'menu_icon' => 'dashicons-slides',
-    )
-  );
-  register_post_type( 'student_blog',
-    array(
-      'labels' => array(    
-      'name' => __( 'Blog Posts' ),
-      'singular_name' => __( 'Blog Post' ),
-      'add_new_item' => __( 'Add Blog Post'),
-      'edit_item' => __( 'Edit Blog Post'),
-      'new_item' => __( 'New Blog Post'),
-      ),
-    //'hierarchical' => true,
-    'supports' => array('title', 'editor', 'thumbnail', 'revisions'),
-    'public' => true,
-    //'has_archive' => false,
-    'show_ui' => true,
-    //'rewrite' => array('slug' => '/news-events/student-services-blog/'),
-  'menu_icon' => 'dashicons-exerpt-view',
     )
   );
    register_post_type( 'intranet_page',
