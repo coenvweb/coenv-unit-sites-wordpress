@@ -57,7 +57,11 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 			$drop_query  = "DROP TABLE IF EXISTS `$target_table`";
 			$drop_result = ns_cloner()->db->query( $drop_query );
 			ns_cloner()->log->handle_any_db_errors();
-			$create_query  = ns_sql_create_table_query( $source_table, $target_table, $source_prefix, $target_prefix );
+			$create_query = ns_sql_create_table_query( $source_table, $target_table, $source_prefix, $target_prefix );
+			// If it was a view, the create query will be returned empty, so skip.
+			if ( empty( $create_query ) ) {
+				return false;
+			}
 			$create_result = ns_cloner()->db->query( $create_query );
 			ns_cloner()->log->handle_any_db_errors();
 			// Abandon this item if table could not be created -
@@ -72,7 +76,9 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 		// Note that it saves but doesn't dispatch here, because that would cause
 		// multiple async requests for this same process, and race conditions.
 		// Instead, we'll dispatch it once at the end in the complete() method.
-		$count_rows = ns_cloner()->db->get_var( "SELECT COUNT(*) rows_qty FROM `$source_table`" );
+		$where      = apply_filters( 'ns_cloner_rows_where', 'WHERE 1=1', $source_table, $source_prefix );
+		$count_rows = ns_cloner()->db->get_var( "SELECT COUNT(*) rows_qty FROM `$source_table` $where" );
+		ns_cloner()->log->log( 'SELECTING rows with query: ' . "SELECT COUNT(*) rows_qty FROM `$source_table` $where" );
 		if ( $count_rows > 0 ) {
 			for ( $i = 0; $i < $count_rows; $i++ ) {
 				$row_data = [

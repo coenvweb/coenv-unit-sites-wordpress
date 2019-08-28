@@ -55,7 +55,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 								</td>
 								<td class="date-col">
 									<?php echo esc_html( date( 'Y-m-d H:i', $data['_created'] ) ); ?>
-									via <?php echo $data['_caller']; ?>
+									via <?php echo esc_html( $data['_caller'] ); ?>
 								</td>
 								<td>
 									<button class="button ns-cloner-scheduled-view" data-cloner-modal="<?php echo esc_attr( "op_$i" ); ?>">
@@ -79,7 +79,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 				<?php endif; ?>
 				<p class="description">
 					<?php esc_html_e( 'Scheduled operations are created when someone clicks the clone button while another cloning operation is still running.', 'ns-cloner' ); ?>
-					<?php esc_html_e(' They may also be created via the command line or by frontend cloning (from member registrations) with Cloner Pro.', 'ns-cloner' ); ?>
+					<?php esc_html_e( 'They may also be created via the command line or by frontend cloning (from member registrations) with Cloner Pro.', 'ns-cloner' ); ?>
 				</p>
 			</div>
 		</div>

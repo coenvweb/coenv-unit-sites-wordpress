@@ -101,7 +101,24 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
-= 4.0.0 - 2019.06.10 =
+= 4.0.3 - 2019.08.19 =
+* Fix missing rows due to lost insert or incorrect row query
+* Fix max_allowed_packet database error
+
+= 4.0.2 - 2019.08.15 =
+* Fix timing conflicts for cleanup tasks.
+* Fix issue where process would keep running after manually cancelling.
+* Rewrite row processing class for much better performance and fewer queries.
+* Add fallback AJAX process dispatching for environments where background requests stall.
+* Add queue batching for large tables.
+* Improve debug logging.
+
+= 4.0.1 - 2019.07.26 =
+* Fix lock timing on background processes to prevent frozen or conflicting processes.
+* Fix handling for SQL views - exclude from table cloning and create at end instead.
+* Fix empty target site url caused by object caching on some servers.
+
+= 4.0.0 - 2019.07.22 =
 * Release all new rebuilt V4.
 
 == Upgrade Notice ==

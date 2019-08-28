@@ -76,19 +76,19 @@ class NS_Cloner_Log {
 	 *
 	 * @return string
 	 */
-	public function generate_file(){
+	public function generate_file() {
 		// Add a hash to the filename, to make it super hard to crawl for logs.
-		$hash       = strtolower( wp_generate_password( 8, false ) );
-		$timestamp  = date( 'Ymd-His' );
+		$hash      = strtolower( wp_generate_password( 8, false ) );
+		$timestamp = date( 'Ymd-His' );
 		return NS_CLONER_LOG_DIR . "ns-cloner-{$timestamp}-{$hash}.html";
 	}
 
 	/**
 	 * Set the log file and open append pointer/handle
 	 *
-	 * @param string $filename Path to log file
+	 * @param string $filename Path to log file.
 	 */
-	public function set_file( $filename ){
+	public function set_file( $filename ) {
 		$this->log_file = apply_filters( 'ns_cloner_log_file', $filename );
 		ns_cloner_request()->set( 'log_file', $this->log_file );
 		ns_cloner_request()->save();
@@ -139,19 +139,42 @@ class NS_Cloner_Log {
 		if ( is_resource( $this->log_handle ) && filesize( $this->log_file ) > 5 * 1024 * 1024 ) {
 			$old = $this->log_file;
 			$new = $this->generate_file();
-			$this->log( 'CONTINUING IN: ' . $new );
-			$this->end();
+			$this->log( 'CONTINUING IN: <a href="' . $this->get_url( $new ) . '"></a>' . $new . '</a>' );
+			$this->end( false );
 			$this->set_file( $new );
 			$this->header();
-			$this->log( 'CONTINUING FROM: ' . $old );
+			$this->log( 'CONTINUING FROM: <a href="' . $this->get_url( $old ) . '">' . $old . '</a>' );
 		}
 	}
 
 	/**
-	 * End logging - add footer
+	 * Checks for a newer log file and switches to that one if so.
+	 *
+	 * Helpful for running in the middle of long background processes so
+	 * logs don't way exceed the max log size.
 	 */
-	public function end() {
-		$this->footer();
+	public function refresh() {
+		$current_log = ns_cloner_request()->refresh()->get( 'log_file' );
+		if ( ! empty( $current_log ) && $current_log !== $this->log_file ) {
+			$this->end( false );
+			$this->log_file   = $current_log;
+			$this->log_handle = fopen( $this->log_file, 'a' );
+		}
+	}
+
+	/**
+	 * End logging - optionally add footer.
+	 *
+	 * Footer param is available because it will mess up formatting if we close a log
+	 * that another background process is still writing to - if that's a possibility,
+	 * don't worry about it and let the browser autoclose the tags.
+	 *
+	 * @param bool $do_footer Whether to output footer / closing tags.
+	 */
+	public function end( $do_footer = true ) {
+		if ( $do_footer ) {
+			$this->footer();
+		}
 		if ( is_resource( $this->log_handle ) ) {
 			fclose( $this->log_handle );
 		}
@@ -210,7 +233,7 @@ class NS_Cloner_Log {
 		foreach ( (array) $message as $message_part ) {
 			if ( is_string( $message_part ) ) {
 				// Auto convert asterisks to bold tags.
-				$text       = preg_replace( '/(?<=\s)\*(.+?)\*(?=\s|$)/', ' <b>$1</b>', $message_part );
+				$text       = preg_replace( '/(?<=\s)\*(.+?)\*(?=\s|:|$)/', ' <b>$1</b>', $message_part );
 				$formatted .= "<span>$text</span>";
 			} else {
 				// Remove any sensitive data.
@@ -349,9 +372,9 @@ class NS_Cloner_Log {
 	 * @return string
 	 */
 	public function get_url( $file = null ) {
-		$log_file    = $file ?: basename( $this->log_file );
+		$log_file    = $file ?: $this->log_file;
 		$log_dir_url = NS_CLONER_V4_PLUGIN_URL . basename( NS_CLONER_LOG_DIR );
-		return $log_dir_url . '/' . $log_file;
+		return $log_dir_url . '/' . basename( $log_file );
 	}
 
 	/**

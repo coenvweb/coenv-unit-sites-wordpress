@@ -284,8 +284,17 @@ function ns_sql_create_table_query( $source_table, $target_table, $source_prefix
 	// Create cloned table structure.
 	$query         = ns_cloner()->db->get_var( "SHOW CREATE TABLE `$source_table`", 1 );
 	$newline       = '(?:\r|\n|\r\n)';
+	$view          = '/^CREATE (.*) VIEW/';
 	$constraint    = "/,$newline+\s*((?:CONSTRAINT|FOREIGN\s+KEY).+?)(?=,?$newline)/";
 	$target_prefix = apply_filters( 'ns_cloner_target_table', $target_prefix );
+	// Handle views, by creating at end after real tables are copied, and returning blank query for now.
+	if ( preg_match( $view, $query ) ) {
+		ns_cloner()->log->log( "DETECTING that table *$source_table* is a view. Skipping." );
+		// Replace prefix for other table names that view refers to.
+		$view_query = str_replace( "`$source_prefix", "`$target_prefix", $query );
+		ns_cloner()->process_manager->add_finish_query( $view_query, 200 );
+		return '';
+	}
 	// Match all constraints / foreign keys in create table query.
 	preg_match_all( $constraint, $query, $constraint_matches );
 	// Save constraints to be applied later in alter table queries.
@@ -346,13 +355,52 @@ function ns_sql_quote( $value ) {
  * Get a MySQL variable. [Originally from the Diagnosis plugin by Gary Jones]
  *
  * @param string $variable MySQL variable name to get.
+ * @param mixed  $default Default if variable isn't found.
  * @return string
  */
-function ns_get_sql_variable( $variable ) {
+function ns_get_sql_variable( $variable, $default = '' ) {
 	$result = ns_cloner()->db->get_row( "SHOW VARIABLES LIKE '$variable';", ARRAY_A );
-	return $result['Value'];
+	return isset( $result['Value'] ) && $result['Value'] ? $result['Value'] : $default;
 }
 
+/**
+ * Auto-insert the proper multisite-compatible table and column values into an option query
+ *
+ * @param string $query SQL options/sitemeta query to make replacements on.
+ * @param array  $args Arguments to pass to wpdb::prepare.
+ * @return string|array
+ */
+function ns_prepare_option_query( $query, $args = [] ) {
+	$details = [
+		'{table}' => is_multisite() ? ns_cloner()->db->sitemeta : ns_cloner()->db->options,
+		'{id}'    => is_multisite() ? 'meta_id' : 'option_id',
+		'{key}'   => is_multisite() ? 'meta_key' : 'option_name',
+		'{value}' => is_multisite() ? 'meta_value' : 'option_value',
+	];
+	// Replace table/column references with actual values based on whether this is multisite or no.
+	$query = str_replace( array_keys( $details ), array_values( $details ), $query );
+	// Run normal db query prep.
+	$query = ns_cloner()->db->prepare( $query, $args );
+	return $query;
+}
+
+
+/**
+ * Take a row of data and return the correct placeholders for a prepared statement.
+ *
+ * Use WPDB defined format for default wp table columns, or default to string.
+ *
+ * @param array $row Data to get placeholders for.
+ * @return array
+ */
+function ns_prepare_row_formats( $row ) {
+	$formats = [];
+	foreach ( $row as $field => $value ) {
+		$field_types = ns_cloner()->db->field_types;
+		$formats[]   = isset( $field_types[ $field ] ) ? $field_types[ $field ] : '%s';
+	}
+	return $formats;
+}
 
 
 

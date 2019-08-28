@@ -98,6 +98,16 @@ final class NS_Cloner_Request {
 	}
 
 	/**
+	 * Reload the request from the saved version in the database
+	 *
+	 * @return $this
+	 */
+	public function refresh() {
+		$this->request = (array) get_site_option( 'ns_cloner_saved_request', [] );
+		return $this;
+	}
+
+	/**
 	 * Get all current request variables
 	 *
 	 * @return array
@@ -164,6 +174,10 @@ final class NS_Cloner_Request {
 		if ( $is_subsite ) {
 			switch_to_blog( $site_id );
 		}
+		// Get site url directly rather than with site_url(), because option/object
+		// caching can result in a blank value for a newly created site.
+		$option_q = 'SELECT option_value FROM ' . ns_cloner()->db->options . " WHERE option_name='siteurl'";
+		$site_url = set_url_scheme( ns_cloner()->db->get_var( $option_q ) );
 		// Past Cloner versions had manual checking/overrides for wp_upload_dir.
 		// However, it seems that wp_upload_dir() is now more reliable, whereas the
 		// overrides were beginning to cause problems. If a fix is needed on a case
@@ -173,7 +187,7 @@ final class NS_Cloner_Request {
 		$upload_dir = wp_upload_dir();
 		// If the upload_url_path option is blank, _wp_upload_dir will use WP_CONTENT_URL,
 		// with the domain set to the network domain, not the current blog's domain, so fix it.
-		$upload_url = str_replace( WP_CONTENT_URL, site_url(), $upload_dir['baseurl'] );
+		$upload_url = str_replace( WP_CONTENT_URL, $site_url, $upload_dir['baseurl'] );
 		// These definitions should all work both for multisite (after using switch_blog above
 		// so they have the correct sub-site values) as well as single site / whole network.
 		$vars = [
@@ -181,9 +195,9 @@ final class NS_Cloner_Request {
 			'upload_dir'          => $upload_dir['basedir'],
 			'upload_dir_relative' => str_replace( ABSPATH, '', $upload_dir['basedir'] ),
 			'upload_url'          => $upload_url,
-			'upload_url_relative' => str_replace( site_url(), '', $upload_url ),
-			'url'                 => site_url(),
-			'url_short'           => untrailingslashit( preg_replace( '|^(https?:)?//|', '', site_url() ) ),
+			'upload_url_relative' => str_replace( $site_url, '', $upload_url ),
+			'url'                 => $site_url,
+			'url_short'           => untrailingslashit( preg_replace( '|^(https?:)?//|', '', $site_url ) ),
 		];
 		if ( $is_subsite ) {
 			restore_current_blog();

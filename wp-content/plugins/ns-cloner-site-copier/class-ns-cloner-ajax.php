@@ -91,6 +91,7 @@ class NS_Cloner_Ajax {
 		ns_cloner()->process_manager->maybe_finish();
 		// Get results of progress.
 		$progress = ns_cloner()->process_manager->get_progress();
+		// Send results back to browser.
 		if ( 'reported' === $progress['status'] ) {
 			// Format report into html if cloning is done.
 			$this->send_response( [ 'report' => ns_cloner()->report->get_html() ] );

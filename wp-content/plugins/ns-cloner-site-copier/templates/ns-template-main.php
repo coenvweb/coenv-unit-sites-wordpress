@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						// Display the title of the current in progress clone mode if applicable.
 						if ( ns_cloner()->process_manager->is_in_progress() ) :
 							$mode = ns_cloner_request()->get( 'clone_mode' );
-							echo ns_cloner()->get_mode( $mode )->title;
+							echo esc_html( $mode ? ns_cloner()->get_mode( $mode )->title : 'Unrecognized mode' );
 						endif;
 						?>
 						</span>
@@ -94,6 +94,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</h1>
 				</div>
 				<div class="ns-modal-body">
+					<div class="ns-cloner-warning-message ajax-on" style="display:none">
+						<?php esc_html_e( 'NOTE: it appears background processing may have stalled on your site. Activating backup AJAX processing (so it\'s best not to close this window).', 'ns-cloner' ); ?>
+					</div>
 					<div class="ns-process-wrapper ns-create-site">
 						<h2><?php esc_html_e( 'Current status', 'ns-cloner' ); ?>:</h2>
 						<div class="ns-cloner-progress-bar">

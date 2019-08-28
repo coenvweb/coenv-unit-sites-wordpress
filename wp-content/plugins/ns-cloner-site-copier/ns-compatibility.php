@@ -41,3 +41,20 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Skip copying options for the WP Mail SMTP Plugin, because they will be created first
+ * by the plugin and will result in a duplicate key error.
+ */
+add_filter(
+	'ns_cloner_do_copy_row',
+	function( $do, $row ) {
+		$mail_bank_options = [ 'mail_bank_update_database', 'mail-bank-version-number', 'mb_admin_notice' ];
+		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $mail_bank_options ) ) {
+			$do = false;
+		}
+		return $do;
+	},
+	10,
+	2
+);
