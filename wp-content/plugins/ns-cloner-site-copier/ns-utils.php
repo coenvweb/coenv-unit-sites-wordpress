@@ -384,24 +384,24 @@ function ns_prepare_option_query( $query, $args = [] ) {
 	return $query;
 }
 
-
 /**
  * Take a row of data and return the correct placeholders for a prepared statement.
  *
  * Use WPDB defined format for default wp table columns, or default to string.
  *
- * @param array $row Data to get placeholders for.
+ * @param array  $row Data to get placeholders for.
+ * @param string $table Table name.
  * @return array
  */
-function ns_prepare_row_formats( $row ) {
+function ns_prepare_row_formats( &$row, $table ) {
 	$formats = [];
 	foreach ( $row as $field => $value ) {
-		$field_types = ns_cloner()->db->field_types;
-		$formats[]   = isset( $field_types[ $field ] ) ? $field_types[ $field ] : '%s';
+		if ( is_null( $value ) ) {
+			$formats[] = 'NULL';
+			unset( $row[$field] );
+		} else {
+			$formats[] = apply_filters( 'ns_cloner_row_format', '%s', $field, $table );
+		}
 	}
 	return $formats;
 }
-
-
-
-

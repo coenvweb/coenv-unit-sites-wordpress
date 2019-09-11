@@ -101,6 +101,12 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.0.4 - 2019.09.02 =
+* Fix database handling for null values
+* Fix fatal site creation error in pre-5.1 WordPress
+* Fix error on servers that don't allow multiple SQL statements in one query
+* Fix misc other bugs and plugin compatibility issues
+
 = 4.0.3 - 2019.08.19 =
 * Fix missing rows due to lost insert or incorrect row query
 * Fix max_allowed_packet database error

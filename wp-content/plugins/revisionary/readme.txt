@@ -3,7 +3,7 @@ Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, moderated editing, change submission, workflow, team publishing, access
 Requires at least: 4.1
 Tested up to: 5.2
-Stable Tag: 1.3.7
+Stable Tag: 1.3.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -46,6 +46,10 @@ Revisionary enables qualified users to submit changes to currently published pos
 11. Revisions Manager
 
 == Changelog ==
+
+= 1.3.8 - 30 Aug 2019 =
+* Fixed : Revisors could Quick Edit published posts (changing post title, slug, author, date, parent or template) since version 1.3. This could be used to unpublish (but not publish) posts. Sites also running PressPermit Pro were not affected.
+* Compat : PressPermit Pro - Under some configurations, Revisors were not allowed appropriate access (due to publish capability check)
 
 = 1.3.7 - 24 May 2019 =
 * Feature : Filter 'revisionary_default_pending_revision', return true to select "Send to Approval Queue" in Classic Editor by default
@@ -360,6 +364,9 @@ Initial release.  Feature Changes and Bug Fixes are vs. Pending Revisions functi
 * Feature : If Role Scoper is active, Editors notification group can be customized via User Group
 
 == Upgrade Notice ==
+
+= 1.3.8 =
+SECURITY FIX: Revisors could Quick Edit published posts (see Change Log for details)
 
 = 1.2.3 =
 Important Fix: Scheduled Revision publication failure with runaway email notifications (since 1.2)

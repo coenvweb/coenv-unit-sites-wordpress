@@ -5,7 +5,7 @@
  * Description: Enables qualified users to submit changes to currently published posts or pages.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
  * Author: PublishPress
  * Author URI: https://publishpress.com
- * Version: 1.3.7
+ * Version: 1.3.8
  * Text Domain: revisionary
  * Domain Path: /languages/
  * Min WP Version: 4.1
@@ -53,7 +53,7 @@ if ( defined( 'RVY_VERSION' ) ) {
 	return;
 }
 
-define ('REVISIONARY_VERSION', '1.3.7');
+define ('REVISIONARY_VERSION', '1.3.8');
 if ( ! defined( 'RVY_VERSION' ) ) {
 	define( 'RVY_VERSION', REVISIONARY_VERSION );  // back compat
 }

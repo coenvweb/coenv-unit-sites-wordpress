@@ -180,7 +180,7 @@ class Revisionary
 		
 		$script_name = $_SERVER['SCRIPT_NAME'];
 		
-		if ( ( defined( 'PP_VERSION' ) || defined( 'PPC_VERSION' ) ) && ( strpos( $script_name, 'p-admin/post.php' ) || rvy_wp_api_request() ) ) {
+		if ( ( defined( 'PRESSPERMIT_VERSION' ) || defined( 'PP_VERSION' ) || defined( 'PPC_VERSION' ) ) && ( strpos( $script_name, 'p-admin/post.php' ) || rvy_wp_api_request() ) ) {
 			$support_publish_cap = empty( $_REQUEST['publish'] ) && ! is_array($args[0]) && ( false !== strpos( $args[0], 'publish_' ) );  // TODO: support custom publish cap prefix without perf hit?
 		}
 		
@@ -210,6 +210,10 @@ class Revisionary
 		else
 			$object_type = rvy_detect_post_type();
 			
+		if (!empty($_REQUEST['action']) && ('inline-save' == $_REQUEST['action']) && ('revision' != $post->post_type)) {
+			$this->skip_revision_allowance = true;
+		}
+
 		if ( rvy_get_option( 'revisor_lock_others_revisions' ) ) {
 			if ( $post ) {
 				// Revisors are enabled to edit other users' posts for revision, but cannot edit other users' revisions unless cap is explicitly set sitewide

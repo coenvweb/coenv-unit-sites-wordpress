@@ -224,7 +224,7 @@ class NS_Cloner_Process_Manager {
 				// If the set lock isn't from this (earlier) instance, bail and let the later instance take over.
 				usleep( apply_filters( 'ns_cloner_process_lock_delay', 0.5 * 1000000 ) );
 				if ( $this->get_finish_lock() !== $finish_lock_id ) {
-					ns_cloner()->log->log( "DETECTED simultaneous finish call - ending" );
+					ns_cloner()->log->log( 'DETECTED simultaneous finish call - ending' );
 					exit;
 				}
 				$this->finish();
@@ -395,9 +395,18 @@ class NS_Cloner_Process_Manager {
 				'path'   => get_current_site()->path . $target_name . '/',
 			];
 		}
-
 		ns_cloner()->log->log( [ 'Attempting to create site with data:', $site_data ] );
-		$target_id = wp_insert_site( $site_data );
+		if ( function_exists( 'wp_insert_site' ) ) {
+			$target_id = wp_insert_site( $site_data );
+		} else {
+			// Backwards compatibility for pre 5.1.
+			$target_id = wpmu_create_blog(
+				$site_data['domain'],
+				$site_data['path'],
+				$site_data['title'],
+				$site_data['user_id']
+			);
+		}
 
 		// Handle results.
 		if ( ! is_wp_error( $target_id ) ) {
@@ -517,10 +526,10 @@ class NS_Cloner_Process_Manager {
 			}
 			// Also prepare to return data for each individual process.
 			$by_process[ $process_id ] = [
-				'label'        => $process->report_label,
-				'progress'     => $progress,
-				'dispatched'   => get_site_option( "ns_cloner_{$process_id}_process_dispatched" ),
-				'nonce'        => $process->get_nonce(),
+				'label'      => $process->report_label,
+				'progress'   => $progress,
+				'dispatched' => get_site_option( "ns_cloner_{$process_id}_process_dispatched" ),
+				'nonce'      => $process->get_nonce(),
 			];
 		}
 		return [

@@ -348,8 +348,8 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * @return bool
 	 */
 	protected function time_exceeded() {
-		// Task count will count from 1-5 and then start over - see task() - so check for exit flag every 4th task.
-		if ( 4 === $this->task_count ) {
+		// Task count will count from 1-5 and then start over - see task() - so check for exit flag every 5th task.
+		if ( 1 === $this->task_count ) {
 			// Check exited flag directly to bypass options cache.
 			$exited = ns_cloner()->db->get_var(
 				ns_prepare_option_query(

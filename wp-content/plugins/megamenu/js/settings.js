@@ -30,7 +30,7 @@ jQuery(function ($) {
         }
     });
 
-    if (typeof wp.codeEditor !== 'undefined') {
+    if (typeof wp.codeEditor !== 'undefined' && typeof cm_settings !== 'undefined') {
         if ($('#codemirror').length) {
             wp.codeEditor.initialize($('#codemirror'), cm_settings);
         }

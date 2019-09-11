@@ -43,14 +43,19 @@ add_filter(
 );
 
 /**
- * Skip copying options for the WP Mail SMTP Plugin, because they will be created first
+ * Skip copying options certain plugin options, because they will be created first
  * by the plugin and will result in a duplicate key error.
  */
 add_filter(
 	'ns_cloner_do_copy_row',
 	function( $do, $row ) {
-		$mail_bank_options = [ 'mail_bank_update_database', 'mail-bank-version-number', 'mb_admin_notice' ];
-		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $mail_bank_options ) ) {
+		$plugin_opts = [];
+		// WP Mail SMTP.
+		$plugin_opts = array_merge( $plugin_opts, [ 'mail_bank_update_database', 'mail-bank-version-number', 'mb_admin_notice' ] );
+		// WordFence.
+		$plugin_opts = array_merge( $plugin_opts, [ 'wordfence_installed' ] );
+		// Skip copying any of the above listed option rows.
+		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $plugin_opts, true ) ) {
 			$do = false;
 		}
 		return $do;

@@ -42,14 +42,14 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 *
 	 * @var string
 	 */
-	private $insert_query = '';
+	protected $insert_query = '';
 
 	/**
 	 * Number of rows to include in a single insert statement.
 	 *
 	 * @var int
 	 */
-	private $rows_per_query = 50;
+	protected $rows_per_query = 50;
 
 	/**
 	 * Number of rows added to current insert statement.
@@ -57,7 +57,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 *
 	 * @var int
 	 */
-	private $rows_count = 0;
+	protected $rows_count = 0;
 
 	/**
 	 * Current table for insert query
@@ -65,7 +65,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 *
 	 * @var string
 	 */
-	private $current_table = '';
+	protected $current_table = '';
 
 	/**
 	 * Initialize and set label
@@ -76,6 +76,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 
 		// Load stored primary keys from past processes.
 		$this->primary_keys = get_site_option( $this->identifier . '_primary_keys', [] );
+		ns_cloner()->log->log( [ 'LOADING previous primary keys', $this->primary_keys ] );
 
 		// Create dependency - this will auto-dispatch when table processing is complete.
 		add_action( 'ns_cloner_tables_process_complete', [ $this, 'dispatch' ] );
@@ -250,30 +251,30 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 */
 	protected function insert_row( $row, $target_table ) {
 		$row         = apply_filters( 'ns_cloner_insert_values', $row, $target_table );
-		$formats     = implode( ', ', ns_prepare_row_formats( $row ) );
 		$field_names = array_map( 'ns_sql_backquote', array_keys( $row ) );
 		$field_list  = implode( ', ', $field_names );
 
-		// Handle compilation of grouped insert query for multiple tasks.
-		if ( apply_filters( 'ns_cloner_single_insert', false, $target_table ) ) {
-			// Do one insert for each row, the slow way, if activated via filter.
-			ns_cloner()->db->insert( $target_table, $row );
+		// Add necessary syntax before row values are appended.
+		if ( empty( $this->insert_query ) ) {
+			// Start off insert statement if one hasn't been started yet.
+			$this->insert_query = "INSERT INTO `$target_table` ( $field_list ) VALUES\n";
+		} elseif ( ! empty( $this->current_table ) && $this->current_table !== $target_table ) {
+			// Track current table and force start of new insert statement if needed.
+			$this->insert_query .= ";\nINSERT INTO `$target_table` ( $field_list ) VALUES\n";
 		} else {
-			// Insert the previous accumulated query and start new, if reaching max or switching tables.
-			$started_new_table   = ( $target_table !== $this->current_table );
-			$exceeded_row_max    = $this->rows_count >= $this->rows_per_query;
-			$exceeded_packet_max = strlen( $this->insert_query ) > ns_get_sql_variable( 'max_allowed_packet', 50000 );
-			if ( ! empty( $this->insert_query ) && ( $started_new_table || $exceeded_row_max || $exceeded_packet_max ) ) {
-				$this->insert_batch();
-			}
-			// Add beginning line of insert query, if it's starting blank.
-			if ( empty( $this->insert_query ) ) {
-				$this->insert_query = "INSERT INTO `$target_table` ( $field_list ) VALUES\n";
-			}
-			// Prepare data and add this row to the query.
-			$this->insert_query .= ns_cloner()->db->prepare( "( $formats ),\n", $row );
-			$this->current_table = $target_table;
-			$this->rows_count++;
+			// If still under the maximum rows per query, just add a comma and keep using current insert.
+			$this->insert_query .= ",\n";
+		}
+
+		// Prepare data and add this row to the query.
+		$formats             = implode( ', ', ns_prepare_row_formats( $row, $target_table ) );
+		$this->insert_query .= ns_cloner()->db->prepare( "( $formats )\n", $row );
+		$this->current_table = $target_table;
+		$this->rows_count++;
+
+		// Insert the previous accumulated query and start new, if reaching max query size.
+		if ( ! empty( $this->insert_query ) && $this->is_query_maxed() ) {
+			$this->insert_batch();
 		}
 	}
 
@@ -282,16 +283,19 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 */
 	public function insert_batch() {
 		ns_cloner()->log->log( "INSERTING $this->rows_count rows into $this->current_table" );
-		$query = trim( $this->insert_query, ",\n" );
-		ns_cloner()->db->query( $query );
-		// Handle any errors.
-		if ( ! empty( ns_cloner()->db->last_error ) ) {
-			if ( false !== strpos( ns_cloner()->db->last_error, 'Duplicate entry' ) ) {
-				ns_cloner()->report->add_notice( ns_cloner()->db->last_error . ' for table ' . $this->current_table );
-				ns_cloner()->log->log( [ 'DUPLICATE entry for query:', $query ] );
-				ns_cloner()->db->last_error = '';
-			} else {
-				ns_cloner()->log->handle_any_db_errors();
+		// Break into single queries to handle servers where multiple insert statements in one query are not allowed.
+		$inserts = preg_split( '/;(?=\sINSERT)/', $this->insert_query );
+		foreach ( $inserts as $query ) {
+			ns_cloner()->db->query( $query );
+			// Handle any errors.
+			if ( ! empty( ns_cloner()->db->last_error ) ) {
+				if ( false !== strpos( ns_cloner()->db->last_error, 'Duplicate entry' ) ) {
+					ns_cloner()->report->add_notice( ns_cloner()->db->last_error . ' for table ' . $this->current_table );
+					ns_cloner()->log->log( [ 'DUPLICATE entry for query:', $query ] );
+					ns_cloner()->db->last_error = '';
+				} else {
+					ns_cloner()->log->handle_any_db_errors();
+				}
 			}
 		}
 		// Reset.
@@ -307,7 +311,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		if ( ! empty( $this->insert_query ) ) {
 			$this->insert_batch();
 		}
-		// Save most recent primary key so we know to pick up again.
+		// Save most recent primary key so we know where to pick up again.
 		ns_cloner()->log->log( [ 'SAVING primary key data for rows process:', $this->primary_keys ] );
 		update_site_option( $this->identifier . '_primary_keys', $this->primary_keys );
 		parent::after_handle();
@@ -317,8 +321,21 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 * Run parent cancel, plus delete stored primary key data.
 	 */
 	public function cancel() {
-		delete_site_option( $this->identifier . '_primary_keys', $this->primary_keys );
+		delete_site_option( $this->identifier . '_primary_keys' );
 		parent::cancel();
 	}
+
+	/**
+	 * Check if current insert query is close to max size, in rows or length
+	 *
+	 * @return bool
+	 */
+	protected function is_query_maxed() {
+		$packet_max          = ns_get_sql_variable( 'max_allowed_packet', 50000 );
+		$exceeded_packet_max = strlen( $this->insert_query ) >= .9 * $packet_max;
+		$exceeded_row_max    = $this->rows_count >= $this->rows_per_query;
+		return $exceeded_row_max || $exceeded_packet_max;
+	}
+
 
 }

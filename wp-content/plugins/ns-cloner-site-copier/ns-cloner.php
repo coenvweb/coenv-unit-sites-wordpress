@@ -3,7 +3,7 @@
  * Plugin Name: NS Cloner - Site Copier
  * Plugin URI: https://neversettle.it
  * Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out NS Cloner Pro for additional powerful add-ons and features!
- * Version: 4.0.3
+ * Version: 4.0.4
  * Author: Never Settle
  * Author URI: https://neversettle.it
  * Requires at least: 3.5
@@ -63,7 +63,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.0.3';
+	public $version = '4.0.4';
 
 	/**
 	 * Menu Slug
@@ -780,7 +780,7 @@ final class NS_Cloner {
 					$this->log->log_break();
 					$this->log->log( "STARTING clone step {$callback_ref}." );
 					// Make sure a previous step didn't trigger an error, and that this step isn't disabled by filters.
-					$do_step = empty( $this->report->get_report( '_error' ) );
+					$do_step = empty( $this->report->get_report( '_error' ) ) && ! get_site_option( 'ns_cloner_exited' );
 					if ( apply_filters( "ns_cloner_do_step_{$callback_name}", $do_step ) ) {
 						call_user_func( $callback );
 					} else {
