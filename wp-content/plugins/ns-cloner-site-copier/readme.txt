@@ -101,6 +101,12 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.0.5 - 2019.10.17 =
+* Enable number-only site names
+* Add automatic cache-flush at end of cloning for WPEngine sites
+* Fix memory/time overload when queueing very large tables
+* Fix misc. plugin compatibility issues
+
 = 4.0.4 - 2019.09.02 =
 * Fix database handling for null values
 * Fix fatal site creation error in pre-5.1 WordPress

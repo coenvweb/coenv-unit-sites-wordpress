@@ -201,13 +201,13 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 				// Handle numeric vs non numeric primary keys - comparisons don't work reliably on non numeric,
 				// so again fall back to limit statement if more efficient primary key comparison isn't possible.
 				if ( is_numeric( $primary_key_val ) && $primary_key_val > 0 ) {
-					$where = "WHERE $primary_key_name > $primary_key_val ";
+					$where = "WHERE `$primary_key_name` > $primary_key_val ";
 					$limit = "LIMIT $preload_amount";
 				} else {
 					$where = 'WHERE 1=1';
 					$limit = "LIMIT $row_num, $preload_amount";
 				}
-				$order = "ORDER BY $primary_key_name ASC";
+				$order = "ORDER BY `$primary_key_name` ASC";
 			} else {
 				$where = 'WHERE 1=1';
 				$limit = "LIMIT $row_num, $preload_amount";

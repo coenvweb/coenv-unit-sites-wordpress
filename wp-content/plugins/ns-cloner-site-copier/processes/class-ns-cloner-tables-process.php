@@ -78,9 +78,18 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 		// Instead, we'll dispatch it once at the end in the complete() method.
 		$where      = apply_filters( 'ns_cloner_rows_where', 'WHERE 1=1', $source_table, $source_prefix );
 		$count_rows = ns_cloner()->db->get_var( "SELECT COUNT(*) rows_qty FROM `$source_table` $where" );
-		ns_cloner()->log->log( 'SELECTING rows with query: ' . "SELECT COUNT(*) rows_qty FROM `$source_table` $where" );
+		ns_cloner()->log->log( [ "SELECTED $count_rows with query:", "SELECT COUNT(*) rows_qty FROM `$source_table` $where" ] );
 		if ( $count_rows > 0 ) {
-			for ( $i = 0; $i < $count_rows; $i++ ) {
+			// Enable picking up a partially-queued table if it was massive and had to cut out in the middle.
+			if ( isset( $item['next_row'] ) ) {
+				$next_row = $item['next_row'];
+				ns_cloner()->log->log( "RESTARTING partially queued table at row *$next_row*" );
+			} else {
+				$next_row = 0;
+			}
+			$next_row = isset( $item['next_row'] ) ? $item['next_row'] : 0;
+			// Add a rows process item for each found row in the table.
+			for ( $i = $next_row; $i < $count_rows; $i++ ) {
 				$row_data = [
 					'row_num'      => $i,
 					'source_table' => $source_table,
@@ -89,6 +98,15 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 					'target_id'    => $item['target_id'],
 				];
 				$rows_process->push_to_queue( $row_data );
+				// Check every 5000 rows for timeout.
+				if ( $i && 0 === $i % 5000 ) {
+					if ( $this->time_exceeded() || $this->memory_exceeded() ) {
+						// Return item to be re-processed, with indicator of how many rows were already queued.
+						ns_cloner()->log->log( "STOPPING partially queued table at row $i due to resource limits" );
+						$item['next_row'] = $i + 1;
+						return $item;
+					}
+				}
 			}
 			$rows_process->save();
 			ns_cloner()->log->log( "QUEUEING *$count_rows* rows from *$source_table* to *$target_table*" );

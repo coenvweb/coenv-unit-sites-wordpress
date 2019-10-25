@@ -173,9 +173,12 @@ function ns_wp_validate_site( $site_name, $site_title ) {
 		$site_signup['errors']->get_error_messages(),
 		$test_signup['errors']->get_error_messages()
 	);
-	// Filter out error caused by hyphens in URL.
+	// Filter out error caused by hyphens in URL and number-only rule.
 	foreach ( $site_errors as $index => $error ) {
 		if ( __( 'Site names can only contain lowercase letters (a-z) and numbers.' ) === $error && preg_match( '/^[a-z0-9-]+$/', $site_name ) ) {
+			unset( $site_errors[ $index ] );
+		}
+		if ( __( 'Sorry, site names must have letters too!' ) === $error && preg_match( '/^[0-9]{2,}$/', $site_name ) ) {
 			unset( $site_errors[ $index ] );
 		}
 	}
