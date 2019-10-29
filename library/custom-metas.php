@@ -71,12 +71,18 @@ function coenv_custom_metas() {
     if ($social_share_title) {
         $html .= '<meta property="og:title" content="' . $social_share_title . '"/>' . $break;
         $html .= '<meta property="twitter:title" content="' . $social_share_title . '"/>' . $break;
-    } 
+    } else {
+        $html .= '<meta property="og:title" content="' . get_the_title() . '"/>' . $break;
+        $html .= '<meta property="twitter:title" content="' . get_the_title() . '"/>' . $break;
+    }
     // Add social description if declared in ACF. 
     if ($social_share_description) {
         $html .= '<meta property="og:description" content="' . $social_share_description . '"/>' . $break;
         $html .= '<meta property="twitter:description" content="' . $social_share_description . '"/>';
-    } 
+    } else {
+        $html .= '<meta property="og:description" content="' . get_the_excerpt() . '"/>' . $break;
+        $html .= '<meta property="twitter:description" content="' . get_the_excerpt() . '"/>';
+    }
 
     return $html;
 } 
