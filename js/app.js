@@ -259,14 +259,14 @@ s=Math.max(0,s);var a=Math.floor(r/this.columnWidth);a-=r%this.columnWidth?0:1,a
 		// lightbox
 		$('a').nivoLightbox();
 
-        $('a').each(function () {
-            if( location.hostname === this.hostname || !this.hostname.length ) {
-            } else {
-                var href = $(this).attr('href');
-                var func = 'trackOutboundLink("' + href + '");';
-                $(this).attr('onclick', func);
-            }
-        });
+        //$('a').each(function () {
+        //  if( location.hostname === this.hostname || !this.hostname.length ) {
+        //    } else {
+        //        var href = $(this).attr('href');
+        //        var func = 'trackOutboundLink("' + href + '");';
+        //        $(this).attr('onclick', func);
+        //    }
+        //});
 
 		// lightbox captions
         $('figure a img').each(function () {

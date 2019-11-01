@@ -9,14 +9,14 @@ jQuery(function ($) {
 		// lightbox
 		$('a').nivoLightbox();
 
-        $('a').each(function () {
-            if( location.hostname === this.hostname || !this.hostname.length ) {
-            } else {
-                var href = $(this).attr('href');
-                var func = 'trackOutboundLink("' + href + '");';
-                $(this).attr('onclick', func);
-            }
-        });
+        //$('a').each(function () {
+        //  if( location.hostname === this.hostname || !this.hostname.length ) {
+        //    } else {
+        //        var href = $(this).attr('href');
+        //        var func = 'trackOutboundLink("' + href + '");';
+        //        $(this).attr('onclick', func);
+        //    }
+        //});
 
 		// lightbox captions
         $('figure a img').each(function () {
