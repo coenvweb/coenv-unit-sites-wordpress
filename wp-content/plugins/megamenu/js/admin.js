@@ -144,6 +144,7 @@
                             // bind save button action
                             form.on("change", function(e) {
                                 start_saving();
+                                isDirty = false;
                                 e.preventDefault();
                                 $("input", form).not(e.target).removeAttr("checked");
                                 var data = $(this).serialize();

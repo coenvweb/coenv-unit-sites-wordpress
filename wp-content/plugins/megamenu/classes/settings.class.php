@@ -1051,7 +1051,7 @@ class Mega_Menu_Settings {
                                 wp_nonce_url( admin_url("admin-post.php"), 'megamenu_add_menu_location' )
                             ) );
 
-                            echo "<br /><p><a class='button button-secondary' href='{$add_location_url}'>" . __("Add another menu location", "megamenu") . "</a></p>";
+                            echo "<br /><p><a class='button button-primary' href='{$add_location_url}'>" . __("Add another menu location", "megamenu") . "</a></p>";
 
                             ?>
 
@@ -1131,7 +1131,7 @@ class Mega_Menu_Settings {
                             <?php wp_nonce_field( 'megamenu_clear_css_cache' ); ?>
                             <input type="hidden" name="action" value="megamenu_clear_css_cache" />
 
-                            <input type='submit' class='button button-secondary' value='<?php _e("Clear CSS Cache", "megamenu"); ?>' />
+                            <input type='submit' class='button button-primary' value='<?php _e("Clear CSS Cache", "megamenu"); ?>' />
 
                             <?php if ( get_transient( 'megamenu_css_last_updated' ) ): ?>
                                 <p><em><small><?php echo sprintf(__("The menu CSS was last updated on %s", "megamenu"), date('l jS F Y H:i:s', get_transient('megamenu_css_last_updated') ) ); ?><small><em></p>
@@ -1210,7 +1210,7 @@ class Mega_Menu_Settings {
                                 echo "<label><input value='json' type='radio' checked='checked' name='format'>" . __("JSON - I want to import this theme into another site I'm developing", "megamenu") . "</label>";
                                 echo "<label><input value='php' type='radio' name='format'>" . __("PHP - I want to distribute this Menu Theme in a WordPress Theme I'm developing", "megamenu") . "<label>";
 
-                                echo "<input type='submit' name='export' class='button button-secondary' value='" . __("Export Theme", "megamenu") . "' />";
+                                echo "<input type='submit' name='export' class='button button-primary' value='" . __("Export Theme", "megamenu") . "' />";
 
                             }
 
@@ -1228,7 +1228,7 @@ class Mega_Menu_Settings {
                             <?php wp_nonce_field( 'megamenu_import_theme' ); ?>
                             <input type="hidden" name="action" value="megamenu_import_theme" />
                             <textarea name='data'></textarea>
-                            <input type='submit' class='button button-secondary' value='<?php _e("Import Theme", "megamenu"); ?>' />
+                            <input type='submit' class='button button-primary' value='<?php _e("Import Theme", "megamenu"); ?>' />
                         </form>
                     </td>
                 </tr>
@@ -1293,14 +1293,6 @@ class Mega_Menu_Settings {
         ) );
 
         if ( ! is_plugin_active('megamenu-pro/megamenu-pro.php') ) {
-
-            //$header_links['rate_us'] = array(
-            //    'url' => 'https://wordpress.org/support/plugin/megamenu/reviews/#new-post',
-            //    'text' => __("If you like this plugin, please vote and support us!", "megamenu"),
-            //    'target' => '_blank',
-            //    'class' => 'mega-star'
-            //);
-
             $header_links['pro'] = array(
                 'url' => 'https://www.megamenu.com/upgrade/?utm_source=free&amp;utm_medium=settings&amp;utm_campaign=pro',
                 'target' => '_mmmpro',
@@ -4140,6 +4132,11 @@ class Mega_Menu_Settings {
 
         wp_enqueue_script( 'accordion' );
         wp_enqueue_script( 'spectrum', MEGAMENU_BASE_URL . 'js/spectrum/spectrum.js', array( 'jquery' ), MEGAMENU_VERSION );
+
+        wp_localize_script( 'spectrum', 'megamenu_spectrum_settings',
+            apply_filters("megamenu_spectrum_localisation", array())
+        );
+
         wp_enqueue_script( 'mega-menu-select2', MEGAMENU_BASE_URL . 'js/select2/select2.min.js', array(), MEGAMENU_VERSION );
 
         wp_enqueue_script( 'mega-menu-theme-editor', MEGAMENU_BASE_URL . 'js/settings.js', array( 'jquery', 'spectrum', 'code-editor' ), MEGAMENU_VERSION );

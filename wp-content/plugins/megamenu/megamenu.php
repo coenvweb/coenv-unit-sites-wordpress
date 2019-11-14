@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: An easy to use mega menu plugin. Written the WordPress way.
- * Version:     2.7.2
+ * Version:     2.7.3
  * Author:      megamenu.com
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -36,7 +36,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.7.2';
+    public $version = '2.7.3';
 
 
     /**
@@ -453,8 +453,9 @@ final class Mega_Menu {
         $args = (object) $args;
         
         // make sure we're working with a Mega Menu
-        if ( ! is_a( $args->walker, 'Mega_Menu_Walker' ) )
+        if ( ! $args->walker || ! is_a( $args->walker, 'Mega_Menu_Walker' ) ) {
             return $nav_menu;
+        }
 
         $find = 'class="' . $args->container_class . '">';
 
@@ -484,7 +485,7 @@ final class Mega_Menu {
         $args = (object) $args;
 
         // make sure we're working with a Mega Menu
-        if ( ! is_a( $args->walker, 'Mega_Menu_Walker' ) ) {
+        if ( ! $args->walker || ! is_a( $args->walker, 'Mega_Menu_Walker' ) ) {
             return $items;
         }
 

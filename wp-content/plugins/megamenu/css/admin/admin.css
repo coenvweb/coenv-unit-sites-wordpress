@@ -982,9 +982,7 @@
     .nav-menus-php #cboxContent table td.mega-value {
       font-size: 12px; }
       .nav-menus-php #cboxContent table td.mega-value select {
-        font-size: 0.9em;
-        height: 28px;
-        line-height: 28px; }
+        font-size: 0.9em; }
       .nav-menus-php #cboxContent table td.mega-value textarea {
         font-size: 0.9em;
         height: 28px;
@@ -1253,7 +1251,8 @@ body[class*='_page_maxmegamenu_'] .icon_dropdown .select2-choice,
 body.toplevel_page_maxmegamenu .icon_dropdown .select2-choice {
   padding: 0 5px 0 5px;
   height: 28px;
-  color: #DFDFDF; }
+  color: #DFDFDF;
+  border: 1px solid #7e8993; }
 
 body[class*='_page_maxmegamenu_'] .icon_dropdown .select2-chosen i:before,
 body.toplevel_page_maxmegamenu .icon_dropdown .select2-chosen i:before {
@@ -1283,6 +1282,7 @@ body[class*='_page_maxmegamenu_'] .icon_dropdown .select2-choice > .select2-chos
 body[class*='_page_maxmegamenu_'] .select2-result-label i,
 body.toplevel_page_maxmegamenu .icon_dropdown .select2-choice > .select2-chosen i,
 body.toplevel_page_maxmegamenu .select2-result-label i {
+  margin: 0;
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -1294,7 +1294,6 @@ body.toplevel_page_maxmegamenu .select2-result-label i {
   font-style: normal;
   vertical-align: top;
   text-align: center;
-  -webkit-transition: color .1s ease-in 0;
   transition: color .1s ease-in 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
@@ -1442,18 +1441,6 @@ body.toplevel_page_maxmegamenu .megamenu_header_top {
           color: white;
           line-height: 30px;
           padding: 0 10px; }
-      body[class*='_page_maxmegamenu_'] .megamenu_header_top ul li.mega-star:before,
-      body.toplevel_page_maxmegamenu .megamenu_header_top ul li.mega-star:before {
-        font: 400 14px/28px dashicons;
-        color: #ffb900;
-        margin-right: 4px;
-        content: "\f155";
-        speak: none;
-        padding: 0;
-        display: inline-block;
-        vertical-align: top;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale; }
 
 body[class*='_page_maxmegamenu_'] .megamenu_wrap .megamenu_submit .saved,
 body.toplevel_page_maxmegamenu .megamenu_wrap .megamenu_submit .saved {
@@ -1502,13 +1489,14 @@ body[class*='_page_maxmegamenu_'] .mm-picker-container,
 body.toplevel_page_maxmegamenu .mm-picker-container {
   border-radius: 3px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-  border: 1px solid #ccc;
+  border: 1px solid #7e8993;
   font-size: 0.9em;
   float: left; }
   body[class*='_page_maxmegamenu_'] .mm-picker-container .sp-replacer,
   body.toplevel_page_maxmegamenu .mm-picker-container .sp-replacer {
     margin: 0;
-    float: left; }
+    float: left;
+    border-right: 1px solid #7e8993; }
   body[class*='_page_maxmegamenu_'] .mm-picker-container .sp-palette-container,
   body.toplevel_page_maxmegamenu .mm-picker-container .sp-palette-container {
     width: 40px; }
@@ -1527,17 +1515,12 @@ body.toplevel_page_maxmegamenu .mm-picker-container {
     margin: 0; }
   body[class*='_page_maxmegamenu_'] .mm-picker-container div.chosen-color,
   body.toplevel_page_maxmegamenu .mm-picker-container div.chosen-color {
-    background: #f7f7f7;
-    -webkit-border-radius: 0 2px 2px 0;
     border-radius: 0 2px 2px 0;
-    border-left: 1px solid #ccc;
     color: #444;
     font-size: 11px;
     line-height: 26px;
     padding: 0 6px;
     text-align: center;
-    -webkit-box-shadow: inset 0 1px 0 #fff;
-    box-shadow: inset 0 1px 0 #fff;
     float: left;
     cursor: default; }
 
@@ -1650,9 +1633,7 @@ body.toplevel_page_maxmegamenu .megamenu_right {
     body.toplevel_page_maxmegamenu .megamenu_right .menu_settings table input[type=number],
     body.toplevel_page_maxmegamenu .megamenu_right .menu_settings table select {
       font-size: 0.9em;
-      height: 28px;
-      line-height: 28px;
-      vertical-align: top; }
+      min-height: 28px; }
     body[class*='_page_maxmegamenu_'] .megamenu_right .menu_settings table textarea,
     body.toplevel_page_maxmegamenu .megamenu_right .menu_settings table textarea {
       width: 100%;
