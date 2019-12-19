@@ -329,7 +329,8 @@ margin-bottom:0;
 }
 
 .rvy-current-revision {
-background-color: #ff8;
+background-color: #FFFDE9;
+box-shadow: 0 0 0 1px #ddd;
 }
 
 .rvy-revision-row {
@@ -448,7 +449,6 @@ table.diff tr {
 }
 
 table.diff td, table.diff th {
-	padding: .5em;
 	font-family: Consolas, Monaco, monospace;
 	border: none;
 }
@@ -482,6 +482,14 @@ margin-right:120px;
 padding:10px;	
 }
 
+#editor a.rvy-post-preview {
+padding-top:1px;
+}
+
+div.revisions-controls .author-card input[type="button"] {
+padding-bottom:2px;
+}
+
 span.rvy-requested-date {
 color: #aaa;
 font-style: italic;
@@ -504,14 +512,31 @@ width:auto;
 }
 
 #revisions-pro-descript {
-    border-width: 1px;
-    border-style: solid;
-    padding: 5px;
-    margin: 0 10px 10px 0;
-    -moz-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    background-color: #ffffe0;
-    border-color: #e6db55;
+border-width: 1px;
+border-style: solid;
+padding: 5px;
+margin: 0 10px 10px 0;
+-moz-border-radius: 3px;
+-khtml-border-radius: 3px;
+-webkit-border-radius: 3px;
+border-radius: 3px;
+background-color: #ffffe0;
+border-color: #e6db55;
+}
+
+#submitdiv_pps #save-action span.spinner {
+margin: 2px 2px 0;
+}
+
+
+.diff-meta input.edit-revision {
+float: right;
+margin-left: 6px;
+margin-right: 6px;
+margin-top: 2px;
+}
+
+
+#rvy_save_as_revision {
+margin-right: 4px;
 }

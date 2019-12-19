@@ -2,9 +2,9 @@
 Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
 Requires at least: 4.9.7
-Tested up to: 5.2.4
+Tested up to: 5.3
 Requires PHP: 5.6.20
-Stable Tag: 2.0.12
+Stable Tag: 2.1.5
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,73 @@ For more details about both the free and pro version, see our <a href="https://p
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.1.5 - 11 Dec 2019 =
+* Compat : PressPermit Pro - Pending revision previews could be viewed by any user (including anonymous) if "Prevent Revisors from viewing others' revisions" disabled (since 2.1.4)
+* Fixed : Contributors had other users' uneditable, unreadable revisions listed in Revision Queue
+* Fixed : Revision Preview - Under some configurations, users with read-only access to revisions had no top bar in revision preview display
+* Fixed : Revision Preview - Under some role configurations, users saw an ineffective "Publish" button in preview top bar
+* Fixed : PHP warning for undefined index 'preview'
+
+= 2.1.4 - 10 Dec 2019 =
+* Fixed : Revision previews were not displayed to Editors under some configurations
+* Feature : Separate settings for "Prevent Revisors from editing others'" and "Prevent Revisors from viewing others'"
+
+= 2.1.3 - 6 Dec 2019 =
+* Compat : Classic Editor plugin - View / Approve buttons missing on Edit Revision screen if Classic Editor active but settings default to Block Editor
+* Compat : Classic Editor plugin - Javascript errors on Edit Post / Edit Revision screen if Classic Editor active but currently using Block Editor
+* Compat : Thin Out Revisions plugin broke Preview / Approval buttons on Compare Pending Revisions screen
+* Compat : Multiple Authors - Revision Queue "Post Author" links did not work for secondary authors
+* Compat : Multiple Authors - Revision Queue "Post Author" links did not filter Revision Queue
+* Compat : JReviews - Live preview from Edit Revision screen failed if JReviews plugin active
+* Fixed : Preview Top Bar blocks admin bar dropdown menu if another fixed-position element on the page (other than #wpadminbar) has a z-index of 99999 or higher
+
+= 2.1.2 - 4 Dec 2019 =
+* Fixed : Scheduled Revisions were not published (since 2.1)
+* Fixed : Edit Revision - Preview of unsaved revision did not work from Gutenberg
+* Change : Edit Revision - Display "View / Approve" button if editor is unchanged from saved revision, otherwise "Preview" button for unsaved changes
+* Fixed : Classic Editor - Preview caused "Update Revision" button to be recaptioned to "Save Draft"
+* Feature : Support Post Slug revision
+* Fixed : Other users' revisions were not listed in Revision Queue even if "Prevent Revisors from editing others' revisions" disabled
+* Fixed : With "Prevent Revisors from editing others' revisions" setting enabled, Revisors and Authors could edit others' revisions by direct URL access
+* Feature : Support list_others_revisions capability to grant read access to other users' revisions (applies if "Prevent Revisors from editing others' revisions" is enabled)
+* Compat : PressPermit Pro - Revisors could not submit Beaver Builder revisions
+* Compat : PressPermit Pro - Revision Exceptions ("Also these" category / taxonomy assignments) assigned to Authors were not applied correctly
+* Compat : JReviews plugin
+
+= 2.1.1 - 26 Nov 2019 =
+* Compat : Multiple Authors - Fatal error on revision creation (since 2.1)
+
+= 2.1 - 26 Nov 2019 =
+* Feature : Bulk Approval / Publishing in Revision Queue
+* Feature : Revision Edit: Approve Button on Editor screen
+* Feature : Option for Approve, Edit buttons on Compare Revisions screen (instead of Preview button)
+* Feature : Email Notification Buffer to avoid failures due to exceeding server send limits
+* Fixed : Email Notification - For pending revision submission, submitter was misidentified on some sites
+* Fixed : Revisors could restore previous revisions through manual URL access
+* Fixed : Fatal error when WP_Privacy_Policy_Content::text_change_check() is triggered
+* Fixed : "Pending Revision" checkbox was displayed in Gutenberg editor, even for unpublished posts
+* Fixed : After clicking "Pending Revision" checkbox, unchecking did not prevent revision save
+* Fixed : Revision Preview - unsaved changes to saved revision could not be previewed with WP 5.3
+* Fixed : Revision Preview - top bar for edit / approval was not displayed on some sites
+* Change : Revision Preview URL - Default to using published post slug with revision page_id argument, for better theme compatibility. Option to use Revision slug or ID only.
+* Fixed : Edit Revision screen links to published post discarded customized slug
+* Fixed : Classic Editor - "View / Approve" link from Edit Revision screen loaded wrong preview URL and no top bar display for approval
+* Fixed : Classic Editor - No preview button was available to Revisors
+* Fixed : Classic Editor - Invalid Revisions > Browse link displayed to Revisors
+* Compat : Classic Editor plugin - with "Allow users to switch editors" enabled, non-default editor did not have correct javascript loaded for Revisions
+* Compat : On themes that use a fixed position header, display preview top bar above header
+* Compat : PressPermit Pro - revision preview could not be viewed by Contributors under some configurations 
+* Fixed : On standard Compare Revisions screen (for past revisions), Preview and Manage button links did not update with slider selection change
+* Fixed : Pending, Schedule Revision notification - invalid preview link in some emails
+* Fixed : Trashed revisions were not identified as revisions in Edit Posts listing
+* Fixed : Trashed revisions were not deleted on parent post deletion
+* Fixed : Trashed revisions showed an invalid comment count value in Edit Posts listing
+* Fixed : PHP Warning in Gutenberg editor when editing is not being limited to revision submission
+* Compat : Multiple Authors - Compare Pending Revisions screen showed revisor as original post author under some conditions 
+* Compat : Multiple Authors - Revision submission / approval caused published post author to be changed to revisor, under some conditions
+* Compat : Plugin interaction caused published post permalink custom slug to be replaced with default permalink structure at revision publication, on some sites
+* Change : Revision Queue - recaption "My Posts" to "My Published Posts"
 
 = 2.0.12 - 29 Oct 2019 =
 * Fixed : Fatal error on Post Preview

@@ -52,19 +52,7 @@ class RevisionaryAdminFiltersItemUI {
 <?php
 global $revisionary;
 if ( ! $revisionary->isBlockEditorActive() ) :?>
-	<?php if (rvy_is_revision_status($post->post_status)):?>
-<script type="text/javascript">
-/* <![CDATA[ */
-jQuery(document).ready( function($) {
-	$('#publish').val("<?php _e('Publish Revision', 'revisionary' )?>");
-	postL10n.update = "<?php _e('Update Revision', 'revisionary' )?>";
-	postL10n.schedule = "<?php _e('Publish Scheduled Revision', 'revisionary' )?>";
-	var rvyNowCaption = "<?php _e( 'Current Time', 'revisionary' );?>";
-	$('#publishing-action #publish').show();
-});
-/* ]]> */
-</script>
-	<?php else: ?>
+	
 <script type="text/javascript">
 /* <![CDATA[ */
 jQuery(document).ready( function($) {
@@ -76,12 +64,24 @@ jQuery(document).ready( function($) {
 });
 /* ]]> */
 </script>
-	<?php endif;?>
+
 <?php endif;?>
 
-<style>
-div.num-revisions, #post-preview{ display:none; }
-</style>
+	<?php
+	$type_obj = get_post_type_object($post->post_type);
+	//$can_publish = $type_obj && agp_user_can($type_obj->cap->edit_post, rvy_post_id($post->ID), '', array('skip_revision_allowance' => true));
+	
+	// Use simpler criteria due to early execution of revisions.php access check in revisionary_main.php
+	$can_publish = $type_obj && (
+		!empty($current_user->allcaps[$type_obj->cap->edit_published_posts]) 
+		&& (($current_user->ID == $parent_post->ID) || !empty($current_user->allcaps[$type_obj->cap->edit_published_posts]))
+	);
+
+	if (!$can_publish):?>
+	<style>
+	div.num-revisions, div.misc-pub-revisions {display:none;}
+	</style>
+	<?php endif;?>
 <?php
 	}
 	
@@ -129,7 +129,7 @@ div.num-revisions, #post-preview{ display:none; }
 			return;
 
 		$object_id = rvy_detect_post_id();
-		
+
 		// This block will be moved to separate class
 		foreach ( $wp_meta_boxes[$object_type] as $context => $priorities ) {
 			foreach ( $priorities as $priority => $boxes ) {

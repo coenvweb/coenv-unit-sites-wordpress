@@ -3,6 +3,7 @@ class RevisionaryHistory
 {	
     var $published_post_ids = [];
     var $post_status = 'pending-revision';
+    var $revision_id = 0;
 
     private $authors = [];
 
@@ -18,7 +19,15 @@ class RevisionaryHistory
         add_action('wp_ajax_get-revision-diffs', [$this, 'actAjaxRevisionDiffs'], 1);
 
         add_action('parse_query', [$this, 'actDisableProblemQueries'], 5);
-		
+
+        // Thin Out Revisions plugin breaks View / Approve button on Compare Pending Revisions screen
+        if (class_exists('HM_TOR_Plugin_Loader')) {
+            global $hm_tor_plugin_loader;
+            if (!empty($hm_tor_plugin_loader)) {
+                remove_action( 'admin_enqueue_scripts',  array( $hm_tor_plugin_loader, 'admin_enqueue_scripts' ), 20 );
+            }
+        }
+
 	   if (did_action('load-revision.php')) {
 		$this->actLoadRevision();
 	   }
@@ -54,6 +63,8 @@ class RevisionaryHistory
         if ( ! $revision_id ) {
             $revision_id = absint( $to );
         }
+
+        $this->revision_id = $revision_id;
 
         $redirect = 'edit.php';
 
@@ -102,7 +113,7 @@ class RevisionaryHistory
                     }
                 }
 
-                if ( ! current_user_can( 'read_post', $revision->ID ) || ! current_user_can( 'edit_post', $published_post->ID ) ) {
+                if ((!current_user_can( 'read_post', $revision->ID ) && !current_user_can('edit_post', $revision->ID))) {
                     return;
                 }
 
@@ -207,9 +218,12 @@ class RevisionaryHistory
 		$q['post_status'] = (!empty($this->post_status)) ? $this->post_status : ['pending-revision', 'future-revision'];
         $q['posts_per_page'] = 99;
 
+        $q = apply_filters('revisionary_compare_vars', $q);
+
         //do_action('revisionary_history_query', $post);
         add_filter('posts_clauses', [$this, 'fltRevisionClauses'], 5, 2);
         $rvy_query = new WP_Query($q);
+
         remove_filter('posts_clauses', [$this, 'fltRevisionClauses'], 5, 2);
         //do_action('revisionary_history_query_done', $post);
         
@@ -721,7 +735,9 @@ class RevisionaryHistory
             foreach($authors as $_author) {
                 $author_ids []= $_author->ID;
             }
-        } else {
+        } 
+        
+        if (!$use_multiple_authors || !$author_ids) {
             $author_ids = [$revision->post_author];
             
             if ($_author = new WP_User($revision->post_author)) {
@@ -729,6 +745,7 @@ class RevisionaryHistory
             }
         }
         
+        sort($author_ids);
         $author_key = implode(",", $author_ids);
 
         if ( ! isset( $this->authors[ $author_key ] ) ) {
@@ -792,7 +809,10 @@ class RevisionaryHistory
 
         cache_users( wp_list_pluck( $revisions, 'post_author' ) );
 
-        $can_restore = current_user_can( 'edit_post', $post->ID );
+        $type_obj = get_post_type_object($post->post_type);
+        
+        $can_restore = agp_user_can( $type_obj->cap->edit_post, $post->ID, '', ['skip_revision_allowance' => true] );
+
         $current_id  = false;
 
         $revisions =  [$post->ID => $post] + $revisions;
@@ -817,16 +837,32 @@ class RevisionaryHistory
                 $current_id = $revision->ID;
             }
 
-            if ($can_restore) {
-                // Until Reject button is implemented, just route to Preview screen so revision can be edited / deleted if necessary
-                if ( in_array( $revision->post_status, ['pending-revision', 'future-revision'] ) ) {
-                    $_arg = ('page' == $revision->post_type) ? 'page_id=' : 'p=';
-                    $restore_link = add_query_arg( 'preview', true, str_replace( 'p=', $_arg, get_post_permalink( $revision ) ) );
-                    //$link_open = "<a href='$preview_url' target='_blank'>";
-                    //$link_close = '</a>';
-                } else {
-                    $restore_link = '';
+            $edit_url = false;
+
+            // Until Reject button is implemented, just route to Preview screen so revision can be edited / deleted if necessary
+            if ( $current || in_array($revision->post_status, ['pending-revision', 'future-revision'])) {
+                $restore_link = rvy_preview_url($revision);  // default to revision preview link
+                
+                if ($can_restore) {
+                    $published_post_id = rvy_post_id($revision->ID);
+
+	                if (rvy_get_option('compare_revisions_direct_approval') && agp_user_can( 'edit_post', $published_post_id, '', ['skip_revision_allowance' => true] ) ) {
+                        $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect={$_REQUEST['rvy_redirect']}" : '';
+
+                        if (in_array($revision->post_status, ['pending-revision'])) {
+                            $restore_link = wp_nonce_url( admin_url("admin.php?page=rvy-revisions&amp;revision={$revision->ID}&amp;action=approve$redirect_arg"), "approve-post_$published_post_id|{$revision->ID}" );
+                        
+                        } elseif (in_array($revision->post_status, ['future-revision'])) {
+                            $restore_link = wp_nonce_url( admin_url("admin.php?page=rvy-revisions&amp;revision={$revision->ID}&amp;action=publish$redirect_arg"), "publish-post_$published_post_id|{$revision->ID}" );
+                        }
+
+                        if (agp_user_can('edit_post', $revision->ID)) {
+                            $edit_url = admin_url("post.php?action=edit&amp;post=$revision->ID");
+                        }
+	                } 
                 }
+            } else {
+                $restore_link = '';
             }
 
             if ('future-revision' == $revision->post_status) {
@@ -847,8 +883,10 @@ class RevisionaryHistory
 
             $time_diff_label = ($now_gmt > $modified_gmt) ? __( '%s%s ago' ) : __( '%s%s from now', 'revisionary');
 
+            $use_multiple_authors = function_exists('get_multiple_authors') && !rvy_is_revision_status($revision->post_status);
+
             // Just track single post_author for revision.  Changes to Authors taxonomy will be applied to published post.
-            $author_key = $this->loadAuthorInfo($revision, false, compact('show_avatars'));
+            $author_key = $this->loadAuthorInfo($revision, $use_multiple_authors, compact('show_avatars'));
 
             $revisions_data = [
                 'id'         => $revision->ID,
@@ -859,7 +897,8 @@ class RevisionaryHistory
                 'timeAgo'    => sprintf( $time_diff_label, $date_prefix, human_time_diff( $modified_gmt, $now_gmt ) ),
                 'autosave'   => false,
                 'current'    => $current,
-                'restoreUrl' => $can_restore ? $restore_link : false,
+                'restoreUrl' => $restore_link,
+                'editUrl'    => $edit_url,
             ];
 
             /**
@@ -974,14 +1013,29 @@ class RevisionaryHistory
             $type_obj = get_post_type_object($post_type);
         }
 
-        $button_label = (empty($type_obj) || agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true])) 
-        ?  __('Preview / Approve', 'revisionary')
-        : __('Preview', 'revisionary');
+        $direct_approval = rvy_get_option('compare_revisions_direct_approval') && agp_user_can( 'edit_post', rvy_post_id($post_id), '', ['skip_revision_allowance' => true] );
 
+        if ($post_id) {
+            $can_approve = agp_user_can('edit_post', rvy_post_id($post_id), 0, ['skip_revision_allowance' => true]);
+        } else {
+            $can_approve = agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true]);
+        }
+
+        if (empty($type_obj) || $can_approve) {
+            $button_label = $direct_approval ? __('Approve', 'revisionary') : __('View / Approve', 'revisionary');
+        } else {
+            $button_label = __('View', 'revisionary');
+        }
         ?>
         <script type="text/javascript">
         /* <![CDATA[ */
         jQuery(document).ready( function($) {
+            var rvyEditURL = '';
+            var rvySearchParams = '';
+            var rvyRevisionID = '';
+            var rvyLastID = 0;
+            var rvyCanEdit = false;
+
             var RvyDiffUI = function() {
                 if( $('input.restore-revision:not(.rvy-recaption)').length) {
                     $('input.restore-revision').attr('value', '<?php echo $button_label;?>').addClass('rvy-recaption');
@@ -990,6 +1044,39 @@ class RevisionaryHistory
                 }
             }
             var RvyDiffUIinterval = setInterval(RvyDiffUI, 50);
+
+            var RvyEditButton = function() {
+                if(!$('input.edit-revision').length) {
+                    setTimeout(function() {
+                        rvySearchParams = new URLSearchParams(window.location.search);
+                        
+                        rvyRevisionID = rvySearchParams.get('to');
+
+                        if (!rvyRevisionID) {
+                            rvyRevisionID = rvySearchParams.get('revision');
+                        }
+
+                        if (!Number(rvyRevisionID)) {
+                            rvyRevisionID = <?php echo $this->revision_id;?>;
+                        }
+
+                        if (rvyRevisionID != rvyLastID) {
+                            var rselected = parseInt(_wpRevisionsSettings.to);
+                            var rkey;
+                            for (rkey = 0; rkey < _wpRevisionsSettings.revisionData.length; rkey++) {
+                                if (_wpRevisionsSettings.revisionData[rkey].id == rselected) {
+                                    if (_wpRevisionsSettings.revisionData[rkey].editUrl) {
+                                        $('input.restore-revision').after('<a href="' + _wpRevisionsSettings.revisionData[rkey].editUrl + '"><input type="button" class="edit-revision button button-primary" style="float:right" value="<?php _e('Edit');?>"></a>');
+                                    }
+                                }
+                            }
+
+                            rvyLastID = rvyRevisionID;
+                        }
+                    }, 100);
+                }
+            }
+            var RvyEditButtonInterval = setInterval(RvyEditButton, 250);
         });
         /* ]]> */
         </script>
@@ -1006,16 +1093,17 @@ class RevisionaryHistory
             $post_id = (isset($_REQUEST['to'])) ? (int) $_REQUEST['to'] : 0;
         }
 
-        if ($post_type = get_post_field('post_type', $post_id)) {
-            $type_obj = get_post_type_object($post_type);
+        if ($post = get_post($post_id)) {
+            $type_obj = get_post_type_object($post->post_type);
+        } else {
+            return;
         }
 
         $preview_label = (empty($type_obj) || agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true])) 
         ?  __('Preview / Restore', 'revisionary')
         : __('Preview', 'revisionary');
 
-        $_arg = ('page' == $post_type) ? 'page_id=' : 'p=';
-        $preview_url = add_query_arg( 'preview', true, str_replace( 'p=', $_arg, get_post_permalink( $post_id ) ) );
+        $preview_url = rvy_preview_url($post);
 
         $manage_label = (empty($type_obj) || agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true])) 
         ?  __('Manage', 'revisionary')
@@ -1026,10 +1114,38 @@ class RevisionaryHistory
         <script type="text/javascript">
         /* <![CDATA[ */
         jQuery(document).ready( function($) {
+            var rvyLastID = 0;
+
             var RvyDiffUI = function() {
-                if(!$('span.rvy-compare-preview').length) {
-                    $('h1').append('<span class="rvy-compare-preview" style="margin-left:20px"><a class="rvy_preview_linkspan" href="<?php echo $preview_url;?>" target="_revision_preview"><input type="button" value="<?php echo $preview_label;?>"></a></span>');
-                    $('h1').append('<span class="rvy-compare-list" style="margin-left:10px"><a class="rvy_preview_linkspan" href="<?php echo $manage_url;?>" target="_revision_list"><input type="button" value="<?php echo $manage_label;?>"></a></span>');
+                rvySearchParams = new URLSearchParams(window.location.search);
+                        
+                var rvyRevisionID = rvySearchParams.get('to');
+
+                if (!rvyRevisionID) {
+                    rvyRevisionID = rvySearchParams.get('revision');
+                }
+
+                if (!Number(rvyRevisionID)) {
+                    rvyRevisionID = <?php echo $this->revision_id;?>;
+                }
+
+                if (rvyRevisionID != rvyLastID) {
+                    var rvyPreviewURL = '<?php echo $preview_url;?>';
+                    rvyPreviewURL = rvyPreviewURL.replace("page_id=" + <?php echo $post_id;?>, "page_id=" + rvyRevisionID);
+                    rvyPreviewURL = rvyPreviewURL.replace("p=" + <?php echo $post_id;?>, "p=" + rvyRevisionID);
+
+                    var rvyManageURL = '<?php echo $manage_url;?>';
+                    rvyManageURL = rvyManageURL.replace("revision=" + <?php echo $post_id;?>, "revision=" + rvyRevisionID);
+
+                    if(!$('span.rvy-compare-preview').length) {
+                    $('h1').append('<span class="rvy-compare-preview" style="margin-left:20px"><a class="rvy_preview_linkspan" href="<?php echo $preview_url;?>" target="_revision_preview"><input class="button" type="button" value="<?php echo $preview_label;?>"></a></span>');
+                    $('h1').append('<span class="rvy-compare-list" style="margin-left:10px"><a class="rvy_preview_linkspan" href="<?php echo $manage_url;?>" target="_revision_list"><input class="button" type="button" value="<?php echo $manage_label;?>"></a></span>');
+                    } else {
+                        $('span.rvy-compare-preview a').attr('href', rvyPreviewURL);
+                        $('span.rvy-compare-list a').attr('href', rvyManageURL);
+                    }
+
+                    rvyLastID = rvyRevisionID;
                 }
             }
             var RvyDiffUIinterval = setInterval(RvyDiffUI, 50);

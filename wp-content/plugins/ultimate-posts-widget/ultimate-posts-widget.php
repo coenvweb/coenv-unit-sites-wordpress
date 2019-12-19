@@ -3,13 +3,21 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.0.7
-Author: Boston Dell-Vandenberg
-Author URI: http://bostondv.com
+Version: 2.0.9
+Author: Clever Widgets
+Author URI: https://themecheck.info
 Text Domain: upw
 Domain Path: /languages/
 License: MIT
 */
+require_once 'analyst/main.php';
+
+analyst_init(array(
+	'client-id' => 'vmg6q36wn85b8kzr',
+	'client-secret' => '35dcca0d55e95f21b3b1f3c6987ae34cf38c65c5',
+	'base-dir' => __FILE__
+));
+
 
 if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
 
@@ -143,11 +151,15 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       }
 
       // Excerpt more filter
-      $new_excerpt_more = create_function('$more', 'return "...";');
+      $new_excerpt_more = function($more){
+                return "...";
+              };
       add_filter('excerpt_more', $new_excerpt_more);
 
       // Excerpt length filter
-      $new_excerpt_length = create_function('$length', "return " . $excerpt_length . ";");
+      $new_excerpt_length = function($length) use ($excerpt_length){
+                return $excerpt_length;
+              };
       if ( $instance['excerpt_length'] > 0 ) add_filter('excerpt_length', $new_excerpt_length);
 
       if( $class ) {

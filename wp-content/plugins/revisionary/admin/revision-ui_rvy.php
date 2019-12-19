@@ -192,9 +192,13 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 	// note: RS filter (un-requiring edit_published/private cap) will be applied to this cap check
 	
 	if ( $link ) { //&& current_user_can( 'edit_post', $revision->ID ) ) {    // revisions are listed in the Editor even if not editable / restorable / approvable
-		
-		$link = "admin.php?page=rvy-revisions&amp;action=view&amp;revision=$revision->ID";
-		$date = "<a href='$link'>$date</a>";
+		if ('inherit' == $revision->post_status) {
+			$link = "revision.php?revision=$revision->ID";
+		} else {
+			$link = rvy_preview_url($revision);
+		}
+
+		$date = "<a href='$link' target='_blank'>$date</a>";
 	}
 
 	$status_obj = get_post_status_object( $revision->post_status );
@@ -268,12 +272,12 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 	// link to publish date in Edit Form metaboxes, but modification date in Revisions Manager table
 	if ( ! $date_field  ) {
 		if ( 'list' == $format ) {
-			$date_field = ( in_array( $status, array( 'inherit', 'pending-revision' ) ) ) ? 'post_modified' : 'post_date';
+			//$date_field = ( in_array( $status, array( 'inherit', 'pending-revision' ) ) ) ? 'post_modified' : 'post_date';
 			$date_field = 'post_modified';
 			$sort_field = $date_field;
 		} else {
 			$date_field = 'post_modified';
-			$sort_field = ( 'inherit' == $status ) ? 'post_modified' : 'post_date';
+			$sort_field = 'post_date';
 		}
 	} else {
 		if ( ! $sort_field )
@@ -309,7 +313,7 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 	
 	$can_edit_post = agp_user_can( $type_obj->cap->edit_post, $post->ID, '', array( 'skip_revision_allowance' => true ) );
 	
-	$hide_others_revisions = ! $can_edit_post && empty( $current_user->allcaps['edit_others_drafts'] ) && rvy_get_option( 'revisor_lock_others_revisions' );
+	$hide_others_revisions = ! $can_edit_post && empty($current_user->allcaps['list_others_revisions']) && rvy_get_option('revisor_hide_others_revisions');
 	
 	$count = 0;
 	$left_checked_done = false;
@@ -379,10 +383,10 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 			
 			if ( $post->ID != $revision->ID ) {
 				if ('inherit' == $revision->post_status) {
+					// @todo: need this case?
 					$preview_url = add_query_arg( 'preview', '1', get_post_permalink( $revision->ID ) . '&post_type=revision' );
 				} else {
-					$_arg = ('page' == $post->post_type) ? 'page_id=' : 'p=';
-					$preview_url = add_query_arg( 'preview', true, str_replace( 'p=', $_arg, get_post_permalink($revision) ) );
+					$preview_url = rvy_preview_url($revision, ['post_type' => $post->post_type]);
 				}
 
 				$preview_link = '<a href="' . esc_url($preview_url) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $revision->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
@@ -417,7 +421,6 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 					$date = str_replace( 'post=', 'revision=', $date );
 					$date = str_replace( '?&amp;', '?', $date );
 					$date = str_replace( '?&', '?', $date );
-					$date = $revisionary->admin->convert_link( $date, 'revision', 'manage', array( 'object_type' => $post->post_type ) );
 
 					$date = str_replace( '&revision=', "&amp;revision_status=$status&amp;revision=", $date );
 					$date = str_replace( '&amp;revision=', "&amp;revision_status=$status&amp;revision=", $date );
