@@ -58,6 +58,12 @@ php_value suhosin.request.max_vars 3000
 RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
 
+RewriteCond %{HTTP_HOST} futurerivers.washington.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
+
+RewriteCond %{HTTP_HOST} futurerivers.uw.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
+
 RewriteCond %{HTTP_HOST} cig.washington.edu [NC]
 RewriteRule ^(.*)$ http://cig.uw.edu/$1 [R=301,NC]
 
