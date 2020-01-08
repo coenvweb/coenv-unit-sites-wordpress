@@ -483,7 +483,7 @@ RewriteRule ^resources/?$ https://qrc.uw.edu/resources/conference-rooms/ [R=302,
 
 # JISAO Redirects
 RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=21]
+RewriteRule .? - [S=22]
 RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
 RewriteRule ^pdo/(.*)$ http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
 RewriteRule ^data/(.*)$ http://research.jisao.washington.edu/data/$1 [R=301,NC,L]
@@ -505,6 +505,7 @@ RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resour
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
+RewriteRule ^wp-content/uploads/sites/21/2019/12/proposal_structure.pdf https://jisao.uw.edu/wp-content/uploads/sites/21/2020/01/proposal_structure.pdf [R=302,NC,L]
 
 # SEFS Redirects
 RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
