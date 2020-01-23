@@ -21,6 +21,10 @@ Require shibboleth
     ModPagespeedDisallow http://dev.atmos.uw.edu/*
 </IfModule>
 
+#don't look at our git
+RewriteRule "^(.*/)?\.git/" - [F,L]
+RedirectMatch 404 /\.git
+
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
 
