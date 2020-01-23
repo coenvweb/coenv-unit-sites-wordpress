@@ -112,7 +112,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		// Set flag to skip any junk rows which shouldn't/needn't be copied.
 		$is_cloner_data = isset( $row['option_name'] ) && preg_match( '/^ns_cloner/', $row['option_name'] );
 		$is_transient   = isset( $row['option_name'] ) && preg_match( '/(_transient_rss_|_transient_(timeout_)?feed_)/', $row['option_name'] );
-		$is_edit_meta   = isset( $row['meta_key'] ) && preg_match( '/(_edit_lock|_edit_last)/', $row['meta_key'] );
+		$is_edit_meta   = isset( $row['meta_key'] ) && preg_match( '/(ns_cloner|_edit_lock|_edit_last)/', $row['meta_key'] );
 		$do_copy_row    = apply_filters( 'ns_cloner_do_copy_row', ( ! $is_cloner_data && ! $is_transient && ! $is_edit_meta ), $row, $item );
 		if ( ! $do_copy_row ) {
 			ns_cloner()->log->log( [ "SKIPPING row in *$source_table* because do_copy_row was false:", $row ] );

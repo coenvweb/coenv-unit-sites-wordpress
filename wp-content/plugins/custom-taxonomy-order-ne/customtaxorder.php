@@ -1,18 +1,18 @@
 <?php
 /*
 Plugin Name: Custom Taxonomy Order
-Plugin URI: http://products.zenoweb.nl/free-wordpress-plugins/custom-taxonomy-order-ne/
+Plugin URI: https://zenoweb.nl/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 2.10.0
+Version: 3.0.1
 Author: Marcel Pol
-Author URI: http://zenoweb.nl/
+Author URI: https://timelord.nl/
 License: GPLv2 or later
 Text Domain: custom-taxonomy-order-ne
 Domain Path: /lang/
 
 /*
 	Copyright 2011 - 2011  Drew Gourley
-	Copyright 2013 - 2018  Marcel Pol   (email: marcel@timelord.nl)
+	Copyright 2013 - 2020  Marcel Pol   (email: marcel@timelord.nl)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ Domain Path: /lang/
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '2.10.0');
+define('CUSTOMTAXORDER_VER', '3.0.1');
 
 
 function customtaxorder_register_settings() {
@@ -53,7 +53,7 @@ add_action('admin_init', 'customtaxorder_register_settings');
 function customtaxorder_update_settings() {
 	$options = customtaxorder_get_settings();
 	if ( isset($options['update']) ) {
-		echo '<div class="updated fade notice is-dismissible" id="message"><p>' . __('Custom Taxonomy Order NE settings', 'custom-taxonomy-order-ne') . ' ' . $options['update'] . '</p></div>';
+		echo '<div class="updated fade notice is-dismissible" id="message"><p>' . __('Custom Taxonomy Order settings', 'custom-taxonomy-order-ne') . ' ' . $options['update'] . '</p></div>';
 		unset($options['update']);
 		update_option('customtaxorder_settings', $options);
 	}
@@ -89,7 +89,9 @@ function customtaxorder_settings_validate($input) {
 	foreach ( $taxonomies as $taxonomy ) {
 		if ( $input[$taxonomy->name] != 1 ) {
 			if ( $input[$taxonomy->name] != 2 ) {
-				$input[$taxonomy->name] = 0; //default
+				if ( $input[$taxonomy->name] != 3 ) {
+					$input[$taxonomy->name] = 0; //default
+				}
 			}
 		}
 	}
@@ -115,12 +117,11 @@ function customtaxorder_menu() {
 	$taxonomies = get_taxonomies($args, $output);
 
 	// Also make the link_category available if activated.
-	$linkplugin = 'link-manager/link-manager.php';
-	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	if ( is_plugin_active($linkplugin) ) {
+	$active_plugins = get_option('active_plugins');
+	if ( in_array( 'link-manager/link-manager.php', $active_plugins ) ) {
 		$args = array( 'name' => 'link_category' );
-		$taxonomies2 = get_taxonomies( $args, $output );
-		$taxonomies = array_merge($taxonomies, $taxonomies2);
+		$link_category = get_taxonomies( $args, $output );
+		$taxonomies = array_merge($taxonomies, $link_category);
 	}
 
 	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
@@ -252,14 +253,16 @@ add_action( 'customtaxorder_update_order', 'customtaxorder_flush_cache' );
 
 
 /*
- * Function to give dropdown options for the list of sub-taxonomies.
+ * Function to give dropdown options for the list of sub-terms.
  */
 function customtaxorder_sub_query( $terms, $tax ) {
 	$options = '';
-	foreach ( $terms as $term ) {
-		$subterms = get_term_children( $term->term_id, $tax );
-		if ( $subterms ) {
-			$options .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+	if ( isset( $terms ) && is_array( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$subterms = get_term_children( $term->term_id, $tax );
+			if ( $subterms ) {
+				$options .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+			}
 		}
 	}
 	return $options;
@@ -289,14 +292,16 @@ function customtaxorder_apply_order_filter( $orderby, $args ) {
 		$options[$taxonomy] = 0; // Default if it was not set in options yet.
 	}
 
-	if ( $args['orderby'] == 'term_order' ) {
+	if ( $args['orderby'] == 'term_order_' ) { // leave for now...
 		return 't.term_order';
-	} elseif ( $args['orderby'] == 'name' ) {
+	} elseif ( $args['orderby'] == 'name_' ) {
 		return 't.name';
-	} elseif ( $options[$taxonomy] == 1 && !isset($_GET['orderby']) ) {
+	} elseif ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
 		return 't.term_order';
-	} elseif ( $options[$taxonomy] == 2 && !isset($_GET['orderby']) ) {
+	} elseif ( $options[$taxonomy] == 2 && ! isset($_GET['orderby']) ) {
 		return 't.name';
+	} elseif ( $options[$taxonomy] == 3 && ! isset($_GET['orderby']) ) {
+		return 't.slug';
 	} else {
 		return $orderby;
 	}
@@ -326,6 +331,8 @@ function customtaxorder_get_terms_defaults( $query_var_defaults, $taxonomies ) {
 		$query_var_defaults['orderby'] = 'term_order';
 	} elseif ( $options[$taxonomy] == 2 ) {
 		$query_var_defaults['orderby'] = 'name';
+	} elseif ( $options[$taxonomy] == 3 ) {
+		$query_var_defaults['orderby'] = 'slug';
 	}
 
 	return $query_var_defaults;
@@ -385,7 +392,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 				$parents = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
 				if ( is_array($parents) && ! empty($parents) ) {
 					$ancestor_ID = array_pop( $parents );
-					$ancestor_term = get_term($ancestor_ID);
+					$ancestor_term = get_term($ancestor_ID, $term->taxonomy);
 					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
 						$float = floatval($term->term_order) + 10000;
 						$term->term_order = floatval( strval($ancestor_term->term_order) . '.' . strval($float) );
@@ -567,12 +574,32 @@ function customtaxorder_activate($networkwide) {
 register_activation_hook( __FILE__, 'customtaxorder_activate' );
 
 
+/*
+ * Install database tables for new blog on MultiSite.
+ * Deprecated action since WP 5.1.0.
+ *
+ */
 function customtaxorder_activate_new_site($blog_id) {
 	switch_to_blog($blog_id);
 	_customtaxorder_activate();
 	restore_current_blog();
 }
 add_action( 'wpmu_new_blog', 'customtaxorder_activate_new_site' );
+
+
+/*
+ * Install database tables for new blog on MultiSite.
+ * Used since WP 5.1.0.
+ * Do not use wp_insert_site, since the options table doesn't exist yet...
+ *
+ * @since 2.10.1
+ */
+function customtaxorder_wp_initialize_site( $blog ) {
+	switch_to_blog( $blog->id );
+	_customtaxorder_activate();
+	restore_current_blog();
+}
+add_action( 'wp_initialize_site', 'customtaxorder_wp_initialize_site' );
 
 
 // Include Settingspage

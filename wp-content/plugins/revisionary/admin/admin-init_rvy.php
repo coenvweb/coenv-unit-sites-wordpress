@@ -113,7 +113,7 @@ function rvy_admin_init() {
 					&& !agp_user_can($type_obj->cap->edit_post, rvy_post_id($revision->ID), '', ['skip_revision_allowance' => true])
 					) {
 						if (count($post_ids) == 1) {
-							wp_die( __('Sorry, you are not allowed to approve this revision.') );
+							wp_die( __('Sorry, you are not allowed to approve this revision.', 'revisionary') );
 						} else {
 							continue;
 						}
@@ -148,7 +148,7 @@ function rvy_admin_init() {
 					
 					if ( ! current_user_can('administrator') && ! current_user_can( 'delete_post', rvy_post_id($revision->ID) ) ) {  // @todo: review Administrator cap check
 						if (('pending-revision' != $revision->post_status) || !rvy_is_post_author($revision)) {	// allow submitters to delete their own still-pending revisions
-							wp_die( __('Sorry, you are not allowed to delete this revision.') );
+							wp_die( __('Sorry, you are not allowed to delete this revision.', 'revisionary') );
 						}
 					} 
 	
@@ -170,14 +170,10 @@ function rvy_admin_init() {
 			wp_redirect($sendback);
 		}
 
-	// don't bother with the checks in this block unless action arg was passed or rvy_compare_revs field was posted
-	} elseif ( ! empty($_GET['action']) || ! empty( $_POST['rvy_compare_revs'] ) || ! empty($_POST['action']) ) {
-		if ( false !== strpos( urldecode($_SERVER['REQUEST_URI']), 'admin.php?page=rvy-revisions') ) {
-			if ( ! empty( $_POST['rvy_compare_revs'] ) ) {
-				require_once( dirname(__FILE__).'/revision-action_rvy.php');	
-				add_action( 'wp_loaded', 'rvy_revision_diff' );
-				
-			} elseif ( ! empty($_GET['action']) && ('restore' == $_GET['action']) ) {
+	// don't bother with the checks in this block unless action arg was passed
+	} elseif ( ! empty($_GET['action']) || ! empty($_POST['action']) ) {
+		if (false !== strpos(urldecode($_SERVER['REQUEST_URI']), 'admin.php') && !empty($_REQUEST['page']) && ('rvy-revisions' == $_REQUEST['page'])) {
+			if ( ! empty($_GET['action']) && ('restore' == $_GET['action']) ) {
 				require_once( dirname(__FILE__).'/revision-action_rvy.php');	
 				add_action( 'wp_loaded', 'rvy_revision_restore' );
 		
@@ -210,22 +206,7 @@ function rvy_admin_init() {
 	}
 
 	if (defined('REVISIONARY_PRO_VERSION') && !empty($_REQUEST['rvy_refresh_updates'])) {
-		revisionary()->keyStatus(true);
-        set_transient('revisionary-pro-refresh-update-info', true, 86400);
-
-		delete_site_transient('update_plugins');
-		delete_option('_site_transient_update_plugins');
-
-		wp_update_plugins();
-		//wp_version_check(array(), true);
-
-		if (current_user_can('update_plugins')) {
-			$url = remove_query_arg('rvy_refresh_updates', $_SERVER['REQUEST_URI']);
-			$url = add_query_arg('rvy_refresh_done', 1, $url);
-			$url = "//" . $_SERVER['HTTP_HOST'] . $url;
-			wp_redirect($url);
-			exit;
-		}
+		do_action('revisionary_refresh_updates');
 	}
 
 	if (!empty($_REQUEST['rvy_refresh_done']) && empty($_POST)) {
@@ -281,7 +262,7 @@ function rvy_dismissable_notice( $msg_id, $message ) {
 		$class = 'rvy-admin-notice rvy-admin-notice-plugin';
 		?>
 		<div class='updated rvy-notice' class='<?php echo $class;?>' id='rvy_dashboard_message'>
-		<span style="float:right"><a href="javascript:void(0);" onclick="RvyDismissNotice();"><?php _e("Dismiss", "pp") ?></a></span>
+		<span style="float:right"><a href="javascript:void(0);" onclick="RvyDismissNotice();"><?php _e("Dismiss", "revisionary") ?></a></span>
 		<?php echo $message ?></div>
 		<script type="text/javascript">
 			function RvyDismissNotice(){

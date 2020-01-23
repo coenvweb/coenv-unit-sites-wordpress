@@ -149,7 +149,18 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 				$this->identifier . '_lock'
 			)
 		);
-		if ( empty( $lock_value ) ) {
+		if ( isset( $_REQUEST['force_process'] ) ) {
+			ns_cloner()->log->log( "FORCING manual run for *$this->identifier* - overriding any existing instances" );
+			if ( $lock_value ) {
+				ns_cloner()->log->log( "FOUND existing lock $lock_value so deleting it" );
+				ns_cloner()->db->query(
+					ns_prepare_option_query(
+						'DELETE FROM {table} WHERE {key} = %s',
+						$this->identifier . '_lock'
+					)
+				);
+			}
+		} elseif ( empty( $lock_value ) ) {
 			ns_cloner()->log->log( "CHECKING for running *$this->identifier* - none found" );
 			return false;
 		} elseif ( $lock_value === $this->lock_id ) {

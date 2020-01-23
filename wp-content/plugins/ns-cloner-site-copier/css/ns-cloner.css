@@ -54,6 +54,36 @@
 	bottom: 36px;
 }
 
+.ns-cloner-header-pro {
+	float: right;
+	padding-top: 2px;
+	text-align: center;
+	line-height: 1.4em;
+	border-left: solid 1px #303030;
+	padding-left: 36px;
+}
+
+.ns-cloner-header-pro strong {
+	display: block;
+	color: #ccc;
+	font-weight: 300;
+	font-size: 17px;
+}
+
+.ns-cloner-header-pro a {
+	display: inline-block;
+    margin: 10px auto;
+    font-size: 13px;
+	padding: 10px 32px 12px !important;
+	height: 18px !important;
+	border-radius: 2px !important;
+}
+
+.ns-cloner-header-pro a:hover {
+	color: #ddd;
+	box-shadow: none !important;
+}
+
 /**
  *  Section boxes + sidebar widgets
  */
@@ -225,8 +255,11 @@
 .ns-cloner-section-content select,
 .ns-cloner-section-content textarea {
 	padding: .5em 1em;
+	margin: 0;
 	height: auto;
 	width: 100%;
+	border-radius: 0;
+	border-color: #bbb;
 }
 
 .ns-cloner-section-content strong {
@@ -287,11 +320,11 @@
 .ns-cloner-section-content .ns-cloner-input-group label {
 	background-color: #eaeaea;
 	padding: .5em 1em;
-	border: solid 1px #ddd;
+	border: solid 1px #ccc;
 	position: relative;
 	display: inline-block;
-	bottom: -1px;
-	left: 2px;
+	bottom: 0;
+	left: 1px;
 	height: 35px;
 	box-sizing: border-box;
 	color: #777;
@@ -311,7 +344,7 @@
 	border-radius: 0 2px 2px 0;
 }
 .ns-cloner-section-content .ns-cloner-input-group + .ns-cloner-input-group {
-	margin-top: -3px;
+	margin-top: -1px;
 }
 
 /**
@@ -418,11 +451,11 @@
 .ns-repeater-remove {
 	background-color: #eaeaea;
 	padding: 8px 8px;
-	border: solid 1px #ddd;
+	border: solid 1px #ccc;
 	position: relative;
 	display: inline-block;
-	bottom: -1px;
-	left: 2px;
+	bottom: 0;
+	left: 1px;
 	height: 35px;
 	box-sizing: border-box;
 	color: #777;

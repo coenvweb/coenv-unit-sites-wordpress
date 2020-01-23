@@ -2,9 +2,9 @@
 Contributors: publishpress, kevinB, stevejburge, andergmartins
 Tags: revision, access, permissions, cms, user, groups, members, admin, pages, posts, page, Post
 Requires at least: 4.9.7
-Tested up to: 5.3
+Tested up to: 5.3.2
 Requires PHP: 5.6.20
-Stable Tag: 2.1.5
+Stable Tag: 2.1.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -61,6 +61,23 @@ For more details about both the free and pro version, see our <a href="https://p
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.1.8 - 15 Jan 2020 =
+* Fixed : Custom Post Types did not have Pending Revisions or Scheduled Revisions available (since 2.1.7)
+* Lang : Some strings were not translatable 
+* Lang: Updated language files
+
+= 2.1.7 - 13 Jan 2020 =
+* Fixed : Excessive resource usage with some caching solutions
+* Fixed : Multisite - Super Administrators without a site role could not access Revision Queue 
+* Fixed : Classic Editor - After updating a revision, "View Post" message linked to published post instead of revision preview
+* Feature : New filter 'revisionary_enabled_post_types', unset post types by key to disable PP Revisions involvement
+
+= 2.1.6 - 23 Dec 2019 =
+* Fixed : Edit Revision - Classic Editor "Approve" button ineffective
+* Fixed : Edit Revision - Classic Editor "View / Approve" button loaded live preview (of unsaved changes) instead
+* Compat : By default, prevent third party post query filtering on Revision Queue (to avoid non-display of Revisions)
+* Compat : PressPermit Pro - Updating a saved revision caused it to be changed to a regular pending post
 
 = 2.1.5 - 11 Dec 2019 =
 * Compat : PressPermit Pro - Pending revision previews could be viewed by any user (including anonymous) if "Prevent Revisors from viewing others' revisions" disabled (since 2.1.4)

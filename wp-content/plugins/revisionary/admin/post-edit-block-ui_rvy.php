@@ -10,7 +10,7 @@ add_action( 'enqueue_block_editor_assets', array( 'RVY_PostBlockEditUI', 'act_ob
 
 class RVY_PostBlockEditUI {
 	public static function act_object_guten_scripts() {
-        global $current_user;
+        global $current_user, $revisionary;
         
         if ( ! $post_id = rvy_detect_post_id() ) {
             return;
@@ -19,6 +19,10 @@ class RVY_PostBlockEditUI {
         $post_type = rvy_detect_post_type();
 
 		if ( ! $type_obj = get_post_type_object( $post_type ) ) {
+            return;
+        }
+
+        if (empty($revisionary->enabled_post_types[$post_type]) || !$revisionary->config_loaded) {
             return;
         }
 
@@ -35,7 +39,7 @@ class RVY_PostBlockEditUI {
             $view_link = rvy_preview_url($post);
 
             if ($can_publish = agp_user_can($type_obj->cap->edit_post, rvy_post_id($post->ID), '', array('skip_revision_allowance' => true))) {
-                $view_caption = ('future-revision' == $post->post_status) ? __('View / Publish') : __('View / Approve');
+                $view_caption = ('future-revision' == $post->post_status) ? __('View / Publish', 'revisionary') : __('View / Approve', 'revisionary');
                 $view_title = __('View / moderate saved revision', 'revisionary');
             } else {
                 $view_caption = __('View');
@@ -136,8 +140,8 @@ class RVY_PostBlockEditUI {
             
             $status = 'pending-revision';
             $args = array(
-                'publish' =>    __('Submit Revision'), 
-                'saveAs' =>     __('Submit Revision'), 
+                'publish' =>    __('Submit Revision', 'revisionary'), 
+                'saveAs' =>     __('Submit Revision', 'revisionary'), 
                 'prePublish' => __( 'Workflow&hellip;', 'revisionary' ),
                 'redirectURL' => admin_url("edit.php?post_type={$post_type}&revision_submitted={$status}&post_id={$post_id}"),
             );  

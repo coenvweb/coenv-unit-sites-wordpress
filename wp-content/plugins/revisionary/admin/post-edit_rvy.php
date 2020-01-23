@@ -17,11 +17,28 @@ class RvyPostEdit {
 
         add_action('post_submitbox_misc_actions', array($this, 'act_post_submit_revisions_links'), 5);
         
+        add_filter('post_updated_messages', [$this, 'fltPostUpdatedMessage']);
+
         add_filter('user_has_cap', [$this, 'fltAllowBrowseRevisionsLink'], 50, 3);
 
         add_filter('revisionary_apply_revision_allowance', [$this, 'fltRevisionAllowance'], 5, 2);
 
         add_action('admin_head', [$this, 'actAdminBarPreventPostClobber'], 5);
+    }
+
+    function fltPostUpdatedMessage($messages) {
+        global $post;
+
+        if (rvy_is_revision_status($post->post_status)) {
+            $preview_url = rvy_preview_url($post);
+            $preview_msg = sprintf(__('Revision updated. %sView Preview%s', 'revisionary'), "<a href='$preview_url'>", '</a>');
+
+            $messages['post'][1] = $preview_msg;
+            $messages['page'][1] = $preview_msg;
+            $messages[$post->post_type][1] = $preview_msg;
+        }
+        
+        return $messages;
     }
 
     function fltAllowBrowseRevisionsLink($wp_blogcaps, $reqd_caps, $args) {
@@ -68,6 +85,19 @@ class RvyPostEdit {
 
         if (!empty($post) && rvy_is_revision_status($post->post_status)):
             $type_obj = get_post_type_object($post->post_type);
+
+            $view_link = rvy_preview_url($post);
+
+            if ($can_publish = agp_user_can($type_obj->cap->edit_post, rvy_post_id($post->ID), '', array('skip_revision_allowance' => true))) {
+                $view_caption = ('future-revision' == $post->post_status) ? __('View / Publish', 'revisionary') : __('View / Approve', 'revisionary');
+                $view_title = __('View / moderate saved revision', 'revisionary');
+            } else {
+                $view_caption = __('View');
+                $view_title = __('View saved revision', 'revisionary');
+            }
+
+            $preview_caption = __('View');
+            $preview_title = __('View unsaved changes', 'revisionary');
         ?>
     <script type="text/javascript">
     /* <![CDATA[ */
@@ -77,6 +107,23 @@ class RvyPostEdit {
         $(document).on('click', '#post-body-content *, #wp-content-editor-container *, #tinymce *', function() {
             $('div.rvy-revision-approve').hide();
         });
+
+        <?php if ($view_link) :?>
+            // remove preview event handlers
+            original = $('#minor-publishing-actions #post-preview');
+            $(original).after(original.clone().attr('href', '<?php echo $view_link;?>').attr('target', '_blank').attr('id', 'revision-preview'));
+            $(original).hide();
+        <?php endif;?>
+
+        <?php if ($view_caption) :?>
+            $('#minor-publishing-actions #revision-preview').html('<?php echo $view_caption;?>');
+        <?php endif;?>
+
+        <?php if ($preview_title) :?>
+            $('#minor-publishing-actions #post-preview').html('<?php echo $preview_caption;?>');
+            $('#minor-publishing-actions #post-preview').attr('title', '<?php echo $preview_title;?>');
+        <?php endif;?>
+
     });
     /* ]]> */
     </script>
@@ -167,7 +214,7 @@ class RvyPostEdit {
 
         if (rvy_is_revision_status($post->post_status)) :
             $compare_link = admin_url("revision.php?revision=$post->ID");
-            $compare_button = __('Compare', 'revisionary');
+            $compare_button = _x('Compare', 'revisions', 'revisionary');
             $compare_title = __('Compare this revision to published copy, or to other revisions', 'revisionary');
             ?>
 
@@ -195,7 +242,7 @@ class RvyPostEdit {
         $type_obj = get_post_type_object($post->post_type);
         $can_publish = $type_obj && agp_user_can($type_obj->cap->edit_post, rvy_post_id($post->ID), '', array('skip_revision_allowance' => true));
         if ($can_publish) {
-            $preview_caption = ('future-revision' == $post->post_status) ? __('View / Publish') : __('View / Approve');
+            $preview_caption = ('future-revision' == $post->post_status) ? __('View / Publish', 'revisionary') : __('View / Approve', 'revisionary');
         } else {
             $preview_caption = __('View');
         }
@@ -262,7 +309,7 @@ class RvyPostEdit {
                 echo $caption;
                 ?>
                 <a class="hide-if-no-js"
-                    href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions'); ?></a>
+                    href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
                 </div>
                 <?php
             }
@@ -283,7 +330,7 @@ class RvyPostEdit {
                 echo $caption;
                 ?>
                 <a class="hide-if-no-js"
-                    href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions'); ?></a>
+                    href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
                 </div>
                 <?php
             }

@@ -308,6 +308,15 @@ jQuery(
 			}
 		);
 
+		// Force re-dispatch mode.
+		$( '.ns-cloner-ajax-force-trigger' ).click(
+			function(e){
+				e.preventDefault();
+				$( this ).parent().remove();
+				ns_cloner_form.ajax_force = true;
+			}
+		);
+
 		// Move license nag down to alerts section.
 		$( '.notice-error:contains("NS Cloner")' )
 			.removeClass( 'notice' )
@@ -593,7 +602,7 @@ jQuery(
 
 			'show_progress': function ( data ) {
 				// Update progress bar.
-				$( '.ns-create-site .ns-percents' ).text( data.percentage + '%' );
+				$( '.ns-create-site .ns-percents' ).text( Math.min( 100, data.percentage ) + '%' );
 				$( '.ns-create-site .ns-cloner-progress-bar-inner' ).css( 'width', data.percentage + '%' );
 				$( '.ns-cloner-processes-modal .objects-migrated' ).text( data.completed );
 				$( '.ns-cloner-processes-modal .total-objects' ).text( data.total );
@@ -604,11 +613,15 @@ jQuery(
 					var item         = $( '#' + process + '_progress' );
 					// Before updating process progress, make sure it hasn't gone backward, and skip if so.
 					// This sometimes happens right at the end due to finish() being called and deleting progress during cleanup.
-					var last = ns_cloner_form.last_progress[ process ] || 0;
-					if ( progress.total < last ) {
-						continue;
-					} else {
-						ns_cloner_form.last_progress[ process ] = progress.total;
+					var last = ns_cloner_form.last_progress[ process ];
+					if ( ! last || progress.completed > last.total ) {
+						last = {
+							total: progress.completed,
+							time: new Date().valueOf()
+						};
+						ns_cloner_form.last_progress[ process ] = last;
+						// If it was stalled (restart option shown) and now progress is added, we no longer need restart.
+						ns_cloner_form.stalled[ process ] = false;
 					}
 					// Show progress for individual process.
 					if ( item.length ) {
@@ -636,8 +649,9 @@ jQuery(
 							}
 						);
 					}
-					// Issue a dispatch request if this process was dispatched more than 5 seconds ago and progress hasn't moved.
-					if ( process_data.dispatched && ( Date.now() / 1000 ) - process_data.dispatched > 5 ) {
+					// Auto re-dispatch if this process was dispatched more than 5 seconds ago but never marked received.
+					var since_dispatched = ( Date.now() / 1000 ) - process_data.dispatched;
+					if ( process_data.dispatched && since_dispatched > 5 && ! ns_cloner_form.ajax_force ) {
 						ns_cloner_form.ajax(
 							{
 								'action' : 'ns_cloner_' + process + '_process',
@@ -645,12 +659,36 @@ jQuery(
 								'ajax'   : true
 							}
 						);
-						$('.ns-cloner-warning-message.ajax-on').show();
+						$( '.ns-cloner-warning-message.ajax-on' ).show();
 					}
+					// Mark process as stalled if it's been more than 15 seconds since last progress.
+					var since_last_progress = last && last.time ? new Date().valueOf() - last.time : 0;
+					if ( ! process_data.dispatched && since_last_progress > 15000 && progress.completed != progress.total ) {
+						$( '.ns-cloner-warning-message.ajax-force' ).show();
+						ns_cloner_form.stalled[ process ] = true;
+					}
+					// Manually re-dispatch with force_process to override any locks, if manual restart clicked.
+					if ( ns_cloner_form.stalled[ process ] && ns_cloner_form.ajax_force ) {
+						ns_cloner_form.ajax(
+							{
+								'action' : 'ns_cloner_' + process + '_process',
+								'nonce'  : process_data.nonce,
+								'ajax'   : true,
+								'force_process' : true,
+							}
+						);
+						ns_cloner_form.stalled[ process ] = false;
+						ns_cloner_form.last_progress[ process ].time = new Date().valueOf();
+					}
+
 				}
 			},
 
-			'last_progress': {}
+			'last_progress': {},
+
+			'stalled': {},
+
+			'ajax_force': false,
 
 		}
 

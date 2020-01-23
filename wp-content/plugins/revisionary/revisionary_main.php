@@ -5,7 +5,7 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 /**
  * @package     PublishPress\Revisions
  * @author      PublishPress <help@publishpress.com>
- * @copyright   Copyright (c) 2019 PublishPress. All rights reserved.
+ * @copyright   Copyright (c) 2020 PublishPress. All rights reserved.
  * @license     GPLv2 or later
  * @since       1.0.0
  */
@@ -20,6 +20,9 @@ class Revisionary
 	var $impose_pending_rev = [];
 	var $save_future_rev = [];
 	var $last_autosave_id = [];
+
+	var $config_loaded = false;		// configuration related to post types and statuses must be loaded late on the init action
+	var $enabled_post_types = [];	// enabled_post_types property is set (keyed by post type slug) late on the init action. 
 
 	// minimal config retrieval to support pre-init usage by WP_Scoped_User before text domain is loaded
 	function __construct() {
@@ -112,6 +115,8 @@ class Revisionary
 			add_filter( 'wp_insert_post_data', array($this, 'flt_insert_post_data'), 99, 2 );
 		}
 
+		add_filter( 'wp_insert_post_data', array($this, 'flt_regulate_revision_status'), 100, 2 );
+
 		// REST logging
 		add_filter( 'rest_pre_dispatch', array( $this, 'rest_pre_dispatch' ), 10, 3 );
 
@@ -136,6 +141,11 @@ class Revisionary
 		add_filter('post_link', [$this, 'fltEditRevisionUpdatedLink'], 99, 3);
 
 		do_action( 'rvy_init', $this );
+	}
+
+	function configurationLateInit() {
+		$this->enabled_post_types = apply_filters('revisionary_enabled_post_types', array_fill_keys(get_post_types(['public' => true]), true));
+		$this->config_loaded = true;
 	}
 
 	function fltEditRevisionUpdatedLink($permalink, $post, $leavename) {
@@ -182,6 +192,10 @@ class Revisionary
 	
 	function fltPressPermitExceptionClause($clause, $required_operation, $post_type, $args) {
 		//"$src_table.ID $logic ('" . implode("','", $ids) . "')",
+
+		if (empty($this->enabled_post_types[$post_type]) && $this->config_loaded) {
+			return $clause;
+		}
 
 		if (('edit' == $required_operation) && in_array($post_type, rvy_get_manageable_types()) 
 		) {
@@ -365,7 +379,7 @@ class Revisionary
 			if ( $result ) {
 				return true;
 			} else {
-				return new WP_Error( 'rest_invalid_featured_media', __( 'Invalid featured media ID.' ), array( 'status' => 400 ) );
+				return new WP_Error( 'rest_invalid_featured_media', __( 'Invalid featured media ID.', 'revisionary' ), array( 'status' => 400 ) );
 			}
 		} else {
 			return delete_post_thumbnail( $post_id );
@@ -503,6 +517,10 @@ class Revisionary
 			if ('inherit' == $post->post_status) {
 				return $caps;
 			}
+
+			if (empty($this->enabled_post_types[$post->post_type]) && $this->config_loaded) {
+				return $caps;
+			}
 		}
 		
 		if ($post && ('future-revision' == $post->post_status)) {
@@ -593,7 +611,7 @@ class Revisionary
 
 	private function filter_caps($wp_blogcaps, $reqd_caps, $args, $internal_args = array()) {
 		global $current_user;
-		
+
 		if (!rvy_get_option('pending_revisions')) {
 			return $wp_blogcaps;
 		}
@@ -625,6 +643,10 @@ class Revisionary
 			$object_type = $post->post_type;
 		} else {
 			$object_type = rvy_detect_post_type();
+		}
+
+		if (empty($this->enabled_post_types[$object_type]) && $this->config_loaded) {
+			return $wp_blogcaps;
 		}
 
 		// For 'edit_post' check, filter required capabilities via 'map_meta_cap' filter, then pass 'user_has_cap' unfiltered
@@ -755,6 +777,29 @@ class Revisionary
 		return $data;
 	}
 	
+	function flt_regulate_revision_status($data, $postarr) {
+		// Revisions are not published by wp_update_post() execution; Prevent setting to a non-revision status
+		if (get_post_meta($postarr['ID'], '_rvy_base_post_id', true)) {
+			$revision = get_post($postarr['ID']);
+			
+			if (!rvy_is_revision_status($data['post_status'])) {
+				$revert_status = true;
+			} elseif ($revision) {
+				if (($data['post_status'] != $revision->post_status) 
+				&& (('future-revision' == $revision->post_status) || ('future-revision' == $postarr['post_status']))
+				) {
+					$revert_status = true;
+				}
+			}
+
+			if (!empty($revert_status) && rvy_is_revision_status($revision->post_status)) {
+				$data['post_status'] = $revision->post_status;
+			}
+		}
+
+		return $data;
+	}
+
 	function flt_create_scheduled_rev( $data, $post_arr ) {
 		require_once( dirname(__FILE__).'/revision-creation_rvy.php' );
 		$rvy_creation = new PublishPress\Revisions\RevisionCreation(['revisionary' => $this]);

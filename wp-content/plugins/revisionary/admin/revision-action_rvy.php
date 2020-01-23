@@ -3,7 +3,7 @@ if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die( 'This page cannot be called directly.' );
 
 add_action( '_wp_put_post_revision', 'rvy_review_revision' );
-	
+
 /**
  * @package     PublishPress\Revisions\RevisionaryAction
  * @author      PublishPress <help@publishpress.com>
@@ -1053,7 +1053,7 @@ function revisionary_copy_terms( $from_post_id, $to_post_id, $mirror_empty = fal
 			}
 		}
 		
-		if ($source_terms || $mirror_empty) {
+		if ($source_terms || ($mirror_empty && !defined('FL_BUILDER_VERSION'))) {
 			if ( $delete_terms = array_diff($target_terms, $source_terms) ) {
 				// todo: single query
 				foreach($delete_terms as $tt_id) {

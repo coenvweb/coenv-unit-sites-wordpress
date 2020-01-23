@@ -101,11 +101,11 @@ function ns_recursive_search_replace( &$data, $search, $replace, $case_sensitive
 	// Run through replacements for different data types.
 	if ( is_array( $data ) ) {
 		foreach ( $data as $key => $value ) {
-			$replacement_count = ns_recursive_search_replace( $data[ $key ], $search, $replace, $case_sensitive );
+			$replacement_count += ns_recursive_search_replace( $data[ $key ], $search, $replace, $case_sensitive );
 		}
 	} elseif ( is_object( $data ) ) {
 		foreach ( $data as $key => $value ) {
-			$replacement_count = ns_recursive_search_replace( $data->$key, $search, $replace, $case_sensitive );
+			$replacement_count += ns_recursive_search_replace( $data->$key, $search, $replace, $case_sensitive );
 		}
 	} elseif ( is_string( $data ) ) {
 		$replace_func = $case_sensitive ? 'str_replace' : 'str_ireplace';

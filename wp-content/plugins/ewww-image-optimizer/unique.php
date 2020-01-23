@@ -91,7 +91,6 @@ function ewww_image_optimizer_exec_init() {
 		add_action( 'load-plugins.php', 'ewww_image_optimizer_tool_init' );
 		add_action( 'load-ims_gallery_page_ewww-ims-optimize', 'ewww_image_optimizer_tool_init' );
 		add_action( 'load-media_page_ewww-image-optimizer-unoptimized', 'ewww_image_optimizer_tool_init' );
-		add_action( 'load-flagallery_page_flag-manage-gallery', 'ewww_image_optimizer_tool_init' );
 	}
 	ewwwio_memory( __FUNCTION__ );
 }
@@ -464,8 +463,8 @@ function ewww_image_optimizer_skip_tools() {
 	$skip['jpegtran'] = false;
 	$skip['optipng']  = false;
 	$skip['gifsicle'] = false;
-	$skip['pngout']   = false;
 	// Except these which are off by default.
+	$skip['pngout']   = true;
 	$skip['pngquant'] = true;
 	$skip['webp']     = true;
 	// If the user has disabled a tool, we aren't going to bother checking to see if it is there.
@@ -478,8 +477,8 @@ function ewww_image_optimizer_skip_tools() {
 	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' ) || ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
 		$skip['gifsicle'] = true;
 	}
-	if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_pngout' ) || ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) || ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) > 10 ) ) {
-		$skip['pngout'] = true;
+	if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_pngout' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
+		$skip['pngout'] = false;
 	}
 	if ( 40 === (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
 		$skip['pngquant'] = false;
@@ -1408,7 +1407,7 @@ function ewww_image_optimizer_tool_found( $path, $tool ) {
 				ewwwio_debug_message( "$path: invalid output" );
 				break;
 			}
-			if ( ! empty( $webp_version ) && preg_match( '/\d.\d.\d/', $webp_version[0] ) ) {
+			if ( ! empty( $webp_version ) && preg_match( '/\d\.\d\.\d/', $webp_version[0] ) ) {
 				ewwwio_debug_message( 'optimizer found' );
 				return $webp_version[0];
 			}

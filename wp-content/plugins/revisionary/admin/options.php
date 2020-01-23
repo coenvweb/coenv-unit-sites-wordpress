@@ -304,7 +304,7 @@ $table_class = 'form-table rs-form-table';
 		</th><td>
 		
 		<?php 
-		$hint = __('The user role "Revisor" role is now available. Include capabilities for all custom post types in this role?', 'revisor');
+		$hint = __('The user role "Revisor" role is now available. Include capabilities for all custom post types in this role?', 'revisionary');
 		$ui->option_checkbox( 'revisor_role_add_custom_rolecaps', $tab, $section, $hint, '' );
 		?>
 		
@@ -722,7 +722,7 @@ foreach ( $available_form_options as $tab_name => $sections ) {
 		if ( isset( $ui->section_captions[$tab_name][$section_name] ) )
 			echo $ui->section_captions[$tab_name][$section_name];
 		else
-			_e( $section_name );
+			echo ucwords(str_replace('_', ' ', $section_name));
 		
 		echo '</strong><ul style="margin-left:2em">';
 			

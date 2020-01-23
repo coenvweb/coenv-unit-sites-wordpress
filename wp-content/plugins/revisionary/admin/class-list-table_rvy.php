@@ -5,7 +5,8 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 	var $published_post_ids = [];
 	var $published_post_count_ids = [];
 	var $post_types = [];
-	 
+	private $posts_clauses_filtered; 
+
 	public function __construct($args = []) {
 		global $wpdb;
 
@@ -69,8 +70,10 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 		do_action('revisionary_queue_pre_query');
 		add_filter('posts_clauses', [$this, 'pre_query_filter'], 5, 2);
+		add_filter('posts_clauses', [$this, 'restore_revisions_filter'], PHP_INT_MAX - 1, 2);
 		$pre_query = new WP_Query( $qp );
 		remove_filter('posts_clauses', [$this, 'pre_query_filter'], 5, 2);
+		remove_filter('posts_clauses', [$this, 'restore_revisions_filter'], PHP_INT_MAX - 1, 2);
 		do_action('revisionary_queue_pre_query_done');
 
 		//echo($pre_query->request . '<br /><br />');
@@ -134,6 +137,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 		add_filter('presspermit_posts_clauses_intercept', [$this, 'flt_presspermit_posts_clauses_intercept'], 10, 4);
 		add_filter('posts_clauses', [$this, 'revisions_filter'], 5, 2);
+		add_filter('posts_clauses', [$this, 'restore_revisions_filter'], PHP_INT_MAX - 1, 2);
 
 		if (defined('PUBLISHPRESS_MULTIPLE_AUTHORS_VERSION')) {
 			remove_action('pre_get_posts', ['MultipleAuthors\\Classes\\Query', 'action_pre_get_posts']);
@@ -150,6 +154,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 		remove_filter('presspermit_posts_clauses_intercept', [$this, 'flt_presspermit_posts_clauses_intercept'], 10, 4);
 		remove_filter('posts_clauses', [$this, 'revisions_filter'], 5, 2);
+		remove_filter('posts_clauses', [$this, 'restore_revisions_filter'], PHP_INT_MAX - 1, 2);
 
 		return $qr['post_status'];
 	}
@@ -181,13 +186,23 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 		return $where;
 	}
 
+	function restore_revisions_filter($clauses, $_wp_query = false) {
+		if (!empty($this->posts_clauses_filtered) && !defined('REVISIONARY_ENABLE_REVISION_QUEUE_FILTERING')) {
+			$clauses = $this->posts_clauses_filtered;
+		}
+
+		return $clauses;
+	}
+
 	function pre_query_filter($clauses, $_wp_query = false) {
 		$clauses['where'] = $this->pre_query_where_filter($clauses['where']);
+		$this->posts_clauses_filtered = $clauses;
+
 		return $clauses;
 	}
 
 	function revisions_where_filter($where, $args = []) {
-		global $wpdb, $current_user;
+		global $wpdb, $current_user, $revisionary;
 		
 		$p = (!empty($args['alias'])) ? $args['alias'] : $wpdb->posts;
 
@@ -211,6 +226,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				if (
 					agp_user_can($type_obj->cap->edit_published_posts, 0, '', ['skip_revision_allowance' => true])
 					&& agp_user_can($type_obj->cap->publish_posts, 0, '', ['skip_revision_allowance' => true])
+					&& (!empty($revisionary->enabled_post_types[$post_type]) || !$revisionary->config_loaded)
 				) {
 					$can_publish_types[]= $post_type;
 				}
@@ -227,6 +243,10 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 			if (empty($args['suppress_author_clause'])) {
 				$where .= $wpdb->prepare(" AND ($p.post_author = %d $type_clause)", $current_user->ID );
 			}
+		} elseif ($revisionary->config_loaded) {
+			$where .= (array_filter($revisionary->enabled_post_types)) 
+			? " AND ($p.post_type IN ('" . implode("','", array_keys(array_filter($revisionary->enabled_post_types))) . "'))" 
+			: "AND 1=2";
 		}
 
 		return $where;
@@ -234,6 +254,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 	function revisions_filter($clauses, $_wp_query = false) {
 		$clauses['where'] = $this->revisions_where_filter($clauses['where']);
+		$this->posts_clauses_filtered = $clauses;
 		return $clauses;
 	}
 	
@@ -248,11 +269,11 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 		
 		$arr = [
 			'cb' => '<input type="checkbox" />', 
-			'title' => __('Revision'), 
+			'title' => __('Revision', 'revisionary'), 
 			'post_status' => __('Status', 'revisionary'), 
 			'post_type' => __('Post Type', 'revisionary'), 
-			'author' => __('Revised By'), 
-			'date' => __('Submission'),
+			'author' => __('Revised By', 'revisionary'), 
+			'date' => __('Submission', 'revisionary'),
 		];
 
 		if (!empty($_REQUEST['cat'])) {
@@ -305,7 +326,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 		
 			case 'date_sched' :
 				if ( ('future-revision' === $post->post_status ) || ( strtotime($post->post_date_gmt) > agp_time_gmt() ) ) {
-						$t_time = get_the_time( __( 'Y/m/d g:i:s a' ) );
+						$t_time = get_the_time( __( 'Y/m/d g:i:s a', 'revisionary' ) );
 						$m_time = $post->post_date;
 						
 						$time = get_post_time( 'G', true, $post );
@@ -316,7 +337,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 							$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
 						} else {
 							//$h_time = mysql2date( __( 'Y/m/d' ), $m_time );
-							$h_time = mysql2date( __( 'Y/m/d g:i a' ), $m_time );
+							$h_time = mysql2date( __( 'Y/m/d g:i a', 'revisionary' ), $m_time );
 							$h_time = str_replace( ' am', '&nbsp;am', $h_time );
 							$h_time = str_replace( ' pm', '&nbsp;pm', $h_time );
 							$h_time = str_replace( ' ', '<br />', $h_time );
@@ -374,7 +395,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 					if (empty($authors_str)) {
 						$authors_str[] = '<span aria-hidden="true">—</span><span class="screen-reader-text">' . __('No author',
-							'publishpress-multiple-authors') . '</span>';
+							'revisionary') . '</span>';
 					}
 
 					echo implode(', ', $authors_str);
@@ -412,7 +433,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 			'<a href="%1$s" title="%2$s" aria-label="%2$s">%3$s</a>',
 			add_query_arg('published_post', $post->ID, $_SERVER['REQUEST_URI']),
 			/* translators: %s: post title */
-			esc_attr( sprintf( __( 'View only revisions of &#8220;%s&#8221;' ), $post->post_title ) ),
+			esc_attr( sprintf( __( 'View only revisions of %s', 'revisionary' ), '&#8220;' . $post->post_title . '&#8221;' ) ),
 			__( 'Filter' )
 		);
 
@@ -421,7 +442,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				'<a href="%1$s" rel="bookmark" title="%2$s" aria-label="%2$s">%3$s</a>',
 				get_permalink( $post->ID ),
 				/* translators: %s: post title */
-				esc_attr( __( 'View published post' ) ),
+				esc_attr( __( 'View published post', 'revisionary' ) ),
 				__( 'View' )
 			);
 		}
@@ -439,8 +460,8 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				'<a href="%1$s" title="%2$s" aria-label="%2$s" target="_revision_diff">%3$s</a>',
 				admin_url("revision.php?revision={$last_past_revision[$post->ID]}"),
 				/* translators: %s: post title */
-				esc_attr('Compare Past Revisions'),
-				__( 'History' )
+				esc_attr(__('Compare Past Revisions', 'revisionary')),
+				__( 'History', 'revisionary' )
 			);
 		}
 
@@ -588,7 +609,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				$link_class = '';
 			}
 
-			$links['mine'] = sprintf(__('%sMy Revisions%s(%s)'), "<a href='admin.php?page=revisionary-q&author=$current_user->ID'{$link_class}>", '</a>', "<span class='count'>$my_count</span>");
+			$links['mine'] = sprintf(__('%sMy Revisions%s(%s)', 'revisionary'), "<a href='admin.php?page=revisionary-q&author=$current_user->ID'{$link_class}>", '</a>', "<span class='count'>$my_count</span>");
 		}
 
 		$where = $this->revisions_where_filter( 
@@ -617,7 +638,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				$link_class = '';
 			}
 
-			$links['my_posts'] = sprintf(__('%sMy Published Posts%s(%s)'), "<a href='admin.php?page=revisionary-q&post_author=$current_user->ID'{$link_class}>", '</a>', "<span class='count'>$my_post_count</span>");
+			$links['my_posts'] = sprintf(__('%sMy Published Posts%s(%s)', 'revisionary'), "<a href='admin.php?page=revisionary-q&post_author=$current_user->ID'{$link_class}>", '</a>', "<span class='count'>$my_post_count</span>");
 		}
 
 		$all_count = 0;
@@ -677,8 +698,8 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 		}
 
 		if ($approval_potential = apply_filters('revisionary_bulk_action_approval', $approval_potential)) {
-			$actions['approve_revision'] = __('Approve', 'revisionary');
-			$actions['publish_revision'] = __('Publish', 'revisionary');
+			$actions['approve_revision'] = __('Approve');
+			$actions['publish_revision'] = __('Publish');
 		}
 
 		$actions['delete'] = __( 'Delete Permanently' );
@@ -766,9 +787,9 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 
 		$m = isset( $_GET['m'] ) ? (int) $_GET['m'] : 0;
 ?>
-		<label for="filter-by-date" class="screen-reader-text"><?php _e( 'Filter by date' ); ?></label>
+		<label for="filter-by-date" class="screen-reader-text"><?php _e( 'Filter by date', 'revisionary' ); ?></label>
 		<select name="m" id="filter-by-date">
-			<option<?php selected( $m, 0 ); ?> value="0"><?php _e( 'All dates' ); ?></option>
+			<option<?php selected( $m, 0 ); ?> value="0"><?php _e( 'All dates', 'revisionary' ); ?></option>
 <?php
 		foreach ( $months as $arc_row ) {
 			if ( 0 == $arc_row->year )
@@ -781,7 +802,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				selected( $m, $year . $month, false ),
 				esc_attr( $arc_row->year . $month ),
 				/* translators: 1: month name, 2: 4-digit year */
-				sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month ), $year )
+				sprintf( _x( '%1$s %2$d', 'MonthName 4-DigitYear', 'revisionary' ), $wp_locale->get_month( $month ), $year )
 			);
 		}
 ?>
@@ -921,7 +942,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 	}
 
 	public function column_date( $post ) {
-		$t_time = get_the_modified_time( __( 'Y/m/d g:i:s a' ), $post );
+		$t_time = get_the_modified_time( __( 'Y/m/d g:i:s a', 'revisionary' ), $post );
 		$time = strtotime($post->post_modified_gmt);
 		$time_diff = time() - $time;
 
@@ -929,7 +950,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 			$h_time = sprintf( __( '%s ago' ), human_time_diff( $time ) );
 			$h_time = str_replace( ' ', '&nbsp;', $h_time );
 		} else {
-			$h_time = mysql2date( __( 'Y/m/d g:i a' ), $t_time );
+			$h_time = mysql2date( __( 'Y/m/d g:i a', 'revisionary' ), $t_time );
 			$h_time = str_replace( ' am', '&nbsp;am', $h_time );
 			$h_time = str_replace( ' pm', '&nbsp;pm', $h_time );
 			$h_time = str_replace( ' ', '<br />', $h_time );
@@ -1000,7 +1021,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 				'<a href="%1$s" class="submitdelete" title="%2$s" aria-label="%2$s">%3$s</a>',
 				get_delete_post_link( $post->ID, '', true ),
 				/* translators: %s: post title */
-				esc_attr( sprintf( __( 'Delete Revision' ), $title ) ),
+				esc_attr( sprintf( __( 'Delete Revision', 'revisionary' ), $title ) ),
 				__( 'Delete' )
 			);
 		}
@@ -1015,7 +1036,7 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 					'<a href="%1$s" rel="bookmark" title="%2$s" aria-label="%2$s">%3$s</a>',
 					esc_url( $preview_link ),
 					/* translators: %s: post title */
-					esc_attr( __( 'Preview Revision' ) ),
+					esc_attr( __( 'Preview Revision', 'revisionary' ) ),
 					__( 'Preview' )
 				);
 			}
@@ -1026,8 +1047,8 @@ class Revisionary_List_Table extends WP_Posts_List_Table {
 					'<a href="%1$s" class="" title="%2$s" aria-label="%2$s" target="_revision_diff">%3$s</a>',
 					admin_url("revision.php?revision=$post->ID"),
 					/* translators: %s: post title */
-					esc_attr( sprintf( __('Compare Changes'), $title ) ),
-					__( 'Compare' )
+					esc_attr( sprintf( __('Compare Changes', 'revisionary'), $title ) ),
+					_x('Compare', 'revisions', 'revisionary')
 				);
 			}
 		}

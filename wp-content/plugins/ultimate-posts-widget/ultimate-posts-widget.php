@@ -3,7 +3,7 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.0.9
+Version: 2.1.0
 Author: Clever Widgets
 Author URI: https://themecheck.info
 Text Domain: upw
@@ -93,7 +93,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       extract( $args );
 
       $title = apply_filters('widget_title', empty($instance['title']) ? '' : $instance['title'], $instance, $this->id_base);
-      $title_link = $instance['title_link'];
+			$title_link = $instance['title_link'];
       $class = $instance['class'];
       $number = empty($instance['number']) ? -1 : $instance['number'];
       $types = empty($instance['types']) ? 'any' : explode(',', $instance['types']);
@@ -108,7 +108,14 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $order = $instance['order'];
       $orderby = $instance['orderby'];
       $meta_key = $instance['meta_key'];
+			$custom_empty = isset($instance['custom_empty']) ? $instance['custom_empty'] : '';
       $custom_fields = $instance['custom_fields'];
+
+			if (strlen($custom_empty) == 0) {
+				$custom_empty = 'No posts found.';
+				$instance['custom_empty'] = 'No posts found.';
+			}
+
 
       // Sticky posts
       if ($sticky == 'only') {
@@ -161,7 +168,6 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
                 return $excerpt_length;
               };
       if ( $instance['excerpt_length'] > 0 ) add_filter('excerpt_length', $new_excerpt_length);
-
       if( $class ) {
         $before_widget = str_replace('class="', 'class="'. $class . ' ', $before_widget);
       }
@@ -182,7 +188,8 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
         'orderby' => $orderby,
         'category__in' => $cats,
         'tag__in' => $tags,
-        'post_type' => $types
+        'post_type' => $types,
+				'post_status' => array('publish', 'inherit')
       );
 
       if ($orderby === 'meta_value') {
@@ -219,6 +226,11 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
         $cache[$args['widget_id']] = ob_get_flush();
       }
       wp_cache_set( 'widget_ultimate_posts', $cache, 'widget' );
+
+			remove_filter('excerpt_more', $new_excerpt_more);
+			if ( $instance['excerpt_length'] > 0 ) remove_filter('excerpt_length', $new_excerpt_length);
+
+			ob_end_flush();
     }
 
     function update( $new_instance, $old_instance ) {
@@ -253,6 +265,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $instance['show_tags'] = isset( $new_instance['show_tags'] );
       $instance['custom_fields'] = strip_tags( $new_instance['custom_fields'] );
       $instance['template'] = strip_tags( $new_instance['template'] );
+			$instance['custom_empty'] = strip_tags( $new_instance['custom_empty'] );
       $instance['template_custom'] = strip_tags( $new_instance['template_custom'] );
 
       if (current_user_can('unfiltered_html')) {
@@ -310,6 +323,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
         'show_content' => false,
         'show_readmore' => true,
         'show_thumbnail' => true,
+				'custom_empty' => 'No posts found.',
         'custom_fields' => '',
         // Set template to 'legacy' if field from UPW < 2.0 is set.
         'template' => empty($instance['morebutton_text']) ? 'standard' : 'legacy',
@@ -346,6 +360,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $show_content = $instance['show_content'];
       $show_readmore = $instance['show_readmore'];
       $show_thumbnail = $instance['show_thumbnail'];
+			$custom_empty = strip_tags($instance['custom_empty']);
       $custom_fields = strip_tags($instance['custom_fields']);
       $template = $instance['template'];
       $template_custom = strip_tags($instance['template_custom']);
@@ -428,6 +443,11 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
           <label for="<?php echo $this->get_field_id('after_posts'); ?>"><?php _e('After posts', 'upw'); ?>:</label>
           <textarea class="widefat" id="<?php echo $this->get_field_id('after_posts'); ?>" name="<?php echo $this->get_field_name('after_posts'); ?>" rows="5"><?php echo $after_posts; ?></textarea>
         </p>
+
+				<p>
+					<label for="<?php echo $this->get_field_id( 'custom_empty' ); ?>"><?php _e( 'No posts found message', 'upw' ); ?>:</label>
+					<input class="widefat" id="<?php echo $this->get_field_id( 'custom_empty' ); ?>" name="<?php echo $this->get_field_name( 'custom_empty' ); ?>" type="text" value="<?php echo $custom_empty; ?>" placeholder="No posts found." />
+				</p>
 
       </div>
 
