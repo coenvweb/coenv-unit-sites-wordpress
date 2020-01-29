@@ -44,10 +44,9 @@
 
 .nav-menus-php #cboxContent {
   padding: 0;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none; }
+  .nav-menus-php #cboxContent .CodeMirror {
+    user-select: auto; }
   .nav-menus-php #cboxContent .notice {
     margin: 10px 0 0 0; }
     .nav-menus-php #cboxContent .notice .notice-dismiss:focus {

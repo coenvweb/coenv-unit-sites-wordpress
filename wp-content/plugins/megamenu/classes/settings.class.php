@@ -3933,7 +3933,7 @@ class Mega_Menu_Settings {
         echo "<select name='settings[$key]'>";
 
         foreach ( $options as $weight => $name ) {
-            echo "<option value='{$weight}' " . selected( $value, $weight, true ) . ">{$name}</option>";
+            echo "<option value='{$weight}' " . selected( $value, $weight, false ) . ">{$name}</option>";
         }
 
         echo "</select>";
@@ -3953,10 +3953,10 @@ class Mega_Menu_Settings {
         $value = $this->active_theme[$key];
 
         echo "<select name='settings[$key]'>";
-        echo "    <option value='none' "      . selected( $value, 'none', true) . ">" . __("Normal", "megamenu") . "</option>";
-        echo "    <option value='capitalize'" . selected( $value, 'capitalize', true) . ">" . __("Capitalize", "megamenu") . "</option>";
-        echo "    <option value='uppercase'"  . selected( $value, 'uppercase', true) . ">" . __("UPPERCASE", "megamenu") . "</option>";
-        echo "    <option value='lowercase'"  . selected( $value, 'lowercase', true) . ">" . __("lowercase", "megamenu") . "</option>";
+        echo "    <option value='none' "      . selected( $value, 'none', false) . ">" . __("Normal", "megamenu") . "</option>";
+        echo "    <option value='capitalize'" . selected( $value, 'capitalize', false) . ">" . __("Capitalize", "megamenu") . "</option>";
+        echo "    <option value='uppercase'"  . selected( $value, 'uppercase', false) . ">" . __("UPPERCASE", "megamenu") . "</option>";
+        echo "    <option value='lowercase'"  . selected( $value, 'lowercase', false) . ">" . __("lowercase", "megamenu") . "</option>";
         echo "</select>";
 
     }
@@ -4025,9 +4025,11 @@ class Mega_Menu_Settings {
         echo "<option value='inherit'>" . __("Theme Default", "megamenu") . "</option>";
 
         foreach ( $this->fonts() as $font ) {
+            $orig_font = $font;
+            $font = esc_attr( stripslashes( $font ) );
             $parts = explode(",", $font);
             $font_name = trim($parts[0]);
-            echo "<option value=\"{$font}\" " . selected( $font, $value ) . ">{$font_name}</option>";
+            echo "<option value=\"{$font}\" " . selected( $orig_font, htmlspecialchars_decode($value) ) . ">{$font_name}</option>";
         }
 
         echo "</select>";

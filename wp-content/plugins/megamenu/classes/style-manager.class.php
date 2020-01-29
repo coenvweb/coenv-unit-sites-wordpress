@@ -760,6 +760,13 @@ final class Mega_Menu_Style_Manager {
                 continue;
             }
 
+            if ( in_array( $name, array( 'menu_item_link_font', 'panel_font_family', 'panel_header_font', 'panel_second_level_font', 'panel_third_level_font', 'panel_third_level_font', 'flyout_link_family', 'tabbed_link_family') ) ) {
+
+                $vars[$name] = "'" . stripslashes( htmlspecialchars_decode( $value ) ) . "'";
+
+                continue;
+            }
+
             if ( in_array( $name, array( 'responsive_text' ) ) ) {
 
                 if ( strlen( $value ) ) {
@@ -889,7 +896,9 @@ final class Mega_Menu_Style_Manager {
 
         $dependencies = apply_filters("megamenu_javascript_dependencies", array('jquery', 'hoverIntent'));
 
-        wp_enqueue_script( 'megamenu', $js_path, $dependencies, MEGAMENU_VERSION, true );
+        $scripts_in_footer = defined( 'MEGAMENU_SCRIPTS_IN_FOOTER' ) ? MEGAMENU_SCRIPTS_IN_FOOTER : true;
+
+        wp_enqueue_script( 'megamenu', $js_path, $dependencies, MEGAMENU_VERSION, $scripts_in_footer );
 
         $params = apply_filters("megamenu_javascript_localisation",
             array(

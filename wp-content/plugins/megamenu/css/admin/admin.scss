@@ -67,10 +67,11 @@ $header_height: 75px;
 	}
 	#cboxContent {
 		padding: 0;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
 		user-select: none;
+
+		.CodeMirror {
+			user-select: auto;
+		}
 
 		.notice {
 			margin: 10px 0 0 0;

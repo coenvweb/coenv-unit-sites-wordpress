@@ -4,11 +4,11 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: An easy to use mega menu plugin. Written the WordPress way.
- * Version:     2.7.3
+ * Version:     2.7.4
  * Author:      megamenu.com
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
- * Copyright:   2019 Tom Hemsley (https://www.megamenu.com)
+ * Copyright:   2020 Tom Hemsley (https://www.megamenu.com)
  *
  * Max Mega Menu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.7.3';
+    public $version = '2.7.4';
 
 
     /**
@@ -61,6 +61,7 @@ final class Mega_Menu {
      * @since 1.0
      */
     public function __construct() {
+        
 
         $this->define_constants();
         $this->includes();
@@ -265,6 +266,12 @@ final class Mega_Menu {
      */
     public function register_widget() {
         register_widget( 'Mega_Menu_Widget' );
+        //register_widget( 'Mega_Menu_Widget_Reusable_Block' );
+
+        // Check if Elementor installed and activated
+        //if ( did_action( 'elementor/loaded' ) ) {
+        //    register_widget( 'Mega_Menu_Widget_Elementor_Template' );
+        //}
     }
 
 
@@ -317,15 +324,17 @@ final class Mega_Menu {
      */
     private function plugin_classes() {
         $classes = array(
-            'mega_menu_walker'            => MEGAMENU_PATH . 'classes/walker.class.php',
-            'mega_menu_widget_manager'    => MEGAMENU_PATH . 'classes/widget-manager.class.php',
-            'mega_menu_menu_item_manager' => MEGAMENU_PATH . 'classes/menu-item-manager.class.php',
-            'mega_menu_nav_menus'         => MEGAMENU_PATH . 'classes/nav-menus.class.php',
-            'mega_menu_style_manager'     => MEGAMENU_PATH . 'classes/style-manager.class.php',
-            'mega_menu_settings'          => MEGAMENU_PATH . 'classes/settings.class.php',
-            'mega_menu_widget'            => MEGAMENU_PATH . 'classes/widget.class.php',
-            'mega_menu_toggle_blocks'     => MEGAMENU_PATH . 'classes/toggle-blocks.class.php',
-            'scssc'                       => MEGAMENU_PATH . 'classes/scssc.inc.php'
+            'mega_menu_walker'                    => MEGAMENU_PATH . 'classes/walker.class.php',
+            'mega_menu_widget_manager'            => MEGAMENU_PATH . 'classes/widget-manager.class.php',
+            'mega_menu_menu_item_manager'         => MEGAMENU_PATH . 'classes/menu-item-manager.class.php',
+            'mega_menu_nav_menus'                 => MEGAMENU_PATH . 'classes/nav-menus.class.php',
+            'mega_menu_style_manager'             => MEGAMENU_PATH . 'classes/style-manager.class.php',
+            'mega_menu_settings'                  => MEGAMENU_PATH . 'classes/settings.class.php',
+            'mega_menu_widget'                    => MEGAMENU_PATH . 'classes/widget.class.php',
+            'mega_menu_widget_reusable_block'     => MEGAMENU_PATH . 'classes/widget-reusable-block.class.php',
+            'mega_menu_widget_elementor_template' => MEGAMENU_PATH . 'classes/widget-elementor-template.class.php',
+            'mega_menu_toggle_blocks'             => MEGAMENU_PATH . 'classes/toggle-blocks.class.php',
+            'scssc'                               => MEGAMENU_PATH . 'classes/scssc.inc.php'
         );
 
         return $classes;

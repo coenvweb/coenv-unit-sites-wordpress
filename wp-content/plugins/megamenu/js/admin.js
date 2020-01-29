@@ -80,20 +80,6 @@
                 complete: function() {
                     $("#cboxLoadingOverlay").remove();
 
-                    // fix for WordPress 4.8 widgets when lightbox is opened, closed and reopened
-                    if (wp.textWidgets !== undefined) {
-                        wp.textWidgets.widgetControls = {}; // WordPress 4.8 Text Widget
-                    }
-
-                    if (wp.mediaWidgets !== undefined) {
-                        wp.mediaWidgets.widgetControls = {}; // WordPress 4.8 Media Widgets
-                    }
-
-                    if (wp.customHtmlWidgets !== undefined) {
-                        wp.customHtmlWidgets.widgetControls = {}; // WordPress 4.9 Custom HTML Widgets
-                    }
-
-                    
                 },
                 success: function(response) {
 
@@ -493,6 +479,19 @@
                         }
 
                         setTimeout(function(){
+                            // fix for WordPress 4.8 widgets when lightbox is opened, closed and reopened
+                            if (wp.textWidgets !== undefined) {
+                                wp.textWidgets.widgetControls = {}; // WordPress 4.8 Text Widget
+                            }
+
+                            if (wp.mediaWidgets !== undefined) {
+                                wp.mediaWidgets.widgetControls = {}; // WordPress 4.8 Media Widgets
+                            }
+
+                            if (wp.customHtmlWidgets !== undefined) {
+                                wp.customHtmlWidgets.widgetControls = {}; // WordPress 4.9 Custom HTML Widgets
+                            }
+
                             $(document).trigger("widget-added", [widget]);
 
                             if ('acf' in window) {
@@ -1094,6 +1093,19 @@
                         }
 
                         setTimeout(function(){
+                            // fix for WordPress 4.8 widgets when lightbox is opened, closed and reopened
+                            if (wp.textWidgets !== undefined) {
+                                wp.textWidgets.widgetControls = {}; // WordPress 4.8 Text Widget
+                            }
+
+                            if (wp.mediaWidgets !== undefined) {
+                                wp.mediaWidgets.widgetControls = {}; // WordPress 4.8 Media Widgets
+                            }
+
+                            if (wp.customHtmlWidgets !== undefined) {
+                                wp.customHtmlWidgets.widgetControls = {}; // WordPress 4.9 Custom HTML Widgets
+                            }
+                            
                             $(document).trigger("widget-added", [widget]);
 
                             if ('acf' in window) {
