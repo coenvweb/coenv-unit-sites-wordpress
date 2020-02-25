@@ -54,6 +54,9 @@ require_once('library/shortcodes.php');
 // GDPR Compliance
 require_once('library/gdpr.php');
 
+// Custom Metas for Sharing
+require_once('library/custom-metas.php');
+
 // Need to be sorted into includes
 
 
