@@ -91,10 +91,10 @@
 		display: block;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		font-weight: 600;
 		text-decoration: none;
 		color: #ddd;
 		border-radius: $radius;
+    @include o_sans_bold();
 
 		&:hover {
 			background: #666;

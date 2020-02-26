@@ -7,10 +7,10 @@
 //
 
 // This is the default html and body font-size for the base rem value.
- $rem-base: $base-font-size;
+ $rem-base: 16 !default;
 
 // Allows the use of rem-calc() or lower-bound() in your settings
-@import "foundation/functions";
+@import "../../bower_components/foundation/scss/foundation/functions";
 
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with browser-based text zoom or user-set defaults.
@@ -54,7 +54,7 @@ $body-font-family: "open-sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 // $default-float: left;
 
 // We use these as default colors throughout
-$primary-color: darken($accent-blue, 15%);
+$primary-color: $accent;
 // $secondary-color: #e7e7e7;
 $alert-color: $accent-red;
 $success-color: #5b8f22;
@@ -1074,7 +1074,7 @@ $global-radius: $radius;
 
 // These control the background color for the table and even rows
 // $table-bg: #fff;
-$table-even-row-bg: #efefef;
+// $table-even-row-bg: #f9f9f9  ;
 
 // These control the table cell border style
 // $table-border-style: solid;

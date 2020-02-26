@@ -21,6 +21,7 @@
                     background: transparent;
                     a {
                         padding: 0 .5rem!important;
+                        margin-bottom: -1rem;
                     }
                     &:first-of-type {
                         margin-top: .9rem;
@@ -86,7 +87,7 @@
                 text-transform: uppercase;
                 background-color: #ffffff;
                 text-align: left;
-                line-height: 3.2rem;
+                line-height: 3rem;
 
                 &:hover, &:focus {
                     color: $accent-blue;

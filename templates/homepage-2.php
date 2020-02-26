@@ -16,7 +16,7 @@ Template Name: Homepage Phase 2
         $hero_buttons = get_field('hero_buttons');
 
     ?>
-    <div class="hero row">
+    <div class="hero">
         <div class="small-12 large-12 columns">
             <div class="playpause"></div>
             <div class="homepage-features">
@@ -25,7 +25,7 @@ Template Name: Homepage Phase 2
 
                         <div class="feature-info-container">
 
-                            <div class="feature-info">
+                            <div class="feature-info row">
 
                                 <div class="feature-content">
                                     <h2 class="feature-title"><span class="feature-white"><?=$hero_text?></span></h2>
@@ -44,8 +44,8 @@ Template Name: Homepage Phase 2
             </div>
         </div>
     </div>
-
-    <div class="row about-summary">
+<div class="about-summary">
+    <div class="row">
         <div class="summary columns large-12">
             <div class="widget widget_custom_post_widget">
                 <div class="widget_content">
@@ -55,8 +55,8 @@ Template Name: Homepage Phase 2
                 </div>
             </div>
         </div>
-		
     </div>
+</div>
 	<?php if(get_field('enable_announcement') && get_field('announcement') && get_field('announcement_placement') == 'top') { ?>
 		<div class="special-announcement columns large-12">
 			<div class="white-container">
@@ -65,7 +65,7 @@ Template Name: Homepage Phase 2
 			</div>
 		</div>
 	<?php } ?>
-    <div class="row programs">
+    <div class="programs">
         <?php
             $tiles = get_field('tiles');
             foreach($tiles as $tile) {
@@ -79,7 +79,8 @@ Template Name: Homepage Phase 2
     </div>
                 
     <?php /* Unreadable ATM - needs refactor */ ?>
-    <div class="row news">
+    <div class="news">
+        <div class="row">
         <div class="medium-12 columns" style="margin-top: 0; padding-top: 0;">
             <a name="More News & Stories" href="/news-stories"><?php include(get_template_directory() . "/assets/img/news-icon.svg"); ?></a>
             <a href="/news-stories/" class="more hide-for-small-only" id="More Events">More News & Stories <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
@@ -237,6 +238,7 @@ Template Name: Homepage Phase 2
             </div>
         <?php } ?>
     </div>
+</div>
 
 
     
@@ -261,26 +263,32 @@ Template Name: Homepage Phase 2
           );
         }
         ?>
-    <div class="row events" style="min-height: 200px;">
-        <?php if(!empty($events)) { ?>
-            <a href="/news-stories/events" id="More Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a>
-            <a href="/news-stories/events" class="more hide-for-small-only" id="More Events">More Events <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
-            <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
-            <div class="list columns large-12">
-                <?php the_widget('CoEnv_Widget_Events', 'feed_url='.$events_feed.'&posts_per_page='.get_field("num_events")); ?>
-            </div>
-        <?php } ?>
-    </div>
-
-    <div class="row fhl">
-        <div class="columns large-12">
-            <?php the_widget('custom_post_widget', 'custom_post_id='.get_field('fhl_block').'&show_featured_image=true'); ?>
+    <div class="events">
+        <div class="row" style="min-height: 200px;">
+            <?php if(!empty($events)) { ?>
+                <a href="/news-stories/events" id="More Events"><?php include(get_template_directory() . "/assets/img/events-icon.svg"); ?></a>
+                <a href="/news-stories/events" class="more hide-for-small-only" id="More Events">More Events <?php include(get_template_directory() . "/assets/img/circle-arrow-icon.svg"); ?></a>
+                <a href="/news-stories/events" id="More Events"><h2>Events</h2></a>
+                <div class="list columns large-12">
+                    <?php the_widget('CoEnv_Widget_Events', 'feed_url='.$events_feed.'&posts_per_page='.get_field("num_events")); ?>
+                </div>
+            <?php } ?>
         </div>
     </div>
 
-    <div class="row adviser">
-        <div class="columns large-12">
-            <?php the_widget('custom_post_widget', 'custom_post_id='.get_field('adviser_block').'&show_featured_image=true'); ?>
+    <div class="fhl">
+        <div class="row">
+            <div class="columns large-12">
+                <?php the_widget('custom_post_widget', 'custom_post_id='.get_field('fhl_block').'&show_featured_image=true'); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="adviser">
+        <div class="row">
+            <div class="columns large-12">
+                <?php the_widget('custom_post_widget', 'custom_post_id='.get_field('adviser_block').'&show_featured_image=true'); ?>
+            </div>
         </div>
     </div>
 

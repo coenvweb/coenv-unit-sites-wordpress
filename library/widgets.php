@@ -377,7 +377,8 @@ class CoEnv_Widget_Events extends WP_Widget {
 
 
             <li data-equalizer-watch>
-                <?  $date = substr($event['date'], 0, -6);
+                <?php
+                $date = substr($event['date'], 0, -6);
                 $date = strtotime($date);
                 $date = date('l, M j, Y ', $date); ?>
                 <a href="<?php echo $event['url'] ?>">

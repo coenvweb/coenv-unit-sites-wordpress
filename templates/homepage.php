@@ -21,7 +21,7 @@ Template Name: Homepage
 			);
 		$feature_query = new WP_Query( $feature_args ); ?>
 		<?php //if ($feature_query->have_posts()) { ?>
-<div class="hero row">
+<div class="hero">
 <div class="small-12 large-12 columns">
 		<div class="playpause"></div>
 			<div class="homepage-features">
@@ -46,7 +46,7 @@ Template Name: Homepage
 echo '<div class="feature">';
 	echo '<div class="feature-image" style="background-image:url(' . $feature_image[0] . ')">';
 
-		echo '<div class="feature-info-container">';
+		echo '<div class="feature-info-container row">';
 		echo '<p class="feature-image-caption right">' . $feature_caption . '</p>';
 if($rows)
 					{

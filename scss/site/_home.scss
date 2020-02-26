@@ -26,7 +26,6 @@
     }
 
     [role=main] .row {
-        max-width: none;
         padding: 2rem 0;
     }
 
@@ -161,38 +160,38 @@
         background-image: url("../assets/img/paper-texture-grey.jpg");
 
         .home-post {
-			.blog-list-item {
+            .blog-list-item {
                 border-bottom: none;
-				position: relative;
-				h3 {
-					@media #{$medium-only} {
-						font-size: 1.7rem;
-					}
-				}
-				.news-meta {
-					p {
-						margin-bottom: 0rem;
-					}
-				}
-				.blog-meta {
-					font-weight: 400;
-					@include o_sans_bold;
-					text-transform: uppercase;
-					vertical-align: center;
-					text-align: right;
-					p {
-						font-size: .8rem!important;
-						margin-top: 0.25rem;
-					}
-					.time {
-						color: $accent-blue-dk!important;
-					}
-				}
-				.read-more {
-					position: relative;
-					bottom: 0px;
-				}
-			}
+                position: relative;
+            h3 {
+                @media #{$medium-only} {
+                    font-size: 1.7rem;
+                }
+            }
+            .news-meta {
+                p {
+                    margin-bottom: 0rem;
+                }
+            }
+            .blog-meta {
+                font-weight: 400;
+                @include o_sans_bold;
+                text-transform: uppercase;
+                vertical-align: center;
+                text-align: right;
+                p {
+                    font-size: .8rem!important;
+                    margin-top: 0.25rem;
+                }
+                .time {
+                    color: $accent-blue-dk!important;
+                }
+            }
+                .read-more {
+                    position: relative;
+                    bottom: 0px;
+                }
+            }
         }
         
         .medium-6 {
@@ -391,6 +390,9 @@
             background-size: 100%;
             background-position: 0 35%;
         }
+        .row {
+            position: relative;
+        }
         position: relative;
         padding-top: 2rem!important;
         
@@ -441,15 +443,12 @@
             text-transform: uppercase;
             font-size: 0.8rem;
             color: white;
-            right: 3.5vw;
+            right: 1rem;
             @media #{$medium-up} {
                 top: 11.4vw;
             }
             @media #{$large-up} {
                 top: 8.4vw;
-            }
-            @media #{$xlarge-up} {
-                padding-right: 10rem!important;
             }
             svg {
                 fill: white;
@@ -461,10 +460,6 @@
         }
         
         .event-list {
-            @media #{$xlarge-up} {
-                padding-left: 10rem!important;
-                padding-right: 10rem!important;
-            }
             @media #{$medium-up} {
                 @include block-grid($per-row:3, $spacing: 3.5vw);
             }
@@ -499,12 +494,6 @@
                     @include o_sans_bold;
                     padding-bottom: 1.5vw;
                     font-size: 1rem;
-                    @media #{$medium-up} {
-                        font-size: 1.5vw;
-                    }
-                    @media #{$large-up} {
-                        font-size: 1vw;
-                    }
                     i {
                         @extend .visuallyhidden;
                     }
@@ -514,21 +503,18 @@
                         height: 4px;
                         width: 40%;
                         background-color: $accent-blue;
-                        bottom: -.7vw;
+                        bottom: -1rem;
                         display: block;
                         margin: 0 auto;
+                        @media #{$small-only} {
+                            bottom: -.5rem;
+                        }
                     }
                 }
                 .title {
                     @include uni_regular;
                     font-weight: 400;
                     font-size: 1.5rem!important;
-                    @media #{$medium-up} {
-                        font-size: 2vw!important;
-                    }
-                    @media #{$large-up} {
-                        font-size: 1.5vw!important;
-                    }
                 }
             }
         }
