@@ -113,7 +113,7 @@ class RevisionaryHistory
                     }
                 }
 
-                if ((!current_user_can( 'read_post', $revision->ID ) && !current_user_can('edit_post', $revision->ID))) {
+                if ((!current_user_can('read_post', $revision->ID) && !current_user_can('edit_post', $revision->ID))) {
                     return;
                 }
 
@@ -589,6 +589,9 @@ class RevisionaryHistory
             }
         }
         
+        $published_id = rvy_post_id($compare_from->ID);
+		$is_beaver = defined('FL_BUILDER_VERSION') && get_post_meta($published_id, '_fl_builder_data', true);
+
         foreach( apply_filters('revisionary_compare_taxonomies', $taxonomies) as $taxonomy => $name) {
             $field = $taxonomy;
             
@@ -607,6 +610,8 @@ class RevisionaryHistory
                 $terms = [];
             }
 
+            $other_term_names = $term_names;
+
             $term_names = [];
             foreach($terms as $term) {
                 $term_names []= $term->name;
@@ -618,6 +623,13 @@ class RevisionaryHistory
             $args = array(
                 'show_split_view' => true,
             );
+
+            if ($is_beaver 
+            && (!$other_term_names && !rvy_is_revision_status($compare_from->post_status)) 
+            || (!$term_names && !rvy_is_revision_status($compare_to->post_status))
+            ) {
+                continue;
+            }
 
             $args = apply_filters( 'revision_text_diff_options', $args, $field, $compare_from, $compare_to );
     
@@ -673,6 +685,30 @@ class RevisionaryHistory
             if ('_thumbnail_id' == $field) {
                 $content_from = ($content_from) ? "$content_from (" . wp_get_attachment_image_url($content_from, 'full') . ')' : '';
                 $content_to = ($content_to) ? "$content_to (" . wp_get_attachment_image_url($content_to, 'full') . ')' : '';
+            
+                // suppress false alarm for featured image clearance
+                if ($content_from && !$content_to) {
+                    continue;
+                }
+
+            } elseif(('_requested_slug' == $field)) {
+                if ($content_to && !rvy_is_revision_status($compare_to->post_status)) {
+                    $content_to = '';
+                }
+
+                if ($content_from && !rvy_is_revision_status($compare_from->post_status)) {
+                    $content_from = '';
+                }
+                
+                if ($content_to && !$content_from) {
+	                if ($parent_post = get_post($published_id)) {
+	                    $content_from = $parent_post->post_name;
+	                }
+	            }
+            }
+
+            if ($is_beaver && !$content_to) {
+                continue;
             }
 
             $args = array(
@@ -993,7 +1029,7 @@ class RevisionaryHistory
         if ($post_id) {
             $can_approve = agp_user_can('edit_post', rvy_post_id($post_id), 0, ['skip_revision_allowance' => true]);
         } else {
-            $can_approve = agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true]);
+            $can_approve = isset($type_obj->cap->edit_published_posts) && agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true]);
         }
 
         if (empty($type_obj) || $can_approve) {
@@ -1074,13 +1110,15 @@ class RevisionaryHistory
             return;
         }
 
-        $preview_label = (empty($type_obj) || agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true])) 
+        $edit_published_cap = isset($type_obj->cap->edit_published_posts) ? $type_obj->cap->edit_published_posts : 'do_not_allow';
+
+        $preview_label = (empty($type_obj) || agp_user_can($edit_published_cap, 0, 0, ['skip_revision_allowance' => true])) 
         ?  __('Preview / Restore', 'revisionary')
         : __('Preview');
 
         $preview_url = rvy_preview_url($post);
 
-        $manage_label = (empty($type_obj) || agp_user_can($type_obj->cap->edit_published_posts, 0, 0, ['skip_revision_allowance' => true])) 
+        $manage_label = (empty($type_obj) || agp_user_can($edit_published_cap, 0, 0, ['skip_revision_allowance' => true])) 
         ?  __('Manage', 'revisionary')
         : __('List', 'revisionary');
 

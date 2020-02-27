@@ -376,13 +376,17 @@ class NS_Cloner_Process_Manager {
 	 * Create a new site/blog on the network (step 1 for core mode)
 	 */
 	public function create_site() {
+		$source_id    = ns_cloner_request()->get( 'source_id' );
 		$target_name  = ns_cloner_request()->get( 'target_name', '' );
 		$target_title = ns_cloner_request()->get( 'target_title', '' );
 
 		// Try to create new site.
+		$source    = get_site( $source_id );
 		$site_data = [
 			'title'   => $target_title,
 			'user_id' => ns_cloner_request()->get( 'user_id' ),
+			'public'  => $source->public,
+			'lang_id' => $source->lang_id,
 		];
 		if ( is_subdomain_install() ) {
 			$site_data += [

@@ -101,6 +101,10 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.0.7 - 2020.01.30 =
+* Fix non-prefixed custom tables being included in root site clone
+* Fix private/public blog property not being reflected on cloned sites
+
 = 4.0.6 - 2020.01.13 =
 * Update admin styles for WP 5.3 UI changes
 * Add new recovery capability for stalled cloning processes
