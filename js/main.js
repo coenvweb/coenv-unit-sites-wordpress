@@ -27,9 +27,48 @@ jQuery(function ($) {
             var $this = $(this);
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
-        
-    }
 
+        autoplay = true;
+        var ppbutton = $('.play-pause-hero');
+        var hero = $('#hero-video');
+        ppbutton.html('<i class="fi-pause"></i>');
+        hero.removeClass("fullfade");
+        if (window.matchMedia('(prefers-reduced-motion)').matches) {
+            hero.removeAttribute("autoplay");
+            hero.get(0).pause()
+            hero.addClass("fade");
+            ppbutton.html('<i class="fi-play"></i>');
+            autoplay = false;
+        }
+        ppbutton.click(function () {
+            hero.toggleClass("fade");
+            hero.get(0).pause()
+            if (autoplay == null || autoplay === false) {
+                $(this).html('<i class="fi-pause"></i>');
+                hero.get(0).play()
+                
+                autoplay = true;
+                ppbutton.html('<i class="fi-pause"></i>');
+                setTimeout(function(){
+                    hero.get(0).pause()
+                    hero.addClass("fade");
+                    ppbutton.html('<i class="fi-play"></i>');
+                    autoplay = false;
+                }, 75000);
+            } else {
+                $(this).html('<i class="fi-play"></i>');
+                hero.get(0).pause()
+                autoplay = false;
+            }
+        });
+        setTimeout(function(){
+                hero.get(0).pause()
+                hero.addClass("fade");
+                ppbutton.html('<i class="fi-play"></i>');
+                autoplay = false;
+        }, 75000);
+    };
+    
     // Category filter for custom post type indicies
     $("select.select-category").on( 'change', function () {
         //alert('This changed!');

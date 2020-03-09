@@ -18,10 +18,17 @@ Template Name: Homepage
     ?>
     <div class="hero">
         <div class="small-12 large-12 columns">
-            <div class="playpause"></div>
-            <div class="homepage-features">
-                <div class="feature">
-                    <div class="feature-image" style="background-image:url(<?=$hero_image['url']?>)">
+            <div class="feature homepage-hero-module">
+            <div class="feature-image video-container">
+            <div class="filter"></div>
+            <video autoplay loop muted class="fillWidth fullfade show-for-medium-up" id="hero-video" poster="/wp-content/themes/coenv-fhl/assets/video/Snapshots/Diverrs.jpg">
+                <source src="/wp-content/themes/coenv-fhl/assets/video/Mp4/FHL Looper Lab Final_1.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="/wp-content/themes/coenv-fhl/assets/video/Mp4/FHL Looper Lab Final_1.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                <source src="/wp-content/themes/coenv-fhl/assets/video/Mp4/FHL Looper Lab Final_1.ogg" type="video/ogg"/>Your browser does not support the video tag. I suggest you upgrade your browser.
+            </video>
+            <div class="poster show-for-small-only">
+                <img src="/wp-content/themes/coenv-fhl/assets/video/Snapshots/Diverrs.jpg" alt="">
+            </div>
 
                         <div class="feature-info-container">
 
