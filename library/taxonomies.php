@@ -1,165 +1,6 @@
 <?php
 
 /**
-* Custom Taxonomies for Publications
-**/
-
-function pub_tax() {
-
-	$labels = array(
-		'name'                       => _x( 'Authors', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Author', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Authors', 'text_domain' ),
-		'all_items'                  => __( 'All Authors', 'text_domain' ),
-		'parent_item'                => __( 'Parent Item', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
-		'new_item_name'              => __( 'New Author', 'text_domain' ),
-		'add_new_item'               => __( 'Add Author', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Author', 'text_domain' ),
-		'update_item'                => __( 'Update Author', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Items', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove authors', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited authors', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$args = array(
-		'labels'                     => $labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'author', array( 'publications' ), $args );
-	
-	$labels_2 = array(
-		'name'                       => _x( 'Publication Years', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Publicvation Year', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Publication Years', 'text_domain' ),
-		'all_items'                  => __( 'All Publication Years', 'text_domain' ),
-		'parent_item'                => __( 'Parent Item', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
-		'new_item_name'              => __( 'New Year', 'text_domain' ),
-		'add_new_item'               => __( 'Add Year', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Year', 'text_domain' ),
-		'update_item'                => __( 'Update Year', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate years with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Years', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove years', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most published years', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$args_2 = array(
-		'labels'                     => $labels_2,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'publication_year', array( 'publications' ), $args_2 );
-	
-	$labels_3 = array(
-		'name'                       => _x( 'Research Themes', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Research Theme', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Research Themes', 'text_domain' ),
-		'all_items'                  => __( 'All Themes', 'text_domain' ),
-		'parent_item'                => __( 'Parent Item', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'text_domain' ),
-		'new_item_name'              => __( 'New Theme', 'text_domain' ),
-		'add_new_item'               => __( 'Add Theme', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Theme', 'text_domain' ),
-		'update_item'                => __( 'Update Theme', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate themes with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Themes', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove themes', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most used themes', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$args_3 = array(
-		'labels'                     => $labels_3,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'publication_theme', array( 'publications' ), $args_3 );
-}
-
-add_action( 'init', 'pub_tax' );
-
-/**
-* Custom Taxonomies for Blog Posts
-**/
-
-function blog_tax() {
-
-	$blog_labels = array(
-		'name'                       => _x( 'Blog Categories', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Blog Category', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Blog Categories', 'text_domain' ),
-		'all_items'                  => __( 'All Blog Categories', 'text_domain' ),
-		'parent_item'                => __( 'Parent Blog Category', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Blog Category:', 'text_domain' ),
-		'new_item_name'              => __( 'New Blog Category', 'text_domain' ),
-		'add_new_item'               => __( 'Add Blog Category', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Blog Category', 'text_domain' ),
-		'update_item'                => __( 'Update Blog Category', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Blog Categories', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove blog categories', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited blog categoriesblog categories', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$blog_args = array(
-		'labels'                     => $blog_labels,
-		'hierarchical'               => true,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'blog_category', array( 'student_blog' ), $blog_args );
-	
-	$blog_labels_2 = array(
-		'name'                       => _x( 'Blog Tags', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Blog Tag', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Blog Tags', 'text_domain' ),
-		'all_items'                  => __( 'All Blog Tags', 'text_domain' ),
-		'parent_item'                => __( 'Parent Blog Tag', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Blog Tag:', 'text_domain' ),
-		'new_item_name'              => __( 'New Blog Tag', 'text_domain' ),
-		'add_new_item'               => __( 'Add Blog Tag', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Blog Tag', 'text_domain' ),
-		'update_item'                => __( 'Update Blog Tag', 'text_domain' ),
-		'separate_items_with_commas' => __( 'Separate blog tags with commas', 'text_domain' ),
-		'search_items'               => __( 'Search blog tags', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove blog tags', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most commonly used blog tags', 'text_domain' ),
-		'not_found'                  => __( 'Not Found', 'text_domain' ),
-	);
-	$blog_args_2 = array(
-		'labels'                     => $blog_labels_2,
-		'hierarchical'               => false,
-		'public'                     => true,
-		'show_ui'                    => true,
-		'show_admin_column'          => true,
-		'show_in_nav_menus'          => true,
-		'show_tagcloud'              => true,
-	);
-	register_taxonomy( 'blog_post_tag', array( 'student_blog' ), $blog_args_2 );
-	
-}
-
-add_action( 'init', 'blog_tax' );
-
-/**
 * Custom Taxonomies for Faculty
 **/
 function fac_tax() {
@@ -196,29 +37,57 @@ function fac_tax() {
 add_action( 'init', 'fac_tax' );
 
 /**
-* Custom Taxonomies for Datasets
+* Custom Taxonomies for Courses
 **/
-function data_tax() {
+function course_tax() {
 
-	$data_labels = array(
-		'name'                       => _x( 'Regions', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Region', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Regions', 'text_domain' ),
-		'all_items'                  => __( 'All Regions', 'text_domain' ),
-		'parent_item'                => __( 'Parent Region', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Region:', 'text_domain' ),
-		'new_item_name'              => __( 'New Region', 'text_domain' ),
-		'add_new_item'               => __( 'Add Region', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Region', 'text_domain' ),
-		'update_item'                => __( 'Update Region', 'text_domain' ),
+//    $course_labels = array(
+//		'name'                       => _x( 'Categories', 'Taxonomy General Name', 'text_domain' ),
+//		'singular_name'              => _x( 'Category', 'Taxonomy Singular Name', 'text_domain' ),
+//		'menu_name'                  => __( 'Categories', 'text_domain' ),
+//		'all_items'                  => __( 'All categories', 'text_domain' ),
+//		'parent_item'                => __( 'Parent category', 'text_domain' ),
+//		'parent_item_colon'          => __( 'Parent category:', 'text_domain' ),
+//		'new_item_name'              => __( 'New category', 'text_domain' ),
+//		'add_new_item'               => __( 'Add category', 'text_domain' ),
+//		'edit_item'                  => __( 'Edit category', 'text_domain' ),
+//		'update_item'                => __( 'Update category', 'text_domain' ),
+//		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+//		'search_items'               => __( 'Search categories', 'text_domain' ),
+//		'add_or_remove_items'        => __( 'Add or remove category', 'text_domain' ),
+//		'choose_from_most_used'      => __( 'Choose from categories with the most courses', 'text_domain' ),
+//		'not_found'                  => __( 'Not Found', 'text_domain' ),
+//	);
+//	$course_args = array(
+//		'labels'                     => $course_labels,
+//		'hierarchical'               => true,
+//		'public'                     => true,
+//		'show_ui'                    => true,
+//		'show_admin_column'          => true,
+//		'show_in_nav_menus'          => true,
+//		'show_tagcloud'              => true,
+//	);
+//	register_taxonomy( 'course_category', array( 'courses' ), $course_args );
+    
+    $course_labels_2 = array(
+		'name'                       => _x( 'Quarters', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Quarter', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Quarters', 'text_domain' ),
+		'all_items'                  => __( 'All Quarters', 'text_domain' ),
+		'parent_item'                => __( 'Parent Quarter', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Quarter:', 'text_domain' ),
+		'new_item_name'              => __( 'New Quarter', 'text_domain' ),
+		'add_new_item'               => __( 'Add Quarter', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Quarter', 'text_domain' ),
+		'update_item'                => __( 'Update Quarter', 'text_domain' ),
 		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Regions', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove Region', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited Regions', 'text_domain' ),
+		'search_items'               => __( 'Search Quarters', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Quarter', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from quarters with the most courses', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
-	$data_args = array(
-		'labels'                     => $data_labels,
+	$course_args_2 = array(
+		'labels'                     => $course_labels_2,
 		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
@@ -226,27 +95,27 @@ function data_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'dataset_region', array( 'datasets' ), $data_args );
-
-	$data_labels_2 = array(
-		'name'                       => _x( 'Data Types', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Data Type', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Data Types', 'text_domain' ),
-		'all_items'                  => __( 'All Data Types', 'text_domain' ),
-		'parent_item'                => __( 'Parent Data Type', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Data Type:', 'text_domain' ),
-		'new_item_name'              => __( 'New Data Type', 'text_domain' ),
-		'add_new_item'               => __( 'Add Data Type', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Data Type', 'text_domain' ),
-		'update_item'                => __( 'Update Data Type', 'text_domain' ),
+	register_taxonomy( 'course_quarter', array( 'courses' ), $course_args_2 );	
+    
+  $course_labels_3 = array(
+		'name'                       => _x( 'Years', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Year', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Years', 'text_domain' ),
+		'all_items'                  => __( 'All Years', 'text_domain' ),
+		'parent_item'                => __( 'Parent Year', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Year:', 'text_domain' ),
+		'new_item_name'              => __( 'New Year', 'text_domain' ),
+		'add_new_item'               => __( 'Add Year', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Year', 'text_domain' ),
+		'update_item'                => __( 'Update Year', 'text_domain' ),
 		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Data Types', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove Data Type', 'text_domain' ),
-		'choose_from_most_used'      => __( 'Choose from the most cited Data Types', 'text_domain' ),
+		'search_items'               => __( 'Search Years', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Years', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from years with the most courses', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
-	$data_args_2 = array(
-		'labels'                     => $data_labels_2,
+	$course_args_3 = array(
+		'labels'                     => $course_labels_3,
 		'hierarchical'               => true,
 		'public'                     => true,
 		'show_ui'                    => true,
@@ -254,7 +123,8 @@ function data_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'dataset_type', array( 'datasets' ), $data_args_2 );
+	register_taxonomy( 'course_year', array( 'courses' ), $course_args_3 );	
+
 }
 
-add_action( 'init', 'data_tax' );
+add_action( 'init', 'course_tax' );

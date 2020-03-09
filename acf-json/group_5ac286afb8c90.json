@@ -27,7 +27,7 @@
             {
                 "param": "post_template",
                 "operator": "==",
-                "value": "templates\/homepage-2.php"
+                "value": "templates\/homepage.php"
             }
         ]
     ],
@@ -49,5 +49,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1522775210
+    "modified": 1583781010
 }

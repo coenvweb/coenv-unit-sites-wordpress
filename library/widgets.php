@@ -122,32 +122,33 @@ class coenv_base_fac_cats extends WP_Widget {
       * @param array $instance Saved values from database.
       */
      public function widget( $args, $instance ) {
-		$fac_cat_1 = get_query_var('research_areas');
-        $fac_cat = get_term_by('slug',$fac_cat_1,'research_areas');
-        $fac_cat = $fac_cat->slug;
-     
+          $fac_cat_1 = get_query_var('research_areas');
+          $fac_cat = get_term_by('slug',$fac_cat_1,'research_areas');
+          $fac_cat = (empty($fac_cat->slug)) ? '' : $fac_cat->slug ;
+
           echo $args['before_widget'];
-          
+          echo '<span class="filter-cap">Filter:</span>';
           if ( ! empty( $instance['title'] ) ) {
                echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
           }
           if ( ! empty( $instance['textarea'] ) ) {
                echo $args['before_text'] . apply_filters( 'widget_text', $instance['textarea'] ). $args['after_text'];
           }
-			$cats_args  = array(
-			  'orderby' => 'name',
-			  'order' => 'ASC',
-			  'taxonomy' => 'research_areas'
-			  );
-			$cats = get_categories($cats_args);
-			if ($cats) {
-				 echo '<ul class="fac-cats cats">';
-				 echo '<li class="fac_cat button" data-cat="faculty-list-item">All Research Areas</li>';
-				 foreach($cats as $cat) { 
-					  echo '<li class="'.($fac_cat_1 == $cat->slug ? 'active' : '').' button fac_cat" data-cat="'.$cat->slug.'">' . $cat->name . '</li>';
-				 }
-				 echo '</ul>';
-			}
+                    $cats_args  = array(
+                      'orderby' => 'name',
+                      'order' => 'ASC',
+                      'taxonomy' => 'research_areas'
+                      );
+                    $cats = get_categories($cats_args);
+                    if ($cats) {
+                         echo '<ul class="cats">';
+                            echo '<li class="'.($fac_cat_1 ? '' : 'active').' fac_cat" data-cat="faculty-list-item">All Research Areas</li>';
+                         foreach($cats as $cat) { 
+                              $selected = ($cat->slug == $fac_cat ? 'active' : '');
+                              echo '<li data-cat="'.$cat->slug.'" class="'.$selected.' fac_cat">' . $cat->name . '</li>';
+                         }
+                         echo '</ul>';
+                    }
           echo $args['after_widget'];
      }
 

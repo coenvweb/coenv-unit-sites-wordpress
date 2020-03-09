@@ -27,56 +27,7 @@ jQuery(function ($) {
             var $this = $(this);
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
-
-        $('.datatable table').addClass('row-border').css('width', '100%');
-        $('.datatable.no-search table').DataTable({
-            paging: false,
-            "sDom": '<"top">rt<"bottom"l><"clear">',
-            scrollX: true,
-            scrollCollapse: true,
-            order: [],
-        });
         
-        $('.datatable.search table').DataTable({
-            paging: false,
-            "sDom": '<"top"if>rt<"bottom"lp><"clear">',
-            scrollX: true,
-            scrollCollapse: true,
-            order: [],
-        }); 
-        
-        if ($('body').hasClass('home')) {
-
-            // slick slider
-            $('.homepage-features').slick({
-                autoplay: true,
-                autoplaySpeed: 3000,
-                dots: true,
-                pauseOnDotsHover: true
-            });
-            
-            var numItems = $('.feature').length;
-            if (numItems > 2) {
-                var autoplay = $('.homepage-features').slickGetOption('autoplay');
-                if (autoplay == null || autoplay === false) {
-                    $('.playpause').html('<i class="fi-play"></i>');
-                } else {
-                    $('.playpause').html('<i class="fi-pause"></i>');
-                }
-
-                $('.playpause').click(function () {
-                    if (autoplay == null || autoplay === false) {
-                        $(this).html('<i class="fi-pause"></i>');
-                        $('.homepage-features').slickPlay();
-                        autoplay = true;
-                    } else {
-                        $(this).html('<i class="fi-play"></i>');
-                        $('.homepage-features').slickPause();
-                        autoplay = false;
-                    }
-                });
-            }
-        }
     }
 
     // Category filter for custom post type indicies
@@ -89,62 +40,65 @@ jQuery(function ($) {
     } );
 
 
-	var $grid = $('.faculty-list-teach').isotope({
-      itemSelector: '.faculty-list-item',
-      layoutMode: 'fitRows'
+	//filterer
+var $grid = $('.filter-list').isotope({
+  itemSelector: '.filter-list-item',
+  layoutMode: 'fitRows'
+});
+
+$grid.imagesLoaded().progress( function() {
+    $grid.isotope({
+        itemSelector: '.filter-list-item',
+        layoutMode: 'fitRows',
+        masonry: {
+            columnWidth: '.grid-sizer'
+          }
     });
+});
 
-    $grid.imagesLoaded().progress(function() {
-        $grid.isotope({
-            itemSelector: '.faculty-list-item',
-            layoutMode: 'fitRows',
-            fitRows: {
-                gutter: 1
-            }
+$('.filter_cat').on('click', function(e) {
+    e.preventDefault();
+    pushHash($(this).data('cat'));
+});
 
-        });
-    });
+$('.filter_filter').on('change', function(e) {
+    e.preventDefault();
+    pushHash($(this).val());
+});
 
-    $('.fac_cat').on('click', function(e) {
-        e.preventDefault();
-        pushHash($(this).data('cat'));
-    });
+$(window).on('hashchange', function() {
+    readHash();
+});
 
-    $('.fac_filter').on('change', function(e) {
-        e.preventDefault();
-        pushHash($(this).val());
-    });
-
-    $(window).on('hashchange', function() {
-        readHash();
-    });
-
-    function toggleFacControl(newValue) {
-        $('ul.cats li.fac_cat').each(function() {
-            if($(this).hasClass('active')) {
-                $(this).removeClass('active');
-            }
-            if($(this).data('cat') == newValue) {
-                $(this).addClass('active');
-            }
-        });
-        $('.fac_filter').val(newValue);
-    }
-
-    function pushHash(hashValue) {
-        window.location.hash = hashValue;
-    }
-
-    function readHash() {
-        if(window.location.hash) {
-            var hash = window.location.hash.substr(1);
-            var filterValue = '.' + hash;
-            toggleFacControl(hash);
-            $grid.isotope({filter: filterValue});
+function toggleFacControl(newValue) {
+    $('ul.filter-cats li.filter_cat').each(function() {
+        
+        if($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $('ul.filter-cats').addClass('show-reset');
         }
-    }
+        if($(this).data('cat') == newValue) {
+            $(this).addClass('active');
+            $('ul.filter-cats').addClass('show-reset');
+        }
+    });
+    $('.filter_filter').val(newValue);
+}
 
-	readHash();
+function pushHash(hashValue) {
+    window.location.hash = hashValue;
+}
+
+function readHash() {
+    if(window.location.hash) {
+        var hash = window.location.hash.substr(1);
+        var filterValue = '.' + hash;
+        toggleFacControl(hash);
+        $grid.isotope({filter: filterValue});
+    }
+}
+
+readHash();
 });
 
 

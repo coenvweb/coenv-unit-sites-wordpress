@@ -2,11 +2,6 @@
 
 .home {
     
-    .columns {
-        padding-left: 2rem;
-        padding-right: 2rem;
-    }
-    
     .big-icon, .fhl .widget_content img {
         @media #{$medium-up} {
             height: 6vw;
@@ -46,36 +41,17 @@
         @include uni;
         text-align: center;
         font-size: 2rem!important;
-        padding: 1rem;
+        padding: 3rem 1rem 1rem 1rem;
         color: $accent-blue-dk;
         margin-bottom: 0;
-        @media #{$medium-up} {
-            font-size: 4vw!important;
-            padding: 3vw;
-        }
-        @media #{$large-up} {
-            font-size: 3vw!important;
-            line-height: 4vw!important;
-            padding: 2vw;
-        }
     }
 
-    .programs {
+    .tiles {
         padding: 0!important;
         position: relative;
         overflow: hidden;
         
-        .major {
-            background-image: url("../assets/img/fhl-dock.JPG");
-            background-position: bottom;
-        }
-        
-        .minor {
-            background-image: url("../assets/img/barnacles.jpg");
-            
-        }
-        
-        .major, .minor {
+        .tile {
             background-size: cover;
             &:after {
                 content: " ";
@@ -96,51 +72,52 @@
         
         .large-6 {
             text-align: center;
-            height: 25vw;
-            min-height: 275px;
+            min-height: 355px;
             position: relative;
             overflow: hidden;
         }
         
-        h3 {
-            z-index: 5;
-            text-transform: uppercase;
-            display: block;
-            @include o_sans_bold;
-            font-family: "open-sans-bold"!important;
-            font-weight: 800;
-            color: white;
-            font-size: 2rem;
-            max-width: 75%;
+        .tile-text {
             position: absolute;
+            z-index: 5;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             -webkit-transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
-            margin-top: -.7rem;
-            text-shadow: rgba(0,0,0,0.3) 0em .1em .5em;
-            
-            @media #{$medium-up} {
-                font-size: 3vw;
-            }
-            @media #{$large-up} {
-                font-size: 2vw;
-            }
-            
-            &:after {
-                content: "";
-                position: relative;
-                height: 4px;
-                width: 75%;
-                background-color: white;
-                bottom: -1rem;
+            margin-top: 0rem;
+            max-width: 75%;
+            h3 {
+                z-index: 5;
+                text-transform: uppercase;
                 display: block;
-                margin: 0 auto;
-                drop-shadow: rgba(0,0,0,0.3) 0em .1em .5em;
-                
+                @include o_sans_bold;
+                font-family: "open-sans-bold"!important;
+                font-weight: 800;
+                color: white;
+                font-size: 1.75rem;
+                text-shadow: rgba(0,0,0,0.3) 0em .1em .5em;
+                padding-bottom: 1.5rem;
+
+                &:after {
+                    content: "";
+                    position: relative;
+                    height: 4px;
+                    width: 75%;
+                    background-color: white;
+                    bottom: -.75rem;
+                    display: block;
+                    margin: 0 auto;
+                    drop-shadow: rgba(0,0,0,0.3) 0em .1em .5em;
+
+                }
+            }
+            p, a {
+                color: white;
+                font-size: 1.5rem;
             }
         }
+        
     }
 
     .widget_content, .widget_links {
@@ -228,9 +205,6 @@
             text-align: center;
             color: $accent-blue;
             margin-bottom: 3rem;
-            @media #{$medium-up} {
-                font-size: 2.5vw!important;
-            }
             &:after {
                 content: "";
                 position: relative;
@@ -247,15 +221,12 @@
             position: absolute;
             bottom: 1.5rem;
             max-width: 80%;
-            margin-left: 2vw;
+            margin-left: 1.5rem;
             @include uni_regular;
             font-weight: 400;
             font-size: 1.5rem;
             @media #{$small-only} {
                 margin-left: 1rem;
-            }
-            @media #{$medium-up} {
-                font-size: 2.05vw;
             }
         }
         
@@ -422,9 +393,6 @@
             color: white;
             text-align: center;
             margin-bottom: 2rem!important;
-            @media #{$medium-up} {
-                font-size: 2.5vw!important;
-            }
             &:after {
                 content: "";
                 position: relative;
@@ -610,7 +578,8 @@
     }
 
     .fhl {
-		background-color: white;
+		        background: $bg-light;
+        background-image: url("../assets/img/paper-texture-grey.jpg");
         .widget_img {
             @media #{$medium-up} {
                 float: left;

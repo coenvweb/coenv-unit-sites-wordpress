@@ -25,23 +25,34 @@ function coenv_base_post_types_init() {
     )
 
   );
-  register_post_type( 'features',
+    register_post_type( 'courses',
     array(
       'labels' => array(    
-      'name' => __( 'Homepage Features' ),
-      'singular_name' => __( 'Homepage Feature' ),
-      'add_new_item' => __( 'Add Homepage Feature'),
-      'edit_item' => __( 'Edit Homepage Feature'),
-      'new_item' => __( 'New Homepage Feature'),
-      ),
-    'hierarchical' => true,
-    'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-    'public' => true,
-    'has_archive' => false,
-    'show_ui' => true,
-    'rewrite' => array('slug' => 'features'),
-  'menu_icon' => 'dashicons-slides',
+		  'name' => __( 'Courses' ),
+		  'singular_name' => __( 'Course' ),
+		  'add_new_item' => __( 'Add Course'),
+		  'edit_item' => __( 'Edit Course'),
+		  'new_item' => __( 'New Course'),
+		),
+		//'hierarchical' => true,
+		'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+		'public' => true,
+		'has_archive' => false,
+		'show_ui' => true,
+		'rewrite' => array('slug' => 'course'),
+		'menu_icon' => 'dashicons-welcome-learn-more',
+		//'capabilities' => array(
+//			'edit_post' => 'edit_course',
+	//		'edit_posts' => 'edit_courses',
+//			'edit_others_posts' => 'edit_other_courses',
+//			'publish_posts' => 'publish_courses',
+	//		'read_post' => 'read_student_course',
+//			'read_private_posts' => 'read_private_courses',
+	//		'delete_post' => 'delete_course'
+//		),
+		'map_meta_cap' => true,
     )
+
   );
 }
 

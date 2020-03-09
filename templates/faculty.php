@@ -3,34 +3,21 @@
 Template Name: Faculty Index
 */
 
-/*
- * Query variables
- */
-
-//Categories
-
-//research areas
-if(isset($wp_query->query_vars['research_areas'])){
-    $coenv_cat_term_1 = urlencode(htmlentities($wp_query->query_vars['research_areas']));
-    $coenv_cat_term_1_arr = get_term_by('slug',$coenv_cat_term_1,'research_areas');
-    $coenv_cat_term_1_val = $coenv_cat_term_1_arr->name;
-    $filtered = true;
-} else {
-    $coenv_cat_1 = $coenv_cat_term_1 = null;
-}
+get_header();
 ?>
 
-<?php get_header(); ?>
-<div class="row" id="main-col">
+<div class="row">
 
-	<div class="small-12 medium-8 columns right" role="main">
-        <div class="entry-content">
-        	<div class="row filters">
-				<div class=" large-6 columns" data-url="<?php $_SERVER['REQUEST_URI']; ?>" data-cat="blog_category">
-				</div>
-	</div>
+	<div class="small-12 medium-9 columns right" role="main" id="main-col">
+      <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
+		  <div class="entry-content">
+        <header class="article__header">
+            <h1 class="article__title"><?php the_title() ?></h1>
+        </header>
+      <section class="article__content">
 
 <?php
+    the_content();
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 $temp = $wp_query;
@@ -39,14 +26,13 @@ $wp_query = new WP_Query();
 $wp_query->query;
 
 /**
-* Faculty loop
+* People loop
 */
 $query_args = array(
 	'post_type'	=> 'faculty',
 	'post_status' => 'publish',
 	'posts_per_page' => -1,
 	'taxonomy' => 'research_areas',
-	'term' => isset($coenv_cat_term_1) ? $coenv_cat_term_1->slug : '',
 	'meta_key' => 'last_name',
 	'orderby' => 'meta_value',
 	'order' => 'ASC',
@@ -59,62 +45,57 @@ $query_args = array(
 	),
 );
 
-// Category filter
-if($coenv_cat_term_1) :
-	$query_args['term'] = $coenv_cat_term_1;
-endif;
 $wp_query = new WP_Query( $query_args );
 
 ?>
-		<div id="filter" class="row filters show-for-small-only">
-            <h2 class="large-12 columns left">Filter By Research Area</h2>
-            <div class="large-6 columns left">
-                <?php
-                    $cats_args  = array(
-                      'orderby' => 'name',
-                      'order' => 'ASC',
-                      'taxonomy' => 'research_areas'
-                      );
-                    $cats = get_categories($cats_args);
-                    if ($cats) {
-                        echo '<select class="fac_filter">';
-                        echo '<option class="" value="faculty-list-item">All Research Areas</option>';
-                        foreach($cats as $cat) {
-                              echo '<option value="'.$cat->slug.'" class="">' . $cat->name . '</option>';
-                        }
-                         echo '</select>';
-                    }
-                ?>
-            </div>
-        </div>
 	<?php if ($wp_query->have_posts()): ?>
-	<div class="faculty-list-teach clearfix">
-
-<?php if ($coenv_cat_term_1): // Category filter ?>
-		<div class="panel">
-			<div class="left"><?php echo $wp_query->found_posts; ?> faculty working in <strong><?php echo $coenv_cat_term_1_val; ?></strong></div>
-			<div class="right"><a href="/faculty-research/faculty-instructor-bios/">all faculty &raquo;</a></div>
-		</div>
-	<?php endif; ?>
-        
-        	<ul class="faculty-list-teach clearfix small-block-grid-3 medium-block-grid-4 large-block-grid-5">
-                
+	<div id="bio" class="filter-list accordion clearfix" data-accordion role="tablist" aria-multiselectable="true">
 		<?php
 		# The Loop
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
-		$faculty_img_src = wp_get_attachment_thumb_url( get_post_thumbnail_id($post->ID));
-        $faculty_link = get_the_permalink();
-        if (!$faculty_img_src) {
-		  $faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
+		$website = get_field('website_url');
+		$phone_number = get_field('phone_number_1');
+		$email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
+    $faculty_img = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
+    $faculty_img_src = $faculty_img[0];
+    $faculty_areas = get_the_terms($post->ID, 'research_areas');
+    $term_list = '';
+      
+    foreach($faculty_areas as $area) {
+        $term_list .= $area->slug . ' ';
+    }
+		if (!$faculty_img_src) {
+		$faculty_img_src = get_template_directory_uri() . '/assets/img/blank-153x153.jpg';
 		}
-        $faculty_areas = get_the_terms($post->ID, 'research_areas');
-        $term_list = ''; 
-        foreach($faculty_areas as $area) {
-            $term_list .= $area->slug . ' ';
-        }
-		echo '<a href="' . $faculty_link . '"><li class="faculty-list-item '.$term_list.'"><div class="faculty-thumb"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div><h3>' . get_the_title() . '</h3></li></a>';
+		echo '<div id="bio-t-' . sanitize_title(get_the_title()) . '" class="filter-list-item accordion-title read '.$term_list.'" aria-label="Toggle more information" tabindex="0" aria-expanded="false" aria-controls="bio-c-' . get_the_title()  . '">';
+		echo '<div class="faculty-image"><img src="' . $faculty_img_src . '"" alt="' . get_the_title() . '" /></div>';
+    echo '<div class="person-info">';
+		echo '<h3>' . get_the_title() . '</h3>';
+    echo '<div class="additional-info" style="display:none;">';
+    echo '<ul class="contact-info">';
+    if( have_rows('job_titles') ) {
+        echo '<ul class="job-titles">';
+        while ( have_rows('job_titles') ) : the_row();
+            echo '<li>';
+            the_sub_field('job_title');
+            echo '</li>';
+        endwhile;
+        echo '</ul>';
+    }
+    coenv_base_fac_terms($post->ID);
+    if (!empty($email)) : 
+        echo '<li class="email"><a href="mailto:' . antispambot($email) .'"><i class="fi-mail"></i>' . antispambot($email) .'</a></li>';
+    endif;
+    if (!empty($phone_number)) :
+        echo '<li class="phone-number"><a href="tel:'. $phone_number . '"><i class="fi-telephone"></i>' . $phone_number .'</a></li>';
+    endif;
+    if (!empty($website)) :
+        echo '<li class="website"><a class="button" href="'. $website . '"><i class="icon-contact-link-phone"></i>Website</a></li>';
+    endif;
+    echo '</ul></div></div></div>';
+    echo '<div id="bio-c-' . sanitize_title(get_the_title())  . '" class="spacer-div"></div>';
 		endwhile;
 		?>
 				<div class="pager">
@@ -130,12 +111,13 @@ $wp_query = new WP_Query( $query_args );
 
 	</div>
 	<?php endif; ?>
+          </section>
         </div>
+  </article>
 	<?php if ( is_active_sidebar( 'after-content' ) ) : ?>
-	<?php do_action('foundationPress_after_content'); ?>
-	<ul class="widget-area after-content">
-	<?php dynamic_sidebar("after-content"); ?>
-	</ul>
+		<div id="after-content" class="before-content widget-area" role="complementary">
+			<?php dynamic_sidebar( 'after-content' ); ?>
+		</div><!-- #after-content -->
 	<?php endif; ?>
 	<a href="#" class="back-to-top">Back to Top</a>
 	<?php do_action('foundationPress_after_content'); ?>
@@ -144,3 +126,19 @@ $wp_query = new WP_Query( $query_args );
 <?php get_sidebar(); ?>
 </div>
 <?php get_footer(); ?>
+<script type="text/javascript" src="<?php echo content_url(); ?>/plugins/accordion-shortcodes/accordion.min.js?ver=2.3.0"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var accordionShortcodesSettings =[{"id":"bio","autoClose":false,"openFirst":false,"openAll":false,"clickToClose":true,"scroll":false}];
+$('.accordion-title').click(function() {
+    setTimeout(
+        function() {
+        $grid.isotope('layout');
+        console.log('isotope-relayout');
+    }, 200);
+});
+$('.additional-info').click(function(event){
+    event.stopPropagation();
+});
+/* ]]> */
+</script>

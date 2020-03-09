@@ -48,6 +48,9 @@
 
 .purple-zone {
     background: $accent;
+    @media #{$large-up} {
+        padding-left: 2rem;
+    }
 }
 
 .top-bar-container {
