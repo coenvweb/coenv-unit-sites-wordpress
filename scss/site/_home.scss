@@ -127,6 +127,8 @@
 
 
     .news {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
         @media #{$xlarge-up} {
             padding-left: 10rem!important;
             padding-right: 10rem!important;
