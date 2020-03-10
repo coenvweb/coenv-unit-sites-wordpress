@@ -66,7 +66,7 @@ jQuery(function ($) {
                 hero.addClass("fade");
                 ppbutton.html('<i class="fi-play"></i>');
                 autoplay = false;
-        }, 75000);
+        }, 750000);
     };
     
     // Category filter for custom post type indicies
