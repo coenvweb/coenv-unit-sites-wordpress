@@ -28,7 +28,7 @@ jQuery(function ($) {
             $this.attr('data-lightbox-gallery', $this.closest('div').attr('id'));
 		});
 
-        autoplay = true;
+        var autoplay = true;
         var ppbutton = $('.play-pause-hero');
         var hero = $('#hero-video');
         ppbutton.html('<i class="fi-pause"></i>');

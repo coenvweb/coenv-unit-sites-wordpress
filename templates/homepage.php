@@ -16,6 +16,7 @@ Template Name: Homepage
         $hero_buttons = get_field('hero_buttons');
 
     ?>
+    <div class="playpause"></div>
     <div class="hero">
         <div class="small-12 large-12 columns">
             <div class="feature homepage-hero-module">
