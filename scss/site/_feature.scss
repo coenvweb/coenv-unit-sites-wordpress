@@ -87,7 +87,8 @@
 		
 		.feature-info {
         padding: rem-calc(16);
-        padding-top: 20rem;
+        top: calc(100% - 15rem);
+        position: relative;
         width: 100%;
         @media #{$small-only} {
             position: relative;
@@ -108,6 +109,9 @@
             font-size: 2.5rem;
             line-height: 3rem;
             font-weight: 400;
+            margin-bottom: 5px;
+            box-shadow: -9em 0px 0px #fff;
+            padding: 3px 0;
             @media #{$medium-up} {
                 font-size: 3.5rem;
                 line-height: 4rem;
@@ -126,15 +130,16 @@
             display: inline;
             position: relative;
             background-color: #FFf;
-            box-shadow: .5em 0 0 #FFf, -1em 0 0 #FFf;
+            box-shadow: .5em 0 0 #FFf, -4em 0 0 #FFf;
             box-decoration-break: clone;
             z-index: 2;
             &:before {
-                content: '';
+                //content: '';
                 display: block;
                 position: absolute;
-                height: calc(200% - 6px);
+                height: calc(200% - 5px);
                 width: 1200px;
+                left: -1200px;
                 right: 0;
                 background-color:
                 #fff;
@@ -160,6 +165,8 @@
         @include o_sans_bold();
         font-weight: 500;
         width: auto;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
         @media #{$small-only} {
             padding-left: 2rem;
             width: 10rem;
