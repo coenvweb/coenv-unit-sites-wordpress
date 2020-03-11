@@ -84,6 +84,7 @@
             content: "\f10d";
             top: 25px;
             color: white;
+            margin-right: 25px;
         }
 
         h3 {
@@ -111,12 +112,20 @@
             .fac-terms {
                 margin-top: .4rem;
                 margin-bottom: .4rem;
+                .focus-label {
+                    display: inline-block;
+                    padding-right: 5px;
+                    margin-bottom: 0;
+                }
             }
             .fac-terms li {
                 margin-top: 0;
                 margin-bottom: 0;
                 margin-left: 0!important;
                 margin-right: 10px;
+                display: inline-block;
+                float: none;
+                
                 a {
                     color: $bg-light;
                     text-transform: uppercase;
@@ -158,13 +167,15 @@
             }
             
             .button {
-                margin-top: .55rem;
+                margin-top: .65rem;
                 margin-bottom: .25rem;
-                color: white;
-                border-color: white;
-                &:hover {
-                    color: $bg-light;
-                    border-color: $bg-light;
+                padding: .4rem .75rem;
+                background: $bg-light!important;
+                color: $text;
+                filter: none;
+                &:hover, &.active {
+                    background: $accent-blue-dk!important;
+                    color: white!important;
                 }
             }
             
