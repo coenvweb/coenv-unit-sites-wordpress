@@ -133,7 +133,7 @@ var accordionShortcodesSettings =[{"id":"bio","autoClose":false,"openFirst":fals
 $('.accordion-title').click(function() {
     setTimeout(
         function() {
-        $grid.isotope('layout');
+        $('.filter-list').isotope('layout');
         console.log('isotope-relayout');
     }, 200);
 });

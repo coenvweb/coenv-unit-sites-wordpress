@@ -127,7 +127,6 @@ class coenv_base_fac_cats extends WP_Widget {
           $fac_cat = (empty($fac_cat->slug)) ? '' : $fac_cat->slug ;
 
           echo $args['before_widget'];
-          echo '<span class="filter-cap">Filter:</span>';
           if ( ! empty( $instance['title'] ) ) {
                echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
           }
@@ -141,11 +140,11 @@ class coenv_base_fac_cats extends WP_Widget {
                       );
                     $cats = get_categories($cats_args);
                     if ($cats) {
-                         echo '<ul class="cats">';
-                            echo '<li class="'.($fac_cat_1 ? '' : 'active').' fac_cat" data-cat="faculty-list-item">All Research Areas</li>';
+                         echo '<ul class="filter-cats">';
+                            echo '<li data-cat="filter-list-item" class="button filter_cat" href="/"><i class="fi-x"></i> Reset filters</a></li>';
                          foreach($cats as $cat) { 
                               $selected = ($cat->slug == $fac_cat ? 'active' : '');
-                              echo '<li data-cat="'.$cat->slug.'" class="'.$selected.' fac_cat">' . $cat->name . '</li>';
+                              echo '<li data-cat="'.$cat->slug.'" class="'.$selected.' filter_cat button">' . $cat->name . '</li>';
                          }
                          echo '</ul>';
                     }
