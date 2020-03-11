@@ -82,9 +82,10 @@
         &:after {
             display: block;
             content: "\f10d";
-            top: 25px;
+            bottom: 15px;
+            right: 15px;
+            position: absolute;
             color: white;
-            margin-right: 25px;
         }
 
         h3 {
