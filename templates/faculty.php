@@ -84,7 +84,14 @@ $wp_query = new WP_Query( $query_args );
         endwhile;
         echo '</ul>';
     }
-    coenv_base_fac_terms($post->ID);
+    $fac_terms = wp_get_post_terms( $id, 'research_areas' );
+    if ($fac_terms) {
+        echo '<ul class="fac-terms inline-list"><p class="focus-label">Focus areas: </p>';
+        foreach ($fac_terms as $term) {
+            echo '<li><a href="#' . $term->slug . '">' . $term->name . '</a></li>';
+        }
+    }
+		echo '</ul>';
     if (!empty($email)) : 
         echo '<li class="email"><a href="mailto:' . antispambot($email) .'"><i class="fi-mail"></i>' . antispambot($email) .'</a></li>';
     endif;

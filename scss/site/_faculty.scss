@@ -23,9 +23,12 @@
     margin-left: .5rem;
     margin-right: .5rem;
     h3 {
-        font-size: 1rem;
-        line-height: 1.25rem;
+        color: white!important;
+        font-size: 1.1rem!important;
+        line-height: 1.25rem!important;
         margin-top: .5rem;
+        padding: .25rem 1rem;
+        font-weight: 400;
     }
 
 }
@@ -54,15 +57,6 @@
     display:table-row;
     background: $accent-blue-dk!important;
     padding: 0;
-    .person-info {
-        h3 {
-            font-weight: normal;
-            font-size: 1.2rem!important;
-            @include o_sans_bold;
-            padding: .35rem 1rem;
-            color: white!important;
-        }
-    }
 
     .faculty-image {
         text-align: center;
@@ -93,7 +87,8 @@
         }
 
         h3 {
-            font-size: 1.1rem;
+            font-size: 1.25rem!important;
+            line-height: 1.5rem!important;
             padding-bottom: .75rem;
             border-bottom: 1px solid $bg-light;
             width: 100%;
@@ -113,17 +108,19 @@
                 margin-left: 0;
             }
             
-            .people-terms {
+            .fac-terms {
                 margin-top: .4rem;
                 margin-bottom: .4rem;
             }
-            .people-terms li {
+            .fac-terms li {
                 margin-top: 0;
                 margin-bottom: 0;
-                margin-left: 0;
+                margin-left: 0!important;
                 margin-right: 10px;
                 a {
                     color: $bg-light;
+                    text-transform: uppercase;
+                    font-weight: 600;
                     &:hover {
                         color: white;
                     }
