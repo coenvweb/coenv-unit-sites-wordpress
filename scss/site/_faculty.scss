@@ -188,6 +188,7 @@
             max-height: none;
             float: left;
             max-width: 25%;
+            display: flex;
             @media #{$medium-up} {
                 height: 200px;
                 width: 200px;
@@ -196,6 +197,7 @@
                     transform: translateY(-50%);
                     position: relative;
                     top: 50%;
+                    object-fit: cover;
                 }
             }
             @media #{$large-up} {

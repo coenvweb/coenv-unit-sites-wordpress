@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Courses
+Template Name: Courses Index
 */
 
 get_header();
@@ -130,7 +130,7 @@ $wp_query = new WP_Query( $query_args );
 	</div>
     <?php wp_reset_postdata(); wp_reset_query(); //roll back query vars to as per the request ?>
     <?php get_sidebar(); ?>
-
+</div>
 <?php get_footer(); ?>
 </div>
 </div>
