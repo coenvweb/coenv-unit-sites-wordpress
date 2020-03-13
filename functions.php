@@ -38,6 +38,7 @@ require_once('library/admin-setting-fields.php');
 
 // Custom content types
 require_once('library/content-types.php');
+require_once('library/content-type-meta.php');
 
 // Faculty functions
 require_once('library/faculty.php');
