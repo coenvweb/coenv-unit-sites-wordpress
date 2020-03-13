@@ -40,10 +40,13 @@
     .about-summary p, .row .row h2 {
         @include uni;
         text-align: center;
-        font-size: 2rem!important;
-        padding: 3rem 1rem 1rem 1rem;
+        padding: 2rem 1rem 2rem;
         color: $accent-blue-dk;
         margin-bottom: 0;
+        font-size: 1.5rem;
+        @media #{$medium-up} {
+            font-size: 2rem!important;
+        }
     }
 
     .tiles {
@@ -72,9 +75,13 @@
         
         .large-6 {
             text-align: center;
-            min-height: 355px;
             position: relative;
             overflow: hidden;
+            background-position: center;
+            min-height: 280px;
+            @media #{$medium-up} {
+                min-height: 355px;
+            }
         }
         
         .tile-text {
@@ -86,7 +93,8 @@
             -webkit-transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
             margin-top: 0rem;
-            max-width: 75%;
+            width: 90%;
+            
             h3 {
                 z-index: 5;
                 text-transform: uppercase;

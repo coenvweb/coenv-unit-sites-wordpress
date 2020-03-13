@@ -22,6 +22,7 @@ Template Name: Homepage
             <div class="feature homepage-hero-module">
             <div class="feature-image video-container">
             <div class="filter"></div>
+            <div class="playpause"></div>
             <video autoplay loop muted class="fillWidth fullfade show-for-medium-up" id="hero-video" poster="/wp-content/themes/coenv-fhl/assets/video/Snapshots/Diverrs.jpg">
                 <source src="<?php echo get_bloginfo('template_directory'); ?>/assets/video/marbio-video.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
                 <!--<source src="/wp-content/themes/coenv-fhl/assets/video/Mp4/FHL Looper Lab Final_1.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
@@ -106,13 +107,14 @@ Template Name: Homepage
             $sticky = get_option( 'sticky_posts' );
             $sticky_count = count($sticky);
             $posts_on_home = 1; //set posts_per_page here
-
-            $home_args = array(
-                'post_type' => 'post',
-                'posts_per_page' => $posts_on_home - $sticky_count,
-                'post_status' => 'publish',
-                'cat' => '136, 137',
-            );
+            
+            if ( $sticky ) {
+                $home_args = [
+                    'post_type'           => 'post',
+                    'post__in'            => $sticky,
+                    'posts_per_page'      => 2,
+                    'ignore_sticky_posts' => 1
+                ];
 
             $wp_query = new WP_Query( $home_args );
             ?>
@@ -122,13 +124,6 @@ Template Name: Homepage
                     <?php
                     while ( $wp_query->have_posts() ) :
                     $wp_query->the_post();
-                        $feature_post = get_the_ID();
-                        if(in_category(136)) { ?>
-                            <a name="More student & alumni stories" class="fake-cat button left" href="/news-stories/category/student-spotlight/">Student Spotlights</a>
-                        <?php } ?>
-                        <?php if(in_category(137)) { ?>
-                            <a name="More research news" class="fake-cat button left" href="/news-stories/category/research-faculty-spotlight/">Research News</a>
-                        <?php }
                         # The Loop
                         if (get_field('story_link_url')) {
                             $post_link_url = get_field('story_link_url');
@@ -152,7 +147,9 @@ Template Name: Homepage
                     ?>
                 </div>
             </div>
-            <?php endif; ?>
+            <?php endif; 
+            };
+            ?>
 
             <?php
             # News Feed
@@ -163,7 +160,8 @@ Template Name: Homepage
                 'post_type' => 'post',
                 'posts_per_page' => $posts_on_home,
                 'post_status' => 'publish',
-                'post__not_in' => array($feature_post),
+                'post__not_in' => array($sticky),
+                'category_name' => 'featured'
             );
 
             $wp_query = new WP_Query( $home_args );
@@ -184,6 +182,7 @@ Template Name: Homepage
                             } else {
                                 $post_link_url = get_the_permalink();
                                 $post_link = '<a class="read-more button left" href="' . $post_link_url . '">Read more</a>';
+                                $post_link_target = ' target="" ';
                             }
                             ?>
                             <div class="blog-list-item clearfix">
