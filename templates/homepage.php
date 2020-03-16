@@ -16,13 +16,12 @@ Template Name: Homepage
         $hero_buttons = get_field('hero_buttons');
 
     ?>
-    <div class="playpause"></div>
+
     <div class="hero">
         <div class="small-12 large-12 columns">
             <div class="feature homepage-hero-module">
             <div class="feature-image video-container">
             <div class="filter"></div>
-            <div class="playpause"></div>
             <video autoplay loop muted class="fillWidth fullfade show-for-medium-up" id="hero-video" poster="/wp-content/themes/coenv-fhl/assets/video/Snapshots/Diverrs.jpg">
                 <source src="<?php echo get_bloginfo('template_directory'); ?>/assets/video/marbio-video.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
                 <!--<source src="/wp-content/themes/coenv-fhl/assets/video/Mp4/FHL Looper Lab Final_1.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
@@ -33,9 +32,8 @@ Template Name: Homepage
             </div>
 
                         <div class="feature-info-container">
-
+                            <div class="play-pause-hero right show-for-medium-up"></div>
                             <div class="feature-info row">
-
                                 <div class="feature-content">
                                     <h2 class="feature-title"><span class="feature-white"><?=$hero_text?></span></h2>
                                     <?php
