@@ -148,8 +148,8 @@
             "sub_fields": [
                 {
                     "key": "field_5d6426ea53ef4",
-                    "label": "Instructor (SAFS Faculty)",
-                    "name": "instructor_safs_faculty",
+                    "label": "Instructor (Marine Biology)",
+                    "name": "instructor_mb_faculty",
                     "type": "post_object",
                     "instructions": "",
                     "required": 0,
@@ -340,7 +340,7 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "hide_on_screen": "",
-    "active": true,
+    "active": 1,
     "description": "",
-    "modified": 1584137967
+    "modified": 1584391077
 }
