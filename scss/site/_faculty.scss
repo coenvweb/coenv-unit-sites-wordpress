@@ -113,10 +113,14 @@
             .fac-terms {
                 margin-top: .4rem;
                 margin-bottom: .4rem;
+                font-size: 14px!important;
                 .focus-label {
                     display: inline-block;
                     padding-right: 5px;
                     margin-bottom: 0;
+                }
+                p {
+                    font-size: 14px!important;
                 }
             }
             .fac-terms li {

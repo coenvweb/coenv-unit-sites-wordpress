@@ -498,10 +498,17 @@
         }
     }
     
-    .fhl, .adviser {
+    .adviser {
         text-align: center;
         padding: 0!important;
         overflow: hidden;
+        background-image: url("../assets/img/fhl-long-dock.jpg");
+        background-size: 100%;
+        background-position: center left;
+        background-repeat: no-repeat;
+        position: relative;
+        z-index: 3;
+        display: table;
         @media #{$medium-up} {
             max-height: 285px;
         }
@@ -511,6 +518,25 @@
         @media #{$xlarge-up} {
             max-height: 25vw;
         }
+
+        @media #{$small-only} {
+            background-position: bottom left;
+            background-size: 100%;
+        }
+        
+        &:after {
+            content: " ";
+            z-index: -1;
+            display: block;
+            position: absolute;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: $bg-transparent-blue;
+            transition: background-color 0.5s ease;
+        }
+        
         .columns {
             padding: 0;
         }
@@ -539,7 +565,7 @@
             }
             img {
                 @media #{$xlarge-up} {
-                    max-width: 100%!important;
+                    max-width: 75%!important;
                 }
                 @media #{$large-up} {
                     max-width: 120%!important;
@@ -587,57 +613,12 @@
         }
     }
 
-    .fhl {
-		        background: $bg-light;
-        background-image: url("../assets/img/paper-texture-grey.jpg");
-        .widget_img {
-            @media #{$medium-up} {
-                float: left;
-            }
-            @media #{$small-only} {
-                display: none;
-            }
-        }
-        strong {
-            color: $accent-blue;
-        }
-        &:after {
-            background-color: $accent-blue;
-        }
-        @media #{$large-up} {
-            p:last-of-type {
-                padding-left: 10rem;
-                padding-right: 10rem;
-                margin-bottom: 1rem;
-            }
-        }
-    }
-
     .adviser {
-        background-image: url("../assets/img/fhl-long-dock.jpg");
-        background-size: 100%;
-        background-position: center left;
-        background-repeat: no-repeat;
-        position: relative;
-        z-index: 3;
+
         
-        @media #{$small-only} {
-            background-position: bottom left;
-            background-size: 100%;
-        }
         
-        &:after {
-            content: " ";
-            z-index: -1;
-            display: block;
-            position: absolute;
-            height: 100%;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: $bg-transparent-blue;
-            transition: background-color 0.5s ease;
-        }
+        
+        
         
         .widget {
             right: 0;

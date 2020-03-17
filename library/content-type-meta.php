@@ -1,6 +1,7 @@
 <?php
 function faculty_change_table_column_titles($columns){
     unset($columns['title']);// temporarily remove, to have custom column before date column
+    unset($columns['taxonomy-research_areas']);// temporarily remove, to have custom column before date column
     unset($columns['date']);// temporarily remove, to have custom column before date column
     $columns['title'] = 'Full Faculty Name';
     $columns['first_name'] = 'First Name';

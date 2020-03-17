@@ -55,6 +55,7 @@ $wp_query = new WP_Query( $query_args );
 		while ( $wp_query->have_posts() ) :
 		$wp_query->the_post();
 		$faculty_thumb = get_the_post_thumbnail(get_the_ID(),'thumbnail');
+    $courses_taught = get_field('courses_taught');
 		$website = get_field('website_url');
 		$phone_number = get_field('phone_number_1');
 		$email = str_replace('u.washington.edu','uw.edu',get_field('email_address'));
@@ -92,6 +93,9 @@ $wp_query = new WP_Query( $query_args );
         }
     }
 		echo '</ul>';
+  if (!empty($courses_taught)) : 
+        echo '<li class="courses">Teaching: ' . $courses_taught . '</li>';
+    endif;
     if (!empty($email)) : 
         echo '<li class="email"><a href="mailto:' . antispambot($email) .'"><i class="fi-mail"></i>' . antispambot($email) .'</a></li>';
     endif;
