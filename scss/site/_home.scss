@@ -509,6 +509,7 @@
         position: relative;
         z-index: 3;
         display: table;
+        width: 100%;
         @media #{$medium-up} {
             max-height: 285px;
         }

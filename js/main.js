@@ -140,6 +140,67 @@ function readHash() {
 readHash();
 });
 
+//course filter
+    if ($('body').hasClass('page-template-courses')) {
+        var $grid = $('.filter-list').isotope({
+          itemSelector: '.filter-list-item',
+          layoutMode: 'fitRows'
+        });
+        
+        // store filter for each group
+        var filters = {};
+
+        $('.course-filter').on( 'click', '.button', function() {
+          var $this = $(this);
+          // get group key
+          var $buttonGroup = $this.parents('.button-group');
+          var filterGroup = $buttonGroup.attr('data-filter-group');
+          // set filter for group
+          filters[ filterGroup ] = $this.attr('data-filter');
+          // combine filters
+          var filterValue = concatValues( filters );
+          $grid.isotope({ filter: (filterValue) });
+        });
+
+        // change is-checked class on buttons
+        $('.button-group').each( function( i, buttonGroup ) {
+          var $buttonGroup = $( buttonGroup );
+          $buttonGroup.on( 'click', '.button', function( event ) {
+            $buttonGroup.find('.active').removeClass('active');
+            var $button = $( event.currentTarget );
+            $button.addClass('active');
+          });
+        });
+        
+        // flatten object by concatting values
+        function concatValues( obj ) {
+          var value = '';
+          for ( var prop in obj ) {
+            value += obj[ prop ];
+          }
+          return value;
+        }
+        
+        $('ul.cats li.course_cat').on('click', function(e) {
+            var $buttonGroup = $('.button-group');
+            $buttonGroup.find('.active').removeClass('active');
+            $buttonGroup.find('.all-quarters').addClass('active');
+            $buttonGroup.find('.all-years').addClass('active');
+            var topic = '.' + $(this).data('cat');
+            $grid.isotope({filter: topic});
+        });
+        
+        $('ul.cats').each( function( i, topicGroup ) {
+            var $topicGroup = $( topicGroup );
+            $topicGroup.on( 'click', '.course_cat', function( event ) {
+                $topicGroup.find('.active').removeClass('active');
+                var $button = $( event.currentTarget );
+                $button.addClass('active');
+            });
+        });
+
+    }
+
 
 
 jQuery(function ($) {
