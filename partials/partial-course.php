@@ -13,7 +13,6 @@
         $quarter_class = $quarter;
     }
     $years = get_field('course_year');
-    print_r($years);
     if($years) {
         $full_year = $years->name;
     }
