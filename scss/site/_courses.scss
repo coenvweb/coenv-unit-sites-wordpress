@@ -115,6 +115,9 @@ $summer: darken(#bf996b, 15%);
             
             &.open {
                 z-index: 9;
+                .additional-info{
+                    display: block!important
+                }
             }
             
             h3 {
