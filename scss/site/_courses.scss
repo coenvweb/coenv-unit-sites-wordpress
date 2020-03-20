@@ -5,10 +5,25 @@ $summer: darken(#bf996b, 15%);
 
 .page-template-courses {
     
+    .row .row {
+        margin: 0;
+    }
+    
     .course-filter {
-        margin-bottom: 1rem;
+        margin-bottom: 1rem!important;
         ul {
             margin-left: 0;
+            
+            .button {
+                background: $bg-light!important;
+                color: $text;
+                filter: none;
+                &:hover, &.active {
+                    background: $accent-blue-dk!important;
+                    color: white!important;
+                }
+            }
+            
             &.quarter li{
                 width: calc(20% - 10px);
             }
@@ -65,20 +80,20 @@ $summer: darken(#bf996b, 15%);
                 }
                 
             }
-            .all-quarters a {
-                border-color: $accent;
+            .all-quarters {
+                border: solid 2px $accent;
             }
             .autumn {
-                border-color: $autumn;
+                border: solid 2px $autumn;
             }
             .winter {
-                border-color: $winter;
+                border: solid 2px $winter;
             }
             .spring {
-                border-color: $spring;
+                border: solid 2px $spring;
             }
             .summer {
-                border-color: $summer;
+                border: solid 2px $summer;
             }
         }
     }
@@ -94,9 +109,18 @@ $summer: darken(#bf996b, 15%);
             min-height: 4.5rem;
         }
         .course-info {
-          padding: .25rem 2rem .25rem 0;   
+          padding: .25rem 2rem .25rem 0;
+            h4 {
+                font-family: open-sans!important;
+                font-weight: 600!important;
+                
+                color: $text!important;
+            }
             h3 {
                 margin-top: 0;
+                font-family: open-sans!important;
+                font-weight: 600!important;
+                font-size: 22px!important;
             }
         }
         .filter-list-item {
@@ -108,9 +132,15 @@ $summer: darken(#bf996b, 15%);
             padding-bottom: 0;
             padding-left: 0;
             overflow: hidden;
+            min-height: 80px!important;
+            @media #{$small-only} {
+                margin-bottom: .5rem;
+            }
             
             &:after {
-                top: 2.65rem;
+                position: absolute;
+                right: 1.25rem;
+                top: 2rem;
             }
             
             &.open {

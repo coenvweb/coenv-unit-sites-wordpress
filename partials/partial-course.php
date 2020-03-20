@@ -84,23 +84,25 @@
         if(!empty($instructors)) {
             echo '<div class="row instructors"><div class="columns medium-12"><p><span class="prompt">Instructor(s):</span> ' . $instructors . '</p></div></div>';
         }
+    echo '<div class="row info"><div class="columns medium-12">';
     the_content();
+    echo '</div></div>';
     echo $term_list;
     if (empty($course_link) && empty($myplan_link) && empty($catalog_link) && empty($time_schedule_link)) {
         
     } else {
         echo '<div class="columns contact-info"><ul>';
         if (!empty($course_link)) : 
-            echo '<li class="course-link"><a href="' . $course_link .'"><i class="fi-link"></i>Course Website</a></li>';
+            echo '<li class="course-link"><a class="button" href="' . $course_link .'"><i class="fi-link"></i>Course Website</a></li>';
         endif;
         if (!empty($myplan_link)) : 
-            echo '<li class="myplan-link"><a href="' . $myplan_link .'"><i class="fi-results-demographics"></i>MyPlan</a></li>';
+            echo '<li class="myplan-link"><a class="button" href="' . $myplan_link .'"><i class="fi-results-demographics"></i>MyPlan</a></li>';
         endif;
         if (!empty($catalog_link)) : 
-            echo '<li class="catalog-link"><a href="' . $catalog_link .'"><i class="fi-results"></i>Course Catalog</a></li>';
+            echo '<li class="catalog-link"><a class="button" href="' . $catalog_link .'"><i class="fi-results"></i>Course Catalog</a></li>';
         endif;
         if (!empty($time_schedule_link)) :
-            echo '<li class="time-schedule-link"><a href="'. $time_schedule_link . '"><i class="fi-clock"></i>Time Schedule</a></li>';
+            echo '<li class="time-schedule-link"><a class="button" href="'. $time_schedule_link . '"><i class="fi-clock"></i>Time Schedule</a></li>';
         endif;
         echo '</ul></div>';
     }
