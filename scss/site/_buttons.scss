@@ -10,7 +10,7 @@
     letter-spacing: .3px;
 	@include font-size(12);
 	font-weight: 800;
-	@extend .dark-to-light;
+    background: $accent;
 	text-decoration: none;
 	color: white;
 	border-radius: $radius;

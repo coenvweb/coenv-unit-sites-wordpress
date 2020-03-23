@@ -38,10 +38,10 @@
     }
 
     .about-summary p, .row .row h2 {
-        @include uni;
+        font-family: uni-sans-regular,open-sans,"Helvetica Neue",Helvetica,Arial,sans-serif !important;
         text-align: center;
         padding: 2rem 1rem 2rem;
-        color: $accent-blue-dk;
+        color: $accent;
         margin-bottom: 0;
         font-size: 1.5rem;
         @media #{$medium-up} {
@@ -213,14 +213,14 @@
         
         h2 {
             text-align: center;
-            color: $accent-blue;
+            color: $accent;
             margin-bottom: 3rem;
             &:after {
                 content: "";
                 position: relative;
                 height: 4px;
                 width: 10rem;
-                background-color: $accent-blue;
+                background-color: $accent;
                 bottom: -.5rem;
                 display: block;
                 margin: 0 auto;
