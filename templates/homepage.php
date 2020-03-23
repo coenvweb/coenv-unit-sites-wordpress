@@ -152,7 +152,7 @@ Template Name: Homepage
             <?php
             # News Feed
 
-            $posts_on_home = 3; //set posts_per_page here
+            $posts_on_home = 2; //set posts_per_page here
 
             $home_args = array(
                 'post_type' => 'post',
