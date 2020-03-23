@@ -158,7 +158,7 @@ Template Name: Homepage
                 'post_type' => 'post',
                 'posts_per_page' => $posts_on_home,
                 'post_status' => 'publish',
-                'post__not_in' => array($sticky),
+                'post__not_in' => $sticky,
                 'category_name' => 'featured'
             );
 
