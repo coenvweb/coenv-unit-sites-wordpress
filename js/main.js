@@ -61,12 +61,12 @@ jQuery(function ($) {
                 autoplay = false;
             }
         });
-        //setTimeout(function(){
-        //        hero.get(0).pause()
-        //        hero.addClass("fade");
-        //        ppbutton.html('<i class="fi-play"></i>');
-        //        autoplay = false;
-        //}, 750000);
+        setTimeout(function(){
+                hero.get(0).pause()
+                hero.addClass("fade");
+                ppbutton.html('<i class="fi-play"></i>');
+                autoplay = false;
+        }, 750000);
     };
     
     // Category filter for custom post type indicies

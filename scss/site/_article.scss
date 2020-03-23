@@ -31,7 +31,7 @@
 
 		a {
 			text-decoration: none;
-			color: $text;
+			color: $accent-blue-dk!important;
 		}
 
 		br {
@@ -106,9 +106,9 @@
 
     h1, h2, h3, h4 {
         a {
-            color: $black !important;
+            color: $accent-blue-dk !important;
             &:hover {
-                color: $accent-blue-dk !important;
+                color: lighten($accent-blue-dk, 10%) !important;
                 text-decoration: underline;
             }
         }
