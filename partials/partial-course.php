@@ -30,8 +30,8 @@
         $full_year = $term_list;
     }
     while ( have_rows('instructor') ) : the_row();
-      if (!empty(get_sub_field('instructor_safs_faculty'))) {
-            $instructor_post = get_sub_field('instructor_safs_faculty');
+      if (!empty(get_sub_field('instructor_mb_faculty'))) {
+            $instructor_post = get_sub_field('instructor_mb_faculty');
             $instructors .= '<a href="' . get_permalink($instructor_post->ID) . '">' . get_the_title($instructor_post->ID) . '</a>';
         } else {
             $instructors .= '<a href="' . get_sub_field('instructor_link') . '">' . get_sub_field('instructor_name') . '</a>';
