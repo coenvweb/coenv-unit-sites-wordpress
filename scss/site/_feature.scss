@@ -24,13 +24,19 @@
     min-height: 400px;
     height: 40vw;
     max-height: 600px;
+    .poster {
+        @media #{$small-only} {
+            display: flex!important;
+        }
+    }
     .poster img {
         @media #{$small-only} {
             max-width: none;
             top: -50%;
             position: absolute;
-            width: 225%;
+            height: calc(70vh + 2rem);
             left: -100%;
+            object-fit: cover;
         }
     }
     .filter {
@@ -63,7 +69,7 @@
     video.fillWidth {
         width: 100%;
         @media #{$small-only} {
-            width: 135%;
+            width: 155%;
         }
     }
 }
@@ -92,7 +98,12 @@
         width: 100%;
         @media #{$small-only} {
             position: relative;
-            top: 30vh;
+            .button {
+                font-size: .8rem;
+                margin-top: -2rem;
+                padding-left: 0;
+                padding-right: 0;
+            }
         }
             
 		}
