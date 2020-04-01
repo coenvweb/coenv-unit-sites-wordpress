@@ -25,9 +25,6 @@
     height: 40vw;
     max-height: 600px;
     .poster {
-        @media #{$small-only} {
-            display: flex!important;
-        }
     }
     .poster img {
         @media #{$small-only} {
@@ -36,7 +33,6 @@
             position: absolute;
             height: calc(70vh + 2rem);
             left: -100%;
-            object-fit: cover;
         }
     }
     .filter {
