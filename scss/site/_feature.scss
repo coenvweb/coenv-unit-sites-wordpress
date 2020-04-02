@@ -36,10 +36,10 @@
     .poster img {
         @media #{$small-only} {
             max-width: none;
-            top: -25%;
+            top: -40%;
             position: absolute;
-            height: calc(70vh + 2rem);
-            left: -100%;
+            height: calc(40rem + 2rem);
+            left: -140%;
         }
     }
     .filter {
