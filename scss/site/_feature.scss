@@ -25,11 +25,13 @@
     height: 40vw;
     max-height: 600px;
     .poster {
-        display: block!important;
-        width: 100%;
-        position: absolute;
-        height: calc(70vh + 2rem);
-        top: 0;
+        @media #{$small-only} {
+            display: block!important;
+            width: 100%;
+            position: absolute;
+            height: calc(70vh + 2rem);
+            top: 0;
+        }
     }
     .poster img {
         @media #{$small-only} {
