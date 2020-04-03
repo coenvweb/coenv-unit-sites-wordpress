@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.3
-Stable tag: 3.0.1
+Tested up to: 5.4
+Stable tag: 3.1.0
 License: GPLv2 or later
 
 
@@ -160,6 +160,13 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 3.1.0 =
+* 2020-03-23
+* Add term_order field to edit screen of terms (thanks @li-an).
+* Add order button for slug (thanks @eric3d).
+* Only load admin functions at dashboard.
+* Remove included es_ES po file, it is maintained in GlotPress.
 
 = 3.0.1 =
 * 2020-01-07

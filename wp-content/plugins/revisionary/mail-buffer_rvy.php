@@ -21,6 +21,8 @@ function _rvy_mail_check_buffer($new_msg = [], $args = []) {
 	$log_only = !empty($args['log_only']);
 	
 	if (!$log_only) {
+		wp_cache_delete('revisionary_mail_buffer', 'options');
+		
 		if (!$buffer = get_option('revisionary_mail_buffer')) {
 			$buffer = [];
 			$first_buffer = true;
@@ -29,6 +31,8 @@ function _rvy_mail_check_buffer($new_msg = [], $args = []) {
 
 	$new_msg_buffered = false;
 
+	wp_cache_delete('revisionary_sent_mail', 'options');
+	
 	if (!$sent_mail = get_option('revisionary_sent_mail')) {
 		$sent_mail = [];
 		$first_mail_log = true;

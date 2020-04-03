@@ -1,10 +1,11 @@
 <?php
 /*
- * Admin Settingspage for Custom Taxonomy Order
+ * Admin Settingspage for Custom Taxonomy Order.
+ * Generated for each taxonomy.
  */
 
 
-function customtaxorder() {
+function customtaxorder_subpage() {
 	global $sitepress;
 
 	customtaxorder_update_settings();
@@ -147,28 +148,31 @@ function customtaxorder() {
 			?>
 			<div id="poststuff" class="metabox-holder">
 				<div class="widget order-widget">
-					<h2 class="widget-top"><?php _e( $tax_label) ?> | <small><?php _e('Order the taxonomies by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small></h2>
+					<h2 class="widget-top"><?php _e( $tax_label) ?> | <small><?php _e('Order the terms by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small></h2>
 					<div class="misc-pub-section">
 						<ul id="custom-order-list">
 							<?php foreach ( $terms as $term ) { ?>
-							<li id="id_<?php echo $term->term_id; ?>" class="lineitem"><?php echo $term->name; ?></li>
+							<li id="id_<?php echo $term->term_id; ?>" data-slug="<?php echo $term->slug; ?>" class="lineitem"><?php echo $term->name; ?></li>
 							<?php } ?>
 						</ul>
 					</div>
 					<div class="misc-pub-section misc-pub-section-last">
 						<?php if ($parent_ID != 0) { ?>
-							<input type="submit" class="button" style="float:left" id="return-sub-posts" name="return-sub-posts" value="<?php _e('Return to Parent', 'custom-taxonomy-order-ne'); ?>" />
+						<div id="publishing-action-return-sub-posts">
+							<input type="submit" class="button" id="return-sub-posts" name="return-sub-posts" value="<?php _e('Return to Parent', 'custom-taxonomy-order-ne'); ?>" />
+						</div>
 						<?php } ?>
 						<div id="publishing-action">
 							<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" id="custom-loading" style="display:none" alt="" />
 							<input type="submit" name="order-submit" id="order-submit" class="button-primary" value="<?php _e('Update Order', 'custom-taxonomy-order-ne') ?>" />
-							<input type="submit" name="order-alpha" id="order-alpha" class="button" value="<?php _e('Sort Alphabetical', 'custom-taxonomy-order-ne') ?>" />
+							<input type="submit" name="order-alpha"  id="order-alpha" class="button" value="<?php _e('Sort Alphabetical', 'custom-taxonomy-order-ne') ?>" />
+							<input type="submit" name="order-slug"   id="order-slug" class="button" value="<?php _e('Sort on slug', 'custom-taxonomy-order-ne') ?>" />
 							<?php do_action('custom_taxonomy_order_ne_settings_buttons'); ?>
 						</div>
 						<div class="clear"></div>
 					</div>
-					<input type="hidden" id="hidden-custom-order" name="hidden-custom-order" />
-					<input type="hidden" id="hidden-parent-id" name="hidden-parent-id" value="<?php echo $parent_ID; ?>" />
+					<input type="hidden" id="hidden-custom-order"    name="hidden-custom-order" />
+					<input type="hidden" id="hidden-parent-id"       name="hidden-parent-id" value="<?php echo $parent_ID; ?>" />
 					<input type="hidden" id="hidden-parent-id-order" name="hidden-parent-id-order" value="<?php echo $parent_ID_order; ?>" />
 				</div>
 				<?php
@@ -212,4 +216,77 @@ function customtaxorder() {
 </div>
 
 <?php
+}
+
+
+/*
+ * Called from customtaxorder().
+ */
+function customtaxorder_update_settings() {
+	$options = customtaxorder_get_settings();
+	if ( isset($options['update']) ) {
+		echo '<div class="updated fade notice is-dismissible" id="message"><p>' . __('Custom Taxonomy Order settings', 'custom-taxonomy-order-ne') . ' ' . $options['update'] . '</p></div>';
+		unset($options['update']);
+		update_option('customtaxorder_settings', $options);
+	}
+}
+
+
+/*
+ * customtaxorder_update_order
+ * Function to update the database with the submitted order
+ */
+function customtaxorder_update_order() {
+
+	/* Check Nonce */
+	$verified = false;
+	if ( isset($_POST['custom-taxonomy-order-ne-nonce']) ) {
+		$verified = wp_verify_nonce( $_POST['custom-taxonomy-order-ne-nonce'], 'custom-taxonomy-order-ne-nonce' );
+	}
+	if ( $verified == false ) {
+		// Nonce is invalid.
+		echo '<div id="message" class="error fade notice is-dismissible"><p>' . __('The Nonce did not validate. Please try again.', 'custom-taxonomy-order-ne') . '</p></div>';
+		return;
+	}
+
+	if (isset($_POST['hidden-custom-order']) && $_POST['hidden-custom-order'] != "") {
+		global $wpdb;
+		$parent_ID_order = 0;
+		if ( isset($_POST['hidden-parent-id-order']) && $_POST['hidden-parent-id-order'] > 0 ) {
+			$parent_ID_order = (int) $_POST['hidden-parent-id-order'] + 1;
+		}
+		$new_order = $_POST['hidden-custom-order'];
+		$IDs = explode(",", $new_order);
+		$ids = Array();
+		$result = count($IDs);
+		for ( $i = 0; $i < $result; $i++ ) {
+			$term_id = (int) str_replace("id_", "", $IDs[$i]);
+			$term_order = $i + $parent_ID_order;
+
+			customtaxorder_set_db_term_order( $term_id, $term_order );
+
+			$ids[] = $term_id;
+		}
+		echo '<div id="message" class="updated fade notice is-dismissible"><p>'. __('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';
+		do_action('customtaxorder_update_order', $ids);
+	} else {
+		echo '<div id="message" class="error fade notice is-dismissible"><p>'. __('An error occured, order has not been saved.', 'custom-taxonomy-order-ne').'</p></div>';
+	}
+}
+
+
+/*
+ * Function to give dropdown options for the list of sub-terms.
+ */
+function customtaxorder_sub_query( $terms, $tax ) {
+	$options = '';
+	if ( isset( $terms ) && is_array( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$subterms = get_term_children( $term->term_id, $tax );
+			if ( $subterms ) {
+				$options .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+			}
+		}
+	}
+	return $options;
 }
