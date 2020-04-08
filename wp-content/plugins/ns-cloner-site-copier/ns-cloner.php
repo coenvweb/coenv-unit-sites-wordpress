@@ -3,11 +3,11 @@
  * Plugin Name: NS Cloner - Site Copier
  * Plugin URI: https://neversettle.it
  * Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out NS Cloner Pro for additional powerful add-ons and features!
- * Version: 4.0.0
+ * Version: 4.0.7
  * Author: Never Settle
  * Author URI: https://neversettle.it
  * Requires at least: 3.5
- * Tested up to: 5.0.1
+ * Tested up to: 5.3.2
  *
  * Text Domain: ns-cloner
  * Domain Path: /languages
@@ -63,7 +63,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.0.0';
+	public $version = '4.0.7';
 
 	/**
 	 * Menu Slug
@@ -165,6 +165,7 @@ final class NS_Cloner {
 
 	/**
 	 * List of hooks that should not be logged, since by default all hooks beginning with ns_cloner are
+	 *
 	 * @var array
 	 */
 	private $hidden_hooks = [];
@@ -337,7 +338,7 @@ final class NS_Cloner {
 				array(
 					'nonce'       => wp_create_nonce( 'ns_cloner' ),
 					'ajaxurl'     => admin_url( '/admin-ajax.php' ),
-					'loading_img'  => NS_CLONER_V4_PLUGIN_URL . 'images/spinner.gif',
+					'loading_img' => NS_CLONER_V4_PLUGIN_URL . 'images/spinner.gif',
 					'in_progress' => $this->process_manager->is_in_progress(),
 				)
 			);
@@ -464,7 +465,8 @@ final class NS_Cloner {
 			$global_pattern    = "/^{$this->db->base_prefix}(" . implode( '|', $all_global_tables ) . ')$/';
 			$subsite_pattern   = "/^{$this->db->base_prefix}\d+_/";
 			$temp_pattern      = '/^' . ns_cloner()->temp_prefix . '/';
-			$all_tables        = $this->db->get_col( 'SHOW TABLES' );
+			$prefix            = $this->db->esc_like( $this->db->base_prefix );
+			$all_tables        = $this->db->get_col( "SHOW TABLES LIKE '{$prefix}%'" );
 			$tables            = [];
 			foreach ( $all_tables as $table ) {
 				$is_global_table  = preg_match( $global_pattern, $table );
@@ -779,7 +781,7 @@ final class NS_Cloner {
 					$this->log->log_break();
 					$this->log->log( "STARTING clone step {$callback_ref}." );
 					// Make sure a previous step didn't trigger an error, and that this step isn't disabled by filters.
-					$do_step = empty( $this->report->get_report( '_error' ) );
+					$do_step = empty( $this->report->get_report( '_error' ) ) && ! get_site_option( 'ns_cloner_exited' );
 					if ( apply_filters( "ns_cloner_do_step_{$callback_name}", $do_step ) ) {
 						call_user_func( $callback );
 					} else {

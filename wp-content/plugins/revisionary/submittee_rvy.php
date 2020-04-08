@@ -16,7 +16,7 @@ class Revisionary_Submittee {
 		if ( $customize_defaults )
 			$sitewide = true;		// default customization is only for per-site options, but is network-wide in terms of DB storage in sitemeta table
 		
-		if ( false === strpos( $_GET["page"], 'rvy-' ) )
+		if ( false === strpos( $_GET["page"], 'revisionary-' ) && false === strpos( $_GET["page"], 'rvy-' ) )
 			return;
 		
 		if ( empty($_POST['rvy_submission_topic']) )
@@ -45,7 +45,7 @@ class Revisionary_Submittee {
 		$this->update_page_options( $sitewide, $customize_defaults );
 		
 		global $wpdb;
-		$wpdb->query( "UPDATE $wpdb->options SET autoload = 'no' WHERE option_name LIKE 'rvy_%' AND option_name != 'rvy_next_rev_publish_gmt'" );
+		$wpdb->query( "UPDATE $wpdb->options SET autoload = 'no' WHERE (option_name LIKE 'rvy_%' OR option_name LIKE 'revisionary_%') AND option_name != 'rvy_next_rev_publish_gmt'" );
 	}
 	
 	function default_options( $sitewide = false, $customize_defaults = false ) {

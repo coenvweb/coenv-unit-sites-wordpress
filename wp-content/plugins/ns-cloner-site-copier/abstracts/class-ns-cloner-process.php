@@ -53,6 +53,26 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	public $report_label = '';
 
 	/**
+	 * Push to queue, modified to limit to a maximum batch size.
+	 *
+	 * @param mixed $data Data.
+	 *
+	 * @return $this
+	 */
+	public function push_to_queue( $data ) {
+		$this->data[] = $data;
+
+		// Check for exceeding maximum batch size.
+		$max_batch = apply_filters( $this->identifier . '_max_batch', 5000 );
+		if ( count( $this->data ) >= $max_batch ) {
+			ns_cloner()->log->log( "REACHING max batch of *$max_batch* in queue - autosaving and starting new" );
+			$this->save();
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Save queue
 	 *
 	 * @return $this
@@ -63,6 +83,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 			// Save the batch/queue items themselves.
 			update_site_option( $this->batch_key, $this->data );
 			ns_cloner()->log->log( "SAVING batch for $this->identifier with " . count( $this->data ) . ' items.' );
+			ns_cloner()->log->handle_any_db_errors();
 			// Save progress data for this batch.
 			// If we want to have an item whose progress is not tracked, we can add 'ignore_progress' to it.
 			// Only items without an ignore_progress key will affect the total and completed progress values.
@@ -86,6 +107,15 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	}
 
 	/**
+	 * Get a nonce for dispatching this process.
+	 *
+	 * @return string
+	 */
+	public function get_nonce() {
+		return wp_create_nonce( $this->identifier );
+	}
+
+	/**
 	 * Dispatch process
 	 *
 	 * Modify this to immediately run complete if the queue is empty,
@@ -95,60 +125,95 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		if ( $this->is_queue_empty() ) {
 			$this->complete();
 		} else {
-			parent::dispatch();
+			update_site_option( "{$this->identifier}_dispatched", time() );
+			ns_cloner()->log->log( "DISPATCHING *$this->identifier* to " . add_query_arg( $this->get_query_args(), $this->get_query_url() ) );
+			$response = parent::dispatch();
+			ns_cloner()->log->log( [ 'RECEIVED response to dispatch', $response ] );
 		}
 		return $this;
 	}
 
 	/**
-	 * Lock process
+	 * Is process running
 	 *
-	 * Add delay to locking to prevent race conditions
+	 * Change this from protected in the parent to public visibility here,
+	 * and use lock method that does hard write to the db to prevent overlap.
+	 *
+	 * @return bool
 	 */
-	protected function lock_process() {
-		$this->start_time = time(); // Set start time of current process.
-		$this->lock_id    = wp_generate_password();
-
-		$lock_duration = ( property_exists( $this, 'queue_lock_time' ) ) ? $this->queue_lock_time : 60; // 1 minute
-		$lock_duration = apply_filters( $this->identifier . '_queue_lock_time', $lock_duration );
-		$lock_delay    = apply_filters( 'ns_cloner_process_delay', 1 );
-		$lock_key      = $this->identifier . '_process_lock';
-
-		// Set lock, then wait 1 second to make sure a simultaneous lock hasn't been set.
-		// Query DB directly because cache won't know if another instance overwrote the lock.
-		set_site_transient( $lock_key, $this->lock_id, $lock_duration );
-		ns_cloner()->log->log( "LOCKING *$this->identifier* instance $this->lock_id" );
-		sleep( $lock_delay );
-		$table        = is_multisite() ? ns_cloner()->db->sitemeta : ns_cloner()->db->options;
-		$key_column   = is_multisite() ? 'meta_key' : 'option_name';
-		$val_column   = is_multisite() ? 'meta_value' : 'option_value';
-		$current_lock = ns_cloner()->db->get_var(
-			ns_cloner()->db->prepare(
-				"SELECT {$val_column} FROM {$table} WHERE {$key_column} = %s",
-				'_site_transient_' . $lock_key
+	public function is_process_running() {
+		ns_cloner()->process_manager->doing_cloning();
+		$lock_value = ns_cloner()->db->get_var(
+			ns_prepare_option_query(
+				'SELECT {value} FROM {table} WHERE {key} = %s',
+				$this->identifier . '_lock'
 			)
 		);
-		ns_cloner()->log->log( "CHECKING for lock on $this->lock_id. Current lock: $current_lock" );
+		if ( isset( $_REQUEST['force_process'] ) ) {
+			ns_cloner()->log->log( "FORCING manual run for *$this->identifier* - overriding any existing instances" );
+			if ( $lock_value ) {
+				ns_cloner()->log->log( "FOUND existing lock $lock_value so deleting it" );
+				ns_cloner()->db->query(
+					ns_prepare_option_query(
+						'DELETE FROM {table} WHERE {key} = %s',
+						$this->identifier . '_lock'
+					)
+				);
+			}
+		} elseif ( empty( $lock_value ) ) {
+			ns_cloner()->log->log( "CHECKING for running *$this->identifier* - none found" );
+			return false;
+		} elseif ( $lock_value === $this->lock_id ) {
+			ns_cloner()->log->log( "CHECKING for running *$this->identifier* - the running process is the current one ($this->lock_id)" );
+			return false;
+		} else {
+			ns_cloner()->log->log( "CHECKING for running *$this->identifier* - found $lock_value" );
+			return true;
+		}
+	}
 
+	/**
+	 * Lock process
+	 *
+	 * Add delay to locking to prevent race conditions, and modified to use direct database
+	 * calls rather than transients, because transients can caching
+	 */
+	protected function lock_process() {
+		// Set start time so we can track and avoid timeout.
+		$this->start_time = time();
+		// Generate unique id for this lock/instance - lets us check in is_process_running()
+		// whether the set lock belongs to the current session/instance or another one.
+		$this->lock_id = wp_generate_password();
+		// Save the lock to db.
+		ns_cloner()->log->log( "LOCKING *$this->identifier* with id $this->lock_id" );
+		ns_cloner()->db->query(
+			ns_prepare_option_query(
+				'INSERT INTO {table} ({key}, {value}) VALUES (%s, %s)',
+				[ $this->identifier . '_lock', $this->lock_id ]
+			)
+		);
+		// Then wait 0.5 seconds to make sure a simultaneous lock hasn't been set.
+		// Query DB directly because cache won't know if another instance overwrote the lock.
 		// If the set lock isn't from this (earlier) instance, bail and let the later instance take over.
-		if ( $current_lock !== $this->lock_id ) {
+		usleep( apply_filters( 'ns_cloner_process_lock_delay', 0.5 * 1000000 ) );
+		if ( $this->get_lock() !== $this->lock_id ) {
 			ns_cloner()->log->log( "DETECTED simultaneous *$this->identifier* - ending" );
 			exit;
 		}
 	}
 
 	/**
-	 * Unlock process
+	 * Get the current lock instance id for a process, if present
 	 *
-	 * Unlock the process so that other instances can spawn.
-	 * Modified to include after_handle() - see that function for details.
-	 *
-	 * @return $this
+	 * @return string|null
 	 */
-	protected function unlock_process() {
-		$this->after_handle();
-		parent::unlock_process();
-		return $this;
+	protected function get_lock() {
+		return ns_cloner()->db->get_var(
+			ns_prepare_option_query(
+				'SELECT {value} FROM {table} WHERE {key} = %s',
+				$this->identifier . '_lock'
+			)
+		);
 	}
 
 	/**
@@ -157,11 +222,14 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * Pass each queue item to the task handler, while remaining
 	 * within server memory and time limit constraints.
 	 */
-	protected function handle() {
+	public function handle() {
 		// Initialize sections because this is what all the section hooks get set up on.
 		ns_cloner()->process_manager->doing_cloning();
 		ns_cloner()->log->log_break();
 		ns_cloner()->log->log( "HANDLING <b>$this->action</b> async request" );
+		ns_cloner()->log->log( [ 'DISPATCHED from:', isset( $_REQUEST['ajax'] ) ? 'client' : 'server' ] );
+		// Remove dispatched flag/timestamp so frontend won't keep dispatching it.
+		delete_site_option( "{$this->identifier}_dispatched" );
 		// Pass back to parent for handling.
 		parent::handle();
 	}
@@ -198,6 +266,25 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	}
 
 	/**
+	 * Unlock process
+	 *
+	 * Unlock the process so that other instances can spawn.
+	 * Modified to include after_handle() - see that function for details.
+	 *
+	 * @return $this
+	 */
+	protected function unlock_process() {
+		$this->after_handle();
+		ns_cloner()->db->query(
+			ns_prepare_option_query(
+				'DELETE FROM {table} WHERE {key} = %s',
+				$this->identifier . '_lock'
+			)
+		);
+		return $this;
+	}
+
+	/**
 	 * Run actions after completing a set of tasks.
 	 *
 	 * This is so we have a way to do a complete-type action that runs not just at the veru end but after each
@@ -205,7 +292,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * version of itself). That's useful for submitting remote requests, saving progress, anything that
 	 * needs current state of cross-task variables.
 	 */
-	protected function after_handle(){
+	protected function after_handle() {
 		$progress = $this->get_batch_progress( $this->batch_key );
 		$this->update_batch_progress(
 			$this->batch_key,
@@ -220,6 +307,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * performed, or, call parent::complete().
 	 */
 	protected function complete() {
+		ns_cloner()->log->log( "COMPLETING *$this->identifier*" );
 		parent::complete();
 		// Add action so that dependent processes can start.
 		do_action( $this->identifier . '_complete' );
@@ -237,9 +325,12 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * any scheduled cron health check in the future.
 	 */
 	public function cancel() {
-		$table  = is_multisite() ? ns_cloner()->db->sitemeta : ns_cloner()->db->options;
-		$column = is_multisite() ? 'meta_key' : 'option_name';
-		ns_cloner()->db->query( "DELETE FROM {$table} WHERE {$column} LIKE '{$this->identifier}_%'" );
+		ns_cloner()->db->query(
+			ns_prepare_option_query(
+				'DELETE FROM {table} WHERE {key} LIKE %s',
+				$this->identifier . '_%'
+			)
+		);
 		wp_clear_scheduled_hook( $this->cron_hook_identifier );
 		ns_cloner()->log->log( "ENDING $this->action background process and clearing data." );
 	}
@@ -256,14 +347,36 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	}
 
 	/**
-	 * Is process running
+	 * Time exceeded.
 	 *
-	 * Change this from protected in the parent to public visibility here
+	 * Uses parent's time checking, but adds checking for if the cloner has exited.
+	 * This is because a process could load a large batch of items into it's memory,
+	 * and then just keep looping through them even after 'exit' has been called,
+	 * which can make the manual cancel button not work. Still, we don't want to
+	 * check EVERY single item because that will decrease performance. Checking
+	 * every 5 items is the compromise.
 	 *
 	 * @return bool
 	 */
-	public function is_process_running() {
-		return parent::is_process_running();
+	protected function time_exceeded() {
+		// Task count will count from 1-5 and then start over - see task() - so check for exit flag every 5th task.
+		if ( 1 === $this->task_count ) {
+			// Check exited flag directly to bypass options cache.
+			$exited = ns_cloner()->db->get_var(
+				ns_prepare_option_query(
+					'SELECT {value} FROM {table} WHERE {key} = %s',
+					'ns_cloner_exited'
+				)
+			);
+			if ( $exited ) {
+				// Need to call cancel, even though it will have already been called once,
+				// to erase the extra progress records that may after been recorded since then.
+				$this->cancel();
+				return true;
+			}
+		}
+		// Normally just use inherited time checking.
+		return parent::time_exceeded();
 	}
 
 	/**
@@ -272,6 +385,10 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * @return stdClass
 	 */
 	public function get_batch() {
+		// Use this as a convenient hook to check for a newer log file, and keep long running
+		// background processes from writing to the same log file forever and making it gigantic.
+		ns_cloner()->log->refresh();
+		// Get batch and store key.
 		$batch           = parent::get_batch();
 		$this->batch_key = $batch->key;
 		return $batch;
@@ -295,17 +412,13 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * @return array
 	 */
 	private function get_batches() {
-		$batches    = [];
-		$table      = is_multisite() ? ns_cloner()->db->sitemeta : ns_cloner()->db->options;
-		$column     = is_multisite() ? 'meta_key' : 'option_name';
-		$key_column = is_multisite() ? 'meta_id' : 'option_id';
-		$val_column = is_multisite() ? 'meta_value' : 'option_value';
+		$batches = [];
 		// Get all progress records for this bg process.
 		$progress_rows = ns_cloner()->db->get_results(
-			"SELECT {$column} as 'key', {$val_column} as 'value'
-				FROM {$table}
-				WHERE {$column} LIKE '{$this->identifier}_progress_%'
-				ORDER BY {$key_column} ASC"
+			ns_prepare_option_query(
+				"SELECT {key} as 'key', {value} as 'value' FROM {table} WHERE {key} LIKE %s	ORDER BY {id} ASC",
+				$this->identifier . '_progress_%'
+			)
 		);
 		foreach ( $progress_rows as $row ) {
 			$batch_key = str_replace( 'progress', 'batch', $row->key );

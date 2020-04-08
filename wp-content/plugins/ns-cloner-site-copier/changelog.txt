@@ -1,3 +1,19 @@
+= 4.0.2 - 2019.08.15 =
+* Fix timing conflicts for cleanup tasks.
+* Fix issue where process would keep running after manually cancelling.
+* Rewrite row processing class for much better performance and fewer queries.
+* Add fallback AJAX process dispatching for environments where background requests stall.
+* Add queue batching for large tables.
+* Improve debug logging.
+
+= 4.0.1 - 2019.07.26 =
+* Fix lock timing on background processes to prevent frozen or conflicting processes.
+* Fix handling for SQL views - exclude from table cloning and create at end instead.
+* Fix empty target site url caused by object caching on some servers.
+
+= 4.0.0 - 2019.07.22 =
+* Release all new rebuilt V4.
+
 = 3.0.7 =
 * Replaced deprecated wp_get_sites() with get_sites()
 

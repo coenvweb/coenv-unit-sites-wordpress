@@ -3,7 +3,7 @@ Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 3.0.1
-Tested up to: 5.2.1
+Tested up to: 5.3.2
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv2 or later
@@ -101,7 +101,45 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
-= 4.0.0 - 2019.06.10 =
+= 4.0.7 - 2020.01.30 =
+* Fix non-prefixed custom tables being included in root site clone
+* Fix private/public blog property not being reflected on cloned sites
+
+= 4.0.6 - 2020.01.13 =
+* Update admin styles for WP 5.3 UI changes
+* Add new recovery capability for stalled cloning processes
+* Fix bugs with serialized search/replace updates, unnecessary sitemeta cloning
+
+= 4.0.5 - 2019.10.17 =
+* Enable number-only site names
+* Add automatic cache-flush at end of cloning for WPEngine sites
+* Fix memory/time overload when queueing very large tables
+* Fix misc. plugin compatibility issues
+
+= 4.0.4 - 2019.09.02 =
+* Fix database handling for null values
+* Fix fatal site creation error in pre-5.1 WordPress
+* Fix error on servers that don't allow multiple SQL statements in one query
+* Fix misc other bugs and plugin compatibility issues
+
+= 4.0.3 - 2019.08.19 =
+* Fix missing rows due to lost insert or incorrect row query
+* Fix max_allowed_packet database error
+
+= 4.0.2 - 2019.08.15 =
+* Fix timing conflicts for cleanup tasks.
+* Fix issue where process would keep running after manually cancelling.
+* Rewrite row processing class for much better performance and fewer queries.
+* Add fallback AJAX process dispatching for environments where background requests stall.
+* Add queue batching for large tables.
+* Improve debug logging.
+
+= 4.0.1 - 2019.07.26 =
+* Fix lock timing on background processes to prevent frozen or conflicting processes.
+* Fix handling for SQL views - exclude from table cloning and create at end instead.
+* Fix empty target site url caused by object caching on some servers.
+
+= 4.0.0 - 2019.07.22 =
 * Release all new rebuilt V4.
 
 == Upgrade Notice ==

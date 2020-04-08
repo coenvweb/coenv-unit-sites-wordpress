@@ -24,6 +24,10 @@ Require shibboleth
 # Added by request for UW-IT
 RewriteRule ^(server-|PubCookie\.reply) - [L]
 
+#don't look at our git
+RewriteRule "^(.*/)?\.git/" - [F,L]
+RedirectMatch 404 /\.git
+
 # block super aggresive baidu spider
 RewriteCond %{HTTP_USER_AGENT} ^Baiduspider.* [NC]
 RewriteRule .* - [F]
@@ -57,6 +61,12 @@ php_value suhosin.request.max_vars 3000
 
 RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
+
+RewriteCond %{HTTP_HOST} futurerivers.washington.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
+
+RewriteCond %{HTTP_HOST} futurerivers.uw.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
 
 RewriteCond %{HTTP_HOST} cig.washington.edu [NC]
 RewriteRule ^(.*)$ http://cig.uw.edu/$1 [R=301,NC]
@@ -541,6 +551,11 @@ RewriteRule ^planning-wisely-for-natural-hazards/$ news-and-events/topic/hazards
 RewriteRule ^protecting-ocean-health/$ members-and-affiliates/washington-ocean-acidification-center/ [R=301,L]
 RewriteRule ^sustaining-healthy-ecosystems/$ members-and-affiliates/doris-duke-conservation-scholars/ [R=301,L]
 RewriteRule ^walker2019 news-and-events/walker-lecture-series/ [R=302,L]
+
+# Future Rivers Redirects
+RewriteCond %{HTTP_HOST} !^futurerivers.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^ https://earthlab.uw.edu/future-rivers/ [R=302,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]

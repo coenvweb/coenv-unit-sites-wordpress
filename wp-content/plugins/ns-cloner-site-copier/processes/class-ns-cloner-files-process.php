@@ -29,6 +29,9 @@ class NS_Cloner_Files_Process extends NS_Cloner_Process {
 	public function __construct() {
 		parent::__construct();
 		$this->report_label = __( 'Files', 'ns-cloner' );
+
+		// Set a lower maximum batch size for files since queue items are bigger (more text for paths).
+		add_filter( $this->identifier . '_max_batch', [ $this, 'max_batch' ] );
 	}
 
 	/**
@@ -79,6 +82,16 @@ class NS_Cloner_Files_Process extends NS_Cloner_Process {
 			return false;
 		}
 
+	}
+
+	/**
+	 * Set a lower maximum batch size for files since queue items are bigger (more text for paths).
+	 *
+	 * @param int $max Default maximum number of batch items.
+	 * @return int
+	 */
+	public function max_batch( $max ){
+		return 2500;
 	}
 
 }

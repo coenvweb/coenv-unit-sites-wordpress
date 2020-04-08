@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 4.9
-Stable tag: 2.10.0
+Tested up to: 5.3
+Stable tag: 3.0.1
 License: GPLv2 or later
 
 
@@ -25,6 +25,10 @@ It supports the following features:
 * Custom functions to order the taxonomies themselves.
 * There is no Pro version, everything works in the Free version.
 
+= Compatibility =
+
+This plugin is compatible with [ClassicPress](https://www.classicpress.net).
+
 
 == Installation ==
 
@@ -35,9 +39,18 @@ It supports the following features:
 5. Optionally set `'orderby' => 'term_order', 'order' => 'ASC'` to manually sort queries by this order.
 6. Enjoy!
 
-== Upgrade Notice ==
+= Upgrade Notice =
 
 If you update from the original Custom Taxonomy Order please deactivate that first, then activate this plugin.
+
+= Removal of database changes =
+
+First you can disable the plugin. Then in wp_options you can delete the field:
+* customtaxorder_settings
+* customtaxorder_taxonomies
+
+In wp_terms you can remove the column
+* term_order
 
 == Frequently Asked Questions ==
 
@@ -147,6 +160,18 @@ The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 == Changelog ==
+
+= 3.0.1 =
+* 2020-01-07
+* Add taxonomy parameter to get_term call for compatibility with WP 4.3.
+
+= 3.0.0 =
+* 2019-12-21
+* Always overwrite orderby according to our settings.
+* Add option to sort by slug.
+* Support new wp_initialize_site action for multisite.
+* Simplify checking for Link Manager plugin.
+* Small fixes found by the phan tool.
 
 = 2.10.0 =
 * 2018-10-17

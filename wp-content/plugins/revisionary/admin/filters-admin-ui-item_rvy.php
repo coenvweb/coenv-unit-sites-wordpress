@@ -52,6 +52,7 @@ class RevisionaryAdminFiltersItemUI {
 <?php
 global $revisionary;
 if ( ! $revisionary->isBlockEditorActive() ) :?>
+	
 <script type="text/javascript">
 /* <![CDATA[ */
 jQuery(document).ready( function($) {
@@ -63,11 +64,25 @@ jQuery(document).ready( function($) {
 });
 /* ]]> */
 </script>
+
 <?php endif;?>
 
-<style>
-div.num-revisions, #post-preview{ display:none; }
-</style>
+	<?php
+	$type_obj = get_post_type_object($post->post_type);
+	//$can_publish = $type_obj && agp_user_can($type_obj->cap->edit_post, rvy_post_id($post->ID), '', array('skip_revision_allowance' => true));
+	
+	// Use simpler criteria due to early execution of revisions.php access check in revisionary_main.php
+	$can_publish = $type_obj && (
+		isset($type_obj->cap->edit_published_posts)
+		&& !empty($current_user->allcaps[$type_obj->cap->edit_published_posts]) 
+		&& (($current_user->ID == $parent_post->ID) || !empty($current_user->allcaps[$type_obj->cap->edit_published_posts]))
+	);
+
+	if (!$can_publish):?>
+	<style>
+	div.num-revisions, div.misc-pub-revisions {display:none;}
+	</style>
+	<?php endif;?>
 <?php
 	}
 	
@@ -115,7 +130,7 @@ div.num-revisions, #post-preview{ display:none; }
 			return;
 
 		$object_id = rvy_detect_post_id();
-		
+
 		// This block will be moved to separate class
 		foreach ( $wp_meta_boxes[$object_type] as $context => $priorities ) {
 			foreach ( $priorities as $priority => $boxes ) {
@@ -123,11 +138,11 @@ div.num-revisions, #post-preview{ display:none; }
 					// Remove Scheduled / Pending Revisions metabox if none will be listed
 					// If a listing does exist, buffer it for subsequent display
 					if ( 'pending_revisions' == $box_id ) {
-						if ( ! $object_id || ! $this->pending_revisions = rvy_list_post_revisions( $object_id, 'pending', array( 'format' => 'list', 'parent' => false, 'echo' => false ) ) )
+						if ( ! $object_id || ! $this->pending_revisions = rvy_list_post_revisions( $object_id, 'pending-revision', array( 'format' => 'list', 'parent' => false, 'echo' => false ) ) )
 							unset( $wp_meta_boxes[$object_type][$context][$priority][$box_id] );
 					
 					} elseif ( 'future_revisions' == $box_id ) {
-						if ( ! $object_id || ! $this->future_revisions = rvy_list_post_revisions( $object_id, 'future', array( 'format' => 'list', 'parent' => false, 'echo' => false ) ) )
+						if ( ! $object_id || ! $this->future_revisions = rvy_list_post_revisions( $object_id, 'future-revision', array( 'format' => 'list', 'parent' => false, 'echo' => false ) ) )
 							unset( $wp_meta_boxes[$object_type][$context][$priority][$box_id] );
 							
 					// Remove Revision Notification List metabox if this user is NOT submitting a pending revision

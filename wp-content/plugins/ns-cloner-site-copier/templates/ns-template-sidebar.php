@@ -67,28 +67,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="ns-side-widget ns-random-widget">
-		<h5><?php esc_html_e( 'Highlighted Plugin', 'ns-cloner' ); ?></h5>
-		<div class="ns-side-widget-content">
-			<?php
-			$feed = fetch_feed( 'http://neversettle.it/feed/?post_type=product&product_cat=wordpress-plugins' );
-			if ( ! is_wp_error( $feed ) && is_array( $feed->get_items() ) && count( $feed->get_items() ) > 0 ) :
-				$items        = array_filter(
-					$feed->get_items(),
-					function ( $i ) {
-						return false === strpos( $i->get_link(), 'ns-cloner' );
-					}
-				);
-				$random       = $items[ array_rand( $items ) ];
-				$thumbnail_el = $random->get_item_tags( 'http://neversettle.it/', 'thumbnail' );
-				?>
-				<a href="<?php echo esc_url( $random->get_link() ); ?>" target="_blank">
-					<img style="max-width:100%; width:100%; margin-bottom:-5px;" src="<?php echo esc_url( $thumbnail_el[0]['data'] ); ?>" alt="Random Product" />
-				</a>
-			<?php endif; ?>
-		</div>
-	</div>
-
 	<div class="ns-side-widget ns-links-widget">
 		<h5>
 			<?php esc_html_e( 'Built by', 'ns-cloner' ); ?>

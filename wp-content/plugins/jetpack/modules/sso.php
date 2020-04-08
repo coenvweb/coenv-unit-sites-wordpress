@@ -1,5 +1,7 @@
 <?php
 
+use Automattic\Jetpack\Roles;
+use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Tracking;
 
 require_once( JETPACK__PLUGIN_DIR . 'modules/sso/class.jetpack-sso-helpers.php' );
@@ -15,7 +17,7 @@ require_once( JETPACK__PLUGIN_DIR . 'modules/sso/class.jetpack-sso-notices.php' 
  * Auto Activate: No
  * Module Tags: Developers
  * Feature: Security
- * Additional Search Queries: sso, single sign on, login, log in
+ * Additional Search Queries: sso, single sign on, login, log in, 2fa, two-factor
  */
 
 class Jetpack_SSO {
@@ -35,7 +37,7 @@ class Jetpack_SSO {
 		add_action( 'login_form_logout',               array( $this, 'store_wpcom_profile_cookies_on_logout' ) );
 		add_action( 'jetpack_unlinked_user',           array( $this, 'delete_connection_for_user') );
 		add_action( 'wp_login',                        array( 'Jetpack_SSO', 'clear_cookies_after_login' ) );
-		add_action( 'jetpack_jitm_received_envelopes', array( $this, 'inject_sso_jitm' ) );
+		add_action( 'jetpack_jitm_received_envelopes', array( $this, 'inject_sso_jitm' ), 10, 2 );
 
 		// Adding this action so that on login_init, the action won't be sanitized out of the $action global.
 		add_action( 'login_form_jetpack-sso', '__return_true' );
@@ -147,7 +149,7 @@ class Jetpack_SSO {
 		// Always add the jetpack-sso class so that we can add SSO specific styling even when the SSO form isn't being displayed.
 		$classes[] = 'jetpack-sso';
 
-		if ( ! Jetpack::is_staging_site() ) {
+		if ( ! ( new Status() )->is_staging_site() ) {
 			/**
 			 * Should we show the SSO login form?
 			 *
@@ -351,7 +353,7 @@ class Jetpack_SSO {
 				$this->handle_login();
 				$this->display_sso_login_form();
 			} else {
-				if ( Jetpack::is_staging_site() ) {
+				if ( ( new Status() )->is_staging_site() ) {
 					add_filter( 'login_message', array( 'Jetpack_SSO_Notices', 'sso_not_allowed_in_staging' ) );
 				} else {
 					// Is it wiser to just use wp_redirect than do this runaround to wp_safe_redirect?
@@ -400,7 +402,7 @@ class Jetpack_SSO {
 		add_filter( 'login_body_class', array( $this, 'login_body_class' ) );
 		add_action( 'login_head',       array( $this, 'print_inline_admin_css' ) );
 
-		if ( Jetpack::is_staging_site() ) {
+		if ( ( new Status() )->is_staging_site() ) {
 			add_filter( 'login_message', array( 'Jetpack_SSO_Notices', 'sso_not_allowed_in_staging' ) );
 			return;
 		}
@@ -595,7 +597,7 @@ class Jetpack_SSO {
 		if ( ! $wpcom_user_id = get_user_meta( $user_id, 'wpcom_user_id', true ) ) {
 			return;
 		}
-		Jetpack::load_xml_rpc_client();
+
 		$xml = new Jetpack_IXR_Client( array(
 			'wpcom_user_id' => $user_id,
 		) );
@@ -619,7 +621,6 @@ class Jetpack_SSO {
 			: false;
 
 		if ( ! $nonce ) {
-			Jetpack::load_xml_rpc_client();
 			$xml = new Jetpack_IXR_Client( array(
 				'user_id' => get_current_user_id(),
 			) );
@@ -651,7 +652,6 @@ class Jetpack_SSO {
 		$wpcom_nonce   = sanitize_key( $_GET['sso_nonce'] );
 		$wpcom_user_id = (int) $_GET['user_id'];
 
-		Jetpack::load_xml_rpc_client();
 		$xml = new Jetpack_IXR_Client( array(
 			'user_id' => get_current_user_id(),
 		) );
@@ -687,8 +687,10 @@ class Jetpack_SSO {
 				'error_message' => 'error_msg_enable_two_step'
 			) );
 
+			$error = new WP_Error( 'two_step_required', __( 'You must have Two-Step Authentication enabled on your WordPress.com account.', 'jetpack' ) );
+
 			/** This filter is documented in core/src/wp-includes/pluggable.php */
-			do_action( 'wp_login_failed', $user_data->login );
+			do_action( 'wp_login_failed', $user_data->login, $error );
 			add_filter( 'login_message', array( 'Jetpack_SSO_Notices', 'error_msg_enable_two_step' ) );
 			return;
 		}
@@ -787,12 +789,13 @@ class Jetpack_SSO {
 
 			$json_api_auth_environment = Jetpack_SSO_Helpers::get_json_api_auth_environment();
 
-			$is_json_api_auth = ! empty( $json_api_auth_environment );
+			$is_json_api_auth  = ! empty( $json_api_auth_environment );
 			$is_user_connected = Jetpack::is_user_connected( $user->ID );
+			$roles             = new Roles();
 			$tracking->record_user_event( 'sso_user_logged_in', array(
 				'user_found_with'  => $user_found_with,
 				'user_connected'   => (bool) $is_user_connected,
-				'user_role'        => Jetpack::translate_current_user_to_role(),
+				'user_role'        => $roles->translate_current_user_to_role(),
 				'is_json_api_auth' => (bool) $is_json_api_auth,
 			) );
 
@@ -830,8 +833,11 @@ class Jetpack_SSO {
 		) );
 
 		$this->user_data = $user_data;
+
+		$error = new WP_Error( 'account_not_found', __( 'Account not found. If you already have an account, make sure you have connected to WordPress.com.', 'jetpack' ) );
+
 		/** This filter is documented in core/src/wp-includes/pluggable.php */
-		do_action( 'wp_login_failed', $user_data->login );
+		do_action( 'wp_login_failed', $user_data->login, $error );
 		add_filter( 'login_message', array( 'Jetpack_SSO_Notices', 'cant_find_user' ) );
 	}
 
@@ -1086,13 +1092,21 @@ class Jetpack_SSO {
 	 *
 	 * @since 6.9.0
 	 *
-	 * @param array $envelopes Array of JITM messages received after API call.
+	 * @param array  $envelopes    Array of JITM messages received after API call.
+	 * @param string $message_path The message path to ask for.
 	 *
 	 * @return array $envelopes New array of JITM messages. May now contain only one message, about SSO.
 	 */
-	public function inject_sso_jitm( $envelopes ) {
-		// Bail early if that's not the first time the user uses SSO.
-		if ( true != Jetpack_Options::get_option( 'sso_first_login' ) ) {
+	public function inject_sso_jitm( $envelopes, $message_path = null) {
+		/*
+		 * Bail early if:
+		 * - the request does not originate from wp-admin main dashboard.
+		 * - that's not the first time the user uses SSO.
+		 */
+		if (
+			'wp:dashboard:admin_notices' !== $message_path
+			|| true !== Jetpack_Options::get_option( 'sso_first_login' )
+		) {
 			return $envelopes;
 		}
 

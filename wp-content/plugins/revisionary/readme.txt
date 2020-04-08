@@ -1,51 +1,294 @@
-=== Plugin Name ===
-Contributors: publishpress, kevinB, stevejburge, andergmartins
-Tags: revision, moderated editing, change submission, workflow, team publishing, access
-Requires at least: 4.1
-Tested up to: 5.2
-Stable Tag: 1.3.7
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+=== PublishPress Revisions: Submit, Moderate, Schedule and Approve Revisions ===
 
-Moderated editing of published content.  Following approval by an editor, the revision can be published immediately or scheduled.
+Contributors: publishpress, kevinB, stevejburge, andergmartins
+Author: PublishPress
+Author URI: https://publishpress.com
+Tags: revision, moderate, permissions, submit revisions, schedule revisions,
+Requires at least: 4.9.7
+Requires PHP: 5.6.20
+Tested up to: 5.3
+Stable tag: 2.2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+This plugin gives you control over updating published content. Users can submit revisions. You can approve or reject them.
 
 == Description ==
 
-Have you ever wanted to allow certain users to submit changes to published content, with an editor reviewing those changes before publication?
+WordPress Revisions are a powerful way to track where your site has been. But what about where it's going?
 
-Doesn't it seem like setting a published post/page to a future date should schedule your changes to be published on that date, instead of unpublishing it until that date?
+To moderate or schedule changes to published posts, just install PublishPress Revisions and let the teamwork begin. There is no need to learn or configure complex new screens because PublishPress Revisions works with familiar WordPress UI, including the Gutenberg and the Classic Editor.
 
-Revisionary enables qualified users to submit changes to currently published posts or pages.  Contributors also gain the ability to submit revisions to their own published content.  These changes, if approved by an Editor, can be published immediately or scheduled for future publication.
+= Submit Revisions =
+PublishPress Revisions allows your users to submit change requests for published posts. Your users can update posts using the normal WordPress editor, but their changes will not be published automatically. Instead, the changes are stored as a "pending revision" that can be approved or rejected.
+[Click here to see how to submit revisions](https://publishpress.com/knowledge-base/revisions-start/).
 
-= Partial Feature List =
-* Schedule or Request changes to published posts and pages using the Gutenberg Editor (or Classic Editor)
-* Supports Custom Post Types
-* Pending Revisions allow designated users to submit changes to currently published content.
-* Scheduled Revisions allow unrestricted editors to schedule changes, updating published content and date.
-* Pending Revisions can be published immediately, or scheduled.
-* Front-end preview display of Pending / Scheduled Revisions with "Publish Now" or "Schedule Now" link.
-* New WordPress role, "Revisor" is a moderated Editor.
-* Works with site-wide WordPress Roles, or in conjunction with <a href="https://presspermit.com">Press Permit</a> for page-specific or category-specific permissions.
+= Schedule Revisions =
+PublishPress Revisions allows you to schedule WordPress revisions to be published in the future. When you're editing a published post, all you need to do is select a future date and click "Schedule Revision". Your changes will be published at the specified time.
+[Click here to see how to schedule revisions](https://publishpress.com/knowledge-base/schedule-revisions-future/).
 
-= Support =
-* Revisionary is professionally supported by both the original author (Kevin Behrens) and the experienced <a href="https://publishpress.com">PublishPress</a> team.
+= Manage and Moderate Revisions =
+After you create a revision with PublishPress Revisions, you can find that revision on the Revision Queue screen. This screen shows you all the revisions that have been submitted for approval. Underneath each revision you can choose from several moderation tools: Edit, Delete, Preview and Compare.
+[Click here to see how to manage and moderate revisions](https://publishpress.com/knowledge-base/schedule-or-publish-revisions/).
 
+= Compare Revisions =
+Pending and Scheduled Revisions can include changes to post content, categories, tags, featured image, page parent and other options. Each of these changes can be reviewed in the familiar Compare Revisions interface.
+[Click here to see how to compare revisions](https://publishpress.com/knowledge-base/compare-revisions/).
+
+= Frontend Moderation of Revisions =
+It is possible to preview and moderate revisions via the frontend of your WordPress site. If you click Preview for a pending revision, you'll see a toolbar across the frontend of the site. This toolbar will change color so you can easily know the status of the revision. For example, if you're looking at a pending revision, the toolbar will be green. For scheduled revisions, the toolbar will be grey.
+[Click here to see how to manage from the frontend of your site](https://publishpress.com/knowledge-base/publishing-revisions-frontend/).
+
+= Email Notifications for Revisions =
+PublishPress Revisions will notify Administrators and Editors when a new revision is submitted. They can log in to preview, compare and approve the changes. PublishPress Revisions can also send emails for revision approval and publication. The Settings screen lets you disable unwanted notifications.
+[Click here for more on revision notifications](https://publishpress.com/knowledge-base/emails-revisionary/).
+
+= Revision Permissions =
+PublishPress Revisions works with the default WordPress user roles, and also introduces a Revisor role:
+
+* Contributors can submit revisions to their own published posts.
+* Revisors can submit revisions to posts and pages published by others.
+* Authors, Editors and Administrators can approve revisions or schedule their own revisions.
+
+To schedule changes to a published post, just set the desired future date before hitting Update.
+
+By upgrading to Revisions Pro, you also gain advanced permissions control through the PublishPress Permissions Pro plugin. You can customize permissions by role or per-user, granting full editing or revision submission rights to specific posts, categories, or taxonomy terms.
+[Click here for more on revision permissions](https://publishpress.com/knowledge-base/permissions-revisions).
+
+= Additional Features in the Pro Version =
+* Advanced Custom Fields integration
+* BeaverBuilder integration (front end revision submission)
+* WPML integration (revision queue follows language filter)
+* Pods compatibility
+* The Events Calendar compatibility
+* WooCommerce compatibility
+* Yoast SEO compatibility
+
+= Join PublishPress and get the Pro plugins =
+* [PublishPress Authors Pro](https://publishpress.com/authors) allows you to add multiple authors and guest authors to WordPress posts.
+* [PublishPress Capabilities Pro](https://publishpress.com/capabilities) is the plugin to manage your WordPress user roles, permissions, and capabilities.
+* [PublishPress Checklists Pro](https://publishpress.com/checklists) enables you to define tasks that must be completed before content is published.
+* [PublishPress Permissions Pro](https://publishpress.com/permissions) is the plugin for advanced WordPress permissions.
+* [PublishPress Pro](https://publishpress.com/publishpress) is the plugin for managing and scheduling WordPress content.
+* [PublishPress Revisions Pro](https://publishpress.com/revisions) allows you to update your published pages with teamwork and precision.
+
+The Pro versions of the PublishPress plugins are well worth your investment. The Pro versions have extra features and faster support. 
+[Click here to join PublishPress](https://publishpress.com/pricing/).
+
+Together, these plugins are a suite of powerful publishing tools for WordPress. If you need to create a professional workflow in WordPress, with moderation, revisions, permissions and more then you should try PublishPress.
+
+= Bug Reports =
+Bug reports for PublishPress Revisions are welcomed in our [repository on GitHub](https://github.com/publishpress/publishpress-revisions). Please note that GitHub is not a support forum, and that issues that aren't properly qualified as bugs will be closed.
+
+= Follow the PublishPress team = 
+Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitter](https://www.twitter.com/publishpresscom) and [YouTube](https://www.youtube.com/publishpress)
 
 == Screenshots ==
 
-1. Pending Revision Submission
-2. Email Notification Recipients
+1. Low-level user submits a "Pending Revision" to a Published Page 
+2. Email Notification Recipients (optionally adjustable)
 3. Pending Revision Confirmation
 4. Pending Revisions in Dashboard Right Now Count
-5. Pending Revisions in Edit Pages Listing
-6. Pending Revision Preview / Approval
-7. Pending Revision Difference Display
-8. Scheduled Revision Creation (unrestricted editor)
-9. Scheduled Revision Confirmation
-10. Scheduled Revisions in Publishing Soon list
-11. Revisions Manager
+5. Revision Queue: filterable list of Pending, Scheduled Revisions
+6. Revision Queue actions
+7. Pending Revision Revision Preview / Approval
+8. Compare Pending and Scheduled Revisions using the familiar UI
+9. Scheduled Revision Creation (unrestricted editor)
+10. Scheduled Revision Confirmation
+11. Scheduled Revision Preview
+12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.2 - 12 Feb 2020 =
+* Feature : Email Notification - option to notify Editors and Administrators when a Pending Revision is approved
+* Fixed : Block Editor - Custom Taxonomies, if unchanged, were not saved to revision. Publication of revision cleared custom taxonomies for published post.
+* Fixed : Block Editor - Error setting Featured Image
+* Fixed : Revisions submitted by Administrators or Editors using "Pending Revision" checkbox caused published post title and content to be cleared if a future publish date was also selected
+* Compat : PublishPress Permissions Status Control - "Prevent Revisors from editing other users' drafts" setting also prevented other non-Editors from editing posts of a custom workflow status that uses custom capabilities (also requires PP Permissions Pro 2.9.1)
+* Compat : Block data from some plugins had html formatting tags displayed as unicode character codes
+* Fixed : Edit Revision screen - Date selector was displayed even if scheduled revisions feature disabled
+* Fixed : Compare Pending Revisions - Non-administrators could not edit Scheduled Revisions
+* Fixed : Compare Pending Revisions - for page slug change, original published slug was not displayed 
+* Fixed : 'revisionary_skip_taxonomies' filter triggered a database error
+* Fixed : PHP Notice if third party code registers a post type without defining the edit_published capability
+* Fixed : PHP Notices on revision submission notification
+* Change : By default, enable "Prevent Revisors from viewing others'" setting
+* Change : Apply possible workaround for Revision Queue capability issues on some sites
+
+= 2.1.8 - 15 Jan 2020 =
+* Fixed : Custom Post Types did not have Pending Revisions or Scheduled Revisions available (since 2.1.7)
+* Lang : Correct textdomain on numerous translation calls
+* Lang : Improve translation string construction
+* Lang : Support translation of Revisor role name
+* Lang: Updated language files
+
+= 2.1.7 - 13 Jan 2020 =
+* Fixed : Excessive resource usage with some caching solutions
+* Fixed : Multisite - Super Administrators without a site role could not access Revision Queue 
+* Fixed : Classic Editor - After updating a revision, "View Post" message linked to published post instead of revision preview
+* Feature : New filter 'revisionary_enabled_post_types', unset post types by key to disable PP Revisions involvement
+
+= 2.1.6 - 23 Dec 2019 =
+* Fixed : Edit Revision - Classic Editor "Approve" button ineffective
+* Fixed : Edit Revision - Classic Editor "View / Approve" button loaded live preview (of unsaved changes) instead
+* Compat : By default, prevent third party post query filtering on Revision Queue (to avoid non-display of Revisions)
+* Compat : PressPermit Pro - Updating a saved revision caused it to be changed to a regular pending post
+
+= 2.1.5 - 11 Dec 2019 =
+* Compat : PressPermit Pro - Pending revision previews could be viewed by any user (including anonymous) if "Prevent Revisors from viewing others' revisions" disabled (since 2.1.4)
+* Fixed : Contributors had other users' uneditable, unreadable revisions listed in Revision Queue
+* Fixed : Revision Preview - Under some configurations, users with read-only access to revisions had no top bar in revision preview display
+* Fixed : Revision Preview - Under some role configurations, users saw an ineffective "Publish" button in preview top bar
+* Fixed : PHP warning for undefined index 'preview'
+
+= 2.1.4 - 10 Dec 2019 =
+* Fixed : Revision previews were not displayed to Editors under some configurations
+* Feature : Separate settings for "Prevent Revisors from editing others'" and "Prevent Revisors from viewing others'"
+
+= 2.1.3 - 6 Dec 2019 =
+* Compat : Classic Editor plugin - View / Approve buttons missing on Edit Revision screen if Classic Editor active but settings default to Block Editor
+* Compat : Classic Editor plugin - Javascript errors on Edit Post / Edit Revision screen if Classic Editor active but currently using Block Editor
+* Compat : Thin Out Revisions plugin broke Preview / Approval buttons on Compare Pending Revisions screen
+* Compat : Multiple Authors - Revision Queue "Post Author" links did not work for secondary authors
+* Compat : Multiple Authors - Revision Queue "Post Author" links did not filter Revision Queue
+* Compat : JReviews - Live preview from Edit Revision screen failed if JReviews plugin active
+* Fixed : Preview Top Bar blocks admin bar dropdown menu if another fixed-position element on the page (other than #wpadminbar) has a z-index of 99999 or higher
+
+= 2.1.2 - 4 Dec 2019 =
+* Fixed : Scheduled Revisions were not published (since 2.1)
+* Fixed : Edit Revision - Preview of unsaved revision did not work from Gutenberg
+* Change : Edit Revision - Display "View / Approve" button if editor is unchanged from saved revision, otherwise "Preview" button for unsaved changes
+* Fixed : Classic Editor - Preview caused "Update Revision" button to be recaptioned to "Save Draft"
+* Feature : Support Post Slug revision
+* Fixed : Other users' revisions were not listed in Revision Queue even if "Prevent Revisors from editing others' revisions" disabled
+* Fixed : With "Prevent Revisors from editing others' revisions" setting enabled, Revisors and Authors could edit others' revisions by direct URL access
+* Feature : Support list_others_revisions capability to grant read access to other users' revisions (applies if "Prevent Revisors from editing others' revisions" is enabled)
+* Compat : PressPermit Pro - Revisors could not submit Beaver Builder revisions
+* Compat : PressPermit Pro - Revision Exceptions ("Also these" category / taxonomy assignments) assigned to Authors were not applied correctly
+* Compat : JReviews plugin
+
+= 2.1.1 - 26 Nov 2019 =
+* Compat : Multiple Authors - Fatal error on revision creation (since 2.1)
+
+= 2.1 - 26 Nov 2019 =
+* Feature : Bulk Approval / Publishing in Revision Queue
+* Feature : Revision Edit: Approve Button on Editor screen
+* Feature : Option for Approve, Edit buttons on Compare Revisions screen (instead of Preview button)
+* Feature : Email Notification Buffer to avoid failures due to exceeding server send limits
+* Fixed : Email Notification - For pending revision submission, submitter was misidentified on some sites
+* Fixed : Revisors could restore previous revisions through manual URL access
+* Fixed : Fatal error when WP_Privacy_Policy_Content::text_change_check() is triggered
+* Fixed : "Pending Revision" checkbox was displayed in Gutenberg editor, even for unpublished posts
+* Fixed : After clicking "Pending Revision" checkbox, unchecking did not prevent revision save
+* Fixed : Revision Preview - unsaved changes to saved revision could not be previewed with WP 5.3
+* Fixed : Revision Preview - top bar for edit / approval was not displayed on some sites
+* Change : Revision Preview URL - Default to using published post slug with revision page_id argument, for better theme compatibility. Option to use Revision slug or ID only.
+* Fixed : Edit Revision screen links to published post discarded customized slug
+* Fixed : Classic Editor - "View / Approve" link from Edit Revision screen loaded wrong preview URL and no top bar display for approval
+* Fixed : Classic Editor - No preview button was available to Revisors
+* Fixed : Classic Editor - Invalid Revisions > Browse link displayed to Revisors
+* Compat : Classic Editor plugin - with "Allow users to switch editors" enabled, non-default editor did not have correct javascript loaded for Revisions
+* Compat : On themes that use a fixed position header, display preview top bar above header
+* Compat : PressPermit Pro - revision preview could not be viewed by Contributors under some configurations 
+* Fixed : On standard Compare Revisions screen (for past revisions), Preview and Manage button links did not update with slider selection change
+* Fixed : Pending, Schedule Revision notification - invalid preview link in some emails
+* Fixed : Trashed revisions were not identified as revisions in Edit Posts listing
+* Fixed : Trashed revisions were not deleted on parent post deletion
+* Fixed : Trashed revisions showed an invalid comment count value in Edit Posts listing
+* Fixed : PHP Warning in Gutenberg editor when editing is not being limited to revision submission
+* Compat : Multiple Authors - Compare Pending Revisions screen showed revisor as original post author under some conditions 
+* Compat : Multiple Authors - Revision submission / approval caused published post author to be changed to revisor, under some conditions
+* Compat : Plugin interaction caused published post permalink custom slug to be replaced with default permalink structure at revision publication, on some sites
+* Change : Revision Queue - recaption "My Posts" to "My Published Posts"
+
+= 2.0.12 - 29 Oct 2019 =
+* Fixed : Fatal error on Post Preview
+
+= 2.0.11 - 28 Oct 2019 =
+* Fixed : Classic Editor - Post Preview showed last stored copy, not unsaved changes
+* Fixed : Revision Preview top bar covered admin menu dropdown
+* Fixed : Revision Edit - live preview showed revision author instead of published author (if Multiple Authors plugin not active)
+
+= 2.0.10 - 25 Oct 2019 =
+* Fixed : Post Preview showed last stored copy, not unsaved changes
+* Fixed : Post Preview (to view unsaved changes) was not available when editing a revision
+* Fixed : Revision Preview - Buttons were not clickable with some themes
+* Fixed : Filter revisionary_default_pending_revision was not effective in Gutenberg (check Save as Revision checkbox by default)
+* Compat : Multiple Authors - Incorrect author display in revision previews on some sites
+* Compat : PressPermit - Database error on Revision Queue screen under some configurations
+
+= 2.0.9 - 18 Oct 2019 =
+* Fixed : Compare Pending Revisions screen - link redirected to Edit Posts screen for some post types
+
+= 2.0.8 - 18 Oct 2019 =
+* Change : PostMeta Failsafe: to avoid the possibility of accidental clearance, Featured Image removal is not revisioned, until further testing. API filter available for experimental usage with specified meta keys.
+* Fixed : Featured Image, Page Template revisioning failed under some conditions
+* Fixed : Scheduled Revisions created with Gutenberg stored selected terms to published post, previous terms to revision
+* Fixed : Scheduled Revisions - If "Update Publish Date" enabled, 404 Not Found redirect after manually publishing a scheduled revision if the post type uses post date in permalink structure
+* Fixed : Revision Preview - Buttons were not clickable with some themes
+* Fixed : Settings - Disabling Pending or Scheduled Revisions did not remove UI from post editor
+* Fixed : Settings - If Pending Revisions disabled, Revisor could still edit published posts
+
+= 2.0.7 - 17 Oct 2019 =
+* Fixed : Scheduled Revisions - published post tags and categories were stripped out on scheduled revision publication
+* Fixed : Scheduled Revisions - manually publishing prior to scheduled time caused published post status to be set to Future (unpublished)
+
+= 2.0.6 - 17 Oct 2019 =
+* Fixed : Featured Image and Page Template revisions were not applied (but did work in PublishPress Revisions Pro)
+* Fixed : Publishing a revision imported from Revisionary 1.x caused tags and categories to be stripped out
+
+= 2.0.5 - 16 Oct 2019 =
+* Fixed : Import script for Revisionary 1.x revisions did not run on plugin activation 
+* Fixed : Administrators, Editors and Authors were blocked from Quick Edit
+* Compat : Multiple Authors plugin
+* Fixed : Pending Revisions - Published post date was not updated even if "Update Publish Date" setting enabled
+* Change : Pending Revision Notification - Include link to Revision Queue
+* Fixed : Pending Revision Notification - If enabled for author only, email was sent with a blank title and message
+* Fixed : Empty Revision Queue was displayed to Subscribers with no Revision capabilities
+* Fixed : PHP notices on Revision Queue screen
+
+= 2.0.4 - 9 Oct 2019 =
+* Change : On installation over Revisionary 1.x, display a "heads up" notice about plugin name change, admin menu and Revision Queue
+* Fixed : Classic Editor - Revision Preview did not always include top bar (for Edit / Compare / Publish) if PressPermit Pro active
+* Fixed : Revision Preview - Edit url did not work on installations with non-conventional admin paths, due to hardcoded /wp-admin
+* Fixed : Schedule Revision notifications sent redundantly under some conditions
+* Change : On Revision Edit, recaption Preview button to "View" to clarify that it's a preview of the saved revision, not unsaved changes. (Future release will make it a true preview).
+
+= 2.0.3 - 3 Oct 2019 =
+* Fixed : Revisionary settings could not be changed
+* Fixed : Pending / Scheduled Revisions were listed in Revision Queue even if feature disabled in Revisions > Settings 
+* Fixed : On post edit for revision, Revisors could not see the current or newly selected Featured Image
+* Fixed : On revision edit, Administrators and Editors did not have Trash button available
+* Fixed : Revisors could edit or delete their scheduled revisions
+* Fixed : Scheduled revision publication did not work with "Asynchronous publishing" setting enabled
+* Fixed : After revision publication reloading, the old revision preview returned "Not Found". Now redirects to published post and marks as "Current Revision"
+* Fixed : PHP Notices throughout wp-admin when WP_DEBUG enabled
+* Change : Revision Queue headline indicates when results are being filtered by post type, revision status, revision author or post author
+
+= 2.0.2 - 2 Oct 2019 =
+* Fixed : On post date change in Gutenberg editor, Publish button was recaptioned to "Schedule Revision" even on a past date selection (unless SCRIPT_DEBUG enabled)
+
+= 2.0.1 - 2 Oct 2019 =
+* Fixed : Fatal error if another copy of Revisionary already active
+
+= 2.0.0 - 1 Oct 2019 =
+* Feature : Submit revisions to Categories, Tags, Custom Terms, Page Parent, Featured Image, Page Template
+* Feature : Revisions editable in Gutenberg, Classic Editor
+* Feature : Voluntary pending revision submission by unrestricted editors in Gutenberg
+* Feature : Revision Queue screen is a sortable, filterable list of pending and scheduled revisions for all post types
+* Feature : Revision Queue screen includes "My Revisions" and "My Posts" filtering links
+* Feature : Revision Queue - Published Posts have "History" link to compare past revisions
+* Feature : Compare Revisions - for past revisions, add button links for "Preview / Restore" and "Manage"
+* Feature : Compare Pending Revisions using standard WordPress UI (link from Editor or Revision Queue)
+* Feature : Compare Scheduled Revisions using standard WordPress UI (link from Editor or Revision Queue)
+* Feature : Compare Pending / Scheduled Revisions shows changes to Categories, Tags, Terms, Page Parent, Featured Image, Page Template
+* Change : Improved styling for revision preview / approval top bar
+* Feature : "Update Publish Date" setting for Pending Revisions (defaults to disabled)
+
+= 1.3.8 - 30 Aug 2019 =
+* Fixed : Revisors could Quick Edit published posts (changing post title, slug, author, date, parent or template) since version 1.3. This could be used to unpublish (but not publish) posts. Sites also running PressPermit Pro were not affected.
+* Compat : PressPermit Pro - Under some configurations, Revisors were not allowed appropriate access (due to publish capability check)
 
 = 1.3.7 - 24 May 2019 =
 * Feature : Filter 'revisionary_default_pending_revision', return true to select "Send to Approval Queue" in Classic Editor by default

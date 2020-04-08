@@ -26,13 +26,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( remove_action( 'ns_cloner_before_construct', 'ns_cloner_addon_content_users_init' ) ) {
 	echo "<span class='ns-cloner-error-message'>";
 	// If remove_action returned true, then pre-v4 pro was installed, so show notice to explain why pro features are missing.
+	$url_function = is_multisite() ? 'network_admin_url' : 'admin_url';
 	printf(
 		wp_kses(
-			/* translators: URL to plugin info page */
-			__( 'Your current version of <a href="%s" target="_blank">NS Cloner Pro</a> is not supported. Please update to access all Pro features.', 'ns-cloner' ),
+			/* translators: URLs to plugins page and plugin license page */
+			__( 'NS Cloner Pro needs to be updated for compatibility with NS Cloner 4. Please <a href="%s" target="_blank">click here</a> to check for the latest version, and then click "Update now" on NS Cloner Pro when you are redirected to the plugins page (you\'ll need to have <a href="%s" target="_blank">entered an active license</a> for the new version to show up).', 'ns-cloner' ),
 			ns_wp_kses_allowed()
 		),
-		esc_url( NS_CLONER_PRO_URL )
+		esc_url( $url_function( 'plugins.php?check_for_updates=yes' ) ),
+		esc_url( $url_function( 'admin.php?page=ns_cloner_pro_dashboard' ) )
 	);
 	echo '</span>';
 }
@@ -144,4 +146,24 @@ if ( is_multisite() && ! iis7_supports_permalinks() ) {
 			echo '</span>';
 		}
 	}
+}
+
+// Warn if AJAX requests return a 401 (probably because of HTTP basic auth), b/c process dispatching won't work if so.
+$test_response = wp_remote_get( admin_url( 'admin-ajax.php' ) );
+if ( is_wp_error( $test_response ) || 401 === wp_remote_retrieve_response_code( $test_response ) ) {
+	echo "<span class='ns-cloner-warning-message'>";
+	esc_html_e( 'It appears you have HTTP basic auth or something else blocking remote requests to your site, which means background cloning won\'t work. ', 'ns-cloner' );
+	esc_html_e( 'The Cloner will default to AJAX processing, so you should be able to still clone sites successfully, but progress will stop if you leave this page. ', 'ns-cloner' );
+	printf(
+		wp_kses(
+			// translators: %s: url to network setup page.
+			__( 'If you have basic auth enabled, you can <a href="%s" target="_blank">add a workaround</a>.', 'ns-cloner' ),
+			ns_wp_kses_allowed()
+		),
+		'https://neversettle.it/documentation/ns-cloner/cloning-on-a-password-protected-site/'
+	);
+	if ( is_wp_error( $test_response ) ) {
+		echo esc_html( ' Error: ' . $test_response->get_error_message() . '.' );
+	}
+	echo '</span>';
 }

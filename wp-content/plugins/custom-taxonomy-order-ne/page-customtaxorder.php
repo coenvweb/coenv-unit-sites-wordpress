@@ -1,6 +1,6 @@
 <?php
 /*
- * Admin Settingspage for Custom Taxonomy Order NE
+ * Admin Settingspage for Custom Taxonomy Order
  */
 
 
@@ -48,8 +48,8 @@ function customtaxorder() {
 	}
 
 	// Remove filter for WPML
-	remove_filter( 'terms_clauses', array( $sitepress, 'terms_clauses' ), 10, 4 );
-	remove_filter( 'get_terms', array( $sitepress, 'get_terms_filter' ) );
+	remove_filter( 'terms_clauses', array( $sitepress, 'terms_clauses' ), 10 );
+	remove_filter( 'get_terms', array( $sitepress, 'get_terms_filter' ),10 );
 	?>
 	<div class='wrap customtaxorder'>
 		<div id="icon-customtaxorder"></div>
@@ -94,7 +94,9 @@ function customtaxorder() {
 						';
 					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="1" ' . checked('1', $options[$taxonomy->name], false) . ' /> ' . __('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />
 						';
-					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="2" ' . checked('2', $options[$taxonomy->name], false) . ' /> ' . __('Alphabetical Order.', 'custom-taxonomy-order-ne') . '</label><br />
+					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="2" ' . checked('2', $options[$taxonomy->name], false) . ' /> ' . __('Alphabetical Order by name.', 'custom-taxonomy-order-ne') . '</label><br />
+						';
+					$settings .= '<label><input type="radio" name="customtaxorder_settings[' . $taxonomy->name . ']" value="3" ' . checked('3', $options[$taxonomy->name], false) . ' /> ' . __('Alphabetical Order by slug.', 'custom-taxonomy-order-ne') . '</label><br />
 						';
 					$tax_label = $taxonomy->label;
 					$tax = $taxonomy->name;

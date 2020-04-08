@@ -14,6 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a href="<?php echo esc_url( network_admin_url( 'admin.php?page=' . ns_cloner()->menu_slug ) ); ?>">
 		<img src="<?php echo esc_url( NS_CLONER_V4_PLUGIN_URL . 'images/ns-cloner-top-logo.png' ); ?>" alt="NS Cloner" />
 	</a>
+	<?php if ( ! defined( 'NS_CLONER_PRO_VERSION' ) ) : ?>
+	<div class="ns-cloner-header-pro">
+		<strong>Want even more<br/> cloning power?</strong>
+		<a href="<?php echo esc_url( NS_CLONER_PRO_URL ); ?>" class="ns-cloner-form-button" target="_blank">Get Pro</a>
+	</div>
+	<?php endif; ?>
 </div>
 
 <div class="ns-cloner-wrapper <?php echo empty( ns_cloner()->get_modes() ) ? 'disabled' : 'enabled'; ?>">
@@ -86,7 +92,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						// Display the title of the current in progress clone mode if applicable.
 						if ( ns_cloner()->process_manager->is_in_progress() ) :
 							$mode = ns_cloner_request()->get( 'clone_mode' );
-							echo ns_cloner()->get_mode( $mode )->title;
+							echo esc_html( $mode ? ns_cloner()->get_mode( $mode )->title : 'Unrecognized mode' );
 						endif;
 						?>
 						</span>
@@ -94,6 +100,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</h1>
 				</div>
 				<div class="ns-modal-body">
+					<div class="ns-cloner-warning-message ajax-on" style="display:none">
+						<?php esc_html_e( 'It appears background processing may be getting blocked on the server. Activating backup AJAX processing, so please keep this window open.', 'ns-cloner' ); ?>
+					</div>
+					<div class="ns-cloner-warning-message ajax-force" style="display:none">
+						<?php esc_html_e( 'It appears background processing has stalled. This could be because of a plugin conflict, server error, non-standard data or environment, etc.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'You may still be able to successfully complete the clone by forcing it to continue - just be aware it may not work, and if it does you\'ll probably see a few harmless "Duplicate entry" notices from where it resumes after the failed process.', 'ns-cloner' ); ?>
+						<a href="#" class="ns-cloner-ajax-force-trigger"><?php esc_html_e( 'Click here to try continuing.', 'ns-cloner' ); ?></a>
+					</div>
 					<div class="ns-process-wrapper ns-create-site">
 						<h2><?php esc_html_e( 'Current status', 'ns-cloner' ); ?>:</h2>
 						<div class="ns-cloner-progress-bar">

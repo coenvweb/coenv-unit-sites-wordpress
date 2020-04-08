@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Accordion Shortcodes
  * Description: Shortcodes for creating responsive accordion drop-downs.
- * Version: 2.3.3
+ * Version: 999
  * Author: Phil Buchanan
  * Author URI: http://philbuchanan.com
  */

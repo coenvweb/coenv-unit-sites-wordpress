@@ -57,11 +57,11 @@ class NS_Cloner_Section_Create_Target extends NS_Cloner_Section {
 		<div class="ns-cloner-input-group">
 		<?php if ( is_subdomain_install() ) : ?>
 			<label><?php echo is_ssl() ? 'https://' : 'http://'; ?></label>
-			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e('Site URL', 'ns-cloner' ); ?>" />
+			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner' ); ?>" />
 			<label>.<?php echo esc_html( preg_replace( '|^www\.|', '', get_current_site()->domain ) ); ?></label>
 		<?php else : ?>
 			<label><?php echo esc_url( trailingslashit( site_url() ) ); ?></label>
-			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e('Site URL', 'ns-cloner' ); ?>" />
+			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner' ); ?>" />
 		<?php endif; ?>
 		</div>
 		<?php

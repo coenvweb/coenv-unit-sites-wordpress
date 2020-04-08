@@ -1,10 +1,10 @@
 === Jetpack by WordPress.com ===
-Contributors: automattic, adamkheckler, aduth, akirk, allendav, alternatekev, andy, annezazu, apeatling, azaozz, batmoo, barry, beaulebens, blobaugh, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, eliorivero, enej, eoigal, erania-pinnera, ethitter, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, keoshi, koke, kraftbj, lancewillett, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, roccotripaldi, samhotchkiss, scarstocea, sdquirk, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
+Contributors: automattic, adamkheckler, aduth, akirk, allendav, alternatekev, andy, annezazu, apeatling, azaozz, batmoo, barry, beaulebens, blobaugh, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, roccotripaldi, samhotchkiss, scarstocea, scottsweb, sdquirk, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Jetpack, WordPress.com, backup, security, related posts, CDN, speed, anti-spam, social sharing, SEO, video, stats
-Stable tag: 7.5.3
-Requires at least: 5.1
+Stable tag: 8.3
+Requires at least: 5.2
 Requires PHP: 5.6
-Tested up to: 5.2
+Tested up to: 5.3
 
 The ideal plugin for stats, related posts, search engine optimization, social sharing, protection, backups, security, and more.
 
@@ -96,67 +96,66 @@ There are opportunities for developers at all levels to contribute. [Learn more 
 
 == Changelog ==
 
-= 7.5.3 =
+= 8.3 =
 
-* Release date: July 17, 2019
-* Release post: https://wp.me/p1moTy-k9A
+* Release date: March 3, 2020
+* Release post: https://wp.me/p1moTy-nZT
 
-**Bug fixes**
+**Major Enhancements**
 
-* General: Fixes plugin activation/deactivation hooks that were accidentally disabled.
-* General: Fixes fatal errors that were possible when using pre-7.5 Jetpack internal API.
-
-= 7.5.2 =
-
-* Release date: July 4, 2019
-* Release post: https://wp.me/p1moTy-k9A
-
-**Bug fixes**
-
-* General: Fixes an error when a site's connection to WordPress.com is set to "Safe Mode".
-
-= 7.5.1 =
-
-* Release date: July 2, 2019
-* Release post: https://wp.me/p1moTy-k9A
-
-**Bug fixes**
-
-* General: Fixes an error when trying to delete the Jetpack plugin.
-* General: Fixes supported PHP version declaration.
-
-= 7.5 =
-
-* Release date: July 2, 2019
-* Release post: https://wp.me/p1moTy-k9A
+* Google Calendar Block: a simple way to embed Google Calendars into your posts.
+* Revue Block: allow your readers to subscribe to your Revue newsletter right from your site.
 
 **Enhancements**
 
-* Admin Page: add an option to send a magic link that will help you log in to the mobile apps in one click.
-* Admin Page: improve style and wording of many different sections of the dashboard to clarify the role of each feature.
-* Admin Page: remove feature that would offer you to activate a list of recommended features upon connecting your site to WordPress.com.
-* Backups: include updates to term relationships when backing up Post object changes.
-* Backups: synchronize ABSPATH value to help setting up SSH credentials when using Jetpack Backups.
-* Faceboook Embeds: support new video URL format.
-* Lazy Load: allow adding event handlers to images.
-* Recurring Payments Block: improve the display of the block in the editor.
-* WordAds: update link to daily earnings stats on WordPress.com.
-* WordAds: provide additional details for custom ads.txt entries in the Jetpack dashboard.
-* WordPress.com Toolbar: add colors to Recovery Mode button.
+* Dashboard widget: clarify wording in Anti-spam and Protect sections.
+* Dashboard notices: allow permanent notices.
+* Dashboard notices: add option to provide action button for a notice.
+* Map block: add the ability to set the size of the map.
+* Map block: add a zoom control to the block sidebar.
+* Map block: add a fullscreen option.
+* Map block: add an option for toggling zoom to scroll behaviour in the published post.
+* Mobile Theme: sunset feature. We originally created the mobile theme feature as a fall-back when the regular theme did not include a mobile view. Most themes include a mobile view by default now, so the feature is no longer necessary.
+* OpenTable block: offer more embedding options.
+* Search: improvements to layout options when using the Search widget.
+* Security Scanning tool: improve message about threats found in dashboard.
+* Sharing: improve Open Graph Meta Tags on search result pages.
+* Shortcodes: improve accessibility of navigation buttons for the Slideshow shortcode.
+* Site Health Tests: improve ability to add additional tests.
+* Site Health Tests: Update Connection test with detailed descriptions and actions to resolve failing tests.
+* Synchronization: increase reliability of sync by not sending wp-rest-api-log posts.
+* Synchronization: increase reliability when synchronizing term IDs.
+* Tiled Gallery block: add a Rounded Corners option.
+* Tiled Gallery block: add an option to easily rearrange images within a gallery.
+* Cookies & Consents Banner widget: improve performance by removing reliance on jQuery.
+* Twitter widget: remove deprecated link color parameter.
 
 **Improved compatibility**
 
-* Admin Page: improve display of the Jetpack Dashboard in IE11.
-* Sharing: avoid displaying extra list items below the sharing buttons when using the AMP plugin.
-* Staging enviroments: add staging enviroment detection for DreamPress sites.
+* Autoloader: avoid conflicts when other plugins rely on the Autoloader to load Jetpack packages.
+* Beautiful Math: avoid layout issues with inline images when using the Twenty Twenty theme.
+* Blocks: improve compatibility with theme colors for block buttons.
+* Blocks: improve the layout of the blocks' placeholders when using the Gutenberg plugin.
+* Blocks: allow defining a minimum WordPress version or minimum Gutenberg plugin version when registering a block.
+* Lazy Images: add option to skip images with the `data-skip-lazy` attribute.
+* SSO: Add error argument for compatibility with a WordPress 5.4 hook change.
 
 **Bug fixes**
 
-* Admin Page: fix display of backup details in the Jetpack dashboard.
-* Admin Page: do not disable Widget Visibility and Widgets toggles in Development mode.
-* Sitemaps: ensure links to sitemaps appear in robots.txt
-* Slideshow Block: fix CSS class name.
-* Videos: ensure that Video Poster images are always displayed properly.
+* Blocks: fix layout issues with previews in block sidebar.
+* Blocks: fix layout issues when using a custom CSS class for a block using the option in the block sidebar.
+* Calendly block: fix overlay to render properly in the editor.
+* Dashboard: remove Backups information from the Jetpack dashboard when on a Multisite network. Those do not support the Backup feature at this point.
+* Map block: only show the Add Marker UI if there are no markers.
+* Map block: prevent an unselected block from accidentally capturing scrolling.
+* Map block: fix the styling of the map theme buttons.
+* Mobile Apps: remove the edit post link when in app.
+* OpenTable block: avoid error when inserting some specific embed codes.
+* OpenTable block: fix alignment issues when center-aligning the block.
+* Secure Sign On: do not display feature message when logging in to WordPress.com's central dashboard.
+* Stats: hide Stats smiley in post embeds.
+* WooCommerce Analytics: improve product checks to avoid errors on order pages.
+* Wufoo shortcode: Security fix return early when invalid parameters.
 
 --------
 

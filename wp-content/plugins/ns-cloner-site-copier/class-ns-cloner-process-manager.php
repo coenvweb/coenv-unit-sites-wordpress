@@ -149,6 +149,9 @@ class NS_Cloner_Process_Manager {
 			do_action( 'ns_cloner_validated' );
 		}
 
+		// Delete the exit flag from the last time.
+		delete_site_option( 'ns_cloner_exited' );
+
 		// Set the current user id, so that the original user id can always be accessed by background processes.
 		ns_cloner_request()->set( 'user_id', get_current_user_id() );
 
@@ -173,7 +176,6 @@ class NS_Cloner_Process_Manager {
 	 *      If blank, validate all sections that are supported for the current clone mode.
 	 */
 	public function validate( $section_id = '' ) {
-		$errors     = array();
 		$clone_mode = ns_cloner_request()->get( 'clone_mode' );
 
 		// Validate sections.
@@ -194,29 +196,61 @@ class NS_Cloner_Process_Manager {
 
 	/**
 	 * Calls $this->finish only if all current processes are complete
+	 *
+	 * Sometimes this could get called twice in a short time window, so use locking.
+	 * The lock, like NS_Cloner_Process::process_lock, uses direct database queries,
+	 * not via transient or site options functions because those have caching that
+	 * can get in the way.
 	 */
 	public function maybe_finish() {
+		// Check that this isn't already being run in another parallel session.
+		if ( $this->get_finish_lock() ) {
+			ns_cloner()->log->log( 'DETECTING already running finish - skipping finish call' );
+			return;
+		}
+		// If it's not in progress, finish already happened.
 		if ( $this->is_in_progress() ) {
 			$progress = $this->get_progress();
-			if ( 'complete' === $progress['status'] && ! get_site_transient( 'ns_cloner_finish_lock' ) ) {
-				// Only call finish if all processes are complete, AND
-				// use a transient to lock this so finish doesn't get run twice by 2 bg processes ending at the same time.
-				set_site_transient( 'ns_cloner_finish_lock', microtime(), 60 );
-				$this->finish();
-				delete_site_transient( 'ns_cloner_finish_lock' );
-			} elseif ( 'in_progress' === $progress['status'] ) {
-				// Restart any stalled processes so they don't have to wait all 5 minutes for the cron healthcheck.
-				foreach ( $progress['processes'] as $process_id => $data ) {
-					$process       = ns_cloner()->get_process( $process_id );
-					$has_started   = $data['progress']['completed'] > 0;
-					$has_remaining = $data['progress']['total'] > $data['progress']['completed'];
-					if ( $has_started && $has_remaining && ! $process->is_process_running() ) {
-						ns_cloner()->log->log( "RESTARTING *$process_id*" );
-						$process->dispatch();
-					}
+			if ( 'complete' === $progress['status'] ) {
+				// Set a unique lock.
+				$finish_lock_id = wp_generate_password( 8 );
+				ns_cloner()->db->query(
+					ns_prepare_option_query(
+						"INSERT INTO {table} ( {key}, {value} ) VALUES( %s, %s )",
+						[ 'ns_cloner_finish_lock', $finish_lock_id ]
+					)
+				);
+				// Then wait 0.5 seconds and check again to make sure a simultaneous lock hasn't been set.
+				// If the set lock isn't from this (earlier) instance, bail and let the later instance take over.
+				usleep( apply_filters( 'ns_cloner_process_lock_delay', 0.5 * 1000000 ) );
+				if ( $this->get_finish_lock() !== $finish_lock_id ) {
+					ns_cloner()->log->log( 'DETECTED simultaneous finish call - ending' );
+					exit;
 				}
+				$this->finish();
+				// Remove lock for next time.
+				ns_cloner()->db->query(
+					ns_prepare_option_query(
+						"DELETE FROM {table} WHERE {key} = %s",
+						'ns_cloner_finish_lock'
+					)
+				);
 			}
 		}
+	}
+
+	/**
+	 * Get the unique ID of the current finish lock, if there is one.
+	 *
+	 * @return string|null
+	 */
+	protected function get_finish_lock(){
+		return ns_cloner()->db->get_var(
+			ns_prepare_option_query(
+				'SELECT {value} FROM {table} WHERE {key} = %s',
+				'ns_cloner_finish_lock'
+			)
+		);
 	}
 
 	/**
@@ -315,6 +349,10 @@ class NS_Cloner_Process_Manager {
 			$process->cancel();
 		}
 
+		// Save flag so that currently running batches can end (otherwise the data might be in memory
+		// of another session and keep running for a while before realizing that the queue was cleared.
+		update_site_option( 'ns_cloner_exited', '1' );
+
 		// Log the current saved report data.
 		ns_cloner()->log->log( [ 'REPORT DATA:', ns_cloner()->report->get_all_reports() ] );
 
@@ -338,13 +376,17 @@ class NS_Cloner_Process_Manager {
 	 * Create a new site/blog on the network (step 1 for core mode)
 	 */
 	public function create_site() {
+		$source_id    = ns_cloner_request()->get( 'source_id' );
 		$target_name  = ns_cloner_request()->get( 'target_name', '' );
 		$target_title = ns_cloner_request()->get( 'target_title', '' );
 
 		// Try to create new site.
+		$source    = get_site( $source_id );
 		$site_data = [
 			'title'   => $target_title,
 			'user_id' => ns_cloner_request()->get( 'user_id' ),
+			'public'  => $source->public,
+			'lang_id' => $source->lang_id,
 		];
 		if ( is_subdomain_install() ) {
 			$site_data += [
@@ -357,9 +399,18 @@ class NS_Cloner_Process_Manager {
 				'path'   => get_current_site()->path . $target_name . '/',
 			];
 		}
-
 		ns_cloner()->log->log( [ 'Attempting to create site with data:', $site_data ] );
-		$target_id = wp_insert_site( $site_data );
+		if ( function_exists( 'wp_insert_site' ) ) {
+			$target_id = wp_insert_site( $site_data );
+		} else {
+			// Backwards compatibility for pre 5.1.
+			$target_id = wpmu_create_blog(
+				$site_data['domain'],
+				$site_data['path'],
+				$site_data['title'],
+				$site_data['user_id']
+			);
+		}
 
 		// Handle results.
 		if ( ! is_wp_error( $target_id ) ) {
@@ -474,13 +525,15 @@ class NS_Cloner_Process_Manager {
 			$completed += $progress['completed'];
 			// Make sure to check both for running and empty queue, because the queue could be empty
 			// but still have a pending teleport request that was fired via $process->after_handle().
-			if ( $process->is_process_running() || ! $process->is_queue_empty() ) {
+			if ( ! $process->is_queue_empty() || $process->is_process_running() ) {
 				$queue_empty = false;
 			}
 			// Also prepare to return data for each individual process.
 			$by_process[ $process_id ] = [
-				'label'    => $process->report_label,
-				'progress' => $progress,
+				'label'      => $process->report_label,
+				'progress'   => $progress,
+				'dispatched' => get_site_option( "ns_cloner_{$process_id}_process_dispatched" ),
+				'nonce'      => $process->get_nonce(),
 			];
 		}
 		return [
@@ -499,7 +552,10 @@ class NS_Cloner_Process_Manager {
 	 */
 	private function get_current_processes() {
 		$processes = [];
-		foreach ( ns_cloner()->processes as $process_id => $process ) {
+		// Add filter here so that addons/mode can disable checking for unused processes to speed up code.
+		$all_processes = apply_filters( 'ns_cloner_processes_to_check', ns_cloner()->processes );
+		ns_cloner()->log->log( [ 'CHECKING progress for processes:', array_keys( $all_processes ) ] );
+		foreach ( $all_processes as $process_id => $process ) {
 			$progress = $process->get_total_progress();
 			// Only add to the results if it this process has more than one object in it.
 			// Check both the total (for normal cases), as well as is_queue_empty so that if
