@@ -126,7 +126,7 @@ class RevisionCreation {
 		} else {
 			global $revisionary;
 		}
-
+        
         if ( $revisionary->doing_rest && $revisionary->rest->is_posts_request && ! empty( $revisionary->rest->request ) ) {
             $postarr = array_merge( $revisionary->rest->request->get_params(), $postarr );
             
@@ -232,7 +232,7 @@ class RevisionCreation {
 			}
 
 			if (defined('RVY_REVISION_CREATION_DO_UNSLASH')) {
-				$data = wp_unslash( $data );
+            	$data = wp_unslash( $data );
 			}
 
             $revision_id = $this->create_revision($data, $postarr);
@@ -603,7 +603,7 @@ class RevisionCreation {
 
 		// If term selections are not posted for revision, store current published terms
 		foreach(get_taxonomies(['public' => true]) as $taxonomy) {
-			if (empty($set_taxonomies[$taxonomy])) {
+			if (empty($set_taxonomies[$taxonomy]) && !in_array($taxonomy, ['category', 'post_tag'])) {
 				if ($published_terms = wp_get_object_terms($published_post_id, $taxonomy, ['fields' => 'ids'])) {
 					wp_set_object_terms( $post_ID, $published_terms, $taxonomy );
 				}

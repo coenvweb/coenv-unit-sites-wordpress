@@ -3,7 +3,7 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.1.3
+Version: 2.1.4
 Author: Clever Widgets
 Author URI: https://themecheck.info
 Text Domain: upw
@@ -19,7 +19,7 @@ analyst_init(array(
 ));
 
 
-if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
+if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
   class WP_Widget_Ultimate_Posts extends WP_Widget {
 
