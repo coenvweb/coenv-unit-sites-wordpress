@@ -14,7 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // FIXED: instead of getting the value from url, use global $post object to get id of current post
-global $post;
+$ow_admin_post = new OW_Admin_Post();
+$post = $ow_admin_post->get();
+
 $post_id = $post_title = '';
 if ( isset( $post ) && ! empty( $post ) ) {
    $post_id = esc_attr( $post->ID );

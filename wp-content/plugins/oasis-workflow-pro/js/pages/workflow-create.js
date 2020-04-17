@@ -91,8 +91,10 @@ var jQueryCgmp = jQuery.noConflict();
             return owf_workflow_create_vars.unsavedChanges;
          }
       }
-
-      jQuery( ".workflow-save-button" ).click( function () {
+      jQuery(document).on("click", ".workflow-save-button, .workflow-save-close-button", function () {
+         //Get which button is clicked
+         var bname = jQuery( this ).data( "bname" );
+         
          jQuery( "#wf_graphic_data_hi" ).val( "" );
          // validate title field is not empty
          if ( !jQuery( "#define-workflow-title" ).val() ) { // title is blank, so focus on the title field.
@@ -147,6 +149,9 @@ var jQueryCgmp = jQuery.noConflict();
                return false;
             }
             // everything looks good, lets submit the form
+            if( bname === "save" ) {
+               jQuery( "#save_action" ).val( "workflow_save" );
+            } 
             // set the action url and submit the form
             jQuery( "#validation_error_message" ).addClass( "owf-hidden" );
             var action_url = jQuery( "#wf-form" ).attr( "action" );

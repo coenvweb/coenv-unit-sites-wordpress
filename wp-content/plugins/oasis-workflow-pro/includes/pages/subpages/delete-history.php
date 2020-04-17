@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="dialog-title"><strong><?php echo __("Delete History", "oasisworkflow") ;?></strong></div>
 	<div>
 		<div id="delete_history_msg" class="ow-info-message select-info">
-		   <?php echo __("Workflow History for posts/pages that are currently active in a workflow will NOT be deleted.")?>
+		   <?php echo __("Workflow History for posts/pages that are currently active in a workflow will NOT be deleted.", "oasisworkflow" );?>
 		</div>
 		<div class="select-info owf-text-info left full-width">	
 			<label class="half-width">

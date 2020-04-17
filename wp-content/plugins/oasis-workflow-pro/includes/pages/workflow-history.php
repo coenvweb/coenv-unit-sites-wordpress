@@ -14,25 +14,66 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if( isset( $_GET['post'] ) && sanitize_text_field( $_GET["post"] ) && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'owf_view_history_nonce' ) ) {
-   $selected_post = intval( sanitize_text_field( $_GET["post"] ) );
+   $selected_post_id = intval( sanitize_text_field( $_GET["post"] ) );
+} else {
+   $selected_post_id = NULL;
+}
+$page_number = ( isset( $_GET['paged'] ) && sanitize_text_field( $_GET["paged"] )) ? intval( sanitize_text_field( $_GET["paged"] ) ) : 1;
+$trashed     = (isset( $_GET['trashed'] ) && sanitize_text_field( $_GET["trashed"] )) ? sanitize_text_field( $_GET["trashed"] ) : "";
+
+if( $selected_post_id && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'owf_view_history_nonce' ) ) {
+   $selected_post = $selected_post_id;
 } else {
    $selected_post = NULL;
 }
-$pagenum = (isset( $_GET['paged'] ) && sanitize_text_field( $_GET["paged"] )) ? intval( sanitize_text_field( $_GET["paged"] ) ) : 1;
-$trashed = (isset( $_GET['trashed'] ) && sanitize_text_field( $_GET["trashed"] )) ? sanitize_text_field( $_GET["trashed"] ) : "";
 
-if( $selected_post && isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'owf_view_history_nonce' ) ) {
-   $selected_post = $selected_post;
-} else {
-   $selected_post = NULL;
+$action = ( isset( $_GET['show_unclaimed'] ) && intval( $_GET["show_unclaimed"] )) ? intval( $_GET["show_unclaimed"] ) : 0;
+
+if( $action == 1 ) {
+   $display_unclaimed = "show_unclaimed";
+}
+
+if( $action == 0 ) {
+   $display_unclaimed = "online";
 }
 
 $ow_history_service = new OW_History_Service();
 $workflow_service = new OW_Workflow_Service();
 $ow_process_flow = new OW_Process_Flow();
 
-$histories = $ow_history_service->get_workflow_history_all( $selected_post );
-$count_posts = $ow_history_service->get_workflow_history_count( $selected_post );
+$show_unclaimed = false;
+      
+// Get transient user details
+$user_id = get_current_user_id();
+if( $user_id ) {
+   $show_unclaimed = get_transient( 'show_unclaimed_'.$user_id );
+} 
+
+// Set css class to hide and show buttons
+$unclaim_class = "hide-unclaim-button";
+$claim_class = "show-claim-button";
+$hide_no_action = null;
+
+// If clicked show unclaimed activity
+if ( $display_unclaimed === "online" ) {
+   // If clicked hide unclaimed activity
+   $claim_class = "show-claim-button";
+   $unclaim_class = "hide-unclaim-button";
+   $hide_no_action = "hide_no_action";
+   $action = 0;
+   $histories = $ow_history_service->get_workflow_history_all( $selected_post, $page_number, "online" );
+   $count_posts = $ow_history_service->get_workflow_history_count( $selected_post, "online" );
+} else if( $display_unclaimed === "show_unclaimed" || $show_unclaimed ) {
+   $unclaim_class = "show-unclaim-button";
+   $claim_class = "hide-claim-button";
+   $action = 1;
+   $histories = $ow_history_service->get_workflow_history_all( $selected_post, $page_number, "show_unclaimed" );
+   $count_posts = $ow_history_service->get_workflow_history_count( $selected_post, "show_unclaimed" );
+} else {
+   $histories = $ow_history_service->get_workflow_history_all( $selected_post, $page_number, "online" );
+   $count_posts = $ow_history_service->get_workflow_history_count( $selected_post, "online" );
+}
+
 $per_page = OASIS_PER_PAGE;
 $option = get_option( 'oasiswf_custom_workflow_terminology' );
 $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflowHistoryText'] : __( 'Workflow History', 'oasisworkflow' );
@@ -77,7 +118,7 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                        $option = '';
                        foreach ( $wf_posts as $wf_post ) {
 
-                          $selected = selected( $selected_post, $wf_post->post_id );
+                          $selected = selected( $selected_post, $wf_post->post_id, false );
                           $option .= "<option value='$wf_post->post_id' $selected>" . esc_html( $wf_post->title ) . "</option>";
                        }
                        echo $option;
@@ -85,7 +126,7 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                     ?>
                 </select>
 
-                <a href="javascript:window.open('<?php echo admin_url( 'admin.php?page=oasiswf-history&post=' ) ?>' + jQuery('#post_filter').val() + '<?php echo '&_wpnonce=' . wp_create_nonce( 'owf_view_history_nonce' ); ?>', '_self')">
+                <a href="javascript:window.open('<?php echo admin_url( 'admin.php?page=oasiswf-history&post=' ) ?>' + jQuery('#post_filter').val() + '<?php echo '&show_unclaimed='.$action.'&_wpnonce=' . wp_create_nonce( 'owf_view_history_nonce' ); ?>', '_self')">
                     <input type="button" class="button-secondary action" value="<?php echo __( "Filter", "oasisworkflow" ); ?>" />
                 </a>&nbsp;
 
@@ -104,11 +145,19 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                    <?php
                 }
                 ?>
-
+                  <a href="javascript:window.open('<?php echo admin_url( 'admin.php?page=oasiswf-
+history&post=' ) ?>' + jQuery('#post_filter').val() + '<?php echo '&show_unclaimed=1&_wpnonce=' . wp_create_nonce( 'owf_view_history_nonce' ); ?>', '_self')" id="owf-show-unclaimed" class="<?php echo $claim_class; ?>">
+                     <input type="button" class="button-secondary action" value="<?php echo __( "Show No-Action Activities", "oasisworkflow" ); ?>" />
+                  </a>
+                   
+                  <a href="javascript:window.open('<?php echo admin_url( 'admin.php?page=oasiswf-
+history&post=' ) ?>' + jQuery('#post_filter').val() + '<?php echo '&show_unclaimed=0&_wpnonce=' . wp_create_nonce( 'owf_view_history_nonce' ); ?>', '_self')" id="owf-hide-unclaimed" class="<?php echo $unclaim_class; ?>">
+                    <input type="button" class="button-secondary action" value="<?php echo __( "Hide No-Action Activities", "oasisworkflow" ); ?>" />
+                  </a>
             </div>
            </form>
             <div class="tablenav-pages">
-                <?php OW_Utility::instance()->get_page_link( $count_posts, $pagenum, $per_page ); ?>
+                <?php OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page ); ?>
             </div>
         </div>
         <table class="wp-list-table widefat fixed posts" cellspacing="0" border="0">
@@ -120,10 +169,15 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
             </tfoot>
             <tbody id="coupon-list">
                 <?php
-                if( $histories ):
-                   $count = 0;
-                   $start = ($pagenum - 1) * $per_page;
-                   $end = $start + $per_page;
+                // Hide/Show actor column using the filter
+                $current_user_id = get_current_user_id();
+                $current_user_role = OW_Utility::instance()->get_user_role( $current_user_id );
+
+                $roles = array();
+
+                $user_roles = apply_filters( 'owf_hide_attributes_by_role', $roles );
+               
+                if( $histories ):                   
                    foreach ( $histories as $row ) {
                       $workflow_name = "<a href='admin.php?page=oasiswf-admin&wf_id=" . $row->workflow_id . "'><strong>" . $row->wf_name;
                       if( !empty( $row->version ) ) {
@@ -131,32 +185,33 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                       }
                       $workflow_name .= "</strong></a>";
 
-                      if( $count >= $end )
-                         break;
-                      if( $count >= $start ) {
                          if( $row->assign_actor_id != -1 ) { //assignment and/or publish steps
                             echo "<tr>";
                             echo "<th scope='row' class='check-column'><input type='checkbox' name='linkcheck[]' value='1'></th>";
-                            echo "<td>
-										<a href='post.php?post={$row->post_id}&action=edit'><strong>" . esc_html( $row->post_title ) . "</strong></a>
+                            echo "<td class='column-primary' data-colname='Title'>
+										<a href='post.php?post={$row->post_id}&action=edit'><strong>" . esc_html( $row->post_title ) . "</strong></a><button type='button' class='toggle-row'><span class='screen-reader-text'>Show more details</span></button>
 									</td>";
-                            if( $row->userid == 0 ) {
+                                                        
+                            if( ! in_array( $current_user_role, $user_roles ) ) {
+                               if( $row->userid == 0 ) {
                                $actor = "System";
-                            } else {
-                               $actor = OW_Utility::instance()->get_user_name( $row->userid );
-                               if( empty( $actor ) ) { // in case the actor is deleted or non existent
-                                  $actor = "System";
-                               }
-                            }
-                            echo "<td>{$actor}</td>";
-                            echo "<td>{$workflow_name} <br> [{$workflow_service->get_step_name( $row )}]</td>";                           
-                            echo "<td>" . OW_Utility::instance()->format_date_for_display( $row->create_datetime, "-", "datetime" ) . "</td>";
-                            echo "<td>" . OW_Utility::instance()->format_date_for_display( $ow_process_flow->get_sign_off_date( $row ), "-", "datetime" ) . "</td>";
-                            echo "<td>{$ow_process_flow->get_sign_off_status( $row )}</td>";
-                            echo "<td class='comments column-comments'>
+                              } else {
+                                 $actor = OW_Utility::instance()->get_user_name( $row->userid );
+                                 if( empty( $actor ) ) { // in case the actor is deleted or non existent
+                                    $actor = "System";
+                                 }
+                              }
+                              echo "<td data-colname='Actor' >{$actor}</td>";
+                            }            
+                            
+                            echo "<td data-colname='Workflow [Step]'>{$workflow_name} <br> [{$workflow_service->get_step_name( $row )}]</td>";                           
+                            echo "<td data-colname='Assigned date'>" . OW_Utility::instance()->format_date_for_display( $row->create_datetime, "-", "datetime" ) . "</td>";
+                            echo "<td data-colname='Sign off date'>" . OW_Utility::instance()->format_date_for_display( $ow_process_flow->get_sign_off_date( $row ), "-", "datetime" ) . "</td>";
+                            echo "<td data-colname='Result'>{$ow_process_flow->get_sign_off_status( $row )}</td>";
+                            echo "<td class='comments column-comments' data-colname='Comments'>
 										<div class='post-com-count-wrapper'>
 											<strong>
-												<a href='#' actionid={$row->ID} class='post-com-count post-com-count-approved' real='history'>
+												<a href='#' actionid='{$row->ID}' actionstatus='{$row->action_status}' class='post-com-count post-com-count-approved' real='history'>
 													<span class='comment-count-approved'>{$ow_process_flow->get_sign_off_comment_count( $row )}</span>
 												</a>
 												<span class='loading' style='display:none'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -168,25 +223,29 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                             echo "</tr>";
                          }
                          if( $row->assign_actor_id == -1 ) { //review step
-                            $review_rows = $ow_history_service->get_review_action_by_history_id( $row->ID, "update_datetime" );
+                            $review_rows = $ow_history_service->get_review_action_by_history_id( $row->ID, "update_datetime", $hide_no_action );
                             if( $review_rows ) {
                                foreach ( $review_rows as $review_row ) {
                                   echo "<tr>";
                                   echo "<th scope='row' class='check-column'><input type='checkbox' name='linkcheck[]' value='1'></th>";
-                                  echo "<td><a href='post.php?post={$row->post_id}&action=edit'><strong>" . esc_html( $row->post_title ) . "</strong></a></td>";
-                                  if( $review_row->actor_id == 0 ) {
+                                  echo "<td class='column-primary' data-colname='Title'><a href='post.php?post={$row->post_id}&action=edit'><strong>" . esc_html( $row->post_title ) . "</strong></a><button type='button' class='toggle-row'><span class='screen-reader-text'>Show more details</span></button></td>";
+                                                                    
+                                  if( ! in_array( $current_user_role, $user_roles ) ) {
+                                    if( $review_row->actor_id == 0 ) {
                                      $actor = "System";
-                                  } else {
-                                     $actor = OW_Utility::instance()->get_user_name( $review_row->actor_id );
-                                     if( empty( $actor ) ) { // in case the actor is deleted or non existent
-                                        $actor = "System";
-                                     }
+                                    } else {
+                                       $actor = OW_Utility::instance()->get_user_name( $review_row->actor_id );
+                                       if( empty( $actor ) ) { // in case the actor is deleted or non existent
+                                          $actor = "System";
+                                       }
+                                    }
+                                    echo "<td data-colname='Actor'>{$actor}</td>";
                                   }
-                                  echo "<td>{$actor}</td>";
-                                  echo "<td>{$workflow_name} <br> [{$workflow_service->get_step_name( $row )}] </td>";
-                                  echo "<td>" . OW_Utility::instance()->format_date_for_display( $row->create_datetime, "-", "datetime" ) . "</td>";
+                                  
+                                  echo "<td data-colname='Workflow [Step]'>{$workflow_name} <br> [{$workflow_service->get_step_name( $row )}] </td>";
+                                  echo "<td data-colname='Assigned date'>" . OW_Utility::instance()->format_date_for_display( $row->create_datetime, "-", "datetime" ) . "</td>";
                                   $signoff_date = $review_row->update_datetime;
-                                  echo "<td>" . OW_Utility::instance()->format_date_for_display( $signoff_date, "-", "datetime" ) . "</td>";
+                                  echo "<td data-colname='Sign off date'>" . OW_Utility::instance()->format_date_for_display( $signoff_date, "-", "datetime" ) . "</td>";
                                   // If editors' review status is "no_action" (Not acted upon) then set user status as "No action taken"
                                   if( $review_row->review_status == "no_action" || $review_row->review_status == "abort_no_action" ) {
                                      $review_status = __( "No Action Taken", "oasisworkflow" );
@@ -199,11 +258,11 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                                         $review_status = $ow_process_flow->get_review_sign_off_status( $row, $review_row );
                                      }
                                   }
-                                  echo "<td>$review_status</td>";
-                                  echo "<td class='comments column-comments'>
+                                  echo "<td data-colname='Result'>$review_status</td>";
+                                  echo "<td class='comments column-comments' data-colname='Comments'>
 												<div class='post-com-count-wrapper'>
 													<strong>
-														<a href='#' actionid={$review_row->ID} class='post-com-count post-com-count-approved' real='review'>
+														<a href='#' actionid='{$review_row->ID}' actionstatus='{$review_row->review_status}' class='post-com-count post-com-count-approved' real='review'>
 															<span class='comment-count-approved'>{$ow_process_flow->get_review_sign_off_comment_count( $review_row, $row->post_id, $review_row->actor_id )}</span>
 														</a>
 														<span class='loading' style='display:none'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -213,12 +272,9 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
                                    // add-ons to add rows to history table on history page
                                    apply_filters( 'display_history_column_content', $row->post_id, $review_row, 'review_history' );
                                   echo "</tr>";
-                                  $count ++;
                                }
                             }
-                         }
-                      }
-                      $count ++;
+                         }                     
                    }
                 else:
                    echo "<tr>";
@@ -234,7 +290,7 @@ $workflow_history = ! empty( $option['workflowHistoryText'] ) ? $option['workflo
         <input type="hidden" name="owf_inbox_ajax_nonce" id="owf_inbox_ajax_nonce" value="<?php echo wp_create_nonce( 'owf_inbox_ajax_nonce' ); ?>" />
         <div class="tablenav">
             <div class="tablenav-pages">
-                <?php OW_Utility::instance()->get_page_link( $count_posts, $pagenum, $per_page ); ?>
+                <?php OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page ); ?>
             </div>
         </div>
     </div>

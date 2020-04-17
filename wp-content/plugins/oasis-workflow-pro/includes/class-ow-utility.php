@@ -3,15 +3,16 @@
 /*
  * Utilities class for Oasis Workflow
  *
- * @copyright   Copyright (c) 2015, Nugget Solutions, Inc
+ * @copyright   Copyright (c) 2017, Nugget Solutions, Inc
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.0
  *
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
    exit;
+}
 
 /*
  * Utilities class - singleton class
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) )
 class OW_Utility {
 
    /**
-    * Private ctor so nobody else can instance it
+    * Private constructor so nobody else can instantiate it
     *
     */
    private function __construct() {
@@ -136,8 +137,10 @@ class OW_Utility {
 
    public function get_date_int( $date = null, $date_separator = "-" ) {
       $date = ( $date ) ? $date : current_time( 'mysql', 0 );
-      $arr = explode( $date_separator, $date );
-      return $arr[0] * 10000 + $arr[1] * 100 + $arr[2] * 1;
+      $date_split = explode( $date_separator, $date );
+      $date_time_split = preg_split('/[\s]+/', $date_split[2] );
+      $date_int = $date_split[0] * 10000 + $date_split[1] * 100 + $date_time_split[0] * 1;
+      return $date_int;
    }
 
    /*
@@ -215,24 +218,64 @@ class OW_Utility {
 
       foreach ( $editable_roles as $role => $details ) {
          $name = translate_user_role( $details['name'] );
-         if ( is_array( $selected ) && in_array( esc_attr( $role ), $selected ) ) // preselect specified role
+         if ( is_array( $selected ) && in_array( esc_attr( $role ), $selected ) ) { // preselect specified role
             $selected_row .= "\n\t<option selected='selected' value='" . esc_attr( $role ) . "'>$name</option>";
-         else
+         } else {
             $row .= "\n\t<option value='" . esc_attr( $role ) . "'>$name</option>";
+         }
       }
 
       // add the custom post author role to the list
       if ( $add_post_author_role ) {
 
-      	if ( is_array( $selected ) && in_array( esc_attr( $post_author_role_value ), $selected ) ) // preselect specified role
+      	if ( is_array( $selected ) && in_array( esc_attr( $post_author_role_value ), $selected ) ) { // preselect specified role
       		$selected_row .= "\n\t<option selected='selected' value='" . esc_attr( $post_author_role_value ) . "'>$post_author_role_name</option>";
-      	else
+         } else {
       		$row .= "\n\t<option value='" . esc_attr( $post_author_role_value ) . "'>$post_author_role_name</option>";
+         }
+      }
+      echo $selected_row . $row;
+   }
+   
+   /*
+    * create drop down for applicable roles
+    * @param int $selected if passed, that will be selected by default
+    * @param boolean $add_post_author_role, adds the custom Post Author role to the drop drop list
+    * @return HTML for roles
+    * @since 6.5
+    */
+   public function owf_dropdown_applicable_roles_multi( $selected = null, $add_post_author_role = false ) {
+      global $wpdb;
+      $row = '';
+      $selected_row = '';
+      $roles_array = array();
+      $post_author_role_name = __( "Post Author", "oasisworkflow" );
+      $post_author_role_value = "owfpostauthor";
+
+      // for single site
+      $editable_roles = get_option('oasiswf_participating_roles_setting');
+
+      foreach ( $editable_roles as $role => $name ) {
+         if ( is_array( $selected ) && in_array( esc_attr( $role ), $selected ) ) { // preselect specified role
+            $selected_row .= "\n\t<option selected='selected' value='" . esc_attr( $role ) . "'>$name</option>";
+         } else {
+            $row .= "\n\t<option value='" . esc_attr( $role ) . "'>$name</option>";
+         }
+      }
+      
+      // add the custom post author role to the list
+      if ( $add_post_author_role ) {
+
+      	if ( is_array( $selected ) && in_array( esc_attr( $post_author_role_value ), $selected ) ) { // preselect specified role
+      		$selected_row .= "\n\t<option selected='selected' value='" . esc_attr( $post_author_role_value ) . "'>$post_author_role_name</option>";
+         } else {
+      		$row .= "\n\t<option value='" . esc_attr( $post_author_role_value ) . "'>$post_author_role_name</option>";
+         }
       }
       echo $selected_row . $row;
    }
 
-   /*
+   /**
     * create HTML checkbox section for post types
     *
     * @param string $list_name name of the control/element
@@ -242,7 +285,6 @@ class OW_Utility {
     *
     * @since 2.0
     */
-
    public function owf_checkbox_post_types_multi( $list_name, $selected ) {
       $selected_row = '';
       // get all custom types
@@ -266,6 +308,38 @@ class OW_Utility {
       echo $selected_row;
    }
    
+   /**
+    * create HTML checkbox section for applicable post types    *
+    * @param string $list_name name of the control/element
+    * @param string $selected    *
+    * @return HTML for post type checkbox    *
+    * @since 6.5
+    */
+   public function owf_checkbox_applicable_post_types_multi( $list_name, $selected ) {
+      $selected_row = '';
+      // get all custom types
+      $all_post_types = OW_Utility::instance()->owf_get_post_types();
+      
+      $types = OW_Utility::instance()->get_applicable_post_types( $all_post_types );
+      
+      $checked = '';
+
+      foreach ( $types as $post_type ) {
+         // If post type is wordpress builtin then ignore it.
+         if ( is_array( $selected ) && in_array( esc_attr( $post_type['name'] ), $selected ) ) { // preselect specified role
+          	$checked = " ' checked='checked' ";
+         } else {
+         	$checked = '';
+         }
+         
+        	$selected_row .= "<label style='display: block;'> <input type='checkbox' class='owf-checkbox'
+					name='" . $list_name . "' value='" . esc_attr( $post_type['name'] ) . "'" . $checked . "/>";
+         $selected_row .= $post_type['label'];
+         $selected_row .= "</label>";
+      }
+      echo $selected_row;
+   }
+   
    /*
     * create HTML checkbox section of roles
     *
@@ -280,17 +354,17 @@ class OW_Utility {
       
       $selected_row = '';
       $checked = '';
-      $paticipants = array();
+      $participants = array();
       $participating_roles = $this->get_participating_roles();
       
       if ( ! empty( $selected_participants ) ) {
          foreach ( $selected_participants as $role => $display_name ) {
-            array_push( $paticipants, $role );
+            array_push( $participants, $role );
          }
       }
       
       foreach ( $participating_roles as $role => $display_name ) {
-         if ( ! empty( $paticipants ) && is_array( $paticipants ) && in_array( esc_attr( $role ), $paticipants ) ) { // preselect specified role
+         if ( ! empty( $participants ) && is_array( $participants ) && in_array( esc_attr( $role ), $participants ) ) { // preselect specified role
           	$checked = " ' checked='checked' ";
          } else {
          	$checked = '';
@@ -383,7 +457,7 @@ class OW_Utility {
     * @return HTML for post status drop down
     * @since 2.0
     */
-   public static function owf_dropdown_post_status_multi( $selected ) {
+   public function owf_dropdown_post_status_multi( $selected ) {
       $row = '';
       $selected_row = '';
       $status_array = get_post_stati( array( 'show_in_admin_status_list' => true ), 'objects' );
@@ -391,10 +465,11 @@ class OW_Utility {
          if ( $status_id == "future" ) { // we do not consider future (scheduled posts) to be valid of auto submit
             continue;
          }
-         if ( is_array( $selected ) && in_array( $status_id, $selected ) ) // preselect specified status
+         if ( is_array( $selected ) && in_array( $status_id, $selected ) ) { // preselect specified status
             $selected_row .= "\n\t<option selected='selected' value='" . $status_id . "'>$status_object->label</option>";
-         else
+         } else {
             $row .= "\n\t<option value='" . $status_id . "'>$status_object->label</option>";
+         }   
       }
       echo $selected_row . $row;
    }
@@ -411,42 +486,42 @@ class OW_Utility {
     * @since 2.0
     */
 
-   public function get_page_link( $total_posts, $current_page_number, $per_page = 20, $action = null ) {
-      $allpages = ceil( $total_posts / $per_page );
+   public function get_page_link( $total_posts, $current_page_number, $per_page = 20, $action = null, $filters = null ) {
+      $all_pages = ceil( $total_posts / $per_page );
       $base = "";
+
+      // get all the query args and put them in an array
+      $query_args = array();
       if ( empty( $action ) ) {
-         $base = esc_url_raw( @add_query_arg( 'paged', '%#%' ) );
+         $query_args['paged'] = '%#%';
       } elseif ( ! empty( $action ) ) {
-         $base .= esc_url_raw( @add_query_arg( array( 'paged' => '%#%', 'action' => $action ) ) );
+         $query_args['paged'] = '%#%';
+         $query_args['action'] = $action;
       }
+
+      if ( ! empty ( $filters ) ){
+         foreach( $filters as $key => $value ) {
+            $query_args[$key] = $value;
+         }
+      }
+
+      // add_query_arg to form the base url
+      $base .= esc_url_raw( add_query_arg( $query_args ) );
+
       $page_links = paginate_links( array(
           'base' => $base,
           'format' => '',
-          'total' => $allpages,
+          'total' => $all_pages,
           'current' => $current_page_number
               ) );
 
-      $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s-%s of %s', "oasisworkflow" ) . '</span>%s', number_format_i18n( ( $current_page_number - 1 ) * $per_page + 1 ), number_format_i18n( min( $current_page_number * $per_page, $total_posts ) ), number_format_i18n( $total_posts ), $page_links );
+      $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s-%s of %s', "oasisworkflow" ) . '</span>%s',
+         number_format_i18n( ( $current_page_number - 1 ) * $per_page + 1 ),
+         number_format_i18n( min( $current_page_number * $per_page, $total_posts ) ),
+         number_format_i18n( $total_posts ),
+         $page_links );
 
       echo $page_links_text;
-   }
-
-   /**
-    * Get the currently registered user
-    */
-   public function get_current_user() {
-      global $wpdb;
-      if ( function_exists( 'wp_get_current_user' ) ) {
-         return wp_get_current_user();
-      } elseif ( function_exists( 'get_currentuserinfo' ) ) {
-         global $userdata;
-         get_currentuserinfo();
-         return $userdata;
-      } else {
-         $user_login = sanitize_text_field( $_COOKIE[USER_COOKIE] );
-         $current_user = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->base_prefix}users WHERE user_login = '%s'", $user_login ) );
-         return $current_user;
-      }
    }
 
    /**
@@ -458,8 +533,9 @@ class OW_Utility {
    public function get_current_user_role() {
       global $wp_roles;
       foreach ( $wp_roles->role_names as $role => $name ) :
-         if ( current_user_can( $role ) )
+         if ( current_user_can( $role ) ) {
             return $role;
+         }
       endforeach;
    }
    
@@ -478,8 +554,9 @@ class OW_Utility {
       $user_id = intval( sanitize_text_field( $user_id ) );
 
       foreach ( $wp_roles->role_names as $role => $name ) :
-         if ( user_can( $user_id, $role ) )
+         if ( user_can( $user_id, $role ) ) {
             return $role;
+         }
       endforeach;
    }
    
@@ -518,8 +595,9 @@ class OW_Utility {
       $user_id = intval( sanitize_text_field( $user_id ) );
 
       $user = get_userdata( $user_id );
-      if ( $user )
+      if ( $user ) {
          return $user->data->display_name;
+      }
    }
 
    /**
@@ -559,12 +637,24 @@ class OW_Utility {
       if ( count( $role ) > 0 ) {
          $user_string = array();
          $post_author_id = "";
+         $post_submitter_id = get_current_user_id();
          // Instead of using WP_User_Query, we have to go this route, because user role editor
          // plugin has implemented the pre_user_query hook and excluded the administrator users to appear in the list
 
          if ( $post_id != null ) {
             $post = get_post( $post_id );
             $post_author_id = $post->post_author;
+            
+            /**
+             * TODO : Move code at other place
+             * Added here so that the function get_users_by_role() call doesn't break
+             * if used in other add-on
+             */
+            $ow_history_service = new OW_History_Service();
+            $history = $ow_history_service->get_post_submitter_by_post_id( $post_id );
+            if( $history ) :
+               $post_submitter_id = $history[0]->assign_actor_id;
+            endif;
          }
 
 
@@ -572,23 +662,29 @@ class OW_Utility {
             if ( $k == 'owfpostauthor' ) { // this is a custom role added by oasis workflow
                $author_user = new WP_User( $post_author_id );
                $users = array( $author_user );
+            } else if ( $k == 'owfpostsubmitter' ) { // this is a custom role added by oasis workflow
+               $submitter_user = new WP_User( $post_submitter_id );
+               $users = array( $submitter_user );
             } else {
                $user_role = '%' . $k . '%';
                $users = $wpdb->get_results( $wpdb->prepare( "SELECT users_1.ID, users_1.display_name FROM {$wpdb->base_prefix}users users_1
    				INNER JOIN {$wpdb->base_prefix}usermeta usermeta_1 ON ( users_1.ID = usermeta_1.user_id )
    				WHERE (usermeta_1.meta_key = '{$wpdb->prefix}capabilities' AND CAST( usermeta_1.meta_value AS CHAR ) LIKE %s)", $user_role ) );
             }
+            
             foreach ( $users as $user ) {
-               $current_user = get_current_user_id();
                $user_obj = new WP_User( $user->ID );
                if ( ! empty( $user_obj->roles ) && is_array( $user_obj->roles ) ) {
                   foreach ( $user_obj->roles as $user_role ) {
-                     if ( $user_role == $k || 'owfpostauthor' == $k ) { // if the selected role is 'postauthor'- the custom role.
+                     if ( $user_role == $k || 'owfpostauthor' == $k || 'owfpostsubmitter' == $k ) { // if the selected role is 'postauthor'- the custom role.
                         $part["ID"] = $user->ID;
 
                         if ( $user->ID == $post_author_id ) {
                            $part["name"] = $user->display_name . ' (' . __( "Post Author", "oasisworkflow" ) . ')';
-                        } else {
+                        } else if( $user->ID == $post_submitter_id ) {
+                           $part["name"] = $user->display_name . ' (' . __( "Post Submitter", "oasisworkflow" ) . ')';
+                        } 
+                        else {
                            $part["name"] = $user->display_name;
                         }
                         // check if the user already exists in the available list
@@ -608,6 +704,12 @@ class OW_Utility {
                }
             }
          }
+         
+         // Sort user by display name
+         usort( $user_string, function( $a, $b ) {
+             return strcmp( strtolower( $a->name ), strtolower( $b->name ) );
+         } );         
+         
          return (object) $user_string;
       }
       return "";
@@ -629,11 +731,11 @@ class OW_Utility {
 
       $date_stamp = $date->format( "U" );
 
-      if ( $direction == "next" )
+      if ( $direction == "next" ) {
          $date_stamp = $date_stamp + 3600 * 24 * $days;
-      elseif ( $direction == "pre" )
+      } elseif ( $direction == "pre" ) {
          $date_stamp = $date_stamp - 3600 * 24 * $days;
-
+      }
       return gmdate( "Y-m-d", $date_stamp );
    }
 
@@ -695,6 +797,28 @@ class OW_Utility {
          }
       }
 
+      return false;
+   }
+   
+   public function is_post_taxonomy_in_array( $post_id, $keyword_array ) {
+      $post_taxonomies = get_post_taxonomies( $post_id );      
+      if( $post_taxonomies ) {
+         foreach( $post_taxonomies as $taxonomy ) {
+            $post_terms = wp_get_post_terms( $post_id, $taxonomy );
+            // Check if keyword is in taxonomy
+            if( in_array( $taxonomy, $keyword_array ) ) :
+               return true;
+            endif;
+            // check if keyword is in taxonomy terms
+            if( $post_terms ):
+               foreach( $post_terms as $terms ) :
+                  if( in_array( $terms->slug, $keyword_array ) ) :
+                     return true;
+                  endif;
+               endforeach;
+            endif;
+         }
+      }
       return false;
    }
 
@@ -814,10 +938,11 @@ class OW_Utility {
       if ( $result ) {
 
          $row = $wpdb->get_row( "SELECT max(ID) as maxid FROM $table" );
-         if ( $row )
+         if ( $row ) {
             return $row->maxid;
-         else
+         } else {
             return false;
+         }
       } else {
          return false;
       }
@@ -832,7 +957,9 @@ class OW_Utility {
     * @since 3.5 initial version
     */
    public function admin_notice( $data = array() ) {
-   	extract( $data ); // Extracts $message and $type from $data array
+      $type = $data["type"];
+      $message = $data["message"];
+
    	switch ( $type ) {
    		case 'error':
    			$return = "<div id=\"message\" class=\"error\">\n";
@@ -873,6 +1000,30 @@ class OW_Utility {
    /**
     * set priority levels
     * @return array
+    * @since 5.8
+    */
+   public function api_get_priorities( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_get_priorities', __( 'You are not allowed to get workflow priorities', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      $priorities = $this->get_priorities();
+      $return = array();
+      foreach ( $priorities as $key => $val ) {
+         $return[] = array(
+            "key" => $key,
+            "value" => $val
+         );
+      }
+      return $return;
+   }
+
+   /**
+    * set priority levels
+    * @return array
     * @since 3.7
     */
    public function get_priorities(){
@@ -899,6 +1050,19 @@ class OW_Utility {
 	   }
 	   echo $option;
 	}
+   
+   /**
+    * Localized process names
+    * @return array
+    * @since 6.5
+    */
+   public function get_process_names(){
+      return array(
+          'assignment'  => __( 'assignment', 'oasisworkflow' ),
+          'review'      => __( 'review', 'oasisworkflow' ),
+          'publish'     => __( 'publish', 'oasisworkflow' )
+      );
+   }
 
 	/**
 	 * get all roles and show the assigneed roles as selected
@@ -918,8 +1082,9 @@ class OW_Utility {
 
       $participating_roles = get_option( 'oasiswf_participating_roles_setting' );
       
-      // add our custom role "Post Author" to this list
+      // add our custom role "Post Author" and "Post Submitter" to this list
       $participating_roles['owfpostauthor'] = __( 'Post Author', 'oasisworkflow' );
+      $participating_roles['owfpostsubmitter'] = __( 'Post Submitter', 'oasisworkflow' );
       asort($participating_roles);
 
 		$options = '<optgroup label="' . __( 'Roles', 'oasisworkflow' ) . '">';
@@ -1001,7 +1166,7 @@ class OW_Utility {
     *
     * @return bool
     */
-   public function is_post_editable( $post_id = null ) {
+   public function is_post_editable_others( $post_id = null ) {
       // if empty post_id, then simply check if the user has atleast edit_posts or edit_pages capability
       if ( empty( $post_id ) ) {
          if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
@@ -1029,9 +1194,30 @@ class OW_Utility {
             return true;
          }
       }
-
       return false;
+   }
+   
+   public function is_post_editable( $post_id = null ) {
+      // if empty post_id, then simply check if the user has atleast edit_others_posts or edit_others_pages capability
+      if ( empty( $post_id ) ) {
+         if ( ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_others_posts' ) ) {
+            return true;
+         }
+      }
+      
+      $post_id = intval( $post_id );
 
+      $post_type_obj = get_post_type_object( get_post_type( $post_id ) );
+      if ( ! empty ( $post_type_obj ) ) {
+         // get the caps for the given custom post type
+         $caps = $post_type_obj->cap;
+         $edit_posts_cap = $caps->edit_posts; // edit_posts cap equivalent
+         
+         if ( current_user_can( $edit_posts_cap ) ) {
+            return true;
+         }
+      }
+      return true;
    }
    
    /*
@@ -1073,14 +1259,108 @@ class OW_Utility {
     * @since 4.6
     */
    public function get_purge_history_period_dropdown( $selected_period = 'one-month-ago' ){
-		$period = $this->purge_history_period();
-	   $option = '';
+      $period = $this->purge_history_period();
+      $option = '';
       
-       foreach ( $period as $key => $val ) {
-         	$option .= '<option value="'. $key . '" ' . selected( $selected_period, $key, FALSE ) . '>' . __( $val, 'oasisworkflow' ).'</option>';
-		}
-	   echo $option;
-	}   
+      foreach ( $period as $key => $val ) {
+         $option .= '<option value="'. $key . '" ' . selected( $selected_period, $key, FALSE ) . '>' . __( $val, 'oasisworkflow' ).'</option>';
+      }
+	 echo $option;
+   } 
+        
+   /**
+    * Create a drop down list of all active workflows
+    *
+    * @return HTML of workflows list dropdrop options
+    * @since 4.9
+    */     
+   public function workflows_dropdown( $workflows, $wf_id = null ) {
+      $option = "<option value = ''>" . __('--Select Workflow--', 'oasisworkflow') . "</option>"
+      ?>
+      <?php
+      foreach ( $workflows as $workflow ) {
+         $workflow_id      = $workflow->ID;
+         $workflow_name    = $workflow->name;
+         $workflow_version = $workflow->version;
+         
+         if ( isset( $wf_id ) && $workflow_id == $wf_id ) {
+            $selected = " ' selected='selected' ";
+         }  else {
+            $selected  = "";
+         }            
+         if ( $workflow->version == 1 ) {
+            $option .= "<option value={$workflow_id} {$selected} >" . $workflow_name . "</option>";
+         } else {
+            $option .= "<option value={$workflow_id} {$selected} >" . $workflow_name . " (" . $workflow_version . ")" . "</option>";
+         }
+      } 
+      echo $option;
+   }
+
+   /**
+    * Create a drop down list of all due date types at inbox page
+    * @param $selected_value
+    * @since 6.8
+    */
+   public function get_due_date_dropdown( $selected_value ) {
+      $option = "";
+      $due_types = array(
+          'no_due_date'       =>  __( 'No Due Date', 'oasisworkflow' ),
+          'overdue'           =>  __( 'Overdue', 'oasisworkflow' ),
+          'due_today'         =>  __( 'Due Today', 'oasisworkflow' ),
+          'due_tomorrow'      =>  __( 'Due Tomorrow', 'oasisworkflow'),
+          'due_in_seven_days' =>  __( 'Due in 7 days', 'oasisworkflow')
+      );
+      
+      foreach( $due_types as $value=>$label) {
+         $selected = "";
+         if( $value == $selected_value ) {
+            $selected = "selected";
+         }
+         $option .= "<option value={$value} {$selected}>" . $label . "</option>";
+      }
+      echo $option;
+   }
+   
+   /**
+    * Get Site role user ids
+    *
+    * @return array
+    * @since 7.2
+    */
+   public function get_roles_user_id( $role ) {
+      $user_ids = array();
+      $args = array(
+         'blog_id' => $GLOBALS['blog_id'],
+         'role__in' => $role,
+         'fields' => array('ID')
+      );
+      $users = get_users($args);
+      foreach ($users as $user) {
+         array_push($user_ids, $user->ID);
+      }
+
+      return $user_ids;
+   }
+   
+   /**
+    * Get applicable post type as per roles and workflow Global Settings
+    * @param array $types
+    * @return array $post_types
+    * @since 6.5
+    */
+   private function get_applicable_post_types( $types ) {
+      $post_types = array();
+      // Get post type selected at workflow global settings
+         $global_post_types = array_unique( get_option( 'oasiswf_show_wfsettings_on_post_types' ) );
+         foreach( $types as $key=>$type ) {
+            if( in_array( $type['name'], $global_post_types ) ) {
+               $post_types[] = $types[ $key ];
+            }            
+         } 
+      return $post_types;
+   }
+   
 }
 
 ?>

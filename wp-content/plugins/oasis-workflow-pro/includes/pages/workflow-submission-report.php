@@ -17,19 +17,27 @@ $action = ( isset( $_REQUEST["action"] ) && sanitize_text_field( $_REQUEST["acti
 $post_type = ( isset( $_REQUEST["type"] ) && sanitize_text_field( $_REQUEST["type"] )) ? sanitize_text_field( $_REQUEST["type"] ) : "all";
 $page_number = (isset( $_GET['paged'] ) && sanitize_text_field( $_GET["paged"] )) ? intval( sanitize_text_field( $_GET["paged"] ) ) : 1;
 
+// Filter post/page by team
+$team_filter = ( isset( $_REQUEST["team-filter"] ) ) ? intval( $_REQUEST["team-filter"] ) : -1;
+
 $ow_report_service = new OW_Report_Service();
 $ow_process_flow = new OW_Process_Flow();
 
-$submitted_posts = $ow_process_flow->get_submitted_articles( $post_type );
-$un_submitted_posts = $ow_process_flow->get_unsubmitted_articles( $post_type );
+$submitted_posts = $ow_process_flow->get_submitted_articles( $post_type, $team_filter, $page_number );
+
+$submitted_post_count = $ow_process_flow->get_submitted_article_count( $post_type, $team_filter );
+$un_submitted_posts = $ow_process_flow->get_unsubmitted_articles( $post_type, $page_number );
+$un_submitted_post_count = $ow_process_flow->get_unsubmitted_article_count( $post_type );
 
 if ( $action == "in-workflow" ) {
    $posts = $submitted_posts;
+   $count_posts = $submitted_post_count;
 } else {
    $posts = $un_submitted_posts;
+   $count_posts = $un_submitted_post_count;
+   $action = 'not-workflow';
 }
 
-$count_posts = count( $posts );
 $per_page = OASIS_PER_PAGE;
 ?>
 <div class="wrap">
@@ -40,9 +48,24 @@ $per_page = OASIS_PER_PAGE;
                 <input type="hidden" id="action" name="action" value="<?php echo esc_attr( $action ); ?>" />
                 <div class="alignleft actions">
                     <select name="type">
-                        <option value="all" <?php echo ( $post_type == "all" ) ? "selected" : ""; ?> >All Types</option>
+                        <option value="all" <?php echo ( $post_type == "all" ) ? "selected" : ""; ?> >All Post Types</option>
                         <?php OW_Utility::instance()->owf_dropdown_post_types_multi( $post_type ); ?>
                     </select>
+                  <?php
+                     if ( has_filter( 'owf_report_team_filter' ) ) { 
+                        if ( $action == 'in-workflow' ) { ?>
+                           <select name="team-filter">
+                              <option value="-1" <?php echo ( $team_filter == -1 ) ? "selected" : ""; ?> >Select Team</option>
+                               <option value="0" <?php echo ( $team_filter == 0 ) ? "selected" : ""; ?> >All Teams</option>
+                              <?php
+                              $team_options = apply_filters( 'owf_report_team_filter', $team_filter );
+                              echo $team_options;
+                              ?>
+                           </select>
+                  <?php
+                        }
+                     }
+                  ?>
                     <input type="submit" class="button action" value="Filter" />
                 </div>
                 <div>
@@ -52,57 +75,43 @@ $per_page = OASIS_PER_PAGE;
                         $not_in_wf = ( $action == "not-workflow" ) ? "class='current'" : "";
                         $in_wf = ( $action == "in-workflow" ) ? "class='current'" : "";
                         echo '<li class="all"><a id="notInWorkflow" href="#" ' . $not_in_wf . '>' . __( 'Not in Workflow' ) .
-                        '<span class="count"> (' . count( $un_submitted_posts ) . ')</span></a> </li>';
+                        '<span class="count"> (' . $un_submitted_post_count . ')</span></a> </li>';
                         echo ' | <li class="all"><a id="inWorkflow" href="#" ' . $in_wf . '>' . __( 'In Workflow' ) .
-                        '<span class="count"> (' . count( $submitted_posts ) . ')</span></a> </li>';
+                        '<span class="count"> (' . $submitted_post_count . ')</span></a> </li>';
                         ?>
                     </ul>
                 </div>
                 <div class="tablenav-pages">
-                    <?php OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page, $action ); ?>
+                     <?php
+                        $filters = array();
+                        $filters["type"]     = $post_type;
+                        $filters["team-filter"] = $team_filter;
+                        OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page, $action, $filters );
+                     ?>
                 </div>
             </div>
            <?php wp_nonce_field( 'owf_workflow_abort_nonce', 'owf_workflow_abort_nonce' ); ?>
         </form>
         <table class="wp-list-table widefat posts" cellspacing="0" border=0>
+            <?php $report_column_header = $ow_report_service->get_submission_report_table_header( $action, $post_type ); ?>
             <thead>
-               <?php $ow_report_service->get_submission_report_table_header( $action ); ?>
+               <tr>
+                  <?php
+                     echo implode( '', $report_column_header );
+                  ?>
+               </tr>              
             </thead>
             <tfoot>
-               <?php $ow_report_service->get_submission_report_table_header( $action ); ?>
+               <tr>
+                  <?php
+                     echo implode( '', $report_column_header );
+                  ?>
+               </tr>               
             </tfoot>
             <tbody id="coupon-list">
-                <?php
-                if ( $posts ):
-                   $count = 0;
-                   $start = ($page_number - 1) * $per_page;
-                   $end = $start + $per_page;
-                   foreach ( $posts as $post ) {
-                      if ( $count >= $end )
-                         break;
-                      if ( $count >= $start ) {
-                         $user = get_userdata( $post->post_author );
-                         echo "<tr>";
-                         if ( $action == 'in-workflow' ) {
-                            echo "<td><input type='checkbox' id='abort-" . $post->ID . "' value='" . esc_attr( $post->ID ) . "' name='abort' /></td>";
-                         }
-                         echo "<td><a href='post.php?post=" . $post->ID . "&action=edit'>" . esc_html( $post->post_title ) . "</a></td>";
-                         echo "<td>{$post->post_type}</td>";
-                         echo "<td>{$user->data->display_name}</td>";
-                         echo "<td>" . OW_Utility::instance()->format_date_for_display( $post->post_date, "-", "datetime" ) . "</td>";
-                         echo "</tr>";
-                      }
-                      $count++;
-                   }
-                else:
-                   echo "<tr>";
-                   echo "<td class='hurry-td' colspan='4'>
-							<label class='hurray-lbl'>";
-                   echo __( "No Posts/Pages found in any workflows." );
-                   echo "</label></td>";
-                   echo "</tr>";
-                endif;
-                ?>
+               <?php
+                  $ow_report_service->get_submission_report_table_rows( $posts, $action, $report_column_header );
+		         ?> 
             </tbody>
         </table>
        
@@ -120,7 +129,12 @@ $per_page = OASIS_PER_PAGE;
                <!-- Bulk Actions End -->
                <!-- Display pages Start -->
                <div class="tablenav-pages">
-                   <?php OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page, $action ); ?>
+                   <?php
+                     $filters = array();
+                     $filters["type"]     = $post_type;
+                     $filters["team-filter"] = $team_filter;
+                     OW_Utility::instance()->get_page_link( $count_posts, $page_number, $per_page, $action, $filters );
+                   ?>
                </div>
                <!-- Display pages End -->
            </div>

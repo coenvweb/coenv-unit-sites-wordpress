@@ -10,26 +10,31 @@ jQuery(document).ready(function() {
 	});
 
 	jQuery( document ).on( "click", "#reassignSave", function(){
-		if ( 0 === jQuery('#actors-set-select option').length ) {
+		if ( 0 === jQuery('#reassign-actors-set-select option').length ) {
 			alert(owf_reassign_task_vars.selectUser);
 			return false;
 		}
 		var actors = [];
-		jQuery('#actors-set-select option').each(function() {
+		jQuery('#reassign-actors-set-select option').each(function() {
 			actors.push(jQuery(this).val());
 		});
       
 		var obj = this ;
 		jQuery(this).parent().children("span").addClass("loading") ;
 		jQuery(this).hide();
-      
+            
+      var task_user = jQuery('#task_user_inbox').val();
+      // If we are on post edit page
+      if( jQuery("#hi_task_user").length !== 0 ) {
+         task_user = jQuery("#hi_task_user").val();
+      }
 
 		data = {
 			action: 'reassign_process' ,
 			oasiswf: jQuery("#action_history_id").val(),
 			reassign_id: actors,
-			reassignComments: jQuery('#reassignComments').val(),
-			task_user: jQuery('#task_user_inbox').val(),
+			reassign_comments: jQuery('#reassign_comments').val(),
+			task_user: task_user,
 			security: jQuery('#owf_reassign_ajax_nonce').val()
 		};
 		jQuery.post(ajaxurl, data, function( response ) {
@@ -46,6 +51,32 @@ jQuery(document).ready(function() {
 		});
 	});
    
+   // assign users to reassign
+   jQuery(document).on("click", "#reassign-assignee-set-point", function () {
+      jQuery('#reassign-actors-list-select option:selected').each(function () {
+         var v = jQuery(this).val();
+         var t = jQuery(this).text();
+         addRemoveOptions('reassign-actors-list-select', 'reassign-actors-set-select', v, t);
+      });
+      return false;
+   });
+
+   //unassign users from the reassign list
+   jQuery(document).on("click", "#reassign-assignee-unset-point", function () {
+      jQuery('#reassign-actors-set-select option:selected').each(function () {
+         var v = jQuery(this).val();
+         var t = jQuery(this).text();
+         addRemoveOptions('reassign-actors-set-select', 'reassign-actors-list-select', v, t);
+      });
+   });
+   
+   function addRemoveOptions (removeSelector, appendSelector, val, text) {
+      if (typeof val !== 'undefined') {
+         jQuery("#" + removeSelector + " option[value='" + val + "']").remove();
+         jQuery('#' + appendSelector).append('<option value=' + val + '>' + text + '</option>');
+      }
+   }
+   
    
    function displayWorkflowReassignErrorMessages( errorMessages ) {
       jQuery('#ow-reassign-messages').html(errorMessages);
@@ -56,7 +87,7 @@ jQuery(document).ready(function() {
       jQuery(".simplemodal-wrap").animate({scrollTop: 0}, "slow");
       jQuery(".simplemodal-wrap").css('overflow', 'scroll');
       jQuery(".changed-data-set span").removeClass("loading");
-      jQuery("#simplemodal-container").css("max-height", "80%");
+      jQuery("#simplemodal-container").css("max-height", "90%");
 
       // call modal.setPosition, so that the window height can adjust automatically depending on the displayed fields.
       jQuery.modal.setPosition();

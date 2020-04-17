@@ -63,7 +63,7 @@ function get_oasis_workflow_add_ons() {
 
    $url = 'https://oasisworkflow.com/add-ons.php';
 
-   $get_list = wp_remote_get( esc_url_raw( $url ), array( 'sslverify' => false ) );
+   $get_list = wp_remote_get( esc_url_raw( $url ) );
    if ( !is_wp_error( $get_list ) ) {
       if ( isset( $get_list[ 'body' ] ) && strlen( $get_list[ 'body' ] ) > 0 ) {
          $display = wp_remote_retrieve_body( $get_list );

@@ -129,7 +129,7 @@ $global_default_due_days = get_option( 'oasiswf_default_due_days' );
          <br class="clear">
       </div>
       <br class="clear">
-        <div class="first-step-post-status owf-hidden">
+        <div class="first-step-post-status owf-hidden ow-fieldset">
             <fieldset class="first-step-fieldset">
                <legend><?php echo __( "On Submit to Workflow", "oasisworkflow" ); ?></legend>
                <label><?php echo __( 'Post Status: ', 'oasisworkflow' ); ?>
@@ -143,14 +143,53 @@ $global_default_due_days = get_option( 'oasiswf_default_due_days' );
                <select name="first_step_post_status" id="first_step_post_status">
                    <option value=""></option>
                    <?php $status_array = get_post_stati( array( 'show_in_admin_status_list' => true ), 'objects' ); ?>
-                   <?php foreach ( $status_array as $status_id => $status_object ) { ?>
+                   <?php foreach ( $status_array as $status_id => $status_object ) { 
+                           // we do not want to show this post status in the drop down and hence removing it.
+                           if ( $status_id == "owf_scheduledrev" ) {
+                              continue;
+                           }                      
+                      ?>
                       <option value="<?php echo $status_id; ?>" <?php selected( $status_id, 'draft' ); ?>><?php echo $status_object->label; ?></option>
                    <?php } ?>
                </select>
                <?php apply_filters( 'owf_display_condition_group_list', $step_info, true, "first_step_condition_group" ); ?>
                <br class="clear">
             </fieldset>
+           <br class="clear">
         </div>
+      <?php if ( $process_name == 'publish' ) { ?>
+         <div class="ow-fieldset">
+            <fieldset class="last-step-fieldset">
+               <legend><?php echo __( "On Workflow Completion", "oasisworkflow" ); ?></legend>
+               <label><?php echo __( 'Post Status: ', 'oasisworkflow' ); ?>
+                   <a href="#" title="<?php echo __( 'Set post status after workflow process is complete.', "oasisworkflow" );
+                   ?>" class="tooltip">
+                       <span title="">
+                           <img src="<?php echo OASISWF_URL . 'img/help.png'; ?>" class="help-icon"/>
+                       </span>
+                   </a>
+               </label>
+               <select name="last_step_post_status" id="last_step_post_status">
+                   <option value=""></option>
+                   <?php $status_array = get_post_stati( array( 'show_in_admin_status_list' => true ), 'objects' ); ?>
+                   <?php foreach ( $status_array as $status_id => $status_object ) { 
+                           // we do not want to show this post status in the drop down and hence removing it.
+                           if ( $status_id == "owf_scheduledrev" ) {
+                              continue;
+                           }
+                           $selected_status = "publish";
+                           if( is_object( $step_info ) && isset( $step_info->last_step_post_status ) ) :
+                              $selected_status = $step_info->last_step_post_status;
+                           endif;
+                   ?>
+                      <option value="<?php echo $status_id; ?>" <?php selected( $status_id, $selected_status ); ?>><?php echo $status_object->label; ?></option>
+                   <?php } ?>
+               </select>
+               <br class="clear">
+            </fieldset>
+            <br class="clear">
+         </div>
+       <?php } ?>
       
       <?php if ( $process_name == 'review' ) { ?>
        <br class="clear">
@@ -189,6 +228,48 @@ $global_default_due_days = get_option( 'oasiswf_default_due_days' );
       
       <?php apply_filters( 'owf_display_condition_group_list', $step_info, false, "condition_group" ); ?>
 
+      <br class="clear">
+      
+      <div>
+         <div style="margin-left:0px;">
+            <label><?php echo __( 'Sign off Action Text: ', 'oasisworkflow' ); ?>
+               <a href="#" title="<?php echo __( 'Specify the text for sign off actions that should appear when user is signing off from a given task.', "oasisworkflow" );
+       ?>" class="tooltip">
+                  <span title="">
+                     <img src="<?php echo OASISWF_URL . 'img/help.png'; ?>" class="help-icon"/>
+                  </span>
+               </a>
+            </label>
+         </div>
+         <span class="signoff-action">
+            <?php 
+            $success_placeholder = __( 'Complete', 'oasisworkflow' );
+            $failure_placeholder = __( 'Unable to Complete', 'oasisworkflow' );
+            if ( $process_name == 'review' ) { 
+               $success_placeholder = __( 'Approved', 'oasisworkflow' );
+               $failure_placeholder = __( 'Reject', 'oasisworkflow' );
+            }?>
+             <div>
+                 <div style="float:left;">
+                    <label><?php _e( 'For Success', 'oasisworkflow' ); ?></label>
+                 </div>
+                 <div style="float:left;">
+                    <input type="text" id="signoff_success_action" placeholder="<?php echo $success_placeholder; ?>" value="<?php echo isset( $step_info->signoff_success_action ) ? $step_info->signoff_success_action : '' ;?>" />
+                 </div>
+                 <br class="clear">
+             </div>
+             <div>
+                 <div style="float:left;">
+                    <label><?php _e( 'For Failure', 'oasisworkflow' ); ?></label>
+                 </div>
+                 <div style="float:left;">
+                    <input type="text" id="signoff_failure_action" placeholder="<?php echo $failure_placeholder; ?>" value="<?php echo isset( $step_info->signoff_failure_action ) ? $step_info->signoff_failure_action : '' ;?>"/>
+                 </div>
+                 <br class="clear">
+             </div>
+         </span>
+      </div>   
+      <br class="clear">
       <br class="clear">
       
       <h3 class="nav-tab-wrapper" id="step_email_content">

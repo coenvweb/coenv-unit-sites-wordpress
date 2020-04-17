@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}   
 
 /*
  * OW_History_Service Class
@@ -24,14 +26,12 @@ class OW_History_Service {
 	 * @since 2.0
 	 */
 	public function __construct() {
+      // only add_actions for AJAX actions
 		add_action( 'wp_ajax_purge_workflow_history', array( $this, 'purge_workflow_history' ) );
-		add_action( 'admin_init', array( $this, 'download_history_report' ) );
-
-		// TODO: this might cause issues with other plugins - compatibility issues - for the time being this feature is turned off.
-		//add_action( 'admin_menu', array( $this, 'create_meta_box' ) );
+      add_action( 'wp_logout', array( $this, 'clear_unclaimed_activity_transient' ) );
 	}
-   
-   /*
+      
+   /**
 	 * AJAX function - Purge or Delete workflow history
 	 * Given a timeframe till all history till that time.
 	 */
@@ -54,8 +54,27 @@ class OW_History_Service {
 	   wp_send_json_success( array( 'result' => $purge_result ) );
    }
    
+   /**
+    * Delete unclaimed activity transient as per user
+    * @since 6.5
+    */
+   public function clear_unclaimed_activity_transient() {        
+      $user_id = get_current_user_id();
+      $hide_unclaimed = false;
+      
+      if( $user_id ) {
+         $hide_unclaimed = get_transient( 'show_unclaimed_'.$user_id );
+      }
+
+      // Remove this user.
+      if ( $hide_unclaimed ) {
+         // Remove this user.
+         delete_transient( 'show_unclaimed_'.$user_id );
+      }
+   }
    
-   /*
+   
+   /**
 	 * Hook - Purge or Delete Workflow History
     * 1) called via ajax function purge_workflow_history()
     * 2) Called via cron schedule event 
@@ -137,7 +156,7 @@ class OW_History_Service {
       return "success_history_deleted";
 	}
    
-   /*
+   /**
 	 * Hook - This action handles download history report AJAX request
 	 * And returns generated CSV file path for download
 	 *
@@ -156,19 +175,43 @@ class OW_History_Service {
          $workflow_service = new OW_Workflow_Service();
          $ow_process_flow = new OW_Process_Flow();
 
-         $histories = $this->get_workflow_history_all( $post_id );
-         $count_posts = $this->get_workflow_history_count( $post_id );
-         $data[] = array( __( "Title", "oasisworkflow" ),
-             __( "Actor", "oasisworkflow" ),
-             __( "Workflow (version)", "oasisworkflow" ),
-             __( "Step", "oasisworkflow" ),
-             __( "Assigned Date", "oasisworkflow" ),
-             __( "Sign off date", "oasisworkflow" ),
-             __( "Result", "oasisworkflow" ),
-             __( "Comments", "oasisworkflow" ),
-             __( "Workflow Meta", "oasisworkflow" ) );
+         $histories = $this->get_workflow_history_all( $post_id, null, "download" );
+
+			// Hide/Show actor column using the filter
+			$current_user_id = get_current_user_id();
+			$current_user_role = OW_Utility::instance()->get_user_role( $current_user_id );
+
+			$roles = array();
+			$user_roles = apply_filters( 'owf_hide_attributes_by_role', $roles );
+
+			if ( ! in_array( $current_user_role, $user_roles ) ) {
+            $data[] = array( __( "Title", "oasisworkflow" ),
+               __( "Actor", "oasisworkflow" ),
+               __( "Workflow (version)", "oasisworkflow" ),
+               __( "Step", "oasisworkflow" ),
+               __( "Assigned Date", "oasisworkflow" ),
+               __( "Sign off date", "oasisworkflow" ),
+               __( "Result", "oasisworkflow" ),
+               __( "Comments", "oasisworkflow" ),
+               __( "Workflow Meta", "oasisworkflow" ) );
+
+			} else  {
+            $data[] = array( __( "Title", "oasisworkflow" ),
+               __( "Workflow (version)", "oasisworkflow" ),
+               __( "Step", "oasisworkflow" ),
+               __( "Assigned Date", "oasisworkflow" ),
+               __( "Sign off date", "oasisworkflow" ),
+               __( "Result", "oasisworkflow" ),
+               __( "Comments", "oasisworkflow" ),
+               __( "Workflow Meta", "oasisworkflow" ) );
+         }
+         
+         if( has_filter( 'owf_download_history_column_header' ) ) {
+            $data = apply_filters("owf_download_history_column_header", $data );
+         }
 
          if ( $histories ):
+            $i = 1;
             foreach ( $histories as $key => $row ) {
                if ( $row->assign_actor_id != -1 ) { //assignment and/or publish steps
                   $post_title = $row->post_title;
@@ -198,8 +241,13 @@ class OW_History_Service {
                      $pre_publish_checklist .= implode(",\n", $selected_checklists );
                      
                   }
+						// hide/show actor field depending on the filter
+						if ( ! in_array( $current_user_role, $user_roles ) ) {
+							$data[ $i ] = array( $post_title, $actor, $workflow, $step, $assigned_date, $sign_off_date, $results, $comments, $pre_publish_checklist );
+						} else {
+							$data[ $i ] = array( $post_title, $workflow, $step, $assigned_date, $sign_off_date, $results, $comments, $pre_publish_checklist );
+						}
 
-                  $data[] = array( $post_title, $actor, $workflow, $step, $assigned_date, $sign_off_date, $results, $comments, $pre_publish_checklist );
                }
 
                if ( $row->assign_actor_id == -1 ) { //review step
@@ -243,10 +291,21 @@ class OW_History_Service {
 									$pre_publish_checklist .= implode(",\n", $selected_checklists );
                         }
 
-                        $data[] = array( $post_title, $actor, $workflow, $step, $assigned_date, $sign_off_date, $review_signoff_status, $comments, $pre_publish_checklist );
+								// hide/show actor field depending on the filter
+								if ( ! in_array( $current_user_role, $user_roles ) ) {
+									$data[ $i ] = array( $post_title, $actor, $workflow, $step, $assigned_date, $sign_off_date, $review_signoff_status, $comments, $pre_publish_checklist );
+								} else {
+									$data[ $i ] = array( $post_title, $workflow, $step, $assigned_date, $sign_off_date, $review_signoff_status, $comments, $pre_publish_checklist );
+								}
+
                      }
                   }
                }
+               if( has_filter( "owf_download_history_column_content" ) ) {
+                  $data[ $i ] = apply_filters("owf_download_history_column_content", $row->post_id, $data[ $i ] );
+               }
+               
+               $i++;
             }
          endif;
 
@@ -295,7 +354,7 @@ class OW_History_Service {
 	}
 
    
-   /*
+   /**
 	 * get all the workflow history
 	 *
 	 * @param null|int $post_id, if particular post id is provided, get history only for that post
@@ -303,9 +362,18 @@ class OW_History_Service {
 	 *
 	 * @since 2.0
 	 */
-	public function get_workflow_history_all( $post_id = null )
+	public function get_workflow_history_all( $post_id = null, $page_number, $report_type )
 	{
-		global $wpdb;
+		global $wpdb;      
+      $limit = OASIS_PER_PAGE;
+      $show_unclaimed = false;
+      
+      // Get transient user details
+      $user_id = get_current_user_id();
+      if( $user_id ) {
+         $show_unclaimed = get_transient( 'show_unclaimed_'.$user_id );
+      }
+      
       // check capability
 		if ( ! current_user_can( 'ow_view_workflow_history' ) ) {
 			wp_die( __( 'You are not allowed to view workflow history.' ) );
@@ -322,10 +390,40 @@ class OW_History_Service {
 				'asc' => 'ASC',
 				'desc' => 'DESC',
 		);
+
+		$limit_search = "";
+
       // sanitize the input
 		if ( ! empty ( $post_id ) ) {
 			$post_id = intval( sanitize_text_field( $post_id ) );
 		}
+      $page_number = intval( sanitize_text_field( $page_number ) );
+      $report_type = sanitize_text_field( $report_type );
+      
+      // If report type is "download" we don't ned the limit search
+      if ( $report_type == "download" ) {
+         $limit_search = "";
+      }
+      
+      // If report type is online and set unclaimed activity transient
+      if ( $report_type == "online" && $show_unclaimed ) :         
+         // Remove this user.
+         delete_transient( 'show_unclaimed_'.$user_id ); 
+         $show_unclaimed = false;
+      endif;
+     
+      // Set the limit and offset to view the history list as per limit search .
+      if ( $report_type == "online" || $report_type == "show_unclaimed" ) {    
+         
+         $offset = 0; 
+         // limit search if page is 1
+         $limit_search = "LIMIT " . $offset. "," . $limit ;
+                 
+         if ( $page_number !== 1 ) {
+            $offset = $limit * ( $page_number - 1 );
+            $limit_search = "LIMIT " . $offset. "," . $limit ;
+         }
+      }
 
 		// default order by
 		$order_by_columns = " ORDER BY A.ID DESC"; // default order by column
@@ -338,7 +436,13 @@ class OW_History_Service {
 			}
 		}
 
-		$where_clause = "action_status != 'complete' AND action_status != 'cancelled'" ;
+      // Generate where clause
+      $where_clause = "action_status != 'complete' AND action_status != 'cancelled' AND action_status NOT IN('claim_cancel', 'abort_no_action')" ;
+      
+      // Where clause to hide unclaimed activities, avoid if report type is download
+      if ( $report_type !== "download" && ( $report_type == "show_unclaimed" || $show_unclaimed  ) ) {
+         $where_clause = "action_status != 'complete' AND action_status != 'cancelled'" ;
+      }
 
 		// if post id is provided, filter by post_id
 		if ( $post_id ) {
@@ -356,30 +460,49 @@ class OW_History_Service {
 					LEFT JOIN
 					(SELECT AA.*, BB.name as wf_name, BB.version FROM " . OW_Utility::instance()->get_workflow_steps_table_name() . " AS AA LEFT JOIN " . OW_Utility::instance()->get_workflows_table_name() . " AS BB ON AA.workflow_id = BB.ID) AS D
 					ON A.step_id = D.ID)
-					{$order_by_columns}" ;
+               {$order_by_columns} {$limit_search}";
 
-					$result = "";
-					if ( $post_id ) {
-						$result = $wpdb->get_results( $wpdb->prepare( $sql, $post_id )) ;
-					} else {
-						$result = $wpdb->get_results( $sql ) ;
-					}
-		return $result;
+      if ( $post_id ) {
+         $results = $wpdb->get_results( $wpdb->prepare( $sql, $post_id )) ;
+      } else {
+         $results = $wpdb->get_results( $sql ) ;
+      }
+      
+      // Set transient if user clicks hide unclaimed activities
+      if ( $report_type == "show_unclaimed" ) {          
+         if ( ! $show_unclaimed ) : 
+            set_transient( 'show_unclaimed_'.$user_id, true );
+         endif;
+      }
+      
+		return $results;
 	}
    
-   
-	/*
+	/**
 	 * get the count of history records
 	 * @param int|null $post_id, if post id is provided, get count for the particular post only
 	 * @return int count of history records
 	 *
 	 * @since 2.0
 	 */
-	public function get_workflow_history_count( $post_id = null )
+	public function get_workflow_history_count( $post_id = null, $report_type )
 	{
 		global $wpdb;
-
-		$where_clause = "action_status != 'complete' AND action_status != 'cancelled'" ;
+      $show_unclaimed = false;
+      
+      // Get transient user details
+      $user_id = get_current_user_id();
+      if( $user_id ) {
+         $show_unclaimed = get_transient( 'show_unclaimed_'.$user_id );
+      }  
+      
+      // Generate where clause
+		$where_clause = "action_status != 'complete' AND action_status != 'cancelled' AND action_status NOT IN('claim_cancel', 'abort_no_action')" ;
+      
+      // Where clause to hide unclaimed activities
+      if ( $report_type == "show_unclaimed" || $show_unclaimed == 1 ) { 
+         $where_clause = "action_status != 'complete' AND action_status != 'cancelled'";
+      }
 
 		// if post id is provided, filter by post_id
 		if ( $post_id ) {
@@ -392,8 +515,7 @@ class OW_History_Service {
 						ON A.ID = C.action_history_id)
 					" ;
 
-		$results = "";
-		if ( $post_id ) {
+      if ( $post_id ) {
 			$results = $wpdb->get_results( $wpdb->prepare( $sql, $post_id )) ;
 		} else {
 			$results = $wpdb->get_results( $sql ) ;
@@ -406,7 +528,7 @@ class OW_History_Service {
 		return count( $final_results );
 	}
    
-   /*
+   /**
 	 * Get Review History object by action history id
 	 *
 	 * @param int $action_history_id
@@ -415,7 +537,7 @@ class OW_History_Service {
 	 *
 	 * @since 2.0
 	 */
-	public function get_review_action_by_history_id( $action_history_id, $order_by = null ) {
+	public function get_review_action_by_history_id( $action_history_id, $order_by = null, $no_action = null ) {
 		global $wpdb;
       // sanitize the input
 		$action_history_id = intval( sanitize_text_field( $action_history_id ) );
@@ -432,7 +554,14 @@ class OW_History_Service {
 		} else {
 			$order_by_clause = " ORDER BY " . $order_by . " DESC ";
 		}
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_table_name() . " WHERE action_history_id = %d " . $order_by_clause, $action_history_id ) );
+      
+      // Set where condition to hide no action review activity
+      $where = "";
+      if( $no_action == "hide_no_action" ) {
+         $where = " AND review_status != 'no_action'";  
+      }
+      
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_table_name() . " WHERE action_history_id = %d {$where}" . $order_by_clause, $action_history_id ) );
 		foreach ( $results as $result ) {
 			$review_history = $this->get_review_history_from_result_set( $result );
 			array_push( $review_histories, $review_history );
@@ -440,7 +569,7 @@ class OW_History_Service {
 		return $review_histories;
 	}
 
-	/*
+	/**
 	 * Get Workflow History object from ID
 	 *
 	 * @param int $action_history_id
@@ -461,7 +590,7 @@ class OW_History_Service {
 
 	}
 
-	/*
+	/**
 	 * Get Workflow History object from "from_id" - the previous step_id
 	 *
 	 * @param int $from_id - previous step id
@@ -475,12 +604,13 @@ class OW_History_Service {
 		// sanitize the input
 		$from_id = intval( sanitize_text_field( $from_id ) );
 
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE from_id = %d", $from_id ) );
-		$action_history = $this->get_action_history_from_result_set( $result );
+      $result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE from_id = %d", $from_id ) );
+      $action_history = $this->get_action_history_from_result_set( $result );
+
 		return $action_history;
 	}
 
-	/*
+	/**
 	 * Get Workflow History object from action status for a post
 	 *
 	 * @param int $action_status
@@ -491,11 +621,11 @@ class OW_History_Service {
 	 */
 	public function get_action_history_by_status( $action_status, $post_id ) {
 		global $wpdb;
+      $action_histories = array();
 		if ( ! empty( $post_id ) ) {
 			// sanitize the input
 			$action_status = sanitize_text_field( $action_status ) ;
-			$post_id = intval( sanitize_text_field( $post_id ) );
-			$action_histories = array();
+			$post_id = intval( sanitize_text_field( $post_id ) );			
 			$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = %s AND post_id = %d ORDER BY create_datetime DESC", $action_status, $post_id ) );
 			foreach ( $results as $result ) {
 				$action_history = $this->get_action_history_from_result_set( $result );
@@ -503,14 +633,14 @@ class OW_History_Service {
 			}
 			return $action_histories;
 		}
-		return null;
+		return $action_histories;
 	}
 
-	/*
+	/**
 	 * Get Workflow History object from post
 	 *
 	 * @param int $post_id
-	 * @return OW_Action_History $action_history object
+	 * @return mixed OW_Action_History array $action_history object
 	 *
 	 * @since 2.0
 	 */
@@ -518,6 +648,7 @@ class OW_History_Service {
 		global $wpdb;
 
 		$post_id = intval( sanitize_text_field( $post_id ) );
+
 		$action_histories = array();
 		$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE post_id = %d ORDER BY create_datetime DESC", $post_id ) );
 		foreach ( $results as $result ) {
@@ -528,30 +659,49 @@ class OW_History_Service {
 
 	}
 
-	/*
+   /**
+    * Get Post submitter
+    * @param int $post_id
+    * @return array
+    *
+    * @since 5.8
+    *
+    */
+   public function get_post_submitter_by_post_id( $post_id ) {
+      global $wpdb;
+
+		$post_id = intval( sanitize_text_field( $post_id ) );
+
+		$results = $wpdb->get_results( $wpdb->prepare( "SELECT assign_actor_id FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE post_id = %d AND action_status = 'submitted' ", $post_id ) );
+      
+      return $results;
+   }
+
+	/**
 	 * Get Workflow History object from multiple parameters
 	 *
-	 * @param int $from_id - previous step id
+	 * @param $workflow_history_params
 	 * @return OW_Action_History $action_history object
 	 *
 	 * @since 2.0
 	 */
-	public function get_action_history_by_parameters( $action_status, $step_id, $post_id, $from_id ) {
+	public function get_action_history_by_parameters( $workflow_history_params ) {
 		global $wpdb;
 
 		// sanitize the data
-		$action_status = sanitize_text_field( $action_status ) ;
-		$step_id = sanitize_text_field( $step_id ) ;
-		$post_id = intval( sanitize_text_field( $post_id ) );
-		$from_id = intval( sanitize_text_field( $from_id ) );
+		$action_status = sanitize_text_field( $workflow_history_params["action_status"] ) ;
+		$step_id = intval( $workflow_history_params["step_id"] ) ;
+		$post_id = intval( $workflow_history_params["post_id"] );
+		$from_id = intval( $workflow_history_params["from_history_id"] );
 
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = %s AND step_id = %d AND post_id = %d AND from_id = %d", $action_status, $step_id, $post_id, $from_id ) );
+      $result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = %s AND step_id = %d AND post_id = %d AND from_id = %d",
+         $action_status, $step_id, $post_id, $from_id ) );
+      $action_history = $this->get_action_history_from_result_set( $result );
 
-		$action_history = $this->get_action_history_from_result_set( $result );
 		return $action_history;
 	}
 
-	/*
+	/**
 	 * Get Review History object by ID
 	 *
 	 * @param int $review_history_id
@@ -570,7 +720,7 @@ class OW_History_Service {
 		return $review_history;
 	}
 
-	/*
+	/**
 	 * Get Review History object by review status
 	 *
 	 * @param string $review_status
@@ -595,10 +745,12 @@ class OW_History_Service {
 		return $review_histories;
 	}
 
-	/*
+	/**
 	 * Get Review History object by actor id
 	 *
-	 * @param int $review_history_id
+	 * @param int $actor_id
+    * @param string $review_status
+    * @param int $action_history_id
 	 * @return OW_Review_History $review_history object
 	 *
 	 * @since 2.0
@@ -614,37 +766,56 @@ class OW_History_Service {
 		$review_history = $this->get_review_history_from_result_set( $result );
 		return $review_history;
 	}
-   
+
+   /**
+    * Get Table Header for the page
+    */
    public function get_table_header()
 	{
 		$order = ( isset( $_GET['order'] ) && sanitize_text_field( $_GET["order"] ) == "desc" ) ? "asc" : "desc" ;
 
-		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "post_title" )
+		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "post_title" ) {
 			$post_order_class = $order;
-		else
+      } else {
 			$post_order_class = "" ;
-
-		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "wf_name" )
+      }
+      
+		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "wf_name" ) {
 			$wf_order_class = $order;
-		else
+      } else {
 			$wf_order_class = "" ;
-
-		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "create_datetime" )
+      }
+      
+		if ( isset( $_GET['orderby'] ) && sanitize_text_field( $_GET["orderby"] ) == "create_datetime" ) {
 			$create_date_order_class = $order;
-		else
+      } else {
 			$create_date_order_class = "" ;
-
+      }
+      
 		$where_post = ( isset( $_GET['post'] ) && sanitize_text_field( $_GET["post"] ) ) ? "&post=" . intval( sanitize_text_field( $_GET["post"] ) ) : "" ;
 
 		echo "<tr>";
 		echo "<td scope='col' class='manage-column column-cb check-column'><input type='checkbox'></td>";
-		echo "<th scope='col' class='history-title sorted $post_order_class'>
+		echo "<th scope='col' class='history-title column-primary sorted $post_order_class'>
 		<a href='admin.php?page=oasiswf-history&orderby=post_title&order=$order" . $where_post . "'>
 					<span>". __("Title", "oasisworkflow") . "</span>
 					<span class='sorting-indicator'></span>
 				</a>
 			</th>" ;
-		echo "<th class='history-header' >" . __("Actor", "oasisworkflow") . "</th>" ;
+         
+      // Hide actor column by roles
+      $current_user_id = get_current_user_id();
+      $current_user_role = OW_Utility::instance()->get_user_role( $current_user_id );
+
+      $roles = array();
+
+      $user_roles = apply_filters( 'owf_hide_attributes_by_role', $roles );
+
+      if( ! in_array( $current_user_role, $user_roles ) ) {
+         echo "<th class='history-header' >" . __("Actor", "oasisworkflow") . "</th>" ;
+      }
+      
+      
 		echo "<th scope='col' class='sorted $wf_order_class'>
 		<a href='admin.php?page=oasiswf-history&orderby=wf_name&order=$order" . $where_post . "'>
 					<span>". __("Workflow [Step]", "oasisworkflow") . "</span>
@@ -665,7 +836,7 @@ class OW_History_Service {
 		echo "</tr>";
 	}
 
-	/*
+	/**
 	 * function to result the action history object from the DB result set
 	 *
 	 * @since 2.0
@@ -691,7 +862,7 @@ class OW_History_Service {
 		return $action_history;
 	}
 
-	/*
+	/**
 	 * function to result the review history object from the DB result set
 	 *
 	 * @since 2.0
@@ -720,4 +891,10 @@ class OW_History_Service {
 // construct an instance so that the actions get loaded
 $ow_history_service = new OW_History_Service();
 add_action( 'oasiswf_auto_delete_history_schedule', array( $ow_history_service, 'delete_history' ) );
+add_action( 'admin_init', array( $ow_history_service, 'download_history_report' ) );
+
+// TODO: this might cause issues with other plugins - compatibility issues - for the time being this feature is turned off.
+//add_action( 'admin_menu', array( $ow_history_service, 'create_meta_box' ) );
+
+
 ?>

@@ -237,6 +237,13 @@ jQuery(document).ready(function () {
             //extract review approval settings
             step_info_array["review_approval"] = jQuery("input:radio[name=review_approval]:checked").val();
         }
+        
+        if(step_info_array["process"]=== 'publish') {
+            step_info_array["last_step_post_status"] = jQuery("#last_step_post_status").val();
+        }
+        
+        step_info_array["signoff_success_action"] = jQuery("#signoff_success_action").val();
+        step_info_array["signoff_failure_action"] = jQuery("#signoff_failure_action").val();
 
         // extract process info
         syncTextarea();

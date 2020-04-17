@@ -3,19 +3,19 @@
   Plugin Name: Oasis Workflow ACF Compare
   Plugin URI: http://www.oasisworkflow.com
   Description: Compare Advanced Custom Fields between the original and revised article.
-  Version: 1.0
+  Version: 1.5
   Author: Nugget Solutions Inc.
   Author URI: http://www.nuggetsolutions.com
   Text Domain: owacfcompare
   ----------------------------------------------------------------------
-  Copyright 2011-2016 Nugget Solutions Inc.
+  Copyright 2011-2019 Nugget Solutions Inc.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
    exit; // Exit if accessed directly
 }
 
-define( 'OW_ACF_COMPARE_VERSION', '1.0' );
+define( 'OW_ACF_COMPARE_VERSION', '1.5' );
 define( 'OW_ACF_COMPARE_ROOT', dirname( __FILE__ ) );
 define( 'OW_ACF_COMPARE_URL', plugins_url( '/', __FILE__ ) );
 define( 'OW_ACF_COMPARE_STORE_URL', 'https://www.oasisworkflow.com/' );
@@ -40,13 +40,15 @@ class OW_ACF_Compare_Init {
       // run on activation of plugin
       register_activation_hook( __FILE__, array( $this, 'ow_acf_compare_plugin_activation' ) );
       register_uninstall_hook( __FILE__, array( __CLASS__, 'ow_acf_compare_plugin_uninstall' ) );
-
+      
       // Load plugin text domain
       add_action( 'init', array( $this, 'load_ow_acf_compare_textdomain' ) );
 
       add_action( 'admin_init', array( $this, 'validate_parent_plugin_exists' ) );
 
       add_action( 'admin_enqueue_scripts', array( $this, 'show_welcome_message_pointers' ) );
+      
+      add_action( 'admin_print_scripts', array( $this, 'add_js_files' ) );
 
       /* add/delete new subsite */
       add_action( 'wpmu_new_blog', array( $this, 'run_on_add_blog' ), 10, 6 );
@@ -103,15 +105,16 @@ class OW_ACF_Compare_Init {
       // for single site only
       $this->create_tables();
    }
+   
 
    /**
-    * Validate parent Plugin Oasis Workflow Pro exist and activated
+    * Validate parent Plugin Oasis Workflow or Oasis Workflow Pro exist and activated
     * @access public
     * @since 1.0
     */
    public function validate_parent_plugin_exists() {
       $plugin = plugin_basename( __FILE__ );
-      if ( ! is_plugin_active( 'oasis-workflow-pro/oasis-workflow-pro.php' ) ) {
+      if( ( !is_plugin_active( 'oasis-workflow-pro/oasis-workflow-pro.php' ) ) &&  ( ! is_plugin_active( 'oasis-workflow/oasiswf.php' ) ) ) {
          add_action( 'admin_notices', array( $this, 'show_oasis_workflow_pro_missing_notice' ) );
          add_action( 'network_admin_notices', array( $this, 'show_oasis_workflow_pro_missing_notice' ) );
          deactivate_plugins( $plugin );
@@ -121,11 +124,13 @@ class OW_ACF_Compare_Init {
          }
       }
 
-      // check oasis workflow pro version
-      // This plugin requires Oasis Workflow Pro 3.4 and higher
+     // check oasis workflow version
+      // This plugin requires Oasis Workflow 2.2 or higher
+      // With "Pro" version it needs Oasis Workflow Pro 3.4 or higher
       $pluginOptions = get_site_option( 'oasiswf_info' );
       if ( is_array( $pluginOptions ) && ! empty( $pluginOptions ) ) {
-         if ( version_compare( $pluginOptions['version'], '3.4', '<' ) ) {
+         if( ( is_plugin_active( 'oasis-workflow/oasiswf.php' ) && version_compare( $pluginOptions['version'], '2.2', '<' ) ) ||
+            ( is_plugin_active( 'oasis-workflow-pro/oasis-workflow-pro.php' ) && version_compare( $pluginOptions['version'], '3.4', '<' ) ) ) {
             add_action( 'admin_notices', array( $this, 'show_oasis_workflow_incompatible_notice' ) );
             add_action( 'network_admin_notices', array( $this, 'show_oasis_workflow_incompatible_notice' ) );
             deactivate_plugins( $plugin );
@@ -138,7 +143,8 @@ class OW_ACF_Compare_Init {
    }
 
    /**
-    * If Oasis Workflow plugin is not installed or activated then throw the error
+    * If Oasis Workflow or Oasis Workflow Pro plugin is not installed or activated
+    * then throw the error
     *
     * @access public
     * @return mixed error_message, an array containing the error message
@@ -148,14 +154,14 @@ class OW_ACF_Compare_Init {
    public function show_oasis_workflow_pro_missing_notice() {
       $plugin_error = OW_ACF_Compare_Utility::instance()->admin_notice( array(
           'type' => 'error',
-          'message' => 'Oasis Workflow ACF Compare Add-on requires Oasis Workflow Pro plugin to be installed and activated.'
+          'message' => 'Oasis Workflow ACF Compare Add-on requires Oasis Workflow or Oasis Workflow Pro plugin to be installed and activated.'
               ) );
       echo $plugin_error;
    }
 
    /**
-    * If the Oasis Workflow version is less than 3.4 then throw the incompatible notice
-    *
+    * If the Oasis Workflow version is less than 2.2  or Oasis Workflow Pro is less than 3.4
+    * then throw the incompatible notice
     * @access public
     * @return mixed error_message, an array containing the error message
     *
@@ -164,11 +170,12 @@ class OW_ACF_Compare_Init {
    public function show_oasis_workflow_incompatible_notice() {
       $plugin_error = OW_ACF_Compare_Utility::instance()->admin_notice( array(
           'type' => 'error',
-          'message' => 'Oasis Workflow ACF Compare Add-on requires Oasis Workflow Pro 3.4 or higher.'
+          'message' => 'Oasis Workflow ACF Compare Add-on requires Oasis Workflow 2.2 or higher and with pro version it requires Oasis Workflow Pro 3.4 or higher.'
               ) );
       echo $plugin_error;
    }
-
+   
+  
    /**
     * Runs on uninstall
     *
@@ -440,6 +447,12 @@ class OW_ACF_Compare_Init {
          <?php
       endif;
    }
+   
+   public function add_js_files() {
+		if ( is_admin() && preg_match_all( '/page=oasiswf-revision(.*)/', $_SERVER['REQUEST_URI'], $matches ) ) {
+         wp_enqueue_script( 'ow-acf-google-map', 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"', array( 'jquery' ) ); 
+      }
+   }   
 
    /**
     * Set up the database tables for the plugin.
@@ -468,23 +481,26 @@ class OW_ACF_Compare_Init {
       // TODO: table creation goes here
    }
 
+   /**
+    * Plugin Update notifier
+    */
+   public function ow_acf_compare_plugin_updater() {
+
+      // setup the updater
+      if ( class_exists( 'OW_Plugin_Updater' ) ) {
+         $edd_oasis_acf_compare_updater = new OW_Plugin_Updater( OW_ACF_COMPARE_STORE_URL, __FILE__, array(
+               'version'   => OW_ACF_COMPARE_VERSION, // current version number
+               'license'   => trim( get_option( 'oasiswf_acf_compare_license_key' ) ), // license key (used get_option above to retrieve from DB)
+               'item_name' => OW_ACF_COMPARE_PRODUCT_NAME, // name of this plugin
+               'author'    => 'Nugget Solutions Inc.' // author of this plugin
+            )
+         );
+      }
+   }
+
 }
 
-// Initialize the Editorial Comment Class
-$init = new OW_ACF_Compare_Init();
-
-// Automatic updates
-if ( ! class_exists( 'OW_ACF_Compare_Updater' ) ) {
-   include( "includes/class-ow-acf-compare-plugin-updater.php" );
-
-
-   // setup the updater
-   $edd_oasis_acf_compare_updater = new OW_ACF_Compare_Updater( OW_ACF_COMPARE_STORE_URL, __FILE__, array(
-       'version' => OW_ACF_COMPARE_VERSION, // current version number
-       'license' => trim( get_option( 'oasiswf_acf_compare_license_key' ) ), // license key (used get_option above to retrieve from DB)
-       'item_name' => OW_ACF_COMPARE_PRODUCT_NAME, // name of this plugin
-       'author' => 'Nugget Solutions Inc.'  // author of this plugin
-           )
-   );
-}
+// Initialize ACF Compare Class
+$ow_acf_compare_init = new OW_ACF_Compare_Init();
+add_action( 'admin_init', array( $ow_acf_compare_init, 'ow_acf_compare_plugin_updater' ) );
 ?>

@@ -9,7 +9,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /**
  *
@@ -98,6 +100,12 @@ class OW_Custom_Capabilities {
          $wp_roles->add_cap( 'author', 'ow_sign_off_step' );
          $wp_roles->add_cap( 'contributor', 'ow_sign_off_step' );
          
+         // Duplicate Post
+         $wp_roles->add_cap( 'administrator', 'ow_duplicate_post' );
+         $wp_roles->add_cap( 'editor', 'ow_duplicate_post' );
+         $wp_roles->add_cap( 'author', 'ow_duplicate_post' );
+         $wp_roles->add_cap( 'contributor', 'ow_duplicate_post' );
+         
 		}
 	}
 
@@ -180,6 +188,34 @@ class OW_Custom_Capabilities {
          
 		}
 	}
+
+   /**
+    * Function - API to check if current user can abort workflow
+    *
+    * @return array
+    *
+    * @since 6.0
+    */
+   public function api_check_user_capabilities( $data ) {
+      
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! is_user_logged_in() ) {
+         return new WP_Error( 'owf_check_user_capabilities', __( 'You are not allowed to invoke this api.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      $response = array (
+         "user_can" => [
+            "ow_abort_workflow" => current_user_can( 'ow_abort_workflow' ),
+            "ow_skip_workflow" => current_user_can( 'ow_skip_workflow' ),
+            "ow_reassign_task" => current_user_can( 'ow_reassign_task' ),
+         ]
+      );
+
+      return $response;
+   }
 
 }
 ?>

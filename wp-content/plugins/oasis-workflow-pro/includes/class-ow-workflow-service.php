@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /**
  * OW_Workflow_Service Class
@@ -25,6 +27,8 @@ class OW_Workflow_Service {
 	 * @since 2.0
 	 */
 	public function __construct() {
+
+	   // only add_actions for AJAX actions
 		add_action( 'wp_ajax_create_new_workflow', array( $this, 'create_new_workflow' ) );
       add_action( 'wp_ajax_validate_workflow_name', array( $this, 'validate_workflow_name' ) );
       
@@ -74,6 +78,10 @@ class OW_Workflow_Service {
 		);
 		$workflow_table = OW_Utility::instance()->get_workflows_table_name( );
 		$new_id = OW_Utility::instance()->insert_to_table( $workflow_table, $data ) ;
+
+      // delete the transient cached workflows, so that we get a refreshed set of workflows next time
+      delete_transient( 'ow-cache-active-workflows' );
+
 		wp_send_json_success( $new_id ) ;
 	}
 
@@ -145,6 +153,12 @@ class OW_Workflow_Service {
 		$step_info = isset( $_POST["step_info"] ) ? sanitize_text_field( $_POST["step_info"] ) : "";
       // FIXED: Do not use sanitize_text_field or stripcslashes to keep user formated message
 		$process_info = isset( $_POST["process_info"] ) ? $_POST["process_info"] : "";
+      
+      //delete the cache to get the updated values
+      if( $step_id !== "" ) {
+         $cache_key = md5( "ow_worklow_steps_" . $step_id );
+         wp_cache_delete( $cache_key, "ow-cache-workflows" );
+      }
 
 		$workflow_step = new OW_Workflow_Step( );
 		$workflow_step->ID = $step_id;
@@ -174,6 +188,10 @@ class OW_Workflow_Service {
 		}
 
 		$step_id = intval( sanitize_text_field( $_POST["copy_step_id"] ) );
+      
+      //delete the cache to get the updated values
+      $cache_key = md5( "ow_worklow_steps_" . $step_id );
+      wp_cache_delete( $cache_key, "ow-cache-workflows" );
 
 		$step = $this->get_step_by_id( $step_id ) ;
 		if ( $step ) {
@@ -244,15 +262,21 @@ class OW_Workflow_Service {
 		// sanitize the input
 		$wf_id = intval( sanitize_text_field( $_POST["workflow_id"] ) );
 
+      // delete the transient cached workflows, so that we get a refreshed set of workflows next time
+      delete_transient( 'ow-cache-active-workflows' );
+      delete_transient( 'ow-cache-workflow_' . $wf_id );
+
 		// first delete all the steps
 		$this->delete_workflow_steps( $wf_id ) ;
 
 		// now delete the workflow
 		$result = $wpdb->get_results( $wpdb->prepare( "DELETE FROM " . OW_Utility::instance()->get_workflows_table_name() . " WHERE ID = %d", $wf_id ) );
 
+     // hook to do something after workflow is deleted
+      do_action( 'owf_workflow_delete', $wf_id );
+
 		wp_send_json_success();
 	}
-
    
    /**
 	 * for internal use only
@@ -376,6 +400,39 @@ class OW_Workflow_Service {
 
 		return false;
 	}
+   
+   /**
+    * Function - API to fetch step process details
+    * 
+    * @param $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_get_step_action_details( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_step_action_details', __( 'You are not allowed to get step process details.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      
+      $action_history_id = intval( $data['action_history_id'] );
+      
+      $ow_history_service = new OW_History_Service();
+	   $current_action = $ow_history_service->get_action_history_by_id( $action_history_id ) ;
+      $current_step = $this->get_step_by_id( $current_action->step_id );
+      $process = $this->get_gpid_dbid( $current_step->workflow_id, $current_action->step_id, "process" );
+      
+      $step_info = json_decode( $current_step->step_info );
+      
+      $signoff_action_success = isset( $step_info->signoff_success_action ) && ( ! empty( $step_info->signoff_success_action ) ) ? $step_info->signoff_success_action : ( $process == "review" ? __("Approved", "oasisworkflow") :  __("Complete", "oasisworkflow") );
+     
+      $signoff_action_failure = isset( $step_info->signoff_failure_action ) && ( ! empty( $step_info->signoff_failure_action ) ) ? $step_info->signoff_failure_action : ( $process == "review" ? __("Reject", "oasisworkflow") :  __("Unable to Complete", "oasisworkflow") );
+      
+      return array( 'success_action' => $signoff_action_success, 'failure_action' => $signoff_action_failure );
+   }
 
    
    /**
@@ -429,36 +486,6 @@ class OW_Workflow_Service {
 	}  
    
 	/**
-	 * Get Workflows by auto submit flag
-	 *
-	 * @param int $auto_submit_flag ( 1 or 0 )
-	 * @return mixed List of Workflows
-	 *
-	 * @since 2.0
-	 * @since 3.3 check if the workflow end date is greater than current date
-	 */
-	public function get_workflow_by_auto_submit( $auto_submit_flag ) {
-		global $wpdb;
-
-		// sanitize the data
-		$auto_submit_flag = intval( $auto_submit_flag );
-
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " .
-				OW_Utility::instance()->get_workflows_table_name() . " WHERE (end_date = '0000-00-00' OR end_date >= CURDATE())
-				AND is_auto_submit = %d
-				AND is_valid = 1
-				ORDER BY ID desc", $auto_submit_flag ) );
-
-		$workflows = array();
-		foreach ( $results as $result ) {
-			$workflow = $this->get_workflow_from_result_set ( $result );
-			array_push( $workflows, $workflow );
-		}
-
-		return $workflows;
-	}
-
-	/**
 	 * Get workflow array for the given workflow ids
 	 *
 	 * @param array $workflow_ids
@@ -494,7 +521,7 @@ class OW_Workflow_Service {
 	 * @since 2.0
 	 */
 
-	public function save_workflow()
+	public function save_workflow( $button_clicked = "workflow_save_and_close" )
 	{
 		global $wpdb;
 
@@ -519,33 +546,18 @@ class OW_Workflow_Service {
 		if ( isset( $_POST["end-date"] ) && ! empty( $_POST["end-date"] ) ) {
 			$end_date = OW_Utility::instance()->format_date_for_db_wp_default( sanitize_text_field( $_POST["end-date"] ) ) ;
 		}
-		// auto submit settings
-		$auto_submit_enabled = ( isset( $_POST["auto-submit"] ) && sanitize_text_field( $_POST["auto-submit"] ) ) ? 1 : 0;
-		$auto_submit_keywords = array_map( 'trim', explode(',', stripcslashes( $_POST["auto-submit-keywords"] ) ) ) ;
-		// sanitize the values
-		$auto_submit_keywords = array_map( 'esc_attr', $auto_submit_keywords );
-
-		$auto_submit_site_teams = ( isset( $_POST["auto-submit-team"] ) && $_POST["auto-submit-team"] ) ? $_POST["auto-submit-team"] : '';
-
-		if ( empty( $auto_submit_site_teams ) ) {
-			$auto_submit_info = array(
-					'keywords' => $auto_submit_keywords
-			);
-		} else {
-			// sanitize the values
-			$auto_submit_site_teams = array_map( 'esc_attr', $auto_submit_site_teams );
-
-			$auto_submit_info = array(
-					'keywords' => $auto_submit_keywords,
-					'teams' => $auto_submit_site_teams
-			);
-		}
+      
+      //delete the cache to get the updated values
+      delete_transient( 'ow-cache-workflow_' . $workflow_id );
 
 		// wf additional info
 
 		// does it apply to new posts, revised posts or both
 		$wf_for_new_posts = ( isset( $_POST["new_post_workflow"] ) && sanitize_text_field( $_POST["new_post_workflow"] ) ) ? 1 : 0;
 		$wf_for_revised_posts = ( isset( $_POST["revised_post_workflow"] ) && sanitize_text_field( $_POST["revised_post_workflow"] ) ) ? 1 : 0;
+
+      // delete the cached workflows, so that we get a refreshed set of workflows next time
+      delete_transient( 'ow-cache-active-workflows' );
 
 		// who can submit to this workflow
 		$wf_for_roles = array();
@@ -590,8 +602,6 @@ class OW_Workflow_Service {
 						'wf_info' => $wf_graphical_info,
 						'start_date' => $start_date,
 						'end_date' => $end_date,
-						'is_auto_submit' => $auto_submit_enabled,
-						'auto_submit_info' => serialize($auto_submit_info),
 						'is_valid' => $valid,
 						'update_datetime' => current_time('mysql'),
 						'wf_additional_info' =>  serialize($wf_additional_info)
@@ -618,11 +628,15 @@ class OW_Workflow_Service {
 			$end_date = date('Y-m-d', strtotime($end_date . '-1 days'));
 			$wpdb->query( $wpdb->prepare( "UPDATE $workflow_table SET end_date = '%s' WHERE ID = '%d'", $end_date, $parent_id ) );
 		}
-
+      
 		// everything went fine, lets redirect to the workflow list page
-		wp_redirect( admin_url( 'admin.php?page=oasiswf-admin' ) );
-		die();
-
+      if( $button_clicked === "workflow_save" ) {
+         wp_redirect( admin_url( 'admin.php?page=oasiswf-admin&wf_id='.$workflow_id ) );
+         die();
+      } else {
+         wp_redirect( admin_url( 'admin.php?page=oasiswf-admin' ) );
+         die();
+      }
 	}
 
 	/**
@@ -641,6 +655,10 @@ class OW_Workflow_Service {
 		if ( ! current_user_can( 'ow_create_workflow' ) ) {
 			wp_die( __( 'You are not allowed to create/edit workflows.' ) );
 		}
+
+      // delete the cached workflows, so that we get a refreshed set of workflows next time
+      delete_transient( 'ow-cache-active-workflows' );
+
       // sanitize the input
 		$workflow_id = intval( sanitize_text_field( $_POST["wf_id"] ) );
 		$wf = $this->get_workflow_by_id( $workflow_id ) ;
@@ -652,8 +670,6 @@ class OW_Workflow_Service {
 			$data = array(
 					'name' => stripcslashes( trim( $wf->name ) ),
 					'description' => stripcslashes( $wf->description ),
-					'is_auto_submit' => $wf->is_auto_submit,
-					'auto_submit_info' => $wf->auto_submit_info,
 					'version' => $new_version,
 					'parent_id' => $parent_id,
 					'create_datetime' => current_time('mysql'),
@@ -705,6 +721,10 @@ class OW_Workflow_Service {
 		if ( ! current_user_can( 'ow_create_workflow' ) ) {
 			wp_die( __( 'You are not allowed to create/edit workflows.' ) );
 		}
+
+      // delete the cached workflows, so that we get a refreshed set of workflows next time
+      delete_transient( 'ow-cache-active-workflows' );
+
       // sanitize the input
 		$workflow_id = intval( sanitize_text_field( $_POST["wf_id"] ) );
 		$workflow = $this->get_workflow_by_id( $workflow_id ) ;
@@ -712,8 +732,6 @@ class OW_Workflow_Service {
 			$data = array(
 				'name' => stripcslashes( trim( $_POST['define-workflow-title'] ) ),
 				'description' => stripcslashes( $_POST['define-workflow-description'] ),
-				'is_auto_submit' => $workflow->is_auto_submit,
-				'auto_submit_info' => $workflow->auto_submit_info,
 				'version' => 1, // since it's a new copy
 				'parent_id' => 0,
 				'start_date' => $workflow->start_date,
@@ -729,7 +747,9 @@ class OW_Workflow_Service {
 			$wf_info = json_decode( $workflow->wf_info );
 			foreach ($wf_info->steps as $k => $v)
 			{
-				if ( $v->fc_dbid == "nodefine" ) continue ;
+				if ( $v->fc_dbid == "nodefine" ) {
+               continue ;
+            }
 				$new_fc_dbid = $this->save_step_as_new( $new_wf_id, $v->fc_dbid ) ;
 				if ( $new_fc_dbid ) {
 					$wf_info->steps->$k->fc_dbid = $new_fc_dbid ;
@@ -786,6 +806,18 @@ class OW_Workflow_Service {
 
 		// sanitize the input
 		$action = sanitize_text_field( $action );
+      
+      $set_cache = false;
+      $cache_key = md5( 'ow_applicable_roles_' . get_current_user_id() );
+      
+      if ( $action == "active" ) {
+         // try to get it from cache
+         $cached_workflows = get_transient( 'ow-cache-active-workflows' );
+         
+         if ( $cached_workflows ) {
+            return $cached_workflows;           
+         }
+      }
 
       // use white list approach to set order by clause
       $order_by = array(
@@ -865,8 +897,6 @@ class OW_Workflow_Service {
 			$workflow->start_date = $result->start_date;
 			$workflow->end_date = $result->end_date;
 			$workflow->wf_info = $result->wf_info;
-			$workflow->is_auto_submit = $result->is_auto_submit;
-			$workflow->auto_submit_info = $result->auto_submit_info;
 			$workflow->is_valid = $result->is_valid;
 			$workflow->create_datetime = $result->create_datetime;
 			$workflow->update_datetime = $result->update_datetime;
@@ -876,6 +906,11 @@ class OW_Workflow_Service {
 			// add to the array
 			array_push( $workflows, $workflow );
 		}
+
+      if ( $action == "active" ) {
+         // non existent cache, so, lets add/set it to cache
+         set_transient( 'ow-cache-active-workflows', $workflows, 86400 ); //cache for 24 hours
+      }
 
 		return $workflows;
 	}
@@ -893,15 +928,18 @@ class OW_Workflow_Service {
 	public function get_post_count_in_workflow( $wf_id ) {
 		global $wpdb;
       // sanitize the input
-      $wf_id = intval( sanitize_text_field( $wf_id ) );
-		$sql = "SELECT DISTINCT(A.post_id) FROM
-					(SELECT AA.post_id, BB.workflow_id FROM
-							(SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = 'assignment') AS AA
-							LEFT JOIN " . OW_Utility::instance()->get_workflow_steps_table_name() . " AS BB
-							ON AA.step_id = BB.ID) as A
-							WHERE A.workflow_id = %d";
-		$result = $wpdb->get_results( $wpdb->prepare( $sql, $wf_id ) );
-		return count( $result );
+      $wf_id = intval( $wf_id );
+
+      $sql = "SELECT DISTINCT(A.post_id) FROM
+            (SELECT AA.post_id, BB.workflow_id FROM
+                  (SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = 'assignment') AS AA
+                  LEFT JOIN " . OW_Utility::instance()->get_workflow_steps_table_name() . " AS BB
+                  ON AA.step_id = BB.ID) as A
+                  WHERE A.workflow_id = %d";
+      $result = $wpdb->get_results( $wpdb->prepare( $sql, $wf_id ) );
+      $post_count = count( $result );
+
+		return absint( $post_count );
 	}
 
 
@@ -993,17 +1031,27 @@ class OW_Workflow_Service {
 		// sanitize the input
 		$step_id = intval( sanitize_text_field( $step_id ) );
 
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_workflow_steps_table_name() . " WHERE ID = %d", $step_id ) );
-		if ( ! $result ) {
-			return "";
-		}
-		$workflow_step = new OW_Workflow_Step();
-		$workflow_step->ID = $result->ID;
-		$workflow_step->process_info = $result->process_info;
-		$workflow_step->step_info = $result->step_info;
-		$workflow_step->workflow_id = $result->workflow_id;
-		$workflow_step->create_datetime = $result->create_datetime;
-		$workflow_step->update_datetime = $result->update_datetime;
+      // try to get it from cache
+      $cache_key = md5( 'ow_worklow_steps_' . $step_id );
+      $workflow_step = wp_cache_get( $cache_key, 'ow-cache-workflows' );
+
+      if( $workflow_step === false ) {
+
+         $result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_workflow_steps_table_name() . " WHERE ID = %d", $step_id ) );
+         if ( ! $result ) {
+            return "";
+         }
+         $workflow_step                  = new OW_Workflow_Step();
+         $workflow_step->ID              = $result->ID;
+         $workflow_step->process_info    = $result->process_info;
+         $workflow_step->step_info       = $result->step_info;
+         $workflow_step->workflow_id     = $result->workflow_id;
+         $workflow_step->create_datetime = $result->create_datetime;
+         $workflow_step->update_datetime = $result->update_datetime;
+
+         // non existent cache, so, lets add/set it to cache
+         wp_cache_set( $cache_key, $workflow_step, 'ow-cache-workflows' );
+      }
 
 		return $workflow_step;
 
@@ -1025,19 +1073,22 @@ class OW_Workflow_Service {
 		$start_date_timestamp = OW_Utility::instance()->get_date_int( $workflow->start_date );
 		$end_date_timestamp = OW_Utility::instance()->get_date_int( $workflow->end_date );
 		$current_date_timestamp = OW_Utility::instance()->get_date_int();
-		if ( $start_date_timestamp > $current_date_timestamp )
+		if ( $start_date_timestamp > $current_date_timestamp ) {
 			return false; // filter-1
+      }
 
 		// If end date is not provided then workflow will be valid
-		if ( $workflow->end_date != '0000-00-00' ) {
-			if ( $end_date_timestamp < $current_date_timestamp )
+		if ( $workflow->end_date !== '0000-00-00' ) {
+			if ( $end_date_timestamp < $current_date_timestamp ) {
 				return false;  // filter-2
+         }
 		}
 
 		$additional_info = @unserialize( $workflow->wf_additional_info );
 
 		// applicable post type
 		$post_type = get_post_type( $post_id );
+
 		if ( ! empty( $additional_info['wf_for_post_types'] ) ) {
 			if ( ! in_array( $post_type, $additional_info['wf_for_post_types'] ) ) {
 				return false;
@@ -1137,7 +1188,69 @@ class OW_Workflow_Service {
 		return $workflows;
 	}
 
+   /**
+    * Function - API to fetch all valid workflows
+    * 
+    * @param $criteria
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+	public function api_get_valid_workflows( $criteria ) {
 
+      if ( ! wp_verify_nonce( $criteria->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+	   if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+        // Replaced wp_die to WP_Error to prevent 500 internal server error.
+        return new WP_Error( 'owf_rest_validate_workflow', __( 'You are not allowed to fetch workflow settings.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      // sanitize incoming data
+      $post_id = intval( $criteria['post_id'] );
+
+	   return $this->get_valid_workflows( $post_id );
+
+
+   }
+
+   public function get_valid_workflows( $post_id ) {
+
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         wp_die( __( 'You are not allowed to get workflows.', 'oasisworkflow' ) );
+      }
+
+      // sanitize incoming data
+      $post_id = intval( $post_id );
+      $post_status = get_post_status( $post_id ) ;
+
+      $workflows = $this->get_workflow_list("active");
+      $valid_workflows = array();
+
+      $check_revision = get_post_meta( $post_id, '_oasis_original', true );
+
+      // check if post is revision
+      if( $check_revision != '' || $post_status == 'publish' || $post_status == 'future' || $post_status == 'private' ) { // used to display "make revision" button
+         $is_revision = true;
+      } else {
+         $is_revision = false;
+      }
+
+      foreach ( $workflows as $workflow ) {
+         if ($this->is_workflow_applicable($workflow->ID, $post_id)) {
+            $additional_info = unserialize($workflow->wf_additional_info);
+            // Get all revised + universal workflows
+            if ($is_revision == true && $additional_info['wf_for_revised_posts']) {
+               array_push( $valid_workflows, $workflow );
+            } else if ($is_revision == false && $additional_info['wf_for_new_posts'] ) {
+               array_push( $valid_workflows, $workflow );
+            }
+         }
+      }
+
+      return $valid_workflows;
+   }
    
    /**
 	 * get connection info
@@ -1200,8 +1313,9 @@ class OW_Workflow_Service {
 
 		echo "<tr>";
 		echo "<td scope='col' class='manage-column column-cb check-column'><input type='checkbox'></td>";
+      echo "<th class='column-primary'>" . __( "Workflow ID", "oasisworkflow" ) . "</th>";
       $sorting_args = add_query_arg( array( 'orderby' => 'title', 'order' => $sortby ) );
-		echo "<th scope='col' class='field-width-200 sorted $title_class'>
+		echo "<th scope='col' class='field-width-200 sorted $title_class' >
                <a href='$sorting_args'>
                   <span>" .  __( "Title", "oasisworkflow" ) . "</span>
                   <span class='sorting-indicator'></span>
@@ -1235,11 +1349,35 @@ class OW_Workflow_Service {
 			  </th>";
 
 		echo "<th>" . __( "Is Valid?", "oasisworkflow" ) . "</th>";
-		echo "<th>" . __( "Is Auto Submit?", "oasisworkflow" ) . "</th>";
 		echo "</tr>";
 	}
+   
+   /**
+    * Set workflow row actions
+    * @since 6.4
+    */
+   public function display_workflow_row_actions( $workflow_id, $postcount ) {
 
-     /**
+      $space = "&nbsp;&nbsp;" ;
+      $workflow_row_action =  array();
+      
+      if ( current_user_can( 'ow_edit_workflow' ) ) {
+         $workflow_row_action["edit"] = "<a href='admin.php?page=oasiswf-admin&wf_id=" . $workflow_id . "'>" . __( "Edit", "oasisworkflow" ) . "</a>".$space;
+      }
+      
+      if ( !$postcount && current_user_can( 'ow_delete_workflow' ) ) {
+         $delete_nonce = wp_create_nonce( 'workflow-delete-nonce' );
+         $workflow_row_action["delete"] = "<a href='admin.php?page=oasiswf-admin&wf_id=" . $workflow_id . "&action=delete&_nonce=$delete_nonce' class='workflow-delete'>" . __( "Delete", "oasisworkflow" ) . "</a>".$space;
+      }
+      
+      if ( current_user_can( 'ow_create_workflow' ) ) {
+         $workflow_row_action["copy"] =  "<a href='javascript:void(0)' class='duplicate_workflow' wf_id='{$workflow_id}'>" . __( "Copy", "oasisworkflow" ) . "</a>.$space";
+      }
+      
+      return $workflow_row_action;
+   }
+
+   /**
 	 * Get Workflow object from ID
 	 *
 	 * @param int $workflow_id
@@ -1250,15 +1388,31 @@ class OW_Workflow_Service {
 	public function get_workflow_by_id( $workflow_id ) {
 		global $wpdb;
 
-		// sanitize the input
-		$workflow_id = intval( sanitize_text_field( $workflow_id ) );
+      // sanitize the input
+      $workflow_id = intval( sanitize_text_field( $workflow_id ) );
 
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_workflows_table_name() . " WHERE ID = %d", $workflow_id ) );
+      // try to get it from cache
+      $cached_workflow = get_transient( 'ow-cache-workflow_' . $workflow_id );
 
-		$workflow = $this->get_workflow_from_result_set ( $result );
+      if ( $cached_workflow ) {
+         return $cached_workflow;
+      }
+
+      // try to get it from cache
+      $cache_key = md5( 'ow_worklows_' . $workflow_id );
+      $workflow = wp_cache_get( $cache_key, 'ow-cache-workflows' );
+
+      if( $workflow === false ) {
+         $result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_workflows_table_name() . " WHERE ID = %d", $workflow_id ) );
+         $workflow = $this->get_workflow_from_result_set( $result );
+
+         // non existent cache, so, lets add/set it to cache
+         set_transient( 'ow-cache-workflow_' . $workflow_id, $workflow, 86400 ); //cache for 24 hours
+      }
+
 		return $workflow;
 
-	}
+	}   
 
 	/**
 	 * Function to convert DB result set to OW_Workflow object
@@ -1311,6 +1465,10 @@ class OW_Workflow_Service {
 					if ( $v->fc_dbid == "nodefine" ) {
 						continue;
 					}
+               //delete the cache to get the updated values
+               $cache_key = md5( "ow_worklow_steps_" . $v->fc_dbid );
+               wp_cache_delete( $cache_key, "ow-cache-workflows" );
+               
 					$result = $wpdb->get_results( $wpdb->prepare( "DELETE FROM " . OW_Utility::instance()->get_workflow_steps_table_name() .
 							" WHERE workflow_id = %d and ID = %d", $wf_id, $v->fc_dbid ) );
 				}
@@ -1431,9 +1589,14 @@ $ow_workflow_service = new OW_Workflow_Service();
 
 // these actions reload the page, so need to be outside the page
 // also we need access to wp_verify_nonce
-if ( isset( $_POST['save_action'] ) && $_POST["save_action"] == "workflow_save" ) {
+if ( isset( $_POST['save_action'] ) && $_POST["save_action"] == "workflow_save_and_close" ) {
 	$workflow_service = new OW_Workflow_Service();
 	$workflow_service->save_workflow();
+}
+
+if ( isset( $_POST['save_action'] ) && $_POST["save_action"] == "workflow_save" ) {
+	$workflow_service = new OW_Workflow_Service();
+	$workflow_service->save_workflow( "workflow_save" );
 }
 
 if ( isset( $_POST['save_action'] ) && $_POST["save_action"] == "workflow_save_as_new_version" ) {

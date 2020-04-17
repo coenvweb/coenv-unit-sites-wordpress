@@ -69,6 +69,7 @@ $terms = $ow_custom_statuses->get_all_custom_statuses();
    </div> <!-- #col-right -->
    <?php
    $term = $term_id = FALSE;
+   $term_name = $term_slug = $term_desc = '';
    if( isset( $_GET['action'] ) && $_GET['action'] == 'edit-status' ) {
       check_admin_referer( 'edit_custom_status', '_wpnonce' );
       $term_id = intval( sanitize_text_field( $_GET['term_id'] ) );
@@ -82,7 +83,7 @@ $terms = $ow_custom_statuses->get_all_custom_statuses();
 
                <div class="form-field form-required">
                   <label for="status_name"><?php _e( 'Name', 'oasisworkflow' ); ?></label>
-                  <input type="text" aria-required="true" size="20" maxlength="20" id="status_name" name="status_name" value="<?php esc_attr_e( $term ? $term->name : ''  ); ?>">
+                  <input type="text" aria-required="true" size="20" maxlength="20" id="status_name" name="status_name" value="<?php esc_attr_e( $term ? $term->name : ''  ); ?>" />
                   <p class="description"><?php _e( 'The name is used to identify the status. (Max: 20 characters)', 'oasisworkflow' ); ?></p>
                </div>
 

@@ -58,6 +58,11 @@ class OW_Document_Revision_Settings {
     * @var string revise workflow by roles option name
     */
    protected $ow_revise_post_make_revision_overlay_option_name = 'oasiswf_revise_post_make_revision_overlay';
+   
+   /**
+    * @var string preserve revision of revised article
+    */
+   protected $ow_preserve_revision_of_revised_article_option_name = 'oasiswf_preserve_revision_of_revised_article';
 
    /**
     * Set things up.
@@ -77,6 +82,7 @@ class OW_Document_Revision_Settings {
       register_setting( $this->ow_doc_revision_group_name, $this->ow_activate_revision_process_option_name, array( $this, 'sanitize_doc_revision_settings' ) );
       register_setting( $this->ow_doc_revision_group_name, $this->ow_hide_compare_button_option_name, array( $this, 'sanitize_doc_revision_settings' ) );
       register_setting( $this->ow_doc_revision_group_name, $this->ow_revise_post_make_revision_overlay_option_name, array( $this, 'sanitize_doc_revision_settings' ) );
+      register_setting( $this->ow_doc_revision_group_name, $this->ow_preserve_revision_of_revised_article_option_name, array( $this, 'sanitize_doc_revision_settings' ) );
 
    }
 
@@ -123,6 +129,7 @@ class OW_Document_Revision_Settings {
       $hide_compare_button = get_option( $this->ow_hide_compare_button_option_name );
       $activate_revision_process = get_option( $this->ow_activate_revision_process_option_name );
       $doc_revision_make_revision_overlay = get_option( $this->ow_revise_post_make_revision_overlay_option_name );
+      $preserved_revisions = get_option( $this->ow_preserve_revision_of_revised_article_option_name );
       ?>
       <form id="wf_settings_form" method="post" action="options.php">
           <?php
@@ -133,8 +140,9 @@ class OW_Document_Revision_Settings {
                   <div class="select-info">
                       <?php
                       $str = "";
-                      if ( $activate_revision_process == "active" )
-                         $str = "checked=true";
+                      if ( $activate_revision_process == "active" ) {
+                          $str = "checked=true";
+                      }
                       ?>
                       <label class="settings-title"><input type="checkbox" name="<?php echo $this->ow_activate_revision_process_option_name; ?>"
                                                            value="active" <?php echo $str; ?> />&nbsp;&nbsp;<?php echo __( "Activate Revision process?", "oasisworkflow" ); ?>
@@ -156,18 +164,38 @@ class OW_Document_Revision_Settings {
                       <input type="text" id="<?php echo $this->ow_doc_revision_title_suffix_option_name; ?>" name="<?php echo $this->ow_doc_revision_title_suffix_option_name; ?>" value="<?php echo esc_attr( $doc_revision_title_suffix ); ?>" />
                       <span class="description"><?php echo __( "Suffix to be added after the original title, e.g. \"(dup)\" (blank for no suffix)", "oasisworkflow" ); ?> </span>
                   </div>
-
+                 
                   <div class="select-info">
                       <?php $check = ( $copy_children_on_revision == "yes" ) ? ' checked="checked" ' : ''; ?>
                       <input type="checkbox" id="<?php echo $this->ow_copy_children_on_revision_option_name; ?>" name="<?php echo $this->ow_copy_children_on_revision_option_name; ?>" value="yes"  <?php echo $check; ?>/>&nbsp;&nbsp;
                       <label class="settings-title"><?php echo __( "Revise children articles on parent revision?", "oasisworkflow" ); ?> </label>
-                      <span class="description"><?php echo __( "(Applicable to hierarchical post types)", "oasisworkflow" ); ?> </span>
+                      <br/>
+                      <span class="description">
+                         <?php echo __( "(Applicable to hierarchical post types)", "oasisworkflow" ); ?>
+                      </span>
                   </div>
+
+                 <div class="select-info">
+                    <?php $check = ( $preserved_revisions == "yes" ) ? ' checked="checked" ' : ''; ?>
+                    <input type="checkbox" id="<?php echo $this->ow_preserve_revision_of_revised_article_option_name; ?>" name="<?php echo $this->ow_preserve_revision_of_revised_article_option_name; ?>" value="yes"  <?php echo $check; ?>/>&nbsp;&nbsp;
+                    <label class="settings-title"><?php echo __( "Preserve the revisions of the revised article?", "oasisworkflow" ); ?> </label>
+                      <span class="description">
+                         <?php echo __( "(Useful for strict auditing purposes)", "oasisworkflow" ); ?>
+                      </span>
+                      <br />
+                      <span class="description">
+								 	<?php echo __( "(When updating the published article with revised content, copy the revisions of the revised article.)", "oasisworkflow" );?>
+                      </span>
+                 </div>
 
                   <div class="select-info">
                       <?php $check = ( $delete_revision_on_copy == "yes" ) ? ' checked="checked" ' : ''; ?>
                       <input type="checkbox" id="<?php echo $this->ow_delete_revision_on_copy_option_name; ?>" name="<?php echo $this->ow_delete_revision_on_copy_option_name; ?>" value="yes"  <?php echo $check; ?>/>&nbsp;&nbsp;
                       <label class="settings-title"><?php echo __( "Delete the revision after it's copied over to the original article?", "oasisworkflow" ); ?> </label>
+                      <br />
+                      <span class="description">
+								 	<?php echo __( "(The workflow history of the revision will get added to the workflow history of the original article.)", "oasisworkflow" );?>
+                      </span>
                   </div>
 
                   <div class="select-info">
@@ -185,7 +213,9 @@ class OW_Document_Revision_Settings {
 								 <span class="description">
 								 	<?php echo __( "(For published articles, display a popup window with a message to let users know that they need to revise the article before making any changes.)", "oasisworkflow" );?>
 							 	 </span>
-							</div>
+							</div>                     
+                  </div>
+                 <div class="ow-revision-overlay">
                      <textarea id="<?php echo $this->ow_revise_post_make_revision_overlay_option_name; ?>"
                      	name="<?php echo $this->ow_revise_post_make_revision_overlay_option_name; ?>"
                      	cols="60" rows="4" class="regular-text"><?php echo esc_textarea( $doc_revision_make_revision_overlay ); ?></textarea>

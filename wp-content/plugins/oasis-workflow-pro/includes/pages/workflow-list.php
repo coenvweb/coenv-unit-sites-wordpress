@@ -69,22 +69,6 @@ $per_page = OASIS_PER_PAGE;
 
         </div>
         <form method="post">
-           <?php if( current_user_can( 'ow_export_import_workflow' ) ) : ?>
-            <div class="tablenav top">
-               <div class="alignleft actions bulkactions">
-                  <label for="bulk-action-selector-top" class="screen-reader-text"><?php _e( 'Select bulk action', 'oasisworkflow' ); ?></label>
-                  <select name="action" id="bulk-action-selector-top">
-                     <option value="-1"><?php _e( 'Bulk Actions' ); ?></option>
-                  	<option value="export" class="hide-if-no-js"><?php _e( 'Export Workflows', 'oasisworkflow' );?></option>
-                  </select>
-                  <input type="submit" name="ow-workflow-bulk-action" id="ow-workflow-bulk-action"
-                  	class="button action" value="<?php echo __("Apply", "oasisworkflow"); ?>">
-                  <?php wp_nonce_field( 'owf_export_workflows', 'owf_export_workflows' ); ?>
-         		</div>
-      			<br class="clear">
-         	</div>
-           <?php endif; ?>
-
         <table class="wp-list-table widefat fixed posts" cellspacing="0" border="0">
             <thead>
                 <?php $workflow_service->get_table_header(); ?>
@@ -100,15 +84,16 @@ $per_page = OASIS_PER_PAGE;
                    $start = ($pagenum - 1) * $per_page;
                    $end = $start + $per_page;
                    foreach ( $workflows as $wf ) {
-                      if ( $count >= $end )
+                      if ( $count >= $end ) {
                          break;
+                      }   
                       if ( $count >= $start ) {
                          $postcount = $workflow_service->get_post_count_in_workflow( $wf->ID );
                          $valid = ( $wf->is_valid ) ? "Yes" : "No";
-                         $autoSubmit = ( $wf->is_auto_submit ) ? "Yes" : "No";
                          echo "<tr class='alternate author-self status-publish format-default iedit'>";
                          echo "<th scope='row' class='check-column'><input type='checkbox' name='workflows[]' value='".esc_attr( $wf->ID )."'></th>";
-                         echo "<td>";
+                         echo "<td class='column-primary' data-colname='Workflow ID'>{$wf->ID}<button type='button' class='toggle-row'><span class='screen-reader-text'>Show more details</span></button></td>";
+                         echo "<td data-colname='Title'>";
                          $class = "";
                          $content = "";
                          $datadesc = "";
@@ -122,27 +107,22 @@ $per_page = OASIS_PER_PAGE;
 								 echo "<div class='bold-label' id=" . "workflow-name-" . $wf->ID . ">{$wf->name}</div>";
 								 echo "<span class='$content'>$datadesc</span></a>";
 								 echo "<div class='row-actions'>";
-                         if ( current_user_can( 'ow_edit_workflow' ) ) {
-								 	echo "<span><a href='admin.php?page=oasiswf-admin&wf_id=" . $wf->ID . "'>" . __( "Edit", "oasisworkflow" ) . "</a></span>";
-                         }
-                         if ( ! $postcount && current_user_can( 'ow_delete_workflow' ) ) {
-                            $delete_nonce = wp_create_nonce('workflow-delete-nonce');
-                            echo "&nbsp;|&nbsp;<span><a href='admin.php?page=oasiswf-admin&wf_id=" . $wf->ID . "&action=delete&_nonce=$delete_nonce' class='workflow-delete'>" . __( "Delete", "oasisworkflow" ) . "</a></span>";
-                         }
-                         if ( current_user_can( 'ow_create_workflow' ) ) {
-	                         echo "&nbsp;|&nbsp;<span>
-	                         	<a href='javascript:void(0)' class='duplicate_workflow' wf_id='{$wf->ID}'>" . __( "Copy", "oasisworkflow" ) . "</a>
-	                			 </span>";
-                         }
-                         $action_url = admin_url( 'admin.php?page=oasiswf-admin' );
+                         
+                           $workflow_row_actions = $workflow_service->display_workflow_row_actions( $wf->ID, $postcount );
+                           $action_count = count( $workflow_row_actions );
+                           $i            = 0;
+                           foreach ( $workflow_row_actions as $action ) {
+                              ++$i;
+                              ( $i == $action_count ) ? $sep = '' : $sep = ' | ';
+                              echo "<span>$action$sep</span>";
+                           }                         
                          echo "</div>
 									</td>";
-                         echo "<td>{$wf->version}</td>";
-                         echo "<td>" . OW_Utility::instance()->format_date_for_display( $wf->start_date ) . "</td>";
-                         echo "<td>" . OW_Utility::instance()->format_date_for_display( $wf->end_date ) . "</td>";
-                         echo "<td>{$postcount}</td>";
-                         echo "<td>{$valid}</td>";
-                         echo "<td>{$autoSubmit}</td>";
+                         echo "<td data-colname='Version'>{$wf->version}</td>";
+                         echo "<td data-colname='Start Date'>" . OW_Utility::instance()->format_date_for_display( $wf->start_date ) . "</td>";
+                         echo "<td data-colname='End Date'>" . OW_Utility::instance()->format_date_for_display( $wf->end_date ) . "</td>";
+                         echo "<td data-colname='Post/Pages in workflow'>{$postcount}</td>";
+                         echo "<td data-colname='Is Valid?'>{$valid}</td>";
                          echo "</tr>";
                       }
                       $count ++;

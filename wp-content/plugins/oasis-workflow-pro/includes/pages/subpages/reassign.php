@@ -14,37 +14,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $history_id = trim( $_POST["oasiswf"] );
+
+// If reassigning from post edit page
+if( isset( $_REQUEST["oasiswf"] ) ) {
+   $history_id = $_REQUEST["oasiswf"];
+}
 // sanitize data
 $history_id = intval( $history_id );
 
 $task_user = ( isset( $_POST["task_user"] ) && $_POST["task_user"] ) ? trim( $_POST["task_user"] ) : get_current_user_id();
-// sanitize data
-$task_user = intval( sanitize_text_field( $task_user ) );
 
-$ow_process_flow = new OW_Process_Flow();
-$ow_history_service = new OW_History_Service();
-$workflow_service = new OW_Workflow_Service();
-
-$history_details = $ow_history_service->get_action_history_by_id( $history_id );
-$team_id = get_post_meta( $history_details->post_id, '_oasis_is_in_team', true );
-$users = array();
-if( $team_id != null && method_exists( 'OW_Teams_Service', 'get_team_members' ) ) {
-   $step = $workflow_service->get_step_by_id( $history_details->step_id );
-   $step_info = json_decode( $step->step_info );
-   $assignee_roles = isset( $step_info->task_assignee->roles ) ? array_flip( $step_info->task_assignee->roles ) : null;
-   $ow_teams_service = new OW_Teams_Service();
-   $users_ids = $ow_teams_service->get_team_members( $team_id, $assignee_roles, $history_details->post_id );
-   foreach ( $users_ids as $user_id ) {
-      $user = get_userdata( $user_id );
-      array_push( $users, $user );
-   }
-} else {
-   $user_info = $ow_process_flow->get_users_in_step( $history_details->step_id );
-   $users = $user_info["users"];
+// If reassigning from post edit page
+if( isset( $_REQUEST["user"] ) ) {
+   $task_user = $_REQUEST["user"];
 }
+
+// sanitize data
+$task_user = intval( $task_user );
+
+// Get reassign users
+$inbox_service = new OW_Inbox_Service();
+$users = $inbox_service->get_reassign_users( $history_id );
+
+$assignees = array();
+
+// no self-reassign
+foreach( $users as $key => $user ){
+   if ($user->ID != $task_user ) {
+      array_push( $assignees, $user );
+   }
+}
+
+// Check if users are available for reassigning            
+$user_count = count( $assignees );
+
 $workflow_terminology_options = get_option( 'oasiswf_custom_workflow_terminology' );
 $assign_actors_label = !empty( $workflow_terminology_options['assignActorsText'] ) ? $workflow_terminology_options['assignActorsText'] : __( 'Assign Actor(s)', 'oasisworkflow' );
-
 
 ?>
 <div id="reassgn-setting" class="info-setting">
@@ -58,23 +63,8 @@ $assign_actors_label = !empty( $workflow_terminology_options['assignActorsText']
             <label><?php echo __( "Available", "oasisworkflow" ); ?></label>
             <span class="assign-loading-span" style="float:right;margin-top:-18px;">&nbsp;</span>
             <br class="clear">
-            <?php
-            // Check if users are available for reassigning
-            $user_count = count( (array) $users ) - 1;
-            if( 0 === $user_count ) {
-               $alert_user =  __( "No users found to reassign", "oasisworkflow" );
-               echo <<<SHOW_ALERT
-               <script>
-                  jQuery(document).ready(function(){
-                     alert('$alert_user');
-                     return false;
-                  });
-               </script>
-SHOW_ALERT;
-            }
-            ?>
             <p>
-               <select id="actors-list-select" name="actors-list-select" size=10 multiple="multiple">
+               <select id="reassign-actors-list-select" name="actors-list-select" size=10 multiple="multiple">
                   <?php
                   // for executing performance lets check the above condition
                   if( 0 < $user_count && $users ) {
@@ -91,27 +81,25 @@ SHOW_ALERT;
             </p>
          </div>
          <div class="select-actors-div-point">
-            <a href="#" id="assignee-set-point"><img src="<?php echo OASISWF_URL . "img/role-set.png"; ?>" style="border:0px;" /></a><br><br>
-            <a href="#" id="assignee-unset-point"><img src="<?php echo OASISWF_URL . "img/role-unset.png"; ?>" style="border:0px;" /></a>
+            <a href="#" id="reassign-assignee-set-point"><img src="<?php echo OASISWF_URL . "img/role-set.png"; ?>" style="border:0px;" /></a><br><br>
+            <a href="#" id="reassign-assignee-unset-point"><img src="<?php echo OASISWF_URL . "img/role-unset.png"; ?>" style="border:0px;" /></a>
          </div>
          <div class="select-actors-list">
             <label><?php echo __( "Assigned", "oasisworkflow" ); ?></label><br class="clear">
             <p>
-               <select id="actors-set-select" name="actors-set-select" size=10 multiple="multiple"></select>
+               <select id="reassign-actors-set-select" name="actors-set-select" size=10 multiple="multiple"></select>
             </p>
          </div>
       </div>
       <br class="clear">
    </div>
 
-
-
    <div class="owf-text-info left full-width">
       <div class="left">
          <label><?php echo __( 'Comments:', 'oasisworkflow' ); ?></label>
       </div>
       <div class="left">
-         <textarea id="reassignComments" class="workflow-comments"></textarea>
+         <textarea id="reassign_comments" class="workflow-comments"></textarea>
       </div>
    </div>
    <br class="clear">

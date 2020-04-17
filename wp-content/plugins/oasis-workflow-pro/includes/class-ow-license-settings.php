@@ -9,7 +9,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /*
  * OW_License_Settings Class
@@ -100,12 +102,12 @@ class OW_License_Settings {
 				<div id="license-setting">
 					<div class="select-info full-width">
 						<div class="left quarter-width">
-							<label class="settings-title" for="oasis_workflow_license_key"><?php echo("Oasis Workflow Pro ");?><?php _e( 'license key' ); ?>:</label>
+							<label class="settings-title" for="oasis_workflow_license_key"><?php echo("Oasis Workflow Pro ");?><?php _e( 'license key', "oasisworkflow" ); ?>:</label>
 						</div>
 						<div class="left three-fourth-width">
 							<input type="text" class="regular-text" name="<?php echo $this->ow_license_key_option_name; ?>" value="<?php echo $ow_license_key; ?>" />
 				         <?php if ( $ow_license_status !== false && $ow_license_status == 'valid' ) { ?>
-								<input type="submit" class="button-secondary" name="oasiswf_license_deactivate" value="<?php _e( 'Deactivate License' ); ?>"/>
+								<input type="submit" class="button-secondary" name="oasiswf_license_deactivate" value="<?php _e( 'Deactivate License', "oasisworkflow" ); ?>"/>
 							<?php }	?>
 						</div>
 						<br class="clear">
@@ -115,7 +117,7 @@ class OW_License_Settings {
 					do_action( 'owf_add_license_settings' );
 					?>
 					<div class="select-info full-width">
-						<input type="submit" class="button button-primary button-large" name="oasiswf_license_activate" value="<?php _e('Save'); ?>"/>
+						<input type="submit" class="button button-primary button-large" name="oasiswf_license_activate" value="<?php echo __( "Save", "oasisworkflow" ); ?>"/>
 					</div>
 					<br class="clear">
 				</div>

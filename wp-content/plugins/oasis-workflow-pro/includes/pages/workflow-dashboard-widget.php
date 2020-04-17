@@ -16,29 +16,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="dashboard-content">
    <?php
    $ow_process_flow = new OW_Process_Flow();
+   
+   $user_id = get_current_user_id();
 
    // get date count of assigned tasks for selected user
-   $tasks = $ow_process_flow->get_task_count_by_due_date( get_current_user_id() );
-
+   $tasks = $inbox_items = $ow_process_flow->get_assigned_post(null, $user_id, "rows", null);
+   $filtered_items = $ow_process_flow->filter_inbox_items( $tasks, "inbox-all" );
+   
+   $task_count = $filtered_items["mineTaskCount"];
+   $unclaimed_task_count = $filtered_items["unclaimedTaskCount"];
+   
    // get priority count of assigned tasks for selected user
-   $task_list_by_priority = $ow_process_flow->get_task_count_by_priority( get_current_user_id() );
+   $task_list_by_priority = $ow_process_flow->get_task_count_by_priority( $user_id );
+   
+   // get unclaimed task count
+   $else_unclaimed_task_message = "";
+   $unclaimed_task_message = ".";
+   if( $unclaimed_task_count > 0 ) {
+      $else_unclaimed_task_message = sprintf( __( ' But there are currently <a href="admin.php?page=oasiswf-inbox&action=inbox-unclaimed&user=%s">%s unclaimed task(s)</a>.', 'oasisworkflow' ), $user_id, $unclaimed_task_count );
+      $unclaimed_task_message = sprintf( __( ' and <a href="admin.php?page=oasiswf-inbox&action=inbox-unclaimed&user=%s">%s unclaimed task(s)</a>.', 'oasisworkflow' ),$user_id, $unclaimed_task_count );
+   }
    ?>
 
    <div class="main-content">
       <?php
-      $task_count = 0;
-      foreach ( $tasks as $task ) {
-         $task_count += $task->row_count;
-      }
       if ( $task_count > 0 ) {
-         $task_count_message = sprintf( __( 'You currently have <a href="admin.php?page=oasiswf-inbox">%s assignment(s).</a>', 'oasisworkflow' ),
-            $task_count );
+         $task_count_message = sprintf( __( 'There are currently <a href="admin.php?page=oasiswf-inbox">%s assignment(s)</a>', 'oasisworkflow' ),
+            $task_count ). $unclaimed_task_message;
          echo "<span>";
          echo $task_count_message;
          echo "</span>";
       } else {
          echo "<span>";
-         echo __( 'Hurray! No assignments.', 'oasisworkflow' );
+         echo __( 'Hurray! No assignments.', 'oasisworkflow' ) . $else_unclaimed_task_message;
          echo "</span>";
       }
       ?>
@@ -57,36 +67,58 @@ if ( ! defined( 'ABSPATH' ) ) {
 
                //set due date types and if we don't have tasks for the given due dates , show 0 count
                $due_types = array(
-                  'overdue' => array( 'label' => 'Overdue', 'count' => 0, 'color' => 'red' ),
-                  'due_today' => array( 'label' => 'Due Today', 'count' => 0, 'color' => '' ),
-                  'due_tomorrow' => array( 'label' => 'Due Tomorrow', 'count' => 0, 'color' => '' ),
-                  'due_in_seven_days' => array( 'label' => 'Due in 7 days', 'count' => 0, 'color' => '' )
+                  'overdue'           => array( 'label' => __( 'Overdue', 'oasisworkflow' ), 
+                                                'count' => 0, 
+                                                'color' => '' ),
+                  'due_today'         => array( 'label' => __( 'Due Today', 'oasisworkflow' ), 
+                                                'count' => 0, 
+                                                'color' => '' ),
+                  'due_tomorrow'      => array( 'label' => __( 'Due Tomorrow', 'oasisworkflow'), 
+                                                'count' => 0, 
+                                                'color' => '' ),
+                  'due_in_seven_days' => array( 'label' => __( 'Due in 7 days', 'oasisworkflow'), 
+                                                'count' => 0, 
+                                                'color' => '' )
                );
 
                // compare dates to get counts for the given tasks by due dates
                foreach ( $tasks as $task ) {
-                  $date = $task->date;
+                  $date = $task->due_date;
                   $key = '';
                   if( $date < $today ) {
                      $key = "overdue";
-                     $due_types[$key]["count"] += $task->row_count;
+                     $due_types[$key]["count"] += 1;
                   }
                   if( $date == $today ) {
                      $key = "due_today";
-                     $due_types[$key]["count"] += $task->row_count;
+                     $due_types[$key]["count"] += 1;
                   }
                   if( $date == $tomorrow ) {
                      $key = "due_tomorrow";
-                     $due_types[$key]["count"] += $task->row_count;
+                     $due_types[$key]["count"] += 1;
                   }
                   if( $date <= $week ) {
                      $key = "due_in_seven_days";
-                     $due_types[$key]["count"] += $task->row_count;
+                     $due_types[$key]["count"] += 1;
                   }
                }
 
                foreach ( $due_types as $key => $value ) {
-                  echo "<li style= color:" . $value['color'] . ">" . $value['count'] . " " . __( $value['label'], "oasisworkflow" ) . "</li>";
+                  
+                  $css_class = "owf-li-normal";
+                  
+                  // If task count is zero change the css class
+                  if ( $value['count'] !== 0 ) {
+                     $css_class = "owf-li-bold";
+                  }
+                  
+                  // If task is overdue than change text color to red
+                  if ( $key == "overdue" && $value['count'] !== 0 ) {
+                     $value['color'] = "red";
+                  }
+                  
+                  echo "<li class='". $css_class ."' style='color:" . $value['color'] . "'>" . $value['count'] . " " . $value['label'] . "</li>";
+                  
                }
                ?>
             </ul>
@@ -116,7 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
                   // since we do not have tasks for the given priority, show 0 count
                   if( !$has_tasks ) {
-                     echo "<li class=" . $css_class . "-task-priority>" . "0 " . $priority_name . "</li>";
+                     echo "<li>" . "0 " . $priority_name . "</li>";
                   }
                }
                ?>

@@ -10,8 +10,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
    exit;
+}
 
 /*
  * OW_Process_Flow Class
@@ -27,6 +28,9 @@ class OW_Process_Flow {
     * @since 2.0
     */
    public function __construct() {
+
+      // only add_action for AJAX actions
+
       add_action( 'wp_ajax_get_submit_step_details', array( $this, 'get_submit_step_details' ) );
       add_action( 'wp_ajax_validate_submit_to_workflow', array( $this, 'validate_submit_to_workflow' ) );
 
@@ -41,26 +45,17 @@ class OW_Process_Flow {
       add_action( 'wp_ajax_workflow_complete', array( $this, 'workflow_complete' ) );
       add_action( 'wp_ajax_workflow_cancel', array( $this, 'workflow_cancel' ) );
 
+      add_action( 'wp_ajax_workflow_abort_comments', array( $this, 'workflow_abort_comments' ) );
       add_action( 'wp_ajax_workflow_abort', array( $this, 'workflow_abort' ) );
       add_action( 'wp_ajax_multi_workflow_abort', array( $this, 'multi_workflow_abort' ) );
       add_action( 'wp_ajax_get_post_publish_date_edit_format', array( $this, 'get_post_publish_date_edit_format' ) );
 
       add_action( 'wp_ajax_oasiswf_delete_post', array( $this, 'oasiswf_delete_post' ) );
-      add_action( 'wp_trash_post', array( $this, 'when_post_trash_delete' ) );
 
-      // Show posts/pages which current logged in user can access or see..
-//      add_action( 'pre_get_posts', array( $this, 'show_only_accessible_posts' ) );
+      add_action( 'wp_ajax_check_applicable_roles', array( $this, 'check_is_role_applicable' ), 10, 1 );   
       
-//      add_filter( 'owf_claim_process_pre', array( $this, 'pre_validate_claim' ), 10, 4 );
-
-      // Trigger after user deleted
-      add_action( 'deleted_user', array( $this, 'purge_user_assignments' ), 10, 1 );
-
-      // Trigger on redirect post location
-      add_action( 'redirect_post_location', array( $this, 'redirect_after_signoff' ) );
-      add_action( 'owf_submit_to_workflow', array( $this, 'redirect_after_workflow_submit' ), 10, 2 );
    }
-
+   
    /**
     * AJAX function - executed on step change during "submit to workflow".
     *
@@ -76,7 +71,7 @@ class OW_Process_Flow {
       $post_id = isset( $_POST["post_id"] ) ? intval( $_POST["post_id"] ) : null;
 
       // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
+      if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
          wp_die( __( 'You are not allowed to create/edit post.' ) );
       }
 
@@ -106,16 +101,11 @@ class OW_Process_Flow {
 
       // if teams add-on is active, get all the available teams
       if ( get_option( 'oasiswf_team_enable' ) == 'yes' ) {
-         $teams = "";
-         $teams = apply_filters( 'get_teams_for_workflow', $teams );
-         if ( empty( $teams ) ) {
-            // something is wrong, we didn't find any teams
-            $messages .= "<div id='message' class='error error-message-background '>";
-            $messages .= '<p>' . __( 'No Teams found. Contact your administrator.', 'oasisworkflow' ) . '</p>';
-            $messages .= "</div>";
-            wp_send_json_error( array( 'errorMessage' => $messages ) );
-         }
-         $step_details["teams"] = $teams;
+         $teams = apply_filters( 'get_teams_for_workflow', $wf_id, $post_id );
+
+         if ( ! empty( $teams ) ) {
+            $step_details["teams"] = $teams;
+         }         
       }
 
       // call filter to display any custom data, like pre publish conditions
@@ -174,7 +164,7 @@ class OW_Process_Flow {
       $post_id = $data['post_ID'];
 
       // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
+      if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
          wp_die( __( 'You are not allowed to create/edit post.' ) );
       }
 
@@ -219,17 +209,7 @@ class OW_Process_Flow {
          $due_date_error_message = __( 'Due date must be greater than the current date.', 'oasisworkflow' );
          array_push( $validation_result, $due_date_error_message );
       }
-
-      // if teams add-on is active, validate if the team has the users
-      if ( get_option( 'oasiswf_team_enable' ) == 'yes' ) {
-         $team_id = $data['hi_actor_ids'];
-         if ( ! $this->has_users_in_team( $submit_to_workflow_params["post_id"],
-            $submit_to_workflow_params["step_id"], $team_id ) ) {
-            $team_error_message = __( 'No users found for the given Team and Workflow assignee(s). Please check the team.', 'oasisworkflow' );
-            array_push( $validation_result, $team_error_message );
-         }
-      }
-
+      
       // let the filter excute pre submit-to-workflow validations and return validation error messages, if any
       $validation_result = apply_filters( 'owf_submit_to_workflow_pre', $validation_result, $submit_to_workflow_params );
 
@@ -366,22 +346,19 @@ class OW_Process_Flow {
          "process" => "",
          "assign_to_all" => 0,
          "team_id" => "",
+         "team_name" => "",
          "due_date" => ""
       );
 
       // if team is assigned to the post, check if the team has members for this step
       $team_id = get_post_meta( $step_details_params["post_id"], '_oasis_is_in_team', true );
-      if ( ! empty( $team_id ) ) {
-         if ( ! $this->has_users_in_team( $step_details_params["post_id"],
-            $step_details_params["step_id"], $team_id ) ) {
-            // something is wrong, we didn't find members in the team for this step
-            $messages .= "<div id='message' class='error error-message-background '>";
-            $messages .= '<p>' .__( 'No users found for the assigned Team and Workflow role. Please contact the administrator.', 'oasisworkflow' ) . '</p>';
-            $messages .= "</div>";
-            wp_send_json_error( array( 'errorMessage' => $messages ) );
-         }
+      if ( ! empty( $team_id ) ) {         
+         $ow_teams_service = new OW_Teams_Service();
+         $team      = $ow_teams_service->get_team_name_by_id( $team_id );
+         $team_name = $team[0]->name;
 
-         $step_details["team_id"] = $team_id;
+         $step_details["team_id"]   = $team_id;
+         $step_details["team_name"] = $team_name;
       }
 
       // get step users
@@ -440,15 +417,20 @@ class OW_Process_Flow {
 
       $selected_actor_val = sanitize_text_field( $_POST["actors"] );
       OW_Utility::instance()->logger( "User Provided Actors:" . $selected_actor_val );
-
+      
+      $team = sanitize_text_field( $_POST["team"] );
+      $team_id = null; 
       $is_team = false;
-      // if team is assigned to the post, then get the team details
-      $team_id = get_post_meta( $post_id, '_oasis_is_in_team', true );
-      OW_Utility::instance()->logger( "Team ID:" . $team_id );
-      if ( ! empty( $team_id ) ) {
-         $selected_actor_val = $team_id;
+      // if teams add-on is active
+      if ( $team === "true" ) { 
+         $team_id = $selected_actor_val;        
+         OW_Utility::instance()->logger( "Team ID:" . $team_id );
          $is_team = true;
+      } else if ( $team !== "" ) {
+         $team_id = $team;
+         OW_Utility::instance()->logger( "Team ID:" . $team_id );
       }
+      
       $actors = $this->get_workflow_actors( $post_id, $step_id, $selected_actor_val, $is_team );
       OW_Utility::instance()->logger( "Selected Actors:" . $actors );
       // hook to allow developers to add/remove users from the task assignment
@@ -534,18 +516,135 @@ class OW_Process_Flow {
       $new_action_history_id = $this->submit_post_to_step_internal( $post_id, $sign_off_workflow_params );
       $submit_post_to_step_results["new_history_id"] = $new_action_history_id;
 
-      $ow_history_service = new OW_History_Service();
-
-      $history_details = $ow_history_service->get_action_history_by_id( $sign_off_workflow_params['history_id'] );
-
-      // get the source step id from the old history info
-      $source_step_id = $history_details->step_id;
-      $target_step_id = $step_id;
-
-      $new_post_status = $this->get_post_status_from_step_transition( $post_id, $source_step_id, $target_step_id );
-      $submit_post_to_step_results["new_post_status"] = $new_post_status;
+      // get the updated post status, since it might have got updated during this step sign off.
+      // in case of assignment/publish - it will, but in case of review, it will get updated only if all the reviewers
+      // have signed off
+      $updated_post_data = get_post( $post_id );
+      $submit_post_to_step_results["new_post_status"] = $updated_post_data->post_status;
 
       wp_send_json_success( $submit_post_to_step_results );
+   }
+   
+   /**
+    * Function - API to sign-off
+    * 
+    * @param $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_submit_to_step( $data ) {
+      
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_submit_to_step', __( 'You are not allowed to signoff.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      
+      /* sanitize incoming data */
+      $post_id = intval( $data['post_id'] );
+      
+      $step_id = intval( $data['step_id'] );
+      $step_decision = sanitize_text_field( $data["decision"] );
+
+      $priority = sanitize_text_field( $data["priority"] );
+
+      // if empty, lets set the priority to default value of "normal".
+      if( empty( $priority ) ) {
+         $priority = '2normal';
+      }
+      
+      $selected_actor_val = implode('@', $data['assignees'] );
+      OW_Utility::instance()->logger( "User Provided Actors:" . $selected_actor_val );
+      
+      $assign_to_all = intval( $data['assign_to_all'] );
+      
+      $team = intval( $data["team_id"] );      
+      $team_id = null;
+      $is_team = false;
+      // if teams add-on is active and assign to all
+      if ( $team !== 0 ) { 
+         $team_id = $team;
+         if( $assign_to_all == 1 ) :
+            $selected_actor_val = $team;
+            $is_team = true;
+         endif;
+      }
+      
+      $actors = $this->get_workflow_actors( $post_id, $step_id, $selected_actor_val, $is_team );
+      OW_Utility::instance()->logger( "Selected Actors:" . $actors );
+      // hook to allow developers to add/remove users from the task assignment
+      $actors = apply_filters( 'owf_get_actors', $actors, $step_id, $post_id );
+      OW_Utility::instance()->logger( "Selected Actors After Filter:" . $actors );
+
+      $task_user = get_current_user_id();
+      // find out who is signing off the task; sometimes the admin can signoff on behalf of the actual user
+      if ( isset( $data["task_user"] ) && $data["task_user"] !== "" ) {
+         $task_user = intval( sanitize_text_field( $data["task_user"] ) );
+      }
+      
+      // sanitize_text_field remove line-breaks so do not sanitize it.
+      $sign_off_comments = nl2br( $data["comments"] );
+
+      $due_date = "";
+      $due_date_settings = get_option( 'oasiswf_default_due_days' );
+      if ( $due_date_settings !== "" && isset( $data["due_date"] ) && ! empty( $data["due_date"] ) ) {
+         $due_date = sanitize_text_field( $data["due_date"] );
+      }
+      
+      $history_id = isset( $data["history_id"] ) ? intval( $data["history_id"] ) : null;
+      
+      // pre publish checklist
+      $pre_publish_checklist = array();
+      if ( ! empty ( $data['pre_publish_checklist'] ) ) {
+         $pre_publish_checklist = $data['pre_publish_checklist'];
+      }
+      
+      // create an array of all the inputs
+      $sign_off_workflow_params = array (
+         "post_id"               => $post_id,
+         "step_id"               => $step_id,
+         "history_id"            => $history_id,
+         "step_decision"         => $step_decision,
+         "post_priority"         => $priority,
+         "task_user"             => $task_user,
+         "actors"                => $actors,
+         "api_due_date"          => $due_date,
+         "comments"              => $sign_off_comments,
+         "pre_publish_checklist" => $pre_publish_checklist,
+         "current_page"          => ""
+      );
+      
+      // let the filter excute pre submit-to-workflow validations and return validation error messages, if any
+      $validation_result = array();
+      $validation_result = apply_filters( 'owf_api_sign_off_workflow_pre', $validation_result, $sign_off_workflow_params );  
+      if ( count( $validation_result ) > 0 ) {
+         $response = array(
+            "validation_error" => $validation_result,
+            "success_response" => false
+         );
+         return $response;
+      }
+      
+      // update priority on the post
+      update_post_meta( $post_id, "_oasis_task_priority", $priority );
+      
+      $new_action_history_id = $this->submit_post_to_step_internal( $post_id, $sign_off_workflow_params );
+
+      $oasis_is_in_workflow = get_post_meta( $post_id, '_oasis_is_in_workflow', true );
+      
+      $redirect_link = admin_url( 'admin.php?page=oasiswf-inbox' );
+      
+      $response = array (
+         "new_action_history_id" => $new_action_history_id,
+         "post_is_in_workflow" => $oasis_is_in_workflow,
+         "redirect_link" => $redirect_link,
+         "success_response" => __('The task was successfully signed off.', 'oasisworkflow')
+      );
+
+      return $response;
    }
 
    /*
@@ -566,6 +665,37 @@ class OW_Process_Flow {
    }
 
    /**
+    * API: Check for claim
+    *
+    * @param $data
+    * @return bool
+    * 
+    * @since 6.0
+    */
+   public function api_check_for_claim( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_check_for_claim', __( 'You are not allowed to claim.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      $claim_button = array(
+         "is_hidden" => true
+      );
+
+      $action_history_id = intval( $data["action_history_id"] );
+
+      // check if we need to show the claim button or not.
+      if ( $this->check_for_claim( $action_history_id ) ) {
+         $claim_button["is_hidden"] = false;
+      }
+
+      return $claim_button;
+   }
+
+   /**
     * AJAX function - Claim process
     * Checks for claim, if true, adds a record in the history table for the claim action
     * deletes all the step emails which are not applicable anymore
@@ -576,12 +706,23 @@ class OW_Process_Flow {
     *
     * @since 2.0
     */
-   public function claim_process() {
+   public function claim_process( $claim_data = null ) {
       global $wpdb;
 
-      check_ajax_referer( 'owf_claim_process_ajax_nonce', 'security' );
-      
-      $action_history_id = intval( $_POST["actionid"] );
+      $is_api = false;
+      $button_clicked = "none";
+      $selected_user = 0;
+      if( empty( $claim_data ) ) {
+         check_ajax_referer( 'owf_claim_process_ajax_nonce', 'security' );
+
+         $action_history_id = intval( $_POST["actionid"] );
+         // get required data to redirect user to post edit page after clicking "claim and edit"
+         $button_clicked = isset( $_POST["buttonid"] ) ? sanitize_text_field( $_POST["buttonid"] ) : "none";
+         $selected_user = isset( $_POST["userid"] ) ? intval( $_POST["userid"] ) : 0;
+      } else {
+         $action_history_id = intval( $claim_data["history_id"] );
+         $is_api = true;
+      }
 
       $action_history_table = OW_Utility::instance()->get_action_history_table_name();
       $ow_history_service = new OW_History_Service();
@@ -593,18 +734,26 @@ class OW_Process_Flow {
       $error_message = "";
       if ( $this->check_for_claim( $action_history_id ) ) { // First check if "claim" is applicable or not
          // let the filter execute pre claim process validations and return validation messages, if any
-         $validation_result = apply_filters( 'owf_claim_process_pre', $validation_result, $action_history_id, $action_history->post_id, $action_history->assign_actor_id  );
-         if ( count( $validation_result ) > 0 ) {
-            $error_message = $this->construct_claim_error_message( $validation_result );
-            wp_send_json_error( array( 'errorMessage' => $error_message ) );
+         if ( has_filter( 'owf_claim_process_pre' ) ) {
+            $validation_result = apply_filters( 'owf_claim_process_pre', $validation_result, $action_history_id, $action_history->post_id, $action_history->assign_actor_id  );
+            if ( count( $validation_result ) > 0 ) {
+               $error_message = $this->construct_claim_error_message( $validation_result );
+               if( $is_api == true ) {
+                  return array( 'isError'=>'true' , 'errorMessage' => $validation_result );
+               } else {               
+                  wp_send_json_error( array( 'errorMessage' => $error_message ) );
+               }
+            }
          }
          
          $action_histories = $ow_history_service->get_action_history_by_status( "assignment", $action_history->post_id );
+         // $selected_user is as per inbox filter else get_current_user_id is used to claim task from post edit page.
+         $current_user_id = $selected_user !== 0 ? $selected_user : get_current_user_id();
          foreach ( $action_histories as $action ) { // for all the history ids, only one will be "claimed", rest need to be "unclaimed" OR claim_cancelled.
             if ( $post_title == "" ) {
                $post_title = stripcslashes( get_post( $action->post_id )->post_title );
             }
-            if ( $action_history_id == $action->ID ) { // this is a match, so claim
+            if ( $current_user_id == $action->assign_actor_id ) { // this is a match, so claim
                // add claim action to history table
                $claim_history_data = (array) $action;
                unset( $claim_history_data["ID"] ); //unset the id, since we will get a new ID after insert
@@ -628,8 +777,8 @@ class OW_Process_Flow {
                // delete reminder emails, since the assignment is now claimed
                $ow_email->delete_step_email( $action->ID, $action->assign_actor_id );
 
-               // send mail to the actor about the assignment and add email reminders, if any
-               $ow_email->send_step_email( $new_history_id );
+               // add email reminders, if any
+               $ow_email->generate_reminder_emails( $new_history_id );
 
                $data["action_status"] = "claimed";
             } else {
@@ -641,45 +790,100 @@ class OW_Process_Flow {
          }
          // send email to other users, saying that the article has been removed from their inbox, since it was claimed by another user
          $ow_email->notify_users_on_task_claimed( $post_id );
+      } else {
+         // Display error message if task is already claimed by another user
+         $validation_result[] = __( "Sorry, You can't claim the task. It is already claimed by another user.", 'oasisworkflow' );     
+         $error_message = $this->construct_claim_error_message( $validation_result );
+         if( $is_api == true ) {
+            return array( 'isError'=>'true' , 'errorMessage' => $validation_result );
+         } else {               
+            wp_send_json_error( array( 'errorMessage' => $error_message ) );
+         }
       }
-      $claim_data = array ( 'url'=> admin_url(), 'new_history_id' => $new_history_id );
-      wp_send_json_success( $claim_data );
+      
+      if( $is_api == true ) {
+         return array (
+            "isError"=>"false" ,
+            'url'=> admin_url(),
+            "new_history_id" => $new_history_id,
+            "successResponse" => __("The post was successfully claimed.")
+         );
+      } elseif( $button_clicked == "claim-and-edit" ) {
+         // Generate URL to redirect user to post edit page after claim
+         $link = admin_url() . "post.php?post=".$post_id."&action=edit&oasiswf=".$new_history_id."&user=".$selected_user;
+         $claim_data = array ( 'url'=> $link );
+         wp_send_json_success( $claim_data );
+      } else { 
+         $claim_data = array ( 'url'=> admin_url(), 'new_history_id' => $new_history_id );
+         wp_send_json_success( $claim_data );
+      }      
+   }
+   
+   /**
+    * Function - API to claim task
+    * 
+    * @param $claim_data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_claim_process( $claim_data ) {
+      if ( ! wp_verify_nonce( $claim_data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      if ( ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_claim_process', __( 'You are not allowed to claim the task.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      $response = $this->claim_process( $claim_data );
+      
+      return $response;
    }
 
    /**
     * AJAX function - Reassign process
     */
-   public function reassign_process() {
+   public function reassign_process( $reassign_data = null ) {
       global $wpdb;
+      
+      $is_api = false;
+      
+      if( empty( $reassign_data ) ) {
+         // nonce check
+         check_ajax_referer( 'owf_reassign_ajax_nonce', 'security' );
 
-      // nonce check
-      check_ajax_referer( 'owf_reassign_ajax_nonce', 'security' );
-
-      // capability check
-      if ( ! current_user_can( 'ow_reassign_task' ) ) {
-         wp_die( __( 'You are not allowed to reassign tasks.' ) );
+         // capability check
+         if ( ! current_user_can( 'ow_reassign_task' ) ) {
+            wp_die( __( 'You are not allowed to reassign tasks.' ) );
+         }
+         
+         /* sanitize incoming data */
+         $current_user = isset( $_POST["task_user"] ) &&  $_POST["task_user"] !== "" ? intval( $_POST["task_user"] ) : get_current_user_id();
+         $action_history_id = intval( $_POST["oasiswf"] );
+         $reassign_users = array_map('sanitize_text_field', $_POST["reassign_id"] );
+         $reassign_comments = ( sanitize_text_field( $_POST['reassign_comments'] ) != "" ) ? sanitize_text_field( $_POST['reassign_comments'] ) : "";
+         
+      } else {
+         /* sanitize incoming data */
+         $current_user = (sanitize_text_field( $reassign_data["task_user"] ) != "") ? intval( sanitize_text_field( $reassign_data["task_user"] ) ) : get_current_user_id();
+         $action_history_id = intval( sanitize_text_field( $reassign_data["history_id"] ) );
+         $reassign_users = array_map('sanitize_text_field', $reassign_data["assignees"] );
+         $reassign_comments = ( sanitize_text_field( $reassign_data['comments'] ) != "" ) ? sanitize_text_field( $reassign_data['comments'] ) : "";
+         $is_api = true;
       }
-
-      /* sanitize incoming data */
-      $current_user = (sanitize_text_field( $_POST["task_user"] ) != "") ? intval( sanitize_text_field( $_POST["task_user"] ) ) : get_current_user_id();
-      $action_history_id = intval( sanitize_text_field( $_POST["oasiswf"] ) );
-      $reassign_users = array_map('sanitize_text_field', $_POST["reassign_id"] );
-      $reassign_comments = ( sanitize_text_field( $_POST['reassignComments'] ) != "" ) ? sanitize_text_field( $_POST['reassignComments'] ) : "";
-
 
       $action_table = OW_Utility::instance()->get_action_table_name();
       $action_history_table = OW_Utility::instance()->get_action_history_table_name();
 
-      $reassign_comments_json_array = json_encode( array( array( "send_id" => $current_user,
-                                                                  "comment" => stripcslashes( $reassign_comments ),
-                                                                  "comment_timestamp" => current_time( "mysql" ) ) ) );
+      $reassign_comments_json_array = array( array( "send_id" => $current_user,
+                                                    "comment" => stripcslashes( $reassign_comments ),
+                                                    "comment_timestamp" => current_time( "mysql" ) ) );
 
       $ow_email = new OW_Email( );
       $ow_history_service = new OW_History_Service();
       // get history details for all assignment, review and publish step
       $action = $ow_history_service->get_action_history_by_id( $action_history_id );
       $data = (array) $action;
-      
+
       // insert record into history table regarding this action
       if ( $data["assign_actor_id"] != -1 ) { // assignment or publish step (reassigned)
          unset( $data["ID"] );
@@ -695,7 +899,7 @@ class OW_Process_Flow {
          $data["from_id"] = $action_history_id;
          $data["create_datetime"] = current_time( 'mysql' );
          if ( ! empty( $reassign_comments ) ) {
-            $data['comment'] = $reassign_comments_json_array;
+            $data['comment'] = json_encode( $reassign_comments_json_array );
          }
 
          foreach ( $reassign_users as $reassign_user_id ) {
@@ -710,51 +914,123 @@ class OW_Process_Flow {
                $ow_email->send_step_email( $new_history_id, $reassign_user_id ); // send mail to the actor .
             }
          }
-         wp_send_json_success();
+         if( $is_api == true ) {
+            return array (
+               "isError"=>"false",
+               "successResponse" => __("The post was successfully reassigned.")
+            );
+         } else {
+            wp_send_json_success();
+         }
       } else { // review step (reassigned)
+         $delete_current_user_task = false;
          $reviews = $ow_history_service->get_review_action_by_status( "assignment", $action_history_id );
-         foreach ( $reviews as $review ) {
-            if ( in_array( $review->actor_id, $reassign_users ) ) {
-               $actor = OW_Utility::instance()->get_user_role_and_name( $review->actor_id  )->username ;
-               $messages = "<div id='message' class='error error-message-background '>";
-               $messages .= '<p>' .  __( "User {$actor} has already been assigned this task. Please select another user.", "oasisworkflow" ) . '</p>';
-               $messages .= "</div>";
-               wp_send_json_error( array( 'errorMessage' => $messages ) );
+         // If the task is already assigned to the user
+            foreach ( $reviews as $review ) {
+               if ( in_array( $review->actor_id, $reassign_users ) ) {
+                  // If comments exist than append the reassign comments to existing comments of the reassigned user
+                  if ( ! empty( $review->comments ) ) {
+                     $comments = json_decode( $review->comments, true );
+                     array_push( $reassign_comments_json_array, $comments[0] );
+                  }
+                  $comment = json_decode( $data['comment'] );
+                  if ( ! empty( $comment ) ) {
+                     array_push( $reassign_comments_json_array, $comment[0] );
+                  }
+                  // Update comments for reassigned users
+                  $wpdb->update( $action_table, array( 
+                        "comments" => json_encode( $reassign_comments_json_array ),
+                        "update_datetime" => current_time( "mysql" ) ),
+                        array( "ID" => $review->ID ) );
+                  $delete_current_user_task = true;
+               }               
+            }  
+         if ( $delete_current_user_task ) {
+            // Delete task from current user
+            $wpdb->delete( $action_table, array(
+                'actor_id' => $current_user,
+                'action_history_id' => $action_history_id ) );
+            $ow_email->delete_step_email( $action_history_id, $current_user );
+            
+            if( $is_api == true ) {
+               return array (
+                  "isError"=>"false",
+                  "successResponse" => __("The post was successfully reassigned.")
+               );
+            } else {
+               wp_send_json_success();
             }
-         }
-         $review = $ow_history_service->get_review_action_by_actor( $current_user, "assignment", $action_history_id );
-
-         // if the reassign is in a review process, insert data into the fc_action table
-         $review = (array) $review;
-         $review_id = $review["ID"];
-         unset( $review["ID"] );
-         if ( empty( $review['due_date'] ) || $review['due_date'] == '0000-00-00' ) {
-            unset( $review['due_date'] );
-         }
-         if ( empty( $review['comments'] ) ) {
-            unset( $review['comments'] );
-         }
-
-         foreach ( $reassign_users as $reassign_user_id ) {
-            $review["actor_id"] = $reassign_user_id;
-
-            $new_review_history_id = OW_Utility::instance()->insert_to_table( $action_table, $review );
-            if ( $new_review_history_id ) {
-               $wpdb->update( $action_table, array( "review_status" => "reassigned",
-                                                    "comments" => $reassign_comments_json_array,
-                                                    "update_datetime" => current_time( "mysql" ) ),
-                              array( "ID" => $review_id ) );
-
-               $ow_email->delete_step_email( $action_history_id, $current_user );
-               $ow_email->send_step_email( $action_history_id, $reassign_user_id ); // send mail to the actor .
-
+            
+         } else {            
+            $review = $ow_history_service->get_review_action_by_actor( $current_user, "assignment", $action_history_id );
+            
+            // if the reassign is in a review process, insert data into the fc_action table
+            $review = (array) $review;
+            $review_id = $review["ID"];
+            unset( $review["ID"] );
+            if ( empty( $review['due_date'] ) || $review['due_date'] == '0000-00-00' ) {
+               unset( $review['due_date'] );
+            }
+            if ( empty( $review['comments'] ) ) {
+               unset( $review['comments'] );
             }
 
-         }
-         wp_send_json_success();
+            foreach ( $reassign_users as $reassign_user_id ) {
+               $review["actor_id"] = $reassign_user_id;
+
+               $new_review_history_id = OW_Utility::instance()->insert_to_table( $action_table, $review );
+               if ( $new_review_history_id ) {
+                  $wpdb->update( $action_table, array( "review_status" => "reassigned",
+                                                       "comments" => json_encode( $reassign_comments_json_array ),
+                                                       "update_datetime" => current_time( "mysql" ) ),
+                                 array( "ID" => $review_id ) );
+
+                  $ow_email->delete_step_email( $action_history_id, $current_user );
+                  $ow_email->send_step_email( $action_history_id, $reassign_user_id ); // send mail to the actor .
+
+               }
+            }   
+            if( $is_api == true ) {
+               return array (
+                  "isError"=>"false",
+                  "successResponse" => __("The post was successfully reassigned.")
+               );
+            } else {
+               wp_send_json_success();
+            }
+         }   
       }
-
-      wp_send_json_error();
+      
+      if( $is_api == true ) {
+            return array (
+               "isError"=>"true",
+               "errorResponse" => __("The post can not be reassigned.")
+            );
+      } else {
+         wp_send_json_error();
+      }
+      
+   }
+   
+   /**
+    * API function for reassign
+    * @param array $data
+    * @return array $response
+    * @since 6.7
+    */
+   public function api_reassign_process( $data ) {
+      
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! current_user_can( 'ow_reassign_task' ) ) {
+         return new WP_Error( 'owf_rest_reassign_task', __( 'You are not allowed to reassign task.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      
+      $response = $this->reassign_process( $data );
+      
+      return $response;
    }
 
    /**
@@ -768,15 +1044,20 @@ class OW_Process_Flow {
       $post_id = intval( $_POST['post_id'] );
 
       // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
+      if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
          wp_die( __( 'You are not allowed to create/edit post.' ) );
       }
+      
+      // parse custom fields
+      $custom_fields = array();
+      $form = $_POST['custom_fields'];
+      parse_str( $form, $custom_fields );
 
       /* sanitize incoming data */
       $history_id = intval( $_POST['history_id'] );
       $publish_datetime = null;
       if( isset( $_POST["immediately"] ) && ! empty( $_POST["immediately"] ) ) { // even though hidden
-         $publish_datetime = sanitize_text_field( $_POST["immediately"] );
+         $publish_datetime = sanitize_text_field( $_POST["immediately"] );            
          $publish_immediately = false;
       } else {
          // looks like a case for immediate publish.
@@ -804,6 +1085,7 @@ class OW_Process_Flow {
       if ( ! empty ( $custom_condition ) ) {
          $pre_publish_checklist = explode( ',', $custom_condition );
       }
+      
 
       // create an array of all the inputs
       $workflow_complete_params = array (
@@ -821,6 +1103,11 @@ class OW_Process_Flow {
          "current_page"          => $post_data['current_page']
       );
       
+      // If custom fields are added than append to sign-off workflow parameters for any validation
+      if( ! empty( $custom_fields ) ) {
+         $workflow_complete_params = array_merge( $workflow_complete_params, $custom_fields );
+      }
+
       $validation_result = $this->validate_workflow_complete( $post_id, $workflow_complete_params );
 
       if (  count( $validation_result ) > 0 ) {
@@ -849,29 +1136,149 @@ class OW_Process_Flow {
       $complete_workflow_results = array();
 
       $complete_workflow_results["new_post_status"] = $result_array["new_post_status"];
-
+      
       wp_send_json_success( $complete_workflow_results );
+   }
+   
+   /**
+    * Function - API to complete the workflow process
+    * 
+    * @param $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_workflow_complete( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_workflow_complete', __( 'You are not allowed to publish post.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+       // sanitize post_id
+      $post_id = intval( $data['post_id'] );
+      
+      /* sanitize incoming data */
+      $history_id = intval( $data['history_id'] );
+      
+      $publish_datetime = null;
+      if( isset( $data["immediately"] ) && empty( $data["immediately"] ) ) { // even though hidden
+         $publish_datetime = sanitize_text_field( $data["publish_datetime"] );
+         // incoming format : 2019-03-09T21:20:00
+         // required format : 2019-03-09 21:20:00
+         $publish_datetime = str_replace('T', ' ', $publish_datetime);
+         $publish_immediately = false;
+      } else {
+         // looks like a case for immediate publish.
+         $publish_immediately = true;
+         $publish_datetime = get_the_date( 'Y-m-d H:i:s', $post_id );
+      }
+
+      OW_Utility::instance()->logger("publish_date:" . $publish_datetime);
+      $task_user = get_current_user_id();
+      // find out who is signing off the task; sometimes the admin can signoff on behalf of the actual user
+      if( isset( $data["task_user"] ) && $data["task_user"] != "" ) {
+         $task_user = intval( sanitize_text_field( $data["task_user"] ) );
+      }
+      
+      // pre publish checklist
+      $pre_publish_checklist = array();
+      if ( ! empty ( $data['pre_publish_checklist'] ) ) {
+         $pre_publish_checklist = $data['pre_publish_checklist'];
+      }
+      
+      // create an array of all the inputs
+      $workflow_complete_params = array (
+         "post_id"               => $post_id,
+         "history_id"            => $history_id,
+         "task_user"             => $task_user,
+         "publish_datetime"      => $publish_datetime,
+         "publish_immediately"   => $publish_immediately,
+         "pre_publish_checklist" => $pre_publish_checklist,
+         "current_page"          => ""
+      );
+      
+      // let the filter excute pre submit-to-workflow validations and return validation error messages, if any
+      $validation_result = array();
+      $validation_result = apply_filters( 'owf_api_sign_off_workflow_pre', $validation_result, $workflow_complete_params );  
+      if ( count( $validation_result ) > 0 ) {
+         $response = array(
+            "validation_error" => $validation_result,
+            "success_response" => false
+         );
+         return $response;
+      }
+      
+      // Sign off and complete the workflow
+      $result_array = $this->change_workflow_status_to_complete_internal( $post_id, $workflow_complete_params );
+
+      $oasis_is_in_workflow = get_post_meta( $post_id, '_oasis_is_in_workflow', true );
+      
+      $redirect_link = admin_url( 'admin.php?page=oasiswf-inbox' );
+
+      $original_post_id = get_post_meta( $post_id, '_oasis_original', true );
+      if ( ! empty( $original_post_id ) ) { // we are dealing with a revision post
+         // hook for revision complete
+         do_action("owf_revision_workflow_complete", $post_id );
+         $response = array (
+            "success_response" => __('The workflow is complete.', 'oasisworkflow'),
+            "post_is_in_workflow" => $oasis_is_in_workflow,
+            "redirect_link" => $redirect_link
+         );
+         return $response;
+      }
+      
+      do_action( 'owf_workflow_complete', $post_id, $result_array["new_action_history_id"] );   
+      
+      $response = array (
+         "success_response" => __('The workflow is complete.', 'oasisworkflow'),
+         "post_is_in_workflow" => $oasis_is_in_workflow,
+         "redirect_link" => $redirect_link
+      );
+
+      return $response;
    }
 
    /*
     * AJAX function - Cancel the workflow
     */
-   public function workflow_cancel() {
-      // nonce check
-      check_ajax_referer( 'owf_signoff_ajax_nonce', 'security' );
+   public function workflow_cancel( $api_data = null ) {
+      $is_api = false;
+      if( empty( $api_data ) ) {
+         // nonce check
+         check_ajax_referer( 'owf_signoff_ajax_nonce', 'security' );
+         
+         // sanitize post_id
+         $post_id = intval( sanitize_text_field( $_POST["post_id"] ) ); 
 
-      // sanitize post_id
-      $post_id = intval( sanitize_text_field( $_POST["post_id"] ) );
-
-      // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
-         wp_die( __( 'You are not allowed to create/edit post.' ) );
-      }
-
-      /* sanitize incoming data */
-      $user_id = get_current_user_id();
-      $history_id = intval( sanitize_text_field( $_POST["history_id"] ) );
-      $user_comments = sanitize_text_field( $_POST["comments"] );
+         // capability check
+         if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
+            wp_die( __( 'You are not allowed to create/edit post.', 'oasisworkflow' ) );
+         }
+         
+         $history_id = intval( sanitize_text_field( $_POST["history_id"] ) );
+         $user_comments = sanitize_text_field( $_POST["comments"] );
+         
+         $current_actor_id = get_current_user_id();
+         if ( isset( $_POST["hi_task_user"] ) && $_POST["hi_task_user"] != "" ) {
+            $current_actor_id = intval( sanitize_text_field( $_POST["hi_task_user"] ) );
+         }
+      } else {
+         // sanitize post_id
+         $post_id = intval( sanitize_text_field( $api_data["post_id"] ) ); 
+         
+         $history_id = intval( sanitize_text_field( $api_data["history_id"] ) );
+         $user_comments = sanitize_text_field( $api_data["comments"] );
+         
+         $current_actor_id = get_current_user_id();
+         if ( isset( $api_data["task_user"] ) && $api_data["task_user"] != "" ) {
+            $current_actor_id = intval( sanitize_text_field( $api_data["task_user"] ) );
+         }
+         $is_api = true;
+      }  
+      $user_id = get_current_user_id();     
 
       $comments[] = array( "send_id" => $user_id, "comment" => stripcslashes( $user_comments ) );
       $comments_json = json_encode( $comments );
@@ -883,16 +1290,10 @@ class OW_Process_Flow {
          'post_id' => $post_id,
          'from_id' => $history_id,
          'create_datetime' => current_time( 'mysql' )
-      );
+      );      
       $action_history_table = OW_Utility::instance()->get_action_history_table_name();
       $review_action_table = OW_Utility::instance()->get_action_table_name();
       $new_action_history_id = OW_Utility::instance()->insert_to_table( $action_history_table, $data );
-
-      if ( isset( $_POST["hi_task_user"] ) && $_POST["hi_task_user"] != "" ) {
-         $current_actor_id = intval( sanitize_text_field( $_POST["hi_task_user"] ) );
-      } else {
-         $current_actor_id = get_current_user_id();
-      }
 
       $ow_email = new OW_Email( );
       $ow_history_service = new OW_History_Service();
@@ -933,8 +1334,56 @@ class OW_Process_Flow {
 
          // clean up after workflow complete
          $this->cleanup_after_workflow_complete( $post_id );
-         wp_send_json_success();
+         if( $is_api ) {
+            $response = array (
+               "success_response" => __('The workflow was successfully aborted from the last step.' , 'oasisworkflow')
+            );
+            return $response;
+         } else {
+            wp_send_json_success();
+         }
       }
+   }
+   
+   /**
+    * Function - API to cancel the workflow process
+    * 
+    * @param $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_workflow_cancel( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      // capability check
+      if ( ! current_user_can( 'ow_abort_workflow' ) ) {
+         return new WP_Error( 'owf_rest_workflow_cancel', __( 'You are not allowed to end the workflow process.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }      
+      $response = $this->workflow_cancel( $data );  
+
+      return $response;
+   }
+   
+   /**
+    * AJAX function - Display popup to enter the comments when doing abort from workflow
+    * @since 5.4
+    */
+   public function workflow_abort_comments() {      
+      // nonce check
+      $nonce = 'owf_inbox_ajax_nonce';
+      
+      if ( isset( $_POST[ 'command' ] ) && sanitize_text_field( $_POST[ 'command' ] ) == 'exit_from_workflow' ) {
+         $nonce = 'owf_exit_post_from_workflow_ajax_nonce';
+      }
+      check_ajax_referer( $nonce, 'security' );
+      
+      ob_start();
+      include_once OASISWF_PATH . 'includes/pages/subpages/abort-workflow-comment.php';
+      $result = ob_get_contents();
+      ob_get_clean();
+      wp_send_json_success( htmlentities( $result ) );
    }
 
    /**
@@ -958,13 +1407,58 @@ class OW_Process_Flow {
 
       /* sanitize incoming data */
       $history_id = intval( $_POST["history_id"] );
+      $comments = sanitize_text_field( $_POST[ "comment" ] );
 
-      $new_history_id = $this->abort_the_workflow( $history_id );
+      $new_history_id = $this->abort_the_workflow( $history_id, $comments );
       if ( $new_history_id != null ) {
          wp_send_json_success();
       } else {
          wp_send_json_error();
       }
+   }
+
+   /**
+    * Function - API to abort the workflow
+    * @param $data
+    *
+    * @return mixed $response
+    *
+    * @since 6.0
+    */
+   public function api_workflow_abort( $data ) {
+      
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      // capability check
+      if ( ! current_user_can( 'ow_abort_workflow' ) ) {
+         return new WP_Error( 'owf_rest_abort_workflow', __( 'You are not allowed to abort the workflow.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      $post_id = intval($data['post_id']);
+
+      // sanitize_text_field remove line-breaks so do not sanitize it.
+      $comments = nl2br( $data['comments'] );
+
+      $ow_history_service = new OW_History_Service();
+      $histories = $ow_history_service->get_action_history_by_status( 'assignment', $post_id  );
+      if ( $histories ) {
+         $new_action_history_id = $this->abort_the_workflow( $histories[0]->ID, $comments );
+         if ( $new_action_history_id != null ) {
+
+            $oasis_is_in_workflow = get_post_meta( $post_id, '_oasis_is_in_workflow', true );
+
+            $response = array (
+               "new_action_history_id" => $new_action_history_id,
+               "post_is_in_workflow" => $oasis_is_in_workflow,
+               "success_response" => __('The workflow was successfully aborted.', 'oasisworkflow')
+            );
+
+            return $response;
+         }
+      }
+
    }
 
    /**
@@ -985,7 +1479,7 @@ class OW_Process_Flow {
 
       /* sanitize incoming data */
       $post_ids = (array) $_POST['post_ids'];
-      $post_ids = array_map( 'esc_attr', $post_ids );
+      $post_ids = array_map( 'intval', $post_ids );
 
       // loop through the history_ids and abort the workflow one by one.
       foreach ( $post_ids as $post_id ) {
@@ -1039,6 +1533,30 @@ class OW_Process_Flow {
       echo $status;
       exit();
    }
+   
+   /**
+    * Function - API to delete the revision post
+    * 
+    * @param $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_delete_post( $data ) {
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      if ( ! current_user_can( 'ow_make_revision' ) || ! current_user_can( 'ow_make_revision_others' ) ) {
+         return new WP_Error( 'owf_rest_delete_revision_post', __( 'You are not allowed delete the post', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      $post_id = intval( $data['post_id'] );
+      if ( $post_id ) {
+         $status = wp_trash_post( $post_id ) ? 'success' : 'error';
+      } else {
+         $status = 'error';
+      }
+      return $response = array( "status" => $status );
+   }
 
    /**
     * Hook - wp_trash_post
@@ -1089,7 +1607,7 @@ class OW_Process_Flow {
       }
 
       if ( $assigned_task_count >= 1 ) {
-         $error_messages[] = __( "You cannot claim additional tasks, since you already have more than 2 assignments.", 'oasisworkflow' );
+         $error_messages[] = __( 'You cannot claim additional tasks, since you already have more than 2 assignments.', 'oasisworkflow' );
          $validation_result = array_merge( $validation_result, $error_messages );
       }
 
@@ -1221,7 +1739,7 @@ class OW_Process_Flow {
     * @return mixed
     */
    public function redirect_after_signoff( $url ) {
-      if ( isset( $_POST['hi_oasiswf_redirect'] ) AND $_POST['hi_oasiswf_redirect'] == 'step' ) {
+      if ( isset( $_POST['hi_oasiswf_redirect'] ) && $_POST['hi_oasiswf_redirect'] == 'step' ) {
          wp_redirect( admin_url( 'admin.php?page=oasiswf-inbox' ) );
          die();
       }
@@ -1293,7 +1811,7 @@ class OW_Process_Flow {
 
       $user_id = intval( $user_id );
 
-      $sql = "SELECT action_history.due_date as date,
+      $sql = "SELECT action_history.ID as ID, action_history.due_date as date,
               COUNT(*) as row_count
               FROM " . OW_Utility::instance()->get_action_history_table_name() . " action_history
               LEFT OUTER JOIN " . OW_Utility::instance()->get_action_table_name() . " action
@@ -1319,7 +1837,7 @@ class OW_Process_Flow {
     * @since 2.0
     */
    // TODO : change the function name to get_assigned_tasks
-   public function get_assigned_post( $post_id = null, $user_id = null, $return_format = "rows" ) {
+   public function get_assigned_post( $post_id = null, $user_id = null, $return_format = "rows", $parameters = null ) {
       global $wpdb;
 
       if ( ! empty( $post_id ) ) {
@@ -1329,6 +1847,39 @@ class OW_Process_Flow {
       if ( ! empty( $user_id ) ) {
          $user_id = intval( $user_id );
       }
+      
+      $priority_filter = null;
+      $due_date_type = $due_date_clause = $priority_clause = $action_clause = "";
+      if( ! empty( $parameters ) ) {
+         $due_date_type = $parameters['due_date_type'];
+         $priority_filter = $parameters['priority'];
+      }
+      
+      // Set priority where clause
+      if ( ! empty( $priority_filter ) && $priority_filter !== 'none' ) {
+         $priority_clause = " AND postmeta.meta_value='".$priority_filter."'";
+      }
+         
+      // Set due date clause
+      $today = date( 'Y-m-d' );
+      $tomorrow = date( 'Y-m-d', strtotime( '+24 hours' ) );
+      $week = date( 'Y-m-d', strtotime( '+7 days' ) );
+
+      if( $due_date_type == 'overdue' ) {
+         $due_date_clause = " AND A.due_date<'".$today."'";
+      }
+      
+      if( $due_date_type == 'due_today' ) {
+         $due_date_clause = " AND A.due_date='".$today."'";
+      }
+      
+      if( $due_date_type == 'due_tomorrow' ) {
+         $due_date_clause = " AND A.due_date='".$tomorrow."'";
+      }
+      
+      if( $due_date_type == 'due_in_seven_days' ) {
+         $due_date_clause = " AND A.due_date<='".$week."'";
+      }      
 
       // use white list approach to set order by clause
       $order_by = array(
@@ -1372,21 +1923,21 @@ class OW_Process_Flow {
 
       // generate the where clause and get the results
       if ( $post_id ) {
-         $where_clause = "AND (assign_actor_id = %d OR actor_id = %d) AND A.post_id = %d " . $order_by_column;
+         $where_clause = "AND (assign_actor_id = %d OR actor_id = %d) AND A.post_id = %d " . $priority_clause . $due_date_clause . $order_by_column;
          if ( $return_format == "rows" ) {
             $result = $wpdb->get_results( $wpdb->prepare( $sql . $where_clause, $user_id, $user_id, $post_id ) );
          } else {
             $result = $wpdb->get_row( $wpdb->prepare( $sql . $where_clause, $user_id, $user_id, $post_id ) );
          }
-      } elseif ( isset( $user_id ) ) {
-         $where_clause = "AND assign_actor_id = %d OR actor_id = %d  " . $order_by_column;
+      } elseif ( isset( $user_id ) ) {         
+         $where_clause = "AND (assign_actor_id = %d OR actor_id = %d)  " . $priority_clause . $due_date_clause . $order_by_column;
          if ( $return_format == "rows" ) {
             $result = $wpdb->get_results( $wpdb->prepare( $sql . $where_clause, $user_id, $user_id ) );
          } else {
             $result = $wpdb->get_row( $wpdb->prepare( $sql . $where_clause, $user_id, $user_id ) );
          }
       } else {
-         $where_clause = $order_by_column;
+         $where_clause = $priority_clause . $due_date_clause . $order_by_column;
          if ( $return_format == "rows" ) {
             $result = $wpdb->get_results( $sql . $where_clause );
          } else {
@@ -1395,6 +1946,61 @@ class OW_Process_Flow {
       }
 
       return $result;
+   }
+
+   /**
+    * Filter the inbox items depending on the action
+    * @param array $inbox_items
+    * @param string $action (possible values - inbox-all, inbox-mine, inbox-unclaimed)
+    * @return array
+    * @since 6.9
+    */
+   public function filter_inbox_items( $inbox_items, $action ) {
+      $action = sanitize_text_field( $action );
+      
+      $mine_tasks = array();
+      $unclaimed_tasks = array();
+      $mine_task_count = 0;
+      $unclaimed_task_count = 0;
+      
+      if( ! empty( $inbox_items ) ) {         
+         foreach( $inbox_items as $item ) {
+            // check if task needs to be claimed
+            $needs_to_be_claimed = $this->check_for_claim( $item->ID );
+            if( $needs_to_be_claimed ) {
+               $unclaimed_tasks[] = $item;
+               $unclaimed_task_count++;
+            } else {
+               $mine_tasks[] = $item;
+               $mine_task_count++;
+            }
+         }
+      }
+      
+      if( $action === "inbox-all" ) {
+         return array(  "inboxItems"         => $inbox_items,
+                        "allTaskCount"       => count($inbox_items),
+                        "mineTaskCount"      => $mine_task_count,
+                        "unclaimedTaskCount" => $unclaimed_task_count,
+                        "display_count"      => count($inbox_items) );
+      }
+      
+      if( $action === "inbox-mine" ) {
+         return array(  "inboxItems"         => $mine_tasks,
+                        "allTaskCount"       => count($inbox_items),
+                        "mineTaskCount"      => $mine_task_count,
+                        "unclaimedTaskCount" => $unclaimed_task_count,
+                        "display_count"      => $mine_task_count );
+      }
+      
+      if( $action === "inbox-unclaimed" ) {
+         return array(  "inboxItems"         => $unclaimed_tasks,
+                        "allTaskCount"       => count($inbox_items),
+                        "mineTaskCount"      => $mine_task_count,
+                        "unclaimedTaskCount" => $unclaimed_task_count,
+                        "display_count"      => $unclaimed_task_count );
+      }
+      
    }
 
    /**
@@ -1449,14 +2055,13 @@ class OW_Process_Flow {
     */
    public function get_all_assigned_posts() {
       global $wpdb;
-      $post_id_array = "";
 
       // anything which the action_status of "assignment" is currently in workflow and assigned.
-      $sql = "SELECT DISTINCT(A.post_id) as post_id FROM
-							(SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = 'assignment') as A
-							LEFT OUTER JOIN
-							(SELECT * FROM " . OW_Utility::instance()->get_action_table_name() . " WHERE review_status = 'assignment') as B
-							ON A.ID = B.action_history_id order by A.due_date";
+      $sql = "SELECT DISTINCT(action_history.post_id) as post_id FROM
+                     (SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE action_status = 'assignment') as action_history
+                     LEFT OUTER JOIN
+                     (SELECT * FROM " . OW_Utility::instance()->get_action_table_name() . " WHERE review_status = 'assignment') as review_history
+                     ON action_history.ID = review_history.action_history_id order by action_history.due_date";
 
       // create a post_id array from the result set
       $assign_posts = $wpdb->get_results( $sql );
@@ -1465,6 +2070,7 @@ class OW_Process_Flow {
             $post_id_array[] = $post->post_id;
          }
       }
+
       return $post_id_array;
    }
 
@@ -1479,43 +2085,56 @@ class OW_Process_Flow {
    public function show_only_accessible_posts( $query ) {
       global $wpdb, $current_screen;
       if ( is_admin() ) {
+         
+         // Show Accessible post by roles
+         $current_user_id = get_current_user_id();
+         $current_user_role = OW_Utility::instance()->get_user_role( $current_user_id );
 
-         /*
-          * Get all the assigned posts
-          * Union
-          * Get all the posts which have "oasis_is_in_workflow" = 0, basically posts which are not in workflow
-          * Union
-          * Get all posts which are newly created, basically anything which do not have oasis_is_in_workflow metakey
-          */
+         $roles = array();
 
-         $sql = "SELECT A.post_id as available_post_id FROM " . OW_Utility::instance()->get_action_history_table_name() . " A
-            LEFT OUTER JOIN ". OW_Utility::instance()->get_action_table_name() . " B ON A.ID = B.action_history_id
-               AND B.review_status = 'assignment'
-               WHERE  A.action_status = 'assignment'
-               AND ( A.assign_actor_id = %d OR B.actor_id = %d)
-               UNION
-               SELECT posts.ID as available_post_id FROM {$wpdb->posts} posts
-               JOIN {$wpdb->postmeta} postmeta ON postmeta.post_id = posts.ID
-               AND postmeta.meta_key = '_oasis_is_in_workflow'
-               AND postmeta.meta_value = '0'
-               UNION
-               SELECT posts.ID as available_post_id FROM {$wpdb->posts} posts
-               WHERE posts.ID NOT IN ( SELECT post_id from {$wpdb->postmeta} postmeta
-               WHERE postmeta.meta_key = '_oasis_is_in_workflow' )";
+         $user_roles = apply_filters( 'owf_show_only_accessible_posts', $roles );
+         
+         
+         if ( in_array( $current_user_role, $user_roles ) ) {            
 
-         $results = $wpdb->get_results( $wpdb->prepare( $sql, get_current_user_id(), get_current_user_id() ) );
+            /*
+             * Get all the assigned posts
+             * Union
+             * Get all the posts which have "oasis_is_in_workflow" = 0, basically posts which are not in workflow
+             * Union
+             * Get all posts which are newly created, basically anything which do not have oasis_is_in_workflow metakey
+             */
 
-         $accessible_posts = array(0);
-         if ( $results ) {
-            foreach ( $results as $result ) {
-               array_push( $accessible_posts, $result->available_post_id );
+            $sql = "SELECT A.post_id as available_post_id FROM " . OW_Utility::instance()->get_action_history_table_name() . " A
+               LEFT OUTER JOIN ". OW_Utility::instance()->get_action_table_name() . " B ON A.ID = B.action_history_id
+                  AND B.review_status = 'assignment'
+                  WHERE  A.action_status = 'assignment'
+                  AND ( A.assign_actor_id = %d OR B.actor_id = %d)
+                  UNION
+                  SELECT posts.ID as available_post_id FROM {$wpdb->posts} posts
+                  JOIN {$wpdb->postmeta} postmeta ON postmeta.post_id = posts.ID
+                  AND postmeta.meta_key = '_oasis_is_in_workflow'
+                  AND postmeta.meta_value = '0'
+                  UNION
+                  SELECT posts.ID as available_post_id FROM {$wpdb->posts} posts
+                  WHERE posts.ID NOT IN ( SELECT post_id from {$wpdb->postmeta} postmeta
+                  WHERE postmeta.meta_key = '_oasis_is_in_workflow' )";
+
+            $results = $wpdb->get_results( $wpdb->prepare( $sql, get_current_user_id(), get_current_user_id() ) );
+
+            $accessible_posts = array(0);
+            if ( $results ) {
+               foreach ( $results as $result ) {
+                  array_push( $accessible_posts, $result->available_post_id );
+               }
             }
-         }
-         $query->set( 'post__in', $accessible_posts );
 
-         // now modify the post count on a given screen with the above results.
-         if (isset( $current_screen ) ) {
-            add_filter( "views_$current_screen->id", array( $this, 'owf_adjust_post_count' ), 10, 1 );
+            $query->set( 'post__in', $accessible_posts );
+            
+            // now modify the post count on a given screen with the above results.
+            if (isset( $current_screen ) ) {
+               add_filter( "views_$current_screen->id", array( $this, 'owf_adjust_post_count' ), 10, 1 );
+            }
          }
       }
    }
@@ -1627,6 +2246,51 @@ class OW_Process_Flow {
       return $views;
    }
 
+   /**
+    * Get the count for all the submitted articles.
+    * @param string $post_type 
+    * @return int $count
+    * @since 4.8
+    */
+   public function get_submitted_article_count( $post_type = 'all', $team_filter ) {
+      global $wpdb;
+      
+      // Sanitize incoming data
+      $post_type = sanitize_text_field( $post_type );
+      
+      // get an array of all the assigned posts
+      $assign_post_ids = $this->get_all_assigned_posts();
+      $assign_post_ids = ( $assign_post_ids ) ? $assign_post_ids : array( -1 );
+      $submitted_posts = null;
+      
+      // Filter Reports by team
+      if ( $team_filter == -1 ) {
+         $join = "";
+         $where = "";
+      } 
+      if ( $team_filter == 0 ) {
+         $join = "INNER JOIN $wpdb->postmeta AS postmeta ON postmeta.post_id = posts.ID AND postmeta.meta_key = '_oasis_is_in_team'";
+      }
+      if ( $team_filter !== 0 && $team_filter !== -1 ) {
+         $join = "INNER JOIN $wpdb->postmeta AS postmeta ON postmeta.post_id = posts.ID AND postmeta.meta_key = '_oasis_is_in_team'";
+         $where = "AND postmeta.meta_value = $team_filter";
+      }
+
+      // get post details
+      if ( $post_type === "all" ) {
+         $sql = "SELECT count(posts.ID) as post_id FROM " . $wpdb->posts .
+                " as posts $join WHERE ID IN (" . implode( $assign_post_ids, "," ) . ") $where ";
+         $submitted_posts = $wpdb->get_results( $sql );
+      } else {
+         $sql = "SELECT count(posts.ID) as post_id FROM " . $wpdb->posts .
+                " as posts $join WHERE post_type = %s AND ID IN (" . implode( $assign_post_ids, "," ) . ") $where ";
+         $submitted_posts = $wpdb->get_results( $wpdb->prepare( $sql, $post_type ) );
+      }
+      
+       $count = $submitted_posts[0]->post_id;
+       
+      return $count;
+   }
 
    /**
     * Get all the submitted articles.
@@ -1641,26 +2305,116 @@ class OW_Process_Flow {
     *
     * @since 2.0 initial version
     */
-
-   public function get_submitted_articles( $post_type = 'all' ) {
+   public function get_submitted_articles( $post_type = 'all', $team_filter, $page_number ) {
       global $wpdb;
-      $post_type = sanitize_text_field( $post_type );
+      $offset = 0;
+      $limit = OASIS_PER_PAGE;
+      
+      // Sanitize incoming data
+      $post_type = sanitize_text_field( $post_type );       
+      $page_number = intval( sanitize_text_field( $page_number ) );
+      
+      if ( $page_number !== 1 ) {
+         $offset = $limit * ( $page_number - 1 );
+      }
+      
+      // use white list approach to set order by clause
+      $order_by = array(
+          'post_title'  => 'post_title',
+          'post_type'   => 'post_type',
+          'post_author' => 'post_author',
+          'post_date'   => 'post_date'
+      );
+      
+      $sort_order = array(
+          'asc'  => 'ASC',
+          'desc' => 'DESC',
+      );
+      
+      // default order by
+      $order_by_column = " ORDER BY posts.post_title"; // default order by column
+      // if user provided any order by and order input, use that
+      if ( isset( $_GET['orderby'] ) && $_GET['orderby'] && $_GET['action'] == 'in-workflow' ) {
+         // sanitize data
+         $user_provided_order_by = sanitize_text_field( $_GET['orderby'] );
+         $user_provided_order = sanitize_text_field( $_GET['order'] );
+         if ( array_key_exists( $user_provided_order_by, $order_by ) ) {
+            $order_by_column = " ORDER BY " . $order_by[$user_provided_order_by] . " " . $sort_order[$user_provided_order];
+         }
+      }
 
       // get an array of all the assigned posts
       $assign_post_ids = $this->get_all_assigned_posts();
       $assign_post_ids = ( $assign_post_ids ) ? $assign_post_ids : array( -1 );
-      $submited_posts = null;
+      $submitted_posts = null;
+     
+      // Filter Reports by team
+      if ( $team_filter == -1 ) {
+         $join = "";
+         $where = "";
+      } 
+      if ( $team_filter == 0 ) {
+         $join = "INNER JOIN $wpdb->postmeta AS postmeta ON postmeta.post_id = posts.ID AND postmeta.meta_key = '_oasis_is_in_team'";
+      }
+      if ( $team_filter !== 0 && $team_filter !== -1 ) {
+         $join = "INNER JOIN $wpdb->postmeta AS postmeta ON postmeta.post_id = posts.ID AND postmeta.meta_key = '_oasis_is_in_team'";
+         $where = "AND postmeta.meta_value = $team_filter";
+      }
 
       // get post details
       if ( $post_type === "all" ) {
-         $sql = "SELECT posts.ID, posts.post_author, posts.post_title, posts.post_type, posts.post_date FROM " . $wpdb->posts . " as posts WHERE ID IN (" . implode( $assign_post_ids, "," ) . ") ORDER BY ID DESC";
-         $submited_posts = $wpdb->get_results( $sql );
+         $sql = "SELECT posts.ID, posts.post_author, posts.post_title, posts.post_type, posts.post_date FROM " .
+                $wpdb->posts . " as posts $join WHERE posts.ID IN (" . implode( $assign_post_ids, "," ) . ") $where ".
+                $order_by_column . " LIMIT {$offset}, {$limit}";
+         $submitted_posts = $wpdb->get_results( $sql );
       } else {
-         $sql = "SELECT posts.ID, posts.post_author, posts.post_title, posts.post_type, posts.post_date FROM " . $wpdb->posts . " as posts WHERE post_type = %s AND ID IN (" . implode( $assign_post_ids, "," ) . ") ORDER BY ID DESC";
-         $submited_posts = $wpdb->get_results( $wpdb->prepare( $sql, $post_type ) );
+         $sql = "SELECT posts.ID, posts.post_author, posts.post_title, posts.post_type, posts.post_date FROM " .
+                $wpdb->posts . " as posts $join WHERE posts.post_type = %s AND posts.ID IN (" . implode( $assign_post_ids, "," ) . ") $where".
+                $order_by_column . " LIMIT {$offset}, {$limit}" ;
+         $submitted_posts = $wpdb->get_results( $wpdb->prepare( $sql, $post_type ) );
       }
 
-      return $submited_posts;
+      return $submitted_posts;
+   }
+   
+   /**
+    * Get the count for all the unsubmitted articles.
+    * @param string $post_type 
+    * @return int $count
+    * @since 4.8
+    */
+   public function get_unsubmitted_article_count( $post_type = 'all' ) {
+      global $wpdb;
+      $post_type = sanitize_text_field( $post_type );
+      
+      foreach ( get_post_stati( array( 'show_in_admin_status_list' => true ) ) as $key => $status ) {
+         if ( $status != 'publish' && $status != 'trash' ) { //not published
+            $auto_submit_stati[$key] = "'" . esc_sql( $status ) . "'";
+         }
+      }
+      $auto_submit_stati_list = join( ",", $auto_submit_stati );
+      $unsubmitted_posts = null;
+
+      // get all posts which are not published and are not in workflow
+      if ( $post_type === "all" ) {
+         $unsubmitted_posts = $wpdb->get_results( "SELECT COUNT( DISTINCT posts.ID) as post_id  FROM {$wpdb->prefix}posts posts
+			WHERE posts.post_status in (" . $auto_submit_stati_list . ")
+			AND
+			(NOT EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta1 WHERE postmeta1.meta_key = '_oasis_is_in_workflow' and posts.ID = postmeta1.post_id) OR
+			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))" );
+      } else {
+         $sql = "SELECT COUNT( DISTINCT posts.ID) as post_id FROM {$wpdb->prefix}posts posts
+			WHERE post_type = %s AND posts.post_status in (" . $auto_submit_stati_list . ")
+			AND
+			(NOT EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta1 WHERE postmeta1.meta_key = '_oasis_is_in_workflow' and posts.ID = postmeta1.post_id) OR
+			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))";
+
+         $unsubmitted_posts = $wpdb->get_results( $wpdb->prepare( $sql, $post_type ) );
+      }
+
+      $count = $unsubmitted_posts[0]->post_id; 
+ 
+      return $count;
    }
 
    /**
@@ -1675,9 +2429,44 @@ class OW_Process_Flow {
     * @since 2.0 initial version
     */
 
-   public function get_unsubmitted_articles( $post_type = 'all' ) {
+   public function get_unsubmitted_articles( $post_type = 'all', $page_number ) {
       global $wpdb;
-      $post_type = sanitize_text_field( $post_type );
+      $offset = 0;
+      $limit = OASIS_PER_PAGE;
+      
+      // Sanitize incoming data
+      $post_type = sanitize_text_field( $post_type );       
+      $page_number = intval( sanitize_text_field( $page_number ) );
+      
+      if ( $page_number !== 1 ) {
+         $offset = $limit * ( $page_number - 1 );
+      }
+      
+      // use white list approach to set order by clause
+      $order_by = array(
+          'post_title' => 'post_title',
+          'post_type' => 'post_type',
+          'post_author' => 'post_author',
+          'post_date' => 'post_date'
+      );
+
+      $sort_order = array(
+          'asc' => 'ASC',
+          'desc' => 'DESC',
+      );
+      
+      // default order by
+      $order_by_column = " ORDER BY posts.post_title"; // default order by column
+      // if user provided any order by and order input, use that
+      if ( isset( $_GET['orderby'] ) && $_GET['orderby'] && $_GET['action'] !== 'in-workflow' ) {
+         // sanitize data
+         $user_provided_order_by = sanitize_text_field( $_GET['orderby'] );
+         $user_provided_order = sanitize_text_field( $_GET['order'] );
+         if ( array_key_exists( $user_provided_order_by, $order_by ) ) {
+            $order_by_column = " ORDER BY " . $order_by[$user_provided_order_by] . " " . $sort_order[$user_provided_order];
+         }
+      }
+
 
       foreach ( get_post_stati( array( 'show_in_admin_status_list' => true ) ) as $key => $status ) {
          if ( $status != 'publish' && $status != 'trash' ) { //not published
@@ -1693,15 +2482,15 @@ class OW_Process_Flow {
 			WHERE posts.post_status in (" . $auto_submit_stati_list . ")
 			AND
 			(NOT EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta1 WHERE postmeta1.meta_key = '_oasis_is_in_workflow' and posts.ID = postmeta1.post_id) OR
-			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))
-			order by post_modified_gmt" );
+			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))".
+                                                  $order_by_column . " LIMIT {$offset}, {$limit}" );
       } else {
          $sql = "SELECT distinct posts.ID, posts.post_author, posts.post_title, posts.post_type, posts.post_date FROM {$wpdb->prefix}posts posts
 			WHERE post_type = %s AND posts.post_status in (" . $auto_submit_stati_list . ")
 			AND
 			(NOT EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta1 WHERE postmeta1.meta_key = '_oasis_is_in_workflow' and posts.ID = postmeta1.post_id) OR
-			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))
-			order by post_modified_gmt";
+			EXISTS (SELECT * from {$wpdb->prefix}postmeta postmeta2 WHERE postmeta2.meta_key = '_oasis_is_in_workflow' AND postmeta2.meta_value = '0' and posts.ID = postmeta2.post_id))".
+                $order_by_column . " LIMIT {$offset}, {$limit}";
 
          $unsubmitted_posts = $wpdb->get_results( $wpdb->prepare( $sql, $post_type ) );
       }
@@ -1937,7 +2726,7 @@ class OW_Process_Flow {
       global $wpdb;
       
       // sanitize the values
-      $review_step_action_history_ids = array_map( 'esc_attr', $review_step_action_history_ids );
+      $review_step_action_history_ids = array_map( 'intval', $review_step_action_history_ids );
       
       $table = OW_Utility::instance()->get_action_table_name();
 
@@ -2010,10 +2799,15 @@ class OW_Process_Flow {
 
       if ( $action_history_row->action_status == "claim_cancel" ) {
          $ow_history_service = new OW_History_Service();
-         $claimed_row = $ow_history_service->get_action_history_by_parameters( "claimed",
-         		$action_history_row->step_id,
-         		$action_history_row->post_id,
-         		$action_history_row->from_id );
+
+         $workflow_history_params = array (
+            "post_id"               => $action_history_row->post_id,
+            "step_id"               => $action_history_row->step_id,
+            "from_history_id"       => $action_history_row->from_id,
+            "action_status"         => "claimed"
+         );
+
+         $claimed_row = $ow_history_service->get_action_history_by_parameters( $workflow_history_params );
          return isset( $claimed_row->create_datetime ) ? $claimed_row->create_datetime  : "";
       }
 
@@ -2032,29 +2826,37 @@ class OW_Process_Flow {
     * @since 2.0
     */
    public function get_sign_off_status( $action_history_row ) {
-      if ( $action_history_row->action_status == "submitted" )
+      if ( $action_history_row->action_status == "submitted" ) {
          return __( "Submitted", "oasisworkflow" );
-      if ( $action_history_row->action_status == "aborted" )
+      }
+      if ( $action_history_row->action_status == "aborted" ) {
          return __( "Aborted", "oasisworkflow" );
-      if ( $action_history_row->action_status == "abort_no_action" )
+      }   
+      if ( $action_history_row->action_status == "abort_no_action" ) {
          return __( "No Action Taken", "oasisworkflow" );
-      if ( $action_history_row->action_status == "claim_cancel" )
+      }   
+      if ( $action_history_row->action_status == "claim_cancel" ) {
          return __( "Unclaimed", "oasisworkflow" );
-      if ( $action_history_row->action_status == "claimed" )
+      }   
+      if ( $action_history_row->action_status == "claimed" ) {
          return __( "Claimed", "oasisworkflow" );
-      if ( $action_history_row->action_status == "reassigned" )
+      }   
+      if ( $action_history_row->action_status == "reassigned" ) {
          return __( "Reassigned", "oasisworkflow" );
+      }   
 
       // from the next history record determine the status of the workflow
       $ow_history_service = new OW_History_Service();
       $next_history_record = $ow_history_service->get_action_history_by_from_id( $action_history_row->ID );
-      if ( ! $next_history_record )
+      if ( ! $next_history_record ) {
          return ""; // this is the latest step, so this step is not yet completed.
-
-      if ( $next_history_record->action_status == "complete" )
+      }
+      if ( $next_history_record->action_status == "complete" ) {
          return __( "Workflow completed", "oasisworkflow" );
-      if ( $next_history_record->action_status == "cancelled" )
+      }
+      if ( $next_history_record->action_status == "cancelled" ) {
          return __( "Cancelled", "oasisworkflow" );
+      }   
       $step_info = json_decode( $action_history_row->step_info );
       $process = "";
       if ( ! empty( $step_info ) ) {
@@ -2067,15 +2869,20 @@ class OW_Process_Flow {
       $process_outcome = $workflow_service->get_process_outcome( $from_step, $to_step );
 
       if ( $process == "review" ) {
-         if ( $process_outcome == "success" )
+         if ( $process_outcome == "success" ) {
             return __( "Approved", "oasisworkflow" );
-         if ( $process_outcome == "failure" )
+         }
+         if ( $process_outcome == "failure" ) {
             return __( "Rejected", "oasisworkflow" );
+         }   
       }
-      if ( $process_outcome == "success" )
+      
+      if ( $process_outcome == "success" ) {
          return __( "Completed", "oasisworkflow" );
-      if ( $process_outcome == "failure" )
+      }
+      if ( $process_outcome == "failure" ) {
          return __( "Unable to Complete", "oasisworkflow" );
+      }
    }
 
    /**
@@ -2086,13 +2893,14 @@ class OW_Process_Flow {
     * @since 2.0
     */
    public function get_review_sign_off_status( $action_history_row, $review_row ) {
-      if ( $review_row->review_status == "reassigned" )
+      if ( $review_row->review_status == "reassigned" ) {
          return __( "Reassigned", "oasisworkflow" );
-
+      }
       $from_step = $action_history_row->step_id;
       $to_step = $review_row->step_id;
-      if ( ! ($from_step && $to_step ) )
+      if ( ! ($from_step && $to_step ) ) {
          return "";
+      }
       $step_info = json_decode( $action_history_row->step_info );
       $process = "";
       if ( ! empty( $step_info ) ) {
@@ -2103,15 +2911,19 @@ class OW_Process_Flow {
       $process_outcome = $workflow_service->get_process_outcome( $from_step, $to_step );
 
       if ( $process == "review" ) {
-         if ( $process_outcome == "success" )
+         if ( $process_outcome == "success" ) {
             return __( "Approved", "oasisworkflow" );
-         if ( $process_outcome == "failure" )
+         }
+         if ( $process_outcome == "failure" ) {
             return __( "Rejected", "oasisworkflow" );
+         }
       }
-      if ( $process_outcome == "success" )
+      if ( $process_outcome == "success" ) {
          return __( "Complete", "oasisworkflow" );
-      if ( $process_outcome == "failure" )
+      }
+      if ( $process_outcome == "failure" ) {
          return __( "Unable to Complete", "oasisworkflow" );
+      }
    }
 
    /**
@@ -2143,15 +2955,22 @@ class OW_Process_Flow {
    public function get_sign_off_comment_count( $action_history_row ) {
       if ( $action_history_row->action_status == "claimed" ||
               $action_history_row->action_status == "claim_cancel" ||
-              $action_history_row->action_status == "complete" ) {
+              $action_history_row->action_status == "complete" || $action_history_row->action_status == "abort_no_action" ) {
          return "0";
       }
       $ow_history_service = new OW_History_Service();
-      $next_history_object = $ow_history_service->get_action_history_by_from_id( $action_history_row->ID );
-      if ( is_object( $next_history_object ) ) {
-         return $this->get_sign_off_comments_count_by_history_id( $next_history_object->ID );
-      } else
-         return 0; // no comments found
+      
+      if ( $action_history_row->action_status == "aborted" ) {
+         // Get comment count for the post aborted
+         return $this->get_sign_off_comments_count_by_history_id( $action_history_row->ID );
+      } else {      
+         $next_history_object = $ow_history_service->get_action_history_by_from_id( $action_history_row->ID );
+         if ( is_object( $next_history_object ) ) {
+            return $this->get_sign_off_comments_count_by_history_id( $next_history_object->ID );
+         } else {
+            return 0; // no comments found
+         }
+      }
    }
 
    /**
@@ -2172,7 +2991,7 @@ class OW_Process_Flow {
          $comments = json_decode( $review_row->comments );
          if ( $comments ) {
             foreach ( $comments as $comment ) {
-               if ( $comment->comment )
+               if ( isset( $comment->comment ) && ( ! empty( $comment->comment ) ) )
                   $i++;
             }
          }
@@ -2501,16 +3320,23 @@ class OW_Process_Flow {
       // get the source and target step_ids
       $source_id = $from_step_id;
       $target_id = $history_details->step_id;
+      $last_step_status = "publish";
 
       // if the source and target step_ids are the same, we are most likely on the last step
       if ( $source_id == $target_id ) {
 
          $step = $ow_workflow_service->get_step_by_id( $target_id );
          $step_info = json_decode( $step->step_info );
-         $process_type = $step_info->process;
+         $process_type = $step_info->process;         
 
          if ( $process_type == 'publish') { // if process type is publish, then set the step_status to "publish"
             $step_status = 'publish';
+            
+            // If last step post status not equal to publish than save the post with the selected status
+            if ( is_object( $step_info ) && isset( $step_info->last_step_post_status ) && $step_info->last_step_post_status !== 'publish'  ) :
+               $step_status = $last_step_status =  $step_info->last_step_post_status;
+            endif;
+         
          } else {
             $step_status = get_post_status( $post_id );
             // TODO : handle other use cases when publish is NOT the last step, via "is Last Step?"
@@ -2530,6 +3356,9 @@ class OW_Process_Flow {
 
          if ( empty( $original_post_id ) ) { // for new posts
             $step_status = "publish";
+            if( $last_step_status !== "publish" ) :
+               $step_status = $last_step_status;
+            endif;
          } else  { // for revised post
             // we do not want to set publish status on revision, since it could trigger transition_post_status,
             // for publish, which could have unexpected results
@@ -2565,13 +3394,11 @@ class OW_Process_Flow {
          $post = get_post( $post_id );
 
          wp_transition_post_status( $step_status, $previous_status, $post );
-
-         if ( $current_page == "inbox" ) {
-
-            /** This action is documented in wp-includes/post.php */
-            // Calling this action, since quite a few plugins depend on this, like Jetpack etc.
-            do_action( 'wp_insert_post', $post->ID, $post, true );
-         }
+        
+         /** This action is documented in wp-includes/post.php */
+         // Calling this action, since quite a few plugins depend on this, like Jetpack etc.
+         //Removed if condition to run hook from both inbox and post edit page
+         do_action( 'wp_insert_post', $post->ID, $post, true );
 
       } else { // simply update the post status
          /**
@@ -2628,6 +3455,8 @@ class OW_Process_Flow {
 
       $ow_email = new OW_Email( );
 
+      $new_action_history_id = '';
+
       if ( $step_info->process == "assignment" || $step_info->process == "publish" ) { //multiple actors are assigned in assignment/publish step
          if ( is_numeric( $actors ) ) {
             $arr[] = $actors;
@@ -2639,7 +3468,6 @@ class OW_Process_Flow {
             $data["assign_actor_id"] = $arr[$i];
             $new_action_history_id = OW_Utility::instance()->insert_to_table( $action_history_table, $data );
             do_action( 'owf_save_workflow_signoff_action', $data["post_id"], $new_action_history_id );
-            $ow_email->send_step_email( $new_action_history_id ); // send mail to the actor .
          }
       } elseif ( $step_info->process == "review" ) {
          $data["assign_actor_id"] = -1;
@@ -2647,8 +3475,9 @@ class OW_Process_Flow {
          do_action( 'owf_save_workflow_signoff_action', $data["post_id"], $new_action_history_id );
 
          $review_data = array(
-             'review_status' => 'assignment',
-             'action_history_id' => $new_action_history_id
+            'review_status' => 'assignment',
+            'action_history_id' => $new_action_history_id,
+            'update_datetime' => current_time('mysql')
          );
 
          if ( is_numeric( $actors ) ) {
@@ -2661,7 +3490,6 @@ class OW_Process_Flow {
                continue;
             $review_data["actor_id"] = $arr[$i];
             OW_Utility::instance()->insert_to_table( $action_table, $review_data );
-            $ow_email->send_step_email( $new_action_history_id, $arr[$i] ); // send mail to the actor .
          }
       }
 
@@ -2685,7 +3513,7 @@ class OW_Process_Flow {
       $post_id = intval( $_POST["post_ID"] );
 
       // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
+      if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
          wp_die( __( 'You are not allowed to create/edit post.' ) );
       }
 
@@ -2696,15 +3524,19 @@ class OW_Process_Flow {
       if( empty( $priority ) ) {
          $priority = '2normal';
       }
-
-      $team_id = null;
-      $is_team = false;
+    
       $selected_actor_val = sanitize_text_field( $_POST["hi_actor_ids"] );
       OW_Utility::instance()->logger( "User Provided Actors:" . $selected_actor_val );
-      // if teams add-on is active, validate if the team has the users
-      if ( get_option( 'oasiswf_team_enable' ) == 'yes' ) {
-         $team_id = $selected_actor_val; // we store the team_id in $selected_actor_val
+      
+      $team = sanitize_text_field( $_POST["hi_is_team"] );
+      $team_id = null; 
+      $is_team = false;
+      // if teams add-on is active
+      if ( $team === "true" ) { 
+         $team_id = $selected_actor_val;
          $is_team = true;
+      } else if ( $team !== "" ) {
+         $team_id = $team;
       }
 
       $actors = $this->get_workflow_actors( $post_id, $step_id, $selected_actor_val, $is_team );
@@ -2739,9 +3571,24 @@ class OW_Process_Flow {
       $workflow_submit_data['team_id'] = $team_id;
       $workflow_submit_data['pre_publish_checklist'] = $pre_publish_checklist;
       $workflow_submit_data['publish_date'] = $user_provided_publish_date;
+      $workflow_submit_data['priority'] = $priority;
 
 
-      $this->submit_post_to_workflow_internal( $post_id, $workflow_submit_data );
+      $new_action_history_id = $this->submit_post_to_workflow_internal( $post_id, $workflow_submit_data );
+
+      if ( ! isset( $_POST[ 'auto_submit_btn' ] ) && ! isset( $_POST[ 'ow_fe_submit_to_workflow' ] ) ) {
+         // Filter to redirect user to a custom url
+         // Redirect user to post/page list page
+         $post_type = get_post_type( $post_id );
+         if ( $post_type == 'post' ) {
+            $link = admin_url() . "edit.php";
+         } else {
+            $link = admin_url() . "edit.php?post_type=" . $post_type;
+         }
+         $link = apply_filters( 'owf_redirect_after_workflow_submit', $link, $post_id );
+         wp_redirect( $link );
+         exit();
+      }
    }
    
    /*
@@ -2753,14 +3600,22 @@ class OW_Process_Flow {
    public function submit_post_to_workflow_internal( $post_id, $workflow_submit_data ) {
 
       // sanitize post_id
-      $post_id = intval( $post_id );
+      $post_id = intval( $post_id );  
 
       // capability check
-      if ( ! OW_Utility::instance()->is_post_editable( $post_id ) ) {
+      if ( ! OW_Utility::instance()->is_post_editable_others( $post_id ) ) {
          wp_die( __( 'You are not allowed to create/edit post.' ) );
       }
 
       /* sanitize other incoming data */
+      
+      $priority = sanitize_text_field( $workflow_submit_data['priority'] );
+      if( empty( $priority ) ) {
+         $priority = '2normal';
+      }
+      // update priority on the post
+      update_post_meta( $post_id, "_oasis_task_priority", $priority );
+      
       $step_id = intval( $workflow_submit_data['step_id'] );
 
       $due_date = "";
@@ -2833,7 +3688,7 @@ class OW_Process_Flow {
 
       if ( ! empty( $workflow_submit_data[ 'publish_date' ] ) ) {
          $user_provided_publish_date = sanitize_text_field( $workflow_submit_data[ 'publish_date' ] );
-         $this::ow_update_post_publish_date( $post_id, $user_provided_publish_date );
+         $this->ow_update_post_publish_date( $post_id, $user_provided_publish_date );
       }
 
       // Lets update the post status when user do submit post to workflow first time
@@ -2855,11 +3710,233 @@ class OW_Process_Flow {
       if ( ! empty( $team_id ) ) {
          update_post_meta( $post_id, "_oasis_is_in_team", $team_id ); // set the post meta to the team_id, specifying that the post is assigned to a specific team
       }
+      
+      // Set task assign meta, so that we will send email after saving the post
+      $this->set_oasis_task_assignment_meta( $post_id, $new_action_history_id, $actors );
 
       // hook to do something after submit to workflow
       do_action( 'owf_submit_to_workflow', $post_id, $new_action_history_id );
+
+      return $new_action_history_id;
+   }
+   
+   /**
+    * API function: submit post data to workflow
+    * 
+    * @param JSON $data
+    * @return mixed $response
+    * 
+    * @since 6.0
+    */
+   public function api_submit_to_workflow( $data ) {
+      
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) ) {
+         return new WP_Error( 'owf_rest_submit_to_workflow', __( 'You are not allowed to submit to workflow.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      $post_id = intval( $data['post_id'] );
+      
+      $step_id = intval( $data['step_id'] );
+      
+      $priority = sanitize_text_field( $data['priority'] );
+      if( empty( $priority ) ) {
+         $priority = '2normal';
+      }
+      
+      $selected_actor_val = implode('@', $data['assignees'] );
+      OW_Utility::instance()->logger( "User Provided Actors:" . $selected_actor_val );
+      
+      $assign_to_all = intval( $data['assign_to_all'] );
+      
+      $team = intval( $data["team_id"] );      
+      $team_id = null;
+      $is_team = false;
+      // if teams add-on is active and assign to all
+      if ( $team !== 0 ) { 
+         $team_id = $team;
+         if( $assign_to_all == 1 ) :            
+            $selected_actor_val = $team;
+            $is_team = true;
+         endif;
+      }
+      
+      $actors = $this->get_workflow_actors( $post_id, $step_id, $selected_actor_val, $is_team );
+      OW_Utility::instance()->logger( "Selected Actors:" . $actors );
+      // hook to allow developers to add/remove users from the task assignment
+      $actors = apply_filters( 'owf_get_actors', $actors, $step_id, $post_id );
+      OW_Utility::instance()->logger( "Selected Actors after filter:" . $actors );
+      
+      // pre publish checklist
+      $pre_publish_checklist = array();
+      if ( ! empty ( $data['pre_publish_checklist'] ) ) {
+         $pre_publish_checklist = $data['pre_publish_checklist'];
+      }
+      
+      $due_date = "";
+      $due_date_settings = get_option( 'oasiswf_default_due_days' );
+      if( $due_date_settings !== "" ) {
+         $due_date = sanitize_text_field( $data['due_date'] );
+         $due_date = date( OASISWF_EDIT_DATE_FORMAT, strtotime( $due_date ) );
+      }
+      
+      $publish_date = sanitize_text_field( $data['publish_date'] );
+      $user_provided_publish_date = isset( $publish_date ) ? date( OASISWF_DATE_TIME_FORMAT, strtotime( $publish_date ) ) : "";
+      
+      // sanitize_text_field remove line-breaks so do not sanitize it.
+      $comments = nl2br( $data['comments'] );
+      
+      $workflow_submit_data = array();
+      $workflow_submit_data['step_id'] = $step_id;
+      $workflow_submit_data['actors'] = $actors;
+      $workflow_submit_data['due_date'] = $due_date;
+      $workflow_submit_data['comments'] = $comments;
+      $workflow_submit_data['team_id'] = $team_id;
+      $workflow_submit_data['pre_publish_checklist'] = $pre_publish_checklist;
+      $workflow_submit_data['publish_date'] = $user_provided_publish_date;
+      $workflow_submit_data['priority'] = $priority;
+      
+      // Parameters for checklist validation
+      $workflow_submit_data['post_id'] = $post_id;
+      $workflow_submit_data['step_decision'] = 'complete';
+      $workflow_submit_data['history_id'] = ""; //since the post is being submitted to a workflow, so no history_id exists      
+      
+      // let the filter excute pre submit-to-workflow validations and return validation error messages, if any
+      $validation_result = array();
+      $validation_result = apply_filters( 'owf_api_submit_to_workflow_pre', $validation_result, $workflow_submit_data );  
+      if ( count( $validation_result ) > 0 ) {
+         $response = array(
+            "validation_error" => $validation_result,
+            "success_response" => false
+         );
+         return $response;
+      }
+      
+      // update priority on the post
+      update_post_meta( $post_id, "_oasis_task_priority", $priority );
+
+      $new_action_history_id = $this->submit_post_to_workflow_internal( $post_id, $workflow_submit_data );
+
+      $oasis_is_in_workflow = get_post_meta( $post_id, '_oasis_is_in_workflow', true );
+      
+      $post_type = get_post_type( $post_id );
+      if ( $post_type == 'post' ) {
+         $link = admin_url() . "edit.php";
+      } else {
+         $link = admin_url() . "edit.php?post_type=" . $post_type;
+      }
+      if( has_filter( 'owf_redirect_after_workflow_submit' ) ) {
+         $link = apply_filters( 'owf_redirect_after_workflow_submit', $link, $post_id );
+      }      
+
+      $response = array (
+         "new_action_history_id" => $new_action_history_id,
+         "post_is_in_workflow" => $oasis_is_in_workflow,
+         "redirect_link" => $link,
+         "success_response" => __('The post was successfully submitted to the workflow.', 'oasisworkflow')
+      );
+
+      return $response;
+   }
+   
+   public function api_get_reassign_assignees( $data ) {       
+      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_reassign_task' ) ) {
+         return new WP_Error( 'owf_rest_reassign', __( 'You are not allowed to reassign task.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      
+      $history_id = intval( $data['action_history_id'] );
+      $task_user = ( isset( $data['task_user'] ) && ( ! is_null( $data['task_user'] ) ) ) ? intval( $data['task_user'] ) : get_current_user_id();
+      //ToDo - Fix if task user is zero
+      if( $task_user == 0 ) {
+         $task_user = get_current_user_id();
+      }
+      
+      $ow_history_service = new OW_History_Service();
+      $workflow_service = new OW_Workflow_Service();
+
+      $history_details = $ow_history_service->get_action_history_by_id( $history_id );
+      $team_id = get_post_meta( $history_details->post_id, '_oasis_is_in_team', true );
+      $users = array();
+      if( $team_id != null && method_exists( 'OW_Teams_Service', 'get_team_members' ) ) {
+         $step = $workflow_service->get_step_by_id( $history_details->step_id );
+         $step_info = json_decode( $step->step_info );
+         $assignee_roles = isset( $step_info->task_assignee->roles ) ? array_flip( $step_info->task_assignee->roles ) : null;
+         $ow_teams_service = new OW_Teams_Service();
+         $users_ids = $ow_teams_service->get_team_members( $team_id, $assignee_roles, $history_details->post_id );
+         foreach ( $users_ids as $user_id ) {
+            $user = get_userdata( $user_id );
+            array_push( $users, $user );
+         }
+      } else {
+         $user_info = $this->get_users_in_step( $history_details->step_id );
+         $users = $user_info["users"];
+      }
+      
+      $assignees = array();
+      $user_info = array();
+
+      // no self-reassign
+      foreach( $users as $key => $user ){
+         if ($user->ID != $task_user ) {
+            array_push( $assignees, $user );
+            $lblNm = OW_Utility::instance()->get_user_name( $user->ID );
+            $user_info[] = array( "ID"=>$user->ID,
+                                  "name"=>$lblNm );
+         }         
+      }
+      
+      // Check if users are available for reassigning            
+      $user_count = count( $assignees );
+      
+      $response = array (
+         "user_info" => $user_info,
+         "assignee_count" => $user_count
+      );
+
+      return $response;
    }
 
+   /**
+    * Loop through the list of actors and send step email to them.
+    *
+    * @param $new_action_history_id
+    * @param $actors
+    */
+   private function send_task_notification( $post_id, $new_action_history_id, $actors ) {
+
+      // sanitize new_action_history_id
+      $new_action_history_id = intval( $new_action_history_id );
+      $post_id = intval( $post_id );
+      
+      // allow developers to filter users for sending task assignment emails
+      if( has_filter( 'owf_filter_assignment_email_users' ) ) {
+         $actors = explode("@", $actors );
+         $actors = apply_filters( 'owf_filter_assignment_email_users', $post_id, $new_action_history_id, $actors );
+         $actors = implode("@", $actors );
+      }
+
+      $ow_email = new OW_Email( );
+
+      if ( is_numeric( $actors ) ) {
+         $arr[] = $actors;
+      } else {
+         $arr = explode( "@", $actors );
+      }
+      for ( $i = 0; $i < count( $arr ); $i ++ ) {
+         if ( ! $arr[ $i ] ) {
+            continue;
+         }
+
+         $ow_email->send_step_email( $new_action_history_id, $arr[ $i ] ); // send mail to the actor .
+      }
+   }
 
    /**
     * Get immediately publish drop down content
@@ -2868,8 +3945,32 @@ class OW_Process_Flow {
       global $wp_locale;
       $date = get_the_date( 'Y-n-d', $post_id );
       $date_array = explode( "-", $date );
-      $time = get_the_time( 'G-i', $post_id );
-      $time_array = explode( "-", $time );
+      $time = get_the_time( 'G:i', $post_id );
+      $time_array = explode( ":", $time );
+      
+      $published_date_time = $date." ".$time;
+      $timestamp = strtotime( $published_date_time );
+
+      // additional filter for allowing post publish date to be in the past.
+      $owf_post_publish_in_past_filter = false;
+      if ( has_filter( 'owf_publish_past' ) ) {
+         $owf_post_publish_in_past_filter = apply_filters( 'owf_publish_past', $post_id );
+      }
+      
+      // Get current date and time      
+      $current_date = current_time( 'Y-n-d' );
+      $current_time = current_time( 'G:i' );
+      $current_date_time = $current_date." ".$current_time;
+      $current_timestamp = strtotime( $current_date_time );
+
+      /*
+       * Set current date for publish date if post publish date 
+       * is smaller than current date.
+       */
+      if( $current_timestamp > $timestamp && $owf_post_publish_in_past_filter == false ) {
+         $date_array = explode( "-", $current_date );
+         $time_array = explode( ":", $current_time );
+      }
 
       echo "<select id='im-mon'>";
        for ( $i = 1; $i < 13; $i = $i +1 ) {
@@ -2963,6 +4064,14 @@ class OW_Process_Flow {
       $this->enqueue_acf_validator_script();
 
       wp_enqueue_script( 'owf_submit_step', OASISWF_URL . 'js/pages/subpages/submit-step.js', array( 'jquery' ), OASISWF_VERSION, true );
+      wp_enqueue_script('owf-workflow-inbox', OASISWF_URL . 'js/pages/workflow-inbox.js', array('jquery'), OASISWF_VERSION);
+      wp_enqueue_script( 'owf_reassign_task', OASISWF_URL. 'js/pages/subpages/reassign.js', array('jquery'), OASISWF_VERSION, true);
+      
+      // check if user have reassign capability
+      $can_reassign = false;
+      if ( current_user_can( 'ow_reassign_task' ) ) {
+         $can_reassign = true;
+      }
 
       $workflow_terminology_options = get_option( 'oasiswf_custom_workflow_terminology' );
       $sign_off_label = ! empty( $workflow_terminology_options['signOffText'] ) ? $workflow_terminology_options['signOffText'] : __( 'Sign Off', 'oasisworkflow' );
@@ -2972,8 +4081,10 @@ class OW_Process_Flow {
           'signOffButton' => $sign_off_label,
           'claimButton' => __( 'Claim', 'oasisworkflow' ),
           'inboxButton' => __( 'Go to Workflow Inbox', 'oasisworkflow' ),
+          'reassign' => __( 'Reassign', 'oasisworkflow' ),
+          'canReassign' => $can_reassign,
           'lastStepFailureMessage' => __( 'There are no further steps defined in the workflow.</br> Do you want to cancel the post/page from the workflow?', 'oasisworkflow' ),
-          'lastStepSuccessMessage' => __( 'This is the last step in the workflow. Are you sure to complete the workflow?', 'oasisworkflow' ),
+          'lastStepSuccessMessage' => __( 'This is the last step in the workflow. Are you ready to complete the workflow?', 'oasisworkflow' ),
           'noUsersFound' => __( 'No users found to assign the task.', 'oasisworkflow' ),
           'decisionSelectMessage' => __( 'Please select an action.', 'oasisworkflow' ),
           'selectStep' => __( 'Please select a step.', 'oasisworkflow' ),
@@ -3002,11 +4113,60 @@ class OW_Process_Flow {
     * @since 3.3
     */
    public function enqueue_acf_validator_script() {
-      if ( class_exists( 'acf_pro' ) ) { // applicable to pro version of ACF
+      $acf_version = "";
+      $active_plugins = array();
+      if ( ! function_exists( 'get_plugins' ) ) {
+         require_once ABSPATH . 'wp-admin/includes/plugin.php';
+      }
+      $plugins = get_plugins();
+      // Get single site active plugins
+      $active_plugins = get_option( 'active_plugins', array() );
+
+      $acf_pro_path = "advanced-custom-fields-pro/acf.php";
+      $acf_path = "advanced-custom-fields/acf.php";
+      $isACFEnabled = "no";
+     
+      // Check ACF pro or free plugin and fetch the version
+      foreach ( $plugins as $plugin_path => $plugin ) {
+         if ( $plugin_path == $acf_pro_path && ( in_array( $acf_pro_path, $active_plugins ) || is_plugin_active_for_network( $acf_pro_path ) == 1 ) ) {
+            $acf_version = $plugin['Version'];
+            $isACFEnabled = "yes";
+            break;
+         }  
+         
+         if ( $plugin_path == $acf_path && ( in_array( $acf_path, $active_plugins ) || is_plugin_active_for_network( $acf_path ) == 1 ) ) {             
+            $acf_version = $plugin['Version'];
+            $isACFEnabled = "yes";
+            break;
+         }
+      }
+      
+      // Localize script for check if acf is enabled.
+      wp_localize_script( 'owf-workflow-util', 'owf_workflow_util_vars', array(
+         'isACFEnabled' => $isACFEnabled
+		) );
+
+      // Based on version enqueue required JS files
+
+      if ( ! empty( $acf_version ) && $acf_version >= "5.7.0" ) { // applicable to pro and free version > 5.7.x of ACF
          wp_enqueue_script( 'owf_acf_validator',
-                 OASISWF_URL . 'js/pages/acf-pro-validator.js',
-                 array( 'jquery' ), OASISWF_VERSION, true );
-      } elseif ( class_exists( 'acf' ) ) { //applicable to free version of ACF
+            OASISWF_URL . 'js/pages/acf-pro-validator-new.js',
+            array( 'jquery' ), OASISWF_VERSION, true );
+      }
+
+      if ( ! empty( $acf_version ) && $acf_version >= "5.0.0" && $acf_version <= "5.6.9"  ) { // applicable to pro and free version > 5.x of ACF
+         wp_enqueue_script( 'owf_acf_validator',
+            OASISWF_URL . 'js/pages/acf-pro-validator.js',
+            array( 'jquery' ), OASISWF_VERSION, true );
+      }
+      
+      if ( ! empty( $acf_version ) && $acf_version == "5.6.10"  ) { // applicable to pro and free version = 5.6.10 of ACF
+         wp_enqueue_script( 'owf_acf_validator',
+            OASISWF_URL . 'js/pages/acf-pro-validator.js',
+            array( 'jquery' ), OASISWF_VERSION, true );
+      }
+      
+      if ( ! empty( $acf_version ) && $acf_version < "5.0.0"  ) { // applicable for free version less than 5.x
          wp_enqueue_script( 'owf_acf_validator',
                  OASISWF_URL . 'js/pages/acf-validator.js',
                  array( 'jquery' ), OASISWF_VERSION, true );
@@ -3051,9 +4211,22 @@ class OW_Process_Flow {
           'clickHereText' => __( 'click here', 'oasisworkflow' ),
           'abortWorkflow' => $abort_workflow_label,
           'compareOriginal' => __( 'Compare With Original', 'oasisworkflow' ),
-          'abortWorkflowConfirm' => __( 'Are you sure to terminate the workflow?', 'oasisworkflow' ),
+          'abortWorkflowConfirm' => __( 'Are you sure to terminate the workflow?', 'oasisworkflow' ),        
           'hideCompareButton' => get_option( "oasiswf_hide_compare_button" ),
       	 'absoluteURL' => get_admin_url()
+      ) );
+   }
+   
+   /**
+    * enqueue and localize the update published article
+    * @since 5.1
+    */
+   public function enqueue_and_localize_update_publish_script() {
+      wp_nonce_field( 'owf_update_published_nonce', 'owf_update_published_nonce' );
+      wp_enqueue_script( 'owf-update-published', OASISWF_URL . 'js/pages/subpages/update-published.js', '', OASISWF_VERSION, true );
+      
+      wp_localize_script( 'owf-update-published', 'owf_update_published_vars', array(
+          'updatePublishLinkText' => __( 'Update Published Article', 'oasisworkflow' )
       ) );
    }
 
@@ -3111,14 +4284,32 @@ class OW_Process_Flow {
 
       $post_id = intval( $post_id );
       $status = sanitize_text_field( $status );
+      $previous_status = get_post_field('post_status', $post_id );
+      
+       /**
+        * The permalink was breaking when submitting and signing off the task in workflow.
+        * So, we are generating the post_name again,
+        * so that it restores the permalink
+        */
+      $post_name = get_post_field('post_name', get_post( $post_id ) );
+      if ( empty ( $post_name ) ) {
+         $title = get_post_field('post_title', $post_id );
+         $post_name = sanitize_title($title, $post_id);
+      }
 
       $wpdb->update(
          $wpdb->posts,
          array(
-            'post_status' => $status
+            'post_status' => $status,
+            'post_name'   => $post_name
          ),
          array( 'ID' => $post_id )
       );
+      
+      clean_post_cache( $post_id );
+      $post = get_post( $post_id );
+      wp_transition_post_status( $status, $previous_status, $post );
+      do_action( 'wp_insert_post', $post->ID, $post, true );
    }
 
 
@@ -3160,12 +4351,12 @@ class OW_Process_Flow {
     *
     * @since 4.5
     */
-   private function get_submit_workflow_due_date( $step_id ) {
+   public function get_submit_workflow_due_date( $step_id ) {
       
       $step_id = intval( $step_id );
       
       // fetch globally set due days
-      $default_due_days = get_option( 'oasiswf_default_due_days' );
+      $default_due_days = get_option( 'oasiswf_default_due_days' ) ? get_option( 'oasiswf_default_due_days' ) : 1;
       $global_due_date = date_i18n( OASISWF_EDIT_DATE_FORMAT, current_time( 'timestamp' ) + DAY_IN_SECONDS * $default_due_days );
       
       $show_step_due_date = get_option( 'oasiswf_step_due_date_settings' );
@@ -3186,6 +4377,43 @@ class OW_Process_Flow {
          return $global_due_date;
       }
    }
+
+   /**
+    * 1) Override the default due date on first step of the workflow, if override is turned on.
+    * 2) If the option to override the default due date is not set than return
+    * the globally set due days settings.
+    *
+    * @param $step_id, ID of the first step in the workflow
+    *
+    * @return due days
+    *
+    * @since 5.3
+    */
+
+   private function get_submit_workflow_due_days_setting( $step_id ) {
+
+      $step_id = intval( $step_id );
+
+      // fetch globally set due days
+      $default_due_days = get_option( 'oasiswf_default_due_days' );
+
+      $show_step_due_date = get_option( 'oasiswf_step_due_date_settings' );
+
+      if ( $show_step_due_date === 'yes' ) {
+         $ow_workflow_service = new OW_Workflow_Service();
+         $step = $ow_workflow_service->get_step_by_id( $step_id );
+         $step_info = json_decode( $step->step_info );
+         // check step due days is set and not empty. If empty use global due date
+         if ( isset( $step_info->step_due_days ) && ! empty( $step_info->step_due_days ) ) {
+            $step_due_days = $step_info->step_due_days;
+            return $step_due_days;
+         } else {
+            return $default_due_days;
+         }
+      } else {
+         return $default_due_days;
+      }
+   }
    
    /**
     * 1) Override the default due date on each step of the workflow, if override is turned on.
@@ -3199,13 +4427,13 @@ class OW_Process_Flow {
     *
     * @since 4.5
     */ 
-   private function get_sign_off_due_date( $post_id, $step_id ) {
+   public function get_sign_off_due_date( $post_id, $step_id ) {
       
       $step_id = intval( $step_id );
       $post_id = intval( $post_id );
       
       // fetch globally set due days
-      $default_due_days = get_option( 'oasiswf_default_due_days' );
+      $default_due_days = get_option( 'oasiswf_default_due_days' ) ? get_option( 'oasiswf_default_due_days' ) : 1;
       $global_due_date = date_i18n( OASISWF_EDIT_DATE_FORMAT, current_time( 'timestamp' ) + DAY_IN_SECONDS * $default_due_days );
       
       $show_step_due_date = get_option( 'oasiswf_step_due_date_settings' );
@@ -3421,17 +4649,83 @@ class OW_Process_Flow {
       return false;
    }
 
-   /*
-    * echo javascript for hiding the ootb publish section
+   /**
+    * Javascript for hiding the ootb publish section
+    * It also hides "Edit" on the post status, if the post is in a workflow.
     */
    private function ootb_publish_section_hide() {
+      // if the post status is pending, WP hides the "Save"  button(meta-boxes.php - post_submit_meta_box())
+      // we want to show the "Save" button no matter what the status is
+      // also, we want to display the publish date/time, if the user has publish priveleges
       echo "<script type='text/javascript'>
 					jQuery(document).ready(function() {
-						jQuery('#publish, .misc-pub-section-last').hide() ;
-						jQuery('#misc-publishing-actions').children('.curtime').hide() ;
-						jQuery('#post-status-display').parent().hide() ;
+						jQuery('#publish, .misc-pub-section-last').hide();
+						if(jQuery(\"#save-post\").length == 0) {
+                     jQuery('#save-action').html('<input type=\"submit\" name=\"save\" id=\"save-post\" value=\"Save\" class=\"button\"><span class=\"spinner\"></span>');
+						}
+						jQuery('#post-status-display').parent().children('.edit-post-status').hide() ;
 					});
 				</script>";
+   }
+   
+   /*
+    * Abort the task for given history id
+    * @global type $wpdb
+    * @param type $history_id
+    * @since 6.3
+    */
+   public function terminate_workflow( $history_id, $comments="" ) {
+      global $wpdb;
+
+      // capability check
+      if ( ! current_user_can( 'ow_abort_workflow' ) ) {
+         wp_die( __( 'You are not allowed to abort the workflow.' ) );
+      }
+      
+      // sanitize incoming data
+      $history_id = intval( $history_id );
+
+      $ow_history_service = new OW_History_Service();
+      $action = $ow_history_service->get_action_history_by_id( $history_id );
+
+      $action_history_table = OW_Utility::instance()->get_action_history_table_name();
+
+      $comment[] = array(
+         "send_id" => get_current_user_id(),
+         "comment" => $comments,
+         "comment_timestamp" => current_time( "mysql" )
+      );
+      $data = array(
+         "action_status"   => "aborted",
+         "post_id"         => $action->post_id,
+         "comment"         => json_encode( $comment ),
+         "from_id"         => $history_id,
+         "step_id"         => $action->step_id, // since we do not have the step id information for this
+         "assign_actor_id" => get_current_user_id(), // since we do not have anyone assigned anymore.
+         'create_datetime' => current_time( 'mysql' )
+      );
+      $action_table = OW_Utility::instance()->get_action_table_name();
+      $new_history_id = OW_Utility::instance()->insert_to_table( $action_history_table, $data );
+      $ow_email = new OW_Email( );
+      if ( $new_history_id ) {
+         // find all the history records for the given post id which has the status = "assignment"
+         $post_action_histories = $ow_history_service->get_action_history_by_status( "assignment", $action->post_id );
+         foreach ( $post_action_histories as $post_action_history ) {
+            // delete all the unsend emails for this workflow
+            $ow_email->delete_step_email( $post_action_history->ID );
+            // update the current assignments to abort_no_action
+            $wpdb->update( $action_history_table, array( "action_status" => "abort_no_action", "create_datetime" => current_time( 'mysql' ) ), array( "ID" => $post_action_history->ID ) );
+            // change the assignments in the action table to processed
+            $wpdb->update( $action_table, array( "review_status" => "abort_no_action", "update_datetime" => current_time( 'mysql' ) ), array( "action_history_id" => $post_action_history->ID ) );
+         }
+         $this->cleanup_after_workflow_complete( $action->post_id );
+
+         do_action( 'owf_workflow_abort', $action->post_id );
+         
+         return $new_history_id;
+      }
+
+      return null;
    }
 
    /*
@@ -3448,7 +4742,7 @@ class OW_Process_Flow {
     */
    private function submit_post_to_step_internal( $post_id, $workflow_signoff_data ) {
       global $wpdb;
-
+      
       $ow_history_service = new OW_History_Service();
       $history_id = $workflow_signoff_data['history_id'];
       $step_id = $workflow_signoff_data['step_id'];
@@ -3456,6 +4750,8 @@ class OW_Process_Flow {
       $sign_off_comments = $workflow_signoff_data['comments'];
       $assigned_actors = $workflow_signoff_data['actors'];
       $step_decision = $workflow_signoff_data['step_decision'];
+
+      $ow_email = new OW_Email();
 
       // get the history details from fc_action_history
       $history_details = $ow_history_service->get_action_history_by_id( $history_id );
@@ -3483,8 +4779,6 @@ class OW_Process_Flow {
          $history_meta_json = null;
       }
 
-      $new_action_history_id = "";
-
       if ( $history_details->assign_actor_id == -1 ) { // the current step is a review step, so review decision check is required
          // let's first save the review action
          // find the next assign actors
@@ -3503,17 +4797,24 @@ class OW_Process_Flow {
             "history_meta"       => $history_meta_json,
             "update_datetime"    => current_time( 'mysql' )
          );
-
+         
          if ( ! empty( $workflow_signoff_data['due_date'] ) ) {
             $review_data["due_date"] = OW_Utility::instance()->format_date_for_db_wp_default( $workflow_signoff_data['due_date'] );
+         }
+         
+         if ( ! empty( $workflow_signoff_data['api_due_date'] ) ) {
+            $review_data["due_date"] = date( 'Y-m-d', strtotime( $workflow_signoff_data['api_due_date'] ) );
          }
 
          $action_table = OW_Utility::instance()->get_action_table_name();
          $wpdb->update( $action_table, $review_data, array( "actor_id" => $task_actor_id, "action_history_id" => $history_id ) );
 
+         // delete reminder email for this user, since the user completed his/her review
+         $ow_email->delete_step_email( $history_id, $task_actor_id );
+
          // invoke the review step procedure to make a review decision
          $new_action_history_id = $this->review_step_procedure( $history_id, $history_details->step_id );
-
+         
       } else { // the current step is either an assignment or publish step, so no review decision check required
          $data = array(
             'action_status'   => "assignment",
@@ -3523,9 +4824,13 @@ class OW_Process_Flow {
             'from_id'         => $history_id,
             "history_meta"    => $history_meta_json,
             'create_datetime' => current_time( 'mysql' )
-         );
+         );       
          if ( ! empty( $workflow_signoff_data['due_date'] ) ) {
             $data["due_date"] = OW_Utility::instance()->format_date_for_db_wp_default( $workflow_signoff_data['due_date'] );
+         }
+         
+         if ( ! empty( $workflow_signoff_data['api_due_date'] ) ) {
+            $data["due_date"] = date( 'Y-m-d', strtotime( $workflow_signoff_data['api_due_date'] ) );
          }
 
          // insert data from the next step
@@ -3533,6 +4838,16 @@ class OW_Process_Flow {
 
          //------post status change----------
          $this->copy_step_status_to_post( $post_id, $history_details->step_id, $new_action_history_id, $workflow_signoff_data['current_page'] );
+      }
+
+      if ( isset( $new_action_history_id ) &&  $new_action_history_id !== 0 ) {
+         if ( $workflow_signoff_data['current_page'] == 'inbox') { ////signing off from inbox
+            // send task assignment notification immediately, since the post is already updated
+            $this->send_task_notification( $post_id, $new_action_history_id, $actors );
+         } else {
+            // Set task assign meta, so that we will send email after saving the post
+            $this->set_oasis_task_assignment_meta( $post_id, $new_action_history_id, $actors );
+         }
       }
 
       do_action( 'owf_step_sign_off', $post_id, $new_action_history_id );
@@ -3653,8 +4968,9 @@ class OW_Process_Flow {
        * If all the reviews are approved, then move to the success step.
        */
 
-      if ( isset( $review_data["assignment"] ) && $review_data["assignment"] )
+      if ( isset( $review_data["assignment"] ) && $review_data["assignment"] ) {
          return 0; // there are users who haven't completed their review
+      }
 
       if ( isset( $review_data["unable"] ) && $review_data["unable"] ) { // even if we see one rejected, we need to go to failure path.
          $new_action_history_id = $this->save_review_action( $review_data["unable"], $action_history_id, "unable" );
@@ -3841,7 +5157,7 @@ class OW_Process_Flow {
       $new_action_history_id = $this->save_action( $review_data, $next_actors, $action->ID );
 
       //--------post status change---------------
-      $this->copy_step_status_to_post( $action->post_id, $action->step_id, $new_action_history_id, "edit" );
+      $this->copy_step_status_to_post( $action->post_id, $action->step_id, $new_action_history_id, "edit" );  
 
       return $new_action_history_id;
    }
@@ -3910,6 +5226,8 @@ class OW_Process_Flow {
                $workflow_complete_params['current_page'], current_time( 'mysql' ), true );
          }
 
+         $this->cleanup_after_workflow_complete( $post_id );
+
       }
       $return_array = array (
          "new_action_history_id" => $new_action_history_id,
@@ -3924,7 +5242,7 @@ class OW_Process_Flow {
     * @param type $history_id
     * @since 3.8
     */
-   private function abort_the_workflow( $history_id ) {
+   private function abort_the_workflow( $history_id, $comments="", $print_id = true ) {
       global $wpdb;
       $history_id = (int) $history_id;
 
@@ -3935,7 +5253,8 @@ class OW_Process_Flow {
 
       $comment[] = array(
          "send_id" => get_current_user_id(),
-         "comment" => "Post/Page was aborted from the workflow."
+         "comment" => $comments,
+         "comment_timestamp" => current_time( "mysql" )
       );
       $data = array(
          "action_status"   => "aborted",
@@ -3969,7 +5288,7 @@ class OW_Process_Flow {
 
       return null;
    }
-
+   
    /*
     * Get the post status from the connnection info, given the source and target steps.
     *
@@ -4020,8 +5339,39 @@ class OW_Process_Flow {
       $error_message .= __( 'Claim Error', 'oasisworkflow' );
       $error_message .= '</strong></div>';
       $error_message .= '<p>' . implode( "<br>", $validation_result ) . '</p>';
+      $error_message .= '<p class="owf-wrapper"><input type="button" value="close" class="claim-close button button-primary" /> </p>';
       $error_message .= '</div>';
       return $error_message;
+   }
+   
+   /**
+    * Set Task Assignment Meta
+    * @param int $post_id
+    * @param int $new_action_history_id
+    * @param String $actors
+    * @since 5.1
+    */
+   private function set_oasis_task_assignment_meta( $post_id, $new_action_history_id, $actors ) {     
+      // send task assignment notification
+      $current_user_id = get_current_user_id();
+      if( empty( $current_user_id ) ) {
+         $current_user_id = -1;
+      }
+      
+      // allow developers to filter users for sending task assignment emails
+      if( has_filter( 'owf_filter_assignment_email_users' ) ) {
+         $actors = explode("@", $actors );
+         $actors = apply_filters( 'owf_filter_assignment_email_users', $post_id, $new_action_history_id, $actors );
+         $actors = implode("@", $actors );
+      }
+      
+      $step_data = array(
+          'action_history_id' => $new_action_history_id,
+          'actors'            => $actors,
+          'current_user_id'   => $current_user_id
+      );
+      
+      add_post_meta( $post_id, "_oasis_task_assignment", $step_data );
    }
 
    /**
@@ -4080,32 +5430,60 @@ class OW_Process_Flow {
 
          $post_type = get_post_type();
          $post_status = "";
+         $is_role_applicable = false;
 
          // do not hide the ootb publish section for skip_workflow_roles option, but hide it if the post is in the workflow
          $show_workflow_for_post_types = get_option( 'oasiswf_show_wfsettings_on_post_types' );
-         $row = null;
+         $row = $aborted = null;
          if ( isset( $_GET['post'] ) && sanitize_text_field( $_GET["post"] ) && isset( $_GET['action'] ) && sanitize_text_field( $_GET["action"] ) == "edit" ) {
             $post_id = intval( sanitize_text_field( $_GET["post"] ) );
             $post_status = get_post_status( $post_id );
             $row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE post_id = %d AND action_status = 'assignment'", $post_id ) );
+            
+            // If revision post and aborted from workflow
+            if( get_post_meta( $post_id, '_oasis_original', true ) ) {
+               $aborted = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE post_id = %d AND action_status = 'aborted'", $post_id ) );
+            }    
          }
 
+         $post_id = get_the_ID();
+
+         // Get all applicable roles
+         $is_role_applicable = $this->check_is_role_applicable( $post_id );
+            
          $hide_ootb_publish_section = array(
             "skip_workflow_roles" => true,
             "show_workflow_for_post_types" => true
          );
 
-         if ( current_user_can( 'ow_skip_workflow' ) ) { // do not hide the ootb publish section for skip_workflow_roles option
+         // additional filter for deciding if the user can skip the workflow or not.
+         // for example, based on tag or categories etc.
+         $owf_skip_workflow_filter = false;
+         if ( has_filter( 'owf_skip_workflow' ) ) {
+            $owf_skip_workflow_filter = apply_filters( 'owf_skip_workflow', $post_id );
+         }
+
+         // check the filter value
+
+         if ( current_user_can( 'ow_skip_workflow' ) || $owf_skip_workflow_filter == true ) { // do not hide the ootb publish section for skip_workflow_roles option
             $hide_ootb_publish_section["skip_workflow_roles"] = false;
          } else {
             $hide_ootb_publish_section["skip_workflow_roles"] = true;
          }
 
-         if ( is_array( $show_workflow_for_post_types ) && in_array( $post_type, $show_workflow_for_post_types ) ) { // do not show ootb publish section for oasiswf_show_wfsettings_on_post_types
-            $hide_ootb_publish_section['show_workflow_for_post_types'] = true;
+         // do not show ootb publish section for oasiswf_show_wfsettings_on_post_types
+         if ( is_array( $show_workflow_for_post_types ) && in_array( $post_type, $show_workflow_for_post_types ) ) {
+            // Display ootb publish section based on applicable roles and post type
+            if( $is_role_applicable == true ) {
+               $hide_ootb_publish_section['show_workflow_for_post_types'] = true;
+            } else {
+               $hide_ootb_publish_section['show_workflow_for_post_types'] = false;
+            }
          } else {
+            // If not in list of oasiswf_show_wfsettings_on_post_types than hide.
             $hide_ootb_publish_section['show_workflow_for_post_types'] = false;
          }
+
 
          if ( $post_status == "publish" || $post_status == "future" ) { // we are dealing with published posts
             $revision_process_status = get_option( "oasiswf_activate_revision_process" );
@@ -4141,8 +5519,399 @@ class OW_Process_Flow {
                echo "<script type='text/javascript'>var exit_wfid = $row->ID ;</script>";
                $this->enqueue_and_localize_abort_script();
             }
+            
+            // If revision post and aborted from workflow
+            if( $aborted ) {
+               echo "<script type='text/javascript'>var revision_post_id_for_update = $post_id ;</script>";
+               $this->enqueue_and_localize_update_publish_script();
+            }
          }
       }
+   }
+
+
+    /**
+     * Ajax - Check if given post type and user role has any applicable workflows.
+     *
+     * @param $post_type
+     * @param $user_role
+     * @return bool
+     *
+     * @since 5.8
+     *
+     */
+   public function check_is_role_applicable( $post_id ) {
+      $is_ajax = "no";
+      if ( wp_doing_ajax() ) {         
+         if ( ! isset( $_POST['check_for'] ) ) {
+            return;
+         }
+         // nonce check
+         if ( isset( $_POST['check_for'] ) && sanitize_text_field( $_POST['check_for'] ) === "revision" ):
+            check_ajax_referer( 'owf_make_revision_ajax_nonce', 'security' );
+         endif;
+         
+         if ( isset( $_POST['check_for'] ) && sanitize_text_field( $_POST['check_for'] ) === "workflowSubmission" ):
+            check_ajax_referer( 'owf_signoff_ajax_nonce', 'security' );
+         endif;
+
+         $post_id = sanitize_text_field( $_POST['post_id'] );
+
+         $is_ajax = "yes";
+      }
+
+      $post_type = get_post_type( $post_id );
+      
+      // Get all user roles (single or multiple)
+      $user_roles = OW_Utility::instance()->get_current_user_roles();
+      
+      // Check user roles selected as participants in workflow
+      $participants = get_option('oasiswf_participating_roles_setting');
+      $user_role_keys = array_keys($participants);
+      
+      $is_participating = 0;
+      foreach ( $user_roles as $role ) {
+         if ( in_array( $role, $user_role_keys ) ) :
+            $is_participating++;
+         endif;
+      }
+      if( $is_participating == 0 ) {
+         return false;
+      }
+
+      // get active workflow list
+      $ow_workflow_service = new OW_Workflow_Service();
+      $workflows = $ow_workflow_service->get_valid_workflows( $post_id );
+
+      if ( $workflows ) {
+         foreach ( $workflows as $workflow ) {
+            $additional_info = @unserialize( $workflow->wf_additional_info );
+            $applicable_roles = $additional_info['wf_for_roles'];
+            $applicable_post_types = $additional_info['wf_for_post_types'];
+
+             // if applicable roles and applicable post types are empty,
+             // then the given workflow is applicable in all scenarios, so return true
+             if ( empty( $applicable_roles ) && empty( $applicable_post_types ) ) :
+                  if( $is_ajax == "yes" ):
+                     wp_send_json_success();
+                  else :                   
+                     return true;
+                  endif;
+             endif;
+
+            // if applicable roles is not empty then check if current user role is applicable
+            if ( empty( $applicable_post_types ) && ( ! empty( $applicable_roles ) ) ) :
+               foreach( $user_roles as $role ) {
+                  if ( in_array( $role, $applicable_roles ) ) :
+                     if( $is_ajax == "yes" ):
+                        wp_send_json_success();
+                     else :                   
+                        return true;
+                     endif;
+                  endif;
+               }
+            endif;
+
+            // if applicable post types is not empty then check if current post type is applicable
+            if ( ! empty( $applicable_post_types ) && ( empty( $applicable_roles ) ) ) :               
+               if ( in_array( $post_type, $applicable_post_types ) ) :
+                  if( $is_ajax == "yes" ):
+                     wp_send_json_success();
+                  else :                   
+                     return true;
+                  endif;
+               endif;
+            endif;
+
+            /**
+             * both post type and Applicable roles is not empty
+             * than check if current user role is applicable for the post type of the post
+             */
+            if ( ! empty( $applicable_post_types ) && ( ! empty( $applicable_roles ) ) ) :
+               if ( in_array( $post_type, $applicable_post_types ) ) :
+                  foreach( $user_roles as $role ) {
+                     if( ! empty( $applicable_roles ) && in_array( $role, $applicable_roles ) ) {
+                        if( $is_ajax == "yes" ):
+                           wp_send_json_success();
+                        else :                   
+                           return true;
+                        endif;
+                     }
+                  }
+               endif;
+            endif;
+         }
+      }
+      return false;
+   }
+
+   /**
+    *
+    * Function - API wrapper of check_is_role_applicable
+    * @param $criteria
+    *
+    * @return array $response
+    * @since 6.0
+    */
+   public function api_check_is_role_applicable( $criteria ) {
+
+      if ( ! wp_verify_nonce( $criteria->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_check_role_capability', __( 'You are not allowed to get workflow step details.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      // sanitize incoming data
+      $post_id = intval( $criteria['post_id'] );
+
+      $post_type = sanitize_text_field( $criteria['post_type'] );
+      $is_workflow_enabled = false;
+      
+       // initialize the return array
+      $response = array(
+         "is_role_applicable" => false,
+         "can_skip_workflow" => current_user_can( 'ow_skip_workflow' ),
+         "can_submit_to_workflow" => current_user_can( 'ow_submit_to_workflow' )
+      );
+
+      $is_activated_workflow = get_option( 'oasiswf_activate_workflow' );
+      
+      $allowed_post_types = get_option( 'oasiswf_show_wfsettings_on_post_types' );
+      
+      if( $allowed_post_types && in_array( $post_type, $allowed_post_types ) ) {
+         $is_workflow_enabled = true;
+      }
+
+      $oasis_is_in_workflow = get_post_meta( $post_id, '_oasis_is_in_workflow', true );
+      if( $oasis_is_in_workflow == 1 ) {
+         $response["is_role_applicable"] = true;
+      } else {
+         $is_role_applicable = $this->check_is_role_applicable( $post_id );
+
+         if ( $is_activated_workflow === "active" && $is_workflow_enabled && $is_role_applicable ) {
+            $response["is_role_applicable"] = true;
+         }
+      }
+      
+      return $response;
+
+   }
+
+   /**
+    * Function - API for getting first step details
+    *
+    * @param $step_details_criteria
+    * @return array $step_details
+    *
+    * @since 6.0
+    */
+   public function api_get_first_step_details($step_details_criteria ) {
+      
+      if ( ! wp_verify_nonce( $step_details_criteria->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_get_first_step_details', __( 'You are not allowed to get workflow step details.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      // sanitize incoming data
+      $post_id = intval( $step_details_criteria['post_id'] );
+      $wf_id = intval( $step_details_criteria['wf_id'] );
+      
+      // fetch first step details
+      $ow_workflow_service = new OW_Workflow_Service();
+      $first_step_details = $ow_workflow_service->get_first_step_internal( $wf_id );      
+      
+      $step_id = $first_step_details['first'][0][0];
+      $step_label = $first_step_details['first'][0][1];
+      
+      // initialize the return array
+      $step_details = array(
+         "step_id" => $step_id,
+         "step_label" => $step_label,
+         "teams" => "",
+         "users" => "",
+         "process" => "",
+         "assign_to_all" => 0,
+         "custom_data" => "",
+         "due_days" => ""
+      );
+      
+      // if teams add-on is active, get all the available teams
+      if ( get_option( 'oasiswf_team_enable' ) == 'yes' ) {
+         $teams = apply_filters( 'get_teams_for_workflow', $wf_id, $post_id );
+
+         if ( ! empty( $teams ) ) {
+            $step_details["teams"] = $teams;
+         }         
+      }
+      
+      // call filter to display any custom data, like pre publish conditions
+      $custom_data = array();
+      $history_id = null;
+      $custom_data = apply_filters( 'owf_api_display_custom_data', $custom_data, $post_id, $step_id, $history_id );
+      if ( ! empty ( $custom_data ) ) {
+         $step_details["custom_data"] = $custom_data;
+      }
+      
+      // get step users
+      $users_and_process_info = $this->get_users_in_step( $step_id, $post_id );
+
+      if ( $users_and_process_info != null ) {
+         $step_details["users"] = $users_and_process_info["users"];
+         $step_details["process"] = $users_and_process_info["process"];
+         $step_details["assign_to_all"] = $users_and_process_info["assign_to_all"];
+      }
+
+      $due_days = $this->get_submit_workflow_due_days_setting( $step_id );
+      $step_details[ "due_days" ] = $due_days;
+
+      return $step_details;
+   }
+
+   /**
+    * Function - API for getting next steps for sign off
+    *
+    * @param $step_details_criteria
+    * @return array $decision_details
+    *
+    * @since 6.0
+    */
+   public function api_get_signoff_next_steps( $step_details_criteria ) {
+      
+      if ( ! wp_verify_nonce( $step_details_criteria->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_get_signoff_next_steps', __( 'You are not allowed to get workflow step details.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+      
+      // sanitize incoming data
+      $post_id = intval( $step_details_criteria['post_id'] );
+      $history_id = intval( $step_details_criteria['action_history_id'] );
+      
+      $decision = sanitize_text_field( $step_details_criteria['decision'] ); //possible values - "success" and "failure"
+      
+      // initialize the return array
+      $decision_details = array(
+         "steps"            => "",
+         "is_original_post" => true,
+         "custom_data"      => ""
+      );
+      
+      // get next steps
+      // depending on the decision, get the next set of steps in the workflow
+      $ow_history_service = new OW_History_Service();
+      $ow_workflow_service = new OW_Workflow_Service();
+      $action_history = $ow_history_service->get_action_history_by_id( $history_id );
+      $steps = $ow_workflow_service->get_process_steps( $action_history->step_id );
+      if ( empty ( $steps ) || ! array_key_exists( $decision, $steps ) ) { // no next steps found for the decision
+         // if the decision was "success" - then this is the last step in the workflow
+         if ( "success" == $decision ) {
+            // check if this is the original post or a revision
+            $original_post_id = get_post_meta( $action_history->post_id, '_oasis_original', true );
+            if ( $original_post_id !== null ) {
+               $decision_details["is_original_post"] = false;
+            }
+         }
+      } else { // assign the next steps depending on the decision
+         $steps_array = array();
+         foreach ( $steps[ $decision ] as $id => $value ) {
+            array_push( $steps_array, array(
+               "step_id" => $id,
+               "step_name" => $value
+            ) );
+         }
+         $decision_details["steps"] = $steps_array;
+      }
+      
+      // call filter to display any custom data, like pre publish conditions
+      $custom_data = array();
+      $step_id = null;
+      if ( "success" == $decision ) {
+         $custom_data = apply_filters( 'owf_api_display_custom_data', $custom_data, $post_id, $step_id, $history_id );
+         if ( ! empty ( $custom_data ) ) {
+            $decision_details["custom_data"] = $custom_data;
+         }
+      }
+      
+      return $decision_details;
+   }
+
+   /**
+    * Function - API for getting step details
+    *
+    * @param $step_details_criteria
+    * @return array $step_details
+    *
+    * @since 6.0
+    */
+   public function api_get_step_details( $step_details_criteria ) {
+      
+      if ( ! wp_verify_nonce( $step_details_criteria->get_header('x_wp_nonce'), 'wp_rest' ) ) {
+         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
+      }
+      
+      if ( ! current_user_can( 'ow_submit_to_workflow' ) && ! current_user_can( 'ow_sign_off_step' ) ) {
+         return new WP_Error( 'owf_rest_get_step_details', __( 'You are not allowed to get workflow step details.', 'oasisworkflow' ), array( 'status' => '403' )  );
+      }
+
+      // sanitize incoming data
+      $history_id = intval( $step_details_criteria['action_history_id'] );
+      $step_id = intval( $step_details_criteria['step_id'] );
+      $post_id = intval( $step_details_criteria['post_id'] );
+      
+      
+      // create an array of all the inputs
+      $step_details_params = array (
+         "step_id"    => $step_id,
+         "post_id"    => $post_id,
+         "history_id" => $history_id
+      );
+      
+      // initialize the return array
+      $step_details = array(
+         "users" => "",
+         "process" => "",
+         "assign_to_all" => 0,
+         "team_id" => "",
+         "due_date" => ""
+      );
+      
+      // if team is assigned to the post, check if the team has members for this step
+      $team_id = get_post_meta( $post_id, '_oasis_is_in_team', true );
+      if ( ! empty( $team_id ) ) {
+         $step_details["team_id"] = $team_id;
+      }
+ 
+      // get step users
+      $users_and_process_info = $this->get_users_in_step( $step_id, $post_id );
+
+      if ( $users_and_process_info != null ) {
+         $step_details["users"] = $users_and_process_info["users"];
+         $step_details["process"] = $users_and_process_info["process"];
+         $step_details["assign_to_all"] = $users_and_process_info["assign_to_all"];
+      }
+
+      // get the due date for the step
+      $due_date = $this->get_sign_off_due_date( $post_id, $step_id );
+      
+      $start = '-';
+      $end  = ' ';
+      $replace_string = '';
+      $formatted_date = preg_replace('#('.preg_quote($start).')(.*?)('.preg_quote($end).')#si', '$1'. $replace_string .'$3', $due_date);
+      $formatted_date = str_replace( "-", "", $formatted_date );
+
+      $due_date_object = DateTime::createFromFormat( 'm d, Y', $formatted_date );
+      $due_date = $due_date_object->format('Y-m-d'); // this is the format required by the front end/moment.js
+
+      $step_details[ "due_date" ] = $due_date;
+
+      return $step_details;
    }
 
    /**
@@ -4179,21 +5948,23 @@ class OW_Process_Flow {
     */
    public function oasis_edit_post_link( $url, $post_id, $context ) {
       global $wpdb;
-      $new_url = $url;
 
       // lets check given post_id is in workflow
       $row_id = (int) $wpdb->get_var(
          $wpdb->prepare( "SELECT AH.ID FROM " . OW_Utility::instance()->get_action_history_table_name() ." AH
-                                 LEFT OUTER JOIN " . OW_Utility::instance()->get_action_table_name() ." A ON AH.ID = A.action_history_id
-                                 AND A.review_status = 'assignment'
-                                 WHERE AH.action_status = 'assignment'
-                                 AND (AH.assign_actor_id = %d OR A.actor_id = %d )
-                                 AND post_id = %d LIMIT 0, 1",
+                              LEFT OUTER JOIN " . OW_Utility::instance()->get_action_table_name() ." A ON AH.ID = A.action_history_id
+                              AND A.review_status = 'assignment'
+                              WHERE AH.action_status = 'assignment'
+                              AND (AH.assign_actor_id = %d OR A.actor_id = %d )
+                              AND post_id = %d LIMIT 0, 1",
             get_current_user_id(), get_current_user_id(), $post_id ) );
 
       if ( $row_id && $row_id > 0 ) {
          $new_url = $url . '&oasiswf=' . $row_id;
+      } else {
+         $new_url = $url;
       }
+
       return $new_url;
    }
 
@@ -4205,16 +5976,94 @@ class OW_Process_Flow {
     *
     * @since 4.5
     */
-   public function redirect_after_workflow_submit( $post_id, $new_action_history_id ) {
-      if ( ! isset( $_POST[ 'auto_submit_btn' ] ) ) {
-         $post_type = get_post_type( $post_id );
-         if ( $post_type == 'post' ) {
-            $link = admin_url() . "edit.php";
-         } else {
-            $link = admin_url() . "edit.php?post_type=" . $post_type;
+//   public function redirect_after_workflow_submit( $post_id, $new_action_history_id ) {
+//      if ( ! isset( $_POST[ 'auto_submit_btn' ] ) && ! isset( $_POST[ 'ow_fe_submit_to_workflow' ] ) ) {
+//         // Filter to redirect user to a custom url
+//         // Redirect user to post/page list page
+//         $post_type = get_post_type( $post_id );
+//         if ( $post_type == 'post' ) {
+//            $link = admin_url() . "edit.php";
+//         } else {
+//            $link = admin_url() . "edit.php?post_type=" . $post_type;
+//         }
+//         $link = apply_filters( 'owf_redirect_after_workflow_submit', $link, $post_id );
+//         wp_redirect( $link );
+//         exit();
+//      }
+//   }
+   
+   /**
+    * Loop through the list of actors and send step email to them.
+    *
+    * @param $post_id
+    * @param $new_action_history_id
+    */
+   public function send_task_notification_after_save( $post_id, $new_action_history_id ) {
+    
+      // Sanitize incoming data
+      $post_id    = intval( $post_id );
+      $post_type  = get_post_type( $post_id );  
+      
+      // Return if this is an auto save
+      if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+          return;
+      }
+      
+      // Return if the function is called for saving revision.
+      if ( $post_type == 'revision' || $post_type == 'auto-draft' ) {
+          return;
+      } 
+     
+      $ow_email = new OW_Email( );
+     
+      // Get current looged in user id
+      $current_user_id = get_current_user_id();
+
+      $task_assignment = get_post_meta( $post_id, '_oasis_task_assignment' );  
+      
+      foreach( $task_assignment as $assignment ) {
+
+         OW_Utility::instance()->logger("Sending Task Assignment Email");
+        
+         $task_user_id            = $assignment['current_user_id'];
+         $new_action_history_id   = $assignment['action_history_id'];
+         $actors                  = $assignment['actors'];
+
+         if( $task_user_id == $current_user_id ) {
+           if ( is_numeric( $actors ) ) {
+               $arr[] = $actors;
+            } else {
+               $arr = explode( "@", $actors );
+            }
+            for ( $i = 0; $i < count( $arr ); $i ++ ) {
+               if ( ! $arr[ $i ] ) {
+                  continue;
+               }
+                
+               $ow_email->send_step_email( $new_action_history_id, $arr[ $i ] ); // send mail to the actor .
+            }
          }
-         wp_redirect( $link );
-         exit();
+         delete_post_meta( $post_id , '_oasis_task_assignment', $assignment );
+     }
+   }
+   
+   /**
+    * Abort from workflow if user publish post in midway of workflow process
+    * @param string $new_status
+    * @param string $old_status
+    * @param object $post
+    * @since 6.7
+    */
+   public function abort_midway_workflow_process( $new_status, $old_status, $post ) {
+      // check if post is in workflow
+      $oasis_is_in_workflow = get_post_meta( $post->ID, '_oasis_is_in_workflow', true );
+      
+      if( ( $new_status === "publish" || $new_status === "future" ) && $oasis_is_in_workflow == 1 ) {
+         $ow_history_service = new OW_History_Service();
+         $histories = $ow_history_service->get_action_history_by_status( 'assignment', $post->ID  );
+         if ( $histories ) {
+            $new_action_history_id = $this->abort_the_workflow( $histories[0]->ID );
+         }
       }
    }
 
@@ -4223,9 +6072,34 @@ class OW_Process_Flow {
 // construct an instance so that the actions get loaded
 $ow_process_flow = new OW_Process_Flow();
 add_action( 'admin_footer', array( $ow_process_flow, 'step_signoff_popup_setup' ) );
-add_filter( 'redirect_post_location', array( $ow_process_flow, 'workflow_submit_action' ), '', 2 );
-add_filter( 'get_edit_post_link', array( $ow_process_flow, 'oasis_edit_post_link' ), '', 3 );
+add_filter( 'redirect_post_location', array( $ow_process_flow, 'workflow_submit_action' ), 8, 2 );
+add_filter( 'get_edit_post_link', array( $ow_process_flow, 'oasis_edit_post_link' ), 10, 3 );
+
+// Abort from workflow if user publish post in midway of workflow process
+add_action( 'transition_post_status', array( $ow_process_flow, 'abort_midway_workflow_process' ), 8, 3 );
 
 // Trigger on post save
 add_action( 'save_post', array( $ow_process_flow, 'check_unauthorized_post_update' ), 10, 1 );
+
+// Send Assignment email after workflow submission
+add_action( 'owf_submit_to_workflow', array( $ow_process_flow, 'send_task_notification_after_save' ), 15, 2 );
+
+// removed edit_post hook for sending step assignment emails with and without gutenberg editor.
+add_action( 'owf_step_sign_off', array( $ow_process_flow, 'send_task_notification_after_save' ), 15, 2 );
+
+// Show posts/pages which current logged in user can access or see..
+//      add_action( 'pre_get_posts', array( $ow_process_flow, 'show_only_accessible_posts' ) );
+
+//      add_filter( 'owf_claim_process_pre', array( $ow_process_flow, 'pre_validate_claim' ), 10, 4 );
+
+// Trigger after user deleted
+add_action( 'deleted_user', array( $ow_process_flow, 'purge_user_assignments' ), 10, 1 );
+
+// Trigger on redirect post location
+add_action( 'redirect_post_location', array( $ow_process_flow, 'redirect_after_signoff' ) );
+// commented out redirect and moved the code directly under submit to workflow.
+// this was causing issues with gutenberg integration
+//      add_action( 'owf_submit_to_workflow', array( $ow_process_flow, 'redirect_after_workflow_submit' ), 10, 2 );
+
+add_action( 'wp_trash_post', array( $ow_process_flow, 'when_post_trash_delete' ) );
 ?>

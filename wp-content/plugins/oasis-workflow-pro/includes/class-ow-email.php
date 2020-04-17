@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 
 /*
@@ -58,22 +60,28 @@ class OW_Email
             $oasis_is_in_workflow == 1 ) {
 
          // Fetch all mail parameters
-         $user_roles       = isset( $post_publish_email_settings['user_roles'] ) ? $post_publish_email_settings['user_roles'] : "";
-         $additional_users = isset( $post_publish_email_settings['additional_users'] ) ? $post_publish_email_settings['additional_users'] : '';
-         $subject          = isset( $post_publish_email_settings['subject'] ) ? $post_publish_email_settings['subject'] : $ow_email_settings_helper->get_post_submit_subject();
-         $content          = isset( $post_publish_email_settings['content'] ) ? $post_publish_email_settings['content'] : $ow_email_settings_helper->get_post_submit_content();
+         $email_assignees = isset( $post_publish_email_settings['email_assignees'] ) ? $post_publish_email_settings['email_assignees'] : '';
+         $email_cc = isset( $post_publish_email_settings['email_cc'] ) ? $post_publish_email_settings['email_cc'] : '';
+         $email_bcc = isset( $post_publish_email_settings['email_bcc'] ) ? $post_publish_email_settings['email_bcc'] : '';
+         $subject          = isset( $post_publish_email_settings['subject'] ) ? $post_publish_email_settings['subject'] : $ow_email_settings_helper->get_post_publish_subject();
+         $content          = isset( $post_publish_email_settings['content'] ) ? $post_publish_email_settings['content'] : $ow_email_settings_helper->get_post_publish_content();
 
          $email_recipient_params = array(
             "post_id"          => $post->ID,
             "action"           => OW_Email_Settings_Helper::POST_PUBLISH_EMAIL,
-            "user_roles"       => $user_roles,
-            "additional_users" => $additional_users
+            "email_assignees"  => $email_assignees,
+            "email_cc"         => $email_cc,
+            "email_bcc"        => $email_bcc
          );
+         
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
 
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
-
-         foreach ( $user_ids as $user_id ) {
+         foreach ( $to_email_recipients as $key=>$user_id ) {
             $email_params = array(
                "post_id"       => $post->ID,
                "email_to"      => $user_id,
@@ -85,11 +93,15 @@ class OW_Email
             $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
-
       }
 
       // since the post is now published, lets call clean up.
@@ -114,43 +126,54 @@ class OW_Email
 	 */
 	public function revised_post_published_notification( $original_post_id, $revised_post ) {
       /* sanitize incoming data */
-		$original_post_id = intval( $original_post_id );
+		$original_post_id = intval( $original_post_id );     
 
       $ow_email_settings_helper = new OW_Email_Settings_Helper();
 		$revised_post_publish_email_settings = get_option('oasiswf_revised_post_email_settings') ;
 		if ( $revised_post_publish_email_settings['is_active'] == "yes" )
 		{
 			// Fetch all mail parameters
-         $user_roles       = isset( $revised_post_publish_email_settings[ 'user_roles' ] ) ? $revised_post_publish_email_settings[ 'user_roles' ] : "";
-         $additional_users = isset( $revised_post_publish_email_settings[ 'additional_users' ] ) ? $revised_post_publish_email_settings[ 'additional_users' ] : '';
-         $subject          = isset( $revised_post_publish_email_settings[ 'subject' ] ) ? $revised_post_publish_email_settings[ 'subject' ] : $ow_email_settings_helper->get_post_submit_subject();
-         $content          = isset( $revised_post_publish_email_settings[ 'content' ] ) ? $revised_post_publish_email_settings[ 'content' ] : $ow_email_settings_helper->get_post_submit_content();
+         $email_assignees = isset( $revised_post_publish_email_settings['email_assignees'] ) ? $revised_post_publish_email_settings['email_assignees'] : '';
+         $email_cc = isset( $revised_post_publish_email_settings['email_cc'] ) ? $revised_post_publish_email_settings['email_cc'] : '';
+         $email_bcc = isset( $revised_post_publish_email_settings['email_bcc'] ) ? $revised_post_publish_email_settings['email_bcc'] : '';
+         $subject          = isset( $revised_post_publish_email_settings[ 'subject' ] ) ? $revised_post_publish_email_settings[ 'subject' ] : $ow_email_settings_helper->get_revised_post_publish_subject();
+         $content          = isset( $revised_post_publish_email_settings[ 'content' ] ) ? $revised_post_publish_email_settings[ 'content' ] : $ow_email_settings_helper->get_revised_post_publish_content();
 
          $email_recipient_params = array (
             "post_id"            => $revised_post->ID,
             "action"             => OW_Email_Settings_Helper::REVISED_POST_PUBLISH_EMAIL,
-            "user_roles"         => $user_roles,
-            "additional_users"   => $additional_users
+            "email_assignees"    => $email_assignees,
+            "email_cc"           => $email_cc,
+            "email_bcc"          => $email_bcc
          );
 
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
 
-         foreach ( $user_ids as $user_id ) {
-            $email_params = array (
-               "post_id"            => $revised_post->ID,
-               "email_to"           => $user_id,
-               "email_subject"      => $subject,
-               "email_content"      => $content
+         foreach ( $to_email_recipients as $key=>$user_id ) {
+            $email_params = array(
+               "post_id"       => $original_post_id,
+               "email_to"      => $user_id,
+               "email_subject" => $subject,
+               "email_content" => $content
             );
 
             // Replace placeholders in mail subject and mail content
-            $mail = $ow_email_settings_helper->get_email_content( $email_params );
+            $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
 		}
 	}
@@ -210,12 +233,25 @@ class OW_Email
 		// sanitize the input
 		$action_id = intval( sanitize_text_field( $action_id ));
 		$to_user_id = intval( sanitize_text_field( $to_user_id ));
+      
+      $current_user_id = get_current_user_id();
+
+      OW_Utility::instance()->logger("Send step email: " . $action_id . "-" . $to_user_id);
 
 		$ow_history_service = new OW_History_Service();
 		$action_step = $ow_history_service->get_action_history_by_id( $action_id ) ;
 		$to_user_id = ( $to_user_id ) ? $to_user_id : $action_step->assign_actor_id ;
 		$mails = $this->get_step_mail_content( $action_id, $action_step->step_id, $to_user_id, $action_step->post_id) ;
 		$comment = $this->get_step_comment_content( $action_id ) ;
+      
+      $post_id       = $action_step->post_id;
+      $post_type     = get_post_type( $post_id );
+      
+      do_action( "owf_generate_additional_attachments", $post_id,  $action_id );
+      
+      // Get attachments
+		// as of now, it's only the PDF files generated using the PDF generator add-on
+      $attachments = $this->get_attachments( $post_id );
 
 		$data = array(
 				'to_user' => $to_user_id,
@@ -229,14 +265,14 @@ class OW_Email
 		if ( isset( $mails ) &&
 			 isset( $mails->assign_subject)  && $mails->assign_subject &&
 			 isset( $mails->assign_content)  && $mails->assign_content &&
-			 $email_settings['assignment_emails'] == "yes" ){
+			 $email_settings['assignment_emails'] == "yes" && ( $to_user_id !== $current_user_id ) ){
 
 		   $mail_content = $mails->assign_content . $comment ;
 
          // check is enable digest email option is set or not
          if ( $email_settings['digest_emails'] !== "yes" ) {
             // if digest email is not set send the assignment mail and set action to 0
-            $this->send_mail( $to_user_id, $mails->assign_subject, $mail_content );
+            $this->send_mail( $to_user_id, $mails->assign_subject, $mail_content, $attachments );
             $data["action"] = 0 ;
          } else {
             // add a horizontal line at the end of each message.
@@ -280,6 +316,66 @@ class OW_Email
 			}
 		}
 	}
+   
+   /**
+    * Setup reminder emails for before and after due date
+	 * @param int $action_id action_history_id for the given workflow step
+	 * @param int $to_user_id user_id in the given step
+    * @since 5.3
+    */
+   public function generate_reminder_emails( $action_id, $to_user_id = null ) {      
+      // sanitize the input
+		$action_id = intval( sanitize_text_field( $action_id ));
+		$to_user_id = intval( sanitize_text_field( $to_user_id ));
+
+		$ow_history_service = new OW_History_Service();
+		$action_step = $ow_history_service->get_action_history_by_id( $action_id ) ;
+		$to_user_id = ( $to_user_id ) ? $to_user_id : $action_step->assign_actor_id ;
+
+      OW_Utility::instance()->logger("Generate reminder emails for : " . $action_id . "-" . $to_user_id);
+
+      $mails = $this->get_step_mail_content( $action_id, $action_step->step_id, $to_user_id, $action_step->post_id) ;
+		$comment = $this->get_step_comment_content( $action_id ) ;
+      
+      $post_id       = $action_step->post_id;
+      $post_type     = get_post_type( $post_id );
+      
+		$data = array(
+				'to_user' => $to_user_id,
+				'history_id' => $action_id,
+				'create_datetime' => current_time('mysql')
+			);
+      
+      // send email if setting is true
+		$emails_table = OW_Utility::instance()->get_emails_table_name();
+		$email_settings = get_option('oasiswf_email_settings') ;
+      
+      // set reminder email for future delivery
+		if ( isset( $mails ) &&
+			 isset( $mails->reminder_subject ) && $mails->reminder_subject &&
+			 isset( $mails->reminder_content) && $mails->reminder_content ) {
+			$mail_content = $mails->reminder_content . $comment ;
+
+			$data["subject"] = $mails->reminder_subject ;
+			$data["message"] = $mail_content ;
+			$data["action"] = 1 ;
+
+			// for reminder before date
+			if ( $action_step->reminder_date )
+			{
+			   $data["send_date"] = $action_step->reminder_date ;
+			   OW_Utility::instance()->insert_to_table( $emails_table, $data ) ;
+			}
+
+			// for reminder after date
+			if ( $action_step->reminder_date_after )
+			{
+			   $data["send_date"] = $action_step->reminder_date_after ;
+			   OW_Utility::instance()->insert_to_table( $emails_table, $data ) ;
+			}
+		}
+   }
+
 
    /**
 	 * Get mail content from the step configuration
@@ -299,6 +395,7 @@ class OW_Email
 		$step_id = intval( sanitize_text_field( $step_id ) );
 		$to_user_id = intval( sanitize_text_field( $to_user_id ) );
 		$post_id = intval( sanitize_text_field( $post_id ) );
+      $current_user_id = get_current_user_id();
 
 		// get step information
 		$workflow_service = new OW_Workflow_Service();
@@ -327,14 +424,14 @@ class OW_Email
    		   $post_link = $ow_placeholders->get_post_title( $post_id, $action_id, true );
    		}
 
-   		$messages->assign_subject = ( ! empty( $subject_line ) ) ? $blog_name . $messages->assign_subject : $blog_name . __("You have an assignment", "oasisworkflow");
-   		$messages->assign_content = ( ! empty( $content_line ) ) ? $messages->assign_content : __("You have an assignment related to post - " . $post_link, "oasisworkflow");
+   		$messages->assign_subject = ( ! empty( $subject_line ) ) ? $messages->assign_subject : $blog_name . __("You have an assignment", "oasisworkflow");
+   		$messages->assign_content = ( ! empty( $content_line ) ) ? $messages->assign_content : __("You have an assignment related to post - ", "oasisworkflow") . $post_link;
 
    		// replace the placeholders
-   		//TODO: to implement custom placeholders
-
-			$callback_custom_placeholders = apply_filters( 'oasiswf_custom_placeholders_handler' , $post );
-
+         $callback_custom_placeholders = array();
+         if ( has_filter( 'oasiswf_custom_placeholders_handler' ) ) {
+            $callback_custom_placeholders = apply_filters( 'oasiswf_custom_placeholders_handler' , $post );
+         }         
 
 			foreach ( $messages as $k => $v ) {
 				$v = str_replace(OW_Place_Holders::FIRST_NAME,
@@ -349,6 +446,10 @@ class OW_Email
 						$ow_placeholders->get_post_publish_date( $post_id ), $v);
             $v = str_replace( OW_Place_Holders::POST_AUTHOR,
                    $ow_placeholders->get_author_display_name( $post_id ), $v );
+            $v = str_replace( OW_Place_Holders::BLOG_NAME,
+                   addslashes( get_bloginfo( 'name' ) ), $v );
+            $v = str_replace( OW_Place_Holders::POST_SUBMITTER,
+                   $ow_placeholders->get_post_submitter( $current_user_id ), $v );
 
 				if ( $k === "assign_content" || $k === "reminder_content" ) { //replace %post_title% with a link to the post
 				   $v = str_replace(OW_Place_Holders::POST_TITLE,
@@ -358,18 +459,18 @@ class OW_Email
 				   $v = str_replace(OW_Place_Holders::POST_TITLE,
 				   		$ow_placeholders->get_post_title( $post_id, $action_id, false ), $v);
 				}
-
-				foreach ( $callback_custom_placeholders as $ki => $vi )
-				{
-					if ( strpos($v, $ki) !== false )
-					{
-						$v = str_replace($ki, $vi, $v);
-					}
-				}
+            
+            if ( ! empty( $callback_custom_placeholders ) ) {
+               foreach ( $callback_custom_placeholders as $ki => $vi ) {
+                  if ( strpos($v, $ki) !== false ) {
+                     $v = str_replace($ki, $vi, $v);
+                  }
+               }
+            }
 
 				$messages->$k = $v ;
 			}
-
+         
 			return $messages ;
 		}
 
@@ -420,7 +521,12 @@ class OW_Email
 				}
 			}
 
-			$comments_str .= "<p>" . __( 'Sign off date', "oasisworkflow" ) . " : {$sign_off_date}</p>" ;
+			$display_sign_off_date = apply_filters( 'owf_display_sign_off_date', true );
+
+			if ( ! empty( $display_sign_off_date ) ) {
+				$comments_str .= "<p>" . __( 'Sign off date', "oasisworkflow" ) . " : {$sign_off_date}</p>";
+			}
+
 			if ( ! empty( $due_date ) ) {
 				// get due date terminology from the settings
             $option = get_option( 'oasiswf_custom_workflow_terminology' );
@@ -492,7 +598,7 @@ class OW_Email
     */
    public function send_digest_email( $email_type ) {
       global $wpdb;
-
+      
       // Sanitize incoming data
       $email_type = intval( $email_type );
 
@@ -603,16 +709,21 @@ class OW_Email
 	 *
 	 * @since 2.0
 	 */
-	public function send_mail( $to_user, $subject, $message ) {
+	public function send_mail( $to_user, $subject, $message, $attachments = '', $cc_users = array(), $bcc_users = array() ) {
+      // Sanitize incoming data
 		$to_user = sanitize_text_field( $to_user );
 		$subject = sanitize_text_field ( $subject );
-
-		// to_user could be an id of the user or email address
-		if ( is_numeric( $to_user ) ) {
-			$user = get_userdata( $to_user ) ;
-		} else {
-			$user = get_user_by( 'email' , $to_user );
-		}
+      
+      if( ! empty( $cc_users ) ) {
+         $cc_users = array_map('esc_attr', $cc_users );
+      }
+      
+      if( ! empty( $bcc_users ) ) {
+         $bcc_users = array_map('esc_attr', $bcc_users );
+      }
+      
+      //Get user email address
+		$user_email = $this->get_user_email_by_id( $to_user );
 
 		// get the email settings
 		$email_settings = get_option( 'oasiswf_email_settings' ) ;
@@ -627,15 +738,35 @@ class OW_Email
 			$from_email = get_option( 'admin_email' );
 		}
 		$headers = array("From: " .  $from_name . " <" . $from_email . ">","Reply-to: " . $from_email . "", "Content-Type: text/html; charset=UTF-8");
+      
+      if( ! empty( $cc_users ) || ( ! empty( $bcc_users ) ) ) {
+         // Generate Cc and Bcc headers
+         $header_cc_bcc = $this->generate_cc_bcc_headers( $cc_users, $bcc_users );
+         // Merge headers
+         $headers = array_merge( $headers, $header_cc_bcc );
+      }
 
 		$imploded_headers = implode( "\r\n", $headers ) . "\r\n";
 
 		$decoded_title = html_entity_decode (  $subject, ENT_QUOTES, 'UTF-8' );
 		$decoded_message = html_entity_decode ( $message, ENT_QUOTES, 'UTF-8' );
-      
+                 
 		// send mail using wp_email function
-		wp_mail( $user->data->user_email, $decoded_title, $decoded_message, $imploded_headers ) ;
+		$result = wp_mail( $user_email, $decoded_title, $decoded_message, $imploded_headers, $attachments ) ;
 
+		// wp mail debugging
+		if ( ! $result ) {
+			global $ts_mail_errors;
+			global $phpmailer;
+
+			if ( ! isset( $ts_mail_errors ) ) $ts_mail_errors = array();
+
+			if ( isset( $phpmailer ) ) {
+				$ts_mail_errors[] = $phpmailer->ErrorInfo;
+			}
+
+			OW_Utility::instance()->logger( $ts_mail_errors );
+		}
 	}
 
    /**
@@ -645,6 +776,112 @@ class OW_Email
     */
    public function log_email_send_error( $wp_error ){
       OW_Utility::instance()->logger( $wp_error );
+   }
+   
+   /**
+    * get the files to be attached to the emails
+    * @param int $post_id
+    * @return array $attachment
+    */
+   private function get_attachments( $post_id ) {   
+      
+      // Sanitize incoming data
+      $post_id = intval( $post_id );
+      
+      // Get absolute path
+      $upload = wp_upload_dir(); 
+      $path   = $upload['basedir'];
+      
+      $pdf_paths = array();
+      $publish_revision_pdf = array();
+      
+      do_action( "owf_modify_attachments", $post_id );
+      
+      // Get post current version pdf
+      $current_pdf = get_post_meta( $post_id, '_oasis_current_post_pdf', true ); 
+      
+      // If revision of post than attach the published version pdf of the original post
+      $original_post_id = get_post_meta( $post_id, '_oasis_original', true );
+      
+      if ( ! empty( $original_post_id ) ) {
+         $publish_revision_pdf = get_post_meta( $original_post_id, '_oasis_published_revisions_pdf', true );
+      }
+     
+      
+      if( ! empty( $publish_revision_pdf ) ) {
+        // Get the latest published/revised pdf
+        $pdf_paths[] = $path.end( $publish_revision_pdf );
+      }
+      
+      
+      if( ! empty( $pdf_paths ) && ( ! empty( $current_pdf ) ) ) {
+         /*
+          * If revision of the post and have published version pdf of original post
+          * than attach current version of revised post and 
+          * published version of original post
+          */
+         $pdf_paths[] = $path.$current_pdf;
+         $attachment = $pdf_paths;
+      } else {
+         // If not revision than only attach the current version of the post
+         if( ! empty( $current_pdf ) ) {
+            $attachment = $path.$current_pdf;           
+         } else {
+            $attachment = "";
+         }
+      }     
+      return $attachment;
+   }
+   
+   /**
+    * Generate headers for Cc and Bcc email recipients
+    * @param array $cc_users
+    * @param array $bcc_users
+    * @return array $header
+    * @since 7.2
+    */
+   private function generate_cc_bcc_headers( $cc_users, $bcc_users ) {
+      $header = array();
+      
+      if( $cc_users ) {
+         foreach( $cc_users as $cc_user ) {
+            $user_email = $this->get_user_email_by_id( $cc_user );
+            $header[] = "Cc: " . $user_email;
+         }
+      }
+      
+      if( $bcc_users ) {
+         foreach( $bcc_users as $bcc_user ) {
+            $user_email = $this->get_user_email_by_id( $bcc_user );
+            $header[] = "Bcc: " . $user_email;
+         }
+      }
+      
+      return $header;
+   }
+   
+   private function get_user_email_by_id( $user_id ) {
+      // to_user could be an id of the user or email address
+		if ( is_numeric( $user_id ) ) {
+         /* External user ID are saved as 5 digit numbers say 12345
+          * preg_match checks if user id is of 5 digit number then get
+          * the details of the external users.
+          */         
+         if ( 1 === preg_match("/^\d{5}$/", $user_id )) {
+           $get_external_user_details = get_option("oasiswf_external_user_settings");
+           $user_detail = $get_external_user_details[ $user_id ];
+           $user_email = $user_detail["email"];
+         } else {  
+            $user = get_userdata( $user_id ) ;
+            $user_email = $user->data->user_email;
+         }
+		} else {
+			$user = get_user_by( 'email' , $user_id );
+         if( $user ):
+            $user_email = $user->data->user_email;
+         endif;
+		}
+      return $user_email;
    }
 
    /**
@@ -668,36 +905,47 @@ class OW_Email
 		if ( $unauthorized_update_email_settings['is_active'] == "yes" )
 		{
 			// Fetch all mail parameters
-         $user_roles       = isset( $unauthorized_update_email_settings[ 'user_roles' ] ) ? $unauthorized_update_email_settings[ 'user_roles' ] : array( 'current_task_assignees' );
-         $additional_users  = isset( $unauthorized_update_email_settings[ 'additional_users' ] ) ? $unauthorized_update_email_settings[ 'additional_users' ] : '';
-         $subject          = isset( $unauthorized_update_email_settings[ 'subject' ] ) ? $unauthorized_update_email_settings[ 'subject' ] : $ow_email_settings_helper->get_task_claimed_subject();
-         $content          = isset( $unauthorized_update_email_settings[ 'content' ] ) ? $unauthorized_update_email_settings[ 'content' ] : $ow_email_settings_helper->get_task_claimed_content();
+         $email_assignees = isset( $unauthorized_update_email_settings['email_assignees'] ) ? $unauthorized_update_email_settings['email_assignees'] : '';
+         $email_cc = isset( $unauthorized_update_email_settings['email_cc'] ) ? $unauthorized_update_email_settings['email_cc'] : '';
+         $email_bcc = isset( $unauthorized_update_email_settings['email_bcc'] ) ? $unauthorized_update_email_settings['email_bcc'] : '';
+         $subject          = isset( $unauthorized_update_email_settings[ 'subject' ] ) ? $unauthorized_update_email_settings[ 'subject' ] : $ow_email_settings_helper->get_unauthorized_update_subject();
+         $content          = isset( $unauthorized_update_email_settings[ 'content' ] ) ? $unauthorized_update_email_settings[ 'content' ] : $ow_email_settings_helper->get_unauthorized_update_content();
          
          $email_recipient_params = array (
             "post_id"            => $post_id,
             "action"             => OW_Email_Settings_Helper::UNAUTHORIZED_UPDATE_EMAIL,
-            "user_roles"         => $user_roles,
-            "additional_users"   => $additional_users
+            "email_assignees"    => $email_assignees,
+            "email_cc"           => $email_cc,
+            "email_bcc"          => $email_bcc
          );
 
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
          
-         foreach ( $user_ids as $user_id ) {
-            $email_params = array (
-               "post_id"            => $post_id,
-               "email_to"           => $user_id,
-               "email_subject"      => $subject,
-               "email_content"      => $content
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
+
+         foreach ( $to_email_recipients as $key=>$user_id ) {
+            $email_params = array(
+               "post_id"       => $post_id,
+               "email_to"      => $user_id,
+               "email_subject" => $subject,
+               "email_content" => $content
             );
 
             // Replace placeholders in mail subject and mail content
-            $mail = $ow_email_settings_helper->get_email_content( $email_params );
+            $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
 		}
 	}
@@ -711,42 +959,53 @@ class OW_Email
 	public function notify_users_on_task_claimed( $post_id ) {
 		// sanitize the input
 		$post_id = intval( sanitize_text_field( $post_id ) );
-      
+     
       $ow_email_settings_helper = new OW_Email_Settings_Helper();
 		$task_claimed_email_settings = get_option( 'oasiswf_task_claim_email_settings' );
 		if ( $task_claimed_email_settings['is_active'] == "yes" )
       {
 			// Fetch all mail parameters
-         $user_roles       = isset( $task_claimed_email_settings[ 'user_roles' ] ) ? $task_claimed_email_settings[ 'user_roles' ] : "";
-         $additional_users  = isset( $task_claimed_email_settings[ 'additional_users' ] ) ? $task_claimed_email_settings[ 'additional_users' ] : '';
+         $email_assignees = isset( $task_claimed_email_settings['email_assignees'] ) ? $task_claimed_email_settings['email_assignees'] : '';
+         $email_cc = isset( $task_claimed_email_settings['email_cc'] ) ? $task_claimed_email_settings['email_cc'] : '';
+         $email_bcc = isset( $task_claimed_email_settings['email_bcc'] ) ? $task_claimed_email_settings['email_bcc'] : '';
          $subject          = isset( $task_claimed_email_settings[ 'subject' ] ) ? $task_claimed_email_settings[ 'subject' ] : $ow_email_settings_helper->get_task_claimed_subject();
          $content          = isset( $task_claimed_email_settings[ 'content' ] ) ? $task_claimed_email_settings[ 'content' ] : $ow_email_settings_helper->get_task_claimed_content();
 
          $email_recipient_params = array (
             "post_id"            => $post_id,
             "action"             => OW_Email_Settings_Helper::TASK_CLAIMED_EMAIL,
-            "user_roles"         => $user_roles,
-            "additional_users"   => $additional_users
+            "email_assignees"    => $email_assignees,
+            "email_cc"           => $email_cc,
+            "email_bcc"          => $email_bcc
          );
 
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
          
-         foreach ( $user_ids as $user_id ) {
-            $email_params = array (
-               "post_id"            => $post_id,
-               "email_to"           => $user_id,
-               "email_subject"      => $subject,
-               "email_content"      => $content
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
+
+         foreach ( $to_email_recipients as $key=>$user_id ) {
+            $email_params = array(
+               "post_id"       => $post_id,
+               "email_to"      => $user_id,
+               "email_subject" => $subject,
+               "email_content" => $content
             );
 
             // Replace placeholders in mail subject and mail content
-            $mail = $ow_email_settings_helper->get_email_content( $email_params );
+            $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
 		}
 	}
@@ -767,36 +1026,47 @@ class OW_Email
       $post_submit_email_settings = get_option( 'oasiswf_post_submit_email_settings' );
       if ( $post_submit_email_settings[ 'is_active' ] == "yes" ) {
          // Fetch all mail parameters
-         $user_roles       = isset( $post_submit_email_settings[ 'user_roles' ] )  ? $post_submit_email_settings[ 'user_roles' ] : "";
-         $additional_users  = isset( $post_submit_email_settings[ 'additional_users' ] ) ? $post_submit_email_settings[ 'additional_users' ] : '';
+         $email_assignees = isset( $post_submit_email_settings['email_assignees'] ) ? $post_submit_email_settings['email_assignees'] : '';
+         $email_cc = isset( $post_submit_email_settings['email_cc'] ) ? $post_submit_email_settings['email_cc'] : '';
+         $email_bcc = isset( $post_submit_email_settings['email_bcc'] ) ? $post_submit_email_settings['email_bcc'] : '';
          $subject          = isset( $post_submit_email_settings[ 'subject' ] ) ? $post_submit_email_settings[ 'subject' ] : $ow_email_settings_helper->get_post_submit_subject();
          $content          = isset( $post_submit_email_settings[ 'content' ] ) ? $post_submit_email_settings[ 'content' ] : $ow_email_settings_helper->get_post_submit_content();
 
          $email_recipient_params = array (
             "post_id"            => $post_id,
             "action"             => OW_Email_Settings_Helper::POST_SUBMITTED_EMAIL,
-            "user_roles"         => $user_roles,
-            "additional_users"   => $additional_users
+            "email_assignees"    => $email_assignees,
+            "email_cc"           => $email_cc,
+            "email_bcc"          => $email_bcc
          );
          
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
          
-         foreach ( $user_ids as $user_id ) {
-            $email_params = array (
-               "post_id"            => $post_id,
-               "email_to"           => $user_id,
-               "email_subject"      => $subject,
-               "email_content"      => $content
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
+
+         foreach ( $to_email_recipients as $key=>$user_id ) {
+            $email_params = array(
+               "post_id"       => $post_id,
+               "email_to"      => $user_id,
+               "email_subject" => $subject,
+               "email_content" => $content
             );
 
             // Replace placeholders in mail subject and mail content
-            $mail = $ow_email_settings_helper->get_email_content( $email_params );
+            $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
       }
    }
@@ -817,36 +1087,47 @@ class OW_Email
    	if ( $workflow_abort_email_settings['is_active'] == 'yes' ) 
       {         
          // Fetch all mail parameters
-         $user_roles       = isset( $workflow_abort_email_settings[ 'user_roles' ] ) ? $workflow_abort_email_settings[ 'user_roles' ] : "";
-         $additional_users  = isset( $workflow_abort_email_settings[ 'additional_users' ] ) ? $workflow_abort_email_settings[ 'additional_users' ] : '';
+         $email_assignees = isset( $workflow_abort_email_settings['email_assignees'] ) ? $workflow_abort_email_settings['email_assignees'] : '';
+         $email_cc = isset( $workflow_abort_email_settings['email_cc'] ) ? $workflow_abort_email_settings['email_cc'] : '';
+         $email_bcc = isset( $workflow_abort_email_settings['email_bcc'] ) ? $workflow_abort_email_settings['email_bcc'] : '';
          $subject          = isset( $workflow_abort_email_settings[ 'subject' ] ) ? $workflow_abort_email_settings[ 'subject' ] : $ow_email_settings_helper->get_workflow_abort_subject();
          $content          = isset( $workflow_abort_email_settings[ 'content' ] ) ? $workflow_abort_email_settings[ 'content' ] : $ow_email_settings_helper->get_workflow_abort_content();
          
          $email_recipient_params = array (
             "post_id"            => $post_id,
             "action"             => OW_Email_Settings_Helper::WORKFLOW_ABORT_EMAIL,
-            "user_roles"         => $user_roles,
-            "additional_users"   => $additional_users
+            "email_assignees"  => $email_assignees,
+            "email_cc"         => $email_cc,
+            "email_bcc"        => $email_bcc
          );
 
-         // Get email recipients
-         $user_ids = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
+         // Get email recipients - all for to, cc and bcc
+         $email_recipients = $ow_email_settings_helper->get_email_recipients( $email_recipient_params );
          
-         foreach ( $user_ids as $user_id ) {
-            $email_params = array (
-               "post_id"            => $post_id,
-               "email_to"           => $user_id,
-               "email_subject"      => $subject,
-               "email_content"      => $content
+         $to_email_recipients = $email_recipients["email_assignees"];
+         $cc_email_recipients = $email_recipients["email_cc"];
+         $bcc_email_recipients = $email_recipients["email_bcc"];
+
+         foreach ( $to_email_recipients as $key=>$user_id ) {
+            $email_params = array(
+               "post_id"       => $post_id,
+               "email_to"      => $user_id,
+               "email_subject" => $subject,
+               "email_content" => $content
             );
 
             // Replace placeholders in mail subject and mail content
-            $mail = $ow_email_settings_helper->get_email_content( $email_params );
+            $mail          = $ow_email_settings_helper->get_email_content( $email_params );
             $final_subject = $mail['subject'];
             $final_message = $mail['message'];
-
-            // now send email
-            $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            
+            if( $key == 0 ) {
+               // send Cc and Bcc recipients with first "To" email recipients
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message, "", $cc_email_recipients, $bcc_email_recipients );
+            } else {
+               // now send email
+               $this->send_mail( $email_params['email_to'], $final_subject, $final_message );
+            }
          }
    	}
    }

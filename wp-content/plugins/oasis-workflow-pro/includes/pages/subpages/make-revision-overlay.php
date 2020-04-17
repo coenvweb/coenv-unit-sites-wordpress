@@ -29,10 +29,10 @@ $doc_revision_make_revision_overlay = get_option( 'oasiswf_revise_post_make_revi
             <input class="button button-primary" id="make_revision_overlay" type="button"
             	value="<?php echo esc_attr( $make_revision_label ); ?>"/>
             <span>&nbsp;</span>	
-            <div class="btn-spacer"></div>
+            <div class="btn-spacer"></div>            
             <input class="button" id="make_revision_overlay_cancel" type="button"
-            	value="<?php echo __( 'Cancel', 'oasisworkflow' ); ?>"
-            	onclick="window.history.back();" />
+               value="<?php echo __( 'Cancel', 'oasisworkflow' ); ?>"
+               onclick="window.history.back();" />
          </div>
       </div>
    </div>

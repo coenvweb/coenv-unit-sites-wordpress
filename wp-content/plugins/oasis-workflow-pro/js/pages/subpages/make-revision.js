@@ -5,45 +5,65 @@ jQuery(document).ready(function () {
       var workflow_process_enabled = owf_make_revision_vars.enableWorkflowProcess;
       var current_post_type = jQuery('#post_type').val();
       var post_status = jQuery('#hidden_post_status').val(); // get post status 
-
-      var get_original = {
-         action: 'is_make_revision_allowed',
-         post_id: jQuery("#hi_post_id").val(),
-         security: jQuery('#owf_make_revision_ajax_nonce').val()
-      };
-      jQuery.post(ajaxurl, get_original, function (response) {
-         jQuery(".loading").hide();
-         // If not allowed post/page type then do not show
-         if (response.success
-                 && jQuery.inArray(current_post_type, allowed_post_types) != -1
-                 && make_revision_enabled == "active"
-                 && workflow_process_enabled == "active")
-         {
-            jQuery("#publishing-action").append("<input type='button' id='oasiswf_make_revision' class='button button-primary button-large'" +
-                    " value='" + owf_make_revision_vars.makeRevisionButton + "' style='float:left;' /><span class='blank-space loading owf-hidden'></span>").css({"width": "100%"});
-
-            jQuery("#publishing-action").css({"margin-top": "10px"});
-
-            // show make revision overlay before making any changes to publish post
-            if (post_status == 'publish') {
-               var alert_make_revision_on_publish_post = {
-                  action: 'alert_make_revision_on_publish_post',
-                  security: jQuery('#owf_make_revision').val()
+      
+      // check if role is applicable to submit to workflow
+      if ( current_post_type !== undefined ) {
+         var check_is_role_applicable = {
+               action: 'check_applicable_roles',            
+               check_for: 'revision',
+               post_id: jQuery("#hi_post_id").val(),
+               post_type: current_post_type,
+               security: jQuery('#owf_make_revision_ajax_nonce').val()
+         };
+         jQuery.post( ajaxurl, check_is_role_applicable, function (response) {
+           if ( ! response.success ) {
+              jQuery('#oasiswf_make_revision').hide();
+              jQuery('.simplemodal-close').click();
+           }  
+           
+            if ( response.success ) {
+              var get_original = {
+                  action: 'is_make_revision_allowed',
+                  post_id: jQuery("#hi_post_id").val(),
+                  security: jQuery('#owf_make_revision_ajax_nonce').val()
                };
-               jQuery.post(ajaxurl, alert_make_revision_on_publish_post, function (response) {
-                  if (response == -1) {
-                     return false; // Invalid nonce
-                  }
-                  if ( ! response.success ) {
-                     return false; // user can skip the workflow so do nothing
-                  }
-                  var content = html_decode(response.data);
-                  jQuery( content ).owfmodal();
-                  jQuery('.simplemodal-close').hide(); // we do not want the user to close this modal window.
+               jQuery.post(ajaxurl, get_original, function (response) {
+                  jQuery(".loading").hide();
+                  // If not allowed post/page type then do not show
+                  if (response.success
+                          && jQuery.inArray(current_post_type, allowed_post_types) != -1
+                          && make_revision_enabled == "active"
+                          && workflow_process_enabled == "active" )
+                  {
+                     jQuery("#publishing-action").append("<input type='button' id='oasiswf_make_revision' class='button button-primary button-large'" +
+                             " value='" + owf_make_revision_vars.makeRevisionButton + "' style='float:left;' /><span class='blank-space loading owf-hidden'></span>").css({"width": "100%"});
+
+                     jQuery("#publishing-action").css({"margin-top": "10px"});
+
+                     // show make revision overlay before making any changes to publish post
+                     if (post_status == 'publish') {
+                        var alert_make_revision_on_publish_post = {
+                           action: 'alert_make_revision_on_publish_post',
+                           post_id: jQuery("#hi_post_id").val(),
+                           security: jQuery('#owf_make_revision').val()
+                        };
+                        jQuery.post(ajaxurl, alert_make_revision_on_publish_post, function (response) {
+                           if (response == -1) {
+                              return false; // Invalid nonce
+                           }
+                           if ( ! response.success ) {
+                              return false; // user can skip the workflow so do nothing
+                           }
+                           var content = html_decode(response.data);
+                           jQuery( content ).owfmodal();
+                           jQuery('.simplemodal-close').hide(); // we do not want the user to close this modal window.
+                        });
+                     }
+                  }         
                });
             }
-         }
-      });
+         });
+      }
    }
 
    load_setting();
@@ -179,6 +199,8 @@ function make_revision_if_not_exist(post_id, security, action) {
          jQuery("#make-revision-submit-div").owfmodal();
          jQuery(".revision-ok").click(function () {
             jQuery(this).hide();
+            jQuery(".revision-no").attr("disabled", true);
+            jQuery(".revision-cancel").attr("disabled", true);
             jQuery(".changed-data-set span").addClass("loading");
             var delete_current_revision = {
                action: 'oasiswf_delete_post',
@@ -197,6 +219,10 @@ function make_revision_if_not_exist(post_id, security, action) {
                owf_redirect_after_revision( objResponse.revision_post_id );
                return false;
             }
+            jQuery(this).hide();
+            jQuery(".revision-ok").attr("disabled", true);
+            jQuery(".revision-cancel").attr("disabled", true);
+            jQuery(".changed-data-set span").addClass("loading");
             window.location.href = ow_admin_url + 'post.php?action=edit&post=' + objResponse.revision_post_id;
          });
 

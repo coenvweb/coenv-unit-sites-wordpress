@@ -2,8 +2,8 @@
 Contributors: nuggetsol
 Tags: workflow, work flow, advanced custom fields, compare, revision compare
 Requires at least: 3.9
-Tested up to: 4.4
-Stable tag: 1.0
+Tested up to: 5.2.3
+Stable tag: 1.5
 
 Compare Advanced Custom Fields between the original and revised article.
 
@@ -20,6 +20,26 @@ Compare Advanced Custom Fields between the original and revised article.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.5 =
+ * Added support to compare ACF Component Fields.
+
+= 1.4 =
+ * Fixed loading of language translation files.
+ * Fixed comparison of choice field type.
+
+= 1.3 =
+* Fixed: Field comparison if field values are added during post revision.
+* Fixed: Field comparison for Flexible and Repeater fields.
+* Added support to compare ACF Group fields.
+
+= 1.2 =
+* Added support to compare ACF Flexible fields.
+* Enhanced the comparison UI to look and behave similar to the OOTB revision compare.
+
+= 1.1 =
+* Added support for comparing ACF jQuery fields like Datepicker, Date/Time picker, Time picker and Color picker.
+* Added support for comparing WYSIWYG editor contents.
 
 = 1.0 =
 * Initial version

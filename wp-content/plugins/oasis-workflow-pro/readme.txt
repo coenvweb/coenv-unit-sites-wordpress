@@ -2,8 +2,8 @@
 Contributors: nuggetsol
 Tags: workflow, work flow, review, assignment, publish, inbox, workflow history, audit
 Requires at least: 4.4
-Tested up to: 4.7.1
-Stable tag: 4.7
+Tested up to: 5.4
+Stable tag: 7.2
 
 Automate your WordPress Editorial Workflow with Oasis Workflow.
 
@@ -81,6 +81,184 @@ For [Frequently Asked Questions](http://oasisworkflow.com/faq) plus documentatio
 
 
 == Changelog ==
+
+= Version 7.2 =
+* Display and link unclaimed task count on dashboard widget.
+* Enhanced Settings page to manage External Users (non-WordPress users) for email notifications.
+* Enhanced email notifications by adding CC and BCC settings.
+* Added capability check to import/export functionality for additional security.
+* Allow meta fields to be edited for Gutenberg Editor.
+* Fixed issue with Jetpack Publicize not getting invoked when task is signed off from the post edit page.
+* Fixed potential issue with update_option not sanitizing certain input values.
+* Fixed errors while copying revision post meta values to original post.
+
+= Version 7.1 =
+* Fixed caching issues.
+
+= Version 7.0 =
+* Allow user to reassign from classic editor publish metabox.
+* Deny creating custom statuses that are interfering with the core ones like draft, etc.
+* Fixed claim when user opens post via assignment email.
+
+= Version 6.9 =
+* Added Inbox row action "Claim and Edit".
+* Allow user to filter Inbox assignments.
+* Hide the no-action activities by default.
+* Enhanced Reports by adding "Task By Due Date" report.
+* Fixed workflow history post filter with hide/show of no-action activities.
+* Fixed displaying of Reassign popup if no user are available.
+* Fixed issue with post parent still pointing to the revision post in case of attachments.
+
+ = Version 6.8 =
+* Made it compatible with Wordpress Version 5.3.
+* Fixed the issue with post status getting updated before the review step was complete.
+
+= Version 6.7 =
+* Allow user to reassign from oasis workflow gutenberg sidebar.
+* Abort post from workflow if user published the post midway of workflow process.
+* Redirect user to either post list page or workflow inbox after workflow submit and sign-off.
+* Added loader for each API request and submission.
+* Fixed undefine URLSearchParams in IE.
+
+= Version 6.6 =
+* Fixed issue with workflow history unclaimed activities transient.
+* Fixed display of "Make Revision" button if there is only one applicable revision workflow.
+
+= Version 6.5 =
+* Allow user to save and continue to work on the workflow editor without closing the page.
+* Allow user to hide and show workflow history unclaimed activities.
+* Display error message on the page if task is already claimed by another user.
+* Fixed localization issues with workflow process button names.
+* Display applicable post types and roles that can submit to workflow as per global settings.
+* Modified fc_action database table definition to be compatible with Maria DB.
+* Fixed "revision already exist" modal to close after action is performed.
+
+= Version 6.4 =
+* Fixed check of role participating in workflow to consider multiple roles.
+* Change hook name that support custom fields on last sign off step.
+* Allow users to sign-off from Inbox page even when they don't have edit_others_posts capability.
+* Fixed "View" link from Inbox page to show up if the user has the right capabilities.
+
+= Version 6.3 =
+* Fixed roles capability check to allow underscore in post type names.
+* Enhanced auto submit to search by taxonomy and terms.
+* Enhanced signoff action to allow user to add custom action names at step info setup.
+* Added functionality to support custom fields on last sign off step.
+* Added workflow settings to display workflow sidebar as default for gutenberg editor.
+* Hide owf_schedulerev from the list of allow post statuses on step transition.
+
+= Version 6.2 =
+* Fixed roles capability check to consider multiple roles.
+* Fixed revision process for custom post type.
+* Added hook to filter users for assignment and reminder emails.
+* Added custom cron intervals for Email digest.
+
+= Version 6.1 =
+* Fixed roles capability check.
+* Fixed Assign to all not working in step assignment with Gutenberg.
+* Display warning message if "Show in Rest" and "custom field support" is not set for Custom Post Type.
+* Added hooks for custom header and values to the workflow history download csv file.
+* Fixed email service invocation to be compatible with Gutenberg Editor.
+
+= Version 6.0 =
+* Made it compatible with Gutenberg Editor.
+* Added hook "oasiswf_emails_placeholders" and "oasiswf_emails_placeholders_handler" for emails settings to support custom placeholders.
+* Fixed index issue for user roles in step_signoff_popup_setup() and check_is_role_applicable()
+
+= Version 5.8 =
+* Fixed revision post to save page builder elements postmeta like unyson sections.
+* Add a custom role called - Post Submitter.
+* Enhanced applicable roles logic, so that only applicable roles and post types participate in workflows.
+
+= Version 5.7 =
+* Enhanced publish step to setup post status after workflow completion.
+* Fixed validation check of ACF for multisite setup.
+* Fixed datatype issue.
+
+= Version 5.6 =
+* Made it compatible with ACF 5.6.10 and above.
+
+= Version 5.5 =
+* Fixed workflow submission with and without ACF plugin enabled.
+* Modified code in Submit and Sign off Workflow to be IE 11 compatible.
+
+= Version 5.4 =
+* Enhanced Import of workflow to display importing details with success and errors.
+* Enhanced workflow abort to allow users to add comments.
+* Added new filter for setting up custom auto submit intervals - "owf_auto_submit_custom_interval".
+* Added hook - owf_publish_past to allow for past publish date.
+* Fixed validation for ACF required fields before submitting to workflow. Made it compatible with v5.x free version.
+* Fixed issue with $_POST unset during revision process.
+* Fixed article order issue with page hierarchy.
+
+= Version 5.3 =
+* Enhanced Export and Import of workflow( now includes teams and/or groups ) and various workflow settings.
+* Added system information tab to the Tools menu. This will allow us to better serve our customers when analyzing an issue.
+* Added "Duplicate Post" along with "Make Revision". "Duplicate Post" will simply duplicate the post.
+* Disable the submit button on submit to workflow and sign-off popup until ajax call is completed.
+* Removed assignment notification after claim process.
+* FIXED: Fixed warnings when installed with PHP 7.x.
+* FIXED: Auto submit to honor workflow applicable post types.
+* FIXED: Issue with oasiswf_custom_placeholders_handler to check for whole word instead of partial text.
+* FIXED: Removed assignment notification in case of self assignment.
+* FIXED: Issue with private property on OW_Admin_Post causing a PHP fatal error.
+* FIXED: Issue with translation when a post link is included in the assignment email.
+
+= Version 5.2 =
+* FIXED: Issue with WordPress revisions not getting created if content is not changed.
+* FIXED: Issue with publish date/time to honor the site date/time.
+* FIXED: Issue with Make Revision Overlay not showing up due to the owf_skip_workflow filter.
+* Added a check to validate existence of "free" Oasis Workflow plugin.
+
+= Version 5.1 =
+* Added new filter - owf_skip_workflow, to define custom criteria for skipping the workflow on a post by post basis.
+* Changed the "Assignment Emails" to be off by default. This is particularly useful, when you are setting up the plugin for the first time and wouldn't like emails to go out to real users.
+* Change the "Revision Compare" tool to be more like the out of the box compare.
+* Added a new link called "Update Published Post", to update published post with the "copy-of", when the revision workflow is aborted.
+* FIXED: default functions for email subject.
+* FIXED: Display row action "Make Revision" link as issue with Duplicate Post.
+* FIXED: In some cases, the published email notification was going to incorrect user.
+* FIXED: Compatibility issues with popup plugins and Make Revision functionality.
+* FIXED: Issue with revision copy - non-html content inside <> brackets was being stripped.
+* FIXED: ACF Pro Validation with Workflow support.
+
+= Version 5.0 =
+* Sort assignee list by name during submit to workflow, sign-off and reassign.
+* Added a new filter called "owf_unset_postmeta", to unset any post meta attributes during the revision process.
+* Modified Workflow Dashboard/Widget CSS to have a better UX.
+* Added "Teams" to reporting, so that user can know which team the post is assigned to.
+* Refactored "assignee" list code to be simple and efficient.
+* Added "%post_submitter%" placeholder to assignment and reminder emails.
+* FIXED: Viewing "404 page not found" issue with scheduled revision.
+* FIXED: redirect of page conflicting with WP Security Audit Log plugin.
+* FIXED: issue with revision post permalink if prefix and suffix are empty.
+* FIXED: {post_title} link for Revised Post Publish Notification email.
+* FIXED: Sign off and Submit to Workflow popup to show only the required fields.
+* FIXED: Delete postmeta fields when the revision of the post is deleted.
+* FIXED: Warnings for workflow settings while creating multisite.
+
+= Version 4.9 =
+* Auto Submit Enhancements - Read the updated documentation at - https://www.oasisworkflow.com/documentation/working-with-workflows/auto-submit-to-workflow
+* Added filter for redirecting a user to a custom url after submitting post to workflow.
+* Added filter to remove sign-off date from assignment/reminder emails.
+* Fixed issue with PSN plugin to trigger email during custom post status transition for revision of post.
+* Fixed issue with permalink breaking during post status update.
+* Added security fixes by sanitizing user input.
+* Removed "sslverify => false" on wp_remote_post calls to fix security issues.
+* Fixed the CSS to display submit to workflow, sign-off, reassign popups without needing to scroll.
+* Fixed display of custom status on the post edit page.
+* Fixed revision check to ignore posts sitting in trash.
+* Fixed issue with "Reassign" when using with Teams add-on.
+
+= Version 4.8 =
+* Enhanced Reports by adding more sorting options on the "Current Assignments" and "Workflow Submissions" report.
+* Improved performance of the reports by optimizing the queries and refactoring the display logic.
+* Improved performance of the history page by optimizing the queries.
+* Cached query results to avoid duplicate queries for a given request.
+* Fixed assignee list logic for reassign feature.
+* Enhanced Post revision history by adding "copy-of" revisions to the published post. This will further help in audit process. This is an optional feature and can be turned on from "Document Revision" Settings page.
+* Allow users to update the publish date(change a deadline) during the workflow. Users will "publish_posts" and/or "publish_pages" can change the deadline during workflow.
+* Fixed an issue with reminder email - delete reminder email once the user has completed his/her review assignment.
 
 = Version 4.7 =
 * Removed wp_email related filters, since they were overriding all the emails and not just workflow related emails.

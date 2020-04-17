@@ -120,24 +120,11 @@ ADD_BLANK_OPTION;
             <span id="step-loading-span"></span>
             <br class="clear">
          </div>
-      <?php } ?>
-
-      <div id="one-actors-div" class="select-info">
-         <label><?php echo __( "Assign actor : ", "oasisworkflow" ); ?></label>
-         <select id="actor-one-select" name="actor-one-select" style="width:150px;" real="assign-loading-span"></select>
-         <span class="assign-loading-span">&nbsp;</span>
-         <br class="clear">
-      </div>
-
-      <?php
-      // if team add on is active then show list else show default assignee list
-      $args = array( "teams" => "false" );
-      do_action_ref_array( 'owf_assignee_list', array( &$args ) );
-      // TODO : for some reason did_action is returning a count of 1 even if the action is not fired. Need to dig deeper to see why so?
-      // expecting the did_action to return 0 if the action is not fired.
-      if( $args['teams'] === "false" ) { // if teams add on is false OR it's not enabled
+      <?php } 
+      // if team add on is active then show teams list 
+      do_action( 'owf_assignee_list' );      
          ?>
-         <div id="multiple-actors-div" class="select-info" style="height:140px;">
+         <div id="multiple-actors-div" class="select-info owf-hidden" style="height:140px;">
             <label><?php echo $assign_actors_label . " :"; ?></label>
             <div class="select-actors-div">
                <div class="select-actors-list">
@@ -158,9 +145,7 @@ ADD_BLANK_OPTION;
             </div>
             <br class="clear">
          </div>
-         <?php
-         }
-      ?>
+      
       <?php if( $default_due_days != '' || $reminder_days != '' || $reminder_days_after != '' ): ?>
          <div class="owf-text-info left full-width">
             <div class="left">

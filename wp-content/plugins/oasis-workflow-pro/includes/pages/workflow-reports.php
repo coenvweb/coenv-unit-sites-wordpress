@@ -18,7 +18,8 @@ $selected_tab = ( isset ( $_GET['tab'] ) && sanitize_text_field( $_GET["tab"] ))
 <div class="wrap">
 	<?php
        $tabs = array( 'userAssignments' => __('Current Assignments', "oasisworkflow"),
-       					 'workflowSubmissions' => __('Workflow Submissions', "oasisworkflow") );
+       					 'workflowSubmissions' => __('Workflow Submissions', "oasisworkflow"),
+                      'taskByDueDate' => __( 'Assignments By Due Date', "oasisworkflow" ) );
        echo '<div id="icon-themes" class="icon32"><br></div>';
        echo '<h2 class="nav-tab-wrapper">';
        foreach( $tabs as $tab => $name ){
@@ -33,6 +34,9 @@ $selected_tab = ( isset ( $_GET['tab'] ) && sanitize_text_field( $_GET["tab"] ))
    		   break;
    		case 'workflowSubmissions' :
    		   include( OASISWF_PATH . "includes/pages/workflow-submission-report.php" ) ;
+   		   break;
+         case 'taskByDueDate' :
+   		   include( OASISWF_PATH . "includes/pages/workflow-by-due-date-report.php" ) ;
    		   break;
    	}
 	?>

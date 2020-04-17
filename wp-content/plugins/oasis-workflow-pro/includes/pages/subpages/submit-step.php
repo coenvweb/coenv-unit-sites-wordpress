@@ -36,6 +36,9 @@ if( $action_history_id ){
 	$process = $ow_workflow_service->get_gpid_dbid($current_step->workflow_id, $current_action->step_id, "process" );
 	$step_info = json_decode( $current_step->step_info );
    $process_type = $step_info->process;
+   $last_step_publish_status = isset( $step_info->last_step_post_status ) ? $step_info->last_step_post_status : "";
+   $signoff_action_success = isset( $step_info->signoff_success_action ) && ( ! empty( $step_info->signoff_success_action ) )  ? $step_info->signoff_success_action : ( $process == "review" ? __("Approved", "oasisworkflow") :  __("Complete", "oasisworkflow") );
+   $signoff_action_failure = isset( $step_info->signoff_failure_action ) && ( ! empty( $step_info->signoff_failure_action ) ) ? $step_info->signoff_failure_action : ( $process == "review" ? __("Reject", "oasisworkflow") :  __("Unable to Complete", "oasisworkflow") );
 	$post_id = $current_action->post_id;
 }
 $default_due_days = get_option('oasiswf_default_due_days') ;
@@ -58,8 +61,8 @@ $priority_label = ! empty( $workflow_terminology_options['taskPriorityText'] ) ?
 			<label><?php echo __("Action : ", "oasisworkflow") ;?></label>
 			<select id="decision-select" style="width:200px;">
 				<option></option>
-				<option value="complete"><?php echo ( $process == "review" ) ? __("Approved", "oasisworkflow") :  __("Complete", "oasisworkflow") ;?></option>
-				<option value="unable"><?php echo ( $process == "review" ) ? __("Reject", "oasisworkflow") :  __("Unable to Complete", "oasisworkflow") ;?></option>
+				<option value="complete"><?php echo $signoff_action_success;?></option>
+				<option value="unable"><?php echo $signoff_action_failure;?></option>
 			</select>
 			<br class="clear">
 		</div>
@@ -94,13 +97,11 @@ $priority_label = ! empty( $workflow_terminology_options['taskPriorityText'] ) ?
          if( get_option( 'oasiswf_priority_setting' ) != 'enable_priority' && get_post_meta( $post_id, "_oasis_task_priority", true ) != '' ) : ?>
          <input type="hidden" id="priority-select" name="priority-select" value="<?php esc_attr_e( get_post_meta( $post_id, "_oasis_task_priority", true ) ); ?>" />
          <?php endif; ?>
-			<div id="one-actors-div" class="select-info">
-				<label><?php echo __("Assign actor : ", "oasisworkflow") ;?></label>
-				<select id="actor-one-select" name="actor-one-select" style="width:150px;" real="assign-loading-span"></select>
-				<span class="assign-loading-span">&nbsp;</span>
-				<br class="clear">
-			</div>
-			<div id="multi-actors-div" class="select-info" style="height:120px;">
+         <?php
+         // If team addon is active display team list
+          do_action( 'owf_assignee_list' );    
+         ?>
+			<div id="multiple-actors-div" class="select-info owf-hidden" style="height:120px;">
 				<label><?php echo $assign_actors_label . " :" ;?></label>
 				<div class="select-actors-div">
 					<div class="select-actors-list" >
@@ -140,9 +141,16 @@ $priority_label = ! empty( $workflow_terminology_options['taskPriorityText'] ) ?
 	<div id="ow-step-custom-data" class="owf-hidden owf-text-info left full-width"></div>
 
 	<div id="immediately-div">
-		<?php if($process_type == "publish"):?>
+		<?php if($process_type == "publish"):
+         // If last step post status empty or not equal to publish, future or private than hide publish section
+         $hide_publish_section = "owf-hidden";
+         $publish_statuses = array( "publish", "future", "private" );
+         if ( in_array( $last_step_publish_status, $publish_statuses ) || $last_step_publish_status == ""  ) :
+            $hide_publish_section = "";
+         endif;
+         ?>
 
-			<div class="owf-text-info left full-width">
+			<div class="owf-text-info left full-width <?php echo $hide_publish_section; ?>">
 				<div class="left">
 					<label><?php echo __("Publish", "oasisworkflow");?> : </label>
 				</div>
@@ -155,17 +163,26 @@ $priority_label = ! empty( $workflow_terminology_options['taskPriorityText'] ) ?
                   $is_immediately = true;
                } else {
                   $is_immediately = false;
-               }
+               }  
 					?>
-					<label for="immediately-chk">
+               <label for="immediately-chk" >
 						<input type="checkbox" id="immediately-chk" <?php echo $is_immediately ? 'checked="checked"' : ''; ?> />&nbsp;&nbsp;<?php echo __("Immediately", "oasisworkflow") ;?>
-					</label>&nbsp;&nbsp;
+					</label>
 						<span id="immediately-span" style="display:none;">
 							<?php $ow_process_flow->get_immediately_content( $post_id );?>
 						</span>
 					<br class="clear">
 				</div>
 			</div>
+      <form id="custom-fields">
+       <?php
+       $html = "";
+       if( has_filter( 'owf_display_publish_custom_fields' ) ) {
+         $html = apply_filters( 'owf_display_publish_custom_fields', $task_user, $process_type, $html ); 
+       }
+       echo $html;
+       ?>
+      </form>
 		<?php endif;?>
 	</div>
 
@@ -198,6 +215,8 @@ $priority_label = ! empty( $workflow_terminology_options['taskPriorityText'] ) ?
 	<input type="hidden" id="hi_parrent_page" value="<?php echo esc_attr( $parent_page );?>" />
 	<input type="hidden" id="hi_current_process" value="<?php echo esc_attr( $process );?>" />
 	<input type="hidden" id="hi_task_user" value="<?php echo esc_attr( $task_user );?>" />
+   <input type="hidden" id="hi_is_team" value="" />
 	<input type="hidden" id="hi_custom_condition" value="" />
 	<input type="hidden" name="owf_signoff_ajax_nonce" id="owf_signoff_ajax_nonce" value="<?php echo wp_create_nonce( 'owf_signoff_ajax_nonce' ); ?>" />
 </div>
+<div id="reassign-div"></div>

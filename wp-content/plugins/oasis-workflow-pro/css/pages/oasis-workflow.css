@@ -311,7 +311,7 @@ path {
 }
 .labelcomponent{
    border:1px solid #346789;
-   widht:20px;
+   width:20px;
    height:15px;
    padding:1px;
    -moz-border-radius:1em;
@@ -327,7 +327,6 @@ path {
 .workflow-save-button, .workflow-copy-button {
    float:right;
    margin:0 15px 5px 10px !important;
-   width:50px;
 }
 
 .workflow-save-new-version-button {
@@ -361,13 +360,17 @@ path {
 .first_step{
    margin-top:-10px;
 }
-.first_step span{
+.first_step span, 
+ span.signoff-action {
    float:left;
    margin-top:4px;
 }
 .first_step span input{
    cursor:pointer;
    margin:1px;
+}
+span.signoff-action label{
+   width: 120px !important;
 }
 
 #workflow-inbox .loading{
@@ -621,25 +624,32 @@ a.owf_about_link:hover {
    margin:5px 25px 0 0;
 }
 
-.reassign-set{
+.reassign-set,
+.abort-set{
    margin:30px 0 20px 0;
    width:100%;
-
 }
-.reassign-set span{margin-top:5px;}
 
-.reassign-set span{
+.reassign-set span,
+.abort-set span {
+   margin-top:5px;
+}
+
+.reassign-set span,
+.abort-set span {
    float:right;
    margin-right:5px;
    width:15px;
 }
 
-#reassignCancel{
+#reassignCancel, 
+#abortCancel {
    margin:5px 10px 0 0px;
    float:right;
    color:blue;
 }
-#reassignSave{
+#reassignSave,
+#abortSave {
    float:right;
    width:70px;
 }
@@ -808,8 +818,8 @@ a.owf_about_link:hover {
    display:none;
 }
 
-.abort-workflow-section {
-   margin-top: 10px;
+.abort-workflow-section, .update-published-article {
+   margin-top: 15px;
    width: 100%;
 }
 
@@ -1376,14 +1386,16 @@ p.ow-sign-off-checklist {
    margin-top: -10px;
 }
 
-.first-step-fieldset {
+.first-step-fieldset,
+.last-step-fieldset {
    padding: 10px;
    font: 100%;
    border: 1px solid;
    border-radius: 10px;
 }
 
-.first-step-fieldset legend {
+.first-step-fieldset legend,
+.last-step-fieldset legend {
    font-weight:bold;
    margin-right:5px;
    text-align:left;
@@ -1479,3 +1491,138 @@ add-on
 .claim-error p {
    color:red;
 }
+
+ul.auto-submit-label {
+   display: inline-flex;
+   background-color: white;
+   width: 99.7%;
+   border: 1px solid #dddddd;  
+   margin-top: 20px;
+}
+ul.external-user-label {
+   display: inline-flex;
+   background-color: white;
+   width: 100%;
+   border: 1px solid #dddddd;  
+   margin-top: 20px;
+   margin-bottom: 0;
+}
+ul.auto-submit-label li,
+ul.external-user-label li {
+   font-weight: 600;
+   padding: 10px 50px 0 0;
+   width: 33%;
+   text-align: center;
+}
+ul.auto-submit-label li:first-child {
+   padding: 10px 45px 0 16px;
+}
+ul.external-user-label li:first-child {
+   padding: 10px 0px 0 16px;
+}
+ul.auto-submit-label li:last-child {
+   padding: 10px 50px 0 150px;
+}
+ul.external-user-label li:last-child {
+   width: 0px;
+}
+.auto-submit-workflow input.add-workflow,
+.external-user-block input.add-external-users {
+   display:block;
+   margin-top: 5px;
+}
+.external-user-block{
+   width: 100%;
+}
+.auto-submit-workflow,
+.external-user-block {
+   background-color: white;
+   border: 1px solid #dddddd;
+   
+}
+.auto-submit-workflow div.owf-workflows,
+.external-user-block div.owf-external-users {   
+   padding: 12px 12px 0 12px;
+}
+.auto-submit-workflow img,
+.external-user-block img {
+   height: 18px;
+}
+.auto-submit-workflow textarea {
+   height: 30px;
+   margin-left: 12px;
+   vertical-align: middle;
+}
+.external-user-block input.eu-name {
+   width: 30%;
+}
+.remove-workflow {
+   background-color: #f2dede;
+}
+.owf-as-button,
+.owf-eu-button {
+   margin-top: 12px;
+   background: #f5f5f5;
+   border-top: 1px solid #dddddd;
+   padding: 10px 0 10px 12px;
+}
+.icon-remove {
+   position: relative;
+   cursor: pointer;
+   margin-left: 12px;
+   padding: 8px 2px 4px 0;
+   vertical-align: middle;   
+}
+div.no-applicable-workflow,
+div.no-external-user {
+   padding: 15px;
+}
+#ow-system-info {
+    background: none;
+    font-family: Menlo, Monaco, monospace;
+    display: block;
+    overflow: auto;
+    white-space: pre;
+    width: 800px;
+    height: 400px;
+}
+.ow-tools #settingstuff {
+    width: 80%;
+}
+#abort-workflow-settings {
+   height: 251px;
+}
+.abort-set span.loading{
+    display:none;
+}
+.ow-fieldset {
+   width: 98%;
+}
+.workflow-save-close-button {
+   float: right;
+}
+.owf-wrapper {
+   text-align: right;
+}
+.show-unclaim-button,
+.show-claim-button {
+   display: inline-block;
+}
+.hide-unclaim-button,
+.hide-claim-button {
+   display: none !important;
+}
+
+@media screen and (max-width: 782px) {
+   #workflow-inbox tbody .comments,
+   .workflow-history tbody .comments{
+      text-align: left !important;
+   }
+   .post-priority {
+      width: 25%;
+   }
+   .history-comment {
+      display:none !important;
+   }
+}
+

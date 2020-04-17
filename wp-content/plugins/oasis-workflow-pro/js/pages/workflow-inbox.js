@@ -347,14 +347,13 @@ jQuery(document).ready(function () {
          jQuery(inbox_obj).parent().children(".loading").hide();
          jQuery("#new-step-submit-div").owfmodal({
             onShow: function (dlg) {
-               jQuery("#simplemodal-container").css("max-height", "80%");
+               jQuery("#simplemodal-container").css({
+                  "max-height": "90%",
+                  "top":"60px"
+               });
                jQuery(dlg.wrap).css('overflow', 'auto'); // or try ;
-               jQuery.modal.update();
-               if (owf_workflow_inbox_vars.workflowTeamsAvailable == 'yes') { // essentially no need to show the user selection, since its submitted to a team
-                  jQuery("#multi-actors-div").hide();
-               } else {
-                  jQuery("#multi-actors-div").show();
-               }
+               // commented out, so that the above CSS can take effect
+               //jQuery.modal.update();               
             }
          });
          jQuery("#due-date").datepicker({
@@ -374,16 +373,33 @@ jQuery(document).ready(function () {
    jQuery(document).on("click", ".reassign", function (e) {
       e.preventDefault();
       inbox_obj = this;
-      task_user = "";
+      var task_user = "";
       if (jQuery('#inbox_filter').length > 0)
       {
          task_user = jQuery('#inbox_filter').val();
       }
+      
+      // if we are on post edit page
+      if ( task_user === "") {
+         task_user = jQuery("#hi_task_user").val();
+      }
+            
+      var wfid = jQuery(this).attr("wfid");
+      var security = jQuery('#owf_inbox_ajax_nonce').val();
+      var screen = "inbox";
+      // if we are on post edit page reset following parameters
+      if ( typeof wfid === "undefined") {
+         wfid = jQuery("#hi_oasiswf_id").val();
+         screen = "edit";
+         security = jQuery('#owf_signoff_ajax_nonce').val();
+      }
+      
       data = {
          action: 'get_reassign_page',
-         oasiswf: jQuery(this).attr("wfid"),
+         oasiswf: wfid,
+         screen : screen,
          task_user: task_user,
-         security: jQuery('#owf_inbox_ajax_nonce').val()
+         security: security
       };
 
       jQuery(this).parent().children(".loading").show();
@@ -394,24 +410,37 @@ jQuery(document).ready(function () {
             return false;
          }
          if (response.success) {
-            var content = html_decode(response.data);
-            jQuery("#reassign-div").html(content);
-            setTimeout("call_reassign_modal()", 100);
+            if( response.data.reassign_users == 0 ) {
+               jQuery(inbox_obj).parent().children(".loading").hide();
+               alert('No users found to reassign');
+               return false;
+            } else {
+               var content = html_decode(response.data.reassign_users);
+               jQuery("#reassign-div").html(content);
+               setTimeout("call_reassign_modal()", 100);
+            }
          }
       });
 
       call_reassign_modal = function () {
          jQuery(inbox_obj).parent().children(".loading").hide();
          jQuery("#reassgn-setting").owfmodal();
+         jQuery("#simplemodal-container").css({ "top":"60px" });
       }
    });
 
-   jQuery(document).on("click", ".claim", function (e) {
+   jQuery(document).on("click", ".claim, .claim-and-edit", function (e) {
       e.preventDefault();
       var claim = jQuery(this);
+      // get required data to redirect user to post edit page after claim
+      var elementId = jQuery(this).attr("id");
+      var userId = jQuery(this).attr("userid");
+      
       data = {
          action: 'claim_process',
          security: jQuery('#owf_claim_process_ajax_nonce').val(),
+         buttonid: elementId,
+         userid: userId,
          actionid: jQuery(this).attr("actionid")
       };
 
@@ -425,11 +454,25 @@ jQuery(document).ready(function () {
             claim.parent().children(".loading").hide();
             var content =  response.data.errorMessage ;
             jQuery( content ).owfmodal();
+            jQuery('.simplemodal-close').hide(); // we do not want the user to close this modal window.
          }
-         if (response.success)
-            location.reload();
+         if (response.success) {
+            if( elementId === "claim-and-edit" ) {
+               window.location.href = response.data.url;
+            } else {
+               // once claimed, move back to the mine inbox-filter page
+               window.location.href = window.location.href.replace("action=inbox-unclaimed", "action=inbox-mine");
+               // location.reload();
+            }
+         }
+            
       });
    });
+   
+   jQuery( document ).on( "click", ".claim-close", function () {
+      jQuery.modal.close();
+      location.reload();
+   } );
 
    jQuery(".post-com-count").click(function (e) {
       e.preventDefault();
@@ -440,6 +483,7 @@ jQuery(document).ready(function () {
       data = {
          action: 'get_step_comment_page',
          actionid: jQuery(this).attr("actionid"),
+         actionstatus: jQuery( this ).attr( "actionstatus" ),
          comment: jQuery(this).attr('data-comment'),
          page_action: page_chk,
          post_id: jQuery(this).attr('post_id'),
@@ -465,36 +509,61 @@ jQuery(document).ready(function () {
          jQuery(inbox_obj).parent().children(".loading").hide();
          //jQuery("#stepcomment-setting").owfmodal();
          jQuery("#ow-editorial-readonly-comment-popup").owfmodal();
-         //jQuery("#simplemodal-container").css("max-height", "90%");
       }
    });
 
 
-   jQuery(document).on("click", ".abort_workflow", function (e) {
+   jQuery( document ).on( "click", ".abort_workflow", function ( e ) {
       e.preventDefault();
-      if (!confirm(owf_workflow_inbox_vars.abortWorkflowConfirm))
-         return;
       var inbox_obj = this;
-      data = {
-         action: 'workflow_abort',
-         history_id: jQuery(this).attr("wfid"),
-         security: jQuery('#owf_inbox_ajax_nonce').val()
-      };
-      jQuery(this).hide();
-      jQuery(this).parent().children(".loading").show();
-      jQuery.post(ajaxurl, data, function (response) {
-         if ( response == -1 ) { // incorrect nonce
-            jQuery(inbox_obj).parent().children(".loading").hide(); // Remove Loader
-            jQuery(inbox_obj).show(); // Show Label
-            return false;
+      
+      var history_id = jQuery( this ).attr( "wfid" );
+      
+       modal_data = {
+         action: 'workflow_abort_comments',
+         history_id: history_id,
+         security: jQuery('#owf_inbox_ajax_nonce').val(),
+      }
+      
+      jQuery.post(ajaxurl, modal_data, function ( response ) {
+         if ( response == -1 ) {
+            return false; // Invalid nonce
          }
-
+         
          if ( response.success ) {
-            jQuery(inbox_obj).parent().children(".loading").hide();
-            location.reload();
+            var content = html_decode(response.data);
+            jQuery( content ).owfmodal();
+            jQuery("#simplemodal-container").css({ "top":"130px" });
+            
+            jQuery("#abortSave").click(function () {
+               var comments = jQuery('#abortComments').val();
+               data = {
+                  action: 'workflow_abort' ,
+                  history_id: history_id,
+                  comment: comments,
+                  security: jQuery('#owf_inbox_ajax_nonce').val()
+               };
+               jQuery( this ).hide();
+               jQuery( this ).parent().children( ".loading" ).show();
+               jQuery.post( ajaxurl, data, function ( response ) {
+                  if ( response == -1 ) { // nonce cannot be validated
+                     jQuery( inbox_obj ).parent().children( ".loading" ).hide(); // Remove Loader
+                     jQuery( inbox_obj ).show(); // Show Label
+                     return false;
+                  }
+                  if ( response.success ) {
+                     jQuery( inbox_obj ).parent().children( ".loading" ).hide();
+                     location.reload();
+                  }
+               } );
+            });
          }
       });
-   });
+   } );
+   
+   jQuery( document ).on( "click", "#abortCancel", function () {
+      jQuery.modal.close();
+   } );
 
    jQuery(document).on('click', '.compare-post-revision', function (e) {
       e.preventDefault();

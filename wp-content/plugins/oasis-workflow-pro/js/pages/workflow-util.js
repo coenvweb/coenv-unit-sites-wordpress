@@ -101,7 +101,7 @@ var jQueryACFValidation = jQuery.noConflict();
 (function(jQuery){
 	owThirdPartyValidation = {
 		run : function (fnParam) {
-			if ( typeof acf !== 'undefined' ) {
+			if ( owf_workflow_util_vars.isACFEnabled === "yes" ) {
 				workflowSubmitWithACF(fnParam);
 			}
 			else {

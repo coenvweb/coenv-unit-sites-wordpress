@@ -9,7 +9,9 @@
  */
  
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /*
  * OW_License_Service Class
@@ -70,7 +72,7 @@ class OW_License_Service {
 		);
 	
 		// Call the custom API.
-		$response = wp_remote_post( OASISWF_STORE_URL, array( 'timeout' => 15, 'body' => $api_params, 'sslverify' => false ) );
+		$response = wp_remote_post( OASISWF_STORE_URL, array( 'timeout' => 15, 'body' => $api_params ) );
       
 		// make sure the response came back okay
 		if ( is_wp_error( $response ) ) {
@@ -102,8 +104,14 @@ class OW_License_Service {
 	
 		// run a quick security check
 		
-		if ( ! check_admin_referer( 'owf_license_nonce', 'owf_license_nonce' ) )
+		if ( ! check_admin_referer( 'owf_license_nonce', 'owf_license_nonce' ) ) {
 			return; // get out if we didn't click the Deactivate button
+      }
+      
+      // sanitize the input
+		$license_key = sanitize_text_field( $license_key );
+		$license_status_option_name = sanitize_text_field( $license_status_option_name );
+		$product_name = sanitize_text_field( $product_name );
 	
 		// data to send in our API request
 		$api_params = array(
@@ -114,7 +122,7 @@ class OW_License_Service {
 		);
 	
 		// Call the custom API.
-		$response = wp_remote_post( OASISWF_STORE_URL, array( 'timeout' => 15, 'body' => $api_params, 'sslverify' => false ) );
+		$response = wp_remote_post( OASISWF_STORE_URL, array( 'timeout' => 15, 'body' => $api_params ) );
 	
 		// make sure the response came back okay
 		if ( is_wp_error( $response ) ) {

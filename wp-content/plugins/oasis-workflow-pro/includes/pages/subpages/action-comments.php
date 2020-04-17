@@ -62,7 +62,12 @@ if( isset( $_POST['comment'] ) && sanitize_text_field( $_POST['comment'] ) == 'i
 }
 
 if( isset( $_POST["page_action"] ) && sanitize_text_field( $_POST["page_action"] ) == "history" ) {
-   $action = $ow_history_service->get_action_history_by_from_id( intval( $_POST["actionid"] ) );
+   if ( $_POST["actionstatus"] == "aborted" || $_POST["actionstatus"] == "abort_no_action" ) {
+      $action = $ow_history_service->get_action_history_by_id( $_POST["actionid"] );
+   } else {
+      $action = $ow_history_service->get_action_history_by_from_id( $_POST["actionid"] );
+   }
+   
    $post_id = $action->post_id;
    if( $action ) {
       $comments[] = json_decode( $action->comment );
@@ -70,9 +75,15 @@ if( isset( $_POST["page_action"] ) && sanitize_text_field( $_POST["page_action"]
 }
 
 if( isset( $_POST["page_action"] ) && sanitize_text_field( $_POST["page_action"] ) == "review" ) {
-   $action = $ow_history_service->get_review_action_by_id( intval( $_POST["actionid"] ) );
-   $action_history = $ow_history_service->get_action_history_by_id( $action->action_history_id );
-   $post_id = $action_history->post_id;
+   if ( $_POST["actionstatus"] == "aborted" ) {
+      $action = $ow_history_service->get_action_history_by_id( $_POST["actionid"] );
+      $post_id = $action->post_id;
+   } else {
+      $action = $ow_history_service->get_review_action_by_id( $_POST["actionid"] );
+      $action_history = $ow_history_service->get_action_history_by_id( $action->action_history_id );
+      $post_id = $action_history->post_id;
+   }
+   
    if( $action ) {
       $comments[] = json_decode( $action->comments );
    }

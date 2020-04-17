@@ -32,9 +32,6 @@ $title = "";
 $workflow_description = "";
 $start_date = "";
 $end_date = "";
-$auto_submit = 0;
-$auto_submit_keywords = "";
-$auto_submit_teams = "";
 $wf_for_new_posts = 1;
 $wf_for_revised_posts = 1;
 $wf_for_roles = array();
@@ -46,18 +43,6 @@ if( $workflow ) {
 	$workflow_description = $workflow->description;
 	$start_date = OW_Utility::instance()->format_date_for_display_and_edit( $workflow->start_date );
 	$end_date = OW_Utility::instance()->format_date_for_display_and_edit( $workflow->end_date );
-	$auto_submit = $workflow->is_auto_submit;
-	$auto_submit_info = @unserialize( $workflow->auto_submit_info );
-	if (!empty($auto_submit_info) && array_key_exists('keywords', $auto_submit_info)) {
-		$keyword_array = $auto_submit_info['keywords'];
-	}
-	if (!empty($keyword_array) && $keyword_array !== false)
-	{
-		$auto_submit_keywords = implode(',', $keyword_array);
-	}
-	if (!empty($auto_submit_info) && array_key_exists('teams', $auto_submit_info)) {
-		$selected_teams_array = $auto_submit_info['teams'];
-	}
 	$additional_info = @unserialize( $workflow->wf_additional_info );
 	if ( is_array( $additional_info )) {
 		$wf_for_new_posts = $additional_info['wf_for_new_posts'];
@@ -89,7 +74,7 @@ echo "<script type='text/javascript'>
 	         <?php add_thickbox(); ?>
 				<?php echo __( 'If you want to know more about creating/modifying workflows ', "oasisworkflow") ;?>
 	            <!-- TODO: if this looks great then lets delete the code from js part .help-popup -->
-				<a href="http://www.youtube.com/embed/JbJJQMMnf5U?TB_iframe=true&width=800&height=600" class="thickbox">
+				<a href="https://www.youtube.com/embed/JbJJQMMnf5U?TB_iframe=true&width=800&height=600" class="thickbox">
 					<?php echo __( 'watch this video.', "oasisworkflow") ;?>
 				</a>
 				<?php echo __( ' You can also look up for more tutorial videos about Oasis Workflow on ', "oasisworkflow") ;?>
@@ -119,9 +104,11 @@ echo "<script type='text/javascript'>
 								if( $wf_editable ){
 									echo '<ul id="wfsortable">';
 									$fw_process = get_site_option('oasiswf_process'); // list all the processes/steps on the side
-									foreach ($fw_process as $k => $v) {
+                           // Get process localized names
+                           $processes = OW_Utility::instance()->get_process_names();
+									foreach ( $fw_process as $k => $v ) {
 										echo "<li class='widget'>
-												<div class='widget-wf-process'>" . __($k, "oasisworkflow") . "</div>
+												<div class='widget-wf-process' data-process='".$k."'>" . $processes[ $k ] . "</div>
 											 </li>";
 									}
 									echo '</ul>';
@@ -243,63 +230,6 @@ echo "<script type='text/javascript'>
 					<div class="postbox" >
 						<div class="handlediv" title="Click to toggle"><br></div>
 						<h3 style="padding:7px;">
-							<span class="workflow-lbl"><?php echo  __("Auto Submit Info", "oasisworkflow");?></span>
-                     <a href="#"
-                     	title="<?php echo __('Enable auto submit and provide keywords for this workflow to be able to participate in auto submit process.',
-                     			"oasisworkflow") ;?>" class="tooltip">
-                     <span title="">
-                     <img src="<?php echo OASISWF_URL . '/img/help.png'; ?>" class="help-icon"/></span>
-                  </a>
-						</h3>
-
-						<div class="move-div workflow-define-div">
-							<table>
-								<tr>
-									<td colspan="2">
-									   <?php
-   				                  $str="" ;
-   				                  if( $auto_submit == 1 ) {
-   				                  	$str = "checked = true" ;
-   				                  }
-   				               ?>
-   									<label>
-   										<span class="space bold-label">
-   											<input type="checkbox" name="auto-submit"	value="1" <?php echo $str;?> />
-   											<?php echo __("Enable Auto Submit?", "oasisworkflow") ;?>
-   										</span>
-   									</label>
-									</td>
-								</tr>
-								<tr height="20px;"><td>&nbsp;</td><td>&nbsp;</td></tr>
-								<tr>
-									<td style="vertical-align: top;">
-										<label>
-											<span class="space bold-label">
-												<?php echo  __("Keywords for Auto Submit", "oasisworkflow") . ":
-													<br>&nbsp;" . __("(comma separated)", "oasisworkflow");?>
-											</span>
-										</label>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<textarea id="auto-submit-keywords"
-											name="auto-submit-keywords" class="define-workflow-textarea"
-                                 cols="20" rows="5"><?php echo $auto_submit_keywords;?></textarea>
-									</td>
-								</tr>
-								<?php
-								//if Oasis Workflow Teams Add on is available
-                        do_action( 'owf_auto_submit_team', $selected_teams_array );
-								?>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div class="postbox-container">
-					<div class="postbox" >
-						<div class="handlediv" title="Click to toggle"><br></div>
-						<h3 style="padding:7px;">
 							<span class="workflow-lbl"><?php echo  __("Workflow Applicable To", "oasisworkflow");?></span>
 						</h3>
 						<div class="move-div workflow-define-div">
@@ -350,7 +280,7 @@ echo "<script type='text/javascript'>
 								<tr>
 									<td>
 					    				<select name="wf_for_roles[]" id="wf_for_roles[]" size="6" multiple="multiple">
-					    				   <?php OW_Utility::instance()->owf_dropdown_roles_multi( $wf_for_roles ); ?>
+					    				   <?php OW_Utility::instance()->owf_dropdown_applicable_roles_multi( $wf_for_roles ); ?>
 					    				</select>
 									</td>
 								</tr>
@@ -371,7 +301,7 @@ echo "<script type='text/javascript'>
 								</tr>
 								<tr>
 									<td>
-										<?php OW_Utility::instance()->owf_checkbox_post_types_multi( 'wf_for_post_types[]', $wf_for_post_types ) ?>
+										<?php OW_Utility::instance()->owf_checkbox_applicable_post_types_multi( 'wf_for_post_types[]', $wf_for_post_types ) ?>
 									</td>
 								</tr>
 							</table>
@@ -391,7 +321,8 @@ echo "<script type='text/javascript'>
 				<?php
 				if ( current_user_can( 'ow_edit_workflow' ) ) {
 				?>
-				<input type="button" value="<?php echo __("Save", "oasisworkflow") ?>" class="button-primary workflow-save-button" >
+            <input type="button" value="<?php echo __("Save and Close", "oasisworkflow") ?>" class="button-primary workflow-save-close-button" data-bname="save-close">
+				<input type="button" value="<?php echo __("Save", "oasisworkflow") ?>" class="button-primary workflow-save-button" data-bname="save">            
 				<?php
 				}
 				?>
@@ -414,8 +345,9 @@ echo "<script type='text/javascript'>
 				}
 				if ( current_user_can( 'ow_edit_workflow' ) ) {
 				?>
+            <input type="button" value="<?php echo __("Save and Close", "oasisworkflow") ?>" class="button-primary workflow-save-close-button" data-bname="save-close" >
 				<input type="button" value="<?php echo __("Save", "oasisworkflow") ?>"
-					class="button-primary workflow-save-button" >
+					class="button-primary workflow-save-button" data-bname="save" >            
 				<?php
 				}
 				if ( current_user_can( 'ow_create_workflow' ) ) {
@@ -433,7 +365,7 @@ echo "<script type='text/javascript'>
 		<input type="hidden" id="deleted_step_ids" name="deleted_step_ids" />
 		<input type="hidden" id="first_step" name="first_step" value="" />
 		<input type="hidden" id="wf_validate_result" name="wf_validate_result" value="active" />
-		<input type="hidden" id="save_action" name="save_action" value="workflow_save" />
+		<input type="hidden" id="save_action" name="save_action" value="workflow_save_and_close" />
 	</form>
 </div>
 <?php

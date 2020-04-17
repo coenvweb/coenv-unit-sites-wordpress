@@ -9,9 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
    exit;
-
+}
 /*
  * OW_Workflow_Terminology_Settings Class
  *
@@ -36,7 +36,8 @@ class OW_Workflow_Terminology_Settings {
    		'abortWorkflowText' => "",
    		'workflowHistoryText' => "",
    		'makeRevisionText' => "",
-         'taskPriorityText' => ""
+         'taskPriorityText' => "",
+         'duplicatePostText' => ""
    );
 
    /**
@@ -113,6 +114,12 @@ class OW_Workflow_Terminology_Settings {
       } else {
       	$workflow_terminology_settings['taskPriorityText'] = $this->ow_workflow_terminology_option_default_value['taskPriorityText'];
       }
+      
+      if ( array_key_exists( 'duplicatePostText', $input ) ) {
+      	$workflow_terminology_settings['duplicatePostText'] = sanitize_text_field( $input['duplicatePostText'] );
+      } else {
+      	$workflow_terminology_settings['duplicatePostText'] = $this->ow_workflow_terminology_option_default_value['duplicatePostText'];
+      }
 
       return $workflow_terminology_settings;
    }
@@ -133,6 +140,7 @@ class OW_Workflow_Terminology_Settings {
       $workflow_history = ! empty( $workflow_terminology_option['workflowHistoryText'] ) ? $workflow_terminology_option['workflowHistoryText'] : __( 'Workflow History' );
       $make_revision = ! empty( $workflow_terminology_option['makeRevisionText'] ) ? $workflow_terminology_option['makeRevisionText'] : __( 'Make Revision', 'oasisworkflow' );
       $task_priority = ! empty( $workflow_terminology_option['taskPriorityText'] ) ? $workflow_terminology_option['taskPriorityText'] : __( 'Priority', 'oasisworkflow' );
+      $duplicate_post = ! empty( $workflow_terminology_option['duplicatePostText'] ) ? $workflow_terminology_option['duplicatePostText'] : __( 'Duplicate Post', 'oasisworkflow' );
       ?>
       <form id="wf_settings_form" method="post" action="options.php">
           <?php
@@ -231,6 +239,18 @@ class OW_Workflow_Terminology_Settings {
                       </div>
                       <br class="clear">
                   </div>
+                  
+                  <div class="select-info">
+                      <div class="half-width left">
+                          <label for="duplicatePost"><?php echo __( "Duplicate Post", "oasisworkflow" ) . __( " Label", "oasisworkflow" ) ?></label>
+                      </div>
+                      <div class="half-width left">
+                          <input type="text" name="<?php echo $this->ow_workflow_terminology_option_name; ?>[duplicatePostText]" value="<?php echo esc_attr( $duplicate_post ); ?>" />
+                          <p class="description" id="tagline-description"><?php echo __( "Label for \"Duplicate Post\" link.", "oasisworkflow" ); ?></p>
+                      </div>
+                      <br class="clear">
+                  </div>
+                  
                   <?php submit_button(); ?>
               </div>
           </div>

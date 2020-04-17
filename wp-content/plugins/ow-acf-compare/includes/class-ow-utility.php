@@ -60,31 +60,37 @@ class OW_ACF_Compare_Utility {
    }
 
    /**
-    * Show message on admin section relavant to plugin
-    * 
-    * @param array $data
-    * @return string
+    *Display error or success message in the admin section
+    *
+    * @param array $data containing type and message
+    * @return string with html containing the error message
     * 
     * @since 1.0 initial version
     */
    public function admin_notice( $data = array() ) {
-      extract( $data ); // Extracts $message and $type from $data array
-      switch ( $type ) {
+      // extract message and type from the $data array
+      $message = isset( $data['message'] ) ? $data['message'] : "";
+      $message_type = isset( $data['type'] ) ? $data['type'] : "";
+
+      switch ( $message_type ) {
          case 'error':
-            $return = "<div id=\"message\" class=\"error\">\n";
+            $admin_notice = '<div id="message" class="error notice is-dismissible">';
             break;
          case 'update':
-            $return = "<div id=\"message\" class=\"updated\">\n";
+            $admin_notice = '<div id="message" class="updated notice is-dismissible">';
+            break;
+         case 'update-nag':
+            $admin_notice = '<div id="message" class="update-nag">';
             break;
          default:
             $message = __( 'There\'s something wrong with your code...', 'owacfcompare' );
-            $return = "<div id=\"message\" class=\"error\">\n";
+            $admin_notice = "<div id=\"message\" class=\"error\">\n";
             break;
       }
 
-      $return .= "    <p>" . __( $message, 'owacfcompare' ) . "</p>\n";
-      $return .= "</div>\n";
-      return $return;
+      $admin_notice .= "    <p>" . __( $message, 'owacfcompare' ) . "</p>\n";
+      $admin_notice .= "</div>\n";
+      return $admin_notice;
    }
 
 }

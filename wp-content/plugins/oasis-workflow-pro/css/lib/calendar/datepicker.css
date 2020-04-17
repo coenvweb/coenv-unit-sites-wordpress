@@ -79,7 +79,7 @@
  */
 .ui-oasis .ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; }
 .ui-oasis .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
-.ui-oasis .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-oasis .ui-datepicker .ui-datepicker-prev, .ui-oasis .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
 .ui-datepicker .ui-datepicker-prev-hover, .ui-oasis .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
 .ui-oasis .ui-datepicker .ui-datepicker-prev { left:2px; }
 .ui-oasis .ui-datepicker .ui-datepicker-next { right:2px; }

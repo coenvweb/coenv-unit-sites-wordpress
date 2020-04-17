@@ -83,6 +83,14 @@ class OW_Review_History {
 	 */
 	public $update_datetime;
 
+
+	/*
+	 * meta data related to the history record
+	 *
+	 * @since 3.0
+	 */
+	public $history_meta;
+
 }
 
 ?>

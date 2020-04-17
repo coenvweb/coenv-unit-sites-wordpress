@@ -1,7 +1,9 @@
 <?php
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /**
  * Allows plugins to use their own update API.
@@ -330,7 +332,7 @@ class OW_Plugin_Updater {
 			'beta'       => ! empty( $data['beta'] ),
 		);
 
-		$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+		$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'body' => $api_params ) );
 
 		if ( ! is_wp_error( $request ) ) {
 			$request = json_decode( wp_remote_retrieve_body( $request ) );
@@ -385,7 +387,7 @@ class OW_Plugin_Updater {
 				'beta'       => ! empty( $data['beta'] )
 			);
 
-			$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+			$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'body' => $api_params ) );
 
 			if ( ! is_wp_error( $request ) ) {
 				$version_info = json_decode( wp_remote_retrieve_body( $request ) );
@@ -429,6 +431,11 @@ class OW_Plugin_Updater {
 		if( empty( $cache_key ) ) {
 			$cache_key = $this->cache_key;
 		}
+      
+      if( is_array( $value ) ) {
+         $value = array_map( 'esc_attr', $value );
+      }
+      $cache_key = sanitize_key( $cache_key );
 
 		$data = array(
 			'timeout' => strtotime( '+3 hours', current_time( 'timestamp' ) ),

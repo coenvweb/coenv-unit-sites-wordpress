@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+   exit;
+}
 
 /*
  * OW_Settings_Base Class
@@ -44,6 +46,9 @@ class OW_Settings_Base {
 
 		// add the workflow terminology settings tab
 		$this->tabs['workflow_terminology_settings'] = __( 'Workflow Terminology', 'oasisworkflow' );
+      
+      // add the workflow terminology settings tab
+		$this->tabs['external_user_settings'] = __( 'External Users', 'oasisworkflow' );
 
 		// to add tabs for add-ons
 		do_action_ref_array( 'owf_add_settings_tab', array( &$this->tabs ) );
@@ -121,6 +126,10 @@ class OW_Settings_Base {
 			    	case 'workflow_terminology_settings' :
 			    		$ow_workflow_terminology_settings = new OW_Workflow_Terminology_Settings();
 			    		$ow_workflow_terminology_settings->add_settings_page();
+			    		break;
+               case 'external_user_settings' :
+                  $ow_external_user_settings = new OW_External_User_Settings();
+			    		$ow_external_user_settings->add_settings_page();
 			    		break;
 			    	default :
 			    		// to display tabs for add-ons

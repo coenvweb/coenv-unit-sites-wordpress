@@ -68,13 +68,14 @@ var jQueryCgmp = jQuery.noConflict();
             stepNum = 0;
             var getNum = get_step_id_num( stepNum );
             var lbl = jQuery( ui.draggable ).children().html();
+            var process = jQuery( ui.draggable ).children().data('process');
             get_step_lbl_inx( lbl );
             var Y = event.originalEvent.pageY - 150;
             var X = event.originalEvent.pageX - 170;
             var p = {"fc_addid": "step" + getNum,
                "fc_label": obj_lbl,
                "fc_dbid": "nodefine",
-               "fc_process": lbl,
+               "fc_process": process,
                "fc_position": [ Y + "px", X + "px" ]};
             createStep( p, "new" );
             set_step_changed_status(); // We can know what workflow graphic was changed.
@@ -154,7 +155,8 @@ var jQueryCgmp = jQuery.noConflict();
          jQuery( "#workflow-area" ).append( "<div class='w' id='" + param["fc_addid"] + "'" +
                  "' real='" + act + "'" +
                  " db-id=" + param["fc_dbid"] +
-                 " process-name='" + param["fc_process"] + "'>" +
+                 " process-name='" + param["fc_process"] + 
+                 "' localize-name='" + param["fc_label"] + "'>" +
                  " <img alt='' src='" + wfPluginUrl + "img/" + param["fc_process"] + ".gif' />" +
                  " <label>" + param["fc_label"] + "</label>" +
                  "</div>" );
@@ -168,7 +170,8 @@ var jQueryCgmp = jQuery.noConflict();
             set_selected_step( "<div class='w' id='" + param["fc_addid"] + "'" +
                     "' real='" + act + "'" +
                     " db-id=" + param["fc_dbid"] +
-                    " process-name='" + param["fc_process"] + "'>" +
+                    " process-name='" + param["fc_process"] +
+                    "' localize-name='" + param["fc_label"] + "'>" +
                     " <img alt='' src='" + wfPluginUrl + "img/" + param["fc_process"] + ".gif' />" +
                     " <label>" + param["fc_label"] + "</label>" +
                     "</div>" );
@@ -488,6 +491,7 @@ var jQueryCgmp = jQuery.noConflict();
          copystep.step_dbid = jQuery( selectedStep ).attr( "db-id" );
          copystep.hrf = jQuery( this ).attr( 'alt' );
          copystep.process_name = jQuery( selectedStep ).attr( "process-name" );
+         copystep.localize_name = jQuery( selectedStep ).attr( "localize-name" );
          jQuery( "#stepMenu" ).hide();
          return false;
       } );
@@ -505,13 +509,14 @@ var jQueryCgmp = jQuery.noConflict();
          stepNum = 0;
          var getNum = get_step_id_num( stepNum );
          var lbl = copystep.process_name;
+         var localize_lbl = copystep.localize_name;
          get_step_lbl_inx( lbl );
          var Y = event.originalEvent.pageY - 120;
          var X = event.originalEvent.pageX - 180;
 
          if ( copystep.step_dbid == "nodefine" ) {
             var p = {"fc_addid": "step" + getNum,
-               "fc_label": obj_lbl,
+               "fc_label": localize_lbl,
                "fc_dbid": "nodefine",
                "fc_process": lbl,
                "fc_position": [ Y + "px", X + "px" ]};
@@ -529,7 +534,7 @@ var jQueryCgmp = jQuery.noConflict();
                jQuery( ".paste_loading" ).removeClass( "loading" ).hide();
                if (response.success ) {
                   var p = {"fc_addid": "step" + getNum,
-                     "fc_label": obj_lbl,
+                     "fc_label": localize_lbl,
                      "fc_dbid": response.data,
                      "fc_process": lbl,
                      "fc_position": [ Y + "px", X + "px" ]};

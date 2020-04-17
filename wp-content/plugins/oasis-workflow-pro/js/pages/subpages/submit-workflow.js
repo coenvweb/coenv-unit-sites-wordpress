@@ -5,41 +5,59 @@ jQuery(document).ready(function () {
    function initWorkflowSubmit() {
       var allowed_post_types = jQuery.parseJSON(owf_submit_workflow_vars.allowedPostTypes);
       var current_post_type = jQuery('#post_type').val();
-
-      // If not allowed post/page type then do not show
-      if (jQuery.inArray(current_post_type, allowed_post_types) != -1)
-      {
-         jQuery("#publishing-action #publish").before("<span class='blank-space loading owf-hidden'></span>");
-         jQuery(".loading").show();
-         var get_original = {
-            action: 'get_original',
-            post_id: jQuery('#post_ID').val(),
-            security: jQuery('#owf_workflow_abort_nonce').val()
+      
+      // check if role is applicable to submit to workflow
+      if ( current_post_type !== undefined ) {
+         var check_is_role_applicable = {
+               action: 'check_applicable_roles',
+               post_id: jQuery('#post_ID').val(),
+               post_type: current_post_type,
+               check_for: 'workflowSubmission',
+               security: jQuery('#owf_signoff_ajax_nonce').val()
          };
-         jQuery.post(ajaxurl, get_original, function (response) {
-            jQuery(".loading").hide();
-            if (response.success && owf_submit_workflow_vars.hideCompareButton == "") {
-               jQuery("#publishing-action #publish").before(
-                       "<input type='button' id='workflow_revision' class='button button-primary button-large' value='" + owf_submit_workflow_vars.compareOriginal + "' style='float:left;display:block;margin-top:10px;margin-bottom:5px;width:100%;clear:both;' />");
+         jQuery.post(ajaxurl, check_is_role_applicable, function (response) {
+            if ( ! response.success ) {
+              jQuery('#workflow_submit').hide();
+            }
+            if ( response.success ) {
+               // If not allowed post/page type then do not show
+               if (jQuery.inArray(current_post_type, allowed_post_types) !== -1 )
+               {
+                  jQuery("#publishing-action #publish").before("<span class='blank-space loading owf-hidden'></span>");
+                  jQuery(".loading").show();
+                  var get_original = {
+                     action: 'get_original',
+                     post_id: jQuery('#post_ID').val(),
+                     security: jQuery('#owf_workflow_abort_nonce').val()
+                  };
+                  jQuery.post(ajaxurl, get_original, function (response) {
+                     jQuery(".loading").hide();
+                     if (response.success && owf_submit_workflow_vars.hideCompareButton == "") {
+                        jQuery("#publishing-action #publish").before(
+                                "<input type='button' id='workflow_revision' class='button button-primary button-large' value='" + owf_submit_workflow_vars.compareOriginal + "' style='float:left;display:block;margin-top:10px;margin-bottom:5px;width:100%;clear:both;' />");
+                     }
+                  });
+
+                  jQuery("#publishing-action").append(
+                          "<input type='button' id='workflow_submit' class='button button-primary button-large'" + " value='" + owf_submit_workflow_vars.submitToWorkflowButton + "' style='float:left;clear:both;' />"
+                          ).css({"width": "100%"});
+
+                  jQuery("#post").append(
+                          "<input type='hidden' id='hi_workflow_id' name='hi_workflow_id' />" +
+                          "<input type='hidden' id='hi_step_id' name='hi_step_id' />" +
+                          "<input type='hidden' id='hi_priority_select' name='hi_priority_select' />" +
+                          "<input type='hidden' id='hi_actor_ids' name='hi_actor_ids' />" +
+                          "<input type='hidden' id='hi_is_team' name='hi_is_team' />" +
+                          "<input type='hidden' id='hi_due_date' name='hi_due_date' />" +
+                          "<input type='hidden' id='hi_publish_datetime' name='hi_publish_datetime' />" +
+                          "<input type='hidden' id='hi_custom_condition' name='hi_custom_condition' />" +
+                          "<input type='hidden' id='hi_comment' name='hi_comment' />" +
+                          "<input type='hidden' id='save_action' name='save_action' />"
+                          );
+                  jQuery("#publishing-action").css({"margin-top": "10px"});
+               }
             }
          });
-
-         jQuery("#publishing-action").append(
-                 "<input type='button' id='workflow_submit' class='button button-primary button-large'" + " value='" + owf_submit_workflow_vars.submitToWorkflowButton + "' style='float:left;clear:both;' />"
-                 ).css({"width": "100%"});
-
-         jQuery("#post").append(
-                 "<input type='hidden' id='hi_workflow_id' name='hi_workflow_id' />" +
-                 "<input type='hidden' id='hi_step_id' name='hi_step_id' />" +
-                 "<input type='hidden' id='hi_priority_select' name='hi_priority_select' />" +
-                 "<input type='hidden' id='hi_actor_ids' name='hi_actor_ids' />" +
-                 "<input type='hidden' id='hi_due_date' name='hi_due_date' />" +
-                 "<input type='hidden' id='hi_publish_datetime' name='hi_publish_datetime' />" +
-                 "<input type='hidden' id='hi_custom_condition' name='hi_custom_condition' />" +
-                 "<input type='hidden' id='hi_comment' name='hi_comment' />" +
-                 "<input type='hidden' id='save_action' name='save_action' />"
-                 );
-         jQuery("#publishing-action").css({"margin-top": "10px"});
       }
    }
 
@@ -77,11 +95,13 @@ jQuery(document).ready(function () {
    jQuery("#workflow-select").change(function () {
       workflowSelect(jQuery(this).val());
    });
-
+   
    /* On Change of Workflow Step during Submit to Workflow */
    jQuery(document).on("change", "#step-select", function () {
       actionSetting("step", "pre");
-    
+      jQuery("#submitSave").prop('disabled', true);
+      jQuery("#step-loading-span").addClass("loading");
+
       var get_submit_step_details_data = {
          action: 'get_submit_step_details',
          step_id: jQuery(this).val(),
@@ -93,18 +113,26 @@ jQuery(document).ready(function () {
 
       jQuery.post(ajaxurl, get_submit_step_details_data, function (response) {
          if (response == -1) {
+            jQuery("#step-loading-span").removeClass("loading");
             return false; // Invalid nonce
          }
 
          // if response is false then there are no users for given role..!
          if ( ! response.success ) {
+            jQuery("#step-loading-span").removeClass("loading");
             displayWorkflowSubmitErrorMessages( response.data.errorMessage );
             return false;
          }
 
          // if teams is active, show teams drop down
          if ( response.data.teams != "" ) {
+            var teams = Object.keys(response.data.teams).length;
             add_option_to_select("teams-list-select", response.data.teams, 'name', 'ID');
+            jQuery('.select-teams-div').removeClass('owf-hidden');
+            // If object length is 1 than trigger the change event
+            if ( teams === 1 ) {
+               jQuery("#teams-list-select").change();
+            }
          }
 
          // if there is any custom data, like checklist conditions, display custom data
@@ -141,17 +169,28 @@ jQuery(document).ready(function () {
             }).appendTo('#post');
          }
 
-         // multiple actors applicable to all the steps
-         jQuery("#one-actors-div").hide();
-
          // if assign to all is checked, then hide the assignee selection.
-         if (is_assign_to_all === 1 && response.data.teams == "") {
-            jQuery('#multiple-actors-div').hide();
+         if ( is_assign_to_all === 1 ) {
+            jQuery('#multiple-actors-div').addClass('owf-hidden');
+         } else if ( is_assign_to_all !== 1 && response.data.teams != ""  ) {
+            // If assign to all is false and team addon is enable
+            jQuery('#multiple-actors-div').removeClass('owf-hidden');
          } else { // "assign to all" is false, show the user selection
-            jQuery("#multiple-actors-div").show();
+            jQuery('#multiple-actors-div').removeClass('owf-hidden');
             if ( response.data.users != "" ) {
                if (typeof response.data.users[0] == 'object') {
-                  users = response.data.users;
+                  users = response.data.users;                  
+                  var i;
+                  var postAuthor = "";
+                  var substring = "Post Author";
+                  for( i = 0; i < users.length; i++ ) {
+                     if( users[i].name.indexOf(substring) !== -1 ) {
+                        postAuthor = users[i];
+                     }
+                  }
+                  users.sort(function(x,y){
+                     return x===postAuthor?-1:y===postAuthor?1:0;
+                  });
                }
             }
             add_option_to_select("actors-list-select", users, 'name', 'ID');
@@ -162,6 +201,14 @@ jQuery(document).ready(function () {
          } 
 
          actionSetting("step", "after");
+         
+         // Resize the popup based on show/hide of assignees
+         jQuery("#simplemodal-container").css({
+               "height": "663px",
+         });
+
+         jQuery("#step-loading-span").removeClass("loading");
+         jQuery("#submitSave").prop('disabled', false);
 
       });
    });
@@ -273,9 +320,13 @@ jQuery(document).ready(function () {
       // display the submit to workflow popup dialog
       jQuery("#new-workflow-submit-div").owfmodal({
          onShow: function (dlg) {
-            jQuery("#simplemodal-container").css("max-height", "80%");
+            jQuery("#simplemodal-container").css({
+               "max-height": "90%",
+               "top":"60px"
+            });
             jQuery(dlg.wrap).css('overflow', 'auto'); // or try ;
-            jQuery.modal.update();
+            // commented out, so that the above CSS can take effect
+            //jQuery.modal.update();
          }
       });
 
@@ -457,33 +508,54 @@ jQuery(document).ready(function () {
    }
 
    function validateAndGetSelectedActors() {
+      var is_assigned_to_all = parseInt(jQuery('#assign_to_all').val());
 
       // Case 1: teams add-on is active
       // Validate if team is selected
-      // if not, display error message.
-      // if yes, simply return the selected team_id
-      if (owf_submit_workflow_vars.workflowTeamsAvailable == 'yes')
-      {
+      // if not, display error message.      
+      if ( owf_submit_workflow_vars.workflowTeamsAvailable == 'yes' ) {
          var optionNum = jQuery("#teams-list-select").val();
-         if (optionNum == '') {
+         if ( optionNum == '' ) {
             jQuery(".changed-data-set span").removeClass("loading");
             jQuery("#submitSave").show();
             alert(owf_submit_workflow_vars.noTeamSelected);
             return false;
          }
-
+         
+         // If assign to all is checked simply send team_id
          var team_id = jQuery('#teams-list-select').val();
-         if ( team_id ) {
+         if ( team_id && is_assigned_to_all === 1 ) {
+            jQuery("#hi_is_team").val("true");
             return team_id;
-         } else {
-            return false;
+         } else if ( team_id && is_assigned_to_all !== 1 ) {
+            // If assign to all is uncheck send multi actors
+            var selectedOptionCount = jQuery("#actors-set-select option").length;
+            if ( ! selectedOptionCount ) {
+               alert(owf_submit_workflow_vars.noAssignedActors);
+               jQuery(".changed-data-set span").removeClass("loading");
+               jQuery("#submitSave").show();
+               return false;
+            }
+            var multi_actors = "", i = 1;
+            jQuery("#actors-set-select option").each(function () {
+               if ( i == selectedOptionCount )
+                  multi_actors += jQuery(this).val();
+               else
+                  multi_actors += jQuery(this).val() + "@";
+               i++;
+            });
+            if ( multi_actors ) {
+               jQuery("#hi_is_team").val(team_id);
+               return multi_actors;
+            } else {
+               return false;
+            }
          }
       }
 
       // Case 2: Assign to all is checked
       // nothing to validates, simply return true
-      var is_assigned_to_all = parseInt(jQuery('#assign_to_all').val());
-      if (is_assigned_to_all === 1) {
+      if ( is_assigned_to_all === 1 ) {
          return true;
       }
 
@@ -493,7 +565,7 @@ jQuery(document).ready(function () {
       // if yes, return the selected actor(s)
 
       var selectedOptionCount = jQuery("#actors-set-select option").length;
-      if (! selectedOptionCount ) {
+      if ( ! selectedOptionCount && is_assigned_to_all !== 1 ) {
          alert(owf_submit_workflow_vars.noAssignedActors);
          jQuery( ".changed-data-set span" ).removeClass("loading");
          jQuery( "#submitSave" ).show();
@@ -501,16 +573,17 @@ jQuery(document).ready(function () {
       }
       var multi_actors = "", i = 1;
       jQuery( "#actors-set-select option" ).each(function () {
-         if (i == selectedOptionCount)
+         if ( i == selectedOptionCount )
             multi_actors += jQuery(this).val();
          else
             multi_actors += jQuery(this).val() + "@";
          i++;
       });
-      if (multi_actors)
+      if ( multi_actors && is_assigned_to_all !== 1 ) {
          return multi_actors;
-      else
+      } else {
          return false;
+      }
    }
 
    function displayWorkflowSubmitErrorMessages( errorMessages ) {
@@ -523,7 +596,7 @@ jQuery(document).ready(function () {
       jQuery(".simplemodal-wrap").animate({scrollTop: 0}, "slow");
       jQuery(".simplemodal-wrap").css('overflow', 'scroll');
       jQuery(".changed-data-set span").removeClass("loading");
-      jQuery("#simplemodal-container").css("max-height", "80%");
+      jQuery("#simplemodal-container").css("max-height", "90%");
 
       // call modal.setPosition, so that the window height can adjust automatically depending on the displayed fields.
       jQuery.modal.setPosition();

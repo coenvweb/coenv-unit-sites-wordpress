@@ -36,10 +36,16 @@ jQuery(document).ready(function () {
             jQuery(".loading").hide();
             if ( ! response.success ) {
                jQuery("#publishing-action").append(
-                       "<input type='button' id='step_submit' class='button button-primary button-large'" +
-                       " value='" + owf_submit_step_vars.signOffButton + "' style='float:left;margin-top:10px;clear:both' />" +
+                       "<div id='owf-signoff-block'><input type='button' id='step_submit' class='button button-primary button-large'" +
+                       " value='" + owf_submit_step_vars.signOffButton + "' style='float:left;margin-top:10px;clear:both' /></div>" +                       
                        "<input type='hidden' name='hi_process_info' id='hi_process_info' />" +
                        "<input type='hidden' name='hi_oasiswf_redirect' id='hi_oasiswf_redirect' value=''/>").css({"width": "100%"});
+               // if user have reassign capability then display the link
+               if ( owf_submit_step_vars.canReassign == 1 ) {
+                  jQuery("#owf-signoff-block").append(
+                         "<a href='#' class='reassign' style='display:inline-block;margin:10px 0 0 10px;clear:both'>" +  owf_submit_step_vars.reassign +"</a>" 
+                  );
+               }
             } else {
                jQuery("#publishing-action").append(
                        "<input type='button' id='claimButton' class='button button-primary button-large'" +
@@ -132,6 +138,7 @@ jQuery(document).ready(function () {
       if ( "unable" == jQuery(this).val() ) {
          decision = "failure";
       }
+      jQuery("#submitSave").prop('disabled', true);
       actionSetting();
 
       var execute_sign_off_decision_data = {
@@ -171,6 +178,8 @@ jQuery(document).ready(function () {
             // if there is only one possible next step, auto select it
             if (next_steps.length == 1) {
                jQuery("#step-select").change();
+            } else {
+               jQuery("#submitSave").prop('disabled', false);
             }
          } else { // looks like we are on the last step of the workflow
             if ( "failure" == decision ) {
@@ -184,7 +193,9 @@ jQuery(document).ready(function () {
             }
             // re-position the popup
             setPosition();
+            jQuery("#submitSave").prop('disabled', false);
          }
+
       });
    });
 
@@ -192,10 +203,13 @@ jQuery(document).ready(function () {
    jQuery(document).on("change", "#step-select", function () {
 
       jQuery(".assign-loading-span").addClass("loading");
+      jQuery("#step-loading-span").addClass("loading");
 
       // reset the error messages
       jQuery('#ow-step-messages').html("");
       jQuery('#ow-step-messages').addClass('owf-hidden');
+      
+      jQuery("#submitSave").prop('disabled', true);
 
       var get_sign_off_step_details_data = {
          action: 'get_sign_off_step_details',
@@ -211,6 +225,7 @@ jQuery(document).ready(function () {
          }
 
          jQuery(".assign-loading-span").removeClass("loading");
+         jQuery("#step-loading-span").removeClass("loading");
 
          // if response is false then there are no users for given role..!
          if ( ! response.success ) {
@@ -250,44 +265,48 @@ jQuery(document).ready(function () {
          // if teams, then set teams id as hidden field
          // get assign to all value from the step
          var team_id = "";
-         if ( response.data.team_id != "" ) {
+         var team_name = "";
+         if ( response.data.team_id !== "" ) {
             team_id = parseInt(response.data.team_id);
+            team_name = response.data.team_name;
+            jQuery("#teams-list-select").append("<option value='" + team_id + "'>" +team_name + "</option>");           
+            jQuery("#teams-list-select").change();
          }
 
-         if ( jQuery("#assigned_team_id").length ) { //if the field exists, update it
-            jQuery("#assigned_team_id").val(team_id);
-         } else { // add the field to the page
-            jQuery('<input>').attr({
-               type: 'hidden',
-               id: 'assigned_team_id',
-               name: 'assigned_team_id',
-               value: team_id
-            }).appendTo('#new-step-submit-div');
-         }
-
-         // multiple actors applicable to all the steps
-         jQuery("#one-actors-div").hide();
-         jQuery("#multi-actors-div").hide();
-
-         // non team use case
-         if ( response.data.team_id == "" ) {
-            if (is_assign_to_all === 1) { // if assign to all is checked, then hide the assignee selection.
-               jQuery("#multi-actors-div").hide();
-               jQuery("#actors-list-select").attr("disabled", true);
-               jQuery("#actors-set-select").attr("disabled", true);
-            } else { // "assign to all" is false, show the user selection
-               jQuery("#multi-actors-div").show();
-               jQuery("#actors-list-select").removeAttr("disabled");
-               jQuery("#actors-set-select").removeAttr("disabled");
-
-               if (response.data.users != "") {
-                  if (typeof response.data.users[0] == 'object') {
-                     users = response.data.users;
+         // if assign to all is checked, then hide the assignee selection.
+         if ( is_assign_to_all === 1 ) {
+            jQuery('#multiple-actors-div').addClass('owf-hidden');
+         } else if ( is_assign_to_all !== 1 && response.data.team_id !== ""  ) {
+            // If assign to all is false and team addon is enable
+            jQuery('#multiple-actors-div').removeClass('owf-hidden');
+         } else { // "assign to all" is false, show the user selection
+            jQuery('#multiple-actors-div').removeClass('owf-hidden');
+            if ( response.data.users != "" ) {
+               if (typeof response.data.users[0] == 'object') {
+                  users = response.data.users;                  
+                  var i;
+                  var postAuthor = "";
+                  var substring = "Post Author";
+                  for( i = 0; i < users.length; i++ ) {
+                     if( users[i].name.indexOf(substring) !== -1 ) {
+                        postAuthor = users[i];
+                     }
                   }
+                  users.sort(function(x,y){
+                     return x===postAuthor?-1:y===postAuthor?1:0;
+                  });
                }
-               add_option_to_select("actors-list-select", users, 'name', 'ID');
             }
+            add_option_to_select("actors-list-select", users, 'name', 'ID');
          }
+         
+         // Resize the popup based on show/hide of assignees
+         jQuery("#simplemodal-container").css({
+               "height": "663px",
+         });
+
+         jQuery("#submitSave").prop('disabled', false);
+         
       });
    });
 
@@ -343,6 +362,7 @@ jQuery(document).ready(function () {
          due_date:            jQuery("#due-date").val(),
          sign_off_comments:   jQuery("#workflowComments").val(),
          task_user:           jQuery("#hi_task_user").val(),
+         team:                jQuery("#hi_is_team").val(),
          history_id:          jQuery("#hi_oasiswf_id").val(),
          custom_condition:    jQuery("#hi_custom_condition").val(),
          step_decision:       jQuery("#decision-select").val(),
@@ -411,6 +431,7 @@ jQuery(document).ready(function () {
          custom_condition: jQuery( "#hi_custom_condition" ).val(),
          immediately:      im_date,
          form:             jQuery("form#post").serialize(),
+         custom_fields:    jQuery("form#custom-fields").serialize(),
          security:         jQuery( '#owf_signoff_ajax_nonce' ).val()
       };
 
@@ -523,7 +544,7 @@ jQuery(document).ready(function () {
          if ( !response.success ) {
             claim.parent().children(".loading").hide();
             var content =  response.data.errorMessage ;
-            jQuery( content ).owfmodal();            
+            jQuery( content ).owfmodal(); 
          }
       });
    });
@@ -533,14 +554,13 @@ jQuery(document).ready(function () {
       jQuery('#hi_oasiswf_redirect').val("step");
       jQuery("#new-step-submit-div").owfmodal({
          onShow: function (dlg) {
-            jQuery("#simplemodal-container").css("max-height", "80%");
+            jQuery("#simplemodal-container").css({
+               "max-height": "90%",
+               "top":"60px"
+            });
             jQuery(dlg.wrap).css('overflow', 'auto'); // or try ;
-            jQuery.modal.update();
-            if (owf_submit_step_vars.workflowTeamsAvailable == 'yes') { // essentially no need to show the user selection, since its submitted to a team
-               jQuery("#multi-actors-div").hide();
-            } else {
-               jQuery("#multi-actors-div").show();
-            }
+            // commented out, so that the above CSS can take effect
+            //jQuery.modal.update();y            
          }
       });
       stepProcess = "";
@@ -643,10 +663,14 @@ jQuery(document).ready(function () {
    }
 
    function setPosition() {
-      jQuery("#simplemodal-container").css("max-height", "80%");
+      jQuery("#simplemodal-container").css({
+         "max-height": "90%",
+         "top":"60px"
+      });
 
       // call modal.setPosition, so that the window height can adjust automatically depending on the displayed fields.
-      jQuery.modal.setPosition();
+      // commented out, so that the above CSS can take effect
+      //jQuery.modal.setPosition();
    }
 
    function actionSetting() {
@@ -669,28 +693,50 @@ jQuery(document).ready(function () {
       jQuery("#actors-set-select").find('option').remove();
 
       jQuery("#step-select").attr("disabled", true);
-      jQuery("#actor-one-select").attr("disabled", true);
-      jQuery("#actors-list-select").attr("disabled", true);
-      jQuery("#actors-set-select").attr("disabled", true);
-
+      
       setPosition();
    }
 
    function validateAndGetSelectedActors() {
 
-      // Case 1: Assign to all is checked
-      // nothing to validate, simply return true
-      var is_assigned_to_all = "";
-      if ( jQuery('#assign_to_all').val() != "" ) {
-         is_assigned_to_all = parseInt(jQuery('#assign_to_all').val());
-         if (is_assigned_to_all === 1) {
-            return true;
+      var is_assigned_to_all = parseInt(jQuery('#assign_to_all').val());
+      
+      // Case 1: teams add-on is active
+      if ( owf_submit_step_vars.workflowTeamsAvailable == 'yes' ) {
+         // If assign to all is checked simply send team_id
+         var team_id = jQuery('#teams-list-select').val();
+         if ( team_id && is_assigned_to_all === 1 ) {
+            jQuery("#hi_is_team").val("true");
+            return team_id;
+         } else if ( team_id && is_assigned_to_all !== 1 ) {
+            // If assign to all is uncheck send multi actors
+            var selectedOptionCount = jQuery("#actors-set-select option").length;
+            if (! selectedOptionCount ) {
+               alert(owf_submit_step_vars.noAssignedActors);
+               jQuery( ".changed-data-set span" ).removeClass("loading");
+               jQuery( "#submitSave" ).show();
+               return false;
+            }
+            var multi_actors = "", i = 1;
+            jQuery( "#actors-set-select option" ).each(function () {
+               if (i == selectedOptionCount)
+                  multi_actors += jQuery(this).val();
+               else
+                  multi_actors += jQuery(this).val() + "@";
+               i++;
+            });
+            if ( multi_actors ) {
+               jQuery("#hi_is_team").val(team_id);
+               return multi_actors;
+            } else {
+               return false;
+            }
          }
       }
 
-      // Case 2: If team is assigned to this post,
-      // nothing to validate, simply return true
-      if ( jQuery('#assigned_team_id').val() != "" ) {
+      // Case 2: Assign to all is checked
+      // nothing to validates, simply return true
+      if ( is_assigned_to_all === 1 ) {
          return true;
       }
 

@@ -57,6 +57,11 @@ class OW_Workflow_Settings {
    protected $ow_publish_date_setting_option_name = 'oasiswf_publish_date_setting';
    
    /**
+    * @var string publish date setting option name
+    */
+   protected $ow_sidebar_display_setting_option_name = 'oasiswf_sidebar_display_setting';
+   
+   /**
     * @var string roles that can participate in the workflow setting option name
     */
    protected $ow_participating_roles_setting_option_name = 'oasiswf_participating_roles_setting';
@@ -93,6 +98,8 @@ class OW_Workflow_Settings {
       		$this->ow_priority_setting_option_name, array( $this, 'validate_priority_setting' ) );
       register_setting( $this->ow_workflow_group_name,
               $this->ow_publish_date_setting_option_name,array( $this, 'validate_publish_date_setting' ) );
+      register_setting( $this->ow_workflow_group_name,
+              $this->ow_sidebar_display_setting_option_name,array( $this, 'validate_sidebar_display_setting' ) );
       register_setting( $this->ow_workflow_group_name,
       		$this->ow_participating_roles_setting_option_name, array( $this, 'validate_selected_participant_roles' ) );
       register_setting( $this->ow_workflow_group_name,
@@ -190,6 +197,15 @@ class OW_Workflow_Settings {
    public function validate_publish_date_setting( $publish_date_setting ) {
       return sanitize_text_field( $publish_date_setting );
    }
+      
+   /**
+    * sanitize data
+    * @param string $sidebar_display_setting
+    * @return string
+    */
+   public function validate_sidebar_display_setting( $sidebar_display_setting ) {
+      return sanitize_text_field( $sidebar_display_setting );
+   }
    
    /**
     * do validate and sanitize selected participants
@@ -235,10 +251,12 @@ class OW_Workflow_Settings {
       $selected_roles = array();
       $login_redirect_roles = OW_Utility::instance()->get_participating_roles();
       
-      if ( count( $roles ) > 0 ) {
+      if ( is_array( $roles ) && ( ! empty( $roles ) ) && count( $roles ) > 0 ) {
          
           // Sanitize the value
-         $roles = array_map( 'esc_attr', $roles );
+         if ( ! empty( $roles ) ) {
+            $roles = array_map( 'esc_attr', $roles );
+         }
          
          foreach ( $login_redirect_roles as $role => $display_name ) {
             if ( is_array( $roles ) && in_array( esc_attr( $role ), $roles ) ) { // preselect specified role
@@ -262,6 +280,7 @@ class OW_Workflow_Settings {
       $show_wfsettings_on_post_types = get_option( $this->ow_show_wfsettings_on_post_types_option_name );
       $priority_setting = get_option( $this->ow_priority_setting_option_name );    
       $publish_date_setting = get_option( $this->ow_publish_date_setting_option_name );
+      $sidebar_display_setting = get_option( $this->ow_sidebar_display_setting_option_name );
       $participants = get_option( $this->ow_participating_roles_setting_option_name );
       $login_redirect_roles = get_option( $this->ow_login_redirect_setting_option_name );
       $auto_delete_history = get_option( $this->ow_auto_delete_history_setting_option_name );
@@ -379,6 +398,16 @@ TRIGGER_EVENT;
                                     <?php checked( $publish_date_setting, 'hide' ); ?>/>
                                  <?php _e( 'Hide Publish Date field on "Submit to Workflow".', 'oasisworkflow' ); ?>
                       </label>
+                  </div>
+                 
+                 <div class="select-info">
+                     <label class="settings-title">
+                         <input type="checkbox" id="display_sidebar"
+                                name="<?php echo $this->ow_sidebar_display_setting_option_name; ?>"
+                                value="show"
+                                   <?php checked( $sidebar_display_setting, 'show' ); ?>/>
+                                <?php _e( 'Display Oasis Workflow Sidebar as default for Gutenberg Editor.', 'oasisworkflow' ); ?>
+                     </label>
                   </div>
                  
                   <div class="select-info">
