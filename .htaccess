@@ -21,12 +21,12 @@ Require shibboleth
     ModPagespeedDisallow http://dev.atmos.uw.edu/*
 </IfModule>
 
-# Added by request for UW-IT
-RewriteRule ^(server-|PubCookie\.reply) - [L]
-
 #don't look at our git
 RewriteRule "^(.*/)?\.git/" - [F,L]
 RedirectMatch 404 /\.git
+
+# Added by request for UW-IT
+RewriteRule ^(server-|PubCookie\.reply) - [L]
 
 # block super aggresive baidu spider
 RewriteCond %{HTTP_USER_AGENT} ^Baiduspider.* [NC]
@@ -62,11 +62,11 @@ php_value suhosin.request.max_vars 3000
 RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
 
-RewriteCond %{HTTP_HOST} futurerivers.washington.edu [NC]
-RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
+RewriteCond %{HTTP_HOST} ^futurerivers.washington.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC,L]
 
-RewriteCond %{HTTP_HOST} futurerivers.uw.edu [NC]
-RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC]
+RewriteCond %{HTTP_HOST} ^futurerivers.uw.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/future-rivers [R=302,NC,L]
 
 RewriteCond %{HTTP_HOST} cig.washington.edu [NC]
 RewriteRule ^(.*)$ http://cig.uw.edu/$1 [R=301,NC]
@@ -487,7 +487,7 @@ RewriteRule ^resources/?$ https://qrc.uw.edu/resources/conference-rooms/ [R=302,
 
 # JISAO Redirects
 RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=21]
+RewriteRule .? - [S=22]
 RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
 RewriteRule ^pdo/(.*)$ http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
 RewriteRule ^data/(.*)$ http://research.jisao.washington.edu/data/$1 [R=301,NC,L]
@@ -509,6 +509,7 @@ RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resour
 RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
 RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
 RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
+RewriteRule ^wp-content/uploads/sites/21/2019/12/proposal_structure.pdf https://jisao.uw.edu/wp-content/uploads/sites/21/2020/01/proposal_structure.pdf [R=302,NC,L]
 
 # SEFS Redirects
 RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
@@ -551,11 +552,6 @@ RewriteRule ^planning-wisely-for-natural-hazards/$ news-and-events/topic/hazards
 RewriteRule ^protecting-ocean-health/$ members-and-affiliates/washington-ocean-acidification-center/ [R=301,L]
 RewriteRule ^sustaining-healthy-ecosystems/$ members-and-affiliates/doris-duke-conservation-scholars/ [R=301,L]
 RewriteRule ^walker2019 news-and-events/walker-lecture-series/ [R=302,L]
-
-# Future Rivers Redirects
-RewriteCond %{HTTP_HOST} !^futurerivers.uw\.edu [NC]
-RewriteRule .? - [S=1]
-RewriteRule ^ https://earthlab.uw.edu/future-rivers/ [R=302,L]
 
 RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
