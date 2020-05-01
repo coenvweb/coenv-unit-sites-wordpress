@@ -17,11 +17,21 @@ jQuery(document).ready(function(jQuery) {
 		e.preventDefault();
 		jQuery("#custom-loading").show();
 		customtaxorder_orderalpha();
-		//jQuery("#order-submit").trigger("click");
 		setTimeout(function(){
 			jQuery("#custom-loading").hide();
 		},500);
 		jQuery("#order-alpha").blur();
+	});
+
+	/* Button to sort the list on slug */
+	jQuery("#order-slug").click(function(e) {
+		e.preventDefault();
+		jQuery("#custom-loading").show();
+		customtaxorder_orderslug();
+		setTimeout(function(){
+			jQuery("#custom-loading").hide();
+		},500);
+		jQuery("#order-slug").blur();
 	});
 
 });
@@ -47,6 +57,7 @@ function customtaxorder_addloadevent(){
 addLoadEvent(customtaxorder_addloadevent);
 
 
+/* Get all the term_orders and send it in a submit. */
 function customtaxorder_ordersubmit() {
 
 	/* Terms */
@@ -62,7 +73,7 @@ function customtaxorder_ordersubmit() {
 	return true;
 }
 
-
+/* Alphabetical ascending sort based on text. */
 function customtaxorder_orderalpha() {
 	jQuery("#custom-order-list li").sort(customtaxorder_asc_sort).appendTo('#custom-order-list');
 	var newOrder = jQuery("#custom-order-list").sortable("toArray");
@@ -70,9 +81,19 @@ function customtaxorder_orderalpha() {
 	jQuery("#hidden-custom-order").val(newOrder);
 	return true;
 }
-
-
-// Ascending sort
 function customtaxorder_asc_sort(a, b) {
 	return jQuery(a).text().localeCompare(jQuery(b).text(), undefined, {numeric: true, sensitivity: 'base'});
+}
+
+
+/* Alphabetical ascending sort based on slug. */
+function customtaxorder_orderslug() {
+	jQuery("#custom-order-list li").sort(customtaxorder_slug_sort).appendTo('#custom-order-list');
+	var newOrder = jQuery("#custom-order-list").sortable("toArray");
+	jQuery("#custom-loading").show();
+	jQuery("#hidden-custom-order").val(newOrder);
+	return true;
+}
+function customtaxorder_slug_sort(a, b) {
+	return jQuery(a).attr('data-slug').localeCompare(jQuery(b).attr('data-slug'), undefined, {numeric: true, sensitivity: 'base'});
 }

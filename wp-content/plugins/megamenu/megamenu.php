@@ -4,7 +4,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: An easy to use mega menu plugin. Written the WordPress way.
- * Version:     2.7.4
+ * Version:     2.7.7
  * Author:      megamenu.com
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -36,7 +36,7 @@ final class Mega_Menu {
     /**
      * @var string
      */
-    public $version = '2.7.4';
+    public $version = '2.7.7';
 
 
     /**
@@ -78,6 +78,7 @@ final class Mega_Menu {
         add_filter( 'wp_nav_menu', array( $this, 'add_responsive_toggle' ), 10, 2 );
 
         add_filter( 'wp_nav_menu_objects', array( $this, 'add_widgets_to_menu' ), apply_filters("megamenu_wp_nav_menu_objects_priority", 10), 2 );
+        add_filter( 'megamenu_nav_menu_objects_before', array( $this, 'apply_depth_to_menu_items' ), 5, 2 );
         add_filter( 'megamenu_nav_menu_objects_before', array( $this, 'setup_menu_items' ), 5, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'reorder_menu_items_within_megamenus' ), 6, 2 );
         add_filter( 'megamenu_nav_menu_objects_after', array( $this, 'apply_classes_to_menu_items' ), 7, 2 );
@@ -290,7 +291,7 @@ final class Mega_Menu {
             return wp_nav_menu( array( 'theme_location' => $atts['location'], 'echo' => false ) );
         }
 
-        return "<!-- menu not found [maxmegamenu location={$atts['location']}] -->";
+        return "<!-- menu not found [maxmegamenu] -->";
 
     }
 
@@ -381,6 +382,7 @@ final class Mega_Menu {
                 if ( is_readable( MEGAMENU_PATH . "integration/{$template}/functions.php" ) ) {
                     require_once( MEGAMENU_PATH . "integration/{$template}/functions.php" );
                 }
+            default:
             break;
         }
 
@@ -458,7 +460,6 @@ final class Mega_Menu {
      * @since 1.3
      */
     public function add_responsive_toggle( $nav_menu, $args ) {
-
         $args = (object) $args;
         
         // make sure we're working with a Mega Menu
@@ -758,19 +759,17 @@ final class Mega_Menu {
         return $rolling_last_menu_order + 1000;
 
     }
-
+    
 
     /**
-     * Setup the mega menu settings for each menu item
+     * Determine if menu item is a top level item or a second level item
      *
-     * @since 2.0
+     * @since 2.7.7
      * @param array $items - All menu item objects
      * @param object $args
      * @return array
      */
-    public function setup_menu_items( $items, $args ) {
-        // apply depth
-        // @todo work out a better way to do this. Suggestions welcome..!
+    public function apply_depth_to_menu_items( $items, $args ) {
         $parents = array();
 
         foreach ( $items as $key => $item ) {
@@ -787,6 +786,20 @@ final class Mega_Menu {
                 }
             }
         }
+
+        return $items;
+    }
+
+
+    /**
+     * Setup the mega menu settings for each menu item
+     *
+     * @since 2.0
+     * @param array $items - All menu item objects
+     * @param object $args
+     * @return array
+     */
+    public function setup_menu_items( $items, $args ) {
 
         // apply saved metadata to each menu item
         foreach ( $items as $item ) {
@@ -1104,6 +1117,13 @@ final class Mega_Menu {
                 $effect_speed_mobile = 0;
             }
 
+            $hover_intent_params = apply_filters("megamenu_javascript_localisation", // backwards compatiblity
+                array(
+                    "timeout" => 300,
+                    "interval" => 100
+                )
+            );
+
             $wrap_attributes = apply_filters("megamenu_wrap_attributes", array(
                 "id" => '%1$s',
                 "class" => '%2$s mega-no-js',
@@ -1119,7 +1139,9 @@ final class Mega_Menu {
                 "data-document-click" => 'collapse',
                 "data-vertical-behaviour" => $vertical_behaviour,
                 "data-breakpoint" => absint( $menu_theme['responsive_breakpoint'] ),
-                "data-unbind" => $unbind === "disabled" ? "false" : "true"
+                "data-unbind" => $unbind === "disabled" ? "false" : "true",
+                "data-hover-intent-timeout" => absint($hover_intent_params['timeout']),
+                "data-hover-intent-interval" => absint($hover_intent_params['interval'])             
             ), $menu_id, $menu_settings, $settings, $current_theme_location );
 
             $attributes = "";
@@ -1313,6 +1335,7 @@ if ( ! function_exists( 'mmm_get_theme_for_location' ) ) {
         return $themes['default'];
     }
 }
+
 
 if ( ! function_exists( 'max_mega_menu_is_enabled' ) ) {
 

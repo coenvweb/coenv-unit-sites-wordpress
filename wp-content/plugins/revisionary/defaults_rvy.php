@@ -34,9 +34,11 @@ function rvy_default_options_sitewide() {
 		'scheduled_revision_update_post_date' => true,
 		'pending_revision_update_post_date' => true,
 		'edd_key' => true,
+		'revision_preview_links' => true,
 		'preview_link_type' => true,
 		'compare_revisions_direct_approval' => true,
 		'display_pp_branding' => true,
+		'trigger_post_update_actions' => true,
 	);
 
 	if ( $other_options = array_diff_key( rvy_default_options(), $def ) ) {
@@ -70,9 +72,11 @@ function rvy_default_options() {
 		'scheduled_revision_update_post_date' => 1,
 		'pending_revision_update_post_date' => 0,
 		'edd_key' => '',
+		'revision_preview_links' => 1,
 		'preview_link_type' => 'published_slug',
 		'compare_revisions_direct_approval' => 0,
 		'display_pp_branding' => 1,
+		'trigger_post_update_actions' => 0,
 	);
 
 	return $def;

@@ -98,9 +98,9 @@ function rvy_maybe_redirect() {
 class RVY_RestAPI {
     // register a postmeta field to flag the need for a redirect following scheduled revision creation
     public static function register_scheduled_rev_meta_field() {
-			$post_types = get_post_types( array( 'public' => true ) );
+			global $revisionary;
 
-			foreach( $post_types as $post_type ) {
+			foreach(array_keys($revisionary->enabled_post_types) as $post_type ) {
 				// Thanks to Josh Pollock for demonstrating this:
 				// https://torquemag.io/2015/07/working-with-post-meta-data-using-the-wordpress-rest-api/
 				register_rest_field( $post_type, 'new_scheduled_revision', array(
@@ -260,8 +260,8 @@ function rvy_detect_post_id() {
 		$post_id = $_GET['post'];
 	elseif ( ! empty( $_POST['post_ID'] ) )
 		$post_id = $_POST['post_ID'];
-	elseif ( ! empty( $_GET['post_id'] ) )
-		$post_id = $_GET['post_id'];
+	elseif ( ! empty( $_REQUEST['post_id'] ) )
+		$post_id = $_REQUEST['post_id'];
 	elseif ( ! empty( $_GET['p'] ) )
 		$post_id = $_GET['p'];
 	elseif ( ! empty( $_GET['id'] ) )
@@ -355,7 +355,12 @@ function rvy_refresh_default_options() {
 function rvy_apply_custom_default_options() {
 	global $wpdb, $rvy_default_options, $rvy_options_sitewide;
 	
-	if ( $results = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE site_id = '$wpdb->siteid' AND meta_key LIKE 'rvy_default_%'" ) ) {
+	if ( $results = $wpdb->get_results( 
+		$wpdb->prepare(
+			"SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE site_id = %d AND meta_key LIKE 'rvy_default_%'", 
+			$wpdb->siteid
+		)	
+	) ) {
 		foreach ( $results as $row ) {
 			$option_basename = str_replace( 'rvy_default_', '', $row->meta_key );
 
@@ -409,9 +414,16 @@ function rvy_retrieve_options( $sitewide = false ) {
 		
 		$rvy_site_options = array();
 
-		if ( $results = $wpdb->get_results( "SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE site_id = '$wpdb->siteid' AND meta_key LIKE 'rvy_%'" ) )
-			foreach ( $results as $row )
+		if ( $results = $wpdb->get_results( 
+			$wpdb->prepare(
+				"SELECT meta_key, meta_value FROM $wpdb->sitemeta WHERE site_id = %d AND meta_key LIKE 'rvy_%'",
+				$wpdb->siteid
+			) 	
+		) ) {
+			foreach ( $results as $row ) {
 				$rvy_site_options[$row->meta_key] = $row->meta_value;
+			}
+		}
 
 		$rvy_site_options = apply_filters( 'site_options_rvy', $rvy_site_options );
 		return $rvy_site_options;
@@ -421,9 +433,11 @@ function rvy_retrieve_options( $sitewide = false ) {
 		
 		$rvy_blog_options = array();
 		
-		if ( $results = $wpdb->get_results("SELECT option_name, option_value FROM $wpdb->options WHERE option_name LIKE 'rvy_%'") )
-			foreach ( $results as $row )
+		if ( $results = $wpdb->get_results("SELECT option_name, option_value FROM $wpdb->options WHERE option_name LIKE 'rvy_%'") ) {
+			foreach ( $results as $row ) {
 				$rvy_blog_options[$row->option_name] = $row->option_value;
+			}
+		}
 				
 		$rvy_blog_options = apply_filters( 'options_rvy', $rvy_blog_options );
 		return $rvy_blog_options;
@@ -517,6 +531,25 @@ function rvy_error( $err_slug, $arg2 = '' ) {
 	$rvy_err->error_notice( $err_slug );
 }
 
+function rvy_check_duplicate_mail($new_msg, $sent_mail, $buffer) {
+	// $new_msg = array_merge(compact('address', 'title', 'message'), ['time' => strtotime(current_time( 'mysql' )), 'time_gmt' => time()], $args);
+
+	foreach([$sent_mail, $buffer] as $compare_set) {
+		foreach($compare_set as $sent) {
+			foreach(['address', 'title', 'message'] as $field) {
+				if ($new_msg[$field] != $sent[$field]) {
+					continue 2;
+				}
+			}
+
+			// If an identical message was sent or queued to the same recipient less than 2 seconds ago, don't send another
+			if (abs($new_msg['time_gmt'] - $sent['time_gmt']) <= 1) {
+				return true;
+			}
+		}
+	}
+}
+
 function rvy_mail( $address, $title, $message, $args ) {
 	// args: ['revision_id' => $revision_id, 'post_id' => $published_post->ID, 'notification_type' => $notification_type, 'notification_class' => $notification_class]
 
@@ -531,8 +564,14 @@ function rvy_mail( $address, $title, $message, $args ) {
 	 *   - If exceeding daily, hourly or minute limit, add this email to buffer
 	 * 	 - If sending, add current timestamp to wp_option array revisionary_sent_mail
 	 */
+	
+	$send = apply_filters('revisionary_mail', compact('address', 'title', 'message'), $args);
 
-	$new_msg = array_merge(compact('address', 'title', 'message'), ['time' => strtotime(current_time( 'mysql' )), 'time_gmt' => time()], $args);
+	if (empty($send['address'])) {
+		return;
+	}
+
+	$new_msg = array_merge($send, ['time' => strtotime(current_time( 'mysql' )), 'time_gmt' => time()], $args);
 
 	if (!$buffer_status = rvy_mail_check_buffer($new_msg)) {
 		$buffer_status = (object)[];
@@ -542,10 +581,16 @@ function rvy_mail( $address, $title, $message, $args ) {
 		return;
 	}
 
+	$sent_mail = (!empty($buffer_status->sent_mail)) ? $buffer_status->sent_mail : [];
+	$buffer = (!empty($buffer_status->buffer)) ? $buffer_status->buffer : [];
+	if (rvy_check_duplicate_mail($new_msg, $sent_mail, $buffer)) {
+		return;
+	}
+
 	if ( defined( 'RS_DEBUG' ) )
-		$success = wp_mail( $address, $title, $message );
+		$success = wp_mail( $new_msg['address'], $new_msg['title'], $new_msg['message'] );
 	else
-		$success = @wp_mail( $address, $title, $message );
+		$success = @wp_mail( $new_msg['address'], $new_msg['title'], $new_msg['message'] );
 
 	if ($success || !defined('REVISIONARY_MAIL_RETRY')) {
 		if (!defined('REVISIONARY_DISABLE_MAIL_LOG')) {
@@ -603,7 +648,7 @@ function rvy_is_status_published( $status ) {
 }
 
 function rvy_revision_statuses() {
-	return apply_filters('rvy_revision_statuses', array('pending-revision', 'future-revision'));
+	return array_map('sanitize_key', (array) apply_filters('rvy_revision_statuses', array('pending-revision', 'future-revision')));
 }
 
 function rvy_is_revision_status($status) {
@@ -638,19 +683,6 @@ function rvy_post_id($revision_id) {
 	return ($published_id) ? $published_id : 0;
 }
 
-/*
-function rvy_get_post_meta($post_id, $key, $single = false) {
-	global $wpdb;
-	if ( $results = $wpdb->get_results( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '$key' AND post_id = '$post_id' GROUP BY meta_id LIMIT 1" ) ) {
-		if ( $single )
-			return current( $results[0] );
-		else
-			return @array_map( 'maybe_unserialize', current($results) );
-	} else
-		return false;
-}
-*/
-
 function rvy_halt( $msg, $title = '' ) {
 	if ( ! $title ) {
 		$title = __( 'Revision Workflow', 'revisionary' );
@@ -682,9 +714,9 @@ function rvy_is_supported_post_type($post_type) {
 function rvy_get_manageable_types() {
 	$types = array();
 	
-	global $current_user;
+	global $current_user, $revisionary;
 	
-	foreach( get_post_types( array( 'public' => true ), 'object' ) as $post_type => $type_obj ) {
+	foreach(array_keys($revisionary->enabled_post_types) as $post_type) {
 		//if ( ! empty( $current_user->allcaps[$type_obj->cap->publish_posts] ) 
 		//&& ! empty( $current_user->allcaps[$type_obj->cap->edit_published_posts] ) 
 		//&& ! empty( $current_user->allcaps[$type_obj->cap->edit_others_posts] ) ) {
@@ -781,21 +813,24 @@ function rvy_init() {
 		
 			// If a previously requested asynchronous request was ineffective, perform the actions now
 			// (this is not executed if the current URI is from a manual publication request with action=publish_scheduled_revisions)
-			$requested_actions = get_option( 'requested_remote_actions_rvy' );
-			if ( is_array( $requested_actions) && ! empty($requested_actions) ) {
-				if ( ! empty($requested_actions['publish_scheduled_revisions']) ) {
-					require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
-					rvy_publish_scheduled_revisions();
-					unset( $requested_actions['publish_scheduled_revisions'] );
+			if (defined('RVY_SCHEDULED_PUBLISH_FALLBACK')) {
+				$requested_actions = get_option( 'requested_remote_actions_rvy' );
+				if ( is_array( $requested_actions) && ! empty($requested_actions) ) {
+					if ( ! empty($requested_actions['publish_scheduled_revisions']) ) {
+						require_once( dirname(__FILE__).'/admin/revision-action_rvy.php');
+						rvy_publish_scheduled_revisions();
+						unset( $requested_actions['publish_scheduled_revisions'] );
+					}
+		
+					update_option( 'requested_remote_actions_rvy', $requested_actions );
 				}
-	
-				update_option( 'requested_remote_actions_rvy', $requested_actions );
 			}
 			
 			$next_publish = get_option( 'rvy_next_rev_publish_gmt' );
 			
 			// automatically publish any scheduled revisions whose time has come
 			if ( ! $next_publish || ( agp_time_gmt() >= strtotime( $next_publish ) ) ) {
+				update_option('rvy_next_rev_publish_gmt', '2035-01-01 00:00:00');
 
 				if ( ini_get( 'allow_url_fopen' ) && rvy_get_option('async_scheduled_publish') ) {
 					// asynchronous secondary site call to avoid delays // TODO: pass site key here

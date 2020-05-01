@@ -153,6 +153,8 @@ class Mega_Menu_Widget_Manager {
                         <option value='2' <?php selected( $menu_item_meta['submenu_columns'], 2, true ) ?> >2 <?php __("columns", "megamenu") ?></option>
                         <option value='3' <?php selected( $menu_item_meta['submenu_columns'], 3, true ) ?> >3 <?php __("columns", "megamenu") ?></option>
                         <option value='4' <?php selected( $menu_item_meta['submenu_columns'], 4, true ) ?> >4 <?php __("columns", "megamenu") ?></option>
+                        <option value='5' <?php selected( $menu_item_meta['submenu_columns'], 5, true ) ?> >5 <?php __("columns", "megamenu") ?></option>
+                        <option value='6' <?php selected( $menu_item_meta['submenu_columns'], 6, true ) ?> >6 <?php __("columns", "megamenu") ?></option>
                     </select>
                 </p>
                 <p>

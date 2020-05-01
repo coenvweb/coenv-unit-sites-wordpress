@@ -56,6 +56,8 @@ class Revisionary
 			}
 		}
 
+		$this->setPostTypes();
+
 		rvy_refresh_options_sitewide();
 
 		// NOTE: $_GET['preview'] and $_GET['post_type'] arguments are set by rvy_init() at response to ?p= request when the requested post is a revision.
@@ -145,8 +147,15 @@ class Revisionary
 	}
 
 	function configurationLateInit() {
-		$this->enabled_post_types = apply_filters('revisionary_enabled_post_types', array_fill_keys(get_post_types(['public' => true]), true));
+		$this->setPostTypes();
 		$this->config_loaded = true;
+	}
+
+	// This is intentionally called twice: once for code that fires on 'init' and then very late on 'init' for types which were registered late on 'init'
+	private function setPostTypes() {
+		$this->enabled_post_types = apply_filters('revisionary_enabled_post_types', array_fill_keys(get_post_types(['public' => true]), true));
+		unset($this->enabled_post_types['attachment']);
+		$this->enabled_post_types = array_filter($this->enabled_post_types);
 	}
 
 	function fltEditRevisionUpdatedLink($permalink, $post, $leavename) {
@@ -537,8 +546,8 @@ class Revisionary
 			if (is_admin() || (defined('REST_REQUEST') && REST_REQUEST) || empty($_REQUEST['preview']) || !empty($_POST) || did_action('template_redirect')) {
 				if ($type_obj = get_post_type_object( $post->post_type )) {
 					if (isset($type_obj->cap->edit_published_posts)) {
-						$check_cap = in_array($cap, ['delete_post', 'delete_page']) ? $type_obj->cap->delete_published_posts : $type_obj->cap->edit_published_posts;
-						return array_merge($caps, [$check_cap]);
+					$check_cap = in_array($cap, ['delete_post', 'delete_page']) ? $type_obj->cap->delete_published_posts : $type_obj->cap->edit_published_posts;
+					return array_merge($caps, [$check_cap]);
 					} else {
 						return $caps;
 					}
@@ -669,11 +678,13 @@ class Revisionary
 			if ( ( 
 				( ! strpos( $script_name, 'p-admin/post.php' ) || empty( $_POST ) ) 
 				&& ! $this->doing_rest && ! rvy_wp_api_request() 
-				&& ( ! defined('DOING_AJAX') || ! DOING_AJAX ) 
+				&& ( ! defined('DOING_AJAX') || ! DOING_AJAX )
 				) || empty( $_REQUEST['action'] ) || ( 'editpost' != $_REQUEST['action'] ) 
 			) {
-				if ( ! in_array( $args[0], array( 'edit_published_pages', 'edit_others_pages', 'edit_private_pages', 'edit_pages', 'publish_pages', 'publish_posts' ) ) ) {
-					return $wp_blogcaps;
+				if (!apply_filters('revisionary_flag_as_post_update', false, $post_id, $reqd_caps, $args, $internal_args)) {
+					if ( ! in_array( $args[0], array( 'edit_published_pages', 'edit_others_pages', 'edit_private_pages', 'edit_pages', 'publish_pages', 'publish_posts' ) ) ) {
+						return $wp_blogcaps;
+					}
 				}
 			}
 		}
@@ -806,7 +817,7 @@ class Revisionary
 	
 	function flt_regulate_revision_status($data, $postarr) {
 		// Revisions are not published by wp_update_post() execution; Prevent setting to a non-revision status
-		if (get_post_meta($postarr['ID'], '_rvy_base_post_id', true)) {
+		if (get_post_meta($postarr['ID'], '_rvy_base_post_id', true) && ('trash' != $data['post_status'])) {
 			$revision = get_post($postarr['ID']);
 			
 			if (!rvy_is_revision_status($data['post_status'])) {

@@ -364,13 +364,15 @@ $header_height: 75px;
 
 				button.mega-add-row,
 				button.mega-add-column {
-					height: 21px;
-					line-height: 20px;
+					height: 23px;
+					min-height: 23px;
+					line-height: 22px;
 					font-size: 12px;
 					padding-left: 4px;
 
 					.dashicons-plus {
-						margin-top: 4px;
+						margin-right: 4px;
+						line-height: 22px;
 					}
 				}
 
@@ -1055,167 +1057,16 @@ $header_height: 75px;
 				}
 			}
 
-			#widgets[data-columns='1'] {
-				.widget[data-columns='1'] {
-					width: 100%;
-				}
+			#widgets {
+                @for $of from 1 through 12 {
+                    @for $cols from 1 through $of {
+                        &[data-columns='#{$of}'] .widget[data-columns='#{$cols}'] {
+                            width: (100% / $of) * $cols;
+                        }
+                    }
+                }
 			}
 
-			#widgets[data-columns='2'] {
-				.widget[data-columns='1'] {
-					width: 50%;
-				}
-				.widget[data-columns='2'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='3'] {
-				.widget[data-columns='1'] {
-					width: 33.3%;
-				}
-				.widget[data-columns='2'] {
-					width: 66.6%;
-				}
-				.widget[data-columns='3'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='4'] {
-				.widget[data-columns='1'] {
-					width: 25%;
-				}
-				.widget[data-columns='2'] {
-					width: 50%;
-				}
-				.widget[data-columns='3'] {
-					width: 75%;
-				}
-				.widget[data-columns='4'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='5'] {
-				.widget[data-columns='1'] {
-					width: 20%;
-				}
-				.widget[data-columns='2'] {
-					width: 40%;
-				}
-				.widget[data-columns='3'] {
-					width: 60%;
-				}
-				.widget[data-columns='4'] {
-					width: 80%;
-				}
-				.widget[data-columns='5'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='6'] {
-				.widget[data-columns='1'] {
-					width: 16.6%;
-				}
-				.widget[data-columns='2'] {
-					width: 33.3%;
-				}
-				.widget[data-columns='3'] {
-					width: 50%;
-				}
-				.widget[data-columns='4'] {
-					width: 66.6%;
-				}
-				.widget[data-columns='5'] {
-					width: 83.3%;
-				}
-				.widget[data-columns='6'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='7'] {
-				.widget[data-columns='1'] {
-					width: 14.28%;
-				}
-				.widget[data-columns='2'] {
-					width: 28.57%;
-				}
-				.widget[data-columns='3'] {
-					width: 42.85%;
-				}
-				.widget[data-columns='4'] {
-					width: 57.14%;
-				}
-				.widget[data-columns='5'] {
-					width: 71.42%;
-				}
-				.widget[data-columns='6'] {
-					width: 85.71%;
-				}
-				.widget[data-columns='7'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='8'] {
-				.widget[data-columns='1'] {
-					width: 12.5%;
-				}
-				.widget[data-columns='2'] {
-					width: 25%;
-				}
-				.widget[data-columns='3'] {
-					width: 37.5%;
-				}
-				.widget[data-columns='4'] {
-					width: 50%;
-				}
-				.widget[data-columns='5'] {
-					width: 62.5%;
-				}
-				.widget[data-columns='6'] {
-					width: 75%;
-				}
-				.widget[data-columns='7'] {
-					width: 87.5%;
-				}
-				.widget[data-columns='8'] {
-					width: 100%;
-				}
-			}
-
-			#widgets[data-columns='9'] {
-				.widget[data-columns='1'] {
-					width: 11.11%;
-				}
-				.widget[data-columns='2'] {
-					width: 22.22%;
-				}
-				.widget[data-columns='3'] {
-					width: 33.33%;
-				}
-				.widget[data-columns='4'] {
-					width: 44.44%;
-				}
-				.widget[data-columns='5'] {
-					width: 55.55%;
-				}
-				.widget[data-columns='6'] {
-					width: 66.66%;
-				}
-				.widget[data-columns='7'] {
-					width: 77.77%;
-				}
-				.widget[data-columns='8'] {
-					width: 88.88%;
-				}
-				.widget[data-columns='9'] {
-					width: 100%;
-				}
-			}
 		}
 
 		label[for='mm_enable_mega_menu'] {
@@ -1498,7 +1349,7 @@ $header_height: 75px;
 
 	.mm_launch {
 		margin-left: 10px;
-		font-size: 0.8em;
+		font-size: 12px;
 		cursor: pointer;
 		color: white;
 		display: inline-block;
@@ -1523,9 +1374,9 @@ $header_height: 75px;
 			font-family: dashicons;
 			content: "\f111";
 			font-size: 10px;
-			margin-right: 2px;
+			margin-right: 4px;
 			display: inline-block;
-			vertical-align: bottom;
+			vertical-align: middle;
 		}
 	}
 

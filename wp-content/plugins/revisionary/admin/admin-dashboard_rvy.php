@@ -5,16 +5,17 @@ function rvy_glance_pending() {
 	if ( ( defined( 'SCOPER_VERSION' ) || defined( 'PP_VERSION' ) || defined( 'PPCE_VERSION' ) || defined( 'RVY_CONTENT_ROLES' ) ) && ! defined( 'USE_RVY_RIGHTNOW' ) )
 		return;
 
-	$post_types = array_diff_key( get_post_types( array( 'public' => true ), 'object' ), array( 'attachment' => true ) );
+	global $revisionary;
 
-	foreach ( $post_types as $post_type => $post_type_obj ) {
+	foreach (array_keys($revisionary->enabled_post_types) as $post_type) {
 		$cache_key = _count_posts_cache_key( $post_type );
 		wp_cache_delete( $cache_key, 'counts' );
 
 		if ( $num_posts = wp_count_posts( $post_type ) ) {   // @todo: PressPermit compat for count_posts filtering with revision statuses
-			
+
 			foreach( array( 'pending-revision', 'future-revision' ) as $status ) {
 				if ( ! empty($num_posts->$status) ) {
+					$post_type_obj = get_post_type_object($post_type);
 					$status_obj = get_post_status_object($status);
 
 					echo '<div class="rvy-glance-pending">';

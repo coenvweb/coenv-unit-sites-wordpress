@@ -126,7 +126,7 @@ class RevisionCreation {
 		} else {
 			global $revisionary;
 		}
-
+        
         if ( $revisionary->doing_rest && $revisionary->rest->is_posts_request && ! empty( $revisionary->rest->request ) ) {
             $postarr = array_merge( $revisionary->rest->request->get_params(), $postarr );
             
@@ -220,7 +220,20 @@ class RevisionCreation {
                 $data['post_date'] = date( 'Y-m-d H:i:00', strtotime( $data['post_date'] ) );
             }
 
-            $data = wp_unslash( $data );
+			$emoji_fields = array( 'post_title', 'post_content', 'post_excerpt' );
+
+			foreach ( $emoji_fields as $emoji_field ) {
+				if ( isset( $data[ $emoji_field ] ) ) {
+					$charset = $wpdb->get_col_charset( $wpdb->posts, $emoji_field );
+					if ( 'utf8' === $charset ) {
+						$data[ $emoji_field ] = wp_encode_emoji( $data[ $emoji_field ] );
+					}
+				}
+			}
+
+			if (defined('RVY_REVISION_CREATION_DO_UNSLASH')) {
+            	$data = wp_unslash( $data );
+			}
 
             $revision_id = $this->create_revision($data, $postarr);
             if (!is_scalar($revision_id)) { // update_post_data() returns array or object on update abandon / failure
@@ -252,6 +265,15 @@ class RevisionCreation {
             $msg = __('Sorry, an error occurred while attempting to submit your revision!', 'revisionary') . ' ';
             rvy_halt( $msg, __('Revision Submission Error', 'revisionary') );
         }
+
+		// Prevent unintended clearance of Page Template on revision submission
+		if ($revisionary->isBlockEditorActive()) {
+			if ($published_template = get_post_meta($published_post->ID, '_wp_page_template', true)) {
+				if (!get_post_meta($revision_id, '_wp_page_template', true)) {
+					update_post_meta($revision_id, '_wp_page_template', $published_template);
+				}
+			}
+		}
 
         if (!$revisionary->doing_rest) {
             $_POST['ID'] = $revision_id;
@@ -581,7 +603,7 @@ class RevisionCreation {
 
 		// If term selections are not posted for revision, store current published terms
 		foreach(get_taxonomies(['public' => true]) as $taxonomy) {
-			if (empty($set_taxonomies[$taxonomy])) {
+			if (empty($set_taxonomies[$taxonomy]) && !in_array($taxonomy, ['category', 'post_tag'])) {
 				if ($published_terms = wp_get_object_terms($published_post_id, $taxonomy, ['fields' => 'ids'])) {
 					wp_set_object_terms( $post_ID, $published_terms, $taxonomy );
 				}
@@ -671,6 +693,9 @@ class RevisionCreation {
 	
 			return $data;
 		}
+
+		$data['ID'] = $revision_id;
+		do_action('revisionary_create_revision', $data);
 
 		return (int) $revision_id; // only return array in calling function should return
 	}

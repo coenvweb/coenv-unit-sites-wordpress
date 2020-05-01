@@ -58,6 +58,10 @@ Plugin URI: http://timelord.nl/
 	margin: 3px auto;
 	height: 30px;
 }
+.customtaxorder #publishing-action-return-sub-posts {
+	margin: 0 0 10px 0;
+}
+
 
 /* Dark Mode */
 .dark-mode .customtaxorder h2.widget-top,

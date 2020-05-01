@@ -3,9 +3,9 @@ Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
 Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, seo, scale
 Requires at least: 5.0
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 5.2.2
+Stable tag: 5.3.0
 License: GPLv3
 
 Speed up your website to better connect with your visitors. Properly compress and size/scale images. Includes lazy load and WebP convert.
@@ -173,7 +173,50 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 * Feature requests can be viewed and submitted at https://github.com/nosilver4u/ewww-image-optimizer/labels/enhancement
 * If you would like to help translate this plugin in your language, get started here: https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/
 
-= 5.2.2
+= 5.3.0 =
+* added: Easy IO replaces image URLs within style elements for page builders like Elementor and Divi
+* added: option to use <picture> tags for WebP rewriting
+* added: ability to define exclusions for JS WebP and <picture> WebP
+* added: include .webp images when using WP Offload Media to copy images from bucket to server
+* added: cleanup/migration tool for folks using EWWW IO 3+ years to remove old metadata entries
+* added: fetch original_image for optimization when local images are removed (WP Offload Media and Microsoft Azure Storage for WordPress)
+* changed: scheduled optimizer uses async/background mode to prevent timeouts
+* changed: images that exceed the max resize dimensions will be queued by the bulk scanner even if previously compressed
+* changed: for security, EWWW IO will only optimize images within the WP root folder, content folder, or uploads folder
+* changed: WebP Only mode will bypass the check for TinyPNG compression
+* changed: background/async mode uses better queueing system for speed and reliability
+* changed: image queue information moved to Tools page
+* changed: image re-opt troubleshooting moved to Tools page
+* fixed: noresize in filename has no effect when using Media File Renamer
+* fixed: debug_message() throws a warning with non-string values
+* fixed: notices when uploading animated GIFs using GD
+* fixed: notices when parsing JSON data from Envira
+* fixed: fatal error when a WP_Error is passed from Envira to Easy IO
+* fixed: executables could not be installed on Windows due to behavior of is_executable() on directories
+* fixed: Include All Resources rewrites wrong URLs when quotes are html-encoded
+* fixed: <picture> tags do not follow Lazy Load exclusions
+* fixed: <picture> tags broken when exluding images from Lazy Load
+* fixed: Azure storage plugin doesn't re-upload optimized images
+
+= 5.2.5 =
+* removed: data-pin-media attribute, as Pinterest is handling WebP images properly now
+
+= 5.2.4 =
+* fixed: data-pin-media attribute added to linked images incorrectly
+* fixed: images are not resized to max dimensions when using S3 Uploads plugin
+
+= 5.2.3 =
+* added: Easy IO sets pre-scaled image in data-pin-media for Pinterest
+* added: Envira Pro cache cleared when activating Easy IO
+* changed: improved compatibility layer with S3 Uploads plugin
+* fixed: background image lazy-loading could be interrupted by other plugins copying elements
+* fixed: JS WebP provides .webp images to Pinterest
+* fixed: JS WebP strips Pinterest data/meta attributes
+* fixed: Easy IO misses some images with Envira Gallery Pro layouts
+* fixed: missing www in domain prevents rewrites for Easy IO
+* fixed: JS WebP and Lazy Load parsing X/Pro theme admin pages
+
+= 5.2.2 =
 * added: automatic plan upgrade detection
 * changed: better compatibility with other implementations of "native lazy load"
 * updated: lazysizes.js to version 5.2
@@ -203,51 +246,6 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 * fixed: errors due to duplicate ssl= arguments in URLs
 * fixed: JS WebP has incorrect selector for video elements (props @CharlieHawker)
 * updated: embedded help code for better debug prefill
-
-= 5.1.4 =
-* fixed: warnings on FlaGallery's manage gallery page
-* fixed: cwebp version test results in false-positives
-* fixed: EWWW IO resize limits are ignored when higher than WP default
-* fixed: PNGOUT warning during one-click conversion
-* fixed: WebP images not removed from remote storage when an attachment is deleted (WP Offload Media)
-* fixed: after running regen for single thumbs with Image Regenerate & Select Crop plugin, regenerated images were not automatically optimized
-
-= 5.1.3 =
-* added: better compatibility with Divi filterable grid images and parallax backgrounds
-* added: cleanup .webp and database records when using Enable Media Replace
-* fixed: Divi builder will not load with Easy IO and Include All Resources active
-* fixed: image cover block with fixed width scaled too much
-* fixed: PNG placeholders could use more memory than available
-* removed: Lazy Load CSS gradient for blank placeholders
-
-= 5.1.2 =
-* added: disable native lazy-load attributes with EWWWIO_DISABLE_NATIVE_LAZY
-* added: ability to choose LQIP or blank placeholders for lazy load
-* changed: renaming ExactDN as Easy IO
-* changed: default to blank placeholders with Easy IO
-* changed: regenerated images are automatically re-optimized after running Image Regenerate & Select Crop plugin
-* fixed: low-quality placeholders sometimes had larger dimensions than necessary
-* fixed: database records and .webp images are not removed when Image Regenerate & Select Crop plugin deletes a thumbnail
-* fixed: path traversal protection preventing normal files from optimizing
-* fixed: Slider Revolution dummy.png not properly handled by Easy IO
-
-= 5.1.1 =
-* fixed: no optimization when escapeshellarg() is disabled
-* fixed: warning thrown by implode() when JS WebP is enabled with no WebP URLs
-
-= 5.1.0 =
-* added: WebP-only mode for Bulk Optimizer
-* added: JS WebP Rewriting for pull-mode CDNs via WebP URLS without Force WebP
-* added: JS WebP Rewriting zero-conf for WP Offload Media
-* added: force lossy PNG to WebP conversion with EWWW_IMAGE_OPTIMIZER_LOSSY_PNG2WEBP override (set to true)
-* changed: bulk optimizer runs wp_update_attachment_metadata() in separate request to avoid timeouts
-* fixed: WebP warning regarding missing modules displayed even if green WebP test image is working
-* fixed: Nextgen bulk actions not working
-* fixed: unable to regenerate existing thumbnails with Image Regenerate & Select Crop plugin
-* updated: WebP (cwebp) binary to version 1.0.3
-* updated: Pngquant binary to version 2.12.5
-* updated: cwebp requires Mac OS X 10.14
-* updated: FreeBSD 10 is EOL, version 11 is the supported/tested version
 
 = Earlier versions =
 Please refer to the separate changelog.txt file.

@@ -25,7 +25,9 @@
             vertical_behaviour: $menu.attr("data-vertical-behaviour"),
             document_click: $menu.attr("data-document-click"),
             breakpoint: $menu.attr("data-breakpoint"),
-            unbind_events: $menu.attr("data-unbind")
+            unbind_events: $menu.attr("data-unbind"),
+            hover_intent_timeout: $menu.attr("data-hover-intent-timeout"),
+            hover_intent_interval: $menu.attr("data-hover-intent-interval")
         };
 
         plugin.settings = {};
@@ -273,8 +275,8 @@
                         plugin.hidePanel($(this).children("a.mega-menu-link"), false);
                     }
                 },
-                timeout: megamenu.timeout,
-                interval: megamenu.interval
+                timeout: plugin.settings.hover_intent_timeout,
+                interval: plugin.settings.hover_intent_interval
             });
         };
 
@@ -520,7 +522,8 @@
         plugin.initToggleBar = function() {
             // mobile menu
             $toggle_bar.on("click", function(e) {
-                if ( $(e.target).is(".mega-menu-toggle, .mega-menu-toggle-block, .mega-menu-toggle-animated-block, .mega-menu-toggle-animated-block *, .mega-toggle-blocks-left, .mega-toggle-blocks-center, .mega-toggle-blocks-right, .mega-toggle-label, .mega-toggle-label span") ) {                    if ($(this).hasClass("mega-menu-open")) {
+                if ( $(e.target).is(".mega-menu-toggle, .mega-menu-toggle-block, .mega-menu-toggle-animated-block, .mega-menu-toggle-animated-block *, .mega-toggle-blocks-left, .mega-toggle-blocks-center, .mega-toggle-blocks-right, .mega-toggle-label, .mega-toggle-label span") ) {
+                    if ($(this).hasClass("mega-menu-open")) {
                         plugin.hideMobileMenu();
                     } else {
                         plugin.showMobileMenu();

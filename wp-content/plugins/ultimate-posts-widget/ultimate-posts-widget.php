@@ -3,7 +3,7 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.1.0
+Version: 2.1.4
 Author: Clever Widgets
 Author URI: https://themecheck.info
 Text Domain: upw
@@ -19,7 +19,7 @@ analyst_init(array(
 ));
 
 
-if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
+if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
   class WP_Widget_Ultimate_Posts extends WP_Widget {
 
@@ -102,6 +102,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $atcat = $instance['atcat'] ? true : false;
       $thumb_size = $instance['thumb_size'];
       $attag = $instance['attag'] ? true : false;
+      $exclude_current = $instance['exclude_current'] ? true : false;
       $excerpt_length = $instance['excerpt_length'];
       $excerpt_readmore = $instance['excerpt_readmore'];
       $sticky = $instance['sticky'];
@@ -192,6 +193,10 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
 				'post_status' => array('publish', 'inherit')
       );
 
+			if ($exclude_current) {
+				$args['post__not_in'] = array($post->ID);
+			}
+
       if ($orderby === 'meta_value') {
         $args['meta_key'] = $meta_key;
       }
@@ -201,7 +206,6 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       }
 
       $args = apply_filters('upw_wp_query_args', $args, $instance, $this->id_base);
-
       $upw_query = new WP_Query($args);
 
       if ($instance['template'] === 'custom') {
@@ -246,6 +250,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $instance['atcat'] = isset( $new_instance['atcat'] );
       $instance['attag'] = isset( $new_instance['attag'] );
       $instance['show_excerpt'] = isset( $new_instance['show_excerpt'] );
+      $instance['exclude_current'] = isset( $new_instance['exclude_current'] );
       $instance['show_content'] = isset( $new_instance['show_content'] );
       $instance['show_thumbnail'] = isset( $new_instance['show_thumbnail'] );
       $instance['show_date'] = isset( $new_instance['show_date'] );
@@ -320,6 +325,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
         'show_author' => true,
         'show_comments' => false,
         'show_excerpt' => true,
+        'exclude_current' => false,
         'show_content' => false,
         'show_readmore' => true,
         'show_thumbnail' => true,
@@ -357,6 +363,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
       $show_author = $instance['show_author'];
       $show_comments = $instance['show_comments'];
       $show_excerpt = $instance['show_excerpt'];
+      $exclude_current = $instance['exclude_current'];
       $show_content = $instance['show_content'];
       $show_readmore = $instance['show_readmore'];
       $show_thumbnail = $instance['show_thumbnail'];
@@ -495,6 +502,11 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_comments' ); ?>" name="<?php echo $this->get_field_name( 'show_comments' ); ?>" type="checkbox" <?php checked( (bool) $show_comments, true ); ?> />
           <label for="<?php echo $this->get_field_id( 'show_comments' ); ?>"><?php _e( 'Show comments count', 'upw' ); ?></label>
+        </p>
+
+        <p>
+          <input class="checkbox" id="<?php echo $this->get_field_id( 'exclude_current' ); ?>" name="<?php echo $this->get_field_name( 'exclude_current' ); ?>" type="checkbox" <?php checked( (bool) $exclude_current, true ); ?> />
+          <label for="<?php echo $this->get_field_id( 'exclude_current' ); ?>"><?php _e( 'Exclude current post from the list', 'upw' ); ?></label>
         </p>
 
         <p>
@@ -662,6 +674,7 @@ if ( !class_exists( 'WP_Widget_Ultimate_Posts' ) ) {
           jQuery(document).ready(function($){
 
             var show_excerpt = $("#<?php echo $this->get_field_id( 'show_excerpt' ); ?>");
+            var exclude_current = $("#<?php echo $this->get_field_id( 'exclude_current' ); ?>");
             var show_content = $("#<?php echo $this->get_field_id( 'show_content' ); ?>");
             var show_readmore = $("#<?php echo $this->get_field_id( 'show_readmore' ); ?>");
             var show_readmore_wrap = $("#<?php echo $this->get_field_id( 'show_readmore' ); ?>").parents('p');

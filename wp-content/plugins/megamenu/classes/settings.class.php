@@ -300,18 +300,33 @@ class Mega_Menu_Settings {
 
     }
 
+
+    /**
+     * Sanitize multidimensional array
+     *
+     * @since 2.7.5
+     */
+    public function sanitize_array( &$array ) {
+        foreach ( $array as &$value) {   
+            if ( ! is_array( $value ) ) {
+                $value = sanitize_textarea_field( $value );
+            } else {
+                $this->sanitize_array( $value );
+            }
+        }
+        return $array;
+    }
+
     /**
      * Save menu general settings.
      *
      * @since 1.0
      */
     public function save_settings() {
-
         check_admin_referer( 'megamenu_save_settings' );
 
         if ( isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ) {
-
-            $settings = $_POST['settings'];
+            $settings = $this->sanitize_array( $_POST['settings'] );
 
             if ( ! isset( $settings['descriptions'] ) ) {
                 $settings['descriptions'] = 'disabled';
@@ -327,19 +342,16 @@ class Mega_Menu_Settings {
 
             $submitted_settings = apply_filters( "megamenu_submitted_settings", $settings );
             $existing_settings = get_option( 'megamenu_settings' );
-
             $new_settings = array_merge( (array)$existing_settings, $submitted_settings );
 
             update_option( 'megamenu_settings', $new_settings );
-
         }
 
         // update location description
         if ( isset( $_POST['location'] ) && is_array( $_POST['location'] ) ) {
-
+            $location = array_map( 'sanitize_text_field', $_POST['location'] );
             $locations = get_option('megamenu_locations');
-
-            $new_locations = array_merge( (array)$locations, $_POST['location'] );
+            $new_locations = array_merge( (array)$locations, $location );
 
             update_option( 'megamenu_locations', $new_locations );
         }
@@ -347,14 +359,11 @@ class Mega_Menu_Settings {
         delete_transient('megamenu_failed_to_write_css_to_filesystem');
 
         do_action("megamenu_after_save_general_settings");
-
         do_action("megamenu_delete_cache");
-
 
         $url = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : admin_url( "admin.php?page=maxmegamenu&saved=true" );
 
         $this->redirect( $url );
-
     }
 
 
@@ -370,6 +379,18 @@ class Mega_Menu_Settings {
         $this->init();
 
         $import = json_decode( stripslashes( $_POST['data'] ), true );
+
+        $sanitized = array();
+
+        foreach ( $import as $key => $value ) {
+            if ( $key == 'custom_css' ) {
+                $sanitized[$key] = sanitize_textarea_field( $value );
+            } else {
+                $sanitized[$key] = sanitize_text_field( $value );
+            }
+        }
+
+        $import = $sanitized;
 
         if ( is_array( $import ) ) {
 
@@ -657,7 +678,9 @@ class Mega_Menu_Settings {
 
         $icon = "data:image/svg+xml;base64," . $svg;
 
-        $page = add_menu_page( __('Max Mega Menu', 'megamenu'), __('Mega Menu', 'megamenu'), 'edit_theme_options', 'maxmegamenu', array($this, 'page'), $icon );
+        $capability = apply_filters("megamenu_options_capability", "edit_theme_options");
+
+        $page = add_menu_page( __('Max Mega Menu', 'megamenu'), __('Mega Menu', 'megamenu'), $capability, 'maxmegamenu', array($this, 'page'), $icon );
 
         $tabs = apply_filters("megamenu_menu_tabs", array(
             'general_settings' => __("General Settings", "megamenu"),
@@ -668,9 +691,9 @@ class Mega_Menu_Settings {
 
         foreach ( $tabs as $key => $title ) {
             if ( $key == 'general_settings') {
-                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, 'edit_theme_options', 'maxmegamenu', array($this, 'page') );
+                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, $capability, 'maxmegamenu', array($this, 'page') );
             } else {
-                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, 'edit_theme_options', 'maxmegamenu_' . $key, array($this, 'page') );
+                add_submenu_page( 'maxmegamenu', __('Max Mega Menu', 'megamenu') . ' - ' . $title, $title, $capability, 'maxmegamenu_' . $key, array($this, 'page') );
             }
         }
 
@@ -966,7 +989,7 @@ class Mega_Menu_Settings {
                                                             <div class='mega-description'><?php _e("Change the name of the location.", "megamenu"); ?></div>
                                                         </td>
                                                         <td class='mega-value wide'>
-                                                            <input type='text' name='location[<?php echo $location ?>]' value='<?php echo esc_attr( $description ); ?>' />
+                                                            <input type='text' name='location[<?php echo esc_attr($location) ?>]' value='<?php echo esc_attr( $description ); ?>' />
                                                         </td>
                                                     </tr>
                                                 <?php endif; ?>
@@ -985,7 +1008,7 @@ class Mega_Menu_Settings {
                                                         <div class='mega-description'><?php _e("For use in a theme template (usually header.php)", "megamenu"); ?></div>
                                                     </td>
                                                     <td class='mega-value'>
-                                                        <textarea readonly="readonly">&lt;?php wp_nav_menu( array( 'theme_location' => '<?php echo $location ?>' ) ); ?&gt;</textarea>
+                                                        <textarea readonly="readonly">&lt;?php wp_nav_menu( array( 'theme_location' => '<?php echo esc_attr( $location ) ?>' ) ); ?&gt;</textarea>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -994,7 +1017,7 @@ class Mega_Menu_Settings {
                                                         <div class='mega-description'><?php _e("For use in a post or page.", "megamenu"); ?></div>
                                                     </td>
                                                     <td class='mega-value'>
-                                                        <textarea readonly="readonly">[maxmegamenu location=<?php echo $location ?>]</textarea>
+                                                        <textarea readonly="readonly">[maxmegamenu location=<?php echo esc_attr( $location ) ?>]</textarea>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1168,11 +1191,12 @@ class Mega_Menu_Settings {
                                             $diff[$key] = $theme_to_export[$key];
                                         }
                                     }
+
                                     if ( isset( $_POST['format'] ) && $_POST['format'] == 'json' ) {
 
                                         echo "<p>" . __("Log into the site you wish to import the theme to. Go to Mega Menu > Tools and paste this into the 'Import Theme' text area:", "megamenu") . "</p>";
 
-                                        echo "<textarea>" . htmlentities( json_encode( $diff ) ) . "</textarea>";
+                                        echo "<textarea>" . sanitize_textarea_field( htmlentities( json_encode( $diff ) ) ) . "</textarea>";
 
                                     } else {
                                         $key = strtolower( str_replace(" ", "_", $theme_to_export['title'] ) );
@@ -1202,7 +1226,7 @@ class Mega_Menu_Settings {
 
                                 echo "<select name='theme_export'>";
                                 foreach ( $this->themes as $id => $theme ) {
-                                    echo "<option value='{$id}'>{$theme['title']}</option>";
+                                    echo "<option value='{$id}'>" . esc_html( $theme['title'] ) . "</option>";
                                 }
                                 echo "</select>";
 
@@ -1507,11 +1531,14 @@ class Mega_Menu_Settings {
             $selected = $id == $this->id ? 'selected=selected' : '';
 
             $list_items .= "<option {$selected} value='" . admin_url("admin.php?page=maxmegamenu_theme_editor&theme={$id}") . "'>";
-            $list_items .= $theme['title'];
+
+            $title = $theme['title'];
 
             if ( is_array( $locations ) ) {
-                $list_items .= " (" . implode( ", ", $locations ) . ")";
+                $title .= " (" . implode( ", ", $locations ) . ")";
             }
+
+            $list_items .= esc_html( $title );
 
             $list_items .= "</option>";
         }
@@ -1591,7 +1618,7 @@ class Mega_Menu_Settings {
                 <a href='<?php echo $duplicate_url ?>'><?php _e("duplicate this theme", "megamenu"); ?></a>
             </div>
 
-            <h3 class='editing_theme'><?php echo __("Editing theme", "megamenu") . ": " . $this->active_theme['title']; ?></h3>
+            <h3 class='editing_theme'><?php echo __("Editing theme", "megamenu") . ": " . esc_html( $this->active_theme['title'] ); ?></h3>
 
             <?php
 
@@ -3860,7 +3887,7 @@ class Mega_Menu_Settings {
                     foreach ($arrow_icons as $code => $class) {
                         $name = str_replace('dashicons-', '', $class);
                         $name = ucwords(str_replace(array('-','arrow'), ' ', $name));
-                        echo "<option data-class='{$class}' value='{$code}' " . selected( $value, $code, false ) . ">" . $name . "</option>";
+                        echo "<option data-class='{$class}' value='{$code}' " . selected( $value, $code, false ) . ">" . esc_html( $name ) . "</option>";
                     }
 
                 ?>
@@ -3893,8 +3920,8 @@ class Mega_Menu_Settings {
         }
 
         echo "<div class='mm-picker-container'>";
-        echo "    <input type='text' class='mm_colorpicker' name='settings[$key]' value='{$value}' />";
-        echo "    <div class='chosen-color'>{$value_text}</div>";
+        echo "    <input type='text' class='mm_colorpicker' name='settings[$key]' value='" . esc_attr( $value ) . "' />";
+        echo "    <div class='chosen-color'>" . esc_html( $value_text ) . "</div>";
         echo "</div>";
 
     }
@@ -3933,7 +3960,7 @@ class Mega_Menu_Settings {
         echo "<select name='settings[$key]'>";
 
         foreach ( $options as $weight => $name ) {
-            echo "<option value='{$weight}' " . selected( $value, $weight, false ) . ">{$name}</option>";
+            echo "<option value='" . esc_attr( $weight ) . "' " . selected( $value, $weight, false ) . ">" . esc_html( $name ) . "</option>";
         }
 
         echo "</select>";
@@ -3971,7 +3998,8 @@ class Mega_Menu_Settings {
      */
     public function print_theme_textarea_option( $key ) {
 
-        $value = $this->active_theme[$key];
+        $value = sanitize_textarea_field( $this->active_theme[$key] );
+
         ?>
 
         <textarea id='codemirror' name='settings[<?php echo $key ?>]'><?php echo stripslashes( $value ) ?></textarea>
@@ -4029,7 +4057,7 @@ class Mega_Menu_Settings {
             $font = esc_attr( stripslashes( $font ) );
             $parts = explode(",", $font);
             $font_name = trim($parts[0]);
-            echo "<option value=\"{$font}\" " . selected( $orig_font, htmlspecialchars_decode($value) ) . ">{$font_name}</option>";
+            echo "<option value=\"{$font}\" " . selected( $orig_font, htmlspecialchars_decode( $value ) ) . ">" . esc_html( $font_name ) . "</option>";
         }
 
         echo "</select>";
@@ -4047,7 +4075,7 @@ class Mega_Menu_Settings {
 
         $value = $this->active_theme[$key];
 
-        echo "<input class='mega-setting-{$key}' type='text' name='settings[$key]' value='{$value}' />";
+        echo "<input class='mega-setting-{$key}' type='text' name='settings[$key]' value='" . esc_attr( $value ) . "' />";
 
     }
 
