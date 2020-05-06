@@ -140,6 +140,24 @@ function readHash() {
 readHash();
 });
 
+$('.datatable table').addClass('row-border').css('width', '100%');
+$('.datatable.no-search table').DataTable({
+    paging: false,
+    "sDom": '<"top">rt<"bottom"l><"clear">',
+    scrollX: true,
+    scrollCollapse: true,
+    order: [],
+});
+
+$('.datatable.search table').DataTable({
+    paging: false,
+    "sDom": '<"top"if>rt<"bottom"lp><"clear">',
+    scrollX: true,
+    scrollCollapse: true,
+    order: [],
+}); 
+
+
 //course filter
     if ($('body').hasClass('page-template-courses')) {
         var $grid = $('.filter-list').isotope({
