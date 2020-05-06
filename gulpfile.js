@@ -44,6 +44,7 @@ gulp.task('main_js', function () {
             './js/lib/masonry.pkgd.js',
             './js/lib/sizzle.js',
             './js/lib/nivo-lightbox.js',
+            './js/datatables/datatables.min.js',
             './js/lib/imagesloaded.pkgd.min.js',
             './js/lib/iodash.js',
             './js/lib/isotope2.js',
