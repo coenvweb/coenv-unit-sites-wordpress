@@ -23,69 +23,71 @@
 }
 
 #top-nav {
-	@include rem('padding', 0.45, 0, 0.45);
-	background-color: #363533;
+    @include rem('padding', 0.45, 0, 0.45);
+    background-color: #363533;
     background-image: url('../assets/img/el-header-slant.svg');
     background-size: cover;
+    background-position: -20px 0;
     background-repeat: no-repeat;
-	font-size: 0;
-	text-align: right;
-	display: block;
+    font-size: 0;
+    text-align: right;
+    display: block;
+    @include o_sans_bold;
 
-	@media print {
-		display: none !important;
-	}
-
-	ul,
-	form {
-		display: inline-block;
-		@include rem('margin-left', 0.3);
-		padding: 0;
-		font-size: 0;
-		vertical-align: top;
-	}
-
-	ul {
-		list-style: none;
-      @include rem('margin', 0, 0, 0, 0.3); 
-		padding-right: rem-calc(10);
-	}
-    #menu-university, .el-logo {
-        @include rem('margin', 0.2, 0, 0, 0.3); 
+    @media print {
+        display: none !important;
     }
 
-	li,
-	input,
-	button {
-		display: inline-block;
-		padding: 0;
-		margin: 0;
-		@include font-size(10);
-		@include rem('line-height', 2.3);
-		@include rem('height', 2.3);
-		vertical-align: top;
-	}
+    ul,
+    form {
+        display: inline-block;
+        @include rem('margin-left', 0.3);
+        padding: 0;
+        font-size: 0;
+        vertical-align: top;
+    }
 
-	input[type="text"] {
-		@include font-size(12);
-		background: #666;
-				color: #fff;
-				@include placeholder {
-					color: #eee;
-				}
-	} // input[type="text"]
+    ul {
+        list-style: none;
+        @include rem('margin', 0, 0, 0, 0.3); 
+        padding-right: rem-calc(10);
+        }
+        #menu-university, .el-logo {
+        @include rem('margin', 0.2, 0, 0, 0.3); 
+        }
+
+        li,
+        input,
+        button {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            @include font-size(10);
+            @include rem('line-height', 2.3);
+            @include rem('height', 2.3);
+            vertical-align: top;
+        }
+
+        input[type="text"] {
+            @include font-size(12);
+            background: #666;
+            color: #fff;
+            @include placeholder {
+                color: #eee;
+            }
+    } // input[type="text"]
 
 	button[type="submit"] {
-		background: #666;
+    background: #666;
 
-		i {
-			@include font-size(16);
-			color: #eee;
-		}
+    i {
+        @include font-size(16);
+        color: #eee;
+    }
 
-		&:hover i {
-			color: #fff;
-		}
+    &:hover i {
+        color: #fff;
+    }
 
 	} // button[type="submit"]
 
@@ -93,13 +95,14 @@
 	input,
 	button {
 		@include rem('padding', 0, 0.5);
+      @include o_sans_bold;
+      font-family: 'open-sans-bold';
 	}
 
 	a {
 		display: block;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		font-weight: 600;
 		text-decoration: none;
 		color: #ddd;
 		border-radius: $radius;
@@ -129,7 +132,6 @@
 
     .el-logo {
         font-size: 1.25rem;
-        font-weight: 600;
         display: inline-block;
         float: left;
         color: $white;
@@ -157,7 +159,6 @@
     }
 
 	#menu-buttons {
-        
         li a {
             background: $accent-red;
             color: #fff;
