@@ -258,7 +258,6 @@
     <div class="section-row row">
         <div class="columns large-8 section-title"><?php echo coenv_base_section_title($post->ID); ?></div>
     </div>
-    </div>
-</div>
+  </div>
 <?php endif; ?>
 <?php do_action('foundationPress_after_header'); ?>
