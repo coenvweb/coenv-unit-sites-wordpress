@@ -7,7 +7,7 @@ Tags: revision, submit changes, workflow, collaboration, permissions, moderate, 
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
 Tested up to: 5.4
-Stable tag: 2.2.4
+Stable tag: 2.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,26 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.3.4 - 29 May 2020 =
+* Fixed : Duplicate email notifications to users who have more than one WordPress role
+* Change : Suppress email notification when an Administrator or Editor creates a pending revision, if constant REVISIONARY_LIMIT_ADMIN_NOTIFICATIONS is defined
+* Compat : Relevanssi - Scheduled revisions were not published with Relevanssi active
+* Fixed : Scheduled revision publication caused other scheduled revisions (for the same post) to be hidden from Revision Queue
+* Fixed : has_revisions postmeta flag was not cleared when a post's last revision was deleted
+* Fixed : Revision Queue - Search function did not work
+* Fixed : Revision Queue link in Edit Posts / Edit Pages row was not removed after post's last pending or scheduled revision published or deleted
+
+= 2.3.3 - 14 May 2020 =
+* Compat : PublishPress Permissions - Fatal error on post creation
+
+= 2.3.2 - 12 May 2020 =
+* Fixed : Post meta flag "_rvy_has_revisions" was not cleared after last remaining pending / scheduled revision was published or deleted, affecting Revision Queue performance
+* Fixed : Revision Queue listed uneditable revisions under some conditions
+* Fixed : My Published Posts count was wrong under some conditions
+* Fixed : Dashboard At a Glance link for Pending Post Revisions linked to Revision Queue without filtering display to Posts only
+* Compat : PublishPress Permissions - suppress Permissions metaboxes on Edit Revision screen
+* Fixed : Published post content cleared on pending revisions submission, on a minority of installations
 
 = 2.2.4 - 6 Apr 2020 =
 * Fixed : Possible fatal error loading Revisions screen on a small percentage of installations

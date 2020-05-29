@@ -33,10 +33,10 @@ class Revisionary
 		//
 		// Note: some filtering is needed to allow users with full editing permissions on the published post to access a Compare Revisions screen with Preview and Manage buttons
 		if (is_admin() && (false !== strpos($_SERVER['REQUEST_URI'], 'revision.php')) && (!empty($_REQUEST['revision'])) && !is_content_administrator_rvy()) {
-			$revision_id = (!empty($_REQUEST['revision'])) ? $_REQUEST['revision'] : $_REQUEST['to'];
+			$revision_id = (!empty($_REQUEST['revision'])) ? (int) $_REQUEST['revision'] : $_REQUEST['to'];
 			
 			if ($revision_id) {
-				if ($_post = get_post($_REQUEST['revision'])) {
+				if ($_post = get_post($revision_id)) {
 					if (!rvy_is_revision_status($_post->post_status)) {
 						if ($parent_post = get_post($_post->post_parent)) {
 							global $current_user;
@@ -65,12 +65,12 @@ class Revisionary
 			require_once( dirname(__FILE__).'/front_rvy.php' );
 			$this->front = new RevisionaryFront();
 		}
-
-		if (!is_admin() && (!defined('REST_REQUEST') || ! REST_REQUEST) && (!empty($_GET['preview']) && !empty($_REQUEST['preview_id']))) {			
+		
+		if (!is_admin() && (!defined('REST_REQUEST') || ! REST_REQUEST) && (!empty($_GET['preview']) && !empty($_REQUEST['preview_id']))) {
 			if (defined('REVISIONARY_PREVIEW_WORKAROUND')) { // @todo: confirm this is no longer needed
-				if ($_post = get_post($_REQUEST['preview_id'])) {
+				if ($_post = get_post((int) $_REQUEST['preview_id'])) {
 					if (in_array($_post->post_status, ['pending-revision', 'future-revision']) && !$this->isBlockEditorActive()) {
-						if (empty($_REQUEST['_thumbnail_id']) || !get_post($_REQUEST['_thumbnail_id'])) {
+						if (empty($_REQUEST['_thumbnail_id']) || !get_post((int) $_REQUEST['_thumbnail_id'])) {
 							$preview_url = rvy_preview_url($_post);
 							wp_redirect($preview_url);
 							exit;
@@ -105,6 +105,8 @@ class Revisionary
 	
 		//add_action( 'wp_loaded', array( &$this, 'set_revision_capdefs' ) );
 		
+		add_action( 'deleted_post', [$this, 'actDeletedPost']);
+
 		if ( rvy_get_option( 'pending_revisions' ) ) {
 			// special filtering to support Contrib editing of published posts/pages to revision
 			add_filter('pre_post_status', array($this, 'flt_pendingrev_post_status') );
@@ -145,7 +147,7 @@ class Revisionary
 
 		do_action( 'rvy_init', $this );
 	}
-
+	
 	function configurationLateInit() {
 		$this->setPostTypes();
 		$this->config_loaded = true;
@@ -156,6 +158,11 @@ class Revisionary
 		$this->enabled_post_types = apply_filters('revisionary_enabled_post_types', array_fill_keys(get_post_types(['public' => true]), true));
 		unset($this->enabled_post_types['attachment']);
 		$this->enabled_post_types = array_filter($this->enabled_post_types);
+	}
+
+	// On post deletion, clear corresponding _rvy_has_revisions postmeta flag
+	function actDeletedPost($post_id) {
+		delete_post_meta($post_id, '_rvy_has_revisions');
 	}
 
 	function fltEditRevisionUpdatedLink($permalink, $post, $leavename) {
@@ -274,7 +281,7 @@ class Revisionary
 		}
 	}
 
-	// On post deletion, also delete its pending revisions and future revisions (and their meta data)
+	// Immediately prior to post deletion, also delete its pending revisions and future revisions (and their meta data)
 	function actDeletePost($post_id) {
 		global $wpdb;
 
@@ -310,6 +317,8 @@ class Revisionary
 					$post_id
 				)
 			);
+
+			revisionary_refresh_postmeta(rvy_post_id($post->ID), null, ['ignore_revisions' => [$post->ID]]);
 		}
 	}
 
@@ -347,7 +356,7 @@ class Revisionary
 			return;
 		}
 
-		$last_user_revision_id = $_REQUEST['get_new_revision'];
+		$last_user_revision_id = (int) $_REQUEST['get_new_revision'];
 
 		$published_post_id = rvy_post_id($post->ID);
 		$published_url = get_permalink($published_post_id);
@@ -427,7 +436,7 @@ class Revisionary
 		if ( ! $object_id || ! is_scalar($object_id) || ( $object_id < 0 ) )
 			return $caps;
 		
-		if ( ! rvy_get_option('require_edit_others_drafts') )
+		if ( ! rvy_get_option( 'require_edit_others_drafts' ) )
 			return $caps;
 
 		if ( $post = get_post( $object_id ) ) {
@@ -484,18 +493,20 @@ class Revisionary
 	// @todo: still needed?
 	// work around WP query_posts behavior (won't allow preview on posts unless status is public, private or protected)
 	function inherit_status_workaround( $results ) {
+		global $wp_post_statuses;
+		
 		if ( isset( $this->orig_inherit_protected_value ) )
 			return $results;
 		
-		$this->orig_inherit_protected_value = $GLOBALS['wp_post_statuses']['inherit']->protected;
+		$this->orig_inherit_protected_value = $wp_post_statuses['inherit']->protected;
 		
-		$GLOBALS['wp_post_statuses']['inherit']->protected = true;
+		$wp_post_statuses['inherit']->protected = true;
 		return $results;
 	}
 	
 	function undo_inherit_status_workaround( $results ) {
 		if ( ! empty( $this->orig_inherit_protected_value ) )
-			$GLOBALS['wp_post_statuses']['inherit']->protected = $this->orig_inherit_protected_value;
+			$wp_post_statuses['inherit']->protected = $this->orig_inherit_protected_value;
 		
 		return $results;
 	}
@@ -505,7 +516,13 @@ class Revisionary
 	}
 	
 	function flt_has_cap_bypass( $bypass, $wp_sitecaps, $pp_reqd_caps, $args ) {
-		if ( ! $GLOBALS['pp_attributes']->is_metacap( $args[0] ) && ( ! array_intersect( $pp_reqd_caps, array_keys($GLOBALS['pp_attributes']->condition_cap_map) )
+		global $pp_attributes;
+
+		if (empty($pp_attributes)) {
+			return $wp_sitecaps;
+		}
+
+		if ( ! $pp_attributes->is_metacap( $args[0] ) && ( ! array_intersect( $pp_reqd_caps, array_keys($pp_attributes->condition_cap_map) )
 		|| ( is_admin() && strpos( $_SERVER['SCRIPT_NAME'], 'p-admin/post.php' ) && ! is_array($args[0]) && ( false !== strpos( $args[0], 'publish_' ) && empty( $_REQUEST['publish'] ) ) ) )
 		) {						// @todo: simplify (Press Permit filter for publish_posts cap check which determines date selector visibility)
 			return $wp_sitecaps;
@@ -536,7 +553,7 @@ class Revisionary
 				return $caps;
 			}
 		}
-		
+
 		if ($post && ('future-revision' == $post->post_status)) {
 			if (in_array($cap, ['read_post', 'read_page'])) {
 				return $caps;
@@ -580,7 +597,7 @@ class Revisionary
 					
 					} else {
 						$caps []= $type_obj->cap->edit_posts;
-					} 
+					}
 				}
 			}
 
@@ -629,7 +646,7 @@ class Revisionary
 
 	private function filter_caps($wp_blogcaps, $reqd_caps, $args, $internal_args = array()) {
 		global $current_user;
-
+		
 		if (!rvy_get_option('pending_revisions')) {
 			return $wp_blogcaps;
 		}
@@ -703,7 +720,7 @@ class Revisionary
 				// Revisors are enabled to edit other users' posts for revision, but cannot edit other users' revisions unless cap is explicitly set sitewide
 				if ( rvy_is_revision_status($post->post_type) && ! $this->skip_revision_allowance ) {
 					if (!rvy_is_post_author($post)) {
-						if ( empty( $GLOBALS['current_user']->allcaps['edit_others_revisions'] ) ) {
+						if ( empty( $current_user->allcaps['edit_others_revisions'] ) ) {
 							$this->skip_revision_allowance = 1;
 						}
 					}
@@ -717,7 +734,7 @@ class Revisionary
 			return $wp_blogcaps;
 		
 		$cap = $object_type_obj->cap;
-
+		
 		//if (!empty($args[2]) && $post && rvy_is_revision_status($post->post_status)) {
 		if ($post && rvy_is_revision_status($post->post_status)) {
 			if (in_array($cap->edit_others_posts, $reqd_caps) ) {
@@ -842,7 +859,7 @@ class Revisionary
 		global $current_user;
 
 		// If Administrator opted to save as a pending revision, don't apply revision scheduling scripts
-		if (get_post_meta($post_arr['ID'], "_save_as_revision_{$current_user->ID}")) {
+		if (get_post_meta($post_arr['ID'], "_save_as_revision_{$current_user->ID}", true)) {
 			return $data;
 		}
 
@@ -963,6 +980,8 @@ class Revisionary
 			require_once( dirname(__FILE__).'/revision-workflow_rvy.php' );
 			$rvy_workflow_ui = new Rvy_Revision_Workflow_UI();
 		}
+
+		do_action('revisionary_get_rev_msg', $revision_id, $args);
 
 		return $rvy_workflow_ui->get_revision_msg( $revision_id, $args );
 	}

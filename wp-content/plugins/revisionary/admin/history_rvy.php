@@ -1,10 +1,9 @@
 <?php
 class RevisionaryHistory
 {	
-    var $published_post_ids = [];
-    var $post_status = 'pending-revision';
-    var $revision_id = 0;
-
+    private $published_post_ids = [];
+    private $post_status = 'pending-revision';
+    private $revision_id = 0;
     private $authors = [];
 
 	function __construct() {
@@ -20,6 +19,8 @@ class RevisionaryHistory
 
         add_action('parse_query', [$this, 'actDisableProblemQueries'], 5);
 
+        //add_filter('_wp_post_revision_fields', [$this, 'actEnsureACFfieldDisplay'], 9);
+
         // Thin Out Revisions plugin breaks View / Approve button on Compare Pending Revisions screen
         if (class_exists('HM_TOR_Plugin_Loader')) {
             global $hm_tor_plugin_loader;
@@ -33,6 +34,13 @@ class RevisionaryHistory
 	   }
     }
 
+	/*
+    function actEnsureACFfieldDisplay($fields) {
+        $fields['_acf_changed'] = 'different than 1';
+        return $fields;
+    }
+	*/
+
     function actDisableProblemQueries(WP_Query $query) {
         $query->set('tribe_suppress_query_filters', true);
     }
@@ -42,7 +50,7 @@ class RevisionaryHistory
 
         //wp_reset_vars( array( 'revision', 'action', 'from', 'to' ) );
 
-        $revision_id = (isset($_REQUEST['revision'])) ? $_REQUEST['revision'] : '';
+        $revision_id = (isset($_REQUEST['revision'])) ? (int) $_REQUEST['revision'] : '';
 
         if (is_scalar($revision_id) && !empty($_REQUEST['post_id']) && rvy_is_revision_status($revision_id)) {
             $orderby = ('future-revision' == $revision_id) ? 'post_date' : 'ID';
@@ -53,11 +61,11 @@ class RevisionaryHistory
 
             $_REQUEST['revision'] = $revision_id;
         } else {
-            $revision_id = (isset($_REQUEST['revision'])) ? $_REQUEST['revision'] : '';
+            $revision_id = (isset($_REQUEST['revision'])) ? (int) $_REQUEST['revision'] : '';
         }
 
-        $from = (isset($_REQUEST['from'])) ? $_REQUEST['from'] : ''; // absint( $from );
-        $to = (isset($_REQUEST['to'])) ? $_REQUEST['to'] : ''; // absint( $to );
+        $from = (isset($_REQUEST['from'])) ? (int) $_REQUEST['from'] : ''; // absint( $from );
+        $to = (isset($_REQUEST['to'])) ? (int) $_REQUEST['to'] : ''; // absint( $to );
 
         $from = is_numeric( $from ) ? absint( $from ) : null;
         if ( ! $revision_id ) {
@@ -113,7 +121,7 @@ class RevisionaryHistory
                     }
                 }
 
-                if ((!current_user_can('read_post', $revision->ID) && !current_user_can('edit_post', $revision->ID))) {
+                if ((!current_user_can( 'read_post', $revision->ID ) && !current_user_can('edit_post', $revision->ID))) {
                     return;
                 }
 
@@ -218,8 +226,8 @@ class RevisionaryHistory
         }
         
         $revision_id = (isset($_REQUEST['revision'])) ? absint($_REQUEST['revision']) : '';
-        $from = (isset($_REQUEST['from'])) ? $_REQUEST['from'] : '';
-        $to = (isset($_REQUEST['to'])) ? $_REQUEST['to'] : '';
+        $from = (isset($_REQUEST['from'])) ? (int) $_REQUEST['from'] : '';
+        $to = (isset($_REQUEST['to'])) ? (int) $_REQUEST['to'] : '';
 
         $from = is_numeric( $from ) ? absint( $from ) : null;
         if ( ! $revision_id ) {
@@ -285,8 +293,8 @@ class RevisionaryHistory
         }
 
         $revision_id = (isset($_REQUEST['revision'])) ? absint($_REQUEST['revision']) : '';
-        $from = (isset($_REQUEST['from'])) ? $_REQUEST['from'] : '';
-        $to = (isset($_REQUEST['to'])) ? $_REQUEST['to'] : '';
+        $from = (isset($_REQUEST['from'])) ? (int) $_REQUEST['from'] : '';
+        $to = (isset($_REQUEST['to'])) ? (int) $_REQUEST['to'] : '';
 
         if (!$revision_id && !$to && !empty($_REQUEST['compare'])) {
             $compare = (array) $_REQUEST['compare'];
@@ -387,7 +395,9 @@ class RevisionaryHistory
             return $return;
         }
 
-        if (!rvy_is_revision_status($compare_from->post_status) && ! rvy_is_revision_status($compare_to->post_status)) {
+        $from_status = ($compare_from) ? $compare_from->post_status : '';
+
+        if (!rvy_is_revision_status($from_status) && ! rvy_is_revision_status($compare_to->post_status)) {
             return $return;
         }
 
@@ -686,11 +696,11 @@ class RevisionaryHistory
                 $content_from = ($content_from) ? "$content_from (" . wp_get_attachment_image_url($content_from, 'full') . ')' : '';
                 $content_to = ($content_to) ? "$content_to (" . wp_get_attachment_image_url($content_to, 'full') . ')' : '';
             
-                // suppress false alarm for featured image clearance
+            	// suppress false alarm for featured image clearance
                 if ($content_from && !$content_to) {
                     continue;
                 }
-
+            
             } elseif(('_requested_slug' == $field)) {
                 if ($content_to && !rvy_is_revision_status($compare_to->post_status)) {
                     $content_to = '';
@@ -701,10 +711,10 @@ class RevisionaryHistory
                 }
                 
                 if ($content_to && !$content_from) {
-	                if ($parent_post = get_post($published_id)) {
-	                    $content_from = $parent_post->post_name;
-	                }
-	            }
+                    if ($parent_post = get_post($published_id)) {
+                        $content_from = $parent_post->post_name;
+                    }
+                }
             }
 
             if ($is_beaver && !$content_to) {
@@ -858,7 +868,7 @@ class RevisionaryHistory
                     $published_post_id = rvy_post_id($revision->ID);
 
 	                if (rvy_get_option('compare_revisions_direct_approval') && agp_user_can( 'edit_post', $published_post_id, '', ['skip_revision_allowance' => true] ) ) {
-                        $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect={$_REQUEST['rvy_redirect']}" : '';
+                        $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect=" . esc_url($_REQUEST['rvy_redirect']) : '';
 
                         if (in_array($revision->post_status, ['pending-revision'])) {
                             $restore_link = wp_nonce_url( admin_url("admin.php?page=rvy-revisions&amp;revision={$revision->ID}&amp;action=approve$redirect_arg"), "approve-post_$published_post_id|{$revision->ID}" );
@@ -1081,7 +1091,7 @@ class RevisionaryHistory
                                     }
                                 }
                             }
-
+                            
                             rvyLastID = rvyRevisionID;
                         }
                     }, 100);

@@ -11,12 +11,12 @@ class RvyPostEdit {
         add_filter('presspermit_preview_post_label', [$this, 'fltPreviewLabel']);
         add_filter('presspermit_preview_post_title', [$this, 'fltPreviewTitle']);
         add_action('post_submitbox_misc_actions', [$this, 'actSubmitMetaboxActions']);
-        add_action('post_submitbox_start', [$this, 'actSubmitBoxStart']);
+		add_action('post_submitbox_start', [$this, 'actSubmitBoxStart']);
 
         add_action('admin_head', array($this, 'act_admin_head') );
 
         add_action('post_submitbox_misc_actions', array($this, 'act_post_submit_revisions_links'), 5);
-        
+
         add_filter('post_updated_messages', [$this, 'fltPostUpdatedMessage']);
 
         add_filter('user_has_cap', [$this, 'fltAllowBrowseRevisionsLink'], 50, 3);
@@ -80,7 +80,7 @@ class RvyPostEdit {
         // Notice: Trying to get property of non-object in F:\www\wp50\wp-content\plugins\publishpress-multiple-authors\core\Classes\Utils.php on line 309
         // @todo: address within MA
         if (defined('PUBLISHPRESS_MULTIPLE_AUTHORS_VERSION') && !empty($_REQUEST['post'])) {
-            $post = get_post($_REQUEST['post']);
+            $post = get_post((int) $_REQUEST['post']);
         }
     }
 
@@ -196,10 +196,10 @@ class RvyPostEdit {
         }
 
         $can_publish = agp_user_can( $type_obj->cap->edit_post, rvy_post_id($post->ID), '', array( 'skip_revision_allowance' => true ) );
-        
+
         if ($can_publish && rvy_is_revision_status($post->post_status)):?>
             <?php
-            $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect={$_REQUEST['rvy_redirect']}" : '';
+            $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect=" . esc_url($_REQUEST['rvy_redirect']) : '';
             $published_post_id = rvy_post_id($post->ID);
 
             if (in_array($post->post_status, ['pending-revision'])) {
@@ -299,45 +299,45 @@ class RvyPostEdit {
         }
 
         if (rvy_get_option('scheduled_revisions')) {
-            if ($_revisions = rvy_get_post_revisions($post->ID, 'future-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
-                $status_obj = get_post_status_object('future-revision');
-                $caption = sprintf(__('%sScheduled Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-clock"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
-                
-                $num_revisions = count($_revisions);
-                //$last_revision = array_pop($_revisions);
-                //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
-                $url = admin_url("revision.php?post_id=$post->ID&revision=future-revision");
-                ?>
-                <div class="misc-pub-section">
-                <?php
-                echo $caption;
-                ?>
-                <a class="hide-if-no-js"
+	        if ($_revisions = rvy_get_post_revisions($post->ID, 'future-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
+	            $status_obj = get_post_status_object('future-revision');
+	            $caption = sprintf(__('%sScheduled Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-clock"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
+	            
+	            $num_revisions = count($_revisions);
+	            //$last_revision = array_pop($_revisions);
+	            //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
+	            $url = admin_url("revision.php?post_id=$post->ID&revision=future-revision");
+	            ?>
+	            <div class="misc-pub-section">
+	            <?php
+	            echo $caption;
+	            ?>
+	            <a class="hide-if-no-js"
                     href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
-                </div>
-                <?php
-            }
+	            </div>
+	            <?php
+	        }
         }
 
         if (rvy_get_option('pending_revisions')) {
-            if ($_revisions = rvy_get_post_revisions($post->ID, 'pending-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
-                $status_obj = get_post_status_object('pending-revision');
-                $caption = sprintf(__('%sPending Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-edit"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
-                
-                $num_revisions = count($_revisions);
-                //$last_revision = array_pop($_revisions);
-                //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
-                $url = admin_url("revision.php?post_id=$post->ID&revision=pending-revision");
-                ?>
-                <div class="misc-pub-section">
-                <?php
-                echo $caption;
-                ?>
-                <a class="hide-if-no-js"
+	        if ($_revisions = rvy_get_post_revisions($post->ID, 'pending-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
+	            $status_obj = get_post_status_object('pending-revision');
+	            $caption = sprintf(__('%sPending Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-edit"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
+	            
+	            $num_revisions = count($_revisions);
+	            //$last_revision = array_pop($_revisions);
+	            //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
+	            $url = admin_url("revision.php?post_id=$post->ID&revision=pending-revision");
+	            ?>
+	            <div class="misc-pub-section">
+	            <?php
+	            echo $caption;
+	            ?>
+	            <a class="hide-if-no-js"
                     href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
-                </div>
-                <?php
-            }
-        }
-    }
+	            </div>
+	            <?php
+	           }
+	        }
+    	}
 }
