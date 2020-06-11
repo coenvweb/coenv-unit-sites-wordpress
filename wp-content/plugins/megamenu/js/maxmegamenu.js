@@ -414,6 +414,11 @@
 
         plugin.unbindClickEvents = function() {
             $("> a.mega-menu-link", items_with_submenus).off("click.megamenu touchend.megamenu");
+
+            if ( plugin.isMobileView() ) {
+                var collapse_children_parents = $("li.mega-menu-megamenu li.mega-menu-item-has-children.mega-collapse-children > a.mega-menu-link"); // these are always activated on click
+                collapse_children_parents.off("click.megamenu touchend.megamenu");
+            }
         };
 
         plugin.unbindHoverEvents = function() {

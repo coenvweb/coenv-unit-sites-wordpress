@@ -74,6 +74,9 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		parent::__construct();
 		$this->report_label = __( 'Rows', 'ns-cloner' );
 
+		// Enable performance optimization by customizing the rows per query.
+		$this->rows_per_query = apply_filters( 'ns_cloner_rows_process_rows_per_query', $this->rows_per_query );
+
 		// Load stored primary keys from past processes.
 		$this->primary_keys = get_site_option( $this->identifier . '_primary_keys', [] );
 		ns_cloner()->log->log( [ 'LOADING previous primary keys', $this->primary_keys ] );
@@ -120,21 +123,27 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		}
 
 		// Perform replacements.
-		$replaced_in_row = 0;
-		$search_replace  = ns_cloner_request()->get_search_replace( $source_id, $target_id );
-		foreach ( $row as $field => $value ) {
-			$replaced_in_column = ns_recursive_search_replace(
-				$value,
-				$search_replace['search'],
-				$search_replace['replace'],
-				ns_cloner_request()->get( 'case_sensitive', false )
-			);
-			$replaced_in_row   += $replaced_in_column;
-			$row[ $field ]      = $value;
-		}
-		if ( $replaced_in_row > 0 ) {
-			ns_cloner()->log->log( "PERFORMED *$replaced_in_row* replacements in *$target_table*" );
-			ns_cloner()->report->increment_report( '_replacements', $replaced_in_row );
+		$replaced_in_row   = 0;
+		$search_replace    = ns_cloner_request()->get_search_replace( $source_id, $target_id );
+		$is_upload_path    = isset( $row['option_name'] ) && 'upload_path' === $row['option_name'];
+		$do_search_replace = apply_filters( 'ns_cloner_do_search_replace', ( ! $is_upload_path ), $row, $item );
+		if ( $do_search_replace ) {
+			foreach ( $row as $field => $value ) {
+				$replaced_in_column = ns_recursive_search_replace(
+					$value,
+					$search_replace['search'],
+					$search_replace['replace'],
+					ns_cloner_request()->get( 'case_sensitive', false )
+				);
+				$replaced_in_row   += $replaced_in_column;
+				$row[ $field ]      = $value;
+			}
+			if ( $replaced_in_row > 0 ) {
+				ns_cloner()->log->log( "PERFORMED *$replaced_in_row* replacements in *$target_table*" );
+				ns_cloner()->report->increment_report( '_replacements', $replaced_in_row );
+			}
+		} else {
+			ns_cloner()->log->log( [ "SKIPPING row replacements in *$source_table* because do_copy_row was false:", $row ] );
 		}
 
 		// Remove primary key, if it's a table like wp_options where:

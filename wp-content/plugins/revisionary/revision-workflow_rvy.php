@@ -227,13 +227,13 @@ class Rvy_Revision_Workflow_UI {
                 if (!empty($use_editor_message)) {
                     $msg = __('Your modification has been saved.', 'revisionary') . ' <br />';
                 } else {
-                $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
-                
-                if ( $future_date ) {
-                    $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
-                } else {
-                    $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
-                }
+	                $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
+	                
+	                if ( $future_date ) {
+	                    $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
+	                } else {
+	                    $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
+	                }
                 }
 
                 clean_post_cache($revision->ID);

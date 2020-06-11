@@ -70,8 +70,7 @@ if ( ! class_exists( 'WP_Background_Process' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		public function
-		dispatch() {
+		public function dispatch() {
 			// Schedule the cron healthcheck.
 			$this->schedule_event();
 

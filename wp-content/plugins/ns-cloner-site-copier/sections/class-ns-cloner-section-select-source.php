@@ -67,7 +67,7 @@ class NS_Cloner_Section_Select_Source extends NS_Cloner_Section {
 					$default = ns_cloner_request()->get( 'source', $saved );
 					?>
 					<option value="<?php echo esc_attr( $id ); ?>" <?php echo selected( esc_attr( $id ), $default ); ?>>
-						<?php echo esc_html( $label ); ?>
+						<?php echo $label; // Don't escape this with esc_html b/c non-latin chars can result in totally empty string. ?>
 					</option>
 				<?php endforeach; ?>
 			</select>

@@ -254,7 +254,8 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		}
 		// Update task count only if it's above threshold. Update too often and you lose performance,
 		// update too seldom and you lose responsiveness in the progress UI.
-		if ( $this->task_count >= 5 ) {
+		$progress_update_interval = apply_filters( 'ns_cloner_progress_update_interval', 5, $this->identifier );
+		if ( $this->task_count >= $progress_update_interval ) {
 			$progress = $this->get_batch_progress( $this->batch_key );
 			$this->update_batch_progress(
 				$this->batch_key,
@@ -377,6 +378,28 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		}
 		// Normally just use inherited time checking.
 		return parent::time_exceeded();
+	}
+
+	/**
+	 * Get memory limit
+	 *
+	 * Override because parent doesn't handle values for other units than MB.
+	 *
+	 * @return int
+	 */
+	protected function get_memory_limit() {
+		if ( function_exists( 'ini_get' ) ) {
+			$memory_limit = ini_get( 'memory_limit' );
+			if ( ! $memory_limit || -1 === $memory_limit ) {
+				// Unlimited, set to 32GB.
+				$memory_limit = '32G';
+			}
+		} else {
+			// Sensible default.
+			$memory_limit = '128M';
+		}
+
+		return wp_convert_hr_to_bytes( $memory_limit );
 	}
 
 	/**

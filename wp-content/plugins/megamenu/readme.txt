@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 4.9
 Tested up to: 5.4
-Stable tag: 2.7.6
+Stable tag: 2.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -132,6 +132,14 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.8 =
+
+* New: Allow menu location settings to be adjusted from the Mega Menu > Menu Locations page
+* Fix: Trim "Panel Width" settings in theme editor to prevent attributes from being malformed
+* Fix: Hover text decoration not applied when Icon Position is set to "Top"
+* Fix: Divi reload bug, ensure sidebar is registered on front and back end
+* Fix: collapsable sub menus open and close themselves in mobile view
 
 = 2.7.7 =
 

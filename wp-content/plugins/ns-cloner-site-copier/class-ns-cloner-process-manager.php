@@ -259,6 +259,8 @@ class NS_Cloner_Process_Manager {
 	public function finish() {
 		$this->doing_cloning();
 		ns_cloner()->log->log( 'ENTERING *finish*' );
+		$target_id    = ns_cloner_request()->get( 'target_id' );
+		$target_title = ns_cloner_request()->get( 'target_title' );
 
 		// Use this do do any finish/cleanup/reporting actions.
 		do_action( 'ns_cloner_process_finish' );
@@ -272,11 +274,16 @@ class NS_Cloner_Process_Manager {
 
 		// Update target title since it will have been overwritten by cloned options.
 		if ( ns_cloner_request()->is_mode( 'core' ) ) {
-			$target_id    = ns_cloner_request()->get( 'target_id' );
-			$target_title = ns_cloner_request()->get( 'target_title' );
 			if ( ! empty( $target_id ) && ! empty( $target_title ) ) {
 				update_blog_option( $target_id, 'blogname', $target_title );
 			}
+		}
+
+		// Flush caches for clone over.
+		if ( ns_cloner_request()->is_mode( 'clone_over' ) ) {
+			switch_to_blog( $target_id );
+			wp_cache_flush();
+			restore_current_blog();
 		}
 
 		// Log and report timing details.
@@ -361,6 +368,12 @@ class NS_Cloner_Process_Manager {
 
 		// Clear saved request data and end log.
 		delete_site_option( 'ns_cloner_finish_queries' );
+		ns_cloner()->db->query(
+			ns_prepare_option_query(
+				'DELETE FROM {table} WHERE {key} = %s',
+				'ns_cloner_finish_lock'
+			)
+		);
 		ns_cloner_request()->delete();
 		ns_cloner()->log->end();
 	}
