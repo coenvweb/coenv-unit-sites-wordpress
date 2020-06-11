@@ -120,7 +120,7 @@ jQuery(document).ready( function($) {
 	if (rvyObjEdit.ScheduleCaption) {
     	var RvyDetectPublishOptionsDivInterval = setInterval(RvyDetectPublishOptionsDiv, 500);
 	}
-	
+    
 	// @todo: Don't show Pending Revision checkbox when post is not publish, private or a custom privacy status
 	// @todo: Fix formatting of Pending Revision checkbox when Pre-Publish check is enabled
     var RvySaveAsRevision = function() {

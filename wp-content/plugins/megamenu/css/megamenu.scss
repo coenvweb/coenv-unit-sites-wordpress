@@ -670,6 +670,10 @@
                     font-weight: $panel_second_level_font_weight_hover;
                     text-decoration: $panel_second_level_text_decoration_hover;
                     @include background($panel_second_level_background_hover_from, $panel_second_level_background_hover_to);
+
+                    > span.mega-title-below {
+                        text-decoration: $panel_second_level_text_decoration_hover;
+                    }
                 }
 
                 li.mega-menu-item {

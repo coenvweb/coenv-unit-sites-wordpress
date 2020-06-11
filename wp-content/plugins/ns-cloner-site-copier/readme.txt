@@ -101,6 +101,13 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.0.8 - 2020.06.11 =
+* Add automatic cache flush after cloning
+* Add new filters for performance tweaking and search/replace control
+* Fix upload_path replacement for root site with hardcoded upload_path
+* Fix sites with non-latin chars in site title being unavailable for cloning
+* Fix other bugs with failed finishes, database prefix irregularities, etc.
+
 = 4.0.7 - 2020.01.30 =
 * Fix non-prefixed custom tables being included in root site clone
 * Fix private/public blog property not being reflected on cloned sites

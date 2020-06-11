@@ -12,8 +12,8 @@ RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
 RewriteRule . index.php [L]
 
 # Allow shib requests through
-RewriteCond %{REQUEST_URI} ^/Shibboleth.sso($|/)
-RewriteRule . - [L]
+# RewriteCond %{REQUEST_URI} ^/Shibboleth.sso($|/)
+# RewriteRule . - [L]
 
 </IfModule>
 

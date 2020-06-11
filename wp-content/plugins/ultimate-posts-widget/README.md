@@ -98,7 +98,7 @@ Example:
 
 *As of version 2.0.0 timthumb is no longer used.*
 
-This plugin uses the [timthumb library](http://www.binarymoon.co.uk/projects/timthumb/) to resize post thumbnails. Please review these requirements and troubleshooting tips if you are having problems displaying thumbnails.
+This plugin uses the timthumb library to resize post thumbnails. Please review these requirements and troubleshooting tips if you are having problems displaying thumbnails.
 
 * Right click > view image - If an image isn't loading then this is the first thing you should do. 9 times out of 10 it will tell you what the problem is in an easy to read error message.
 * JetPack plugin - There is a known conflict between JetPack's "Photon" component, please disable it for compatibility with timthumb.

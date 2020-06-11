@@ -40,13 +40,13 @@ class Mega_Menu_Nav_Menus {
 
     }
 
+
     /**
      * Constructor
      *
      * @since 1.0
      */
     public function __construct() {
-
         add_action( 'admin_init', array( $this, 'register_nav_meta_box' ), 9 );
         add_action( 'megamenu_nav_menus_scripts', array( $this, 'enqueue_menu_page_scripts' ), 10 );
         add_action( 'wp_ajax_mm_save_settings', array($this, 'save') );
@@ -148,16 +148,15 @@ class Mega_Menu_Nav_Menus {
 
     }
 
-
     /**
-     * Enqueue required CSS and JS for Mega Menu
+     * Enqueue required CSS and JS for the mega menu lightbox and meta options
      *
      * @since 1.0
      */
-    public function enqueue_menu_page_scripts($hook) {
-
-        if( 'nav-menus.php' != $hook )
+    public function enqueue_menu_page_scripts( $hook ) {
+        if( ! in_array( $hook, array( 'nav-menus.php' ) ) ) {
             return;
+        }
 
         // Compatibility fix for SlideDeck Pro
         wp_deregister_script('codemirror');
@@ -313,8 +312,10 @@ class Mega_Menu_Nav_Menus {
 
                 $locations = array_keys( $tagged_menu_locations );
                 $location = $locations[0];
+                $name = esc_html( $tagged_menu_locations[ $location ] );
 
-                if (isset( $tagged_menu_locations[ $location ] ) ) {
+                if ( isset( $tagged_menu_locations[ $location ] ) ) {
+                    echo "<h4><span class='dashicons dashicons-location'></span>{$name}</h4>";
                     $this->settings_table( $location, $saved_settings );
                 }
 
@@ -323,7 +324,7 @@ class Mega_Menu_Nav_Menus {
                 <div id='megamenu_accordion'>
                     <?php foreach ( $theme_locations as $location => $name ) : ?>
                         <?php if ( isset( $tagged_menu_locations[ $location ] ) ): ?>
-                            <h3 class='theme_settings'><?php echo esc_html( $name ); ?></h3>
+                            <h4><span class='dashicons dashicons-location'></span><?php echo esc_html( $name ); ?></h4>
                             <div class='accordion_content' style='display: none;'>
                                 <?php $this->settings_table( $location, $saved_settings ); ?>
                             </div>

@@ -3,7 +3,7 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.1.4
+Version: 2.1.5
 Author: Clever Widgets
 Author URI: https://themecheck.info
 Text Domain: upw
@@ -17,7 +17,6 @@ analyst_init(array(
 	'client-secret' => '35dcca0d55e95f21b3b1f3c6987ae34cf38c65c5',
 	'base-dir' => __FILE__
 ));
-
 
 if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
@@ -159,15 +158,11 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       }
 
       // Excerpt more filter
-      $new_excerpt_more = function($more){
-                return "...";
-              };
+      $new_excerpt_more = function($more) { return "..."; };
       add_filter('excerpt_more', $new_excerpt_more);
 
       // Excerpt length filter
-      $new_excerpt_length = function($length) use ($excerpt_length){
-                return $excerpt_length;
-              };
+      $new_excerpt_length = function($length) use ($excerpt_length) { return $excerpt_length; };
       if ( $instance['excerpt_length'] > 0 ) add_filter('excerpt_length', $new_excerpt_length);
       if( $class ) {
         $before_widget = str_replace('class="', 'class="'. $class . ' ', $before_widget);
@@ -663,9 +658,11 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
       </div>
 
-      <p class="upw-credits">
-        <?php _e('Enjoy this plugin? <a href="http://bostondv.com/tips/" target="_blank">Send a tip to support development</a>.', 'upw'); ?>
+			<?php if (!is_plugin_active('copy-delete-posts/copy-delete-posts.php')) { ?>
+      <p class="upw-cdp" data-url="<?php echo get_site_url(); ?>">
+        <?php _e('<b>Please check it out</b>: We released another cool plugin! It is called "Copy & Delete Posts" and it allows you to make (bulk) copies of your pages & posts and delete them again. <b><a href="#" id="wpse1_6817_install_btn">Install it now</a></b> or check out the <a href="https://bit.ly/34bgWdr" target="_blank"><b>plugin page</b></a>.<span id="wpse1_6817_dots"></span>', 'upw'); ?>
       </p>
+			<?php } ?>
 
       <?php if ( $instance ) { ?>
 
@@ -772,3 +769,72 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
   add_action( 'widgets_init', 'init_wp_widget_ultimate_posts' );
 }
+
+/** –– **\
+ * Notices handler
+ * @since 1.4.8
+ */
+	// Handle install
+	add_action('wp_ajax_wpse1_6817_install', function () {
+
+		if (get_option('_wps18472_now_already', false)) return;
+		else update_option('_wps18472_now_already', true);
+
+		function is_plugin_installed($slug) {
+			$all_plugins = get_plugins();
+
+			if (!empty($all_plugins[$slug])) return true;
+			else return false;
+		}
+
+		function install_plugin($plugin_zip) {
+			include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+			wp_cache_flush();
+
+			$upgrader = new Plugin_Upgrader();
+			$installed = $upgrader->install($plugin_zip);
+
+			return $installed;
+		}
+
+		function upgrade_plugin($plugin_slug) {
+			include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+			wp_cache_flush();
+
+			$upgrader = new Plugin_Upgrader();
+			$upgraded = $upgrader->upgrade($plugin_slug);
+
+			return $upgraded;
+		}
+
+	  $plugin_slug = 'copy-delete-posts/copy-delete-posts.php';
+	  $plugin_zip = 'https://downloads.wordpress.org/plugin/copy-delete-posts.latest-stable.zip';
+
+	  if (is_plugin_installed($plugin_slug)) {
+	    upgrade_plugin($plugin_slug);
+	    $installed = true;
+	  } else $installed = install_plugin($plugin_zip);
+
+	  if (!is_wp_error($installed) && $installed) {
+	    $activate = activate_plugin($plugin_slug);
+
+	    if (is_null($activate)) {
+				update_option('_cdp_cool_installation', true);
+				update_option('_wps18472_installed', true);
+				update_option('_wps18472_now_already', false);
+				echo json_encode(array('status' => 'success'));
+			}
+
+	  } else {
+			update_option('_wps18472_only_now', true);
+			update_option('_wps18472_now_already', false);
+			echo json_encode(array('status' => 'fail'));
+		}
+
+	});
+
+	// End the action
+	add_action('admin_footer', function () {
+		update_option('_wps18472_now_already', false);
+	});
+/** –– **/

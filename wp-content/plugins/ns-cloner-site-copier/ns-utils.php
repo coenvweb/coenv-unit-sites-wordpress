@@ -285,11 +285,12 @@ function ns_site_link( $site_id = null, $html = true ) {
  */
 function ns_sql_create_table_query( $source_table, $target_table, $source_prefix, $target_prefix ) {
 	// Create cloned table structure.
-	$query         = ns_cloner()->db->get_var( "SHOW CREATE TABLE `$source_table`", 1 );
-	$newline       = '(?:\r|\n|\r\n)';
-	$view          = '/^CREATE (.*) VIEW/';
-	$constraint    = "/,$newline+\s*((?:CONSTRAINT|FOREIGN\s+KEY).+?)(?=,?$newline)/";
-	$target_prefix = apply_filters( 'ns_cloner_target_table', $target_prefix );
+	$query             = ns_cloner()->db->get_var( "SHOW CREATE TABLE `$source_table`", 1 );
+	$newline           = '(?:\r|\n|\r\n)';
+	$view              = '/^CREATE (.*) VIEW/';
+	$constraint        = "/,$newline+\s*((?:CONSTRAINT|FOREIGN\s+KEY).+?)(?=,?$newline)/";
+	$raw_target_prefix = $target_prefix;
+	$target_prefix     = apply_filters( 'ns_cloner_target_table', $target_prefix );
 	// Handle views, by creating at end after real tables are copied, and returning blank query for now.
 	if ( preg_match( $view, $query ) ) {
 		ns_cloner()->log->log( "DETECTING that table *$source_table* is a view. Skipping." );
@@ -304,10 +305,10 @@ function ns_sql_create_table_query( $source_table, $target_table, $source_prefix
 	foreach ( $constraint_matches[1] as $constraint_def ) {
 		// Redefine final target table name based on source, instead of using $target_table,
 		// because for teleport and clone over, $target_table will have a temp prefix that shouldn't be in alter query.
-		$constraint_table = preg_replace( "|^$source_prefix|", $target_prefix, $source_table );
+		$constraint_table = preg_replace( "|^$source_prefix|", $raw_target_prefix, $source_table );
 		// Rename prefixes in constraint. Can't look for a backquote before the prefix (assume prefix is at beginning),
 		// because some plugins like Woo add extra prefixes like fk_{wpdb_prefix}_something, etc.
-		$constraint_def = str_replace( $source_prefix, $target_prefix, $constraint_def );
+		$constraint_def = str_replace( $source_prefix, $raw_target_prefix, $constraint_def );
 		// Store alter query in site_options. Use high priority to make sure it executes after all table renames.
 		ns_cloner()->process_manager->add_finish_query( "ALTER TABLE `$constraint_table` ADD $constraint_def;", 100 );
 	}

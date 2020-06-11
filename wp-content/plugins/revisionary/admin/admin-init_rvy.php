@@ -24,7 +24,7 @@ function _rvy_post_edit_ui() {
 			$revisionary->post_edit_ui = new RvyPostEdit();
 		}
 
-		if ($revisionary->isBlockEditorActive()) {
+		if ( $revisionary->isBlockEditorActive() ) {
 			require_once( dirname(__FILE__).'/post-edit-block-ui_rvy.php' );
 		}
 	}
@@ -66,7 +66,7 @@ function rvy_admin_init() {
 		}
 		
 	} elseif (isset($_REQUEST['action2']) && !empty($_REQUEST['page']) && ('revisionary-q' == $_REQUEST['page']) && !empty($_REQUEST['post'])) {
-		$doaction = (!empty($_REQUEST['action']) && !is_numeric($_REQUEST['action'])) ? $_REQUEST['action'] : $_REQUEST['action2'];
+		$doaction = (!empty($_REQUEST['action']) && !is_numeric($_REQUEST['action'])) ? sanitize_key($_REQUEST['action']) : sanitize_key($_REQUEST['action2']);
 
 		check_admin_referer('bulk-revision-queue');
 
@@ -74,16 +74,16 @@ function rvy_admin_init() {
 	
 		if ( 'delete_all' == $doaction ) {
 			// Prepare for deletion of all posts with a specified post status (i.e. Empty trash).
-			$post_status = preg_replace('/[^a-z0-9_-]+/i', '', $_REQUEST['post_status']);
+			$post_status = preg_replace('/[^a-z0-9_-]+/i', '', sanitize_key($_REQUEST['post_status']));
 			// Verify the post status exists.
 			if ( get_post_status_object( $post_status ) ) {
 				$post_ids = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type=%s AND post_status = %s", $post_type, $post_status ) );
 			}
 			$doaction = 'delete';
 		} elseif ( isset( $_REQUEST['media'] ) ) {
-			$post_ids = $_REQUEST['media'];
+			$post_ids =  array_map('intval', (array) $_REQUEST['media']);
 		} elseif ( isset( $_REQUEST['ids'] ) ) {
-			$post_ids = explode( ',', $_REQUEST['ids'] );
+			$post_ids =  array_map('intval', explode( ',', $_REQUEST['ids'] ));
 		} elseif ( !empty( $_REQUEST['post'] ) ) {
 			$post_ids = array_map('intval', $_REQUEST['post']);
 		}
@@ -288,7 +288,7 @@ function rvy_get_post_revisions($post_id, $status = 'inherit', $args = '' ) {
 		$status, 
 		array_merge(rvy_revision_statuses(), array('inherit')) 
 	) ) {
-		return array();
+		return [];
 	}
 
 	if ( COL_ID_RVY == $fields ) {
@@ -334,9 +334,7 @@ function rvy_get_post_revisions($post_id, $status = 'inherit', $args = '' ) {
 		}	
 			
 	} else {
-		$order_clause = ( $order && $orderby ) 
-		? $wpdb->prepare("ORDER BY %s %s", $orderby, $order)
-		: '';
+		$order_clause = "ORDER BY $orderby $order";
 
 		if ('inherit' == $status) {
 			$revisions = $wpdb->get_results(
