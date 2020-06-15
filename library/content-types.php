@@ -23,7 +23,7 @@ function coenv_base_post_types_init() {
     'has_archive' => false,
     'show_ui' => true,
     'rewrite' => array('slug' => 'publications'),
-  'menu_icon' => 'dashicons-book',
+  'menu_icon' => 'dashicons-media-text',
     )
   );
   register_post_type( 'datasets',
@@ -43,6 +43,27 @@ function coenv_base_post_types_init() {
     //'rewrite' => array('slug' => 'student_blog'),
     'menu_icon' => 'dashicons-exerpt-view',
     )
+  );
+  register_post_type( 'projects',
+  array(
+    'labels' => array(    
+    'name' => __( 'Projects' ),
+    'singular_name' => __( 'Project' ),
+    'add_new_item' => __( 'Add Project'),
+    'edit_item' => __( 'Edit Project'),
+    'new_item' => __( 'New Project'),
+    ),
+  'hierarchical' => true,
+  'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+  'public' => true,
+  'has_archive' => false,
+  'show_ui' => true,
+  'with_front' => false,
+  'rewrite' => array('slug' => 'science/project'),
+  'show_in_rest' => true,
+  'rest_base' => 'projects',
+  'menu_icon' => 'dashicons-book',
+  )
   );
   register_post_type( 'people',
     array(

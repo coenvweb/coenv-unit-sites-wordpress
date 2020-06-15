@@ -88,7 +88,7 @@ function pub_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'publication_theme', array( 'publications' ), $args_3 );
+	register_taxonomy( 'publication_theme', array( 'publications', 'projects' ), $args_3 );
 
 	$labels_4 = array(
 		'name'                       => _x( 'Groups', 'Taxonomy General Name', 'text_domain' ),
@@ -220,3 +220,68 @@ function data_tax() {
 }
 
 add_action( 'init', 'data_tax' );
+
+/**
+* Custom Taxonomies for Projects
+**/
+function project_tax() {
+
+    $funding_year_labels = array(
+		'name'                       => _x( 'Funding Years', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Funding Year', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Funding Years', 'text_domain' ),
+		'all_items'                  => __( 'All Funding Years', 'text_domain' ),
+		'parent_item'                => __( 'Parent Funding Year', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Funding Year:', 'text_domain' ),
+		'new_item_name'              => __( 'New Funding Year', 'text_domain' ),
+		'add_new_item'               => __( 'Add Funding Year', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Funding Year', 'text_domain' ),
+		'update_item'                => __( 'Update Funding Year', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Funding Years', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Funding Year', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from the most cited Funding Years', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$funding_year_args = array(
+		'labels'                     => $funding_year_labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'funding-year', array( 'projects' ), $funding_year_args);
+
+    $state_labels = array(
+		'name'                       => _x( 'Regions', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Region', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Regions', 'text_domain' ),
+		'all_items'                  => __( 'All Regions', 'text_domain' ),
+		'parent_item'                => __( 'Parent Region', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Region:', 'text_domain' ),
+		'new_item_name'              => __( 'New Region', 'text_domain' ),
+		'add_new_item'               => __( 'Add Region', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Region', 'text_domain' ),
+		'update_item'                => __( 'Update Region', 'text_domain' ),
+		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
+		'search_items'               => __( 'Search Regions', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Region', 'text_domain' ),
+		'choose_from_most_used'      => __( 'Choose from the most cited States', 'text_domain' ),
+		'not_found'                  => __( 'Not Found', 'text_domain' ),
+	);
+	$state_args = array(
+		'labels'                     => $state_labels,
+		'hierarchical'               => true,
+		'public'                     => true,
+		'show_ui'                    => true,
+		'show_admin_column'          => true,
+		'show_in_nav_menus'          => true,
+		'show_tagcloud'              => true,
+	);
+	register_taxonomy( 'region', array( 'projects' ), $state_args);
+}
+
+add_action( 'init', 'project_tax' );
+
