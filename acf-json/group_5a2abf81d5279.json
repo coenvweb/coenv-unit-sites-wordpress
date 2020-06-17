@@ -3,25 +3,6 @@
     "title": "Project Fields",
     "fields": [
         {
-            "key": "field_5aa2cbdd6df17",
-            "label": "Intro Text",
-            "name": "intro_text",
-            "type": "textarea",
-            "instructions": "2-3 sentences of introductory text with special treatment",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "",
-            "maxlength": "",
-            "rows": "",
-            "new_lines": ""
-        },
-        {
             "key": "field_5a2abfe119c36",
             "label": "Investigators",
             "name": "investigators",
@@ -216,22 +197,6 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
-        },
-        {
-            "key": "field_5a2ac27519c3d",
-            "label": "Data Link",
-            "name": "data_link",
-            "type": "url",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": ""
         }
     ],
     "location": [
@@ -258,5 +223,5 @@
     ],
     "active": 1,
     "description": "",
-    "modified": 1592250481
+    "modified": 1592434907
 }
