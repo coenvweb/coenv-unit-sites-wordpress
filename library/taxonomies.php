@@ -227,19 +227,19 @@ add_action( 'init', 'data_tax' );
 function project_tax() {
 
     $funding_year_labels = array(
-		'name'                       => _x( 'Funding Years', 'Taxonomy General Name', 'text_domain' ),
-		'singular_name'              => _x( 'Funding Year', 'Taxonomy Singular Name', 'text_domain' ),
-		'menu_name'                  => __( 'Funding Years', 'text_domain' ),
-		'all_items'                  => __( 'All Funding Years', 'text_domain' ),
-		'parent_item'                => __( 'Parent Funding Year', 'text_domain' ),
-		'parent_item_colon'          => __( 'Parent Funding Year:', 'text_domain' ),
-		'new_item_name'              => __( 'New Funding Year', 'text_domain' ),
-		'add_new_item'               => __( 'Add Funding Year', 'text_domain' ),
-		'edit_item'                  => __( 'Edit Funding Year', 'text_domain' ),
-		'update_item'                => __( 'Update Funding Year', 'text_domain' ),
+		'name'                       => _x( 'Year Completed', 'Taxonomy General Name', 'text_domain' ),
+		'singular_name'              => _x( 'Year Completed', 'Taxonomy Singular Name', 'text_domain' ),
+		'menu_name'                  => __( 'Year Completed', 'text_domain' ),
+		'all_items'                  => __( 'All Years', 'text_domain' ),
+		'parent_item'                => __( 'Parent Year', 'text_domain' ),
+		'parent_item_colon'          => __( 'Parent Year:', 'text_domain' ),
+		'new_item_name'              => __( 'New Year', 'text_domain' ),
+		'add_new_item'               => __( 'Add Year Completed', 'text_domain' ),
+		'edit_item'                  => __( 'Edit Year', 'text_domain' ),
+		'update_item'                => __( 'Update Year', 'text_domain' ),
 		'separate_items_with_commas' => __( 'Separate items with commas', 'text_domain' ),
-		'search_items'               => __( 'Search Funding Years', 'text_domain' ),
-		'add_or_remove_items'        => __( 'Add or remove Funding Year', 'text_domain' ),
+		'search_items'               => __( 'Search Years', 'text_domain' ),
+		'add_or_remove_items'        => __( 'Add or remove Year', 'text_domain' ),
 		'choose_from_most_used'      => __( 'Choose from the most cited Funding Years', 'text_domain' ),
 		'not_found'                  => __( 'Not Found', 'text_domain' ),
 	);
@@ -252,7 +252,7 @@ function project_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy( 'funding-year', array( 'projects' ), $funding_year_args);
+	register_taxonomy( 'year', array( 'projects' ), $funding_year_args);
 
     $state_labels = array(
 		'name'                       => _x( 'Regions', 'Taxonomy General Name', 'text_domain' ),
