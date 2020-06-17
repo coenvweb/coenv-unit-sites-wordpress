@@ -58,6 +58,8 @@ add_filter(
 		$plugin_opts = array_merge( $plugin_opts, [ 'mail_bank_update_database', 'mail-bank-version-number', 'mb_admin_notice' ] );
 		// WordFence.
 		$plugin_opts = array_merge( $plugin_opts, [ 'wordfence_installed' ] );
+		// Yoast WP SEO.
+		$plugin_opts = array_merge( $plugin_opts, [ 'wpseo_ryte'] );
 		// Skip copying any of the above listed option rows.
 		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $plugin_opts, true ) ) {
 			$do = false;

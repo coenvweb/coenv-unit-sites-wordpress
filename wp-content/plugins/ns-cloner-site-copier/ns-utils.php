@@ -156,34 +156,54 @@ function ns_recursive_dir_copy_by_process( $src, $dst, $process ) {
 /**
  * Validate a potential new site and return an array of error messages.
  *
+ * We used to use wpmu_validate_blog_signup here, but that caused too many issues due to the extra
+ * validation place on front-end signups vs. admin creations (cloning should have the same rules
+ * that apply to an admin in Sites > Add New, not front end registration).
+ *
+ * This is now a custom combination of logic from site-new.php and wpmu_validate_blog_signup().
+ *
  * @param string $site_name Domain/subdirectory of new site.
  * @param string $site_title Title of new site.
  * @return array
  */
 function ns_wp_validate_site( $site_name, $site_title ) {
-	// Disable default 4 character minimum for site name to enable language domains like fr.domain.com.
-	$min_length = function( $length ) {
-		return 2;
-	};
-	add_filter( 'minimum_site_name_length', $min_length );
-	// Use a test on a known valid name / title to filter out any errors added by other plugins, etc.
-	$test_signup = wpmu_validate_blog_signup( 'clonervalidationtest', 'NS Cloner Test' );
-	$site_signup = wpmu_validate_blog_signup( $site_name, $site_title );
-	$site_errors = array_diff(
-		$site_signup['errors']->get_error_messages(),
-		$test_signup['errors']->get_error_messages()
-	);
-	// Filter out error caused by hyphens in URL and number-only rule.
-	foreach ( $site_errors as $index => $error ) {
-		if ( __( 'Site names can only contain lowercase letters (a-z) and numbers.' ) === $error && preg_match( '/^[a-z0-9-]+$/', $site_name ) ) {
-			unset( $site_errors[ $index ] );
+	global $domain;
+	$errors        = [];
+	// Preempt any spaces and uppercase chars.
+	$site_name = strtolower( trim( $site_name ) );
+	// Require some name.
+	if ( empty( $site_name ) ) {
+		$errors[] = __( 'Site URL is required.', 'ns-cloner' );
+	} elseif ( ! preg_match( '|^([a-z0-9-])+$|', $site_name ) ) {
+		$errors[] = __( 'Site URLs can only contain letters (a-z), numbers and hyphens.', 'ns-cloner' );
+	}
+	if ( is_multisite() ) {
+		// Check if the domain/path has been used already.
+		$current_network = get_network();
+		$base            = $current_network->path;
+		if ( is_subdomain_install() ) {
+			$mydomain = $site_name . '.' . preg_replace( '|^www\.|', '', $domain );
+			$path     = $base;
+		} else {
+			$mydomain = "$site_name";
+			$path     = $base . $site_name . '/';
 		}
-		if ( __( 'Sorry, site names must have letters too!' ) === $error && preg_match( '/^[0-9]{2,}$/', $site_name ) ) {
-			unset( $site_errors[ $index ] );
+		if ( domain_exists( $mydomain, $path, get_network()->id ) ) {
+			$errors[] = __('Sorry, that site already exists!', 'ns-cloner');
+		}
+		// Validate against WP illegal / reserved names.
+		$illegal_names  = get_site_option( 'illegal_names', [] );
+		$illegal_dirs   = get_subdirectory_reserved_names();
+		$illegal_values = is_subdomain_install() ? $illegal_names : array_merge ( $illegal_names, $illegal_dirs );
+		if ( in_array ( $site_name, $illegal_values ) ) {
+			$errors[] = __('That URL is reserved by WordPress.', 'ns-cloner');
 		}
 	}
-	remove_filter( 'minimum_site_name_length', $min_length );
-	return $site_errors;
+	// Require some title.
+	if ( empty( $site_title ) ) {
+		$errors[] = __( 'A site title is required', 'ns-cloner' );
+	}
+	return apply_filters( 'ns_cloner_validate_site_errors', $errors, $site_name, $site_title );
 }
 
 /**
@@ -408,4 +428,28 @@ function ns_prepare_row_formats( &$row, $table ) {
 		}
 	}
 	return $formats;
+}
+
+/**
+ * Organize a list of tables in execution order.
+ *
+ * Right now that just means putting sitemeta or options first, so that its row count
+ * can get counted accurately before the Cloner starts adding temp batch data to it.
+ *
+ * @param string[] $tables List of table names.
+ * @return string[]
+ */
+function ns_reorder_tables( $tables ) {
+	$options_index = null;
+	foreach ( $tables as $i => $table ) {
+		if ( preg_match( '/(options|sitemeta)$/', $table ) ) {
+			$options_index = $i;
+		}
+	}
+	if ( null !== $options_index ) {
+		$value = $tables[ $options_index ];
+		unset( $tables[ $options_index ] );
+		array_unshift( $tables, $value );
+	}
+	return $tables;
 }

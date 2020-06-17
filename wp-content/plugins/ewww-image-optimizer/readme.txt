@@ -5,7 +5,7 @@ Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization,
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 5.4.0
+Stable tag: 5.4.1
 License: GPLv3
 
 Speed up your website to better connect with your visitors. Properly compress and size/scale images. Includes lazy load and WebP convert.
@@ -172,6 +172,13 @@ https://developers.google.com/web/tools/lighthouse/audits/optimize-images
 
 * Feature requests can be viewed and submitted at https://github.com/nosilver4u/ewww-image-optimizer/labels/enhancement
 * If you would like to help translate this plugin in your language, get started here: https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/
+
+= 5.4.1 =
+* fixed: Bulk Optimizer sticks on stage 2 when there are no images to optimize
+* fixed: transparency in PNG images with color type 0 or 2 not detected
+* fixed: transparency false positives for PNG images with color types 4 and 6
+* fixed: lazy load skips img elements with unquoted src attributes
+* fixed: images converted by PNG to JPG (and friends) do not have restore links in library
 
 = 5.4.0 =
 * added: EXACTDN_DEFER_JQUERY_SAFE override for when inline scripts depend on jQuery

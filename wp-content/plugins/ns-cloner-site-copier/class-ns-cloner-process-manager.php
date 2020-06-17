@@ -204,8 +204,8 @@ class NS_Cloner_Process_Manager {
 	 */
 	public function maybe_finish() {
 		// Check that this isn't already being run in another parallel session.
-		if ( $this->get_finish_lock() ) {
-			ns_cloner()->log->log( 'DETECTING already running finish - skipping finish call' );
+		if ( $lock = $this->get_finish_lock() ) {
+			ns_cloner()->log->log( "DETECTED already running finish $lock, skipping" );
 			return;
 		}
 		// If it's not in progress, finish already happened.
@@ -220,11 +220,13 @@ class NS_Cloner_Process_Manager {
 						[ 'ns_cloner_finish_lock', $finish_lock_id ]
 					)
 				);
+				ns_cloner()->log->log( "SETTING finish lock *$finish_lock_id*" );
 				// Then wait 0.5 seconds and check again to make sure a simultaneous lock hasn't been set.
 				// If the set lock isn't from this (earlier) instance, bail and let the later instance take over.
 				usleep( apply_filters( 'ns_cloner_process_lock_delay', 0.5 * 1000000 ) );
-				if ( $this->get_finish_lock() !== $finish_lock_id ) {
-					ns_cloner()->log->log( 'DETECTED simultaneous finish call - ending' );
+				$current_lock = $this->get_finish_lock();
+				if ( $current_lock !== $finish_lock_id ) {
+					ns_cloner()->log->log( "DETECTED simultaneous finish call *$current_lock*, ending" );
 					exit;
 				}
 				$this->finish();
@@ -393,6 +395,9 @@ class NS_Cloner_Process_Manager {
 		$target_name  = ns_cloner_request()->get( 'target_name', '' );
 		$target_title = ns_cloner_request()->get( 'target_title', '' );
 
+		// Sanitize.
+		$target_name = strtolower( trim( $target_name ) );
+
 		// Try to create new site.
 		$source    = get_site( $source_id );
 		$site_data = [
@@ -454,7 +459,7 @@ class NS_Cloner_Process_Manager {
 		}
 
 		// Queue table cloning background process.
-		$source_tables = ns_cloner()->get_site_tables( $source_id );
+		$source_tables = ns_reorder_tables( ns_cloner()->get_site_tables( $source_id ) );
 		foreach ( $source_tables as $source_table ) {
 			$target_table = preg_replace( "|^$source_prefix|", $target_prefix, $source_table );
 			$target_table = apply_filters( 'ns_cloner_target_table', $target_table );
@@ -561,12 +566,16 @@ class NS_Cloner_Process_Manager {
 	/**
 	 * Get all background process batches in the database, and group by which process created them
 	 *
+	 * @param bool $suppress_filters Whether to enable checking all processes, or only a filtered subset.
 	 * @return array
 	 */
-	private function get_current_processes() {
-		$processes = [];
+	private function get_current_processes( $suppress_filters = false ) {
+		$processes     = [];
+		$all_processes = ns_cloner()->processes;
 		// Add filter here so that addons/mode can disable checking for unused processes to speed up code.
-		$all_processes = apply_filters( 'ns_cloner_processes_to_check', ns_cloner()->processes );
+		if ( ! $suppress_filters ) {
+			$all_processes = apply_filters('ns_cloner_processes_to_check', $all_processes);
+		}
 		ns_cloner()->log->log( [ 'CHECKING progress for processes:', array_keys( $all_processes ) ] );
 		foreach ( $all_processes as $process_id => $process ) {
 			$progress = $process->get_total_progress();
@@ -587,10 +596,11 @@ class NS_Cloner_Process_Manager {
 	 * even if none have the actual 'in_progress' status - the idea is that if they have not been
 	 * cleared via $this->exit_processes(), the overall operation is still in progress.
 	 *
+	 * @param bool $suppress_filters Whether to enable checking all processes, or only a filtered subset.
 	 * @return bool
 	 */
-	public function is_in_progress() {
-		return count( $this->get_current_processes() ) > 0;
+	public function is_in_progress( $suppress_filters = false ) {
+		return count( $this->get_current_processes( $suppress_filters ) ) > 0;
 	}
 
 }

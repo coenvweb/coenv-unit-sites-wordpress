@@ -360,6 +360,10 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 * @return bool
 	 */
 	protected function time_exceeded() {
+		$exceeded = parent::time_exceeded();
+		if ( $exceeded ) {
+			ns_cloner()->log->log( "EXCEEDED TIME for $this->identifier" );
+		}
 		// Task count will count from 1-5 and then start over - see task() - so check for exit flag every 5th task.
 		if ( 1 === $this->task_count ) {
 			// Check exited flag directly to bypass options cache.
@@ -377,7 +381,22 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 			}
 		}
 		// Normally just use inherited time checking.
-		return parent::time_exceeded();
+		return $exceeded;
+	}
+
+	/**
+	 * Memory exceeded
+	 *
+	 * Simply add logging to parent method.
+	 *
+	 * @return bool
+	 */
+	protected function memory_exceeded() {
+		$exceeded = parent::memory_exceeded();
+		if ( $exceeded ) {
+			ns_cloner()->log->log( "EXCEEDED MEMORY for $this->identifier with usage of " . size_format( memory_get_usage( true ) ) );
+		}
+		return $exceeded;
 	}
 
 	/**
@@ -390,7 +409,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	protected function get_memory_limit() {
 		if ( function_exists( 'ini_get' ) ) {
 			$memory_limit = ini_get( 'memory_limit' );
-			if ( ! $memory_limit || -1 === $memory_limit ) {
+			if ( ! $memory_limit || -1 == $memory_limit ) {
 				// Unlimited, set to 32GB.
 				$memory_limit = '32G';
 			}

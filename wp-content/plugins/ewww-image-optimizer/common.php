@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EWWW_IMAGE_OPTIMIZER_VERSION', '540' );
+define( 'EWWW_IMAGE_OPTIMIZER_VERSION', '541.0' );
 
 // Initialize a couple globals.
 $eio_debug  = '';
@@ -590,8 +590,10 @@ function ewww_image_optimizer_upgrade() {
 		ewww_image_optimizer_set_defaults();
 		// This will get re-enabled if things are too slow.
 		ewww_image_optimizer_set_option( 'exactdn_prevent_db_queries', false );
-		delete_option( 'ewww_image_optimizer_exactdn_verify_method' );
-		delete_site_option( 'ewww_image_optimizer_exactdn_verify_method' );
+		if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn' ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_exactdn_verify_method' ) > 0 ) {
+			delete_option( 'ewww_image_optimizer_exactdn_verify_method' );
+			delete_site_option( 'ewww_image_optimizer_exactdn_verify_method' );
+		}
 		if ( get_option( 'ewww_image_optimizer_version' ) < 297.5 ) {
 			// Cleanup background test mess.
 			wp_clear_scheduled_hook( 'wp_ewwwio_test_optimize_cron' );
@@ -4979,7 +4981,7 @@ function ewww_image_optimizer_update_table( $attachment, $opt_size, $orig_size, 
 	// First check if the image was converted, so we don't orphan records.
 	if ( $original && $original !== $attachment ) {
 		$already_optimized = ewww_image_optimizer_find_already_optimized( $original );
-		$converted         = $original;
+		$converted         = ewww_image_optimizer_relativize_path( $original );
 	} else {
 		$already_optimized = ewww_image_optimizer_find_already_optimized( $attachment );
 		if ( is_array( $already_optimized ) && ! empty( $already_optimized['converted'] ) ) {
@@ -7714,11 +7716,11 @@ function ewww_image_optimizer_png_alpha( $filename ) {
 	// Determine what color type is stored in the file.
 	$color_type = ord( substr( $file_contents, 25, 1 ) );
 	ewwwio_debug_message( "color type: $color_type" );
-	// If it is set to RGB alpha or Grayscale alpha.
-	if ( 4 === $color_type || 6 === $color_type ) {
+	// If we do not have GD and the PNG color type is RGB alpha or Grayscale alpha.
+	if ( ! ewww_image_optimizer_gd_support() && ( 4 === $color_type || 6 === $color_type ) ) {
 		ewwwio_debug_message( 'transparency found' );
 		return true;
-	} elseif ( 3 === $color_type && ewww_image_optimizer_gd_support() ) {
+	} elseif ( ewww_image_optimizer_gd_support() ) {
 		$image = imagecreatefrompng( $filename );
 		if ( imagecolortransparent( $image ) >= 0 ) {
 			ewwwio_debug_message( 'transparency found' );
@@ -8332,7 +8334,7 @@ function ewww_image_optimizer_custom_column_results( $id, $optimized_images ) {
 			}
 		}
 		if ( ! empty( $optimized_image['converted'] ) ) {
-			$converted = $optimized_image['converted'];
+			$converted = ewww_image_optimizer_absolutize_path( $optimized_image['converted'] );
 		}
 		$sizes_to_opt++;
 		if ( ! empty( $optimized_image['resize'] ) ) {

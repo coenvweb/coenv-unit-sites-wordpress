@@ -661,9 +661,9 @@ jQuery(
 						);
 						$( '.ns-cloner-warning-message.ajax-on' ).show();
 					}
-					// Mark process as stalled if it's been more than 15 seconds since last progress.
+					// Mark process as stalled if it's been more than 60 seconds since last progress.
 					var since_last_progress = last && last.time ? new Date().valueOf() - last.time : 0;
-					if ( ! process_data.dispatched && since_last_progress > 15000 && progress.completed != progress.total ) {
+					if ( ! process_data.dispatched && since_last_progress > 60000 && progress.completed != progress.total ) {
 						$( '.ns-cloner-warning-message.ajax-force' ).show();
 						ns_cloner_form.stalled[ process ] = true;
 					}

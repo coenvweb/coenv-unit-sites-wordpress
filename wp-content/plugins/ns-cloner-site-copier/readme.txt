@@ -2,9 +2,9 @@
 Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
-Requires at least: 3.0.1
-Tested up to: 5.3.2
-Requires PHP: 5.6
+Requires at least: 4.0.0
+Tested up to: 5.4.2
+Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,13 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.0.9 - 2020.06.15 =
+* Add new performance control options
+* Simplify and improve new site URL validation
+* Fix handling for memory limit of -1
+* Fix compatibility issue with Yoast WP SEO
+* Fix other bugs with stalled clone recovery, notices from options table, etc.
 
 = 4.0.8 - 2020.06.11 =
 * Add automatic cache flush after cloning

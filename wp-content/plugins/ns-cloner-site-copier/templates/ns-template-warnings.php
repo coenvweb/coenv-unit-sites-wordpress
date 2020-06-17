@@ -111,7 +111,7 @@ if ( $max_execution_time > 0 && $max_execution_time < 60 ) {
 // Warn if memory limit is less than 128M.
 if ( function_exists( 'ini_get' ) ) {
 	$memory_limit = ini_get( 'memory_limit' );
-	if ( $memory_limit && -1 !== $memory_limit && wp_convert_hr_to_bytes( $memory_limit ) < 128 * MB_IN_BYTES ) {
+	if ( $memory_limit && -1 != $memory_limit && wp_convert_hr_to_bytes( $memory_limit ) < 128 * MB_IN_BYTES ) {
 		echo "<span class='ns-cloner-warning-message'>";
 		// translators: %d: memory limit in megabytes.
 		echo esc_html( sprintf( __( 'This host\'s memory_limit is set to %dMB - we generally recommend at least 128MB for running the Cloner.', 'ns-cloner' ), $memory_limit ) );
