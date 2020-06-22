@@ -143,13 +143,9 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 # SSL on each domain
 
-# RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
-# RewriteCond %{SERVER_PORT} 80 
-# RewriteRule ^(.*)$ https://cms.coenv.uw.edu/$1 [R,L]
-
-# RewriteCond %{HTTP_HOST} ^dev.envstudies.uw\.edu [NC]
-# RewriteCond %{SERVER_PORT} 80 
-# RewriteRule ^(.*)$ https://dev.envstudies.uw.edu/$1 [R,L]
+RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://cms.coenv.uw.edu/$1 [R=302,L]
 
 RewriteCond %{HTTP_HOST} ^cig.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
