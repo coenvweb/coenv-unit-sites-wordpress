@@ -54,7 +54,6 @@
         $banner_class .= ' template-print';
     ?>
     <?php
-    $post = get_queried_object();
     $post_title = get_the_title().' | ' . get_bloginfo( 'name' );
     $post_description = $advancedExcerpt;
     $post_link = get_permalink();

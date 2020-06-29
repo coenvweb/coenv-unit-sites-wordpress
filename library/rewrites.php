@@ -56,7 +56,8 @@ function add_cpt_rewrites($wp_rewrite) {
     $a_rules = generate_cpt_rewrite_rules('post', 'news-and-events', array('coenv-year', 'coenv-month'));
     $b_rules = generate_cpt_rewrite_rules('datasets', 'resources/data/cig-datasets');
     $c_rules = generate_cpt_rewrite_rules('publications', 'resources/publications', array('publication_author'));
-    $wp_rewrite->rules = $a_rules + $b_rules + $c_rules + $wp_rewrite->rules;
+    $d_rules = generate_cpt_rewrite_rules('projects', 'our-work/projects', array('project_topic', 'region', 'year'));
+    $wp_rewrite->rules = $a_rules + $b_rules + $c_rules + $d_rules + $wp_rewrite->rules;
 }
 add_action('generate_rewrite_rules', 'add_cpt_rewrites');
 
@@ -69,6 +70,9 @@ function add_query_vars() {
     add_rewrite_tag('%coenv-month%', '(.+?)/');
     add_rewrite_tag('%coenv-year%', '(.+?)/');
     add_rewrite_tag('%category%', '(.+?)/');
+    add_rewrite_tag('%project_topic%', '(.+?)/');
+    add_rewrite_tag('%project_region%', '(.+?)/');
+    add_rewrite_tag('%project_year%', '(.+?)/');
 }
 add_action('init', 'add_query_vars');
 

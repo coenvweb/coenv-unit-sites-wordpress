@@ -15,15 +15,14 @@ function coenv_base_post_types_init() {
       'edit_item' => __( 'Edit Publication'),
       'new_item' => __( 'New Publication'),
       ),
-    //'hierarchical' => true,
-    // drew - i think we need this for each tax connected to a content type
     'taxonomies' => array('author','publication_theme'),
     'supports' => array( 'title', 'editor', 'thumbnail', 'revisions' ),
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
     'rewrite' => array('slug' => 'publications'),
-  'menu_icon' => 'dashicons-media-text',
+    'with_front' => false,
+    'menu_icon' => 'dashicons-media-text',
     )
   );
   register_post_type( 'datasets',
@@ -40,7 +39,8 @@ function coenv_base_post_types_init() {
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
-    //'rewrite' => array('slug' => 'student_blog'),
+    'with_front' => true,
+    'rewrite' => array('slug' => 'datasets'),
     'menu_icon' => 'dashicons-exerpt-view',
     )
   );
@@ -58,10 +58,8 @@ function coenv_base_post_types_init() {
   'public' => true,
   'has_archive' => false,
   'show_ui' => true,
-  'with_front' => false,
-  'rewrite' => array('slug' => 'science/project'),
-  'show_in_rest' => true,
-  'rest_base' => 'projects',
+  'with_front' => true,
+  'rewrite' => array('slug' => 'projects'),
   'menu_icon' => 'dashicons-book',
   )
   );
@@ -74,12 +72,12 @@ function coenv_base_post_types_init() {
       'edit_item' => __( 'Edit People'),
       'new_item' => __( 'New People'),
       ),
-    //'hierarchical' => true,
     'supports' => array( 'title', 'thumbnail' ),
     'public' => true,
     'has_archive' => false,
     'show_ui' => true,
     'rewrite' => array('slug' => 'about/people'),
+    'with_front' => false,
     'menu_icon' => 'dashicons-id',
     )
   ); 
@@ -101,6 +99,7 @@ define( 'PUBS_PAGE_PARENT_ID', '124' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
 define( 'PEOPLE_PARENT_ID', '58' );
 define( 'NEWS_PARENT_ID', '142' );
+define( 'PROJECTS_PAGE_PARENT_ID', '17424' );
  
  
 function coenv_base_dataset_parent( $data, $postarr ) {
@@ -171,6 +170,24 @@ function coenv_base_pubs_parent( $data, $postarr ) {
 }
 add_action( 'wp_insert_post_data', 'coenv_base_pubs_parent', '142', 2  );
 
+function coenv_base_project_parent( $data, $postarr ) {
+  global $post;
+
+
+  // verify if this is an auto save routine.
+  // If it is our form has not been submitted, so we dont want to do anything
+  //if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+   //   return $data;
+
+  if ( $post->post_type == "projects" ){
+      $data['post_parent'] = PROJECTS_PAGE_PARENT_ID;
+  }
+
+  return $data;
+}
+add_action( 'wp_insert_post_data', 'coenv_base_project_parent', '142', 2  );
+
+
 /*
  * Teasers for custom fields
  */
@@ -187,4 +204,3 @@ function coenv_base_custom_field_excerpt($field_name) {
   }
   return apply_filters('the_excerpt', $text);
 }
-

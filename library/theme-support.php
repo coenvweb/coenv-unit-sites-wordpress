@@ -106,10 +106,14 @@ function coenv_get_ancestor($attr = 'ID') {
     
     $post = get_queried_object();
 
+    //print_r($post);
+
     // test for search
     if ( is_search() ) {
         return false;
     }
+
+    if(isset($post)){
 
     if ( ($post->post_type == 'post' || is_archive() || is_search()) ) {
 
@@ -168,6 +172,7 @@ function coenv_get_ancestor($attr = 'ID') {
         $ancestor = get_post( array_pop( $ancestors ) );
         return $ancestor->$attr;
     }
+}
 }
 
 /**
