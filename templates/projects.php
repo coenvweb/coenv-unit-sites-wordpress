@@ -4,34 +4,34 @@ Template Name: Projects Index
 */
 
 $filtered = false;
-//Fiscal years
-if(isset($wp_query->query_vars['funding-year']) && $wp_query->query_vars['funding-year']){
-    $funding_year = urlencode(htmlentities($wp_query->query_vars['funding-year']));
-    $funding_year_arr = get_term_by('slug',$funding_year,'funding-year');
-    $funding_year_val = $funding_year_arr->name;
+//Project Year
+if(isset($wp_query->query_vars['project-year']) && $wp_query->query_vars['project-year']){
+    $project_year = urlencode(htmlentities($wp_query->query_vars['project-year']));
+    $project_year_arr = get_term_by('slug',$funding_year,'project-year');
+    $project_year_val = $funding_year_arr->name;
     $filtered = true;
 } else {
-    $funding_year = null;
+    $project_year = null;
 }
 
-//State
-if(isset($wp_query->query_vars['state']) && $wp_query->query_vars['state']){
-    $state = urlencode(htmlentities($wp_query->query_vars['state']));
-    $state_arr = get_term_by('slug',$state,'state');
-    $state_val = $state_arr->name;
+//Project Region
+if(isset($wp_query->query_vars['project-region']) && $wp_query->query_vars['project-region']){
+    $project_region = urlencode(htmlentities($wp_query->query_vars['project-region']));
+    $project_region_arr = get_term_by('slug',$state,'project-region');
+    $project_region_val = $state_arr->name;
     $filtered = true;
 } else {
-    $state = null;
+    $project_region = null;
 }
 
 //Topic
-if(isset($wp_query->query_vars['topic']) && $wp_query->query_vars['topic']){
-    $topic = urlencode(htmlentities($wp_query->query_vars['topic']));
-    $topic_arr = get_term_by('slug',$topic,'topic');
-    $topic_val = $topic_arr->name;
+if(isset($wp_query->query_vars['project-topic']) && $wp_query->query_vars['project-topic']){
+    $project_topic = urlencode(htmlentities($wp_query->query_vars['project-topic']));
+    $project_topic_arr = get_term_by('slug',$topic,'project-topic');
+    $project_topic_val = $topic_arr->name;
     $filtered = true;
 } else {
-    $topic = null;
+    $tproject_opic = null;
 }
 
 //Current
@@ -230,14 +230,14 @@ $wp_query = new WP_Query($query_args);
 			<div class="filters no-auto">
           <p class="filter-label columns">Filter Projects:</p>
 				<form method="get" class="search-form filter-form" action="<?php the_permalink() ?>">
-					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category fiscal-year">
-						<?php coenv_base_no_auto_filter('funding-year', $funding_year);?>
-					</div>
-					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category state">
-						<?php coenv_base_no_auto_filter('state', $state); ?>
-					</div>
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category topic">
-						<?php coenv_base_no_auto_filter('topic', $topic); ?>
+						<?php coenv_base_cat_filter('project_topic', $project_topic); // Category filter ?>
+					</div>
+					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category region">
+						<?php coenv_base_cat_filter('project_region', $project_region); // Category filter ?>
+					</div>
+					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category year">
+						<?php coenv_base_cat_filter('project_year', $project_year); // Category filter ?>
 					</div>
 					<div class=" large-7 columns">
 						<label for="project-search" class="hidden" aria-hidden="true">Search projects</label>

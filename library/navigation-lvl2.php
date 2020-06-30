@@ -8,7 +8,8 @@ function coenv_base_hierarchical_submenu($postid) {
     $top_post = $post;
     // If the post has ancestors, get its ultimate parent and make that the top post
     if ($post->post_parent && $post->ancestors) {
-        $top_post = get_post(end($post->ancestors));
+        $ancestors = $post->ancestors;
+        $top_post = get_post(end($ancestors));
     }
     if ($post->ID == '15466' || in_array(15466, $post->ancestors) || $post->ID == '14250' || in_array(14250, $post->ancestors)) { //for tribal vulnerability pages
          return special_tvar_coenv_base_hierarchical_submenu_get_children($top_post, $post);
