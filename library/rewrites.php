@@ -70,9 +70,9 @@ function add_query_vars() {
     add_rewrite_tag('%coenv-month%', '(.+?)/');
     add_rewrite_tag('%coenv-year%', '(.+?)/');
     add_rewrite_tag('%category%', '(.+?)/');
-    add_rewrite_tag('%project_topic%', '(.+?)/');
-    add_rewrite_tag('%project_region%', '(.+?)/');
-    add_rewrite_tag('%project_year%', '(.+?)/');
+    add_rewrite_tag('%project-topic%', '(.+?)/');
+    add_rewrite_tag('%project-region%', '(.+?)/');
+    add_rewrite_tag('%project-year%', '(.+?)/');
 }
 add_action('init', 'add_query_vars');
 

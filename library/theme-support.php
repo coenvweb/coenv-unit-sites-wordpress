@@ -141,6 +141,14 @@ function coenv_get_ancestor($attr = 'ID') {
         return $ancestor->$attr;
     }
 
+    if ( $post->post_type == 'projects' ) {
+
+        // must be a child page
+        $ancestors = get_post_ancestors( PROJECTS_PAGE_PARENT_ID );
+        $ancestor = get_post( array_pop( $ancestors ) );
+        return $ancestor->$attr;
+    }
+
     // test for custom post types
     $custom_post_types = get_post_types( array( '_builtin' => false ), 'object' );
     if ( !empty( $custom_post_types ) && array_key_exists( $post->post_type, $custom_post_types ) ) {

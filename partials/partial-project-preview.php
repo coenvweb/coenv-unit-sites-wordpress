@@ -15,7 +15,7 @@
                 <div class="post-content post-meta article__meta post-info">
                     <div class="project-status large-3 columns"><?php the_field('project_status'); ?></div><div class="topics">
                     <?php // Get categories
-                        $terms = wp_get_post_terms(get_the_id(), 'topic');
+                        $terms = wp_get_post_terms(get_the_id(), 'project_topic');
                       $url_base = "/science/projects";
                         if (!empty($terms)) {
                             $terms_arr = array();

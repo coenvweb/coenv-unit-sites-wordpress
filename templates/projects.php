@@ -31,7 +31,7 @@ if(isset($wp_query->query_vars['project-topic']) && $wp_query->query_vars['proje
     $project_topic_val = $topic_arr->name;
     $filtered = true;
 } else {
-    $tproject_opic = null;
+    $project_topic = null;
 }
 
 //Current
@@ -189,27 +189,27 @@ if(isset($project_search)) {
 	$query_args['_meta_or_title'] = $project_search;
 }
 
-if($topic) {
+if($project_topic) {
 	$query_args['tax_query'][] = array(
-		'taxonomy' => 'topic',
+		'taxonomy' => 'project_topic',
 		'field' => 'slug',
-		'terms' => $topic,
+		'terms' => $project_topic,
 	);
 }
 
-if($state) {
+if($project_region) {
 	$query_args['tax_query'][] = array(
-		'taxonomy' => 'state',
+		'taxonomy' => 'project_region',
 		'field' => 'slug',
-		'terms' => $state,
+		'terms' => $project_region,
 	);
 }
 
-if($funding_year) {
+if($project_year) {
 	$query_args['tax_query'][] = array(
-		'taxonomy' => 'funding-year',
+		'taxonomy' => 'project_year',
 		'field' => 'slug',
-		'terms' => $funding_year,
+		'terms' => $project_year,
 	);
 }
 
@@ -218,7 +218,7 @@ if($funding_year) {
 $wp_query = new WP_Query($query_args);
 ?>
 <div class="row">
-	<div class="small-12 medium-9 columns right" role="main" id="main-col">
+	<div class="small-12 medium-9 columns" role="main" id="main-col">
       <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 		<div class="entry-content">
         <header class="article__header">

@@ -1,0 +1,164 @@
+.page-template-projects {
+    .filters {
+        .select-category {
+            margin-top: 1rem;
+        }
+        input[type=text] {
+            display: inline-block;
+            width: 100%;
+        }
+        .current-check {
+            label {
+                font-size: 13px;
+                display: inline;
+                line-height: 2.8rem;
+            }
+        }
+        button {
+            padding: .5rem;
+            margin: 0;
+            border-radius: 4px;
+            width: 100%;
+            height: 37px;
+            font-size: 1rem;
+            background: transparent;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: $accent-blue;
+            //@include border-radius( $radius );
+            border-radius: $radius;
+            border: 2px solid #627A9F;
+        }
+        input[type=checkbox] {
+            margin: 1rem 0;
+        }
+    }
+    .projects {
+        list-style-type: none;
+        
+        .project {
+            margin-bottom: 1rem;
+            min-height: 200px;
+            padding-left: 0!important;
+            
+            .project-wrap {
+                margin: 0 1.1rem;
+                @extend .shadow;
+                transition: .5s;
+                .project-status {
+                   background-color: #333;
+                    padding: .5rem;
+                    margin-top: -.5rem;
+                    margin-right: .5rem;
+                    margin-left: 1rem;
+                    line-height: 2rem;
+                    text-align: center;
+                    color: white;
+                    text-transform: uppercase;
+                    @include o_sans_bold();
+                    font-size: .9rem;
+                    opacity: 1;
+                    max-width: 110px;
+                }
+                .topics {
+                    padding: .5rem;
+                }
+                .post-meta {
+                    color: white;
+                    margin-bottom: 1rem;
+                    margin-left: calc(-1rem - 1px);
+                    a {
+                    }
+                }
+                .project-preview-img {
+                    @media #{$medium-only} {
+                        width: calc(100% + 1rem - 1px);
+                        max-width: none;
+                    }
+                    @media #{$small-only} {
+                        width: calc(100% + 1rem - 1px);
+                        max-width: none;
+                    }
+                }
+                .project-info {
+                    color: rgba(0, 0, 0, 0.1);
+                    h2 {
+                        font-size: 1.4rem;
+                        &:hover {
+                            color: $accent-purple;
+                        }
+                        color: $text;
+                        &:after {
+                            content: '▶';
+                            font-size: .75rem;
+                            vertical-align: .2rem;
+                            padding-left: .5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.single-projects {
+    .project {
+        .article__meta {
+            margin-bottom: .5rem;
+             a {
+                color: $accent-blue;
+            }
+        }
+        .article__content {
+            .intro {
+                text-align: center;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 1rem;
+            }
+            .side-panel {
+                @extend .shadow;
+                padding: 0rem;
+                background: $bg-lighter;
+                padding-bottom: 1rem;
+                .investigators {
+                    padding: 0rem 1.1rem;
+                    margin-left: 0px;
+                    li {
+                        list-style-type: none;
+                    }
+                    border-bottom: 1px solid #ccc;
+                }
+                .project-meta {
+                    padding: 0rem 1.5rem;
+                    .meta-row {
+                        clear: both;
+                        margin-bottom: 1rem;
+                        overflow: hidden;
+                        label {
+                            float: left;
+                            width: 40%;
+                            margin-right: 5%;
+                            color: black;
+                        }
+                        .value {
+                            float: left;
+                            width: 55%;
+                            color: $text;
+                        }
+                        ul {
+                            margin-left: 0px;
+                            li {
+                                margin-left: 0px;
+                                list-style-type: none;
+                            }
+                        }
+                    }
+                }
+            }
+            .button {
+                margin-right: .5rem;
+            }
+        }
+    }
+}

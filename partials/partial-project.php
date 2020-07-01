@@ -8,9 +8,6 @@ function pi_to_front($a, $b) {
     if($a['name'] == 'Principal Investigator') {
         return -1;
     }
-    if($a['name'] == 'NW CASC Fellow') {
-        return -1;
-    }
     return 1;
 }
 
@@ -20,53 +17,53 @@ $project_type = get_field('project_type');
 $url_base = "/science/projects";
 
 //Taxonomies
-$topics = wp_get_post_terms(get_the_id(), 'topic');
-$states = wp_get_post_terms(get_the_id(), 'state');
-$funding_years = wp_get_post_terms(get_the_id(), 'funding-year');
+$project_topic = wp_get_post_terms(get_the_id(), 'project_topic');
+$project_region = wp_get_post_terms(get_the_id(), 'project_region');
+$project_years = wp_get_post_terms(get_the_id(), 'project_year');
 $terms_str = '';
 
-if (!empty($topics)) {
-    $topics_arr = array();
+if (!empty($project_topic)) {
+    $project_topic_arr = array();
 
-    foreach ($topics as &$term) {
+    foreach ($project_topic as &$term) {
         if ($term->slug != 'uncategorized') {
-            $topics_arr[] = '<a href="'.$url_base.'/?topic=' . $term->slug . '">' . $term->name . '</a>';
+            $project_topic_arr[] = '<a href="'.$url_base.'/?topic=' . $term->slug . '">' . $term->name . '</a>';
         }   
     }
-        $topics_str = implode(', ', $topics_arr);
+        $project_topic_str = implode(', ', $project_topic_arr);
 
 } else {
-    $topics_str = '';
+    $project_topic_str = '';
 }
 $terms = "";      
 
-if (!empty($states)) {
-    $states_arr = array();
+if (!empty($project_region)) {
+    $project_region_arr = array();
 
-    foreach ($states as &$term) {
+    foreach ($project_region as &$term) {
         if ($term->slug != 'uncategorized') {
-            $states_arr[] = '<a href="'.$url_base.'/?states=' . $term->slug . '">' . $term->name . '</a>';
+            $project_region_arr[] = '<a href="'.$url_base.'/?project_region=' . $term->slug . '">' . $term->name . '</a>';
         }   
     }
-        $states_str = implode(', ', $states_arr);
+        $project_region_str = implode(', ', $project_region_arr);
 
 } else {
-    $states_str = '';
+    $project_region_str = '';
 }
 $terms = "";   
 
-if (!empty($funding_years)) {
-    $funding_years_arr = array();
+if (!empty($project_years)) {
+    $project_years_arr = array();
 
-    foreach ($funding_years as &$term) {
+    foreach ($project_years as &$term) {
         if ($term->slug != 'uncategorized') {
-            $funding_years_arr[] = '<a href="'.$url_base.'/?funding_years=' . $term->slug . '">' . $term->name . '</a>';
+            $project_years_arr[] = '<a href="'.$url_base.'/?project_years=' . $term->slug . '">' . $term->name . '</a>';
         }   
     }
-        $funding_years_str = implode(', ', $funding_years_arr);
+        $project_years_str = implode(', ', $project_years_arr);
 
 } else {
-    $funding_years_str = '';
+    $project_years_str = '';
 }
 $terms = "";  
 
@@ -86,16 +83,18 @@ $story_map_link = get_field('story_map_link');
 
 //Break investigators into parts
 $gators_sorted = array();
-foreach($gators as $gator) {
-    $type = $gator['type'];
-    unset($gator['type']);
-    if($gator['email']) {
-        $gator['email'] = '<a href="mailto:'.$gator['email'].'">'.$gator['email'].'</a>';
-    }
-    if(array_key_exists($type, $gators_sorted)) {
-        $gators_sorted[$type][] = $gator;
-    } else {
-        $gators_sorted[$type] = array( 'name' => $type, $gator );
+if (!empty($gators)) {
+    foreach($gators as $gator) {
+        $type = $gator['type'];
+        unset($gator['type']);
+        if($gator['email']) {
+            $gator['email'] = '<a href="mailto:'.$gator['email'].'">'.$gator['email'].'</a>';
+        }
+        if(array_key_exists($type, $gators_sorted)) {
+            $gators_sorted[$type][] = $gator;
+        } else {
+            $gators_sorted[$type] = array( 'name' => $type, $gator );
+        }
     }
 }
 
@@ -110,15 +109,15 @@ $intro = get_field('intro_text');
         <div class="article__meta">
 			 <div class="post-info">
             <?php the_field('project_status'); ?> | 
-            <?php if (!empty($topics_str)) {
-                echo $topics_str;
+            <?php if (!empty($project_topic_str)) {
+                echo $project_topic_str;
             } ?>
            <br />
-           <?php if (!empty($states_str)) {
-                echo 'States: ' . $states_str;
+           <?php if (!empty($project_region_str)) {
+                echo 'project_region: ' . $project_region_str;
             } ?>
-           <?php if (!empty($funding_years_str)) {
-                echo '| Funding years: ' . $funding_years_str;
+           <?php if (!empty($project_years_str)) {
+                echo '| Funding years: ' . $project_years_str;
             } ?>
         </div>
         </div>
@@ -201,11 +200,6 @@ $intro = get_field('intro_text');
         </div>
         <div class="content small-12 medium-8 columns">
             <?php the_content(); ?>
-            <?php if($nccwsc) { ?>
-                <a href="<?=$nccwsc?>" class="button">Data and Products</a>
-            <?php } if($story_map_link) { ?>
-                <a href="<?=$story_map_link?>" class="button">Story Map</a>
-            <?php } ?>
             
         </div>
     </section>

@@ -308,7 +308,7 @@ function project_tax() {
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
 	);
-	register_taxonomy('project_topic', array( 'projects'));
+	register_taxonomy('project_topic', array( 'projects'), $topic_args);
 }
 
 add_action( 'init', 'project_tax' );

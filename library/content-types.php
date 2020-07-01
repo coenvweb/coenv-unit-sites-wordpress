@@ -59,7 +59,6 @@ function coenv_base_post_types_init() {
   'has_archive' => false,
   'show_ui' => true,
   'with_front' => true,
-  'rewrite' => array('slug' => 'projects'),
   'menu_icon' => 'dashicons-book',
   )
   );
@@ -170,8 +169,8 @@ function coenv_base_pubs_parent( $data, $postarr ) {
 }
 add_action( 'wp_insert_post_data', 'coenv_base_pubs_parent', '142', 2  );
 
-function coenv_base_project_parent( $data, $postarr ) {
-  global $post;
+//function coenv_base_project_parent( $data, $postarr ) {
+ // global $post;
 
 
   // verify if this is an auto save routine.
@@ -179,13 +178,13 @@ function coenv_base_project_parent( $data, $postarr ) {
   //if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
    //   return $data;
 
-  if ( $post->post_type == "projects" ){
-      $data['post_parent'] = PROJECTS_PAGE_PARENT_ID;
-  }
+  //if ( $post->post_type == "projects" ){
+   //   $data['post_parent'] = PROJECTS_PAGE_PARENT_ID;
+  //}
 
-  return $data;
-}
-add_action( 'wp_insert_post_data', 'coenv_base_project_parent', '142', 2  );
+  //return $data;
+//}
+//add_action( 'wp_insert_post_data', 'coenv_base_project_parent', '142', 2  );
 
 
 /*
