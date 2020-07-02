@@ -109,13 +109,13 @@ $intro = get_field('intro_text');
         <div class="article__meta">
 			 <div class="post-info">
             <?php if (!empty($project_topic_str)) {
-                echo 'Topic(s): ' . $project_topic_str;
+                echo 'Topic' . (count($project_region) > 1 ? 's: ' : ': ') . $project_topic_str;
             } ?>
            <?php if (!empty($project_region_str)) {
-                echo 'project_region: ' . $project_region_str;
+                echo 'Region' . (count($project_region) > 1 ? 's: ' : ': ') . $project_region_str;
             } ?>
            <?php if (!empty($project_years_str)) {
-                echo '| Year(s): ' . $project_years_str;
+                echo '| Year' . (count($project_years) > 1 ? 's: ' : ': ') . $project_years_str;
             } ?>
         </div>
         </div>
@@ -157,13 +157,13 @@ $intro = get_field('intro_text');
                 -->
                 <?php if($partners) { ?>
                     <div class="meta-row">
-                        <label for="funding">
+                        <label for="partners">
                             Partner<?=(count($partners) > 1 ? 's' : '')?>
                         </label>
-                        <ul class="value" id="funding">
+                        <ul class="value" id="partners">
                             <?php 
                             foreach($partners as $partner) { ?>
-                                <li class="$partner"><?=$partner['$partner']?></li>
+                                <li class="$partner"><?=$partner['partner']?></li>
                             <?php } ?>
                         </ul>
                     </div>
