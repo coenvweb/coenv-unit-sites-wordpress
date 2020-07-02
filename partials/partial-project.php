@@ -108,16 +108,14 @@ $intro = get_field('intro_text');
     <header class="article__header columns">
         <div class="article__meta">
 			 <div class="post-info">
-            <?php the_field('project_status'); ?> | 
             <?php if (!empty($project_topic_str)) {
-                echo $project_topic_str;
+                echo 'Topic(s): ' . $project_topic_str;
             } ?>
-           <br />
            <?php if (!empty($project_region_str)) {
                 echo 'project_region: ' . $project_region_str;
             } ?>
            <?php if (!empty($project_years_str)) {
-                echo '| Funding years: ' . $project_years_str;
+                echo '| Year(s): ' . $project_years_str;
             } ?>
         </div>
         </div>

@@ -105,6 +105,7 @@ if(isset($wp_query->query_vars['category'])){
         } else {
             $post_link_url = get_the_permalink();
             $post_link = '<a class="button left" href="' . $post_link_url . '">Read more</a>';
+            $post_link_target = '';
         }
         ?>
         <div class="blog-list-item clearfix">
@@ -142,7 +143,7 @@ if(isset($wp_query->query_vars['category'])){
         </div>
         </div>
 
-        <div class="post-content left <?php echo $has_thumb; ?>">
+        <div class="post-content left">
             
             <h2><a href="<?php echo $post_link_url; ?>"<?php echo $post_link_target; ?>><?php echo get_the_title(); ?></a></h2>
             <?php   
@@ -151,7 +152,6 @@ if(isset($wp_query->query_vars['category'])){
             ?>
         </div>
     </div>
-    <?php $has_thumb = ""; ?>
     <?php endwhile; ?>
     </div>
     <div class="pager">

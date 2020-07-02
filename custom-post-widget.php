@@ -72,12 +72,14 @@ if ( $show_featured_image ) {
 	echo '</div>';
 	}
 echo '<div class="widget_content">';
-if ( $link_position[0] == 'title' ) {
+if ( !empty($link_position) && $link_position[0] == 'title' ) {
     echo $buttons;
 }
-if ( $show_custom_post_title ) {
+if ( $show_custom_post_title) {
 	echo $before_title;
-	echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">' . $widget_title . '</a>';
+    if (!empty($first_link_title)) { echo '<a title="' . $first_link_title . '" href="' . $first_link_url . '" target="_' . $first_link_target . '">'; }
+    echo $widget_title; 
+    if (!empty($first_link_title)) { echo '</a>'; }
 	echo $after_title;
 }
 echo $widget_copy;
