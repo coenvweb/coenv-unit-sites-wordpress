@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.4
-Stable tag: 3.1.0
+Stable tag: 3.2.0
 License: GPLv2 or later
 
 
@@ -52,17 +52,13 @@ First you can disable the plugin. Then in wp_options you can delete the field:
 In wp_terms you can remove the column
 * term_order
 
+
 == Frequently Asked Questions ==
 
 = I sorted the terms in the WordPress backend, but I don't see it changed in the frontend =
 
 Did you set the option for that taxonomy to use that custom order? Make sure to check it so the filters run
 with your taxonomy.
-
-= My custom taxonomy is not available in the menu page =
-
-This plugin will only offer to sort them when the taxonomy is set to public. Make sure you use 'register_taxonomy'
-with the public parameter set to true (default).
 
 = How do I sort the terms when using a custom query? =
 
@@ -153,13 +149,24 @@ You can start translating strings there for your locale. They need to be validat
 and you want to apply for being validator, please post it on the support forum. I will make a request on make/polyglots to
 have you added as validator for this plugin/locale.
 
+
 == Screenshots ==
 
 1. Screenshot of the menu page for Custom Taxonomy Order.
 The WordPress menu completely left lists the different taxonomies.
 The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
+
 == Changelog ==
+
+= 3.2.0 =
+* 2020-07-06
+* Improve compatibility with WPML plugin.
+* Add function 'customtaxorder_get_taxonomies()' to remove duplicate code.
+* Be able to sort all taxonomies, public and non-public.
+* Use more esc_html functions.
+* Update About page.
+* Only load translations at the dashboard.
 
 = 3.1.0 =
 * 2020-03-23
