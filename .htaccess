@@ -11,6 +11,18 @@ deny from 31.207.44.186
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
+# block aws   
+RewriteCond %{HTTP_REFERER} ^http://.*amazonaws\.com [OR]    
+RewriteCond %{REMOTE_HOST} ^.*\.compute-1\.amazonaws\.com$ [NC,OR]  
+RewriteCond %{REMOTE_HOST} ^.*\.compute\.amazonaws\.com$ [NC,OR]  
+RewriteCond %{HTTP_USER_AGENT} "AISearchBot" [NC,OR]    
+RewriteCond %{HTTP_USER_AGENT} "woriobot" [NC,OR]    
+RewriteCond %{HTTP_USER_AGENT} "heritrix" [NC,OR]    
+RewriteCond %{HTTP_USER_AGENT} "NetSeer" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Rustbot/0.3" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Nutch" [NC]    
+RewriteRule ^(.*)$ - [F] 
+
 # Begin Shibboleth
 AuthType shibboleth
 Require shibboleth
