@@ -1,5 +1,19 @@
 .page-template-projects {
     .filters {
+        display: table;
+        background-color: #f6f5f7;
+        border-top: 5px solid $accent;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+
+        .filter-label {
+            margin-bottom: 0;
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: .9rem;
+        }
         .select-category {
             margin-top: 1rem;
         }
@@ -128,6 +142,10 @@
                         list-style-type: none;
                     }
                     border-bottom: 1px solid #ccc;
+                    .gator-type {
+                        margin-top: 1rem;
+                        font-size: 1.7rem!important;
+                    }
                 }
                 .project-meta {
                     padding: 0rem 1.5rem;
