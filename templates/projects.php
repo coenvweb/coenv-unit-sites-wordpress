@@ -4,34 +4,34 @@ Template Name: Projects Index
 */
 
 $filtered = false;
-//Project Year
-if(isset($wp_query->query_vars['project-year']) && $wp_query->query_vars['project-year']){
-    $project_year = urlencode(htmlentities($wp_query->query_vars['project-year']));
-    $project_year_arr = get_term_by('slug',$funding_year,'project-year');
-    $project_year_val = $funding_year_arr->name;
+//Topic
+if(isset($wp_query->query_vars['project_topic']) && $wp_query->query_vars['project_topic']){
+    $project_topic = urlencode(htmlentities($wp_query->query_vars['project_topic']));
+    $project_topic_arr = get_term_by('slug',$project_topic,'project_topic');
+    $project_topic_val = $project_topic_arr->name;
     $filtered = true;
 } else {
-    $project_year = null;
+    $project_topic = null;
 }
 
 //Project Region
-if(isset($wp_query->query_vars['project-region']) && $wp_query->query_vars['project-region']){
-    $project_region = urlencode(htmlentities($wp_query->query_vars['project-region']));
-    $project_region_arr = get_term_by('slug',$state,'project-region');
-    $project_region_val = $state_arr->name;
+if(isset($wp_query->query_vars['project_region']) && $wp_query->query_vars['project_region']){
+    $project_region = urlencode(htmlentities($wp_query->query_vars['project_region']));
+    $project_region_arr = get_term_by('slug',$project_region,'project_region');
+    $project_region_val = $project_region_arr->name;
     $filtered = true;
 } else {
     $project_region = null;
 }
 
-//Topic
-if(isset($wp_query->query_vars['project-topic']) && $wp_query->query_vars['project-topic']){
-    $project_topic = urlencode(htmlentities($wp_query->query_vars['project-topic']));
-    $project_topic_arr = get_term_by('slug',$topic,'project-topic');
-    $project_topic_val = $topic_arr->name;
+//Project Year
+if(isset($wp_query->query_vars['project_year']) && $wp_query->query_vars['project_year']){
+    $project_year = urlencode(htmlentities($wp_query->query_vars['project_year']));
+    $project_year_arr = get_term_by('slug',$project_year,'project_year');
+    $project_year_val = $project_year_arr->name;
     $filtered = true;
 } else {
-    $project_topic = null;
+    $project_year = null;
 }
 
 //Current
