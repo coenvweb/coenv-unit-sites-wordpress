@@ -231,25 +231,25 @@ $wp_query = new WP_Query($query_args);
           <p class="filter-label columns">Filter Projects:</p>
 				<form method="get" class="search-form filter-form" action="<?php the_permalink() ?>">
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category topic">
-						<?php coenv_base_cat_filter('project_topic', $project_topic); // Category filter ?>
+						<?php coenv_base_no_auto_filter('project_topic', $project_topic); // Category filter ?>
 					</div>
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category region">
-						<?php coenv_base_cat_filter('project_region', $project_region); // Category filter ?>
+						<?php coenv_base_no_auto_filter('project_region', $project_region); // Category filter ?>
 					</div>
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category year">
-						<?php coenv_base_cat_filter('project_year', $project_year); // Category filter ?>
+						<?php coenv_base_no_auto_filter('project_year', $project_year); // Category filter ?>
 					</div>
 					<div class=" large-7 columns">
 						<label for="project-search" class="hidden" aria-hidden="true">Search projects</label>
 						<input value="<?php if(isset($project_search)){echo $project_search;}; ?>" name="project-search" id="project-search" placeholder="Search projects" aria-label="Search" title="Search" type="text">
 					</div>
-            <div class="submit large-2 columns right">
-                <button type="submit"><i class="fi-magnifying-glass"></i><span> Apply</span></button>
-            </div>
-            <div class="current-check large-3 columns right">
-                <input type="checkbox" id="project_status" name="project_status" value="In Progress" class="left" <?php if ($project_status == 'In+Progress'){echo 'checked';}; ?>><label for="project_status">Current projects</label>
-                
-            </div>
+					<div class="submit large-2 columns right">
+						<button type="submit"><i class="fi-magnifying-glass"></i><span> Apply</span></button>
+					</div>
+					<div class="current-check large-3 columns right">
+						<input type="checkbox" id="project_status" name="project_status" value="In Progress" class="left" <?php if ($project_status == 'In+Progress'){echo 'checked';}; ?>><label for="project_status">Current projects</label>
+						
+					</div>
 				</form>
 			</div>
 		<?php if ($wp_query->have_posts()) {  ?>

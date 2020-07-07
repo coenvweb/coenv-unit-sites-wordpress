@@ -61,13 +61,14 @@ jQuery(function ($) {
 	
 
     // Category filter for custom post type indicies
-    $("select.select-category").on( 'change', function () {
+    $(".filters:not(.no-auto) select.select-category").on( 'change', function () {
         //alert('This changed!');
         //var url = $(this).parent('div').attr('data-url');
         var cat = $(this).parent('div').attr('data-url');
         var catval = $(this).val();
         window.location.href = cat + catval;
-    } );
+    });
+    
 });
 
 

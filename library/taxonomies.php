@@ -312,3 +312,26 @@ function project_tax() {
 }
 
 add_action( 'init', 'project_tax' );
+
+function coenv_base_no_auto_filter($tax,$tax_value) {
+
+$tax_obj = get_taxonomy($tax);
+$tax_str = $tax_obj->labels->name;
+
+$cats_args  = array(
+	'orderby' => 'name',
+	'order' => 'ASC',
+	'taxonomy' => $tax
+);
+$cats = get_categories($cats_args);
+	if ($cats) {
+		echo '<label for="'.$tax_obj->name.'"  class="visuallyhidden">Select ' . $tax_str . '</label>';
+		echo '<select name="'.$tax_obj->name.'" class="select-category" id="select-category">';
+		echo '<option class="level-0" value="0">All ' . $tax_str . '</option>';
+		foreach($cats as $cat) { 
+			$selected = $cat->slug == $tax_value ? ' selected="selected"' : '';
+			echo '<option value="'. $cat->slug . '"' . $selected . '>' . $cat->name . '</option>';
+		}
+		echo '</select>';
+	}
+}
