@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.4
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 License: GPLv2 or later
 
 
@@ -158,6 +158,11 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.2.1 =
+* 2020-07-07
+* More compatibility with WPML plugin.
+* Remove code to set taxonomy 'link_category' to public.
 
 = 3.2.0 =
 * 2020-07-06

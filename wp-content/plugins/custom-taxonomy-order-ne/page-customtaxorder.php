@@ -127,9 +127,9 @@ function customtaxorder_subpage() {
 		if ( in_array( 'sitepress-multilingual-cms/sitepress.php', $active_plugins ) ) {
 			remove_filter( 'terms_clauses', array( $sitepress, 'terms_clauses' ), 10 );
 			remove_filter( 'get_terms', array( $sitepress, 'get_terms_filter' ), 10 );
-			//remove_filter( 'get_terms_args', array( $sitepress, 'get_terms_args_filter' ), 10, 2 ); // Not needed.
+			remove_filter( 'get_terms_args', array( $sitepress, 'get_terms_args_filter' ), 10, 2 ); // Needed to get the correct list of sub-terms.
 			remove_filter( "pre_option_{$tax}_children", array( $sitepress, 'pre_option_tax_children' ), 10, 0 );
-			add_filter( "pre_option_{$tax}_children", 'customtaxorder_pre_option_tax_children', 99, 0 );
+			add_filter( "pre_option_{$tax}_children", 'customtaxorder_pre_option_tax_children', 99, 0 ); // Needed to fill the dropdown of sub-terms.
 		}
 
 		$args = array(
