@@ -7,7 +7,7 @@ function custom_taxonomy_order() {
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
 	if ( function_exists('current_user_can') && !current_user_can( $custom_cap ) ) {
-		die(__( 'Cheatin&#8217; uh?', 'custom-taxonomy-order-ne' ));
+		die(esc_html__( 'Cheatin&#8217; uh?', 'custom-taxonomy-order-ne' ));
 	}
 
 	if (isset($_POST['order-submit'])) {
@@ -17,7 +17,7 @@ function custom_taxonomy_order() {
 	?>
 	<div class='wrap customtaxorder'>
 		<div id="icon-customtaxorder"></div>
-		<h1><?php _e('Order Taxonomies', 'custom-taxonomy-order-ne'); ?></h1>
+		<h1><?php esc_html_e('Order Taxonomies', 'custom-taxonomy-order-ne'); ?></h1>
 
 		<form name="custom-order-form" method="post" action=""><?php
 
@@ -25,20 +25,9 @@ function custom_taxonomy_order() {
 			$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
 			echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
 
-			$args = array();
-			$output = 'objects';
-			$taxonomies = get_taxonomies( $args, $output );
+			$taxonomies = customtaxorder_get_taxonomies() ;
 
-			// Also make the link_category available if activated.
-			$linkplugin = "link-manager/link-manager.php";
-			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-			if ( is_plugin_active($linkplugin) ) {
-				$args = array( 'name' => 'link_category' );
-				$taxonomies2 = get_taxonomies( $args, $output );
-				$taxonomies = array_merge($taxonomies, $taxonomies2);
-			}
-
-			if ( $taxonomies ) {
+			if ( ! empty($taxonomies) ) {
 
 				$taxonomies_ordered = customtaxorder_sort_taxonomies( $taxonomies );
 				?>
@@ -46,8 +35,8 @@ function custom_taxonomy_order() {
 				<div id="poststuff" class="metabox-holder">
 					<div class="widget order-widget">
 						<h2 class="widget-top">
-							<?php _e('Order Taxonomies', 'custom-taxonomy-order-ne'); ?> |
-							<small><?php _e('Order the taxonomies by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small>
+							<?php esc_html_e('Order Taxonomies', 'custom-taxonomy-order-ne'); ?> |
+							<small><?php esc_html_e('Order the taxonomies by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small>
 						</h2>
 						<div class="misc-pub-section">
 							<ul id="custom-taxonomy-list">
@@ -61,7 +50,7 @@ function custom_taxonomy_order() {
 						<div class="misc-pub-section misc-pub-section-last">
 							<div id="publishing-action">
 								<img src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" id="custom-loading" style="display:none" alt="" />
-								<input type="submit" name="order-submit" id="order-submit" class="button-primary" value="<?php _e('Update Order', 'custom-taxonomy-order-ne') ?>" />
+								<input type="submit" name="order-submit" id="order-submit" class="button-primary" value="<?php esc_attr_e('Update Order', 'custom-taxonomy-order-ne') ?>" />
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -70,7 +59,7 @@ function custom_taxonomy_order() {
 				</div>
 
 			<?php } else { ?>
-				<p><?php _e('No taxonomies found', 'custom-taxonomy-order-ne'); ?></p>
+				<p><?php esc_html_e('No taxonomies found', 'custom-taxonomy-order-ne'); ?></p>
 			<?php }
 			?>
 		</form>
@@ -80,7 +69,7 @@ function custom_taxonomy_order() {
 
 
 /*
- * Save order of the taxonomies in an option
+ * Save order of the taxonomies in an option.
  */
 function customtaxorder_update_taxonomies() {
 
@@ -91,7 +80,7 @@ function customtaxorder_update_taxonomies() {
 	}
 	if ( $verified == false ) {
 		// Nonce is invalid.
-		echo '<div id="message" class="error fade notice is-dismissible"><p>' . __('The Nonce did not validate. Please try again.', 'custom-taxonomy-order-ne') . '</p></div>';
+		echo '<div id="message" class="error fade notice is-dismissible"><p>' . esc_html__('The Nonce did not validate. Please try again.', 'custom-taxonomy-order-ne') . '</p></div>';
 		return;
 	}
 
@@ -101,19 +90,19 @@ function customtaxorder_update_taxonomies() {
 		$new_order = sanitize_text_field( $new_order );
 		update_option('customtaxorder_taxonomies', $new_order);
 
-		echo '<div id="message" class="updated fade notice is-dismissible"><p>'. __('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';
+		echo '<div id="message" class="updated fade notice is-dismissible"><p>'. esc_html__('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';
 	} else {
-		echo '<div id="message" class="error fade notice is-dismissible"><p>'. __('An error occured, order has not been saved.', 'custom-taxonomy-order-ne').'</p></div>';
+		echo '<div id="message" class="error fade notice is-dismissible"><p>'. esc_html__('An error occured, order has not been saved.', 'custom-taxonomy-order-ne').'</p></div>';
 	}
 }
 
 
 /*
- * Sort the taxonomies
+ * Sort the taxonomies.
  *
- * Parameter: $taxonomies, array with a list of taxonomy objects.
+ * @param $taxonomies, array with a list of taxonomy objects.
  *
- * Returns: array with list of taxonomies, ordered correctly.
+ * @return array list of taxonomies, ordered correctly.
  *
  * @since: 2.7.0
  *
@@ -145,11 +134,11 @@ function customtaxorder_sort_taxonomies( $taxonomies = array() ) {
 
 
 /*
- * Sort the taxonomies for WooCommerce
+ * Sort the taxonomies for WooCommerce automatically.
  *
- * Parameter: $taxonomies, array with a list of taxonomy objects of WC_Product_Attribute.
+ * @param $attributes array with a list of taxonomy objects of WC_Product_Attribute.
  *
- * Returns: array with list of taxonomies, ordered correctly.
+ * @rturn array list of taxonomies, ordered correctly.
  *
  * @since: 2.10.0
  *

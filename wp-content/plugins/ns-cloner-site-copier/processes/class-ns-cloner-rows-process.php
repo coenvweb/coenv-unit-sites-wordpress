@@ -74,9 +74,6 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		parent::__construct();
 		$this->report_label = __( 'Rows', 'ns-cloner' );
 
-		// Enable performance optimization by customizing the rows per query.
-		$this->rows_per_query = apply_filters( 'ns_cloner_rows_process_rows_per_query', $this->rows_per_query );
-
 		// Load stored primary keys from past processes.
 		$this->primary_keys = get_site_option( $this->identifier . '_primary_keys', [] );
 		ns_cloner()->log->log( [ 'LOADING previous primary keys', $this->primary_keys ] );
@@ -342,7 +339,8 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	protected function is_query_maxed() {
 		$packet_max          = ns_get_sql_variable( 'max_allowed_packet', 50000 );
 		$exceeded_packet_max = strlen( $this->insert_query ) >= .9 * $packet_max;
-		$exceeded_row_max    = $this->rows_count >= $this->rows_per_query;
+		$rows_per_query      = apply_filters( 'ns_cloner_rows_per_query', $this->rows_per_query, $this->identifier );
+		$exceeded_row_max    = $this->rows_count >= $rows_per_query;
 		return $exceeded_row_max || $exceeded_packet_max;
 	}
 

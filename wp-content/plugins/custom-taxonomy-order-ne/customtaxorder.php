@@ -3,31 +3,31 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.1.0
+Version: 3.2.1
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
 Text Domain: custom-taxonomy-order-ne
 Domain Path: /lang/
 
-/*
-	Copyright 2011 - 2011  Drew Gourley
-	Copyright 2013 - 2020  Marcel Pol   (email: marcel@timelord.nl)
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+Copyright 2011 - 2011  Drew Gourley
+Copyright 2013 - 2020  Marcel Pol   (email: marcel@timelord.nl)
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 
 
 /*
@@ -40,7 +40,7 @@ Domain Path: /lang/
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.1.0');
+define('CUSTOMTAXORDER_VER', '3.2.1');
 
 
 /*
@@ -50,9 +50,7 @@ define('CUSTOMTAXORDER_VER', '3.1.0');
 function customtaxorder_get_settings() {
 	$customtaxorder_defaults = array('category' => 0);
 
-	$args = array( 'public' => true, '_builtin' => false );
-	$output = 'objects';
-	$taxonomies = get_taxonomies( $args, $output );
+	$taxonomies = customtaxorder_get_taxonomies() ;
 	foreach ( $taxonomies as $taxonomy ) {
 		$customtaxorder_defaults[$taxonomy->name] = 0;
 	}
@@ -79,18 +77,6 @@ function customtax_cmp( $a, $b ) {
 		return 1;
 	}
 }
-
-
-/*
- * Flush object cache when order is changed in taxonomy ordering plugin.
- *
- * @since 2.7.8
- *
- */
-function customtaxorder_flush_cache() {
-	wp_cache_flush();
-}
-add_action( 'customtaxorder_update_order', 'customtaxorder_flush_cache' );
 
 
 /*
@@ -194,7 +180,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		break; // just the first one :)
 	}
 
-	if ( !isset ( $options[$taxonomy] ) ) {
+	if ( ! isset ( $options[$taxonomy] ) ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
 	}
 	if ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
@@ -203,7 +189,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		// filtering will happen in the tag_cloud_sort filter sometime later
 		// post_tag = default tags
 		// product_tag = woocommerce product tags
-		if (current_filter() == 'get_terms'  && !is_admin() ) {
+		if ( current_filter() == 'get_terms' && !is_admin() ) {
 			$customtaxorder_exclude_taxonomies = array('post_tag', 'product_tag');
 			if ( in_array($taxonomy, apply_filters( 'customtaxorder_exclude_taxonomies', $customtaxorder_exclude_taxonomies )) ) {
 				return $terms;
@@ -281,7 +267,7 @@ function customtaxorder_order_categories( $categories ) {
 
 	$terms_old_order = $categories;
 
-	if ( !isset ( $options['category'] ) ) {
+	if ( ! isset( $options['category'] ) ) {
 		$options['category'] = 0; // default if not set in options yet
 	}
 	if ( $options['category'] == 1 && ! isset($_GET['orderby']) ) {
@@ -307,25 +293,22 @@ add_filter( 'get_the_categories', 'customtaxorder_order_categories' );
 
 
 /*
- * Set WooCommerce attribute terms to public so they can be sorted.
- * Works for WooCommerce 3.0+
+ * Get list of taxonomies.
+ *
+ * @return array list of taxonomies.
+ *
+ * @since 3.2.0
  */
-function customtaxorder_woocommerce_attribute_taxonomies_public( $attribute_taxonomies ) {
-    foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
-        $attribute_taxonomy->attribute_public = 1;
-    }
-    return $attribute_taxonomies;
-}
-add_filter( 'woocommerce_attribute_taxonomies', 'customtaxorder_woocommerce_attribute_taxonomies_public' );
+function customtaxorder_get_taxonomies() {
 
+	$args = array(); // Just get them all and don't mess about with setting some taxonomies to public.
+	$output = 'objects';
+	$taxonomies = get_taxonomies( $args, $output );
 
-/*
- * Load language files.
- */
-function customtaxorder_load_lang() {
-	load_plugin_textdomain('custom-taxonomy-order-ne', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/');
+	return $taxonomies;
+	return $taxonomies;
+
 }
-add_action('plugins_loaded', 'customtaxorder_load_lang');
 
 
 /*
@@ -334,7 +317,9 @@ add_action('plugins_loaded', 'customtaxorder_load_lang');
 function _customtaxorder_activate() {
 	global $wpdb;
 	$init_query = $wpdb->query("SHOW COLUMNS FROM $wpdb->terms LIKE 'term_order'");
-	if ($init_query == 0) { $wpdb->query("ALTER TABLE $wpdb->terms ADD term_order INT( 4 ) NULL DEFAULT '0'"); }
+	if ( $init_query == 0 ) {
+		$wpdb->query("ALTER TABLE $wpdb->terms ADD term_order INT( 4 ) NULL DEFAULT '0'");
+	}
 }
 
 
@@ -355,7 +340,7 @@ register_activation_hook( __FILE__, 'customtaxorder_activate' );
 
 
 /*
- * Install database tables for new blog on MultiSite.
+ * Install database column for new blog on MultiSite.
  * Deprecated action since WP 5.1.0.
  *
  */
@@ -368,9 +353,9 @@ add_action( 'wpmu_new_blog', 'customtaxorder_activate_new_site' );
 
 
 /*
- * Install database tables for new blog on MultiSite.
+ * Install database column for new blog on MultiSite.
  * Used since WP 5.1.0.
- * Do not use wp_insert_site, since the options table doesn't exist yet...
+ * Do not use 'wp_insert_site' action, since the options table doesn't exist yet at that time.
  *
  * @since 2.10.1
  */

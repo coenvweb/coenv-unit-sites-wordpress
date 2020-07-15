@@ -101,11 +101,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div class="ns-modal-body">
 					<div class="ns-cloner-warning-message ajax-on" style="display:none">
-						<?php esc_html_e( 'It appears background processing may be getting blocked on the server. Activating backup AJAX processing, so please keep this window open.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'It appears background processing may be getting blocked on the server (or could just be running slowly). Activating backup AJAX processing to ensure completion, so please keep this window open.', 'ns-cloner' ); ?>
 					</div>
 					<div class="ns-cloner-warning-message ajax-force" style="display:none">
-						<?php esc_html_e( 'It appears background processing has stalled. This could be because of a plugin conflict, server error, non-standard data or environment, etc.', 'ns-cloner' ); ?>
-						<?php esc_html_e( 'You may still be able to successfully complete the clone by forcing it to continue - just be aware it may not work, and if it does you\'ll probably see a few harmless "Duplicate entry" notices from where it resumes after the failed process.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'One or more of the cloning processes below have gone more than 60 seconds without showing progress. If at least one item is still progressing, it\'s probably fine and you can ignore this.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'If you\'ve been waiting a while and everything is stopped, though, you can try forcing a continuation (if so, expect to see some "Duplicate entry" notices at the end from resuming the failed process).', 'ns-cloner' ); ?>
 						<a href="#" class="ns-cloner-ajax-force-trigger"><?php esc_html_e( 'Click here to try continuing.', 'ns-cloner' ); ?></a>
 					</div>
 					<div class="ns-process-wrapper ns-create-site">
