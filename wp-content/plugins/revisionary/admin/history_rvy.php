@@ -19,8 +19,6 @@ class RevisionaryHistory
 
         add_action('parse_query', [$this, 'actDisableProblemQueries'], 5);
 
-        //add_filter('_wp_post_revision_fields', [$this, 'actEnsureACFfieldDisplay'], 9);
-
         // Thin Out Revisions plugin breaks View / Approve button on Compare Pending Revisions screen
         if (class_exists('HM_TOR_Plugin_Loader')) {
             global $hm_tor_plugin_loader;
@@ -33,13 +31,6 @@ class RevisionaryHistory
 		$this->actLoadRevision();
 	   }
     }
-
-	/*
-    function actEnsureACFfieldDisplay($fields) {
-        $fields['_acf_changed'] = 'different than 1';
-        return $fields;
-    }
-	*/
 
     function actDisableProblemQueries(WP_Query $query) {
         $query->set('tribe_suppress_query_filters', true);

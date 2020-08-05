@@ -65,7 +65,9 @@ class Analyst implements AnalystContract
 
 		$this->accountDataFactory = AccountDataFactory::instance();
 
-		$this->mutator->initialize();
+        if(strpos($_SERVER['REQUEST_URI'], 'plugin') !== false) {
+            $this->mutator->initialize();
+        }
 
 		$this->collector = new Collector($this);
 

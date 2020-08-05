@@ -814,7 +814,6 @@ $revisionary->admin->publishpressFooter();
 
 <?php
 } // end function
-
 } // end class RvyOptionUI
 
 
