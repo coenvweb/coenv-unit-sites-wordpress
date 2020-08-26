@@ -75,6 +75,8 @@ class RVY_PostBlockEditUI {
                 $deletion_url = get_delete_post_link($post->ID, '', false);
             }
 
+            global $wp_version;
+
             $args = array(
                 'saveRevision' => __('Update Revision'),
                 'viewURL' => $view_link,
@@ -87,6 +89,7 @@ class RVY_PostBlockEditUI {
                 'deletionURL' => $can_publish ? $deletion_url : '',
                 'approvalTitle' => esc_attr(__('Approve saved changes', 'revisionary')),
                 'scheduledRevisionsEnabled' => $do_scheduled_revisions,
+                'multiPreviewActive' => version_compare($wp_version, '5.5-beta', '>=')
             );
 
         } elseif ( agp_user_can( $type_obj->cap->edit_post, $post_id, '', array( 'skip_revision_allowance' => true ) ) ) {
@@ -110,9 +113,9 @@ class RVY_PostBlockEditUI {
                 'UpdateCaption' => __('Update'),
                 'publishedStatuses' => $published_statuses,
                 'revision' => ($do_pending_revisions) ? __('Pending Revision', 'revisionary') : '',
-                'revisionTitle' => attribute_escape(__('Do not publish current changes yet, but save to Revision Queue', 'revisionary')), 
+                'revisionTitle' => esc_attr(__('Do not publish current changes yet, but save to Revision Queue', 'revisionary')), 
                 'defaultPending' => apply_filters('revisionary_default_pending_revision', false, $post ),
-                'revisionTitleFuture' => attribute_escape(__('Do not schedule current changes yet, but save to Revision Queue', 'revisionary')), 
+                'revisionTitleFuture' => esc_attr(__('Do not schedule current changes yet, but save to Revision Queue', 'revisionary')), 
                 'ajaxurl' => admin_url(''),
                 'SaveCaption' => ($do_pending_revisions) ? __('Save Revision', 'revisionary') : '',
                 'previewURL' => $preview_url,
