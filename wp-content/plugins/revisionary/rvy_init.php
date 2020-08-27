@@ -18,7 +18,7 @@ if (did_action('set_current_user')) {
 
 if (!empty($_REQUEST['preview']) && !empty($_REQUEST['post_type']) && empty($_REQUEST['preview_id'])) {
 		add_filter('redirect_canonical', '_rvy_no_redirect_filter', 10, 2);
-}
+	}
 
 add_action('init', 'rvy_maybe_redirect', 1);
 
@@ -100,23 +100,23 @@ function rvy_maybe_redirect() {
 class RVY_RestAPI {
     // register a postmeta field to flag the need for a redirect following scheduled revision creation
     public static function register_scheduled_rev_meta_field() {
-		global $revisionary;
+			global $revisionary;
 
-		foreach(array_keys($revisionary->enabled_post_types) as $post_type ) {
-			// Thanks to Josh Pollock for demonstrating this:
-			// https://torquemag.io/2015/07/working-with-post-meta-data-using-the-wordpress-rest-api/
-			register_rest_field( $post_type, 'new_scheduled_revision', array(
-				'get_callback' => array( 'RVY_RestAPI', 'get_new_scheduled_revision_flag' ),
-				'schema' => null,
-				)
-			);
+			foreach(array_keys($revisionary->enabled_post_types) as $post_type ) {
+				// Thanks to Josh Pollock for demonstrating this:
+				// https://torquemag.io/2015/07/working-with-post-meta-data-using-the-wordpress-rest-api/
+				register_rest_field( $post_type, 'new_scheduled_revision', array(
+					'get_callback' => array( 'RVY_RestAPI', 'get_new_scheduled_revision_flag' ),
+					'schema' => null,
+					)
+				);
 
-			register_rest_field( $post_type, 'save_as_revision', array(
-				'get_callback' => array( 'RVY_RestAPI', 'get_save_as_revision_flag' ),
-				'schema' => null,
-				)
-			);
-		}
+				register_rest_field( $post_type, 'save_as_revision', array(
+					'get_callback' => array( 'RVY_RestAPI', 'get_save_as_revision_flag' ),
+					'schema' => null,
+					)
+				);
+			}
     }
     
     public static function get_new_scheduled_revision_flag( $object ) {
@@ -136,7 +136,7 @@ function rvy_ajax_handler() {
 	if (!empty($_REQUEST['rvy_ajax_field']) && !empty($_REQUEST['post_id'])) {
 		if ('save_as_revision' == $_REQUEST['rvy_ajax_field']) {
 			$save_revision = isset($_REQUEST['rvy_ajax_value']) && in_array($_REQUEST['rvy_ajax_value'], ['true', true, 1, '1'], true);
-			update_post_meta((int) $_REQUEST['post_id'], "_save_as_revision_{$current_user->ID}", $save_revision);
+			rvy_update_post_meta((int) $_REQUEST['post_id'], "_save_as_revision_{$current_user->ID}", $save_revision);
 			exit;
 		}
 	}
@@ -145,6 +145,38 @@ function rvy_ajax_handler() {
 		require_once( dirname(__FILE__).'/admin/history_rvy.php' );
 		new RevisionaryHistory();
 	}
+}
+
+function rvy_update_post_meta($post_id, $meta_key, $meta_value) {
+	global $wpdb;
+
+	// some extra low-level database operations until the cause of meta sync failure with WP 5.5 can be determined
+	rvy_delete_post_meta($post_id, $meta_key);
+
+	if ($meta_value) {
+		$wpdb->insert(
+			$wpdb->postmeta, 
+			['meta_value' => $meta_value, 'meta_key' => $meta_key, 'post_id' => $post_id]
+		);
+	}
+}
+
+function rvy_delete_post_meta($post_id, $meta_key) {
+	global $wpdb;
+
+	delete_post_meta($post_id, $meta_key);
+
+	// some extra low-level database operations until the cause of meta sync failure with WP 5.5 can be determined
+
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d",
+			$meta_key,
+			$post_id
+		)
+	);
+
+	//wp_cache_delete($post_id, 'post_meta');
 }
 
 function rvy_status_registrations() {
@@ -256,25 +288,38 @@ function rvy_detect_post_type() {
 function rvy_detect_post_id() {
 	global $revisionary;
 	
-	if ( isset($revisionary) && $revisionary->doing_rest && $revisionary->rest->is_posts_request )
+	if ( isset($revisionary) && $revisionary->doing_rest && $revisionary->rest->is_posts_request ) {
 		$post_id = $revisionary->rest->post_id;
-	elseif ( ! empty( $_GET['post'] ) )
+
+	} elseif ( ! empty( $_GET['post'] ) ) {
 		$post_id = (int) $_GET['post'];
-	elseif ( ! empty( $_POST['post_ID'] ) )
+
+	} elseif ( ! empty( $_POST['post_ID'] ) ) {
 		$post_id = (int) $_POST['post_ID'];
-	elseif ( ! empty( $_REQUEST['post_id'] ) )
+
+	} elseif ( ! empty( $_REQUEST['post_id'] ) ) {
 		$post_id = (int) $_REQUEST['post_id'];
-	elseif ( ! empty( $_GET['p'] ) )
+
+	} elseif ( ! empty( $_GET['p'] ) ) {
 		$post_id = (int) $_GET['p'];
-	elseif ( ! empty( $_GET['id'] ) )
+
+	} elseif ( ! empty( $_GET['id'] ) ) {
 		$post_id = (int) $_GET['id'];
-	elseif ( ! empty( $_REQUEST['fl_builder_data'] ) && is_array( $_REQUEST['fl_builder_data'] ) && ! empty( $_REQUEST['fl_builder_data']['post_id'] ) )
+
+	} elseif ( ! empty( $_REQUEST['fl_builder_data'] ) && is_array( $_REQUEST['fl_builder_data'] ) && ! empty( $_REQUEST['fl_builder_data']['post_id'] ) ) {
 		$post_id = (int) $_REQUEST['fl_builder_data']['post_id'];
-	elseif ( ! empty( $_GET['page_id'] ) )
+
+	} elseif ( ! empty( $_GET['page_id'] ) ) {
 		$post_id = (int) $_GET['page_id'];
-	else
+
+	} elseif (defined('REST_REQUEST') && REST_REQUEST && strpos($_SERVER['REQUEST_URI'], 'autosaves')) {
+		require_once( dirname(__FILE__).'/rest_rvy.php' );
+		$post_id = Revisionary_REST::get_id_element($_SERVER['REQUEST_URI'], 1);
+
+	} else {
 		$post_id = 0;
-	
+	}
+
 	return $post_id;	
 }
 
@@ -630,7 +675,7 @@ function rvy_mail( $address, $title, $message, $args ) {
 	 *   - If exceeding daily, hourly or minute limit, add this email to buffer
 	 * 	 - If sending, add current timestamp to wp_option array revisionary_sent_mail
 	 */
-
+	
 	$send = apply_filters('revisionary_mail', compact('address', 'title', 'message'), $args);
 
 	if (empty($send['address'])) {
@@ -674,7 +719,6 @@ function rvy_settings_scripts() {
 	if (defined('REVISIONARY_PRO_VERSION')) {
 		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
 		wp_enqueue_script('revisionary-pro-settings', plugins_url('', REVISIONARY_FILE) . "/includes-pro/settings-pro{$suffix}.js", ['jquery', 'jquery-form'], REVISIONARY_VERSION, true);
-		$wp_scripts->in_footer[] = 'revisionary-pro-settings';  // otherwise it will not be printed in footer  @todo: review
 	}
 }
 

@@ -30,6 +30,7 @@ class RevisionaryAdmin
 		
 		add_action('admin_head', array(&$this, 'admin_head'));
 		add_action('admin_enqueue_scripts', array(&$this, 'admin_scripts'));
+		add_action('admin_print_scripts', [$this, 'admin_print_scripts'], 99);
 
 		if ( ! defined('XMLRPC_REQUEST') && ! strpos($script_name, 'p-admin/async-upload.php' ) ) {
 			global $blog_id;
@@ -134,6 +135,7 @@ class RevisionaryAdmin
 
 		add_action('admin_enqueue_scripts', [$this, 'fltAdminPostsListing'], 50);  // 'the_posts' filter is not applied on edit.php for hierarchical types
 
+		add_filter('display_post_states', [$this, 'flt_display_post_states'], 50, 2);
 		add_filter( 'page_row_actions', array($this, 'revisions_row_action_link' ) );
 		add_filter( 'post_row_actions', array($this, 'revisions_row_action_link' ) );
 
@@ -198,7 +200,7 @@ class RevisionaryAdmin
 		if ($listed_ids) {
 			$id_csv = implode("','", array_map('intval', $listed_ids));
 			$results = $wpdb->get_results(
-				"SELECT comment_count AS published_post, COUNT(comment_count) AS num_revisions FROM $wpdb->posts WHERE comment_count IN('$id_csv') GROUP BY comment_count"
+				"SELECT comment_count AS published_post, COUNT(comment_count) AS num_revisions FROM $wpdb->posts WHERE comment_count IN('$id_csv') AND post_status IN ('pending-revision', 'future-revision') GROUP BY comment_count"
 			);
 			
 			foreach($results as $row) {
@@ -306,6 +308,14 @@ class RevisionaryAdmin
 		}
 
 		return $comment_count;
+	}
+
+	function flt_display_post_states($post_states, $post) {
+		if (!empty($this->post_revision_count[$post->ID]) && !defined('REVISIONARY_SUPPRESS_POST_STATE_DISPLAY')) {
+			$post_states []= __('Has Revision', 'revisionary');
+		}
+
+		return $post_states;
 	}
 
 	function revisions_row_action_link($actions = array()) {
@@ -530,6 +540,26 @@ class RevisionaryAdmin
 				</style>
 				<?php
 			}
+
+			if (!class_exists('DS_Public_Post_Preview')) {
+				?>
+				<style>
+				div.edit-post-post-visibility, div.edit-post-post-status div {
+					display:none;
+				}
+				</style>
+				<?php
+			} else {
+				?>
+				<style>
+				/*
+				div.edit-post-post-status #inspector-checkbox-control-1 {
+					display:none;
+				}
+				*/
+				</style>
+				<?php
+			}
 		}
 
 		wp_enqueue_style('revisionary-admin-common', RVY_URLPATH . '/common/css/pressshack-admin.css', [], REVISIONARY_VERSION);
@@ -538,6 +568,22 @@ class RevisionaryAdmin
 			wp_enqueue_style('revisionary-settings', RVY_URLPATH . '/includes-pro/settings-pro.css', [], REVISIONARY_VERSION);
 		}
  	}
+
+	function admin_print_scripts() {
+		if (class_exists('DS_Public_Post_Preview')) {
+			?>
+			<script type="text/javascript">
+			/* <![CDATA[ */
+			jQuery(document).ready( function($) {
+				setInterval(function() {
+					$("div.edit-post-post-status label:not(:contains('<?php _e('Enable public preview');?>')):not('[for=public-post-preview-url]')"). closest('div').hide();
+				}, 100);
+			});
+			/* ]]> */
+			</script>
+			<?php
+		}
+	}
 
 	function admin_head() {
 		//echo '<link rel="stylesheet" href="' . RVY_URLPATH . '/admin/revisionary.css" type="text/css" />'."\n";

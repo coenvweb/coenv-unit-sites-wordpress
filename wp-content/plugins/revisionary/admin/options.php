@@ -35,14 +35,14 @@ class RvyOptionUI {
 		$this->sitewide = $args['sitewide'];
 		$this->customize_defaults = $args['customize_defaults'];
 		$this->display_hints = rvy_get_option( 'display_hints' );
-	}
+    }
 	
 	function option_checkbox( $option_name, $tab_name, $section_name, $hint_text, $trailing_html, $args = '') {
 		$return = array( 'in_scope' => false, 'val' => '', 'subcaption' => '' );
 		
 		if ( ! is_array($args) )
 			$args = array();
-		
+
 		if ( in_array( $option_name, $this->form_options[$tab_name][$section_name] ) ) {
 			$this->all_options []= $option_name;
 			
@@ -72,9 +72,9 @@ class RvyOptionUI {
 		
 		return $return;
 	}
-
-function options_ui( $sitewide = false, $customize_defaults = false ) {
 	
+function options_ui( $sitewide = false, $customize_defaults = false ) {
+
 global $revisionary;
 
 if ( ! current_user_can( 'manage_options' ) || ( $sitewide && ! is_super_admin() ) )
@@ -127,6 +127,7 @@ $this->option_captions = array(
 	'revision_preview_links' => __('Show Preview Links', 'revisionary'),
 	'preview_link_type' => __('Preview Link Type', 'revisionary'),
 	'compare_revisions_direct_approval' => __('Approve Button on Compare Revisions screen', 'revisionary'),
+	'copy_revision_comments_to_post' => __('Copy revision comments to published post', 'revisionary'),
 );
 
 if ( defined('RVY_CONTENT_ROLES') ) {
@@ -147,7 +148,7 @@ $this->form_options = array(
 	'scheduled_revisions' => array( 'scheduled_revisions', 'async_scheduled_publish', 'scheduled_revision_update_post_date', ),
 	'pending_revisions'	=> 	 array( 'pending_revisions', 'pending_revision_update_post_date', ),
 	'preview' =>			 array( 'revision_preview_links', 'preview_link_type', 'compare_revisions_direct_approval'),
-	'revisions'		=>		 array( 'revisor_lock_others_revisions', 'revisor_hide_others_revisions', 'trigger_post_update_actions', 'diff_display_strip_tags', 'display_hints' ),
+	'revisions'		=>		 array( 'revisor_lock_others_revisions', 'revisor_hide_others_revisions', 'trigger_post_update_actions', 'copy_revision_comments_to_post', 'diff_display_strip_tags', 'display_hints' ),
 	'notification'	=>		 array( 'pending_rev_notify_admin', 'pending_rev_notify_author', 'rev_approval_notify_admin', 'rev_approval_notify_author', 'rev_approval_notify_revisor', 'publish_scheduled_notify_admin', 'publish_scheduled_notify_author', 'publish_scheduled_notify_revisor', 'use_notification_buffer' )
 )
 );
@@ -448,6 +449,9 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 		
 		$hint = __('This may improve compatibility with some plugins.', 'revisionary');
 		$this->option_checkbox( 'trigger_post_update_actions', $tab, $section, $hint, '' );
+
+		$hint = '';
+		$this->option_checkbox( 'copy_revision_comments_to_post', $tab, $section, $hint, '' );
 
 		$hint = '';
 		$this->option_checkbox( 'diff_display_strip_tags', $tab, $section, $hint, '' );
@@ -814,7 +818,6 @@ $revisionary->admin->publishpressFooter();
 
 <?php
 } // end function
-
 } // end class RvyOptionUI
 
 

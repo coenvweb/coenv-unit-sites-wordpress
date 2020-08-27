@@ -79,7 +79,12 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 
 			add_action( 'wp_head', array( $this, 'no_js_css' ) );
 
-			add_filter( $this->prefix . 'filter_page_output', array( $this, 'filter_page_output' ), 15 );
+			if ( method_exists( 'autoptimizeImages', 'imgopt_active' ) && autoptimizeImages::imgopt_active() ) {
+				add_filter( 'autoptimize_filter_html_before_minify', array( $this, 'filter_page_output' ) );
+			} else {
+				add_filter( $this->prefix . 'filter_page_output', array( $this, 'filter_page_output' ), 15 );
+			}
+
 			add_filter( 'vc_get_vc_grid_data_response', array( $this, 'filter_page_output' ) );
 
 			if ( class_exists( 'ExactDN' ) && $this->get_option( $this->prefix . 'exactdn' ) ) {
@@ -169,6 +174,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 				is_embed() ||
 				is_feed() ||
 				is_preview() ||
+				is_customize_preview() ||
 				( defined( 'REST_REQUEST' ) && REST_REQUEST ) ||
 				wp_script_is( 'twentytwenty-twentytwenty', 'enqueued' ) ||
 				preg_match( '/^<\?xml/', $buffer ) ||
@@ -364,6 +370,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 			if (
 				( ! defined( 'EWWWIO_DISABLE_NATIVE_LAZY' ) || ! EWWWIO_DISABLE_NATIVE_LAZY ) &&
 				( ! defined( 'EASYIO_DISABLE_NATIVE_LAZY' ) || ! EASYIO_DISABLE_NATIVE_LAZY ) &&
+				apply_filters( 'wp_lazy_loading_enabled', true ) &&
 				! $disable_native_lazy
 			) {
 				$this->set_attribute( $image, 'loading', 'lazy' );
@@ -443,6 +450,7 @@ if ( ! class_exists( 'EIO_Lazy_Load' ) ) {
 					$this->set_attribute( $image, 'srcset', $placeholder_src, true );
 					$this->remove_attribute( $image, 'src' );
 				} else {
+					$placeholder_src = apply_filters( 'as3cf_get_asset', $placeholder_src );
 					$this->set_attribute( $image, 'src', $placeholder_src, true );
 					$this->remove_attribute( $image, 'srcset' );
 				}

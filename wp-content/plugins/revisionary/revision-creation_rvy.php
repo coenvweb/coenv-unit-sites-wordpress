@@ -21,6 +21,10 @@ class RevisionCreation {
 			global $revisionary;
 		}
 
+		if ($revisionary->disable_revision_trigger) {
+			return $data;
+		}
+
         if ( isset($_POST['wp-preview']) && ( 'dopreview' == $_POST['wp-preview'] ) ) {
             return $data;
         }
@@ -129,7 +133,11 @@ class RevisionCreation {
 		} else {
 			global $revisionary;
 		}
-        
+		
+		if ($revisionary->disable_revision_trigger) {
+			return $data;
+		}
+
         if ( $revisionary->doing_rest && $revisionary->rest->is_posts_request && ! empty( $revisionary->rest->request ) ) {
             $postarr = array_merge( $revisionary->rest->request->get_params(), $postarr );
             
@@ -269,7 +277,7 @@ class RevisionCreation {
         
         if ( $revision_id ) {
 			$revisionary->last_revision[$published_post->ID] = $revision_id;
-            set_transient("_rvy_pending_revision_{$current_user->ID}_{$postarr['ID']}", $revision_id, 30);
+            set_transient("_rvy_pending_revision_{$current_user->ID}_{$published_post->ID}", $revision_id, 30);
 
             update_post_meta($revision_id, '_rvy_base_post_id', $published_post->ID);
             update_post_meta($published_post->ID, '_rvy_has_revisions', true);
@@ -394,6 +402,10 @@ class RevisionCreation {
 			global $revisionary;
 		}
 
+		if ($revisionary->disable_revision_trigger) {
+			return $data;
+		}
+
 		if ( empty( $post_arr['ID'] ) ) {
 			return $data;
 		}
@@ -410,7 +422,6 @@ class RevisionCreation {
 		if ($last_revision && (strtotime(current_time('mysql', 1)) - strtotime($last_revision->post_modified_gmt) < $min_seconds )) {
 			return $data;
 		}
-
 		if ( isset($_POST['wp-preview']) && ( 'dopreview' == $_POST['wp-preview'] ) ) {
 			return $data;
 		}
@@ -558,7 +569,7 @@ class RevisionCreation {
 		if ( $revisionary->doing_rest ) {
 			// prevent alteration of published post, while allowing save operation to complete
 			$data = array_intersect_key( (array) $published_post, array_fill_keys( array( 'ID', 'post_name', 'post_status', 'post_parent', 'post_author' ), true ) );
-			update_post_meta( $published_post->ID, "_new_scheduled_revision_{$current_user->ID}", $revision_id );
+			rvy_update_post_meta( $published_post->ID, "_new_scheduled_revision_{$current_user->ID}", $revision_id );
 		} else {
 			$msg = $revisionary->get_revision_msg( $revision_id, array( 'post_id' => $published_post->ID ) );
 			rvy_halt( $msg, __('Scheduled Revision Created', 'revisionary') );
@@ -614,8 +625,16 @@ class RevisionCreation {
 			}
 		}
 	
-		if ( isset( $postarr['tags_input'] ) && is_object_in_taxonomy( $post_type, 'post_tag' ) ) {
+		if (is_object_in_taxonomy( $post_type, 'post_tag' )) {
+			if (isset($postarr['tags_input'])) {
 			wp_set_post_tags( $post_ID, $postarr['tags_input'] );
+
+			} elseif (isset($postarr['tags'])) {
+				wp_set_post_tags( $post_ID, $postarr['tags'] );
+
+			} elseif ($tags = wp_get_object_terms($published_post_id, 'post_tag', ['fields' => 'ids'])) {
+				wp_set_post_tags( $post_ID, $tags );
+			}
 		}
 	
 		// New-style support for all custom taxonomies.
