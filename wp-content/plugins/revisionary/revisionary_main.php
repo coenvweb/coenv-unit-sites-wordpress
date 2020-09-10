@@ -67,8 +67,8 @@ class Revisionary
 			require_once( dirname(__FILE__).'/front_rvy.php' );
 			$this->front = new RevisionaryFront();
 		}
-		
-		if (!is_admin() && (!defined('REST_REQUEST') || ! REST_REQUEST) && (!empty($_GET['preview']) && !empty($_REQUEST['preview_id']))) {
+
+		if (!is_admin() && (!defined('REST_REQUEST') || ! REST_REQUEST) && (!empty($_GET['preview']) && !empty($_REQUEST['preview_id']))) {			
 			if (defined('REVISIONARY_PREVIEW_WORKAROUND')) { // @todo: confirm this is no longer needed
 				if ($_post = get_post((int) $_REQUEST['preview_id'])) {
 					if (in_array($_post->post_status, ['pending-revision', 'future-revision']) && !$this->isBlockEditorActive()) {
@@ -141,6 +141,8 @@ class Revisionary
 			add_action('revisionary_created_revision', [$this, 'act_save_revision_followup'], 5);
 		}
 
+		add_filter('publishpress_notif_workflow_receiver_post_authors', [$this, 'flt_publishpress_notification_authors'], 10, 3);
+
 		add_filter('presspermit_exception_clause', [$this, 'fltPressPermitExceptionClause'], 10, 4);
 
 		add_action('wp_insert_post', [$this, 'actLogPreviewAutosave'], 10, 2);
@@ -149,7 +151,7 @@ class Revisionary
 
 		do_action( 'rvy_init', $this );
 	}
-	
+
 	function configurationLateInit() {
 		$this->setPostTypes();
 		$this->config_loaded = true;
@@ -169,6 +171,61 @@ class Revisionary
 
 		unset($this->enabled_post_types['attachment']);
 		$this->enabled_post_types = array_filter($this->enabled_post_types);
+	}
+
+	/**
+	 * Filters the list of PublishPress Notification receivers, but triggers only when "Authors of the Content" is selected in Notification settings.
+	 *
+	 * @param array $receivers
+	 * @param WP_Post $workflow
+	 * @param array $args
+	 */
+	function flt_publishpress_notification_authors($receivers, $workflow, $args) {
+		global $current_user;
+
+		if (empty($args['post']) || !rvy_is_revision_status($args['post']->post_status)) {
+			return $receivers;
+		}
+
+		$revision = $args['post'];
+		$recipient_ids = [];
+
+		if ($revision->post_author != $current_user->ID) {
+			$recipient_ids []= $revision->post_author;
+		}
+
+		$post_author = get_post_field('post_author', rvy_post_id($revision->ID));
+		
+		if (!in_array($post_author, [$current_user->ID, $revision->post_author])) {
+			$recipient_ids []= $post_author;
+		}
+
+		foreach($recipient_ids as $user_id) {
+			$channel = get_user_meta($user_id, 'psppno_workflow_channel_' . $workflow->ID, true);
+
+			// If no channel is set yet, use the default one
+			if (empty($channel)) {
+				if (!isset($notification_options)) {
+					// Avoid reference to PublishPress module class, object schema
+					$notification_options = get_option('publishpress_improved_notifications_options');
+				}
+
+				if (!empty($notification_options) && !empty($notification_options->default_channels)) {
+					if (!empty($notification_options->default_channels[$workflow->ID])) {
+						$channel = $notification_options->default_channels[$workflow->ID];
+					}
+				}
+			}
+
+			// @todo: config retrieval method for Slack, other channels
+			if (!empty($channel) && ('email' == $channel)) {
+				if ($user = new WP_User($user_id)) {
+					$receivers []= "{$channel}:{$user->user_email}";
+				}
+			}
+		}
+
+		return $receivers;
 	}
 
 	// On post deletion, clear corresponding _rvy_has_revisions postmeta flag
@@ -425,7 +482,7 @@ class Revisionary
 		
 		$rest_response = $this->rest->pre_dispatch( $rest_response, $rest_server, $request );
 
-		if ($this->rest->is_posts_request) {
+		if ($this->rest->is_posts_request) {			
 			if (empty($this->enabled_post_types[$this->rest->post_type])) {
 				return $rest_response;
 			}
@@ -451,7 +508,7 @@ class Revisionary
 		if ( ! $object_id || ! is_scalar($object_id) || ( $object_id < 0 ) )
 			return $caps;
 		
-		if ( ! rvy_get_option( 'require_edit_others_drafts' ) )
+		if ( ! rvy_get_option('require_edit_others_drafts') )
 			return $caps;
 
 		if ( $post = get_post( $object_id ) ) {
@@ -552,7 +609,7 @@ class Revisionary
 	
 	function flt_post_map_meta_cap($caps, $cap, $user_id, $args) {
 		global $current_user;
-		
+
 		if (!in_array($cap, array('read_post', 'read_page', 'edit_post', 'edit_page', 'delete_post', 'delete_page'))) {
 			return $caps;
 		}
@@ -572,7 +629,7 @@ class Revisionary
 				return $caps;
 			}
 		}
-
+		
 		if ($post && ('future-revision' == $post->post_status)) {
 			if (in_array($cap, ['read_post', 'read_page'])) {
 				return $caps;
@@ -616,7 +673,7 @@ class Revisionary
 					
 					} else {
 						$caps []= $type_obj->cap->edit_posts;
-					}
+					} 
 				}
 
 				return $caps;
@@ -664,7 +721,7 @@ class Revisionary
 
 	private function filter_caps($wp_blogcaps, $reqd_caps, $args, $internal_args = array()) {
 		global $current_user;
-		
+
 		if (!rvy_get_option('pending_revisions')) {
 			return $wp_blogcaps;
 		}
@@ -752,7 +809,7 @@ class Revisionary
 			return $wp_blogcaps;
 		
 		$cap = $object_type_obj->cap;
-		
+
 		//if (!empty($args[2]) && $post && rvy_is_revision_status($post->post_status)) {
 		if ($post && rvy_is_revision_status($post->post_status)) {
 			if (in_array($cap->edit_others_posts, $reqd_caps) ) {
@@ -777,7 +834,7 @@ class Revisionary
 			
 			if ( array_intersect( $reqd_caps, $replace_caps) ) {	// don't need to fudge the capreq for post.php unless existing post has public/private status
 				if ( is_preview() || rvy_wp_api_request() || strpos($script_name, 'p-admin/edit.php') || strpos($script_name, 'p-admin/widgets.php') 
-				|| ( !empty($post) && in_array( $post->post_status, array('publish', 'private') ) ) 
+				|| ( !empty($post) && in_array( $post->post_status, array('publish', 'private') ) )
 				) {
 					if ( $type_obj = get_post_type_object( $object_type ) ) {
 						if ( ! empty( $wp_blogcaps[ $type_obj->cap->edit_posts ] ) || $is_meta_cap_call) {
@@ -789,7 +846,7 @@ class Revisionary
 				}
 			}
 		}
-		
+
 		// Special provision for Pages - @todo: still needed?
 		if ( is_admin() && in_array( 'edit_others_posts', $reqd_caps ) && ( 'post' != $object_type ) ) {
 			// Allow contributors to edit published post/page, with change stored as a revision pending review
@@ -869,7 +926,7 @@ class Revisionary
 			if (empty($this->enabled_post_types[$revision->post_type])) {
 				return $data;
 			}
-			
+
 			if (!rvy_is_revision_status($data['post_status'])) {
 				$revert_status = true;
 			} elseif ($revision) {
