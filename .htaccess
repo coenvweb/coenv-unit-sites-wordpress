@@ -120,19 +120,19 @@ RewriteCond %{HTTP_HOST} ^poe.uw.edu [NC]
 RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
-RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=302,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^nwcasc.washington.edu [NC]
 RewriteRule ^(.*)$ https://nwcasc.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.jisao.washington.edu [NC]
-RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=302,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.jisao.uw.edu [NC]
-RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=302,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^jisao.uw.edu [NC]
-RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=302,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^quantitative.washington.edu [NC]
 RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
