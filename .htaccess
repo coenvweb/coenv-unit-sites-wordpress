@@ -120,16 +120,19 @@ RewriteCond %{HTTP_HOST} ^poe.uw.edu [NC]
 RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
-RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^nwcasc.washington.edu [NC]
 RewriteRule ^(.*)$ https://nwcasc.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.jisao.washington.edu [NC]
-RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.jisao.uw.edu [NC]
-RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R=301,NC,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^jisao.uw.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^quantitative.washington.edu [NC]
 RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
@@ -145,6 +148,9 @@ RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 
 RewriteCond %{HTTP_HOST} ^www\.sefs.washington.edu [NC]
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.cicoes.uw.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
 #6/5 test to force non-www
 RewriteEngine On
@@ -214,7 +220,7 @@ RewriteRule ^(.*)$ https://qrc.uw.edu/$1 [R,L]
 
 RewriteCond %{HTTP_HOST} ^jisao.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
-RewriteRule ^(.*)$ https://jisao.uw.edu/$1 [R,L]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R,L]
 
 RewriteCond %{HTTP_HOST} ^freshwater.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
@@ -228,6 +234,9 @@ RewriteCond %{HTTP_HOST} ^sefs.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R,L]
 
+RewriteCond %{HTTP_HOST} ^cicoes.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R,L]
 
 RewriteCond %{HTTP_HOST} !^freshwater.uw\.edu [NC]
 RewriteRule .? - [S=92]
@@ -512,32 +521,6 @@ RewriteRule ^library.html https://qrc.uw.edu/resources/conference-rooms/ [R=301,
 RewriteRule ^events.html https://qrc.uw.edu/about/events/ [R=301,L]
 RewriteRule ^facilities.html https://qrc.uw.edu/resources/laboratories/ [R=301,L]
 RewriteRule ^resources/?$ https://qrc.uw.edu/resources/conference-rooms/ [R=302,L]
-
-# JISAO Redirects
-RewriteCond %{HTTP_HOST} !^jisao.uw\.edu [NC]
-RewriteRule .? - [S=22]
-RewriteRule ^pdo/?$  http://research.jisao.washington.edu/pdo/ [R=301,NC,L]
-RewriteRule ^pdo/(.*)$ http://research.jisao.washington.edu/pdo/$1 [R=301,NC,L]
-RewriteRule ^data/(.*)$ http://research.jisao.washington.edu/data/$1 [R=301,NC,L]
-RewriteRule ^data_sets/(.*)$ http://research.jisao.washington.edu/data_sets/$1 [R=301,NC,L]
-RewriteRule ^about-jisao/?$ https://jisao.uw.edu/about/ [R=301,NC,L]
-RewriteRule ^Directory-landing/?$ https://jisao.uw.edu/about/contact-us/ [R=301,NC,L]
-RewriteRule ^research-landing/?$ https://jisao.uw.edu/research/ [R=301,NC,L]
-RewriteRule ^research/postdocs/?$ https://jisao.uw.edu/postdoc-program/ [R=301,NC,L]
-RewriteRule ^grants-awards/?$ https://jisao.uw.edu/staff-resources/grant-and-budget-information/?$ [R=301,NC,L]
-RewriteRule ^publications-landing/?$ https://jisao.uw.edu/research/publications/obtain-a-contribution-number/ [R=301,NC,L]
-RewriteRule ^education/researchOps/?$ https://jisao.uw.edu/internships/ [R=301,NC,L]
-RewriteRule ^staffportal/administration/responsibilities/?$ https://jisao.uw.edu/staff-resources/ [R=301,NC,L]
-RewriteRule ^staff-portal/administration/signature_authority/?$ https://jisao.uw.edu/staff-resources/grant-and-budget-information/signature-authority/?$ [R=301,NC,L]
-RewriteRule ^staff-portal/forms/?$ https://jisao.uw.edu/staff-resources/forms/ [R=301,NC,L]
-RewriteRule ^staff-portal/payroll/?$ https://jisao.uw.edu/staff-resources/payroll-and-leave/ [R=301,NC,L]
-RewriteRule ^staff-portal/purchasing/?$ https://jisao.uw.edu/staff-resources/purchasing/ [R=301,NC,L]
-RewriteRule ^staff-portal/travel/?$ https://jisao.uw.edu/staff-resources/travel/ [R=301,NC,L]
-RewriteRule ^staff-portal/travel/guidelines/?$ https://jisao.uw.edu/staff-resources/travel/guidelines/ [R=301,NC,L]
-RewriteRule ^staff-portal/travel/foreign_travel/?$ https://jisao.uw.edu/staff-resources/travel/foreign-travel/ [R=301,NC,L]
-RewriteRule ^staff-portal/hr/hiring/?$ https://jisao.uw.edu/staff-resources/human-resources/hiring/ [R=301,NC,L]
-RewriteRule ^personnel/?$ http://admin.jisao.washington.edu/personnel [R=301,NC,L]
-RewriteRule ^wp-content/uploads/sites/21/2019/12/proposal_structure.pdf https://jisao.uw.edu/wp-content/uploads/sites/21/2020/01/proposal_structure.pdf [R=302,NC,L]
 
 # SEFS Redirects
 RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
