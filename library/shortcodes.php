@@ -154,8 +154,8 @@ function tile_func_v2($atts, $content = null) {
         $tiles_acf = get_field('tiles_v2');
         $tiles = array();
         foreach($ids as $id) {
-            $id = $id - 1;
-            if($tiles_acf[$id]) {
+            $id = --$id;
+            if(@$tiles_acf[$id]) {
                 $tiles[] = $tiles_acf[$id];
             }
         }

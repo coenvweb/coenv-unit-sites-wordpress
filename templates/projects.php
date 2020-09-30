@@ -218,7 +218,7 @@ if($project_year) {
 $wp_query = new WP_Query($query_args);
 ?>
 <div class="row">
-	<div class="small-12 medium-9 columns" role="main" id="main-col">
+	<div class="small-12 medium-8 columns" role="main" id="main-col">
       <article id="post-<?php the_ID() ?>" <?php post_class( 'article' ) ?>>
 		<div class="entry-content">
         <header class="article__header">
@@ -227,8 +227,8 @@ $wp_query = new WP_Query($query_args);
               <h1 class="article__title"><?php the_title() ?></h1>
         </header>
         <?php the_content(); ?>
-			<div class="filters no-auto">
-          <p class="filter-label columns">Filter Projects:</p>
+			<div class="filters no-auto row">
+          <h3 class="filter-label columns">Filter Projects</h3>
 				<form method="get" class="search-form filter-form" action="<?php the_permalink() ?>">
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category topic">
 						<?php coenv_base_no_auto_filter('project_topic', $project_topic); // Category filter ?>
@@ -252,11 +252,12 @@ $wp_query = new WP_Query($query_args);
 					</div>
 				</form>
 			</div>
+			<hr />
 		<?php if ($wp_query->have_posts()) {  ?>
 			<?php if ($filtered) { ?>
 				<div class="panel">
 					<div class="left"><?php echo $wp_query->found_posts; ?> projects matching your filters</div>
-					<div class="right close"><a href="<?=the_permalink()?>"> All projects <i class="fi-x"></i></a></div>
+					<div class="right close"><a href="<?=the_permalink()?>">all projects »</a></div>
 				</div>
 			<?php } ?>
 			<div class="projects row">

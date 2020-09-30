@@ -129,32 +129,24 @@ $intro = get_field('intro_text');
         <?php } ?>
         <div class="side-panel small-12 medium-4 columns right">
             <img class="project-preview-img" src="<?=$img?>" alt="<?=$meta?>" />
-            <ul class="investigators">
                 <?php foreach($gators_sorted as $type) { ?>
-                    <?php if($type['name'] != 'Cooperator/Partner') { ?>
-                        <h3 class="gator_type"><?=$type['name']?><?=(count($type) > 2 ? 's' : '')?></h3>
-                        <?php unset($type['name']);
-                        foreach($type as $gator) { ?>
-                            <li class="gator">
-                                <?php echo implode(', ', array_filter($gator)); ?>
-                            </li>
+                    <div class="project-meta">
+                        <?php if($type['name'] != 'Cooperator/Partner') { ?>
+                            <div class="meta-row">
+                            <label for="investigators" class="gator_type"><?=$type['name']?><?=(count($type) > 2 ? 's' : '')?></label>
+                            <?php unset($type['name']);
+                            foreach($type as $gator) { ?>
+                                <ul class="investigators">
+                                    <li class="gator">
+                                        <?php echo implode(', ', array_filter($gator)); ?>
+                                    </li>
+                                </ul>
+                            <?php } ?>
+                            </div>
                         <?php } ?>
-                    <?php } ?>
-                <?php } ?>
-            </ul>
-            <div class="project-meta">
-                <!--
-                <?php if($nccwsc) { ?>}
-                    <div class="meta-row">
-                        <label for="nccwsc">
-                            NCCWSC Link
-                        </label>
-                        <div class="value" id="nccwsc">
-                            <a href="<?=$nccwsc?>">Project Page</a>
-                        </div>
                     </div>
                 <?php } ?>
-                -->
+            <div class="project-meta">
                 <?php if($partners) { ?>
                     <div class="meta-row">
                         <label for="partners">

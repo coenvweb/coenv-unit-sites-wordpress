@@ -9,9 +9,14 @@ var concat = require('gulp-concat');
 var autoprefixer = require('gulp-autoprefixer');
 var cssmin = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
-var livereload = require('gulp-livereload');
+var browserSync = require('browser-sync').create();
 var mainBowerFiles = require('main-bower-files');
-var bless = require('gulp-bless');
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        proxy: "cig.local"
+    });
+});
 
 gulp.task('bower', function() {
     return gulp.src(mainBowerFiles())
@@ -23,8 +28,8 @@ gulp.task('bower', function() {
 gulp.task('main_js', function () {
   return gulp
     .src([  './js/lib/jquery.js',
+            './js/lib/fastclick.js',
             './js/lib/jquery.placeholder.js',
-            './js/lib/slick.min.js',
             './js/lib/jquery.cookie.js',
             './js/lib/modernizr.js',
             './js/lib/foundation.js',
@@ -33,18 +38,20 @@ gulp.task('main_js', function () {
             './js/lib/matches-selector.js',
             './js/lib/utils.js',
             './js/lib/item.js',
+            './js/lib/isotope.pkgd.js',
+            './js/lib/imagesloaded.pkgd.js',
             './js/lib/outlayer.js',
             './js/lib/masonry.pkgd.js',
             './js/lib/sizzle.js',
-            './js/nivo-lightbox/nivo-lightbox.js',
+            './js/lib/nivo-lightbox.js',
             './js/lib/iodash.js',
-            './js/foundation/js/foundation.min.js',
+            './js/lib/slick.min.js',
             './js/init-foundation.js',
             './js/kitchen-sink.js',
             './js/share.js',
+            './js/alert-closer.js',
             './js/widget-media-upload.js',
             './js/wp-menufix.js',
-            './js/alert-closer.js',
             './js/main.js',
          ])
     .pipe(sourcemaps.init())
@@ -53,7 +60,7 @@ gulp.task('main_js', function () {
     .pipe(uglify())
     .pipe(rename('app.js'))
     .pipe(gulp.dest('./js/'))
-    .pipe(livereload());
+    .pipe(browserSync.stream());
   ;
 });
 
@@ -72,13 +79,15 @@ gulp.task('sass', function () {
     .pipe(rename('app.css'))
     .pipe(sourcemaps.write('./maps', {includeContent: false, sourceRoot: '../scss'}))
     .pipe(gulp.dest('./css'))
-    .pipe(livereload());
+    .pipe(browserSync.stream());
   ;
 });
 
 gulp.task('watch', function () {
-    livereload.listen();
-    gulp.watch('**/*.{html,php}', livereload.reload);
+    browserSync.init({
+        proxy: "cig.local"
+    });
+    gulp.watch('**/*.{html,php}', browserSync.reload);
     gulp.watch('scss/**/*.scss', ['sass']);
     gulp.watch(['./js/*.js', '!./js/app.js'], ['js']);
 ;
@@ -89,3 +98,4 @@ gulp.task('dev', ["default","watch"]);
 gulp.task('js', ["bower","main_js"]);
 
 gulp.task('default', ["js","sass"]);
+
