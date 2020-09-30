@@ -146,7 +146,18 @@ $intro = get_field('intro_text');
                         <?php } ?>
                     </div>
                 <?php } ?>
+                <hr />
             <div class="project-meta">
+                <?php if($status) { ?>
+                    <div class="meta-row">
+                        <label for="status">
+                            Project Status
+                        </label>
+                        <div class="value" id="status">
+                            <?php echo '<ul><li>' . $status . '</li></ul>'?>
+                        </div>
+                    </div>
+                <?php } ?>
                 <?php if($partners) { ?>
                     <div class="meta-row">
                         <label for="partners">
@@ -172,17 +183,6 @@ $intro = get_field('intro_text');
                                 <li class="agency"><?=$agency['funder_name']?></li>
                             <?php } ?>
                         </ul>
-                    </div>
-                <?php } ?>
-
-                <?php if($status) { ?>
-                    <div class="meta-row">
-                        <label for="status">
-                            Project Status
-                        </label>
-                        <div class="value" id="status">
-                            <?=$status?>
-                        </div>
                     </div>
                 <?php } ?>
 

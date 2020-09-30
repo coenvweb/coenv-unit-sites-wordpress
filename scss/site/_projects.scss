@@ -141,15 +141,17 @@
                         margin-bottom: .5rem;
                         overflow: hidden;
                         label {
-                            font-size: 1.1rem;
+                            font-size: 1rem;
                             text-transform: uppercase;
                             margin-bottom: 5px;
                         }
                         ul {
                             margin-left: 0px;
-                            li {
+                            margin-bottom: 0;
+                            li, p {
                                 margin-left: 0px;
                                 list-style-type: none;
+                                font-size: .9rem;
                             }
                         }
                     }

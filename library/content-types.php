@@ -98,7 +98,7 @@ define( 'PUBS_PAGE_PARENT_ID', '124' );
 define( 'DATASET_PAGE_PARENT_ID', '104' );
 define( 'PEOPLE_PARENT_ID', '58' );
 define( 'NEWS_PARENT_ID', '142' );
-define( 'PROJECTS_PAGE_PARENT_ID', '17776' );
+define( 'PROJECTS_PAGE_PARENT_ID', '17831' );
  
  
 function coenv_base_dataset_parent( $data, $postarr ) {
