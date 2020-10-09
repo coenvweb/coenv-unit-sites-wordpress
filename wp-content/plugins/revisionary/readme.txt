@@ -7,7 +7,7 @@ Tags: revision, submit changes, workflow, collaboration, permissions, moderate, 
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
 Tested up to: 5.5
-Stable tag: 2.3.12
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,13 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.4 - 1 Oct 2020 =
+* Fixed : Revisors and other limited editors had editor elements hidden when adding a new post, under some site configurations
+* Fixed : Revision publication always set post publish date to current time. Now does only with enabled setting Revisions > Settings > Pending Revisions > Update Publish Date
+* Fixed : Classic Editor - after Preview Changes is clicked, limited editors see "Submit Revision" button recaptioned to "Update"
+* Compat : PublishPress Authors - Authors could not be changed on Edit Revision screen with Gutenberg editor if PublishPress is also active
+* Compat : Gutenberg Ramp - Revision submission UI did not load for post types that have Gutenberg enabled
 
 = 2.3.12 - 27 Aug 2020 =
 * Fixed : WP 5.5 - Post previews did not display correctly for Revisors
