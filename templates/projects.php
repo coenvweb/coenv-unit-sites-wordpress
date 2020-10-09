@@ -34,7 +34,7 @@ if(isset($wp_query->query_vars['project_year']) && $wp_query->query_vars['projec
     $project_year = null;
 }
 
-//Current
+//Active
 if(isset($_GET['project_status'])) {
     $project_status = urlencode(htmlentities($_GET['project_status']));
     $filtered = true;
@@ -42,10 +42,6 @@ if(isset($_GET['project_status'])) {
     $project_status = '';
 }
 
-if(isset($wp_query->query_vars['project-search']) && $wp_query->query_vars['project-search']) {
-	$project_search = urldecode($wp_query->query_vars['project-search']);
-	$filtered = true;
-}
 
 // WP Query
 
@@ -167,7 +163,17 @@ if(isset($project_search)) {
             'relation' => 'AND',
             array(
               'key' => 'project_status',
-              'value' => 'In Progress',
+              'value' => $project_status,
+              'compare' => '=',
+            ),
+        );
+	}
+	if (!empty($project_status)) {
+        $meta_query[] = array (
+            'relation' => 'AND',
+            array(
+              'key' => 'project_status',
+              'value' => $project_status,
               'compare' => '=',
             ),
         );
@@ -247,7 +253,11 @@ $wp_query = new WP_Query($query_args);
 						<button type="submit"><i class="fi-magnifying-glass"></i><span> Apply</span></button>
 					</div>
 					<div class="current-check large-3 columns right">
-						<input type="checkbox" id="project_status" name="project_status" value="In Progress" class="left" <?php if ($project_status == 'In+Progress'){echo 'checked';}; ?>><label for="project_status">Current projects</label>
+						<input type="checkbox" id="project_status_active" name="project_status" value="Active" class="left" <?php if ($project_status == 'Active'){echo 'checked';}; ?>><label for="project_status_active">Active</label>
+						
+					</div>
+					<div class="current-check large-3 columns right">
+						<input type="checkbox" id="project_status_completed" name="project_status" value="Completed" class="left" <?php if ($project_status == 'Completed'){echo 'checked';}; ?>><label for="project_status_completed">Completed</label>
 						
 					</div>
 				</form>

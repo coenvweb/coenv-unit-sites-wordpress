@@ -112,7 +112,7 @@ $intro = get_field('intro_text');
                 echo 'Topic' . (count($project_region) > 1 ? 's: ' : ': ') . $project_topic_str;
             } ?>
            <?php if (!empty($project_region_str)) {
-                echo 'Region' . (count($project_region) > 1 ? 's: ' : ': ') . $project_region_str;
+                echo '| Region' . (count($project_region) > 1 ? 's: ' : ': ') . $project_region_str;
             } ?>
            <?php if (!empty($project_years_str)) {
                 echo '| Year' . (count($project_years) > 1 ? 's: ' : ': ') . $project_years_str;
@@ -121,13 +121,13 @@ $intro = get_field('intro_text');
         </div>
 		<h1 class="article__title"><a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title() ?></a></h1>
 	</header>
-    <section class="article__content">
+    <section class="article__content" style="padding:0">
         <?php if($intro) { ?>
             <p class="intro">
                 <?=$intro?>
             </p>
         <?php } ?>
-        <div class="side-panel small-12 medium-4 columns right">
+        <div class="side-panel small-12 medium-4 large-3 columns right">
             <img class="project-preview-img" src="<?=$img?>" alt="<?=$meta?>" />
                 <?php foreach($gators_sorted as $type) { ?>
                     <div class="project-meta">
@@ -188,7 +188,7 @@ $intro = get_field('intro_text');
 
             </div>
         </div>
-        <div class="content small-12 medium-8 columns">
+        <div class="content small-12 medium-8 columns left">
             <?php the_content(); ?>
             
         </div>

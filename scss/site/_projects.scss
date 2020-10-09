@@ -131,6 +131,9 @@
                 padding: 0rem;
                 background: $bg-lighter;
                 padding-bottom: 1rem;
+                @media #{$large-up} {
+                    margin-left: rem-calc(50);
+                }
                 img {
                     margin-bottom: 1rem;
                 }
