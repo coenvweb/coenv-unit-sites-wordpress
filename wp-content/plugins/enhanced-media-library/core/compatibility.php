@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 
 /**
- *  wpuxss_eml_elementor_scripts
+ *  Elementor
  *  @TODO: temporary solution
  *
  *  @since    2.5
@@ -29,3 +29,16 @@ if ( ! function_exists( 'wpuxss_eml_elementor_scripts' ) ) {
         );
     }
 }
+
+
+
+/**
+ *  Enfold Theme
+ *  for [av_masonry_gallery] shortcode
+ *  use Default Layout and choose the shortcode Media Elements > Masonry Gallery 
+ *  to make theme gallery shows images from the specific category
+ *
+ *  @since    2.7.3
+ *  @created  9/10/20
+ */
+add_filter( 'shortcode_atts_av_masonry_entries', 'wpuxss_eml_shortcode_atts', 10, 3 );

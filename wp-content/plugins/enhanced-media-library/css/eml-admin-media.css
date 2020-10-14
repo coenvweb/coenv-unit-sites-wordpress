@@ -6,7 +6,7 @@ body.eml-media-css .term-list {
     border: 1px solid #dfdfdf;
     border-radius: 3px;
     padding: 10px 10px 5px;
-    margin: 0 0 10px;
+    margin: 10px 0;
 }
 body.eml-media-css .term-list li {
     line-height: 22px;
@@ -45,6 +45,40 @@ body.eml-media-css .compat-item .eml-tax-field {
     float: none;
 }
 
+
+
+/* == ACF Attachment Fields == */
+
+body.eml-media-css .compat-attachment-fields > tbody > .acf-field {
+    margin: 5px 0;
+}
+body.eml-media-css .compat-attachment-fields > tbody > .acf-field > .acf-label {
+    min-width: 30%;
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    display: block;
+    float: left;
+}
+body.eml-media-css .compat-attachment-fields > tbody > .acf-field > .acf-label > label {
+    padding-top: 6px;
+    margin: 0;
+    color: #666666;
+    font-weight: 400;
+    line-height: 16px;
+}
+body.eml-media-css .compat-attachment-fields > tbody > .acf-field > .acf-input {
+    width: 65%;
+    margin: 0;
+    padding: 0;
+    float: right;
+    display: block;
+}
+/* == TODO: look deeper into this one == */
+body.eml-media-css .compat-field-acf-form-data, 
+body.eml-media-css .compat-field-acf-blank {
+    display: none !important;
+}
 
 
 
@@ -360,6 +394,10 @@ body.upload-php.eml-grid #wpbody-content > #screen-meta {
 
 /* == Attachment(s) Details Saving Styles == */
 
+.media-frame .media-frame-toolbar .button.button-large {
+    float: right;
+}
+
 .media-frame .media-frame-toolbar #eml-save-changes-button {
     float: right;
 }
@@ -391,6 +429,7 @@ body.eml-media-css .media-modal-content .media-frame select.attachment-filters {
     width: auto;
     max-width: calc(48% - 12px);
     margin-right: 10px;
+    margin-top: 10px;
     vertical-align: middle;
     line-height: 28px;
     height: 28px;
@@ -398,6 +437,7 @@ body.eml-media-css .media-modal-content .media-frame select.attachment-filters {
 
 body.eml-media-css .attachments-browser .media-toolbar-secondary > .media-button {
     margin: 10px 10px 0 0;
+    vertical-align: middle;
 }
 
 body.eml-media-css .media-modal-content .attachments-browser .search {
@@ -432,4 +472,14 @@ body.eml-media-css .media-frame .spinner {
 .media-modal-content .media-frame .attachments-browser .media-toolbar .spinner {
     right: 10px;
     top: 14px;
+}
+
+
+
+/* == Gallery, Playlist :: Edit :: Classic Editor == */
+/* == a problem since wp 5 == */
+/* == TODO: look deeper into this == */
+
+body.eml-media-css .media-menu .media-menu-item.hidden {
+    display: none !important;
 }

@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Enhanced Media Library (Free & PRO)\n"
-"POT-Creation-Date: 2018-09-11 00:08+0300\n"
-"PO-Revision-Date: 2018-09-11 00:13+0300\n"
+"POT-Creation-Date: 2020-10-11 23:54+0300\n"
+"PO-Revision-Date: 2020-10-11 23:55+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -12,7 +12,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: core/media-templates.php:21
+msgid "Remove"
+msgstr "Ta bort"
+
+#: core/media-templates.php:23
+msgid "Deselect"
+msgstr "Avmarkera"
+
+#: core/media-templates.php:79
+msgid "Caption this image&hellip;"
+msgstr "Rubrik på denna bild&hellip;"
+
+#: core/media-templates.php:83
+msgid "Describe this video&hellip;"
+msgstr "Beskriv denna video&hellip;"
+
+#: core/media-templates.php:85
+msgid "Describe this audio file&hellip;"
+msgstr "Beskriv denna ljudfil&hellip;"
+
+#: core/media-templates.php:87
+msgid "Describe this media file&hellip;"
+msgstr "Beskriv denna mediefil&hellip;"
 
 #: core/mime-types.php:30
 msgid "MIME Types settings restored."
@@ -186,7 +210,7 @@ msgstr "Förälder"
 #: core/options-pages.php:568 core/options-pages.php:862
 #: core/options-pages.php:1084 core/options-pages.php:2011
 #: core/options-pages.php:2074 core/taxonomies.php:381
-#: enhanced-media-library.php:561
+#: enhanced-media-library.php:562
 msgid "All"
 msgstr "Alla"
 
@@ -543,7 +567,7 @@ msgstr ""
 #: core/options-pages.php:1824 core/options-pages.php:1861
 #: core/options-pages.php:1905 core/options-pages.php:2113
 #: core/options-pages.php:2177 core/options-pages.php:2215
-#: core/options-pages.php:2386 enhanced-media-library.php:570
+#: core/options-pages.php:2386 enhanced-media-library.php:571
 msgid "Save Changes"
 msgstr "Spara ändringar"
 
@@ -669,7 +693,6 @@ msgid "Date"
 msgstr "Datum"
 
 #: core/options-pages.php:1793 core/options-pages.php:1853
-#: core/taxonomies.php:1650
 msgid "Title"
 msgstr "Rubrik"
 
@@ -732,7 +755,7 @@ msgstr ""
 msgid "Filename"
 msgstr ""
 
-#: core/options-pages.php:1855 core/taxonomies.php:1666
+#: core/options-pages.php:1855
 msgid "Caption"
 msgstr ""
 
@@ -1030,11 +1053,11 @@ msgid "All Authors"
 msgstr ""
 
 #: core/taxonomies.php:374 core/taxonomies.php:380
-#: enhanced-media-library.php:560
+#: enhanced-media-library.php:561
 msgid "Filter by"
 msgstr "Filtrera efter "
 
-#: core/taxonomies.php:382 enhanced-media-library.php:562
+#: core/taxonomies.php:382 enhanced-media-library.php:563
 msgid "Not in a"
 msgstr "Inte i en"
 
@@ -1042,160 +1065,95 @@ msgstr "Inte i en"
 msgid "Add some"
 msgstr ""
 
-#: core/taxonomies.php:1501
-msgid "Remove"
-msgstr "Ta bort"
-
-#: core/taxonomies.php:1503
-msgid "Deselect"
-msgstr "Avmarkera"
-
-#: core/taxonomies.php:1559
-msgid "Caption this image&hellip;"
-msgstr "Rubrik på denna bild&hellip;"
-
-#: core/taxonomies.php:1563
-msgid "Describe this video&hellip;"
-msgstr "Beskriv denna video&hellip;"
-
-#: core/taxonomies.php:1565
-msgid "Describe this audio file&hellip;"
-msgstr "Beskriv denna ljudfil&hellip;"
-
-#: core/taxonomies.php:1567
-msgid "Describe this media file&hellip;"
-msgstr "Beskriv denna mediefil&hellip;"
-
-#: core/taxonomies.php:1585
-msgid "Attachment Details"
-msgstr ""
-
-#: core/taxonomies.php:1588 enhanced-media-library.php:568
-msgid "Saved."
-msgstr ""
-
-#: core/taxonomies.php:1612
-msgid "Edit Image"
-msgstr ""
-
-#: core/taxonomies.php:1617
-msgid "Length:"
-msgstr ""
-
-#: core/taxonomies.php:1623
-msgid "Untrash"
-msgstr ""
-
-#: core/taxonomies.php:1625
-msgctxt "verb"
-msgid "Trash"
-msgstr ""
-
-#: core/taxonomies.php:1628
-msgid "Delete Permanently"
-msgstr ""
-
-#: core/taxonomies.php:1632 enhanced-media-library.php:390
-msgid "More Details"
-msgstr ""
-
-#: core/taxonomies.php:1644
-msgid "URL"
-msgstr ""
-
-#: core/taxonomies.php:1656
-msgid "Artist"
-msgstr ""
-
-#: core/taxonomies.php:1657
-msgid "Album"
-msgstr ""
-
-#: core/taxonomies.php:1671
-msgid "Alt Text"
-msgstr ""
-
-#: core/taxonomies.php:1676
-msgid "Description"
-msgstr ""
-
-#: enhanced-media-library.php:358 enhanced-media-library.php:559
+#: enhanced-media-library.php:359 enhanced-media-library.php:560
 msgid "All Uncategorized"
 msgstr "Alla Okategoriserade"
 
-#: enhanced-media-library.php:359 enhanced-media-library.php:563
+#: enhanced-media-library.php:360 enhanced-media-library.php:564
 msgid "Reset All Filters"
 msgstr "Återställ alla filter"
 
 #: enhanced-media-library.php:391
+msgid "More Details"
+msgstr ""
+
+#: enhanced-media-library.php:392
 msgid "Less Details"
 msgstr ""
 
-#: enhanced-media-library.php:564
+#: enhanced-media-library.php:565
 msgid "author"
 msgstr ""
 
-#: enhanced-media-library.php:565
+#: enhanced-media-library.php:566
 msgid "authors"
 msgstr ""
 
 #: enhanced-media-library.php:569
+msgid "Saved."
+msgstr ""
+
+#: enhanced-media-library.php:570
 msgid "Something went wrong."
 msgstr "Någonting gick fel."
 
-#: enhanced-media-library.php:572
+#: enhanced-media-library.php:573
 msgid "Select All"
 msgstr "Välj Alla"
 
-#: enhanced-media-library.php:601
+#: enhanced-media-library.php:574
+msgid "Deselect "
+msgstr ""
+
+#: enhanced-media-library.php:603
 msgid "Uploaded to post #"
 msgstr ""
 
-#: enhanced-media-library.php:602
+#: enhanced-media-library.php:604
 msgid "Based On"
 msgstr ""
 
-#: enhanced-media-library.php:671 enhanced-media-library.php:673
+#: enhanced-media-library.php:673 enhanced-media-library.php:675
 msgid "Media Categories"
 msgstr ""
 
-#: enhanced-media-library.php:672
+#: enhanced-media-library.php:674
 msgid "Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:674
+#: enhanced-media-library.php:676
 msgid "All Media Categories"
 msgstr ""
 
-#: enhanced-media-library.php:675
+#: enhanced-media-library.php:677
 msgid "Edit Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:676
+#: enhanced-media-library.php:678
 msgid "View Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:677
+#: enhanced-media-library.php:679
 msgid "Update Media Category"
 msgstr ""
 
-#: enhanced-media-library.php:678
+#: enhanced-media-library.php:680
 msgid "Add New Media Category"
 msgstr "Lägg till ny mediakategori"
 
-#: enhanced-media-library.php:679
+#: enhanced-media-library.php:681
 msgid "New Media Category Name"
 msgstr "Nytt mediakategorinamn"
 
-#: enhanced-media-library.php:680
+#: enhanced-media-library.php:682
 msgid "Parent Media Category"
 msgstr "Överordnad mediakategori"
 
-#: enhanced-media-library.php:681
+#: enhanced-media-library.php:683
 msgid "Parent Media Category:"
 msgstr "Överordnad mediakategori:"
 
-#: enhanced-media-library.php:682
+#: enhanced-media-library.php:684
 msgid "Search Media Categories"
 msgstr "Sök mediakategorier"
 

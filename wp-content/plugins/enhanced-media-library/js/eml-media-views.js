@@ -8,7 +8,8 @@ window.eml = window.eml || { l10n: {} };
         l10n = media.view.l10n,
         l10n_defaults = { media_orderby: 'date', media_order: 'DESC' },
         mediaTrash = media.view.settings.mediaTrash,
-        original = {};
+        original = {},
+        newEvents = {};
 
 
     _.extend( eml.l10n, wpuxss_eml_media_views_l10n );
@@ -90,72 +91,75 @@ window.eml = window.eml || { l10n: {} };
     /**
      * wp.media.view.AttachmentCompat
      *
+     * 'preSave' and 'postSave' are being used 
+     *  because of the way ACF extends 'save'
      */
+
+    newEvents = { 'click input[type=checkbox]': 'preSave' };
+    _.extend( newEvents, media.view.AttachmentCompat.prototype.events);
+
+    original.AttachmentCompat = {
+        postSave: media.view.AttachmentCompat.prototype.postSave
+    };
 
     _.extend( media.view.AttachmentCompat.prototype, {
 
-        save: function( event ) {
+        events: newEvents,
 
-            var data = {},
-                spinner;
+        preSave: function() {
 
+            var spinner,
+                checkboxes = $( 'input[type=checkbox]', this.$el );
 
-            if ( event ) {
-                event.preventDefault();
-            }
 
             if ( this.controller.isModeActive( 'eml-grid' ) ) {
                 spinner = this.controller.browserView.toolbar.get( 'spinner' );
             }
 
-            _.each( this.$el.serializeArray(), function( pair ) {
-                data[ pair.name ] = pair.value;
-            });
-
-            $( 'input', this.$el ).prop('disabled', true);
+            checkboxes.prop('readonly', true);
             if ( spinner ) {
                 spinner.show();
             }
 
             this.noRender = true;
+            this.rendered = false; // a workaround for ACF compatibility
             media.model.Query.cleanQueries();
-
-            this.controller.trigger( 'attachment:compat:waiting', ['waiting'] );
-            this.model.saveCompat( data ).done( _.bind( this.postSave, this, 1 ) ).fail( _.bind( this.postSave, this, 0 ) );
         },
 
-        postSave: function( success ) {
+        postSave: function( result ) {
 
-            var toolbar,
-                spinner,
-                emlMessage;
+            var emlMessage, state,
+                spinner, toolbar,
+                checkboxes = $( 'input[type=checkbox]', this.$el );
 
 
-            if ( 'edit-attachment' !== this.controller._state ) {
-                toolbar = this.controller.toolbar.get();
-            }
+            original.AttachmentCompat.postSave.apply( this, arguments );
+
 
             if ( this.controller.isModeActive( 'eml-grid' ) ) {
                 spinner = this.controller.browserView.toolbar.get( 'spinner' );
             }
 
-
-            $( 'input', this.$el ).prop('disabled', false);
-
+                        
+            checkboxes.prop('readonly', false);
             if ( spinner ) {
                 spinner.hide();
             }
 
+            if ( 'edit-attachment' !== this.controller._state ) {
+                toolbar = this.controller.toolbar.get();
+            }
+
             if ( toolbar ) {
-                emlMessage = success ? toolbar.get( 'emlAttachmentSuccess' ) : toolbar.get( 'emlAttachmentError' );
+
+                state = result ? 'emlAttachmentSuccess' : 'emlAttachmentError';
+                emlMessage = toolbar.get( state );
 
                 emlMessage.$el.fadeIn( 200 );
                 setTimeout( function() {
                     emlMessage.$el.fadeOut( 100 );
                 }, 800 );
             }
-
-            this.controller.trigger( 'attachment:compat:ready', ['ready'] );
         },
 
         render: function() {
@@ -163,6 +167,11 @@ window.eml = window.eml || { l10n: {} };
             var compat = this.model.get('compat'),
                 $compat_el = this.$el,
                 tcount = this.model.get('tcount');
+
+
+            if ( ! compat || ! compat.item ) {
+                return;
+            }
 
 
             _.each( tcount, function( count, term_id ) {
@@ -174,9 +183,6 @@ window.eml = window.eml || { l10n: {} };
                 $option.text( text );
             });
 
-            if ( ! compat || ! compat.item ) {
-                return;
-            }
 
             if ( this.noRender ) {
                 return this;
@@ -211,6 +217,7 @@ window.eml = window.eml || { l10n: {} };
             return this;
         }
     });
+
 
 
 
@@ -575,7 +582,6 @@ window.eml = window.eml || { l10n: {} };
      * wp.media.view.Attachment.Details
      *
      */
-
     _.extend( media.view.Attachment.Details.prototype, {
 
         deleteAttachment: function( event ) {
@@ -589,7 +595,7 @@ window.eml = window.eml || { l10n: {} };
                     this.controller.modal.focusManager.focus();
                 }
             }
-        },
+        }
     });
 
 
@@ -601,7 +607,6 @@ window.eml = window.eml || { l10n: {} };
     original.AttachmentsBrowser = {
 
         initialize: media.view.AttachmentsBrowser.prototype.initialize,
-        createToolbar: media.view.AttachmentsBrowser.prototype.createToolbar,
         createSidebar: media.view.AttachmentsBrowser.prototype.createSidebar,
         createSingle: media.view.AttachmentsBrowser.prototype.createSingle,
         disposeSingle: media.view.AttachmentsBrowser.prototype.disposeSingle
@@ -754,7 +759,7 @@ window.eml = window.eml || { l10n: {} };
                     }
                 }
 
-                if ( eml.l10n.wp_version >= '4.0' && -1 !== $.inArray( 'dates', eml.l10n.filters_to_show ) && media.view.settings.months.length ) {
+                if ( -1 !== $.inArray( 'dates', eml.l10n.filters_to_show ) && media.view.settings.months.length ) {
 
                     this.toolbar.set( 'dateFilterLabel', new media.view.Label({
                         value: l10n.filterByDate,
@@ -828,6 +833,7 @@ window.eml = window.eml || { l10n: {} };
 
                 var toolbar = this.controller.toolbar.get();
 
+
                 if ( $('body').hasClass('eml-pro-media-css') ) {
                     toolbar.set( 'emlSelectAllButton', new media.view.emlSelectAllButton({
                         filters: Filters,
@@ -841,7 +847,7 @@ window.eml = window.eml || { l10n: {} };
                 toolbar.set( 'emlDeselectButton', new media.view.emlDeselectButton({
                     filters: Filters,
                     disabled: true,
-                    text: l10n.cancelSelection,
+                    text: eml.l10n.deselect,
                     controller: this.controller,
                     priority: -70
                 }).render() );
@@ -850,7 +856,7 @@ window.eml = window.eml || { l10n: {} };
                     filters: Filters,
                     style: 'primary',
                     disabled: true,
-                    text: mediaTrash ? l10n.trashSelected : l10n.deleteSelected,
+                    text: mediaTrash ? l10n.trashSelected : l10n.deletePermanently,
                     controller: this.controller,
                     priority: -60
                 }).render() );
@@ -860,7 +866,7 @@ window.eml = window.eml || { l10n: {} };
                         filters: Filters,
                         style: 'primary',
                         disabled: true,
-                        text: l10n.deleteSelected,
+                        text: l10n.deletePermanently,
                         controller: this.controller,
                         priority: -50
                     }).render() );
@@ -882,7 +888,7 @@ window.eml = window.eml || { l10n: {} };
                     filters: Filters,
                     style: 'primary',
                     disabled: true,
-                    text: mediaTrash ? l10n.trashSelected : l10n.deleteSelected,
+                    text: mediaTrash ? l10n.trashSelected : l10n.deletePermanently,
                     controller: this.controller,
                     priority: -60,
                     click: function() {
@@ -942,7 +948,7 @@ window.eml = window.eml || { l10n: {} };
                         filters: Filters,
                         style: 'primary',
                         disabled: true,
-                        text: l10n.deleteSelected,
+                        text: l10n.deletePermanently,
                         controller: this.controller,
                         priority: -55,
                         click: function() {
@@ -994,19 +1000,20 @@ window.eml = window.eml || { l10n: {} };
 
                 var toolbar = this.controller.toolbar.get();
 
+
                 toolbar.set( 'emlAttachmentSuccess', new media.view.emlAttachmentDetailsEditMessage({
                     text: eml.l10n.saveButton_success,
                     class: 'updated',
                     controller: this.controller,
                     priority:   200
-                }) );
+                }).render() );
 
                 toolbar.set( 'emlAttachmentError', new media.view.emlAttachmentDetailsEditMessage({
                     text: eml.l10n.saveButton_failure,
                     class: 'error',
                     controller: this.controller,
                     priority:   220
-                }) );
+                }).render() );
             }
         },
 
@@ -1124,23 +1131,21 @@ window.eml = window.eml || { l10n: {} };
                 AttachmentView: this.options.AttachmentView
             });
 
-            // Add keydown listener to the instance of the Attachments view
-            this.attachments.listenTo( this.controller, 'attachment:keydown:arrow',     this.attachments.arrowEvent );
-            this.attachments.listenTo( this.controller, 'attachment:details:shift-tab', this.attachments.restoreFocus );
+            // Add keydown listener to the instance of the Attachments view.
+            this.controller.on( 'attachment:keydown:arrow',     _.bind( this.attachments.arrowEvent, this.attachments ) );
+            this.controller.on( 'attachment:details:shift-tab', _.bind( this.attachments.restoreFocus, this.attachments ) );
 
             this.views.add( this.attachments );
 
 
-            if ( this.controller.isModeActive( 'grid' ) ||
-                this.controller.isModeActive( 'eml-grid' ) ) {
-
+            if ( this.controller.isModeActive( 'grid' ) || this.controller.isModeActive( 'eml-grid' ) ) {
                 this.attachmentsNoResults = new media.View({
                     controller: this.controller,
                     tagName: 'p'
                 });
 
                 this.attachmentsNoResults.$el.addClass( 'hidden no-media' );
-                this.attachmentsNoResults.$el.html( l10n.noItemsFound );
+                this.attachmentsNoResults.$el.html( l10n.noMedia );
 
                 this.views.add( this.attachmentsNoResults );
             }
@@ -1169,7 +1174,7 @@ window.eml = window.eml || { l10n: {} };
             original.MediaFrame.Post.activate.apply( this, arguments );
 
             this.on( 'open', content.fixLayout, content );
-            if ( typeof acf !== 'undefined' && $('.acf-expand-details').length ) {
+            if ( typeof acf !== 'undefined' ) {
                 $( document ).on( 'click', '.acf-expand-details', _.debounce( _.bind( content.fixLayout, content ), 250 ) );
             }
         }

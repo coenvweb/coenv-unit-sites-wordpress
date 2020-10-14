@@ -1,10 +1,10 @@
 === Enhanced Media Library ===
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
-Requires at least: 4.5
-Tested up to: 4.9.9
+Requires at least: 5
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 2.7.2
+Stable tag: 2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,23 @@ Additional comfort and even more convenient way to organize WordPress media libr
 
 ## Changelog ##
 
+### 2.8 ###
+*Release Date - October 11, 2020*
+
+= Bugfixes =
+* Critical WP core compatibility issues fixed
+* Gallery and Playlist editing bug fixed
+* Image uploading issue fixed
+
+= Improvements =
+* ACF attachment custom fields - better compatibility
+* Enfold Theme: added `[av_masonry_gallery]` shortcode compatibility with media category parameters like `media_category='10'`, `tag='21'`
+* PRO only: The bulk Save Changes button is disabled by default since v2.8 for new plugin installations. All changes are being made on the fly. If you prefer the button, you can enable it at Settings > Media Taxonomies > Bulk Edit > Save Changes button.
+
+= Apology =
+My sincere apologies to everyone hurt by the absence of EML updates last year. The plugin is not abandoned, its development will continue.
+
+
 ### 2.7.2 ###
 *Release Date - September 13, 2018*
 
@@ -248,204 +265,6 @@ Additional comfort and even more convenient way to organize WordPress media libr
 * Custom order for a taxonomy archive page fixed
 * Position of WordPress core messages in the Grid Mode fixed
 * A lot of small bug fixed
-
-
-### 2.5.1 (PRO only) ###
-* A bug causing "Test Error" on searching for update fixed
-
-
-### 2.5 ###
-*Release Date - February 5, 2018*
-
-= Improvements =
-* Natural sort order added to the media library (Settings > Media > Media Library tab)
-* "Force filters" for third-parties is now set by default for new installations
-* Update mechanism is significantly improved (PRO only)
-
-= Bugfixes =
-* A few minor bugs fixed
-
-= Compatibility =
-* WordPress 4.9 compatibility ensured
-
-
-### 2.4.5 ###
-*Release Date - June 8, 2017*
-
-= Compatibility =
-* WordPress 4.8 compatibility ensured
-
-= Bugfixes =
-* Media library grid view layout fixed (a bug since WP 4.7.4)
-
-
-### 2.4.4 ###
-*Release Date - February 16, 2017*
-
-= Bugfixes =
-* Update mechanism improved to avoid issue on some installations (PRO only)
-* The issue causing an error when editing in bulk (in some cases) is fixed (PRO only)
-* Minor bugs fixed
-
-
-### 2.4.3 ###
-*Release Date - January 28, 2017*
-
-= Improvements =
-* Admin notifications behavior in media library Grid Mode improved
-* Minor bugs fixed
-
-
-### 2.4.2 ###
-*Release Date - January 19, 2017*
-
-= Bugfixes =
-* Wrong subcategories indent fixed
-* Admin notifications can now be clicked in media library grid mode
-* Active license key information is now displayed correctly, fixed a bug of versions 2.4 and 2.4.1 (PRO only)
-* JS code improved to avoid incompatibility with other plugins - [Support Ticket](https://wordpress.org/support/topic/conflict-with-shortcode-ui-plugin/)
-
-= Improvements =
-* Notification added when the plugin cannot receive update information from our server (PRO only)
-
-
-### 2.4.1 ###
-*Release Date - January 16, 2017*
-
-= Bugfixes =
-* A bug with saving taxonomy terms from post editor media popup fixed - [Support Ticket](https://wordpress.org/support/topic/category-filter-not-media-category-filter-stopped-working-again/)
-
-
-### 2.4 ###
-*Release Date - January 13, 2017*
-
-= Improvements =
-* Better layout and workflow for the grid mode
-* RTL stylesheets added
-
-
-### 2.3.6 ###
-*Release Date - December 16, 2016*
-
-= Improvements =
-* Better admin CSS
-* Inline uploader restored in media library Grid Mode (PRO only)
-* Bulk edit action added with new WP 4.7 hook (PRO only)
-* Media Settings admin page improved to be more compatible with third-party plugins extending it as well
-
-
-### 2.3.5 ###
-*Release Date - November 29, 2016*
-
-= Improvements =
-* Better grid mode layout, including small mobile screens (PRO only)
-
-= Compatibility =
-* WordPress 4.7 compatibility ensured
-* Compatibility with 'Compress JPEG & PNG images' ensured
-
-= Bugfixes =
-* Few minor bugs fixed
-
-
-### 2.3.4 ###
-*Release Date - November 19, 2016*
-
-= Bugfixes =
-* A bug of v2.3.2 and v2.3.3 with incorrect media filtering fixed
-
-
-### 2.3.3 ###
-*Release Date - November 13, 2016*
-
-= Bugfixes =
-* A bug of v2.3.2 causing issues to some third-party plugins and Customizer fixed
-
-
-### 2.3.2 ###
-*Release Date - November 11, 2016*
-
-= Improvements =
-* Tag names are being used instead of slugs for non-hierarchical taxonomies to assign to media items
-
-= Bugfixes =
-* The bug preventing taxonomy filters to switch correctly on upload fixed
-* A few minor bugs fixed
-
-= Compatibility =
-* Compatibility with the Jetpack Slideshow added
-
-
-### 2.3.1 ###
-*Release Date - August 9, 2016*
-
-= Bugfixes =
-* MIME Type saving/restoring bug fixed: Settings > Media > MIME Types (tab)
-* Few minor bugs fixed
-
-= Compatibility =
-* WordPress 4.6 compatibility ensured
-
-
-### 2.3 ###
-*Release Date - June 27, 2016*
-
-= Improvements =
-* All bulk operations are now dramatically (!) faster: save order, bulk assign terms (PRO only), bulk trash / restore / delete (PRO only). It actually takes seconds now to assign hundreds of media items in bulk
-* Bulk Trash / Restore added (PRO only)
-* "Show Count" option added to Media Taxonomies tab
-* Term count is now being calculated correctly and separately for different post types when they share a taxonomy with media library
-* Complete cleanup is now deleting all term relationships for non-media taxonomies assigned to media library
-
-= Bugfixes =
-* Typos and absent localizations fixed, spaces added to the text of filters
-* Settings backup is not being performed if a user doesn't submit any file in the import operation (thanks Enrico for your contribution https://plugins.trac.wordpress.org/ticket/2506)
-* Various minor bugs fixed
-
-
-### 2.2.2 ###
-*Release Date - April 30, 2016*
-
-= Improvements =
-* Many typos corrected
-* Localization added for default taxonomy Media Categories and credits
-* CSS for RTL improved
-* Encoding for Japanese translation fixed
-* Taxonomy queries (filtering) improved for List mode of the media library
-* Count number added to filters for List and Grid modes
-* Media Taxonomy tab: various CSS and JS improvements, minor bugs fixed
-* Media taxonomy 'year' is now being renamed to 'media_year' automatically on creation to avoid issues with WP queries
-* Performance: enhanced media library loading time reduced for about 40%
-
-
-### 2.2.1 ###
-*Release Date - April 13, 2016*
-
-= Improvements =
-* Enhanced media library settings moved under Settings > Media
-* Text domain changed to match the plugin slug
-* Better CSS for media library grid mode, addressing some minor issues as well
-
-= Compatibility =
-* WordPress 4.5 compatibility ensured
-
-
-### 2.2 ###
-*Release Date - March 19, 2016*
-
-= New =
-* Option "Auto-assign media items to parent post categories on upload" added per non-media taxonomy [PRO only]
-* Options and database cleanup added
-
-= Improvements =
-* Few security improvements
-* Few CSS, UI and behavior improvements
-* Slight performance improvement
-
-= Bugfixes =
-* A bug with non-saved drag and drop order in media library fixed
-* A bug with "Reset All Filters" button fixed
-* Custom order works now correctly on upload
 
 
 ### Previous releases... ###

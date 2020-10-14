@@ -156,9 +156,14 @@ function emlIsFilterBased( attrs ) {
         },
 
         change_orderbyRandom: function( event ) {
-        
+
             var content = this.controller.frame.content,
                 reverse = content.get().toolbar.get( 'reverse' );
+
+
+            if ( _.isUndefined( reverse ) ) {
+                return false;
+            }
 
             reverse.model.set( 'disabled', $( event.target ).is(':checked') );
         }
@@ -277,11 +282,14 @@ function emlIsFilterBased( attrs ) {
         var reverse = browser.toolbar.get( 'reverse' );
 
 
-        reverse.model.set( 'disabled', 'rand' === library.props.get('orderby') );
+        if ( _.isUndefined( reverse ) ) {
+            return false;
+        }
 
         reverse.options.click = function() {
 
-            order = library.props.get( 'order' );
+            var order = library.props.get( 'order' );
+
 
             if ( 'ASC' === order ) {
                 order = 'DESC';
@@ -312,7 +320,7 @@ function emlIsFilterBased( attrs ) {
     _.extend( media.controller.GalleryEdit.prototype, {
 
         gallerySettings: function( browser ) {
-
+            
             var library = this.get('library');
 
             original.GalleryEdit.gallerySettings.apply( this, arguments );
@@ -324,7 +332,7 @@ function emlIsFilterBased( attrs ) {
 
 
     /**
-     * wp.media.controller.CollectionEdit
+     * wp.media.controller.CollectionEdit (Playlist)
      *
      */
     original.CollectionEdit = {

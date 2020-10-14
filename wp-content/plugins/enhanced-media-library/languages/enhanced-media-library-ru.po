@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Enhanced Media Library (Free & PRO)\n"
-"POT-Creation-Date: 2018-09-11 00:08+0300\n"
-"PO-Revision-Date: 2018-09-11 00:14+0300\n"
+"POT-Creation-Date: 2020-10-11 22:46+0300\n"
+"PO-Revision-Date: 2020-10-11 22:48+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -13,7 +13,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: core/media-templates.php:21
+msgid "Remove"
+msgstr "Удалить"
+
+#: core/media-templates.php:23
+msgid "Deselect"
+msgstr "Снять выбор"
+
+#: core/media-templates.php:79
+msgid "Caption this image&hellip;"
+msgstr "Подпись к этому изображению&hellip;"
+
+#: core/media-templates.php:83
+msgid "Describe this video&hellip;"
+msgstr "Опишите это видео&hellip;"
+
+#: core/media-templates.php:85
+msgid "Describe this audio file&hellip;"
+msgstr "Опишите это аудио&hellip;"
+
+#: core/media-templates.php:87
+msgid "Describe this media file&hellip;"
+msgstr "Опиши этот медиафайл&hellip;"
 
 #: core/mime-types.php:30
 msgid "MIME Types settings restored."
@@ -192,7 +216,7 @@ msgstr "Родитель"
 #: core/options-pages.php:568 core/options-pages.php:862
 #: core/options-pages.php:1084 core/options-pages.php:2011
 #: core/options-pages.php:2074 core/taxonomies.php:381
-#: enhanced-media-library.php:561
+#: enhanced-media-library.php:562
 msgid "All"
 msgstr "Все"
 
@@ -558,7 +582,7 @@ msgstr ""
 #: core/options-pages.php:1824 core/options-pages.php:1861
 #: core/options-pages.php:1905 core/options-pages.php:2113
 #: core/options-pages.php:2177 core/options-pages.php:2215
-#: core/options-pages.php:2386 enhanced-media-library.php:570
+#: core/options-pages.php:2386 enhanced-media-library.php:571
 msgid "Save Changes"
 msgstr "Сохранить изменения"
 
@@ -685,7 +709,6 @@ msgid "Date"
 msgstr "Дате"
 
 #: core/options-pages.php:1793 core/options-pages.php:1853
-#: core/taxonomies.php:1650
 msgid "Title"
 msgstr "Названию"
 
@@ -748,7 +771,7 @@ msgstr ""
 msgid "Filename"
 msgstr ""
 
-#: core/options-pages.php:1855 core/taxonomies.php:1666
+#: core/options-pages.php:1855
 msgid "Caption"
 msgstr ""
 
@@ -1052,11 +1075,11 @@ msgid "All Authors"
 msgstr ""
 
 #: core/taxonomies.php:374 core/taxonomies.php:380
-#: enhanced-media-library.php:560
+#: enhanced-media-library.php:561
 msgid "Filter by"
 msgstr "Фильтровать по"
 
-#: core/taxonomies.php:382 enhanced-media-library.php:562
+#: core/taxonomies.php:382 enhanced-media-library.php:563
 msgid "Not in a"
 msgstr "Не в"
 
@@ -1064,160 +1087,95 @@ msgstr "Не в"
 msgid "Add some"
 msgstr ""
 
-#: core/taxonomies.php:1501
-msgid "Remove"
-msgstr "Удалить"
-
-#: core/taxonomies.php:1503
-msgid "Deselect"
-msgstr "Снять выбор"
-
-#: core/taxonomies.php:1559
-msgid "Caption this image&hellip;"
-msgstr "Подпись к этому изображению&hellip;"
-
-#: core/taxonomies.php:1563
-msgid "Describe this video&hellip;"
-msgstr "Опишите это видео&hellip;"
-
-#: core/taxonomies.php:1565
-msgid "Describe this audio file&hellip;"
-msgstr "Опишите это аудио&hellip;"
-
-#: core/taxonomies.php:1567
-msgid "Describe this media file&hellip;"
-msgstr "Опиши этот медиафайл&hellip;"
-
-#: core/taxonomies.php:1585
-msgid "Attachment Details"
-msgstr ""
-
-#: core/taxonomies.php:1588 enhanced-media-library.php:568
-msgid "Saved."
-msgstr ""
-
-#: core/taxonomies.php:1612
-msgid "Edit Image"
-msgstr ""
-
-#: core/taxonomies.php:1617
-msgid "Length:"
-msgstr ""
-
-#: core/taxonomies.php:1623
-msgid "Untrash"
-msgstr ""
-
-#: core/taxonomies.php:1625
-msgctxt "verb"
-msgid "Trash"
-msgstr ""
-
-#: core/taxonomies.php:1628
-msgid "Delete Permanently"
-msgstr ""
-
-#: core/taxonomies.php:1632 enhanced-media-library.php:390
-msgid "More Details"
-msgstr ""
-
-#: core/taxonomies.php:1644
-msgid "URL"
-msgstr ""
-
-#: core/taxonomies.php:1656
-msgid "Artist"
-msgstr ""
-
-#: core/taxonomies.php:1657
-msgid "Album"
-msgstr ""
-
-#: core/taxonomies.php:1671
-msgid "Alt Text"
-msgstr ""
-
-#: core/taxonomies.php:1676
-msgid "Description"
-msgstr ""
-
-#: enhanced-media-library.php:358 enhanced-media-library.php:559
+#: enhanced-media-library.php:359 enhanced-media-library.php:560
 msgid "All Uncategorized"
 msgstr "Все без категории"
 
-#: enhanced-media-library.php:359 enhanced-media-library.php:563
+#: enhanced-media-library.php:360 enhanced-media-library.php:564
 msgid "Reset All Filters"
 msgstr "Сброс"
 
 #: enhanced-media-library.php:391
+msgid "More Details"
+msgstr ""
+
+#: enhanced-media-library.php:392
 msgid "Less Details"
 msgstr ""
 
-#: enhanced-media-library.php:564
+#: enhanced-media-library.php:565
 msgid "author"
 msgstr ""
 
-#: enhanced-media-library.php:565
+#: enhanced-media-library.php:566
 msgid "authors"
 msgstr ""
 
 #: enhanced-media-library.php:569
+msgid "Saved."
+msgstr ""
+
+#: enhanced-media-library.php:570
 msgid "Something went wrong."
 msgstr "Что-то пошло не так."
 
-#: enhanced-media-library.php:572
+#: enhanced-media-library.php:573
 msgid "Select All"
 msgstr "Выбрать все"
 
-#: enhanced-media-library.php:601
+#: enhanced-media-library.php:574
+msgid "Deselect "
+msgstr ""
+
+#: enhanced-media-library.php:603
 msgid "Uploaded to post #"
 msgstr "Загружено для записи #"
 
-#: enhanced-media-library.php:602
+#: enhanced-media-library.php:604
 msgid "Based On"
 msgstr "На основе"
 
-#: enhanced-media-library.php:671 enhanced-media-library.php:673
+#: enhanced-media-library.php:673 enhanced-media-library.php:675
 msgid "Media Categories"
 msgstr "Медиа категории"
 
-#: enhanced-media-library.php:672
+#: enhanced-media-library.php:674
 msgid "Media Category"
 msgstr "Медиа категория"
 
-#: enhanced-media-library.php:674
+#: enhanced-media-library.php:676
 msgid "All Media Categories"
 msgstr "Все медиа категории"
 
-#: enhanced-media-library.php:675
+#: enhanced-media-library.php:677
 msgid "Edit Media Category"
 msgstr "Изменить медиа категорию"
 
-#: enhanced-media-library.php:676
+#: enhanced-media-library.php:678
 msgid "View Media Category"
 msgstr "Смотреть медиа категорию"
 
-#: enhanced-media-library.php:677
+#: enhanced-media-library.php:679
 msgid "Update Media Category"
 msgstr "Обновить медиа категорию"
 
-#: enhanced-media-library.php:678
+#: enhanced-media-library.php:680
 msgid "Add New Media Category"
 msgstr "Добавить новую медиа категорию"
 
-#: enhanced-media-library.php:679
+#: enhanced-media-library.php:681
 msgid "New Media Category Name"
 msgstr "Название новой медиа категории"
 
-#: enhanced-media-library.php:680
+#: enhanced-media-library.php:682
 msgid "Parent Media Category"
 msgstr "Родительская категория"
 
-#: enhanced-media-library.php:681
+#: enhanced-media-library.php:683
 msgid "Parent Media Category:"
 msgstr "Родительская категория:"
 
-#: enhanced-media-library.php:682
+#: enhanced-media-library.php:684
 msgid "Search Media Categories"
 msgstr "Поиск медиа категорий"
 

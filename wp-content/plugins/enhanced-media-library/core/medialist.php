@@ -20,7 +20,7 @@ add_filter( 'shortcode_atts_slideshow', 'wpuxss_eml_shortcode_atts', 10, 3 );
 
 if ( ! function_exists( 'wpuxss_eml_shortcode_atts' ) ) {
 
-    function wpuxss_eml_shortcode_atts( $output, $defaults, $atts ) {
+    function wpuxss_eml_shortcode_atts( $output, $defaults = array(), $atts ) {
 
         $wpuxss_eml_lib_options = get_option( 'wpuxss_eml_lib_options', array() );
 
