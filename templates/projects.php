@@ -51,7 +51,7 @@ if(empty($project_search) && !empty($project_status)) {
 	$meta_query = array(
 		array(
 			'key' => 'project_status',
-			'value' => 'In Progress',
+			'value' => $project_status,
 			'compare' => '=',
 		),
 	);
@@ -168,16 +168,6 @@ if(isset($project_search)) {
             ),
         );
 	}
-	if (!empty($project_status)) {
-        $meta_query[] = array (
-            'relation' => 'AND',
-            array(
-              'key' => 'project_status',
-              'value' => $project_status,
-              'compare' => '=',
-            ),
-        );
-    }
 	$query_args['_meta_or_title'] = $project_search;
 } else {
     $meta_query[] = array();
@@ -245,18 +235,18 @@ $wp_query = new WP_Query($query_args);
 					<div class=" large-4 columns" data-url="<?php the_permalink() ?>" data-cat="blog_category year">
 						<?php coenv_base_no_auto_filter('project_year', $project_year); // Category filter ?>
 					</div>
-					<div class=" large-7 columns">
+					<div class=" large-6 columns">
 						<label for="project-search" class="hidden" aria-hidden="true">Search projects</label>
 						<input value="<?php if(isset($project_search)){echo $project_search;}; ?>" name="project-search" id="project-search" placeholder="Search projects" aria-label="Search" title="Search" type="text">
 					</div>
 					<div class="submit large-2 columns right">
 						<button type="submit"><i class="fi-magnifying-glass"></i><span> Apply</span></button>
 					</div>
-					<div class="current-check large-3 columns right">
+					<div class="current-check large-2 columns right">
 						<input type="checkbox" id="project_status_active" name="project_status" value="Active" class="left" <?php if ($project_status == 'Active'){echo 'checked';}; ?>><label for="project_status_active">Active</label>
 						
 					</div>
-					<div class="current-check large-3 columns right">
+					<div class="current-check large-2 columns right">
 						<input type="checkbox" id="project_status_completed" name="project_status" value="Completed" class="left" <?php if ($project_status == 'Completed'){echo 'checked';}; ?>><label for="project_status_completed">Completed</label>
 						
 					</div>
