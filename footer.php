@@ -48,11 +48,11 @@
                         <li><a target="_blank" href="http://atmos.uw.edu/">Atmospheric Sciences</a></li>
                         <li><a target="_blank" href="https://quantitative.uw.edu/">Center for Quantitative Science</a></li>
                         <li><a target="_blank" href="http://cig.uw.edu/">Climate Impacts Group</a></li>
+                        <li><a target="_blank" href="http://cicoes.uw.edu/">Cooperative Institute for Climate, Ocean, & Ecosystem Studies</a></li>
                         <li><a target="_blank" href="https://earthlab.uw.edu/">EarthLab</a></li>
                         <li><a target="_blank" href="http://www.ess.washington.edu/">Earth and Space Sciences</a></li>
                         <li><a target="_blank" href="http://sefs.uw.edu/">Environmental and Forest Sciences</a></li>
                         <li><a target="_blank" href="http://fhl.uw.edu/">Friday Harbor Laboratories</a></li>
-                        <li><a target="_blank" href="http://jisao.uw.edu/">Joint Institute for the Study of the Atmosphere and Ocean</a></li>
                         <li><a target="_blank" href="https://smea.uw.edu">Marine and Environmental Affairs</a></li>
                         <li><a target="_blank" href="https://marinebiology.uw.edu/">Marine Biology</a></li>
                         <li><a target="_blank" href="http://www.ocean.washington.edu/">Oceanography</a></li>

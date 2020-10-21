@@ -39,7 +39,8 @@
     }
     
     .menu-icon span::after {
-        box-shadow: 0 0px 0 1px #fff,0 7px 0 1px #fff,0 14px 0 1px #fff;
+        height: 1px!important;
+        box-shadow: 0 -2px 0px 1px #fff,0 6px 0 1px #fff,0 14px 0 1px #fff!important;
     }
 
 }
