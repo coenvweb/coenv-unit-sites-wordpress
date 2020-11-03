@@ -146,9 +146,7 @@ window.eml = window.eml || { l10n: {} };
         },
 
         click: function() {
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
-                this.controller.selectAll();
-            }
+            this.controller.selectAll();
         }
     });
 
@@ -223,7 +221,7 @@ window.eml = window.eml || { l10n: {} };
                 library = this.controller.state().get( 'library' );
 
 
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
+            if ( typeof this.controller._bulk !== 'undefined' ) {
 
                 if ( mediaTrash ) {
                     action = 'trash' === selection.at( 0 ).get( 'status' ) ? 'restore' : 'trash';
@@ -300,7 +298,7 @@ window.eml = window.eml || { l10n: {} };
 
         click: function() {
 
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
+            if ( typeof this.controller._bulk !== 'undefined' ) {
                 this.controller.bulk( 'delete' );
             }
             else {

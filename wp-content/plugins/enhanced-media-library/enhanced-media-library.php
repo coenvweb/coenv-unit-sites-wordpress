@@ -3,7 +3,7 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: http://wpUXsolutions.com
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.8
+Version: 2.8.1
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
@@ -26,7 +26,8 @@ global $wp_version,
 
 
 
-if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.8' );
+if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.8.1' );
+if ( ! defined('EML_PRO') ) define( 'EML_PRO', false );
 
 
 
@@ -139,7 +140,7 @@ if ( ! function_exists( 'wpuxss_eml_on_plugins_loaded' ) ) {
 
 
         // textdomain
-        load_plugin_textdomain( 'enhanced-media-library', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+        load_plugin_textdomain( 'enhanced-media-library' );
 
 
         // on update
@@ -560,7 +561,7 @@ if ( ! function_exists( 'wpuxss_eml_enqueue_media' ) ) {
             'uncategorized'             => __( 'All Uncategorized', 'enhanced-media-library' ),
             'filter_by'                 => __( 'Filter by', 'enhanced-media-library' ),
             'in'                        => __( 'All', 'enhanced-media-library' ),
-            'not_in'                    => __( 'Not in a', 'enhanced-media-library' ),
+            'not_in'                    => __( 'Not in', 'enhanced-media-library' ),
             'reset_filters'             => __( 'Reset All Filters', 'enhanced-media-library' ),
             'author'                    => __( 'author', 'enhanced-media-library' ),
             'authors'                   => __( 'authors', 'enhanced-media-library' ),

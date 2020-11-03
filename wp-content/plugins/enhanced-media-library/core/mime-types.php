@@ -166,6 +166,44 @@ if ( ! function_exists( 'wpuxss_eml_upload_mimes' ) ) {
 
 
 /**
+ *  wpuxss_eml_check_filetype_and_ext
+ *
+ *  Allowed mime types
+ *
+ *  @since    2.8
+ *  @created  10/2020
+ */
+
+add_filter( 'wp_check_filetype_and_ext', 'wpuxss_eml_check_filetype_and_ext', 10, 5 );
+
+if ( ! function_exists( 'wpuxss_eml_check_filetype_and_ext' ) ) {
+
+    function wpuxss_eml_check_filetype_and_ext( $types, $file, $filename, $mimes, $real_mime ) {
+
+        $wpuxss_eml_mimes = get_option('wpuxss_eml_mimes');
+
+        if ( empty( $wpuxss_eml_mimes ) ) {
+            return $types;
+        }
+        
+        foreach ( $wpuxss_eml_mimes as $extension => $mime ) {
+
+            if ( (bool) $mime['upload'] ) {
+            
+                if ( false !== strpos( $filename, '.'.$extension ) ) {
+                    $types['ext'] = wpuxss_eml_sanitize_extension( $extension );
+                    $types['type'] = sanitize_mime_type( $mime['mime'] );
+                }
+            }
+        }
+
+        return $types;
+    }
+}
+
+
+
+/**
  *  wpuxss_eml_mime_types
  *
  *  All mime Types

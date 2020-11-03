@@ -163,8 +163,8 @@ if ( ! function_exists( 'wpuxss_eml_admin_utility_menu' ) ) {
 
 
         $eml_options_page = add_options_page(
-           __('Enhanced Media Library','enhanced-media-library'),
-           __('Enhanced Media Library','enhanced-media-library'),
+           __('Enhanced Media Library Utilities','enhanced-media-library'),
+           __('EML Utilities','enhanced-media-library'),
            'manage_options',
            'eml-settings',
            'wpuxss_eml_print_settings'
@@ -1774,7 +1774,46 @@ if ( ! function_exists( 'wpuxss_eml_print_media_library_options' ) ) {
                             </div>
 
 
-                            <?php do_action( 'wpuxss_eml_extend_library_option_page' ); ?>
+                            <?php
+                                $class_name = EML_PRO ? '' : ' disabled';
+                                $class = EML_PRO ? '' : ' class="disabled"';
+                                $disabled = EML_PRO ? '' : ' readonly="readonly"';
+                                $pro_message = EML_PRO ? '' : ' <span class="premium">/ Premium Feature</span>';
+                            ?>
+
+                            <h2<?php echo $class; ?>><?php _e('Search','enhanced-media-library'); echo $pro_message; ?></h2>
+
+                            <div class="postbox<?php echo $class_name; ?>">
+
+                                <div class="inside">
+
+                                    <table class="form-table">
+
+                                        <tr>
+                                            <th scope="row"><?php _e('Enable search in','enhanced-media-library'); ?></th>
+                                            <td>
+                                                <fieldset>
+                                                    <legend class="screen-reader-text"><span><?php _e('Enable search in', 'enhanced-media-library'); ?></span></legend>
+                                                    <input name="wpuxss_eml_lib_options[search_in][]" type="hidden" value="none" />
+                                                    <label><input name="wpuxss_eml_lib_options[search_in][]" type="checkbox" value="titles" <?php echo in_array('titles', $wpuxss_eml_lib_options['search_in']) ? 'checked' : ''; echo $disabled; ?> /> <?php _e('Titles','enhanced-media-library'); ?></label><br />
+                                                    <label><input name="wpuxss_eml_lib_options[search_in][]" type="checkbox" value="captions" <?php echo in_array('captions', $wpuxss_eml_lib_options['search_in']) ? 'checked' : '';  echo $disabled; ?> /> <?php _e('Captions','enhanced-media-library'); ?></label><br />
+                                                    <label><input name="wpuxss_eml_lib_options[search_in][]" type="checkbox" value="descriptions" <?php echo in_array('descriptions', $wpuxss_eml_lib_options['search_in']) ? 'checked' : ''; echo $disabled; ?> /> <?php _e('Descriptions','enhanced-media-library'); ?></label><br />
+
+                                                    <label><input name="wpuxss_eml_lib_options[search_in][]" type="checkbox" value="authors" <?php echo in_array('authors', $wpuxss_eml_lib_options['search_in']) ? 'checked' : ''; echo $disabled; ?> /> <?php _e('Authors','enhanced-media-library'); ?></label><br />
+                                                    <label><input name="wpuxss_eml_lib_options[search_in][]" type="checkbox" value="taxonomies" <?php echo in_array('taxonomies', $wpuxss_eml_lib_options['search_in']) ? 'checked' : ''; echo $disabled; ?> /> <?php _e('Media Taxonomies','enhanced-media-library'); ?></label>
+                                                    <p class="description"><?php _e('Enhance default search in Media Library and Media Popups. By default, WordPress looks into filenames, titles, captions, and descriptions.','enhanced-media-library'); ?></p>
+                                                </fieldset>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <?php submit_button( __( 'Save Changes' ), 'primary', 'submit', true, array( 'id' => 'eml-submit-lib-settings-search' ) ); ?>
+
+                                </div>
+
+                            </div>
+
+
 
 
                             <h2><?php _e('Order','enhanced-media-library'); ?></h2>
@@ -2153,8 +2192,32 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
                                                     $html .= '<li><input type="checkbox" class="wpuxss-eml-media_uploader_filter" name="wpuxss_eml_taxonomies[' . esc_attr($taxonomy->name) . '][media_uploader_filter]" id="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-media_uploader_filter" value="1" ' . checked( true, (bool) $wpuxss_eml_taxonomies[$taxonomy->name]['media_uploader_filter'], false ) . ' /><label for="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-media_uploader_filter">' . __('Filter for Grid View / Media Popup','enhanced-media-library') . '</label></li>';
                                                     $html .= '<li><input type="checkbox" class="wpuxss-eml-media_popup_taxonomy_edit" name="wpuxss_eml_taxonomies[' . esc_attr($taxonomy->name) . '][media_popup_taxonomy_edit]" id="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-media_popup_taxonomy_edit" value="1" ' . checked( true, (bool) $wpuxss_eml_taxonomies[$taxonomy->name]['media_popup_taxonomy_edit'], false ) . ' /><label for="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-media_popup_taxonomy_edit">' . __('Edit in Media Popup','enhanced-media-library') . '</label></li>';
 
-                                                    $options = '';
-                                                    $html .= apply_filters( 'wpuxss_eml_extend_non_media_taxonomy_options', $options, $taxonomy, $post_type, $wpuxss_eml_taxonomies );
+                                                    $class = EML_PRO ? '' : ' class="disabled"';
+                                                    $class_name = EML_PRO ? '' : ' disabled';
+                                                    $disabled = EML_PRO ? '' : ' readonly="readonly"';
+                                                    $pro_message = EML_PRO ? '' : ' <span class="premium disabled">/ Premium Feature</span>';
+                                                    $post_singular_name = strtolower ( $post_type->labels->singular_name );
+
+                                                    $html .= $pro_message;
+                                                    $html .= '<li' . $class . '><input type="checkbox" class="wpuxss-eml-taxonomy_auto_assign" name="wpuxss_eml_taxonomies[' . esc_attr($taxonomy->name) . '][taxonomy_auto_assign]" id="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-taxonomy_auto_assign" value="1" ' . checked( true, (bool) $wpuxss_eml_taxonomies[$taxonomy->name]['taxonomy_auto_assign'], false ) . $disabled . ' />';
+                                                    $html .= '<label for="wpuxss_eml_taxonomies-' . esc_attr($taxonomy->name) . '-taxonomy_auto_assign">' . sprintf(
+                                                        __('Auto-assign media items to parent %s %s on upload','enhanced-media-library'),
+                                                        esc_html($post_singular_name),
+                                                        esc_html($taxonomy->label)
+                                                    ) . '</label>
+                                                    <a class="add-new-h2 eml-button-synchronize-terms' . $class_name . '" data-post-type="' . esc_attr($post_type->name) . '" data-taxonomy="' . esc_attr($taxonomy->name) . '" href="javascript:;">' . __( 'Synchronize Now', 'enhanced-media-library' ) . '</a><p class="description">';
+                                                    $html .= sprintf(
+                                                        '<strong style="color:red">%s:</strong> ',
+                                                        __('Warning','enhanced-media-library')
+                                                    );
+                                                    $html .= sprintf(
+                                                        __('As a result of clicking "Synchronize Now" all media items attached to a %s will be assigned to %s of their parent %s. Currently assigned %s will not be saved. Media items that are not attached to any %s will not be affected.','enhanced-media-library'),
+                                                        esc_html($post_singular_name),
+                                                        esc_html($taxonomy->label),
+                                                        esc_html($post_singular_name),
+                                                        esc_html($taxonomy->label),
+                                                        esc_html($post_singular_name)
+                                                    ) . '</p></li>';
 
                                                     $html .= '</ul>';
 
@@ -2218,7 +2281,37 @@ if ( ! function_exists( 'wpuxss_eml_print_taxonomies_options' ) ) {
 
                             </div>
 
-                            <?php do_action( 'wpuxss_eml_extend_taxonomies_option_page' ); ?>
+                            <?php 
+                                $class_name = EML_PRO ? '' : ' disabled';
+                                $class = EML_PRO ? '' : ' class="disabled"';
+                                $disabled = EML_PRO ? '' : ' readonly="readonly"';
+                                $pro_message = EML_PRO ? '' : ' <span class="premium">/ Premium Feature</span>';
+                            ?>
+
+                            <h2<?php echo $class; ?>><?php _e('Bulk Edit','enhanced-media-library');  echo $pro_message; ?></h2>
+
+                            <div class="postbox<?php echo $class_name; ?>">
+
+                                <div class="inside">
+
+                                    <table class="form-table">
+                                        <tr>
+                                            <th scope="row"><?php _e('Save Changes button','enhanced-media-library'); ?></th>
+                                            <td>
+                                                <fieldset>
+                                                    <legend class="screen-reader-text"><span><?php _e('Turn off \'Save Changes\' button','enhanced-media-library'); ?></span></legend>
+                                                    <label><input name="wpuxss_eml_tax_options[bulk_edit_save_button]" type="hidden" value="0"><input name="wpuxss_eml_tax_options[bulk_edit_save_button]" type="checkbox" value="1" <?php checked( true, (bool) $wpuxss_eml_tax_options['bulk_edit_save_button'], true ); echo $disabled; ?> /> <?php _e('Bulk changes are being made not immediately - by clicking \'Save Changes\' button','enhanced-media-library'); ?></label>
+                                                    <p class="description"><?php _e( 'Try this if you edit a lot of media items at once and feel uncomfortable with editing saved on the fly.', 'enhanced-media-library' ); ?></p>
+                                                </fieldset>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <?php submit_button( __( 'Save Changes' ), 'primary', 'submit', true, array( 'id' => 'eml-submit-tax-settings-bulk-edit' ) ); ?>
+
+                                </div>
+
+                            </div>
 
                         </form>
 
@@ -2415,8 +2508,13 @@ if ( ! function_exists( 'wpuxss_eml_print_credits' ) ) {
                 <h4><?php _e( 'Changelog', 'enhanced-media-library' ); ?></h4>
                 <p><?php _e( 'What\'s new in', 'enhanced-media-library' ); ?> <a href="https://wordpress.org/plugins/enhanced-media-library/changelog/"><?php _e( 'version', 'enhanced-media-library' ); echo ' ' . EML_VERSION; ?></a>.</p>
 
-                <h4>Enhanced Media Library PRO</h4>
-                <p><?php _e( 'More features under the hood', 'enhanced-media-library' ); ?> <a href="https://wpuxsolutions.com/plugins/enhanced-media-library/">wpuxsolutions.com</a>.</p>
+                <?php if ( ! EML_PRO ) : ?>
+
+                    <h4>Enhanced Media Library PRO</h4>
+                    <p><?php _e( 'More features under the hood', 'enhanced-media-library' ); ?></p>
+                    <p><a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" target="_blank" class="button button-primary">Discover <span>PRO</span></a></p>
+
+                <?php endif; ?>
 
                 <h4><?php _e( 'Support', 'enhanced-media-library' ); ?></h4>
                 <p><?php _e( 'Feel free to ask for help on', 'enhanced-media-library' ); ?> <a href="https://wpuxsolutions.com/support/">wpuxsolutions.com</a>. <?php _e( 'Support is free for both versions of the plugin.', 'enhanced-media-library' ); ?></p>
@@ -2466,7 +2564,7 @@ if ( ! function_exists( 'wpuxss_eml_settings_link' ) ) {
         );
 
         $utility_link = array(
-            'utility' => '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utility', 'enhanced-media-library' ) . '</a>'
+            'utility' => '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utilities', 'enhanced-media-library' ) . '</a>'
         );
 
         return array_merge( $settings_link, $utility_link, $links );
@@ -2489,6 +2587,11 @@ if ( ! function_exists( 'wpuxss_eml_plugin_row_meta' ) ) {
 
         if ( wpuxss_get_eml_basename() !== $file ) {
             return $links;
+        }
+
+        if ( ! EML_PRO ) {
+
+            $links[] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" target="_blank"><strong>' . __( 'Go PRO ', 'enhanced-media-library' ) . '</strong></a>';
         }
 
         $links[] = __( 'Rate us:', 'enhanced-media-library' ) . " <span class='rating-stars'><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=1#new-post' target='_blank' data-rating='1' title='" . __('Poor', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=2#new-post' target='_blank' data-rating='2' title='" . __('Works', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=3#new-post' target='_blank' data-rating='3' title='" . __('Good', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=4#new-post' target='_blank' data-rating='4' title='" . __('Great', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=5#new-post' target='_blank' data-rating='5' title='" . __('Fantastic!', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><span>";

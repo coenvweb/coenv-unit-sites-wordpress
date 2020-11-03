@@ -18,9 +18,9 @@ if ( ! function_exists( 'wpuxss_eml_print_media_templates' ) ) {
 
     function wpuxss_eml_print_media_templates() {
 
-        $remove_button = '<button type="button" class="button-link attachment-close media-modal-icon"><span class="screen-reader-text">' . __( 'Remove', 'enhanced-media-library' ) . '</span></button>';
+        $remove_button = '<button type="button" class="button-link attachment-close media-modal-icon"><span class="screen-reader-text">' . __( 'Remove' ) . '</span></button>';
 
-        $deselect_button = '<button type="button" class="button-link check" tabindex="-1"><span class="media-modal-icon"></span><span class="screen-reader-text">' . __( 'Deselect', 'enhanced-media-library' ) . '</span></button>'; ?>
+        $deselect_button = '<button type="button" class="button-link check" tabindex="-1"><span class="media-modal-icon"></span><span class="screen-reader-text">' . __( 'Deselect' ) . '</span></button>'; ?>
 
 
         <script type="text/html" id="tmpl-attachment-grid-view">

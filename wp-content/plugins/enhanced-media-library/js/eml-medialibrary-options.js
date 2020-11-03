@@ -35,4 +35,9 @@
         $('#wpuxss_eml_lib_options_grid_caption_type').prop( 'hidden', ! isChecked );
     });
 
+
+    $( document ).on( 'click', 'input[readonly], .disabled .submit input.button', function( event ) {
+        event.preventDefault();
+    });
+
 })( jQuery );

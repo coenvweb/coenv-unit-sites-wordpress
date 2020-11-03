@@ -371,15 +371,15 @@ if ( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
                 if ( ! (bool) $wpuxss_eml_taxonomies[$taxonomy->name]['admin_filter'] )
                     continue;
 
-                echo "<label for='" . esc_attr($taxonomy->name) ."' class='screen-reader-text'>" . __('Filter by','enhanced-media-library') . " " . esc_html($taxonomy->labels->singular_name) . "</label>";
+                echo "<label for='" . esc_attr($taxonomy->name) ."' class='screen-reader-text'>" . __('Filter by','enhanced-media-library') . " " . esc_html($taxonomy->labels->name) . "</label>";
 
                 $selected = ( ! $uncategorized && isset( $wp_query->query[$taxonomy->name] ) ) ? $wp_query->query[$taxonomy->name] : 0;
 
                 wp_dropdown_categories(
                     array(
-                        'show_option_all'    =>  __( 'Filter by', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->singular_name),
+                        'show_option_all'    =>  __( 'Filter by', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name),
                         'show_option_in'     =>  '— ' . __( 'All', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name) . ' —',
-                        'show_option_not_in' =>  '— ' . __( 'Not in a', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->singular_name) . ' —',
+                        'show_option_not_in' =>  '— ' . __( 'Not in', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name) . ' —',
                         'taxonomy'           =>  $taxonomy->name,
                         'name'               =>  $taxonomy->name,
                         'orderby'            =>  'name',

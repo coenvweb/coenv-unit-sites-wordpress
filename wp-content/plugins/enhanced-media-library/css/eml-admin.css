@@ -161,6 +161,21 @@
     list-style: disc;
     margin-left: 1.4em;
 }
+#wpuxss-credits .button-primary {
+    background-color: #1ace0d;
+    border-color: #139a09;
+}
+#wpuxss-credits .button-primary:hover {
+    background: #1dbb11;
+    border-color: #127d0a;
+    color: #e4ffe2;
+}
+#wpuxss-credits .button-primary:focus {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 3px #1dbb11;
+}
+#wpuxss-credits .button-primary span {
+    font-weight: bold;
+}
 
 @font-face {
     font-family: 'webbistro';
@@ -340,4 +355,39 @@
 .eml-options #poststuff h2 {
     font-size: 23px;
     font-weight: 400;
+}
+
+.eml-button-synchronize-terms.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+
+
+/* == Disabled Styles == */
+
+.wrap.eml-options .disabled {
+    opacity: 0.6;
+}
+.wrap.eml-options .disabled label,
+.wrap.eml-options .disabled input {
+    cursor: default;
+}
+.wrap.eml-options .disabled input {
+    pointer-events: none;
+}
+.wrap.eml-options .disabled input:focus {
+    box-shadow: none;
+}
+
+.wrap.eml-options .disabled .submit {
+    pointer-events: none;
+    cursor: default;
+}
+.wrap.eml-options span.premium {
+    text-transform: uppercase;
+}
+.wrap.eml-options h2 span.premium {
+    font-size: 0.5em;
 }

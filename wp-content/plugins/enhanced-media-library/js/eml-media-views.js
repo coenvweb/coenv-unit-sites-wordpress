@@ -437,7 +437,7 @@ window.eml = window.eml || { l10n: {} };
             });
 
             filters.all = {
-                text: eml.l10n.filter_by + ' ' + self.options.singularName,
+                text: eml.l10n.filter_by + ' ' + self.options.pluralName,
                 props: {
                     uncategorized : null,
                     orderby       : eml.l10n.media_orderby,
@@ -461,7 +461,7 @@ window.eml = window.eml || { l10n: {} };
             filters['in']['props'][self.options.taxonomy] = 'in';
 
             filters.not_in = {
-                text: '&#8212; ' + eml.l10n.not_in + ' ' + self.options.singularName + ' &#8212;',
+                text: '&#8212; ' + eml.l10n.not_in + ' ' + self.options.pluralName + ' &#8212;',
                 props: {
                     uncategorized : null,
                     orderby       : eml.l10n.media_orderby,
@@ -625,6 +625,8 @@ window.eml = window.eml || { l10n: {} };
             if ( $('.notice-dismiss').length ) {
                 $( document ).on( 'click', '.notice-dismiss', _.debounce( _.bind( this.fixLayout, this), 250 ) );
             }
+
+            this.controller.on( 'sidebar:on' , _.debounce( _.bind( this.scrollAttachmentIntoView, this, {block: "center"} ), 15 ) );
         },
 
         fixLayout: function() {
@@ -674,6 +676,15 @@ window.eml = window.eml || { l10n: {} };
 
                 $browser.css( 'top', $toolbar.outerHeight() + messagesOuterHeight + 15 + 'px' );
                 $toolbar.css( 'top', - $toolbar.outerHeight() - 25 + 'px' );
+            }
+        },
+
+        scrollAttachmentIntoView: function( options ) {
+
+            var selection = this.controller.state().get( 'selection' );
+
+            if ( selection.length == 1 ) {
+                $( 'li.attachment[data-id="' + selection.single().get( 'id' ) +'"]' )[0].scrollIntoView( options );
             }
         },
 
@@ -798,7 +809,7 @@ window.eml = window.eml || { l10n: {} };
                         if ( -1 !== _.indexOf( eml.l10n.filter_taxonomies, taxonomy ) && values.term_list.length ) {
 
                             self.toolbar.set( taxonomy+'FilterLabel', new media.view.Label({
-                                value: eml.l10n.filter_by + values.singular_name,
+                                value: eml.l10n.filter_by + values.plural_name,
                                 attributes: {
                                     'for':  'media-attachment-' + taxonomy + '-filters',
                                 },
@@ -1033,11 +1044,15 @@ window.eml = window.eml || { l10n: {} };
                 this.sidebar.$el.removeClass( 'hidden' );
                 this.$el.children('.attachments').css( 'right', '300px' );
                 this.$el.children('.uploader-inline').css( 'right', '310px' );
+
+                this.controller.trigger( 'sidebar:on' );
             }
             else {
                 this.sidebar.$el.addClass( 'hidden' );
                 this.$el.children('.attachments').css( 'right', 0 );
                 this.$el.children('.uploader-inline').css( 'right', '10px' );
+
+                this.controller.trigger( 'sidebar:off' );
             }
         },
 
@@ -1057,7 +1072,6 @@ window.eml = window.eml || { l10n: {} };
                         priority:   80
                     }) );
                 }
-
                 this.toggleSidebar();
             }
         },
@@ -1174,7 +1188,7 @@ window.eml = window.eml || { l10n: {} };
             original.MediaFrame.Post.activate.apply( this, arguments );
 
             this.on( 'open', content.fixLayout, content );
-            if ( typeof acf !== 'undefined' ) {
+            if ( typeof acf !== 'undefined' && $('.acf-expand-details').length ) {
                 $( document ).on( 'click', '.acf-expand-details', _.debounce( _.bind( content.fixLayout, content ), 250 ) );
             }
         }
