@@ -7,7 +7,7 @@ Tags: revision, submit changes, workflow, collaboration, permissions, moderate, 
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
 Tested up to: 5.5
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,11 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.4.3 - 5 Nov 2020 =
+* Compat : Polylang - language settings were not stored to revision (Fix also applies to other plugins using hidden taxonomies)
+* Compat : Project Nami (Microsoft SQL Server / ODBC) - No confirmation redirect on revision submission
+* Lang : Added .pot file
 
 = 2.4.2 - 26 Oct 2020 =
 * Compat : PublishPress Permissions - Users assigned Revise permissions for specific pages or categories could not compare Pending Revisions
