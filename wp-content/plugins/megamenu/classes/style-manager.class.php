@@ -665,6 +665,10 @@ if ( ! class_exists( 'Mega_Menu_Style_Manager' ) ) :
 		 */
 		public function generate_css_for_location( $location, $theme, $menu_id ) {
 
+			if ( is_readable( MEGAMENU_PATH . 'classes/scssc.inc.php' ) && ! class_exists( 'scssc' ) ) {
+				include_once MEGAMENU_PATH . 'classes/scssc.inc.php';
+			}
+
 			$scssc = new scssc();
 			$scssc->setFormatter( 'scss_formatter' );
 

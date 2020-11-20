@@ -8,7 +8,8 @@ window.eml = window.eml || { l10n: {} };
     var media = wp.media,
         mediaTrash = media.view.settings.mediaTrash,
         l10n = media.view.l10n,
-        original = {};
+        original = {},
+        newEvents = {};
 
 
 
@@ -28,7 +29,7 @@ window.eml = window.eml || { l10n: {} };
 
 
 
-    var newEvents = { 'click .edit': 'emlEditAttachment' };
+    newEvents = { 'click .edit': 'emlEditAttachment' };
     _.extend( newEvents, media.view.Attachment.prototype.events);
 
     _.extend( media.view.Attachment.prototype, {
@@ -65,20 +66,22 @@ window.eml = window.eml || { l10n: {} };
     });
 
 
-
-    var newEvents = { 'click .eml-toggle-collapse': 'toggleCollapse' };
+    
+    newEvents = { 'click .eml-toggle-collapse': 'toggleCollapse' };
     _.extend( newEvents, media.view.Attachment.Details.prototype.events);
 
     media.view.emlGridAttachmentDetails = media.view.Attachment.Details.extend({
 
-        template:  media.template('eml-grid-attachment-details'),
-
         events: newEvents,
 
-        initialize: function() {
+        render: function() {
 
-            media.view.Attachment.Details.prototype.initialize.apply( this, arguments );
-            this.render();
+            media.view.Attachment.Details.prototype.render.apply( this, arguments );
+
+            // collapse
+            this.$el.find('.setting, #alt-text-description').wrapAll( '<div class="eml-collapse" />' );
+            this.$el.find('.compat-meta').before( '<a class="eml-toggle-collapse" href="javascript:;">'+eml.l10n.more_details+'</a>' );
+
             this.toggleCollapse();
         },
 
@@ -143,9 +146,7 @@ window.eml = window.eml || { l10n: {} };
         },
 
         click: function() {
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
-                this.controller.selectAll();
-            }
+            this.controller.selectAll();
         }
     });
 
@@ -220,7 +221,7 @@ window.eml = window.eml || { l10n: {} };
                 library = this.controller.state().get( 'library' );
 
 
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
+            if ( typeof this.controller._bulk !== 'undefined' ) {
 
                 if ( mediaTrash ) {
                     action = 'trash' === selection.at( 0 ).get( 'status' ) ? 'restore' : 'trash';
@@ -297,7 +298,7 @@ window.eml = window.eml || { l10n: {} };
 
         click: function() {
 
-            if ( typeof this.controller._stopSelecting !== 'undefined' ) {
+            if ( typeof this.controller._bulk !== 'undefined' ) {
                 this.controller.bulk( 'delete' );
             }
             else {

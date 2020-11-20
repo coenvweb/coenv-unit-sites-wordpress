@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, widget, dropdown menu, drag and drop, mobile, responsive, retina, theme editor, widget, shortcode, sidebar, icons, dashicons
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 2.9.0.1
+Stable tag: 2.9.0.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,15 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.9.1 =
+
+* Fix: Error when clearing cache on some installations
+* Fix: Menu item ordering incorrect on some installations
+* Fix: Invalid 'max-width' CSS rule
+* Fix: Conflict with Eduma theme - only load scss class when required
+* New: Add support for 'never-highlight' custom class
+* New: Add new dashicons introduced in WordPress 5.5
 
 = 2.9.0.2 =
 

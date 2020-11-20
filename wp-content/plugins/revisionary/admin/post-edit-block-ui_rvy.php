@@ -10,7 +10,11 @@ add_action( 'enqueue_block_editor_assets', array( 'RVY_PostBlockEditUI', 'act_ob
 
 class RVY_PostBlockEditUI {
 	public static function act_object_guten_scripts() {
-        global $current_user, $revisionary;
+        global $current_user, $revisionary, $pagenow;
+
+        if ('post-new.php' == $pagenow) {
+            return;
+        }
         
         if ( ! $post_id = rvy_detect_post_id() ) {
             return;
@@ -102,7 +106,8 @@ class RVY_PostBlockEditUI {
             }
 
             $published_statuses = array_merge(get_post_stati(['public' => true]), get_post_stati(['private' => true]));
-
+        	$revisable_statuses = rvy_filtered_statuses('names');
+            
             $future_status = 'future-revision';
             $pending_status = 'pending-revision';
             $args = array(
@@ -112,7 +117,8 @@ class RVY_PostBlockEditUI {
                 'ScheduleCaption' => ($do_scheduled_revisions) ? __('Schedule Revision', 'revisionary') : '',
                 'UpdateCaption' => __('Update'),
                 'publishedStatuses' => $published_statuses,
-                'revision' => ($do_pending_revisions) ? __('Pending Revision', 'revisionary') : '',
+                'revisableStatuses' => $revisable_statuses,
+                'revision' => ($do_pending_revisions) ? apply_filters('revisionary_pending_checkbox_caption', __('Pending Revision', 'revisionary'), $post) : '',
                 'revisionTitle' => esc_attr(__('Do not publish current changes yet, but save to Revision Queue', 'revisionary')), 
                 'defaultPending' => apply_filters('revisionary_default_pending_revision', false, $post ),
                 'revisionTitleFuture' => esc_attr(__('Do not schedule current changes yet, but save to Revision Queue', 'revisionary')), 
@@ -120,6 +126,14 @@ class RVY_PostBlockEditUI {
                 'SaveCaption' => ($do_pending_revisions) ? __('Save Revision', 'revisionary') : '',
                 'previewURL' => $preview_url,
             );
+
+            if (defined('REVISIONARY_DISABLE_SUBMISSION_REDIRECT') || !apply_filters('revisionary_do_submission_redirect', true)) {
+                unset($args['redirectURLpending']);
+            }
+
+            if (defined('REVISIONARY_DISABLE_SCHEDULE_REDIRECT') || !apply_filters('revisionary_do_schedule_redirect', true)) {
+                unset($args['redirectURLscheduled']);
+            }
 
             if ($do_pending_revisions && $_revisions = rvy_get_post_revisions($post_id, 'pending-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
                 $status_obj = get_post_status_object('pending-revision');
@@ -157,7 +171,12 @@ class RVY_PostBlockEditUI {
                 'saveAs' =>     __('Submit Revision', 'revisionary'), 
                 'prePublish' => __( 'Workflow&hellip;', 'revisionary' ),
                 'redirectURL' => admin_url("edit.php?post_type={$post_type}&revision_submitted={$status}&post_id={$post_id}"),
-            );  
+                'revisableStatuses' => rvy_filtered_statuses('names'),
+            );
+
+            if (defined('REVISIONARY_DISABLE_SUBMISSION_REDIRECT') || !apply_filters('revisionary_do_submission_redirect', true)) {
+                unset($args['redirectURL']);
+            }
         }
 
         wp_localize_script( 'rvy_object_edit', 'rvyObjEdit', $args );

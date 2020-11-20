@@ -73,10 +73,11 @@ window.eml = window.eml || { l10n: {} };
 
         saveMenuOrder: function() {
 
-            var nonce = wp.media.model.settings.post.nonce || eml.l10n.bulk_edit_nonce;
+            var nonce = wp.media.model.settings.post.nonce || eml.l10n.bulk_edit_nonce,
+                orderby = this.props.get('orderby') || 'menuOrder';
 
 
-            if ( 'menuOrder' !== this.props.get('orderby') ) {
+            if ( 'menuOrder' !== orderby ) {
                 return;
             }
 

@@ -43,6 +43,8 @@ class NS_Cloner_Section_Additional_Settings extends NS_Cloner_Section {
 	public function process_init() {
 	    add_filter( 'ns_cloner_rows_per_query', [ $this, 'filter_rows_per_query' ] );
 	    add_filter( 'ns_cloner_progress_update_interval', [ $this, 'filter_progress_update_interval' ] );
+	    add_filter( 'ns_cloner_skip_views', [ $this, 'filter_skip_views' ] );
+	    add_filter( 'ns_cloner_skip_constraints', [ $this, 'filter_skip_constraints' ] );
 	}
 
 	/**
@@ -79,6 +81,25 @@ class NS_Cloner_Section_Additional_Settings extends NS_Cloner_Section {
 			<?php esc_html_e( 'This is the number of items (rows or files) to clone in between updating the progress values.', 'ns-cloner' ); ?>
             <?php esc_html_e( 'You can make cloning faster by increasing this number, but the higher it is the more jumpy and less smooth/accurate the progress bar will be.', 'ns-cloner' ); ?>
 		</p>
+        <h5><?php esc_html_e( 'Database', 'ns-cloner' ); ?></h5>
+        <label>
+            <input type="checkbox" name="skip_views"/>
+            <?php esc_html_e( 'Skip views?', 'ns-cloner' ); ?>
+        </label>
+        <p class="description">
+            <strong>
+			    <?php esc_html_e( 'This will prevent attempting to clone any SQL views along with tables, which can be required by plugins but can sometimes result in permissions errors.', 'ns-cloner' ); ?>
+            </strong>
+        </p>
+        <label>
+            <input type="checkbox" name="skip_constraints"/>
+            <?php esc_html_e( 'Skip constraints?', 'ns-cloner' ); ?>
+        </label>
+        <p class="description">
+            <strong>
+                <?php esc_html_e( 'This will prevent trying to re-apply any SQL constraints to cloned tables, which help ensure data integrity but can sometimes result in permissions errors.', 'ns-cloner' ); ?>
+            </strong>
+        </p>
 		<?php
 		$this->close_section_box();
 	}
@@ -103,6 +124,26 @@ class NS_Cloner_Section_Additional_Settings extends NS_Cloner_Section {
 	public function filter_progress_update_interval( $default ) {
 	    $custom = (int) ns_cloner_request()->get( 'progress_update_interval' );
 	    return $custom > 0 ? $custom : $default;
+	}
+
+	/**
+     * Apply checkbox value to whether to skip SQL views when cloning tables.
+     *
+	 * @param bool $default Whether to skip
+	 * @return bool
+	 */
+	public function filter_skip_views( $default ) {
+	    return (bool) ns_cloner_request()->get( 'skip_views', false );
+	}
+
+	/**
+     * Apply checkbox value to whether to skip re-applying SQL constraints to cloned tables.
+     *
+	 * @param bool $default
+	 * @return bool
+	 */
+	public function filter_skip_constraints( $default ) {
+	    return (bool) ns_cloner_request()->get( 'skip_constraints', false );
 	}
 
 }

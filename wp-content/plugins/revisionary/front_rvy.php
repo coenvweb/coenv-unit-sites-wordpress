@@ -12,6 +12,24 @@ class RevisionaryFront {
 		if (defined('PUBLISHPRESS_MULTIPLE_AUTHORS_VERSION')) {
 			add_filter('the_author', [$this, 'fltAuthor'], 20);
 		}
+
+		if (!empty($_REQUEST['_ppp'])) {
+			add_action('template_redirect', [$this, 'actRevisionPreviewRedirect'], 1);
+		}
+	}
+
+	public function actRevisionPreviewRedirect() {
+		if (!class_exists('DS_Public_Post_Preview')) {
+			return;
+		}
+
+		if ($_post = get_post(rvy_detect_post_id())) {
+			if (('revision' == $_post->post_type) && ('inherit' == $_post->post_status)) {
+				if ($url = get_permalink(rvy_post_id($_post->ID))) {
+					wp_redirect($url);
+				}
+			}
+		}
 	}
 
 	public function fltAuthor($display_name) {
@@ -150,7 +168,7 @@ class RevisionaryFront {
 			$color = '#ccc';
 			$class = '';
 			$message = '';
-			
+
 			// This topbar is presently only for those with restore / approve / publish rights
 			if ( $type_obj = get_post_type_object( $post->post_type ) ) {
 				$cap_name = $type_obj->cap->edit_post;	
@@ -163,7 +181,7 @@ class RevisionaryFront {
 
 			$redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect=" . esc_url($_REQUEST['rvy_redirect']) : '';
 
-			load_plugin_textdomain('revisionary', false, RVY_FOLDER . '/languages');
+			load_plugin_textdomain('revisionary', false, dirname(plugin_basename(REVISIONARY_FILE)) . '/languages');
 			
 			$published_url = ($published_post_id) ? get_permalink($published_post_id) : '';
 			$diff_url = admin_url("revision.php?revision=$revision_id");
@@ -171,7 +189,11 @@ class RevisionaryFront {
 			if (current_user_can( 'read_post', $revision_id)) { 
 				$view_published = ($published_url) 
 				? sprintf(
-					__("%sCompare%s%sView&nbsp;Published&nbsp;Post%s", 'revisionary'),
+					apply_filters(
+						'revisionary_preview_compare_view_caption', 
+						__("%sCompare%s%sView&nbsp;Published&nbsp;Post%s", 'revisionary'),
+						$post // revision
+					),
 					"<span><a href='$diff_url' class='rvy_preview_linkspan' target='_revision_diff'>",
 					'</a></span>',
 					"<span><a href='$published_url' class='rvy_preview_linkspan'>",
@@ -181,7 +203,11 @@ class RevisionaryFront {
 			} else { // @todo
 				$view_published = ($published_url) 
 				? sprintf(
-					__("%sView&nbsp;Published&nbsp;Post%s", 'revisionary'), 
+					apply_filters(
+						'revisionary_preview_view_caption',
+						__("%sView&nbsp;Published&nbsp;Post%s", 'revisionary'), 
+						$post // revision
+					),
 					"<span><a href='$published_url' class='rvy_preview_linkspan'>",
 					"</a></span>"
 					) 
@@ -224,13 +250,17 @@ class RevisionaryFront {
 			} else {
 				switch ( $post->post_status ) {
 				case 'pending-revision' :
+					$approve_caption = __( 'Approve', 'revisionary' );
+
 					if ( strtotime( $post->post_date_gmt ) > agp_time_gmt() ) {
 						$class = 'pending_future';
-						$publish_button = ($can_publish) ? '<span><a href="' . $publish_url . '" class="rvy_preview_linkspan">' . __( 'Approve', 'revisionary' ) . '</a></span>' : '';
+						$publish_button = ($can_publish) ? '<span><a href="' . $publish_url . '" class="rvy_preview_linkspan">' . $approve_caption . '</a></span>' : '';
 						$message = sprintf( __('This is a Pending Revision (requested publish date: %s). %s %s %s', 'revisionary'), $date, $view_published, $edit_button, $publish_button );
 					} else {
 						$class = 'pending';
-						$publish_button = ($can_publish) ? '<span><a href="' . $publish_url . '" class="rvy_preview_linkspan">' . __( 'Publish now', 'revisionary' ) . '</a></span>' : '';
+						$status_obj = get_post_status_object(get_post_field('post_status', rvy_post_id($revision_id)));
+						$publish_caption = (!empty($status_obj->public) || !empty($status_obj->private)) ? __('Publish now', 'revisionary') : $approve_caption;
+						$publish_button = ($can_publish) ? '<span><a href="' . $publish_url . '" class="rvy_preview_linkspan">' . $publish_caption . '</a></span>' : '';
 						$message = sprintf( __('This is a Pending Revision. %s %s %s', 'revisionary'), $view_published, $edit_button, $publish_button );
 					}
 					break;
@@ -297,10 +327,7 @@ class RevisionaryFront {
 	}
 
 	function rvyFrontCSS() {
-		$wp_content = ( is_ssl() || ( is_admin() && defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN ) ) ? str_replace( 'http:', 'https:', WP_CONTENT_URL ) : WP_CONTENT_URL;
-		$path = $wp_content . '/plugins/' . RVY_FOLDER;
-		
-		echo '<link rel="stylesheet" href="' . $path . '/revisionary-front.css" type="text/css" />'."\n";
+		echo '<link rel="stylesheet" href="' . plugins_url('', REVISIONARY_FILE) . '/revisionary-front.css" type="text/css" />'."\n";
 	}
 	
 	function rvyEnqueuePreviewJS() {

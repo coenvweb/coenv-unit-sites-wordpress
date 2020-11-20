@@ -334,6 +334,14 @@ class NS_Cloner_Process_Manager {
 		$this->doing_cloning();
 		ns_cloner()->log->log( 'ENTERING *exit_processes*' );
 
+		// Process Cloner analytics.
+		ns_cloner_analytics()->process_cloner_result(
+			$this->get_current_processes(),
+			ns_cloner_request()->get( 'clone_mode' ),
+			ns_cloner()->report->get_elapsed_time(),
+			$error
+		);
+
 		// Log and report the error, if present.
 		if ( $error ) {
 			ns_cloner()->log->log( [ 'CALLED exit with error message:', $error ] );
@@ -353,7 +361,7 @@ class NS_Cloner_Process_Manager {
 		}
 
 		// Cancel running background processes, as well as clear data from any completed ones.
-		foreach ( $this->get_current_processes() as $process_id => $progress ) {
+		foreach ( $this->get_current_processes(true) as $process_id => $progress ) {
 			$process = ns_cloner()->get_process( $process_id );
 			$process->cancel();
 		}
@@ -484,6 +492,13 @@ class NS_Cloner_Process_Manager {
 		$files_process = ns_cloner()->get_process( 'files' );
 		$source_dir    = ns_cloner_request()->get( 'source_upload_dir' );
 		$target_dir    = ns_cloner_request()->get( 'target_upload_dir' );
+
+		// Makes sure that the target uploads dir is not somehow the same as the source.
+		// Shouldn't be possible, but is irreversibly destructive if it does, so make sure.
+		if ( $source_dir === $target_dir ) {
+			$this->exit_processes( __( 'Source and target uploads directories are the same. Cannot clone files.', 'ns-cloner' ) );
+			return;
+		}
 
 		// Queue file copy background process.
 		$num_files = ns_recursive_dir_copy_by_process( $source_dir, $target_dir, $files_process );

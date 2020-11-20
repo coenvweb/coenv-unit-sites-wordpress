@@ -7,7 +7,7 @@ Tags: revision, submit changes, workflow, collaboration, permissions, moderate, 
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
 Tested up to: 5.5
-Stable tag: 2.3.12
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,37 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.4.3 - 5 Nov 2020 =
+* Compat : Polylang - language settings were not stored to revision (Fix also applies to other plugins using hidden taxonomies)
+* Compat : Project Nami (Microsoft SQL Server / ODBC) - No confirmation redirect on revision submission
+* Lang : Added .pot file
+
+= 2.4.2 - 26 Oct 2020 =
+* Compat : PublishPress Permissions - Users assigned Revise permissions for specific pages or categories could not compare Pending Revisions
+* Compat : PublishPress Permissions Pro - With Status Control module active, Edit Revision screen had invalid "Workflow" button (also requires Permissions Pro 3.3.8)
+* Compat : Public Post Preview - Author selector was hidden in post editor
+* Compat : Public Post Preview - Make public post previews of published posts redirect to the published post
+* Change : Revision Settings - Revision Queue section, includes "Compatibility Mode" setting to prevent revisions from being hidden from the queue in the case of plugin integration issues
+* Fixed : "Prevent Revisors from editing others' revisions" setting was not applied
+* Fixed : Error when Revision submission includes a template setting
+* Fixed : Custom plugins path caused PHP error
+* Fixed : Revison Queue - PHP Notice "Undefined variable: post_id" when URL includes published_post argument
+* Feature : If Revisors are blocked from editing other users' drafts, those can now be included (unclickable) in Edit Pages if the list_others_pages capability is granted 
+* Feature : Support constant definitions REVISIONARY_DISABLE_SUBMISSION_REDIRECT, REVISIONARY_DISABLE_SCHEDULE_REDIRECT
+* Feature : New filters "revisionary_do_submission_redirect", "revisionary_do_schedule_redirect"
+
+= 2.4.1 - 9 Oct 2020 =
+* Compat : PublishPress Permissions - On new post creation, Revisors get a Publish button instead of a Submit button. Publishing fails; the only way to submit successfully is Save Draft, then Submit for Review.
+* Compat : PublishPress Permissions - Revisions were not listed in Queue under some configurations with PublishPress Permissions active
+* Fixed : With pre-Publish checks enabled in Gutenberg, after first save "Pending Revision" checkbox was moved off of pre-Publish Panel
+
+= 2.4 - 1 Oct 2020 =
+* Fixed : Revisors and other limited editors had editor elements hidden when adding a new post, under some site configurations
+* Fixed : Revision publication always set post publish date to current time. Now does only with enabled setting Revisions > Settings > Pending Revisions > Update Publish Date
+* Fixed : Classic Editor - after Preview Changes is clicked, limited editors see "Submit Revision" button recaptioned to "Update"
+* Compat : PublishPress Authors - Authors could not be changed on Edit Revision screen with Gutenberg editor if PublishPress is also active
+* Compat : Gutenberg Ramp - Revision submission UI did not load for post types that have Gutenberg enabled
 
 = 2.3.12 - 27 Aug 2020 =
 * Fixed : WP 5.5 - Post previews did not display correctly for Revisors

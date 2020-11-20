@@ -371,15 +371,15 @@ if ( ! function_exists( 'wpuxss_eml_restrict_manage_posts' ) ) {
                 if ( ! (bool) $wpuxss_eml_taxonomies[$taxonomy->name]['admin_filter'] )
                     continue;
 
-                echo "<label for='" . esc_attr($taxonomy->name) ."' class='screen-reader-text'>" . __('Filter by','enhanced-media-library') . " " . esc_html($taxonomy->labels->singular_name) . "</label>";
+                echo "<label for='" . esc_attr($taxonomy->name) ."' class='screen-reader-text'>" . __('Filter by','enhanced-media-library') . " " . esc_html($taxonomy->labels->name) . "</label>";
 
                 $selected = ( ! $uncategorized && isset( $wp_query->query[$taxonomy->name] ) ) ? $wp_query->query[$taxonomy->name] : 0;
 
                 wp_dropdown_categories(
                     array(
-                        'show_option_all'    =>  __( 'Filter by', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->singular_name),
+                        'show_option_all'    =>  __( 'Filter by', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name),
                         'show_option_in'     =>  '— ' . __( 'All', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name) . ' —',
-                        'show_option_not_in' =>  '— ' . __( 'Not in a', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->singular_name) . ' —',
+                        'show_option_not_in' =>  '— ' . __( 'Not in', 'enhanced-media-library' ) . ' ' . esc_html($taxonomy->labels->name) . ' —',
                         'taxonomy'           =>  $taxonomy->name,
                         'name'               =>  $taxonomy->name,
                         'orderby'            =>  'name',
@@ -1481,205 +1481,6 @@ if ( ! function_exists('wpuxss_eml_pre_get_posts') ) {
         $query->set('orderby', $orderby );
         $query->set('order', $order );
     }
-}
-
-
-
-/**
- *  wpuxss_eml_print_media_templates
- *
- *  @since    2.4
- *  @created  07/01/17
- */
-
-add_action( 'print_media_templates', 'wpuxss_eml_print_media_templates' );
-
-if ( ! function_exists( 'wpuxss_eml_print_media_templates' ) ) {
-
-    function wpuxss_eml_print_media_templates() {
-
-        $remove_button = '<button type="button" class="button-link attachment-close media-modal-icon"><span class="screen-reader-text">' . __( 'Remove' ) . '</span></button>';
-
-        $deselect_button = '<button type="button" class="button-link check" tabindex="-1"><span class="media-modal-icon"></span><span class="screen-reader-text">' . __( 'Deselect' ) . '</span></button>'; ?>
-
-
-        <script type="text/html" id="tmpl-attachment-grid-view">
-
-            <div class="attachment-preview js--select-attachment type-{{ data.type }} subtype-{{ data.subtype }} {{ data.orientation }}">
-                <div class="eml-attacment-inline-toolbar">
-                    <# if ( data.can.save && data.buttons.edit ) { #>
-                        <i class="eml-icon dashicons dashicons-edit edit" data-name="edit"></i>
-                    <# } #>
-                </div>
-
-                <# show_caption = parseInt(wpuxss_eml_media_grid_l10n.grid_show_caption);
-                caption_type = wpuxss_eml_media_grid_l10n.grid_caption_type;
-                caption = data[caption_type].length <= 15 ? data[caption_type] : data[caption_type].substring(0, 15) + '...';
-                non_image_caption = ( 'image' !== data.type && caption ) ? caption : data.filename;
-                title = show_caption ? data[caption_type] : ''; #>
-                <div class="thumbnail" title="{{ title }}">
-                    <# if ( data.uploading ) { #>
-                        <div class="media-progress-bar"><div style="width: {{ data.percent }}%"></div></div>
-                    <# } else if ( 'image' === data.type && data.sizes ) { #>
-                        <div class="centered">
-                            <img src="{{ data.size.url }}" draggable="false" alt="" />
-                        </div>
-                        <# if ( show_caption && caption ) { #>
-                                <div class="filename">
-                                    <div>{{ caption }}</div>
-                                </div>
-                        <# } #>
-                    <# } else { #>
-                        <div class="centered">
-                            <# if ( data.image && data.image.src && data.image.src !== data.icon ) { #>
-                                <img src="{{ data.image.src }}" class="thumbnail" draggable="false" alt="" />
-                            <# } else if ( data.sizes && data.sizes.medium ) { #>
-                                <img src="{{ data.sizes.medium.url }}" class="thumbnail" draggable="false" alt="" />
-                            <# } else { #>
-                                <img src="{{ data.icon }}" class="icon" draggable="false" alt="" />
-                            <# } #>
-                        </div>
-                        <div class="filename">
-                            <div>{{ non_image_caption }}</div>
-                        </div>
-                    <# } #>
-                </div>
-                <# if ( data.buttons.close ) { #>
-                    <?php echo $remove_button; ?>
-                <# } #>
-            </div>
-            <# if ( data.buttons.check ) { #>
-                <?php echo $deselect_button; ?>
-            <# } #>
-            <#
-            var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly';
-            if ( data.describe ) {
-                if ( 'image' === data.type ) { #>
-                    <input type="text" value="{{ data.caption }}" class="describe" data-setting="caption"
-                        placeholder="<?php esc_attr_e('Caption this image&hellip;'); ?>" {{ maybeReadOnly }} />
-                <# } else { #>
-                    <input type="text" value="{{ data.title }}" class="describe" data-setting="title"
-                        <# if ( 'video' === data.type ) { #>
-                            placeholder="<?php esc_attr_e('Describe this video&hellip;'); ?>"
-                        <# } else if ( 'audio' === data.type ) { #>
-                            placeholder="<?php esc_attr_e('Describe this audio file&hellip;'); ?>"
-                        <# } else { #>
-                            placeholder="<?php esc_attr_e('Describe this media file&hellip;'); ?>"
-                        <# } #> {{ maybeReadOnly }} />
-                <# }
-            } #>
-        </script>
-
-        <script type="text/html" id="tmpl-eml-media-selection">
-
-            <div class="selection-info">
-                <span class="count"></span>
-            </div>
-            <div class="selection-view"></div>
-
-        </script>
-
-        <script type="text/html" id="tmpl-eml-grid-attachment-details">
-
-            <h2>
-                <?php _e( 'Attachment Details' ); ?>
-                <span class="settings-save-status">
-                    <span class="spinner"></span>
-                    <span class="saved"><?php esc_html_e('Saved.'); ?></span>
-                </span>
-            </h2>
-            <div class="attachment-info">
-                <div class="thumbnail thumbnail-{{ data.type }}">
-                    <# if ( data.uploading ) { #>
-                        <div class="media-progress-bar"><div></div></div>
-                    <# } else if ( 'image' === data.type && data.sizes ) { #>
-                        <img src="{{ data.size.url }}" draggable="false" alt="" />
-                    <# } else { #>
-                        <img src="{{ data.icon }}" class="icon" draggable="false" alt="" />
-                    <# } #>
-                </div>
-                <div class="details">
-                    <div class="filename">{{ data.filename }}</div>
-                    <div class="uploaded">{{ data.dateFormatted }}</div>
-
-                    <div class="file-size">{{ data.filesizeHumanReadable }}</div>
-                    <# if ( 'image' === data.type && ! data.uploading ) { #>
-                        <# if ( data.width && data.height ) { #>
-                            <div class="dimensions">{{ data.width }} &times; {{ data.height }}</div>
-                        <# } #>
-
-                        <# if ( data.can.save && data.sizes ) { #>
-                            <a class="edit-attachment" href="{{ data.editLink }}&amp;image-editor" target="_blank"><?php _e( 'Edit Image' ); ?></a>
-                        <# } #>
-                    <# } #>
-
-                    <# if ( data.fileLength ) { #>
-                        <div class="file-length"><?php _e( 'Length:' ); ?> {{ data.fileLength }}</div>
-                    <# } #>
-
-                    <# if ( ! data.uploading && data.can.remove ) { #>
-                        <?php if ( MEDIA_TRASH ): ?>
-                        <# if ( 'trash' === data.status ) { #>
-                            <button type="button" class="button-link untrash-attachment"><?php _e( 'Untrash' ); ?></button>
-                        <# } else { #>
-                            <button type="button" class="button-link trash-attachment"><?php _ex( 'Trash', 'verb' ); ?></button>
-                        <# } #>
-                        <?php else: ?>
-                            <button type="button" class="button-link delete-attachment"><?php _e( 'Delete Permanently' ); ?></button>
-                        <?php endif; ?>
-                    <# } #>
-
-                    <a class="eml-toggle-collapse" href="javascript:;"><?php _e( 'More Details', 'enhanced-media-library' ); ?> &darr;</a>
-
-                    <div class="compat-meta">
-                        <# if ( data.compat && data.compat.meta ) { #>
-                            {{{ data.compat.meta }}}
-                        <# } #>
-                    </div>
-                </div>
-            </div>
-
-            <div class="eml-collapse" style="display:none;">
-                <label class="setting" data-setting="url">
-                    <span class="name"><?php _e('URL'); ?></span>
-                    <input type="text" value="{{ data.url }}" readonly />
-                </label>
-                <# var maybeReadOnly = data.can.save || data.allowLocalEdits ? '' : 'readonly'; #>
-                <?php if ( post_type_supports( 'attachment', 'title' ) ) : ?>
-                <label class="setting" data-setting="title">
-                    <span class="name"><?php _e('Title'); ?></span>
-                    <input type="text" value="{{ data.title }}" {{ maybeReadOnly }} />
-                </label>
-                <?php endif; ?>
-                <# if ( 'audio' === data.type ) { #>
-                <?php foreach ( array(
-                    'artist' => __( 'Artist' ),
-                    'album' => __( 'Album' ),
-                ) as $key => $label ) : ?>
-                <label class="setting" data-setting="<?php echo esc_attr( $key ) ?>">
-                    <span class="name"><?php echo $label ?></span>
-                    <input type="text" value="{{ data.<?php echo $key ?> || data.meta.<?php echo $key ?> || '' }}" />
-                </label>
-                <?php endforeach; ?>
-                <# } #>
-                <label class="setting" data-setting="caption">
-                    <span class="name"><?php _e('Caption'); ?></span>
-                    <textarea {{ maybeReadOnly }}>{{ data.caption }}</textarea>
-                </label>
-                <# if ( 'image' === data.type ) { #>
-                    <label class="setting" data-setting="alt">
-                        <span class="name"><?php _e('Alt Text'); ?></span>
-                        <input type="text" value="{{ data.alt }}" {{ maybeReadOnly }} />
-                    </label>
-                <# } #>
-                <label class="setting" data-setting="description">
-                    <span class="name"><?php _e('Description'); ?></span>
-                    <textarea {{ maybeReadOnly }}>{{ data.description }}</textarea>
-                </label>
-            </div>
-
-        </script>
-    <?php }
 }
 
 ?>

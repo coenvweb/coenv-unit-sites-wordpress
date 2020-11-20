@@ -98,6 +98,7 @@ $this->section_captions = array(
 		'role_definition' 	  	=> __('Role Definition', 'revisionary'),
 		'scheduled_revisions' 	=> __('Scheduled Revisions', 'revisionary'),
 		'pending_revisions'		=> __('Pending Revisions', 'revisionary'),
+		'revision_queue'		=> __('Revision Queue', 'revisionary'),		
 		'preview'				=> __('Preview / Approval', 'revisionary'),
 		'revisions'				=> __('Revision Options', 'revisionary'),
 		'notification'			=> __('Email Notification', 'revisionary')
@@ -105,53 +106,58 @@ $this->section_captions = array(
 );
 
 // TODO: replace individual _e calls with these (and section, tab captions)
-$this->option_captions = array(
-	'pending_revisions' => __('Enable Pending Revisions', 'revisionary'),
-	'scheduled_revisions' => __('Enable Scheduled Revisions', 'revisionary'),
-	'revisor_lock_others_revisions' => __("Prevent Revisors from editing others&apos; revisions", 'revisionary'),
-	'revisor_hide_others_revisions' => __("Prevent Revisors from viewing others&apos; revisions", 'revisionary'),
-	'trigger_post_update_actions' => __('Revision publication triggers API actions to mimic post update', 'revisionary'),
-	'diff_display_strip_tags' => __('Strip html tags out of difference display', 'revisionary'),
-	'async_scheduled_publish' => __('Asynchronous Publishing', 'revisionary'),
-	'scheduled_revision_update_post_date' => __('Update Publish Date', 'revisionary'),
-	'pending_revision_update_post_date' => __('Update Publish Date', 'revisionary'),
-	'pending_rev_notify_author' => __('Email original Author when a Pending Revision is submitted', 'revisionary'),
-	'rev_approval_notify_author' => __('Email the original Author when a Pending Revision is approved', 'revisionary'),
-	'rev_approval_notify_revisor' => __('Email the Revisor when a Pending Revision is approved', 'revisionary'),
-	'publish_scheduled_notify_author' => __('Email the original Author when a Scheduled Revision is published', 'revisionary'),
-	'publish_scheduled_notify_revisor' => __('Email the Revisor when a Scheduled Revision is published', 'revisionary'),
-	'use_notification_buffer' => __('Enable notification buffer', 'revisionary'),
-	'revisor_role_add_custom_rolecaps' => __('All custom post types available to Revisors', 'revisionary' ),
-	'require_edit_others_drafts' => __('Prevent Revisors from editing other user&apos;s drafts', 'revisionary' ),
-	'display_hints' => __('Display Hints'),
-	'revision_preview_links' => __('Show Preview Links', 'revisionary'),
-	'preview_link_type' => __('Preview Link Type', 'revisionary'),
-	'compare_revisions_direct_approval' => __('Approve Button on Compare Revisions screen', 'revisionary'),
-	'copy_revision_comments_to_post' => __('Copy revision comments to published post', 'revisionary'),
+$this->option_captions = apply_filters('revisionary_option_captions', 
+	[
+	'pending_revisions' => 						__('Enable Pending Revisions', 'revisionary'),
+	'scheduled_revisions' => 					__('Enable Scheduled Revisions', 'revisionary'),
+	'revisor_lock_others_revisions' =>			__("Prevent Revisors from editing others&apos; revisions", 'revisionary'),
+	'revisor_hide_others_revisions' => 			__("Prevent Revisors from viewing others&apos; revisions", 'revisionary'),
+	'queue_query_all_posts' => 					__('Compatibility Mode', 'revisionary'),
+	'trigger_post_update_actions' => 			__('Revision publication triggers API actions to mimic post update', 'revisionary'),
+	'diff_display_strip_tags' => 				__('Strip html tags out of difference display', 'revisionary'),
+	'async_scheduled_publish' => 				__('Asynchronous Publishing', 'revisionary'),
+	'scheduled_revision_update_post_date' => 	__('Update Publish Date', 'revisionary'),
+	'pending_revision_update_post_date' => 		__('Update Publish Date', 'revisionary'),
+	'pending_rev_notify_author' => 				__('Email original Author when a Pending Revision is submitted', 'revisionary'),
+	'rev_approval_notify_author' => 			__('Email the original Author when a Pending Revision is approved', 'revisionary'),
+	'rev_approval_notify_revisor' => 			__('Email the Revisor when a Pending Revision is approved', 'revisionary'),
+	'publish_scheduled_notify_author' => 		__('Email the original Author when a Scheduled Revision is published', 'revisionary'),
+	'publish_scheduled_notify_revisor' => 		__('Email the Revisor when a Scheduled Revision is published', 'revisionary'),
+	'use_notification_buffer' => 				__('Enable notification buffer', 'revisionary'),
+	'revisor_role_add_custom_rolecaps' => 		__('All custom post types available to Revisors', 'revisionary' ),
+	'require_edit_others_drafts' => 			__('Prevent Revisors from editing other user&apos;s drafts', 'revisionary' ),
+	'display_hints' => 							__('Display Hints'),
+	'revision_preview_links' => 				__('Show Preview Links', 'revisionary'),
+	'preview_link_type' => 						__('Preview Link Type', 'revisionary'),
+	'compare_revisions_direct_approval' => 		__('Approve Button on Compare Revisions screen', 'revisionary'),
+	'copy_revision_comments_to_post' => 		__('Copy revision comments to published post', 'revisionary'),
+	]
 );
 
+
 if ( defined('RVY_CONTENT_ROLES') ) {
-	$this->option_captions['pending_rev_notify_admin'] = __('Email designated Publishers when a Pending Revision is submitted', 'revisionary');
-	$this->option_captions['publish_scheduled_notify_admin'] = __('Email designated Publishers when a Scheduled Revision is published', 'revisionary');
-	$this->option_captions['rev_approval_notify_admin'] = __('Email designated Publishers when a Pending Revision is approved', 'revisionary');
+	$this->option_captions['pending_rev_notify_admin'] = 		__('Email designated Publishers when a Pending Revision is submitted', 'revisionary');
+	$this->option_captions['publish_scheduled_notify_admin'] = 	__('Email designated Publishers when a Scheduled Revision is published', 'revisionary');
+	$this->option_captions['rev_approval_notify_admin'] = 		__('Email designated Publishers when a Pending Revision is approved', 'revisionary');
 } else {
-	$this->option_captions['pending_rev_notify_admin'] = __('Email Editors and Administrators when a Pending Revision is submitted', 'revisionary');
-	$this->option_captions['publish_scheduled_notify_admin'] = __('Email Editors and Administrators when a Scheduled Revision is published', 'revisionary');
-	$this->option_captions['rev_approval_notify_admin'] = __('Email Editors and Administrators when a Pending Revision is approved', 'revisionary');
+	$this->option_captions['pending_rev_notify_admin'] = 		__('Email Editors and Administrators when a Pending Revision is submitted', 'revisionary');
+	$this->option_captions['publish_scheduled_notify_admin'] = 	__('Email Editors and Administrators when a Scheduled Revision is published', 'revisionary');
+	$this->option_captions['rev_approval_notify_admin'] = 		__('Email Editors and Administrators when a Pending Revision is approved', 'revisionary');
 }
 	
 
-$this->form_options = array( 
-'features' => array(
-	'license' =>			 array( 'edd_key' ),
-	'role_definition' => 	 array( 'revisor_role_add_custom_rolecaps', 'require_edit_others_drafts' ),
-	'scheduled_revisions' => array( 'scheduled_revisions', 'async_scheduled_publish', 'scheduled_revision_update_post_date', ),
-	'pending_revisions'	=> 	 array( 'pending_revisions', 'pending_revision_update_post_date', ),
-	'preview' =>			 array( 'revision_preview_links', 'preview_link_type', 'compare_revisions_direct_approval'),
-	'revisions'		=>		 array( 'revisor_lock_others_revisions', 'revisor_hide_others_revisions', 'trigger_post_update_actions', 'copy_revision_comments_to_post', 'diff_display_strip_tags', 'display_hints' ),
-	'notification'	=>		 array( 'pending_rev_notify_admin', 'pending_rev_notify_author', 'rev_approval_notify_admin', 'rev_approval_notify_author', 'rev_approval_notify_revisor', 'publish_scheduled_notify_admin', 'publish_scheduled_notify_author', 'publish_scheduled_notify_revisor', 'use_notification_buffer' )
-)
-);
+$this->form_options = apply_filters('revisionary_option_sections', [ 
+'features' => [
+	'license' =>			 ['edd_key'],
+	'role_definition' => 	 ['revisor_role_add_custom_rolecaps', 'require_edit_others_drafts'],
+	'scheduled_revisions' => ['scheduled_revisions', 'async_scheduled_publish', 'scheduled_revision_update_post_date'],
+	'pending_revisions'	=> 	 ['pending_revisions', 'pending_revision_update_post_date'],
+	'revision_queue' =>		 ['revisor_lock_others_revisions', 'revisor_hide_others_revisions', 'queue_query_all_posts'],
+	'preview' =>			 ['revision_preview_links', 'preview_link_type', 'compare_revisions_direct_approval'],
+	'revisions'		=>		 ['trigger_post_update_actions', 'copy_revision_comments_to_post', 'diff_display_strip_tags', 'display_hints'],
+	'notification'	=>		 ['pending_rev_notify_admin', 'pending_rev_notify_author', 'rev_approval_notify_admin', 'rev_approval_notify_author', 'rev_approval_notify_revisor', 'publish_scheduled_notify_admin', 'publish_scheduled_notify_author', 'publish_scheduled_notify_revisor', 'use_notification_buffer'],
+]
+]);
 
 if ( RVY_NETWORK ) {
 	if ( $sitewide )
@@ -336,7 +342,7 @@ $scheduled_revisions_available ) :
 		$hint = __( 'If a currently published post or page is edited and a future date set, the change will not be applied until the selected date.', 'revisionary' );
 		$this->option_checkbox( 'scheduled_revisions', $tab, $section, $hint, '' );
 		
-		$hint = __( 'When a scheduled revision is published, also update the publish date.', 'revisionary' );
+		$hint = __( 'When a scheduled revision is published, update post publish date to current time.', 'revisionary' );
 		$this->option_checkbox( 'scheduled_revision_update_post_date', $tab, $section, $hint, '' );
 
 		$hint = __( 'Publish scheduled revisions asynchronously, via a secondary http request from the server.  This is usually best since it eliminates delay, but some servers may not support it.', 'revisionary' );
@@ -363,9 +369,41 @@ $pending_revisions_available ) :
 		);
 		$this->option_checkbox( 'pending_revisions', $tab, $section, $hint, '' );
 		
-		$hint = __( 'When a pending revision is published, also update the publish date.', 'revisionary' );
+		$hint = __( 'When a pending revision is published, update post publish date to current time.', 'revisionary' );
 		$this->option_checkbox( 'pending_revision_update_post_date', $tab, $section, $hint, '' );
+
+		do_action('revisionary_option_ui_pending_revisions', $this);
 		?>
+		</td></tr>
+	<?php endif; // any options accessable in this section
+endif;
+
+
+if ( 	// To avoid confusion, don't display any revision settings if pending revisions / scheduled revisions are unavailable
+	$pending_revisions_available || $scheduled_revisions_available ) :
+	
+		$section = 'revision_queue';			// --- REVISION QUEUE SECTION ---
+	
+		if ( ! empty( $this->form_options[$tab][$section] ) ) :?>
+			<tr valign="top"><th scope="row">
+			<?php echo $this->section_captions[$tab][$section]; ?>
+			</th><td>
+
+			<?php 
+			$hint = __('This restriction applies to users who are not full editors for the post type. To enable a role, give it the edit_others_revisions capability.', 'revisionary');
+			$this->option_checkbox( 'revisor_lock_others_revisions', $tab, $section, $hint, '' );
+			
+			$hint = __('This restriction applies to users who are not full editors for the post type. To enable a role, give it the list_others_revisions capability.', 'revisionary');
+			$this->option_checkbox( 'revisor_hide_others_revisions', $tab, $section, $hint, '' );
+
+			$hint = __('If some revisions are missing from the queue, disable a performance enhancement for better compatibility with themes and plugins.', 'revisionary');
+			$this->option_checkbox( 'queue_query_all_posts', $tab, $section, $hint, '' );
+		?>
+
+		<p style="padding-left:22px">
+		<a href="<?php echo add_query_arg('rvy_flush_flags', 1, esc_url($_SERVER['REQUEST_URI']))?>"><?php _e('Regenerate "post has revision" flags', 'revisionary');?></a>
+		</p>
+
 		</td></tr>
 	<?php endif; // any options accessable in this section
 endif;
@@ -441,12 +479,6 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 		<?php endif;?>
 
 		<?php 
-		$hint = __('This restriction applies to users who are not full editors for the post type. To enable a role, give it the edit_others_revisions capability.', 'revisionary');
-		$this->option_checkbox( 'revisor_lock_others_revisions', $tab, $section, $hint, '' );
-		
-		$hint = __('This restriction applies to users who are not full editors for the post type. To enable a role, give it the list_others_revisions capability.', 'revisionary');
-		$this->option_checkbox( 'revisor_hide_others_revisions', $tab, $section, $hint, '' );
-		
 		$hint = __('This may improve compatibility with some plugins.', 'revisionary');
 		$this->option_checkbox( 'trigger_post_update_actions', $tab, $section, $hint, '' );
 
@@ -458,11 +490,10 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 
 		$hint = __( 'Show descriptive captions for PublishPress Revisions settings', 'revisionary' );
 		$this->option_checkbox( 'display_hints', $tab, $section, $hint, '' );
+
+		do_action('revisionary_option_ui_revision_options', $this);
 		?>
 
-		<p style="padding-left:22px">
-		<a href="<?php echo add_query_arg('rvy_flush_flags', 1, esc_url($_SERVER['REQUEST_URI']))?>"><?php _e('Regenerate revision storage flags (for Revision Queue listing)', 'revisionary');?></a>
-		</p>
 		</td></tr>
 	<?php endif; // any options accessable in this section
 		
@@ -553,7 +584,7 @@ $pending_revisions_available || $scheduled_revisions_available ) :
 					if ( defined('RVY_CONTENT_ROLES') )
 						_e('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  Eligibile "Publisher" email recipients are members of the Pending Revision Monitors group who <strong>also</strong> have the ability to publish the revision.  If not explicitly defined, the Monitors group is all users with a primary WP role of Administrator or Editor.', 'revisionary');
 					else
-						printf( __('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  For more flexibility in moderation and notification, install the %1$s PressPermit Pro%2$s plugin.', 'revisionary'), "<a href='https://publishpress.com/presspermit/'>", '</a>' );
+						printf( __('Note: "by default" means Pending Revision creators can customize email notification recipients before submitting.  For more flexibility in moderation and notification, install the %1$s PublishPress Permissions Pro%2$s plugin.', 'revisionary'), "<a href='https://publishpress.com/presspermit/'>", '</a>' );
 					echo '</div>';
 				}
 			}

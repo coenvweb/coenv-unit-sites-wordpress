@@ -12,8 +12,7 @@
 if( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) )
 	die();
 
-$wp_content = ( is_ssl() || ( is_admin() && defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN ) ) ? str_replace( 'http:', 'https:', WP_CONTENT_URL ) : WP_CONTENT_URL;
-define ('RVY_URLPATH', $wp_content . '/plugins/' . RVY_FOLDER);
+define ('RVY_URLPATH', plugins_url('', REVISIONARY_FILE));
 
 class RevisionaryAdmin
 {
@@ -155,7 +154,21 @@ class RevisionaryAdmin
 
 		add_filter('presspermit_disable_exception_ui', [$this, 'fltDisableExceptionUI'], 10, 4);
 
+		add_filter('presspermit_status_control_scripts', [$this, 'fltDisableStatusControlScripts']);
+
 		add_action('admin_menu', [$this, 'actSettingsPageMaybeRedirect'], 999);
+	}
+
+	public function fltDisableStatusControlScripts($enable_scripts) {
+		if ($post_id = rvy_detect_post_id()) {
+			if ($post = get_post($post_id)) {
+				if (!empty($post) && rvy_is_revision_status($post->post_status)) {
+					$enable_scripts = false;
+				}
+			}
+		}
+		
+		return $enable_scripts;
 	}
 
 	public function fltDisableExceptionUI($disable, $src_name, $post_id, $post_type = '') {
@@ -170,7 +183,7 @@ class RevisionaryAdmin
 			if (in_array($post_status, ['pending-revision', 'future-revision'])) {
 				return true;
 			}
-		
+			
 			if (!agp_user_can('edit_post', $post_id, '', ['skip_revision_allowance' => true])) {
 				return true;
 			}
@@ -241,11 +254,10 @@ class RevisionaryAdmin
 			return;
 		}
 
-		$published_stati = get_post_stati(array('public' => true, 'private' => true), 'names', 'OR');
-
 		if (!empty($wp_query->posts)) {
 			foreach ($wp_query->posts as $row) {
-				if (in_array($listed_post_statuses[$row->ID], $published_stati)) {
+				if (in_array($listed_post_statuses[$row->ID], rvy_filtered_statuses())) {
+					// @todo: better cap check precision for filter-applied statuses
 					if (!$can_edit_published || (!$can_edit_others && !rvy_is_post_author($row))) {
 						$this->hide_quickedit []= $row->ID;
 					}
@@ -398,7 +410,9 @@ class RevisionaryAdmin
 							$revisionary->do_notifications( $status, $status, (array) $revised_post, $args );
 						}
 						
-						rvy_halt( $revisionary->get_revision_msg( $revision, array( 'post_arr' => (array) $revision, 'post_id' => $revised_post->ID ) ) );
+						if (apply_filters('revisionary_do_submission_redirect', true)) {
+							rvy_halt( $revisionary->get_revision_msg( $revision, array( 'post_arr' => (array) $revision, 'post_id' => $revised_post->ID ) ) );
+						}
 					}
 				}
 			}
@@ -424,7 +438,7 @@ class RevisionaryAdmin
 
 				if ( $status_obj = get_post_status_object( $post->post_status ) ) {
 					// only apply revisionary UI for currently published or scheduled posts
-					if ( $status_obj->public || $status_obj->private || ( 'future' == $post->post_status ) ) {
+					if (in_array($post->post_status, rvy_filtered_statuses()) || ('future' == $post->post_status)) {
 						require_once( dirname(__FILE__).'/filters-admin-ui-item_rvy.php' );
 						$revisionary->filters_admin_item_ui = new RevisionaryAdminFiltersItemUI();
 					} elseif (rvy_is_revision_status($post->post_status) && !$revisionary->isBlockEditorActive()) {
@@ -485,9 +499,7 @@ class RevisionaryAdmin
 			return;
 		}
 
-		$status_obj = get_post_status_object( $post->post_status );
-		
-		if ( ! $status_obj || ( ! $status_obj->public && ! $status_obj->private && ( 'future' != $post->post_status ) ) || !rvy_is_supported_post_type($post->post_type) ) {
+		if (empty($post) || (!in_array($post->post_status, rvy_filtered_statuses()) && ('future' != $post->post_status)) || !rvy_is_supported_post_type($post->post_type)) {
 			return;
 		}
 
@@ -497,7 +509,7 @@ class RevisionaryAdmin
 			}
 		}
 
-		$caption = __( 'Save as Pending Revision', 'revisionary' );
+		$caption = apply_filters('revisionary_pending_checkbox_caption_classic', __( 'Save as Pending Revision', 'revisionary' ), $post);
 		$checked = (apply_filters('revisionary_default_pending_revision', false, $post )) ? "checked='checked'" : '';
 		
 		$title = esc_attr(__('Do not publish current changes yet, but save to Revision Queue', 'revisionary'));
@@ -518,7 +530,7 @@ class RevisionaryAdmin
 	
 	// adds an Options link next to Deactivate, Edit in Plugins listing
 	function flt_plugin_action_links($links, $file) {
-		if ( $file == RVY_BASENAME ) {
+		if ($file == plugin_basename(REVISIONARY_FILE)) {
 			$page = ( RVY_NETWORK ) ? 'rvy-net_options' : 'revisionary-settings';
 			$links[] = "<a href='admin.php?page=$page'>" . __awp('Settings') . "</a>";
 		}
@@ -571,17 +583,19 @@ class RevisionaryAdmin
 
 	function admin_print_scripts() {
 		if (class_exists('DS_Public_Post_Preview')) {
-			?>
-			<script type="text/javascript">
-			/* <![CDATA[ */
-			jQuery(document).ready( function($) {
-				setInterval(function() {
-					$("div.edit-post-post-status label:not(:contains('<?php _e('Enable public preview');?>')):not('[for=public-post-preview-url]')"). closest('div').hide();
-				}, 100);
-			});
-			/* ]]> */
-			</script>
-			<?php
+			$post_id = rvy_detect_post_id();
+			
+			if ($post_id && rvy_is_revision_status(get_post_field('post_status', $post_id))):?>
+				<script type="text/javascript">
+				/* <![CDATA[ */
+				jQuery(document).ready( function($) {
+					setInterval(function() {
+						$("div.edit-post-post-status label:not(:contains('<?php _e('Enable public preview');?>')):not('[for=public-post-preview-url]')").closest('div').closest('div.components-panel__row').hide();
+					}, 100);
+				});
+				/* ]]> */
+				</script>
+			<?php endif;
 		}
 	}
 

@@ -84,6 +84,30 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 			</div>
 		</div>
 
+        <div class="ns-cloner-section">
+            <div class="ns-cloner-section-header">
+                <h4><?php esc_html_e( 'NS Cloner Statistics', 'ns-cloner' ); ?></h4>
+            </div>
+            <div class="ns-cloner-section-content" id="analytics-settings">
+                <?php
+                $analytics_modes      = ns_cloner_analytics()->get_user_modes();
+                $analytics_saved_mode = ns_cloner_analytics()->get_user_saved_mode();
+                ?>
+                <?php foreach ( $analytics_modes as $mode_value => $mode_data ) : ?>
+                    <label class="analytics-settings-label">
+                        <input type="radio" name="cloner_analytics_mode" value="<?php echo esc_attr( $mode_value ); ?>" <?php checked( $mode_value, $analytics_saved_mode ); ?>>
+                        <span class="<?php echo !empty( $mode_data['tooltip'] ) ? 'tooltip' : ''; ?>">
+                            <?php echo esc_html( $mode_data['text'] ); ?>
+                            <?php if ( !empty( $mode_data['tooltip'] ) ) : ?>
+                                <span class="tooltip-text"><?php echo esc_html( $mode_data['tooltip'] ); ?></span>
+                            <?php endif; ?>
+                        </span>
+                    </label>
+
+                <?php endforeach; ?>
+            </div>
+        </div>
+
 		<div class="ns-cloner-section">
 			<div class="ns-cloner-section-header">
 				<h4><?php esc_html_e( 'Manage Logs', 'ns-cloner' ); ?></h4>

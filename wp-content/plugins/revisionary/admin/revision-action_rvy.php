@@ -621,7 +621,27 @@ function rvy_apply_revision( $revision_id, $actual_revision_status = '' ) {
 		}
 	}
 
+	// Prevent post date from being set to current time unless Revisionary settings call for that
+	if (
+		(('pending-revision' == $revision->post_status) && !rvy_get_option('pending_revision_update_post_date'))
+		|| (('future-revision' == $revision->post_status) && !rvy_get_option('scheduled_revision_update_post_date'))
+	) {
+		if ($_post) {
+			$set_dates = (('pending-revision' == $revision->post_status) && ($_post->post_date_gmt != $_post->post_modified_gmt))
+			? ['post_date' => $revision->post_date, 'post_date_gmt' => $revision->post_date_gmt]
+			: ['post_date' => $published->post_date, 'post_date_gmt' => $published->post_date_gmt];
+
+			$wpdb->update(
+				$wpdb->posts, 
+				$set_dates, 
+				['ID' => $published->ID]
+			);
+		}
+	}
+
 	rvy_delete_past_revisions($revision_id);
+
+	rvy_delete_redundant_revisions($revision);
 
 	/**
 	 * Trigger after a revision has been applied.
@@ -632,6 +652,21 @@ function rvy_apply_revision( $revision_id, $actual_revision_status = '' ) {
 	do_action( 'revision_applied', $published->ID, $revision );
 
 	return $revision;
+}
+
+function rvy_delete_redundant_revisions($revision) {
+	global $wpdb, $current_user;
+
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM $wpdb->posts WHERE post_type = %s AND post_status = %s AND post_author = %d AND post_parent = %d AND ID > %d",
+			'revision',
+			'inherit',
+			$current_user->ID,
+			rvy_post_id($revision->ID),
+			$revision->ID
+		)
+	);
 }
 
 // Restore a past revision (post_status = inherit)

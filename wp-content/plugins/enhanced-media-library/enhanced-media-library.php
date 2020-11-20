@@ -3,14 +3,14 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: http://wpUXsolutions.com
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.7.2
+Version: 2.8.1
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
 Domain Path: /languages
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-Copyright 2013-2018  wpUXsolutions  (email : wpUXsolutions@gmail.com)
+Copyright 2013-2020  wpUXsolutions  (email : wpUXsolutions@gmail.com)
 */
 
 
@@ -26,7 +26,8 @@ global $wp_version,
 
 
 
-if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.7.2' );
+if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.8.1' );
+if ( ! defined('EML_PRO') ) define( 'EML_PRO', false );
 
 
 
@@ -96,6 +97,7 @@ if ( ! function_exists( 'wpuxss_eml_enhance_media_shortcodes' ) ) {
 
 include_once( 'core/mime-types.php' );
 include_once( 'core/taxonomies.php' );
+include_once( 'core/media-templates.php' );
 include_once( 'core/compatibility.php' );
 
 if ( wpuxss_eml_enhance_media_shortcodes() ) {
@@ -138,7 +140,7 @@ if ( ! function_exists( 'wpuxss_eml_on_plugins_loaded' ) ) {
 
 
         // textdomain
-        load_plugin_textdomain( 'enhanced-media-library', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+        load_plugin_textdomain( 'enhanced-media-library' );
 
 
         // on update
@@ -559,7 +561,7 @@ if ( ! function_exists( 'wpuxss_eml_enqueue_media' ) ) {
             'uncategorized'             => __( 'All Uncategorized', 'enhanced-media-library' ),
             'filter_by'                 => __( 'Filter by', 'enhanced-media-library' ),
             'in'                        => __( 'All', 'enhanced-media-library' ),
-            'not_in'                    => __( 'Not in a', 'enhanced-media-library' ),
+            'not_in'                    => __( 'Not in', 'enhanced-media-library' ),
             'reset_filters'             => __( 'Reset All Filters', 'enhanced-media-library' ),
             'author'                    => __( 'author', 'enhanced-media-library' ),
             'authors'                   => __( 'authors', 'enhanced-media-library' ),
@@ -569,7 +571,8 @@ if ( ! function_exists( 'wpuxss_eml_enqueue_media' ) ) {
             'saveButton_failure'        => __( 'Something went wrong.', 'enhanced-media-library' ),
             'saveButton_text'           => __( 'Save Changes', 'enhanced-media-library' ),
 
-            'select_all'                => __( 'Select All', 'enhanced-media-library' )
+            'select_all'                => __( 'Select All', 'enhanced-media-library' ),
+            'deselect'                  => __( 'Deselect ', 'enhanced-media-library')
         );
 
         wp_localize_script(

@@ -174,7 +174,7 @@ jQuery(
 		// if an operation is already in progress when page is loaded.
 		if ( ns_cloner.in_progress ) {
 			$( '.ns-cloner-processes-modal' ).show( 500 );
-			$( window ).load(
+			$( window ).on('load',
 				function () {
 					ns_cloner_form.get_progress();
 				}
@@ -206,7 +206,7 @@ jQuery(
 						var bottom_of_element  = $( this ).offset().top + $( this ).height();
 						if ( bottom_of_element < bottom_of_viewport ) {
 							// Highlight the current step in the bottom bar.
-							var step_label = $( '[data-section=' + $( this ).attr( 'id' ) + ']' );
+							var step_label = $( '[data-section="' + $( this ).attr( 'id' ) + '"]' );
 							step_label.addClass( 'seen' ).prevAll().addClass( 'seen' );
 							return false;
 						}
@@ -300,7 +300,7 @@ jQuery(
 		);
 
 		// Trigger initial setup when page loads.
-		$( window ).load(
+		$( window ).on('load',
 			function () {
 				$( '.ns-cloner-main-form' )
 					.trigger( 'ns_cloner_form_refresh' )
@@ -401,7 +401,7 @@ jQuery(
 
 			'validate_section': function ( section_id ) {
 				var section    = $( '#' + section_id );
-				var step_label = $( '[data-section=' + section_id + ']' );
+				var step_label = $( '[data-section="' + section_id + '"]' );
 				// Make sure there's no pending validation request.
 				if ( ! section.length || section.is( '.validating' ) ) {
 					return;
@@ -498,12 +498,12 @@ jQuery(
 									var error_message = $( '<span class="ns-cloner-error-message">' + item.message + '</span>' );
 									// Add the error message to the appropriate section if associated with one, otherwise to the top of the form.
 									if ( item.section ) {
-										var section_id = '#ns-cloner-section-' + item.section;
-										$( section_id )
+										var section_id = 'ns-cloner-section-' + item.section;
+										$( '#' + section_id )
 										.removeClass( 'closed' )
 										.find( '.ns-cloner-section-content' )
 										.prepend( error_message );
-										$( '[data-section=' + section_id + ']' ).addClass( 'invalid' );
+										$( '[data-section="' + section_id + '"]' ).addClass( 'invalid' );
 									} else {
 										$( '.ns-cloner-main-form' ).prepend( error_message );
 									}
@@ -690,8 +690,36 @@ jQuery(
 
 			'ajax_force': false,
 
-		}
+		};
 
+		$(document).ready(function () {
+			$('.ns-cloner-extra-modal.load').fadeIn();
+        });
+
+		$(document).on('click', '#analytics-settings .save-analytics-mode', function () {
+			var button = $(this).css({ opacity: 0.75 });
+			button.find('span').text('Saving...');
+			save_analytics_mode(button.attr('data-mode'), button.closest('.ns-cloner-extra-modal'));
+        });
+
+		$(document).on('change', '#analytics-settings [name=cloner_analytics_mode]', function () {
+            save_analytics_mode($(this).val());
+        });
+
+		function save_analytics_mode(mode, modal) {
+            $.post(
+                ns_cloner.ajaxurl,
+                {
+                    action: 'ns_cloner_save_analytics_mode',
+                    mode: mode
+                },
+                function (response) {
+                    if (typeof response.success !== 'undefined' && response.success === true && modal) {
+                        modal.fadeOut();
+                    }
+                }
+            );
+        }
 	}
 );
 

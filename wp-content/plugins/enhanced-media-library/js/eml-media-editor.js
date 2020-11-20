@@ -2,7 +2,6 @@ window.wp = window.wp || {};
 window.eml = window.eml || { l10n: {} };
 
 
-
 ( function( $, _ ) {
 
     var media = wp.media,
@@ -28,7 +27,6 @@ window.eml = window.eml || { l10n: {} };
 
 
             delete collections[ shortcodeString ];
-
 
             if ( result && ! isFilterBased && _.isUndefined( shortcode.attrs.named.limit ) ) {
                 return result;
@@ -215,69 +213,8 @@ window.eml = window.eml || { l10n: {} };
             collections[ shortcode.string() ] = clone;
 
             return shortcode;
-        },
-
-        edit: function( content ) {
-            var shortcode = wp.shortcode.next( this.tag, content ),
-                defaultPostId = this.defaults.id,
-                attachments, selection, state;
-
-            // Bail if we didn't match the shortcode or all of the content.
-            if ( ! shortcode || shortcode.content !== content ) {
-                return;
-            }
-
-            // Ignore the rest of the match object.
-            shortcode = shortcode.shortcode;
-
-            if ( _.isUndefined( shortcode.get('id') ) && ! _.isUndefined( defaultPostId ) ) {
-                shortcode.set( 'id', defaultPostId );
-            }
-
-            attachments = this.attachments( shortcode );
-            // @todo
-            // attachments.props.set( 'perPage', -1 );
-
-            selection = new wp.media.model.Selection( attachments.models, {
-                props:    attachments.props.toJSON(),
-                multiple: true
-            });
-
-            selection[ this.tag ] = attachments[ this.tag ];
-
-            // Fetch the query's attachments, and then break ties from the
-            // query to allow for sorting.
-            selection.more().done( function() {
-                // Break ties with the query.
-                selection.props.set({ query: false });
-                selection.unmirror();
-                selection.props.unset('orderby'); // @todo: test more carefully
-            });
-
-            // Destroy the previous gallery frame.
-            if ( this.frame ) {
-                this.frame.dispose();
-            }
-
-            if ( shortcode.attrs.named.type ) {
-                if ( 'video' === shortcode.attrs.named.type )
-                    state = 'video-' + this.tag + '-edit';
-            } else {
-                state = this.tag + '-edit';
-            }
-
-            // Store the current frame.
-            this.frame = wp.media({
-                frame:     'post',
-                state:     state,
-                title:     this.editTitle,
-                editing:   true,
-                multiple:  true,
-                selection: selection
-            }).open();
-
-            return this.frame;
         }
+
     };
 
 

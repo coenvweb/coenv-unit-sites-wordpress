@@ -3,7 +3,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: An easy to use mega menu plugin. Written the WordPress way.
- * Version:     2.9.0.2
+ * Version:     2.9.1
  * Author:      megamenu.com
  * Author URI:  https://www.megamenu.com
  * License:     GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 		 *
 		 * @var string
 		 */
-		public $version = '2.9.0.2';
+		public $version = '2.9.1';
 
 
 		/**
@@ -86,6 +86,7 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 			add_filter( 'body_class', array( $this, 'add_megamenu_body_classes' ), 10, 1 );
 
 			add_filter( 'megamenu_nav_menu_css_class', array( $this, 'prefix_menu_classes' ), 10, 3 );
+			add_filter( 'megamenu_nav_menu_css_class', array( $this, 'css_classes_never_highlight' ), 10, 3 );
 
 			// plugin compatibility.
 			add_filter( 'conditional_menus_theme_location', array( $this, 'conditional_menus_restore_theme_location' ), 10, 3 );
@@ -385,7 +386,6 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 				'Mega_Menu_Widget_Reusable_Block'     => MEGAMENU_PATH . 'classes/widgets/widget-reusable-block.class.php',
 				'Mega_Menu_Widget_Elementor_Template' => MEGAMENU_PATH . 'classes/widgets/widget-elementor-template.class.php',
 				'Mega_Menu_toggle_Blocks'             => MEGAMENU_PATH . 'classes/toggle-blocks.class.php',
-				'scssc'                               => MEGAMENU_PATH . 'classes/scssc.inc.php',
 			);
 
 			return $classes;
@@ -472,6 +472,28 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 			return $return;
 		}
 
+		/**
+		 * Remove the current menu item classes when a custom class of 'never-highlight' has been added to the menu item
+		 *
+		 * @param array $classes
+		 * @param ovject $item
+		 * @param array $args
+		 * @return array
+		 */
+		public function css_classes_never_highlight( $classes, $item, $args ) {
+			if ( in_array( 'mega-never-highlight', $classes ) ) {
+				if ( in_array( 'mega-current-menu-ancestor', $classes ) ) {
+					$classes = array_diff( $classes, array( 'mega-current-menu-ancestor' ) );
+				}
+
+				if ( in_array( 'mega-current-menu-item', $classes ) ) {
+					$classes = array_diff( $classes, array( 'mega-current-menu-item' ) );
+				}
+			}
+
+			return $classes;
+		}
+
 
 		/**
 		 * Add the html for the responsive toggle box to the menu
@@ -532,7 +554,7 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 			foreach ( $items as $item ) {
 
 				// populate standard (non-grid) sub menus.
-				if ( 0 === $item->depth && 'megamenu' === $item->megamenu_settings['type'] || ( absint( $item->depth ) === 1 && 'tabbed' === $item->parent_submenu_type && 'grid' !== $item->megamenu_settings['type'] ) ) {
+				if ( 0 === $item->depth && 'megamenu' === $item->megamenu_settings['type'] || ( 1 === $item->depth && 'tabbed' === $item->parent_submenu_type && 'grid' !== $item->megamenu_settings['type'] ) ) {
 
 					$panel_widgets = $widget_manager->get_widgets_for_menu_id( $item->ID, $args->menu );
 
@@ -585,7 +607,7 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 				}
 
 				// populate grid sub menus.
-				if ( absint( $item->depth ) === 0 && 'grid' === $item->megamenu_settings['type'] || ( absint( $item->depth ) === 1 && 'tabbed' === $item->parent_submenu_type && 'grid' === $item->megamenu_settings['type'] ) ) {
+				if ( 0 === $item->depth && 'grid' === $item->megamenu_settings['type'] || ( 1 === $item->depth && 'tabbed' === $item->parent_submenu_type && 'grid' === $item->megamenu_settings['type'] ) ) {
 
 					$saved_grid = $widget_manager->get_grid_widgets_and_menu_items_for_menu_id( $item->ID, $args->menu->term_id, $items );
 

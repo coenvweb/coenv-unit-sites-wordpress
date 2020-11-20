@@ -101,6 +101,15 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.1.3 - 2020.11.17 =
+* Add new options to help avoid database view / constraint errors
+* Make compatible with pro SFTP transfer feature
+* Fix inefficient database calls, unresponsive analytics setting UI
+
+= 4.1.0 - 2020.09.25 =
+* Add productivity statistics capture and analytics
+* Fix jQuery 1.8 compatibility, debug notices, more misc. bugfixes
+
 = 4.0.9 - 2020.06.15 =
 * Add new performance control options
 * Simplify and improve new site URL validation
@@ -155,6 +164,8 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 = 4.0.0 - 2019.07.22 =
 * Release all new rebuilt V4.
+
+= Pre V4.0 - see changelog.txt =
 
 == Upgrade Notice ==
 
