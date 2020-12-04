@@ -27,6 +27,51 @@ add_action('init', 'rvy_set_notification_buffer_cron');
 add_action('rvy_mail_buffer_hook', 'rvy_send_buffered_mail' );
 add_filter('cron_schedules', 'rvy_mail_buffer_cron_interval');
 
+add_filter('wp_insert_post_empty_content', '_rvy_buffer_post_content', 10, 2);
+
+add_action('post_updated', '_rvy_restore_published_content', 99, 3);
+
+add_action('update_post_metadata', '_rvy_limit_postmeta_update', 10, 5);
+add_action('delete_post_metadata', '_rvy_limit_postmeta_update', 10, 5);
+
+function _rvy_limit_postmeta_update($block_update, $object_id, $meta_key, $meta_value, $prev_value) {
+	global $current_user;
+	
+	if (in_array($meta_key, apply_filters('revisionary_protect_published_meta_keys', ['_thumbnail_id', '_wp_page_template']), $object_id)) {
+		if ($status_obj = get_post_status_object(get_post_field('post_status', $object_id))) {
+			if (!empty($status_obj->public) || !empty($status_obj->private)) {
+				if (rvy_get_post_meta($object_id, "_save_as_revision_{$current_user->ID}", true) || !agp_user_can('edit_post', $object_id, '', ['skip_revision_allowance' => true])) {
+					$block_update = true;
+				}
+			}
+		}
+	}
+
+	return $block_update;
+}
+
+// Make sure upstream capability filtering never allows unauthorized updating of published post content
+function _rvy_restore_published_content( $post_ID, $post_after, $post_before ) {
+	global $wpdb, $current_user;
+
+	if (defined('RVY_DISABLE_CONTENT_BUFFER')) {
+		return;
+	}
+
+	if ($status_obj = get_post_status_object(get_post_field('post_status', $post_ID))) {
+		if (!empty($status_obj->public) || !empty($status_obj->private)) {
+			update_postmeta_cache($post_ID);
+			
+			if (rvy_get_post_meta($post_ID, "_save_as_revision_{$current_user->ID}", true) || !agp_user_can('edit_post', $post_ID, '', ['skip_revision_allowance' => true])) {
+				if ($post_content = get_transient('rvy_post_content_' . $post_ID)) {
+					$wpdb->update($wpdb->posts, ['post_content' => $post_content], ['ID' => $post_ID]);
+					delete_transient('rvy_post_content_' . $post_ID);
+				}
+			}
+		}
+	}
+}
+
 if (defined('JREVIEWS_ROOT') && !empty($_REQUEST['preview']) 
 && ((empty($_REQUEST['preview_id']) && empty($_REQUEST['thumbnail_id']))
 || (!empty($_REQUEST['preview_id']) && rvy_is_revision_status(get_post_field('post_status', (int) $_REQUEST['preview_id'])))
@@ -34,6 +79,31 @@ if (defined('JREVIEWS_ROOT') && !empty($_REQUEST['preview'])
 ) {
 	require_once('compat_rvy.php');
 	_rvy_jreviews_preview_compat();
+}
+
+function _rvy_buffer_post_content($maybe_empty, $postarr) {
+	global $wpdb, $current_user;
+
+	if (empty($postarr['ID']) || defined('RVY_DISABLE_CONTENT_BUFFER')) { 
+		return $maybe_empty;
+	}
+
+	if ($status_obj = get_post_status_object(get_post_field('post_status', $postarr['ID']))) {
+		if (!empty($status_obj->public) || !empty($status_obj->private)) {
+			if (rvy_get_post_meta($postarr['ID'], "_save_as_revision_{$current_user->ID}", true) || !agp_user_can('edit_post', $postarr['ID'], '', ['skip_revision_allowance' => true])) {
+				if ($raw_content = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT post_content FROM $wpdb->posts WHERE ID = %d",
+						$postarr['ID']
+					)
+				)) {
+					set_transient('rvy_post_content_' . $postarr['ID'], $raw_content, 60);
+				}
+			}
+		}
+	}
+
+	return $maybe_empty;
 }
 
 function rvy_mail_check_buffer($new_msg = [], $args = []) {
@@ -121,12 +191,17 @@ class RVY_RestAPI {
     
     public static function get_new_scheduled_revision_flag( $object ) {
 		global $current_user;
-        return ( isset( $object['id'] ) ) ? get_post_meta( $object['id'], "_new_scheduled_revision_{$current_user->ID}", true ) : false;
+        return ( isset( $object['id'] ) ) ? rvy_get_post_meta( $object['id'], "_new_scheduled_revision_{$current_user->ID}", true ) : false;
 	}
 	
 	public static function get_save_as_revision_flag( $object ) {
 		global $current_user;
-        return ( isset( $object['id'] ) ) ? get_post_meta( $object['id'], "_save_as_revision_{$current_user->ID}", true ) : false;
+
+		if (!empty($object['id'])) {
+			return rvy_get_post_meta($object['id'], "_save_as_revision_{$current_user->ID}", true);
+		}
+
+		return false;
     }
 }
 
@@ -137,6 +212,7 @@ function rvy_ajax_handler() {
 		if ('save_as_revision' == $_REQUEST['rvy_ajax_field']) {
 			$save_revision = isset($_REQUEST['rvy_ajax_value']) && in_array($_REQUEST['rvy_ajax_value'], ['true', true, 1, '1'], true);
 			rvy_update_post_meta((int) $_REQUEST['post_id'], "_save_as_revision_{$current_user->ID}", $save_revision);
+			update_postmeta_cache($_REQUEST['post_id']);
 			exit;
 		}
 	}
@@ -147,8 +223,22 @@ function rvy_ajax_handler() {
 	}
 }
 
+function rvy_get_post_meta($post_id, $meta_key, $unused = false) {
+	global $wpdb;
+
+	return $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s and post_id = %d",
+				$meta_key,
+				$post_id
+			)
+		);
+}
+
 function rvy_update_post_meta($post_id, $meta_key, $meta_value) {
 	global $wpdb;
+
+	update_post_meta($post_id, $meta_key, $meta_value);
 
 	// some extra low-level database operations until the cause of meta sync failure with WP 5.5 can be determined
 	rvy_delete_post_meta($post_id, $meta_key);
@@ -646,7 +736,10 @@ function rvy_check_duplicate_mail($new_msg, $sent_mail, $buffer) {
 	foreach([$sent_mail, $buffer] as $compare_set) {
 		foreach($compare_set as $sent) {
 			foreach(['address', 'title', 'message'] as $field) {
-				if ($new_msg[$field] != $sent[$field]) {
+				if (!isset($new_msg[$field]) 
+				|| !isset($sent[$field])
+				|| ($new_msg[$field] != $sent[$field])
+				) {
 					continue 2;
 				}
 			}
@@ -1095,3 +1188,37 @@ function rvy_filtered_statuses($output = 'names') {
 		$output
 	);
 }
+
+/**
+ * Based on WP Engine Cache Flush by Aaron Holbrook
+ * https://github.org/a7/wpe-cache-flush/
+ * http://github.org/a7/
+ */
+/*
+function rvy_wpe_cache_flush() {
+    // Don't cause a fatal if there is no WpeCommon class
+    if ( ! class_exists( 'WpeCommon' ) ) {
+        return false;
+    }
+
+    if ( function_exists( 'WpeCommon::purge_memcached' ) ) {
+        \WpeCommon::purge_memcached();
+    }
+
+    if ( function_exists( 'WpeCommon::clear_maxcdn_cache' ) ) {
+        \WpeCommon::clear_maxcdn_cache();
+    }
+
+    if ( function_exists( 'WpeCommon::purge_varnish_cache' ) ) {
+        \WpeCommon::purge_varnish_cache();
+    }
+
+    global $wp_object_cache;
+    // Check for valid cache. Sometimes this is broken -- we don't know why! -- and it crashes when we flush.
+    // If there's no cache, we don't need to flush anyway.
+
+    if ( $wp_object_cache && is_object( $wp_object_cache ) ) {
+        @wp_cache_flush();
+    }
+}
+*/

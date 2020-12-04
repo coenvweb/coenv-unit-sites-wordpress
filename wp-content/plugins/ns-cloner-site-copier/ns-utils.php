@@ -125,12 +125,12 @@ function ns_recursive_search_replace( &$data, $search, $replace, $case_sensitive
  * Skip directories called 'sites' to avoid copying all sites storage in WP > 3.5
  *
  * @param string                $src Source directory path.
- * @param string                $dst Destination directory path.
+ * @param string                $dst Destination directory path (Relative).
  * @param WP_Background_Process $process Background process to use for queueing files.
+ * @param int                   $num File number in queue.
  * @return int Number of files found
  */
-function ns_recursive_dir_copy_by_process( $src, $dst, $process ) {
-	$num = 0;
+function ns_recursive_dir_copy_by_process( $src, $dst, $process, $num = 0 ) {
 	if ( is_dir( $src ) ) {
 		$files = scandir( $src );
 		// Specify items to ignore when copying.
@@ -138,18 +138,18 @@ function ns_recursive_dir_copy_by_process( $src, $dst, $process ) {
 		// Recursively copy files that aren't in the ignore array.
 		foreach ( $files as $file ) {
 			if ( ! in_array( $file, $ignore, true ) ) {
-				$num += ns_recursive_dir_copy_by_process( "$src/$file", "$dst/$file", $process );
+				$num += ns_recursive_dir_copy_by_process( "$src/$file", "$dst/$file", $process, $num );
 			}
 		}
 	} elseif ( file_exists( $src ) ) {
-		$num ++;
 		$file = [
-			'number'      => $num,
+			'number'      => ++ $num,
 			'source'      => $src,
 			'destination' => $dst,
 		];
 		$process->push_to_queue( $file );
 	}
+
 	return $num;
 }
 
@@ -315,22 +315,26 @@ function ns_sql_create_table_query( $source_table, $target_table, $source_prefix
 	if ( preg_match( $view, $query ) ) {
 		ns_cloner()->log->log( "DETECTING that table *$source_table* is a view. Skipping." );
 		// Replace prefix for other table names that view refers to.
-		$view_query = str_replace( "`$source_prefix", "`$target_prefix", $query );
-		ns_cloner()->process_manager->add_finish_query( $view_query, 200 );
+		if ( ! apply_filters( 'ns_cloner_skip_views', false ) ) {
+			$view_query = str_replace ("`$source_prefix", "`$target_prefix", $query );
+			ns_cloner()->process_manager->add_finish_query( $view_query, 200 );
+		}
 		return '';
 	}
 	// Match all constraints / foreign keys in create table query.
 	preg_match_all( $constraint, $query, $constraint_matches );
 	// Save constraints to be applied later in alter table queries.
-	foreach ( $constraint_matches[1] as $constraint_def ) {
-		// Redefine final target table name based on source, instead of using $target_table,
-		// because for teleport and clone over, $target_table will have a temp prefix that shouldn't be in alter query.
-		$constraint_table = preg_replace( "|^$source_prefix|", $raw_target_prefix, $source_table );
-		// Rename prefixes in constraint. Can't look for a backquote before the prefix (assume prefix is at beginning),
-		// because some plugins like Woo add extra prefixes like fk_{wpdb_prefix}_something, etc.
-		$constraint_def = str_replace( $source_prefix, $raw_target_prefix, $constraint_def );
-		// Store alter query in site_options. Use high priority to make sure it executes after all table renames.
-		ns_cloner()->process_manager->add_finish_query( "ALTER TABLE `$constraint_table` ADD $constraint_def;", 100 );
+	if ( ! apply_filters( 'ns_cloner_skip_constraints', false ) ) {
+		foreach ( $constraint_matches[1] as $constraint_def ) {
+			// Redefine final target table name based on source, instead of using $target_table,
+			// because for teleport and clone over, $target_table will have a temp prefix that shouldn't be in alter query.
+			$constraint_table = preg_replace("|^$source_prefix|", $raw_target_prefix, $source_table);
+			// Rename prefixes in constraint. Can't look for a backquote before the prefix (assume prefix is at beginning),
+			// because some plugins like Woo add extra prefixes like fk_{wpdb_prefix}_something, etc.
+			$constraint_def = str_replace($source_prefix, $raw_target_prefix, $constraint_def);
+			// Store alter query in site_options. Use high priority to make sure it executes after all table renames.
+			ns_cloner()->process_manager->add_finish_query( "ALTER TABLE `$constraint_table` ADD $constraint_def;", 100 );
+		}
 	}
 	// Now remove constraint statements from the create table query.
 	$query = preg_replace( $constraint, '', $query );

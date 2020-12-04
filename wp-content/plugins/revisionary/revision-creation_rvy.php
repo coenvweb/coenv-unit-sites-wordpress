@@ -80,7 +80,7 @@ class RevisionCreation {
 
 		global $current_user;
 
-		if (get_post_meta( $post_id, "_save_as_revision_{$current_user->ID}", true )) {
+		if (rvy_get_post_meta( $post_id, "_save_as_revision_{$current_user->ID}", true )) {
 			$revisionary->impose_pending_rev[$post_id] = true;
 			return $status;
 		}
@@ -183,8 +183,8 @@ class RevisionCreation {
 
         if (!empty($revision_id) && $post = get_post($revision_id)) {
             $post_ID = $revision_id;
-            $post_arr['post_ID'] = $revision_id;
-            $data = wp_unslash((array) $post);
+			$post_arr['post_ID'] = $revision_id;
+			$data = wp_unslash((array) $post);
         } else {
             $post_ID = 0;
             $previous_status = 'new';
@@ -369,8 +369,8 @@ class RevisionCreation {
         }
 
         if ( $revisionary->doing_rest || apply_filters('revisionary_limit_revision_fields', false, $post, $published_post) ) {
-            // prevent alteration of published post, while allowing save operation to complete
-        
+			// prevent alteration of published post, while allowing save operation to complete
+			
 			$keys = array_fill_keys( array( 'post_type', 'post_name', 'post_status', 'post_parent', 'post_author', 'post_content' ), true );
 
 			if (!isset($data['ID']) || ($data['ID'] != $published_post->ID)) {

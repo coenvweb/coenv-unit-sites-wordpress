@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.4
-Stable tag: 3.2.1
+Tested up to: 5.6
+Stable tag: 3.2.2
 License: GPLv2 or later
 
 
@@ -158,6 +158,13 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.2.2 =
+* 2020-12-04
+* Fix category/tag edit screen, extra field.
+* Change 'strval()' to '(string)'.
+* Change 'floatval()' to '(float)'.
+
 
 = 3.2.1 =
 * 2020-07-07

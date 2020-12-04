@@ -11,12 +11,12 @@ class RvyPostEdit {
         add_filter('presspermit_preview_post_label', [$this, 'fltPreviewLabel']);
         add_filter('presspermit_preview_post_title', [$this, 'fltPreviewTitle']);
         add_action('post_submitbox_misc_actions', [$this, 'actSubmitMetaboxActions']);
-		add_action('post_submitbox_start', [$this, 'actSubmitBoxStart']);
+        add_action('post_submitbox_start', [$this, 'actSubmitBoxStart']);
 
         add_action('admin_head', array($this, 'act_admin_head') );
 
         add_action('post_submitbox_misc_actions', array($this, 'act_post_submit_revisions_links'), 5);
-
+        
         add_filter('post_updated_messages', [$this, 'fltPostUpdatedMessage']);
 
         add_filter('user_has_cap', [$this, 'fltAllowBrowseRevisionsLink'], 50, 3);
@@ -109,7 +109,7 @@ class RvyPostEdit {
         $('h1.wp-heading-inline').html('<?php printf(__('Edit %s Revision', 'revisionary'), $type_obj->labels->singular_name);?>');
 
         $(document).on('click', '#post-body-content *, #wp-content-editor-container *, #tinymce *', function() {
-            $('div.rvy-revision-approve').hide();
+           $('div.rvy-revision-approve').hide();
         });
 
         <?php if ($view_link) :?>
@@ -169,6 +169,7 @@ class RvyPostEdit {
         );
 
         delete_post_meta( $post->ID, "_save_as_revision_{$current_user->ID}" );
+        update_postmeta_cache($post->ID);
     }
 
     function limitRevisionEditorUI() {
@@ -196,7 +197,7 @@ class RvyPostEdit {
         }
 
         $can_publish = agp_user_can( $type_obj->cap->edit_post, rvy_post_id($post->ID), '', array( 'skip_revision_allowance' => true ) );
-
+        
         if ($can_publish && rvy_is_revision_status($post->post_status)):?>
             <?php
             $redirect_arg = ( ! empty($_REQUEST['rvy_redirect']) ) ? "&rvy_redirect=" . esc_url($_REQUEST['rvy_redirect']) : '';
@@ -232,8 +233,8 @@ class RvyPostEdit {
 
         if (!empty($_REQUEST['wp-preview']) && !empty($_post) && !empty($revisionary->last_autosave_id[$_post->ID])) {
             if (defined('REVISIONARY_PREVIEW_LEGACY_ARGS')) {
-            	$url = remove_query_arg('_thumbnail_id', $url);
-            	$url = add_query_arg('_thumbnail_id', $revisionary->last_autosave_id[$_post->ID], $url);
+                $url = remove_query_arg('_thumbnail_id', $url);
+                $url = add_query_arg('_thumbnail_id', $revisionary->last_autosave_id[$_post->ID], $url);
             }
         } elseif ($post && rvy_is_revision_status($post->post_status)) {
             $url = rvy_preview_url($post);
@@ -301,45 +302,45 @@ class RvyPostEdit {
         }
 
         if (rvy_get_option('scheduled_revisions')) {
-	        if ($_revisions = rvy_get_post_revisions($post->ID, 'future-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
-	            $status_obj = get_post_status_object('future-revision');
-	            $caption = sprintf(__('%sScheduled Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-clock"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
-	            
-	            $num_revisions = count($_revisions);
-	            //$last_revision = array_pop($_revisions);
-	            //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
-	            $url = admin_url("revision.php?post_id=$post->ID&revision=future-revision");
-	            ?>
-	            <div class="misc-pub-section">
-	            <?php
-	            echo $caption;
-	            ?>
-	            <a class="hide-if-no-js"
+            if ($_revisions = rvy_get_post_revisions($post->ID, 'future-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
+                $status_obj = get_post_status_object('future-revision');
+                $caption = sprintf(__('%sScheduled Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-clock"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
+                
+                $num_revisions = count($_revisions);
+                //$last_revision = array_pop($_revisions);
+                //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
+                $url = admin_url("revision.php?post_id=$post->ID&revision=future-revision");
+                ?>
+                <div class="misc-pub-section">
+                <?php
+                echo $caption;
+                ?>
+                <a class="hide-if-no-js"
                     href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
-	            </div>
-	            <?php
-	        }
+                </div>
+                <?php
+            }
         }
 
         if (rvy_get_option('pending_revisions')) {
-	        if ($_revisions = rvy_get_post_revisions($post->ID, 'pending-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
-	            $status_obj = get_post_status_object('pending-revision');
-	            $caption = sprintf(__('%sPending Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-edit"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
-	            
-	            $num_revisions = count($_revisions);
-	            //$last_revision = array_pop($_revisions);
-	            //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
-	            $url = admin_url("revision.php?post_id=$post->ID&revision=pending-revision");
-	            ?>
-	            <div class="misc-pub-section">
-	            <?php
-	            echo $caption;
-	            ?>
-	            <a class="hide-if-no-js"
+            if ($_revisions = rvy_get_post_revisions($post->ID, 'pending-revision', ['orderby' => 'ID', 'order' => 'ASC'])) {
+                $status_obj = get_post_status_object('pending-revision');
+                $caption = sprintf(__('%sPending Revisions: %s', 'revisionary'), '<span class="dashicons dashicons-edit"></span>&nbsp;', '<b>' . count($_revisions) . '</b>');
+                
+                $num_revisions = count($_revisions);
+                //$last_revision = array_pop($_revisions);
+                //$url = admin_url("revision.php?revision=$last_revision->ID");   // @todo: fix i8n
+                $url = admin_url("revision.php?post_id=$post->ID&revision=pending-revision");
+                ?>
+                <div class="misc-pub-section">
+                <?php
+                echo $caption;
+                ?>
+                <a class="hide-if-no-js"
                     href="<?php echo esc_url($url); ?>" target="_revision_diff"><?php _ex('Compare', 'revisions', 'revisionary'); ?></a>
-	            </div>
-	            <?php
-	           }
-	        }
-    	}
+                </div>
+                <?php
+            }
+        }
+    }
 }

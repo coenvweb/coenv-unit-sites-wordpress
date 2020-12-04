@@ -96,6 +96,7 @@ add_action('admin_print_scripts', 'customtaxorder_js_libs');
 function customtaxorder_tag_edit_screen() {
 
 	$taxonomies = customtaxorder_get_taxonomies() ;
+	$options = customtaxorder_get_settings();
 
 	foreach ( $taxonomies as $taxonomy ) {
 		if ( is_object($taxonomy) && isset($taxonomy->name) ) {
@@ -137,11 +138,11 @@ function customtaxorder_term_order_add_form_field( $taxonomy ) {
 
 /*
  * Output the "term_order" form field when editing an existing term.
- * @param object $term
+ * @param object $term WP_Term Current taxonomy term object.
  * @param string $taxonomy the name of the taxonomy.
  * @since 3.1.0
  */
-function customtaxorder_term_order_edit_form_field( $term = false, $taxonomy ) {
+function customtaxorder_term_order_edit_form_field( $term, $taxonomy ) {
 	$options = customtaxorder_get_settings();
 	if ( isset($options[$taxonomy]) && $options[$taxonomy] == 1 ) {
 		if ( is_object($term) && isset($term->term_order) ) {

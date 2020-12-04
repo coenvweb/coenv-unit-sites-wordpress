@@ -3,7 +3,7 @@
  * Plugin Name: NS Cloner - Site Copier
  * Plugin URI: https://neversettle.it
  * Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out NS Cloner Pro for additional powerful add-ons and features!
- * Version: 4.0.9
+ * Version: 4.1.3
  * Author: Never Settle
  * Author URI: https://neversettle.it
  * Requires at least: 4.0.0
@@ -49,6 +49,9 @@ require_once NS_CLONER_V4_PLUGIN_DIR . 'abstracts/class-ns-cloner-addon.php';
 require_once NS_CLONER_V4_PLUGIN_DIR . 'abstracts/class-ns-cloner-section.php';
 require_once NS_CLONER_V4_PLUGIN_DIR . 'abstracts/class-ns-cloner-process.php';
 
+//Load cloner features classes.
+require_once NS_CLONER_V4_PLUGIN_DIR . 'features/class-ns-cloner-analytics.php';
+
 /**
  * Main core of NS_Cloner plugin.
  *
@@ -63,7 +66,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.0.9';
+	public $version = '4.1.3';
 
 	/**
 	 * Menu Slug
@@ -221,6 +224,8 @@ final class NS_Cloner {
 		// Hook to WP 'all' hook to automatically log all hooks that start with ns_cloner.
 		add_action( 'all', [ $this, 'log_hooks' ] );
 
+		// Install custom tables after cloner init
+		add_action( 'ns_cloner_init', [ $this, 'install_tables' ] );
 	}
 
 	/**
@@ -342,9 +347,9 @@ final class NS_Cloner {
 					'in_progress' => $this->process_manager->is_in_progress( true ),
 				)
 			);
+			// Run action so addons can easily enqueue scripts only on cloner pages without having to use conditionals.
+			do_action( 'ns_cloner_enqueue_scripts' );
 		}
-		// Run action so addons can easily enqueue scripts only on cloner pages without having to use conditionals.
-		do_action( 'ns_cloner_enqueue_scripts' );
 	}
 
 	/**
@@ -793,6 +798,37 @@ final class NS_Cloner {
 		}
 	}
 
+	/**
+	 * Install custom Cloner tables
+	 */
+	public function install_tables() {
+		if ( get_site_option( 'ns_cloner_installed_version' ) !== $this->version ) {
+			// Required for using dbDelta function
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			$table_name = ns_cloner_analytics()->get_db_log_table();
+			global $wpdb;
+			$query = "
+	            CREATE TABLE `{$table_name}` (
+	            id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT, 
+	            version VARCHAR(50) NOT NULL,
+	            is_success INT(1) NOT NULL,
+	            clone_mode VARCHAR(100) NOT NULL,
+	            date DATETIME NOT NULL,
+	            time_spent_sec INT(20) NOT NULL,
+	            tables_count int(20) DEFAULT NULL,
+	            rows_count INT(20) DEFAULT NULL,
+	            files_count INT(20) DEFAULT NULL,
+	            users_count INT(20) DEFAULT NULL,
+	            replacements_count INT(20) DEFAULT NULL,
+	            wp_data TEXT DEFAULT NULL,
+	            is_synced INT(1) NOT NULL,
+	            PRIMARY KEY (id)
+	            ) {$wpdb->get_charset_collate()};
+	        ";
+			dbDelta($query);
+			update_site_option( 'ns_cloner_installed_version', $this->version );
+		}
+	}
 }
 
 /**
