@@ -217,7 +217,7 @@ Template Name: Homepage
 					
 					foreach ($more_terms as &$term) {
 						if ( $term->slug != 'uncategorized') {
-							$more_terms_arr[] = '<a href="/news-and-events/category/ . $term->slug . '">' . $term->name . '</a>';
+							$more_terms_arr[] = '<a href="/news-and-events/category/' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 				}
