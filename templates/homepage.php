@@ -67,7 +67,7 @@ Template Name: Homepage
 					
 					foreach ($terms as &$term) {
 						if ( $term->slug != 'uncategorized') {
-							$terms_arr[] = '<a href="/news-and-events/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$terms_arr[] = '<a href="/news-and-events/category/' . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 				}
@@ -217,7 +217,7 @@ Template Name: Homepage
 					
 					foreach ($more_terms as &$term) {
 						if ( $term->slug != 'uncategorized') {
-							$more_terms_arr[] = '<a href="/about/news/?tax=category&amp;term=' . $term->slug . '">' . $term->name . '</a>';
+							$more_terms_arr[] = '<a href="/news-and-events/category/ . $term->slug . '">' . $term->name . '</a>';
 						}
 					}
 				}
