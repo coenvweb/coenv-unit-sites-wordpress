@@ -2559,15 +2559,18 @@ if ( ! function_exists( 'wpuxss_eml_settings_link' ) ) {
 
         $settings_page = is_network_admin() ? 'settings.php' : 'options-general.php';
 
-        $settings_link = is_network_admin() ? array() : array(
-            'settings' => '<a href="' . self_admin_url($settings_page.'?page=media') . '">' . __( 'Media Settings', 'enhanced-media-library' ) . '</a>'
-        );
+        if ( ! is_network_admin() ) {
+            $custom_links['settings'] = '<a href="' . self_admin_url($settings_page.'?page=media') . '">' . __( 'Media Settings', 'enhanced-media-library' ) . '</a>';
+        }
 
-        $utility_link = array(
-            'utility' => '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utilities', 'enhanced-media-library' ) . '</a>'
-        );
+        $custom_links['utility'] = '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utilities', 'enhanced-media-library' ) . '</a>';
 
-        return array_merge( $settings_link, $utility_link, $links );
+        if ( ! EML_PRO ) {
+
+            $custom_links['go_pro'] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" class="eml-pro" target="_blank">' . __( 'Go PRO', 'enhanced-media-library' ) . '</a>';
+        }
+
+        return array_merge( $custom_links, $links );
     }
 }
 
@@ -2589,12 +2592,7 @@ if ( ! function_exists( 'wpuxss_eml_plugin_row_meta' ) ) {
             return $links;
         }
 
-        if ( ! EML_PRO ) {
-
-            $links[] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" target="_blank"><strong>' . __( 'Go PRO ', 'enhanced-media-library' ) . '</strong></a>';
-        }
-
-        $links[] = __( 'Rate us:', 'enhanced-media-library' ) . " <span class='rating-stars'><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=1#new-post' target='_blank' data-rating='1' title='" . __('Poor', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=2#new-post' target='_blank' data-rating='2' title='" . __('Works', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=3#new-post' target='_blank' data-rating='3' title='" . __('Good', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=4#new-post' target='_blank' data-rating='4' title='" . __('Great', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><a href='//wordpress.org/support/plugin/enhanced-media-library/reviews/?rate=5#new-post' target='_blank' data-rating='5' title='" . __('Fantastic!', 'enhanced-media-library') . "'><span class='dashicons dashicons-star-filled' style='color:#ffb900 !important;'></span></a><span>";
+        $links[] = '<a href="https://wordpress.org/support/plugin/enhanced-media-library/reviews/" target="_blank">' . __( 'Rate plugin', 'enhanced-media-library' ) . '</a>';
 
         return $links;
     }

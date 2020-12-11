@@ -2,9 +2,9 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 5.0
-Tested up to: 5.5.1
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,7 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 * [Contribute to Translation](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library)
 
 
+
 ## Installation ##
 
 1. Upload plugin folder to '/wp-content/plugins/' directory
@@ -148,9 +149,11 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 4. Enjoy Enhanced Media Library!
 
 
+
 ## Frequently Asked Questions ==
 
 > [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs/) | [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library/)
+
 
 
 ## Screenshots ##
@@ -178,7 +181,15 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 11. Filter-based image gallery
 
 
+
 ## Changelog ##
+
+### 2.8.2 ###
+*Release Date - December 9, 2020*
+
+= Compatibility =
+* WordPress 5.0 - 5.6 minor compatibility issues resolved
+
 
 ### 2.8.1 ###
 *Release Date - October 29, 2020*
