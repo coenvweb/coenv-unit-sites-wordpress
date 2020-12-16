@@ -28,6 +28,14 @@ class Revisionary
 
 	// minimal config retrieval to support pre-init usage by WP_Scoped_User before text domain is loaded
 	function __construct() {
+		if (is_admin() && (false !== strpos($_SERVER['REQUEST_URI'], 'revision.php')) && (!empty($_REQUEST['revision']))) {
+			add_action('init', [$this, 'addFilters'], PHP_INT_MAX);
+		} else {
+			$this->addFilters();
+		}
+	}
+
+	function addFilters() {
 		global $script_name;
 
 		// Ensure editing access to past revisions is not accidentally filtered. 
@@ -724,7 +732,7 @@ class Revisionary
 			}
 		}
 
-		if ($post && ('future-revision' == $post->post_status)) {
+		if ($post && (('future-revision' == $post->post_status) || in_array($cap, ['read_post', 'read_page']))) {
 			if (in_array($cap, ['read_post', 'read_page'])) {
 				return $caps;
 			}
@@ -1095,7 +1103,7 @@ class Revisionary
 		}
 
 		// If Administrator opted to save as a pending revision, don't apply revision scheduling scripts
-		if (get_post_meta($post_arr['ID'], "_save_as_revision_{$current_user->ID}", true)) {
+		if (rvy_get_post_meta($post_arr['ID'], "_save_as_revision_{$current_user->ID}", true)) {
 			return $data;
 		}
 

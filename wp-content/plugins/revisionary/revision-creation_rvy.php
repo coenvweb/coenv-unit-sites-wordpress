@@ -80,7 +80,7 @@ class RevisionCreation {
 
 		global $current_user;
 
-		if (get_post_meta( $post_id, "_save_as_revision_{$current_user->ID}", true )) {
+		if (rvy_get_post_meta( $post_id, "_save_as_revision_{$current_user->ID}", true )) {
 			$revisionary->impose_pending_rev[$post_id] = true;
 			return $status;
 		}
@@ -125,7 +125,7 @@ class RevisionCreation {
 
     // impose pending revision
     function flt_pending_revision_data( $data, $postarr ) {
-        global $wpdb, $current_user;
+        global $wpdb, $current_user, $pagenow;
 		
 		if (!empty($this->revisionary)) {
 			$revisionary = $this->revisionary;
@@ -135,6 +135,12 @@ class RevisionCreation {
 
 		if ($revisionary->disable_revision_trigger) {
 			return $data;
+		}
+
+		if (!empty($pagenow) && ('post.php' == $pagenow)) {
+			if (!empty($_REQUEST['action']) && in_array($_REQUEST['action'], ['delete', 'trash'])) {
+				return $data;
+			}
 		}
 
         if ( $revisionary->doing_rest && $revisionary->rest->is_posts_request && ! empty( $revisionary->rest->request ) ) {
@@ -183,8 +189,8 @@ class RevisionCreation {
 
         if (!empty($revision_id) && $post = get_post($revision_id)) {
             $post_ID = $revision_id;
-            $post_arr['post_ID'] = $revision_id;
-            $data = wp_unslash((array) $post);
+			$post_arr['post_ID'] = $revision_id;
+			$data = wp_unslash((array) $post);
         } else {
             $post_ID = 0;
             $previous_status = 'new';
@@ -327,7 +333,7 @@ class RevisionCreation {
                 $_author = reset($_authors);
 
                 if ($_author && empty($_author->ID)) { // @todo: is this still necessary?
-                    $_author = MultipleAuthors\Classes\Objects\Author::get_by_term_id($_author->term_id);
+                    $_author = \MultipleAuthors\Classes\Objects\Author::get_by_term_id($_author->term_id);
                 }
             }
 
@@ -336,7 +342,7 @@ class RevisionCreation {
             // If multiple authors could not be stored, restore original authors from published post
             if (empty($_authors) || (!empty($_author) && $_author->ID == $current_user->ID)) {
                 if (!$published_authors) {
-                    if ($author = MultipleAuthors\Classes\Objects\Author::get_by_user_id((int) $published_post->post_author)) {
+                    if ($author = \MultipleAuthors\Classes\Objects\Author::get_by_user_id((int) $published_post->post_author)) {
                         $published_authors = [$author];
                     }
                 }
@@ -369,8 +375,8 @@ class RevisionCreation {
         }
 
         if ( $revisionary->doing_rest || apply_filters('revisionary_limit_revision_fields', false, $post, $published_post) ) {
-            // prevent alteration of published post, while allowing save operation to complete
-        
+			// prevent alteration of published post, while allowing save operation to complete
+			
 			$keys = array_fill_keys( array( 'post_type', 'post_name', 'post_status', 'post_parent', 'post_author', 'post_content' ), true );
 
 			if (!isset($data['ID']) || ($data['ID'] != $published_post->ID)) {

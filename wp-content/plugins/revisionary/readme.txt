@@ -6,8 +6,8 @@ Author URI: https://publishpress.com
 Tags: revision, submit changes, workflow, collaboration, permissions, moderate, posts, schedule revisions
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
-Tested up to: 5.5
-Stable tag: 2.4.3
+Tested up to: 5.6
+Stable tag: 2.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,30 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.4.6 - 8 Dec 2020 =
+* Lang: Include a .pot file (translation template)
+* Fixed : If no revisions are accessible to user, all revisions were listed in Revision Queue
+* Fixed : Post deletion triggered revision submission redirect under some conditions
+* Compat : REST API Cache plugin - "Save as Revision" checkbox was ineffective
+* Compat : PublishPress Authors - revision submission failed under some conditions
+
+= 2.4.5 - 30 Nov 2020 =
+* Compat : WP Engine, Kinsta object cache - "Pending Revision" checkbox was ineffective
+* Compat : PublishPress Permissions - Revision editing or deletion was improperly blocked under some configurations
+* Fixed : Revision submission by Administrator or Editor caused corruption of published block content (by slash removal) on some installations
+* Fixed : Edit Revision screen did not display Approve Revision button to users who cannot delete the revision
+* Fixed : Revision Queue - other plugin / theme filters could cause all revisions to be listed when a requested published post has no accessible revisions
+* Fixed : Revision Queue - filter links worked, but had original URL reconstructed incorrectly
+* Fixed : Revision Queue - pagination links had badly formatted arguments if a filtering argument is active
+* Fixed : Revisors had non-applicable elements hidden in post editor, but orphaned labels for those elements remained visible
+* API : New filter 'revisionary_notify_publishers_eligible' to modify eligible "Publishers to Notify" when Email Notification is optional
+* API : New filter 'revisionary_notify_publisher_default_ids' to modify default "Publishers to Notify" when Email Notification is optional
+
+= 2.4.4 - 18 Nov 2020 =
+* Fixed : Revision submission caused Post Thumbnail to be cleared from the published post
+* Fixed : Revision submission by a Revisor caused corruption of published block content (by slash removal) on some installations
+* Fixed : Compare Past Revisions - Editors did have "Preview / Restore" or "Manage" buttons
 
 = 2.4.3 - 5 Nov 2020 =
 * Compat : Polylang - language settings were not stored to revision (Fix also applies to other plugins using hidden taxonomies)

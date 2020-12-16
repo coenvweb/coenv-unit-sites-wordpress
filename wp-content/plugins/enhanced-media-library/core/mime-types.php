@@ -178,7 +178,7 @@ add_filter( 'wp_check_filetype_and_ext', 'wpuxss_eml_check_filetype_and_ext', 10
 
 if ( ! function_exists( 'wpuxss_eml_check_filetype_and_ext' ) ) {
 
-    function wpuxss_eml_check_filetype_and_ext( $types, $file, $filename, $mimes, $real_mime ) {
+    function wpuxss_eml_check_filetype_and_ext( $types, $file, $filename, $mimes, $real_mime = false ) {
 
         $wpuxss_eml_mimes = get_option('wpuxss_eml_mimes');
 

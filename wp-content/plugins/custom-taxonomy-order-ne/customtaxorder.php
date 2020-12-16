@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.2.1
+Version: 3.2.2
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.2.1');
+define('CUSTOMTAXORDER_VER', '3.2.2');
 
 
 /*
@@ -204,8 +204,9 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 					$ancestor_ID = array_pop( $parents );
 					$ancestor_term = get_term($ancestor_ID, $term->taxonomy);
 					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
-						$float = floatval($term->term_order) + 10000;
-						$term->term_order = floatval( strval($ancestor_term->term_order) . '.' . strval($float) );
+						$float_front = (string) $ancestor_term->term_order;
+						$float_rear = (string) ( $term->term_order + 10000 ); // Make it sort correctly. Not many websites have more than 90000 subterms.
+						$term->term_order = (float) ( $float_front . '.' . $float_rear );
 					}
 				}
 			}
