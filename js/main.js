@@ -7,7 +7,7 @@ jQuery(function ($) {
 		$('.share').coenvshare();
 		
 		// lightbox
-		$('a').nivoLightbox();
+		$('a:not([href*=youtube]):not([href*=youtu]):not([href*=vimeo])').nivoLightbox();
 
 		// lightbox captions
         $('figure a img').each(function () {
