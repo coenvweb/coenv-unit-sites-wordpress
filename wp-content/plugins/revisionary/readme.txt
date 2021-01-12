@@ -7,7 +7,7 @@ Tags: revision, submit changes, workflow, collaboration, permissions, moderate, 
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
 Tested up to: 5.6
-Stable tag: 2.4.6
+Stable tag: 2.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,18 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 12. Scheduled Revisions in Publishing Soon list
 
 == Changelog ==
+
+= 2.4.8 - 17 Dec 2020 =
+* Compat : WPML - Revision Queue was not filtered by WPML language selector
+* Compat : WPML - Hide non-revisionable Languages settings in Revision editor
+* Compat : TablePress - Tables could not be updated by non-Administrators
+* Fixed : Revision Queue - PHP Notice if no revisions listed
+
+= 2.4.7 - 15 Dec 2020 =
+* Fixed : WP 5.6 - Pending Revision submission failed (since 2.4.6)
+* Fixed : Compare Pending Revisions always credited assigned post author for Current Revision, now shows user who created the last published update. To revert to previous behavior, define constant RVY_LEGACY_COMPARE_REVISIONS_AUTHOR_DISPLAY.
+* Change : Clarify captions for permissions-related checkboxes in Revisions > Settings > Revision Queue
+* Compat : PublishPress Capabilities - organize Revisions capabilities into own area
 
 = 2.4.6 - 8 Dec 2020 =
 * Lang: Include a .pot file (translation template)

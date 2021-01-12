@@ -132,7 +132,7 @@ class NS_Cloner_Analytics {
 
 		if ( empty( $this->user_saved_mode ) ||
 		     ( 'no_share' == $this->user_saved_mode && $this->is_time_to_show_settings_modal() ) ) {
-			ns_cloner()::render( 'analytics-settings-modal' );
+			ns_cloner()->render( 'analytics-settings-modal' );
 		}
 	}
 

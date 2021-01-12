@@ -1,3 +1,8 @@
+= 4.1.4 - 2020.12.30 =
+* Fix visibility error on magic wakeup method
+* Fix cache clearing mechanism for WP Engine sites
+* Fix conflict with Woo Discount Rules
+
 = 4.1.3 - 2020.11.17 =
 * Add new options to help avoid database view / constraint errors
 * Make compatible with pro SFTP transfer feature

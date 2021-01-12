@@ -81,7 +81,7 @@ final class NS_Cloner_Request {
 	/**
 	 * Disable unserialize
 	 */
-	private function __wakeup() {
+	public function __wakeup() {
 	}
 
 	/**

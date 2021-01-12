@@ -3,7 +3,7 @@ Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copy site, copier, clone, clone site, cloner, multisite, network, subdomain, subdirectory, subfolder, template
 Requires at least: 4.0.0
-Tested up to: 5.4.2
+Tested up to: 5.6
 Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv2 or later
@@ -100,6 +100,11 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.1.4 - 2020.12.30 =
+* Fix visibility error on magic wakeup method
+* Fix cache clearing mechanism for WP Engine sites
+* Fix conflict with Woo Discount Rules
 
 = 4.1.3 - 2020.11.17 =
 * Add new options to help avoid database view / constraint errors

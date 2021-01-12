@@ -82,9 +82,13 @@ if (defined('JREVIEWS_ROOT') && !empty($_REQUEST['preview'])
 }
 
 function _rvy_buffer_post_content($maybe_empty, $postarr) {
-	global $wpdb, $current_user;
+	global $wpdb, $current_user, $revisionary;
 
 	if (empty($postarr['ID']) || defined('RVY_DISABLE_CONTENT_BUFFER')) { 
+		return $maybe_empty;
+	}
+
+	if (!empty($postarr['post_type']) && $revisionary && empty($revisionary->enabled_post_types[$postarr['post_type']])) {
 		return $maybe_empty;
 	}
 
@@ -336,6 +340,26 @@ function rvy_plugin_active_for_network( $plugin ) {
 	}
 
 	return false;
+}
+
+function rvy_is_plugin_active($check_plugin_file) {
+	$plugins = (array)get_option('active_plugins');
+	foreach ($plugins as $plugin_file) {
+		if (false !== strpos($plugin_file, $check_plugin_file)) {
+			return $plugin_file;
+		}
+	}
+
+	if (is_multisite()) {
+		$plugins = (array)get_site_option('active_sitewide_plugins');
+
+		// network activated plugin names are array keys
+		foreach (array_keys($plugins) as $plugin_file) {
+			if (false !== strpos($plugin_file, $check_plugin_file)) {
+				return $plugin_file;
+			}
+		}
+	}
 }
 
 function rvy_configuration_late_init() {
@@ -1206,7 +1230,7 @@ function my_post_types_config() {
 	}
 
 	$rest_cache_active = $rest_cache_active 
-	|| ((!empty($_REQUEST['wp-remove-post-lock']) || strpos($uri, '_locale')) && is_plugin_active('wp-rest-cache/wp-rest-cache.php'));
+	|| ((!empty($_REQUEST['wp-remove-post-lock']) || strpos($uri, '_locale')) && rvy_is_plugin_active('wp-rest-cache/wp-rest-cache.php'));
 
 	if ($rest_cache_active) {
 		foreach(array_keys($wp_post_types) as $key) {

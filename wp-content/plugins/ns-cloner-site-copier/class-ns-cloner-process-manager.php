@@ -495,7 +495,7 @@ class NS_Cloner_Process_Manager {
 
 		// Makes sure that the target uploads dir is not somehow the same as the source.
 		// Shouldn't be possible, but is irreversibly destructive if it does, so make sure.
-		if ( $source_dir === $target_dir ) {
+		if ( $source_dir === $target_dir && ns_cloner_request()->get( 'do_copy_files', true ) ) {
 			$this->exit_processes( __( 'Source and target uploads directories are the same. Cannot clone files.', 'ns-cloner' ) );
 			return;
 		}

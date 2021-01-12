@@ -60,6 +60,8 @@ add_filter(
 		$plugin_opts = array_merge( $plugin_opts, [ 'wordfence_installed' ] );
 		// Yoast WP SEO.
 		$plugin_opts = array_merge( $plugin_opts, [ 'wpseo_ryte'] );
+		// Woo Discount Rules.
+		$plugin_opts = array_merge( $plugin_opts, [ 'awdr_activity_log_version' ] );
 		// Skip copying any of the above listed option rows.
 		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $plugin_opts, true ) ) {
 			$do = false;
@@ -73,26 +75,17 @@ add_filter(
 /**
  * Clear WP Engine cache on completion because cloned sites won't use the correct
  * theme + options without flushing if object caching is enabled.
+ * Based from https://github.com/a7/wpe-cache-flush/ and issue #1 on that repo.
  */
 add_action(
 	'ns_cloner_process_finish',
 	function() {
-		if ( function_exists( 'WpeCommon::purge_memcached' ) ) {
-			WpeCommon::purge_memcached();
+		if ( defined( 'PWP_NAME' ) ) {
+			$wpe_nonce    = wp_create_nonce( PWP_NAME . '-config' );
+			$wpe_endpoint = 'admin.php?page=wpengine-common&purge-all=1&_wpnonce=' . $wpe_nonce;
+			wp_remote_get( is_multisite() ? network_admin_url( $wpe_endpoint ) : admin_url( $wpe_endpoint ) );
 		}
-		if ( function_exists( 'WpeCommon::clear_maxcdn_cache' ) ) {
-			WpeCommon::clear_maxcdn_cache();
-		}
-		if ( function_exists( 'WpeCommon::purge_varnish_cache' ) ) {
-			WpeCommon::purge_varnish_cache();
-		}
-		global $wp_object_cache;
-		if ( $wp_object_cache && is_object( $wp_object_cache ) ) {
-			try {
-				wp_cache_flush();
-			} catch ( Exception $e ) {
-				// Sometimes this crashes for an unknown reason, per WPE.
-			}
-		}
-	}
+	},
+	10,
+	99
 );
