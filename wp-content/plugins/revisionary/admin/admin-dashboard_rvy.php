@@ -28,7 +28,7 @@ function rvy_glance_pending() {
 						$text = sprintf( __('%1$s %2$s Revision', 'revisionary'), $status_label, $post_type_obj->labels->singular_name);
 					else
 						$text = sprintf( __('%1$s %2$s Revisions', 'revisionary'), $status_label, $post_type_obj->labels->singular_name);
-							
+						
 					$url = "admin.php?page=revisionary-q&post_status=$status&post_type=$post_type";
 
 					if (current_user_can('administrator') || (isset($post_type_obj->cap->edit_published_posts) && current_user_can($post_type_obj->cap->edit_published_posts) && current_user_can($post_type_obj->cap->edit_others_posts))) {  // hide count from non-Admins until it is properly filtered

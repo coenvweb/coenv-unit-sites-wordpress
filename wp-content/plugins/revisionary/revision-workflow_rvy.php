@@ -3,7 +3,7 @@
 class Rvy_Revision_Workflow_UI {
     function do_notifications( $notification_type, $status, $post_arr, $args ) {
         global $revisionary, $current_user;
-        
+
         if ( 'pending-revision' != $notification_type ) {
             return;
         }
@@ -39,7 +39,7 @@ class Rvy_Revision_Workflow_UI {
             $title = sprintf( __('[%s] Pending Revision Notification', 'revisionary'), $blogname );
             
             $message = sprintf( __('A pending revision to the %1$s "%2$s" has been submitted.', 'revisionary'), $type_caption, $post_arr['post_title'] ) . "\r\n\r\n";
-            
+
             $message .= sprintf( __('It was submitted by %1$s.', 'revisionary' ), $current_user->display_name ) . "\r\n\r\n";
 
             if ( $revision_id ) {
@@ -227,23 +227,25 @@ class Rvy_Revision_Workflow_UI {
                 if (!empty($use_editor_message)) {
                     $msg = __('Your modification has been saved.', 'revisionary') . ' <br />';
                 } else {
-	                $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
-	                
-	                if ( $future_date ) {
-	                    $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
-	                } else {
-	                    $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
-	                }
+                    $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
+                    
+                    if ( $future_date ) {
+                        $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
+                    } else {
+                        $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
+                    }
                 }
 
                 clean_post_cache($revision->ID);
                 
                 $msg .= '<ul>';
 
-                if (rvy_get_option('revision_preview_links') || current_user_can('administrator') || is_super_admin()) {
+                $type_obj = get_post_type_object($revision->post_type);
+
+                if (($type_obj && !empty($type_obj->public)) && (rvy_get_option('revision_preview_links') || current_user_can('administrator') || is_super_admin())) {
                     $preview_link = rvy_preview_url($revision);
                     $preview_link = remove_query_arg('preview_id', $preview_link);
-
+                    
                     $msg .= '<li>';
                     $msg .= sprintf( '<a href="%s">' . __( 'Preview it', 'revisionary' ) . '</a>', $preview_link );
                     $msg .= '<br /><br /></li>';
@@ -286,7 +288,7 @@ class Rvy_Revision_Workflow_UI {
 		}
 		
 		return $arr;
-	}
+    }
     
     static function getRecipients($notification_class, $args) {
         $defaults = ['type_obj' => false, 'published_post' => false];
