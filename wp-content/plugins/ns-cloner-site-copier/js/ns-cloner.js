@@ -375,6 +375,28 @@ jQuery(
 			}
 		);
 
+		// Delete plugin options data.
+		$( '.ns-cloner-options-delete' ).on(
+			'click',
+			function( e ){
+				var button = $( this ).addClass( 'working' );
+				ns_cloner_form.ajax(
+					{
+						'action' : 'ns_cloner_delete_options',
+					},
+					function( result ){
+						button.removeClass( 'working' );
+						if ( true === result.success ) {
+							button.hide().after('<span class="ns-cloner-success-message">Data cleared successfully.</span>');
+						} else {
+							alert( 'Clearing data failed, please try again.' );
+						}
+					}
+				);
+				e.preventDefault();
+			}
+		);
+
 		/**
 		 * Utility functions
 		 */

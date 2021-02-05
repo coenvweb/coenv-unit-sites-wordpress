@@ -32,18 +32,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- mode selector -->
 		<div class="ns-cloner-section" id="ns-cloner-section-modes">
 			<div class="ns-cloner-section-header">
-				<h4><?php esc_html_e( 'Select Cloning Mode', 'ns-cloner' ); ?></h4>
+				<h4><?php esc_html_e( 'Select Cloning Mode', 'ns-cloner-site-copier' ); ?></h4>
 				<span class="ns-cloner-collapse-all">
-					<small>&#9650;</small> <?php esc_html_e( 'Collapse All', 'ns-cloner' ); ?>
+					<small>&#9650;</small> <?php esc_html_e( 'Collapse All', 'ns-cloner-site-copier' ); ?>
 				</span>
 				<span class="ns-cloner-expand-all">
 					<small>&#9660;</small>
-					<?php esc_html_e( 'Expand All', 'ns-cloner' ); ?>
+					<?php esc_html_e( 'Expand All', 'ns-cloner-site-copier' ); ?>
 				</span>
 			</div>
 			<div class="ns-cloner-section-content">
 				<?php if ( empty( ns_cloner()->get_modes() ) ) : ?>
-				<h5><?php esc_html_e( 'No cloning modes are currently available for this site.', 'ns-cloner' ); ?></h5>
+				<h5><?php esc_html_e( 'No cloning modes are currently available for this site.', 'ns-cloner-site-copier' ); ?></h5>
 				<?php else : ?>
 				<select class="ns-cloner-select-mode" name="clone_mode">
 					<?php foreach ( ns_cloner()->get_modes() as $mode_id => $details ) : ?>
@@ -64,8 +64,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- warning text -->
 		<div class="ns-cloner-disclaimer">
-			<strong><?php esc_html_e( 'WARNING:', 'ns-cloner' ); ?></strong>
-			<?php esc_html_e( 'We have made an incredibly complex process ridiculously easy with this powerful plugin. We have tested thoroughly and used this exact tool in our own live multisite environments. However, our comfort level should not dictate your precautions. If you\'re confident in your testing and back-up scheme - which you should have in place anyway ;) - then by all means - start cloning like there\'s no tomorrow!', 'ns-cloner' ); ?>
+			<strong><?php esc_html_e( 'WARNING:', 'ns-cloner-site-copier' ); ?></strong>
+			<?php esc_html_e( 'We have made an incredibly complex process ridiculously easy with this powerful plugin. We have tested thoroughly and used this exact tool in our own live multisite environments. However, our comfort level should not dictate your precautions. If you\'re confident in your testing and back-up scheme - which you should have in place anyway ;) - then by all means - start cloning like there\'s no tomorrow!', 'ns-cloner-site-copier' ); ?>
 		</div>
 
 	</form>
@@ -84,8 +84,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="ns-cloner-processes-modal-wrapper">
 			<div class="ns-cloner-processes-working">
 				<div class="ns-modal-head">
-					<button class="ns-modal-refresh"><?php esc_html_e( 'Refresh', 'ns-cloner' ); ?></button>
-					<button class="ns-modal-cancel"><?php esc_html_e( 'Cancel', 'ns-cloner' ); ?></button>
+					<button class="ns-modal-refresh"><?php esc_html_e( 'Refresh', 'ns-cloner-site-copier' ); ?></button>
+					<button class="ns-modal-cancel"><?php esc_html_e( 'Cancel', 'ns-cloner-site-copier' ); ?></button>
 					<h1>
 						<span class="ns-modal-title">
 						<?php
@@ -96,20 +96,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 						endif;
 						?>
 						</span>
-						<?php esc_html_e( 'started...', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'started...', 'ns-cloner-site-copier' ); ?>
 					</h1>
 				</div>
 				<div class="ns-modal-body">
 					<div class="ns-cloner-warning-message ajax-on" style="display:none">
-						<?php esc_html_e( 'It appears background processing may be getting blocked on the server (or could just be running slowly). Activating backup AJAX processing to ensure completion, so please keep this window open.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'It appears background processing may be getting blocked on the server (or could just be running slowly). Activating backup AJAX processing to ensure completion, so please keep this window open.', 'ns-cloner-site-copier' ); ?>
 					</div>
 					<div class="ns-cloner-warning-message ajax-force" style="display:none">
-						<?php esc_html_e( 'One or more of the cloning processes below have gone more than 60 seconds without showing progress. If at least one item is still progressing, it\'s probably fine and you can ignore this.', 'ns-cloner' ); ?>
-						<?php esc_html_e( 'If you\'ve been waiting a while and everything is stopped, though, you can try forcing a continuation (if so, expect to see some "Duplicate entry" notices at the end from resuming the failed process).', 'ns-cloner' ); ?>
-						<a href="#" class="ns-cloner-ajax-force-trigger"><?php esc_html_e( 'Click here to try continuing.', 'ns-cloner' ); ?></a>
+						<?php esc_html_e( 'One or more of the cloning processes below have gone more than 60 seconds without showing progress. If at least one item is still progressing, it\'s probably fine and you can ignore this.', 'ns-cloner-site-copier' ); ?>
+						<?php esc_html_e( 'If you\'ve been waiting a while and everything is stopped, though, you can try forcing a continuation (if so, expect to see some "Duplicate entry" notices at the end from resuming the failed process).', 'ns-cloner-site-copier' ); ?>
+						<a href="#" class="ns-cloner-ajax-force-trigger"><?php esc_html_e( 'Click here to try continuing.', 'ns-cloner-site-copier' ); ?></a>
 					</div>
 					<div class="ns-process-wrapper ns-create-site">
-						<h2><?php esc_html_e( 'Current status', 'ns-cloner' ); ?>:</h2>
+						<h2><?php esc_html_e( 'Current status', 'ns-cloner-site-copier' ); ?>:</h2>
 						<div class="ns-cloner-progress-bar">
 							<div class="ns-percents">0%</div>
 							<div class="ns-cloner-progress-bar-inner">
@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="ns-cloner-progress-info">
 							<span class="objects-migrated">0</span> of
 							<span class="total-objects">all</span>
-							<?php esc_html_e( 'items processed', 'ns-cloner' ); ?>
+							<?php esc_html_e( 'items processed', 'ns-cloner-site-copier' ); ?>
 						</div>
 						<div class="ns-cloner-progress-items"></div>
 					</div>
@@ -126,8 +126,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="ns-cloner-processes-done">
 				<div class="ns-modal-head">
-					<button class="ns-modal-close"><?php esc_html_e( 'Close', 'ns-cloner' ); ?></button>
-					<h1><span class="ns-modal-title"></span> <?php esc_html_e( 'finished...', 'ns-cloner' ); ?></h1>
+					<button class="ns-modal-close"><?php esc_html_e( 'Close', 'ns-cloner-site-copier' ); ?></button>
+					<h1><span class="ns-modal-title"></span> <?php esc_html_e( 'finished...', 'ns-cloner-site-copier' ); ?></h1>
 				</div>
 				<div class="ns-modal-body">
 					<div class="ns-process-report">

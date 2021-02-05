@@ -28,7 +28,7 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->report_label = __( 'Tables', 'ns-cloner' );
+		$this->report_label = __( 'Tables', 'ns-cloner-site-copier' );
 	}
 
 	/**

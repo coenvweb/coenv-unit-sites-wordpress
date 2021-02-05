@@ -27,6 +27,7 @@ class NS_Cloner_Ajax {
 		add_action( 'wp_ajax_ns_cloner_process_finish', [ $this, 'process_finish' ] );
 		add_action( 'wp_ajax_ns_cloner_process_exit', [ $this, 'process_exit' ] );
 		add_action( 'wp_ajax_ns_cloner_delete_schedule', [ $this, 'delete_schedule' ] );
+		add_action( 'wp_ajax_ns_cloner_delete_options', [ $this, 'delete_options' ] );
 	}
 
 	/**
@@ -109,6 +110,17 @@ class NS_Cloner_Ajax {
 		$index = ns_cloner_request()->get( 'index' );
 		ns_cloner()->schedule->delete( $index );
 		$this->send_response();
+	}
+
+	/**
+	 * Clear all plugin options data (settings and current operation)
+	 */
+	public function delete_options() {
+		$this->check_nonce();
+		$options_table = is_multisite() ? ns_cloner()->db->sitemeta : ns_cloner()->db->options;
+		$options_key   = is_multisite() ? 'meta_key' : 'option_name';
+		ns_cloner()->db->query( "DELETE * FROM $options_table WHERE $options_key LIKE 'ns_cloner%'" );
+		wp_send_json_success();
 	}
 
 	/**

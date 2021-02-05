@@ -83,15 +83,15 @@ class NS_Cloner_Analytics {
 	public function __construct() {
 		$this->user_modes           = array(
 			'share'             => array(
-				'text' => __( 'Yes, Share', 'ns-cloner' )
+				'text' => __( 'Yes, Share', 'ns-cloner-site-copier' )
 			),
 			'share_anonymously' => array(
-				'text'    => __( 'Yes, Share Anonymously', 'ns-cloner' ),
+				'text'    => __( 'Yes, Share Anonymously', 'ns-cloner-site-copier' ),
 				'tooltip' => __( 'Your domain name will be anonymized and we won\'t know 
-				where the stats are from (but they are still helpful to us!) Thank you!', 'ns-cloner' )
+				where the stats are from (but they are still helpful to us!) Thank you!', 'ns-cloner-site-copier' )
 			),
 			'no_share'          => array(
-				'text' => __( 'No, Dismiss', 'ns-cloner' )
+				'text' => __( 'No, Dismiss', 'ns-cloner-site-copier' )
 			)
 		);
 		$this->user_saved_mode      = get_site_option( $this->user_saved_mode_option_name, get_option( $this->user_saved_mode_option_name ) );

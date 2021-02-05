@@ -173,9 +173,9 @@ function ns_wp_validate_site( $site_name, $site_title ) {
 	$site_name = strtolower( trim( $site_name ) );
 	// Require some name.
 	if ( empty( $site_name ) ) {
-		$errors[] = __( 'Site URL is required.', 'ns-cloner' );
+		$errors[] = __( 'Site URL is required.', 'ns-cloner-site-copier' );
 	} elseif ( ! preg_match( '|^([a-z0-9-])+$|', $site_name ) ) {
-		$errors[] = __( 'Site URLs can only contain letters (a-z), numbers and hyphens.', 'ns-cloner' );
+		$errors[] = __( 'Site URLs can only contain letters (a-z), numbers and hyphens.', 'ns-cloner-site-copier' );
 	}
 	if ( is_multisite() ) {
 		// Check if the domain/path has been used already.
@@ -189,19 +189,19 @@ function ns_wp_validate_site( $site_name, $site_title ) {
 			$path     = $base . $site_name . '/';
 		}
 		if ( domain_exists( $mydomain, $path, get_network()->id ) ) {
-			$errors[] = __('Sorry, that site already exists!', 'ns-cloner');
+			$errors[] = __('Sorry, that site already exists!', 'ns-cloner-site-copier');
 		}
 		// Validate against WP illegal / reserved names.
 		$illegal_names  = get_site_option( 'illegal_names', [] );
 		$illegal_dirs   = get_subdirectory_reserved_names();
 		$illegal_values = is_subdomain_install() ? $illegal_names : array_merge ( $illegal_names, $illegal_dirs );
 		if ( in_array ( $site_name, $illegal_values ) ) {
-			$errors[] = __('That URL is reserved by WordPress.', 'ns-cloner');
+			$errors[] = __('That URL is reserved by WordPress.', 'ns-cloner-site-copier');
 		}
 	}
 	// Require some title.
 	if ( empty( $site_title ) ) {
-		$errors[] = __( 'A site title is required', 'ns-cloner' );
+		$errors[] = __( 'A site title is required', 'ns-cloner-site-copier' );
 	}
 	return apply_filters( 'ns_cloner_validate_site_errors', $errors, $site_name, $site_title );
 }

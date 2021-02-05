@@ -51,53 +51,53 @@ class NS_Cloner_Section_Additional_Settings extends NS_Cloner_Section {
 	 * Output content for section settings box on admin page.
 	 */
 	public function render() {
-		$this->open_section_box( __( 'Additional Settings', 'ns-cloner' ) );
+		$this->open_section_box( __( 'Additional Settings', 'ns-cloner-site-copier' ) );
 		?>
-		<h5><?php esc_html_e( 'Debugging', 'ns-cloner' ); ?></h5>
+		<h5><?php esc_html_e( 'Debugging', 'ns-cloner-site-copier' ); ?></h5>
 		<label>
 			<input type="checkbox" name="debug" />
-			<?php esc_html_e( 'Enable logging', 'ns-cloner' ); ?>
+			<?php esc_html_e( 'Enable logging', 'ns-cloner-site-copier' ); ?>
 		</label>
 		<p class="description">
 			<strong>
-			<?php esc_html_e( 'Logs may contain sensitive information from your database.', 'ns-cloner' ); ?>
-			<?php esc_html_e( 'If you enable logging, it\'s recommended to go to NS Cloner > Logs and clear your logs when you are finished.', 'ns-cloner' ); ?>
+			<?php esc_html_e( 'Logs may contain sensitive information from your database.', 'ns-cloner-site-copier' ); ?>
+			<?php esc_html_e( 'If you enable logging, it\'s recommended to go to NS Cloner > Logs and clear your logs when you are finished.', 'ns-cloner-site-copier' ); ?>
 			</strong>
 		</p>
-		<h5><?php esc_html_e( 'Performance', 'ns-cloner' ); ?></h5>
+		<h5><?php esc_html_e( 'Performance', 'ns-cloner-site-copier' ); ?></h5>
 		<div class="ns-cloner-input-group">
-			<label class="before"><?php esc_html_e( 'Rows per query', 'ns-cloner' ); ?></label>
+			<label class="before"><?php esc_html_e( 'Rows per query', 'ns-cloner-site-copier' ); ?></label>
 			<input type="number" name="rows_per_query" placeholder="50" />
 		</div>
 		<p class="description">
-			<?php esc_html_e( 'This controls how many database records will be copied at one time.', 'ns-cloner' ); ?>
-            <?php esc_html_e( 'You can make cloning faster by increasing this number, but if it\'s too large for your server to handle you\'ll see SQL errors and need to reduce this setting again.', 'ns-cloner' ); ?>
+			<?php esc_html_e( 'This controls how many database records will be copied at one time.', 'ns-cloner-site-copier' ); ?>
+            <?php esc_html_e( 'You can make cloning faster by increasing this number, but if it\'s too large for your server to handle you\'ll see SQL errors and need to reduce this setting again.', 'ns-cloner-site-copier' ); ?>
 		</p>
 		<div class="ns-cloner-input-group">
-			<label class="before"><?php esc_html_e( 'Progress update interval', 'ns-cloner' ); ?></label>
+			<label class="before"><?php esc_html_e( 'Progress update interval', 'ns-cloner-site-copier' ); ?></label>
 			<input type="number" name="progress_update_interval" placeholder="5" />
 		</div>
 		<p class="description">
-			<?php esc_html_e( 'This is the number of items (rows or files) to clone in between updating the progress values.', 'ns-cloner' ); ?>
-            <?php esc_html_e( 'You can make cloning faster by increasing this number, but the higher it is the more jumpy and less smooth/accurate the progress bar will be.', 'ns-cloner' ); ?>
+			<?php esc_html_e( 'This is the number of items (rows or files) to clone in between updating the progress values.', 'ns-cloner-site-copier' ); ?>
+            <?php esc_html_e( 'You can make cloning faster by increasing this number, but the higher it is the more jumpy and less smooth/accurate the progress bar will be.', 'ns-cloner-site-copier' ); ?>
 		</p>
-        <h5><?php esc_html_e( 'Database', 'ns-cloner' ); ?></h5>
+        <h5><?php esc_html_e( 'Database', 'ns-cloner-site-copier' ); ?></h5>
         <label>
             <input type="checkbox" name="skip_views"/>
-            <?php esc_html_e( 'Skip views?', 'ns-cloner' ); ?>
+            <?php esc_html_e( 'Skip views?', 'ns-cloner-site-copier' ); ?>
         </label>
         <p class="description">
             <strong>
-			    <?php esc_html_e( 'This will prevent attempting to clone any SQL views along with tables, which can be required by plugins but can sometimes result in permissions errors.', 'ns-cloner' ); ?>
+			    <?php esc_html_e( 'This will prevent attempting to clone any SQL views along with tables, which can be required by plugins but can sometimes result in permissions errors.', 'ns-cloner-site-copier' ); ?>
             </strong>
         </p>
         <label>
             <input type="checkbox" name="skip_constraints"/>
-            <?php esc_html_e( 'Skip constraints?', 'ns-cloner' ); ?>
+            <?php esc_html_e( 'Skip constraints?', 'ns-cloner-site-copier' ); ?>
         </label>
         <p class="description">
             <strong>
-                <?php esc_html_e( 'This will prevent trying to re-apply any SQL constraints to cloned tables, which help ensure data integrity but can sometimes result in permissions errors.', 'ns-cloner' ); ?>
+                <?php esc_html_e( 'This will prevent trying to re-apply any SQL constraints to cloned tables, which help ensure data integrity but can sometimes result in permissions errors.', 'ns-cloner-site-copier' ); ?>
             </strong>
         </p>
 		<?php

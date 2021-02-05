@@ -1,3 +1,15 @@
+= 4.1.5.2 - 2020.02.03 =
+* Fix bug with new site title not being applied after cloning
+
+= 4.1.5.1 - 2020.02.02 =
+* Fix slug change that broke compatibility with pro version
+
+= 4.1.5 - 2020.01.31 =
+* Add wp_cache_flush() call to resolve object caching issues
+* Add option to clear plugin data for stuck processes
+* Update internationalization to follow WP recommendations
+* Fix misc. warnings, typos
+
 = 4.1.4 - 2020.12.30 =
 * Fix visibility error on magic wakeup method
 * Fix cache clearing mechanism for WP Engine sites

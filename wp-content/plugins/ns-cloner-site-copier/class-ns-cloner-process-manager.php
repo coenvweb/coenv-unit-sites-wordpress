@@ -143,7 +143,7 @@ class NS_Cloner_Process_Manager {
 
 		// Check for errors, and don't proceed if found.
 		if ( ! empty( $this->errors ) ) {
-			$this->add_error( __( 'Validation errors found.', 'ns-cloner' ) );
+			$this->add_error( __( 'Validation errors found.', 'ns-cloner-site-copier' ) );
 			return;
 		} else {
 			do_action( 'ns_cloner_validated' );
@@ -261,8 +261,9 @@ class NS_Cloner_Process_Manager {
 	public function finish() {
 		$this->doing_cloning();
 		ns_cloner()->log->log( 'ENTERING *finish*' );
-		$target_id    = ns_cloner_request()->get( 'target_id' );
-		$target_title = ns_cloner_request()->get( 'target_title' );
+		$target_id     = ns_cloner_request()->get( 'target_id' );
+		$target_title  = ns_cloner_request()->get( 'target_title' );
+		$target_prefix = ns_cloner_request()->get( 'target_prefix' );
 
 		// Use this do do any finish/cleanup/reporting actions.
 		do_action( 'ns_cloner_process_finish' );
@@ -275,18 +276,21 @@ class NS_Cloner_Process_Manager {
 		}
 
 		// Update target title since it will have been overwritten by cloned options.
+		// Use direct db query because otherwise object caching + cache flush can cause update to be lost.
 		if ( ns_cloner_request()->is_mode( 'core' ) ) {
 			if ( ! empty( $target_id ) && ! empty( $target_title ) ) {
-				update_blog_option( $target_id, 'blogname', $target_title );
+				ns_cloner()->db->update(
+					$target_prefix . 'options',
+					[ 'option_value' => $target_title ],
+					[ 'option_name' => 'blogname' ]
+				);
 			}
 		}
 
 		// Flush caches for clone over.
-		if ( ns_cloner_request()->is_mode( 'clone_over' ) ) {
-			switch_to_blog( $target_id );
-			wp_cache_flush();
-			restore_current_blog();
-		}
+		switch_to_blog( $target_id );
+		wp_cache_flush();
+		restore_current_blog();
 
 		// Log and report timing details.
 		ns_cloner()->report->set_end_time();
@@ -295,9 +299,9 @@ class NS_Cloner_Process_Manager {
 		$total_time = ns_cloner()->report->get_elapsed_time();
 		$minutes    = floor( $total_time / 60 );
 		$seconds    = ceil( $total_time % 60 );
-		ns_cloner()->report->add_report( __( 'Start Time', 'ns-cloner' ), $start_time );
-		ns_cloner()->report->add_report( __( 'End Time', 'ns-cloner' ), $end_time );
-		ns_cloner()->report->add_report( __( 'Total Time', 'ns-cloner' ), "{$minutes} min. {$seconds} sec." );
+		ns_cloner()->report->add_report( __( 'Start Time', 'ns-cloner-site-copier' ), $start_time );
+		ns_cloner()->report->add_report( __( 'End Time', 'ns-cloner-site-copier' ), $end_time );
+		ns_cloner()->report->add_report( __( 'Total Time', 'ns-cloner-site-copier' ), "{$minutes} min. {$seconds} sec." );
 		ns_cloner()->log->log( 'END TIME: ' . $end_time );
 		ns_cloner()->log->log( 'TOTAL_TIME: ' . "{$minutes} min. {$seconds} sec." );
 
@@ -310,7 +314,7 @@ class NS_Cloner_Process_Manager {
 			if ( ! empty( $process->report_label ) ) {
 				$completed = $progress['completed'];
 				/* translators: number of items copied in clone operation */
-				$report_string = _n( '%d item processed', '%d items processed', $completed, 'ns-cloner' );
+				$report_string = _n( '%d item processed', '%d items processed', $completed, 'ns-cloner-site-copier' );
 				ns_cloner()->report->add_report( $process->report_label, sprintf( $report_string, $completed ) );
 			}
 		}
@@ -318,8 +322,8 @@ class NS_Cloner_Process_Manager {
 		// Report number of text replacements made in site content.
 		$replacements = (int) ns_cloner()->report->get_report( '_replacements' );
 		/* translators: number of text replacements made on site content */
-		$report_string = _n( '%d replacement made', '%d replacements made', $replacements, 'ns-cloner' );
-		ns_cloner()->report->add_report( __( 'Replacements', 'ns-cloner' ), sprintf( $report_string, $replacements ) );
+		$report_string = _n( '%d replacement made', '%d replacements made', $replacements, 'ns-cloner-site-copier' );
+		ns_cloner()->report->add_report( __( 'Replacements', 'ns-cloner-site-copier' ), sprintf( $report_string, $replacements ) );
 
 		// Clear all process data (except report).
 		$this->exit_processes();
@@ -357,7 +361,7 @@ class NS_Cloner_Process_Manager {
 
 		// Report log file location for debugging.
 		if ( ns_cloner()->log->is_debug() ) {
-			ns_cloner()->report->add_report( __( 'Log File', 'ns-cloner' ), ns_cloner()->log->get_url() );
+			ns_cloner()->report->add_report( __( 'Log File', 'ns-cloner-site-copier' ), ns_cloner()->log->get_url() );
 		}
 
 		// Cancel running background processes, as well as clear data from any completed ones.
@@ -462,7 +466,7 @@ class NS_Cloner_Process_Manager {
 		// Makes sure that the target prefix is not somehow the same as the source.
 		// Shouldn't be possible, but is irreversibly destructive if it does, so make sure.
 		if ( $source_prefix === $target_prefix ) {
-			$this->exit_processes( __( 'Source and target prefix the same. Cannot clone tables.', 'ns-cloner' ) );
+			$this->exit_processes( __( 'Source and target prefix the same. Cannot clone tables.', 'ns-cloner-site-copier' ) );
 			return;
 		}
 
@@ -496,7 +500,7 @@ class NS_Cloner_Process_Manager {
 		// Makes sure that the target uploads dir is not somehow the same as the source.
 		// Shouldn't be possible, but is irreversibly destructive if it does, so make sure.
 		if ( $source_dir === $target_dir && ns_cloner_request()->get( 'do_copy_files', true ) ) {
-			$this->exit_processes( __( 'Source and target uploads directories are the same. Cannot clone files.', 'ns-cloner' ) );
+			$this->exit_processes( __( 'Source and target uploads directories are the same. Cannot clone files.', 'ns-cloner-site-copier' ) );
 			return;
 		}
 
@@ -537,7 +541,7 @@ class NS_Cloner_Process_Manager {
 		// to be called, so there was probably an error and exit_processes() was called.
 		if ( empty( $processes ) && empty( ns_cloner()->report->get_all_reports() ) ) {
 			// Try to get error message.
-			$default_error = __( 'An unknown error occurred. Check the logs for info.', 'ns-cloner' );
+			$default_error = __( 'An unknown error occurred. Check the logs for info.', 'ns-cloner-site-copier' );
 			$this->add_error( ns_cloner()->report->get_report( '_error' ) ?: $default_error );
 			return false;
 		}

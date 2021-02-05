@@ -30,7 +30,7 @@ if ( remove_action( 'ns_cloner_before_construct', 'ns_cloner_addon_content_users
 	printf(
 		wp_kses(
 			/* translators: URLs to plugins page and plugin license page */
-			__( 'NS Cloner Pro needs to be updated for compatibility with NS Cloner 4. Please <a href="%s" target="_blank">click here</a> to check for the latest version, and then click "Update now" on NS Cloner Pro when you are redirected to the plugins page (you\'ll need to have <a href="%s" target="_blank">entered an active license</a> for the new version to show up).', 'ns-cloner' ),
+			__( 'NS Cloner Pro needs to be updated for compatibility with NS Cloner 4. Please <a href="%s" target="_blank">click here</a> to check for the latest version, and then click "Update now" on NS Cloner Pro when you are redirected to the plugins page (you\'ll need to have <a href="%s" target="_blank">entered an active license</a> for the new version to show up).', 'ns-cloner-site-copier' ),
 			ns_wp_kses_allowed()
 		),
 		esc_url( $url_function( 'plugins.php?check_for_updates=yes' ) ),
@@ -42,22 +42,22 @@ if ( remove_action( 'ns_cloner_before_construct', 'ns_cloner_addon_content_users
 // #2: Warn if activating core for single site without pro.
 if ( ! is_network_admin() && ! defined( 'NS_CLONER_PRO_VERSION' ) ) {
 	if ( ! is_multisite() ) {
-		$message = __( 'The free version of NS Cloner only works on WordPress Multisite.', 'ns-cloner' );
+		$message = __( 'The free version of NS Cloner only works on WordPress Multisite.', 'ns-cloner-site-copier' );
 	} elseif ( is_plugin_active_for_network( plugin_basename( NS_CLONER_V4_PLUGIN_DIR . '/ns-cloner.php' ) ) ) {
 		$message = sprintf(
 			/* translators: URL to network cloner page */
-			__( 'The free version of NS Cloner only works as a Multisite Network plugin (<a href="%s">go here to access the Network Cloner page</a>).', 'ns-cloner' ),
+			__( 'The free version of NS Cloner only works as a Multisite Network plugin (<a href="%s">go here to access the Network Cloner page</a>).', 'ns-cloner-site-copier' ),
 			network_admin_url( 'admin.php?page=' . ns_cloner()->menu_slug )
 		);
 	} elseif ( is_multisite() ) {
 		$message = sprintf(
 			/* translators: URL to network plugins page */
-			__( 'The free version of NS Cloner only works as a Network Activated plugin. Go to <a href="%s">Network Admin > Plugins</a> to activate it.', 'ns-cloner' ),
+			__( 'The free version of NS Cloner only works as a Network Activated plugin. Go to <a href="%s">Network Admin > Plugins</a> to activate it.', 'ns-cloner-site-copier' ),
 			network_admin_url( 'plugins.php' )
 		);
 	}
 	/* translators: URL to plugin info page */
-	$pro_text = __( 'For cloning to and from single sites, check out <a href="%s" target="_blank">NS Cloner Pro</a>.', 'ns-cloner' );
+	$pro_text = __( 'For cloning to and from single sites, check out <a href="%s" target="_blank">NS Cloner Pro</a>.', 'ns-cloner-site-copier' );
 	$pro_link = sprintf( $pro_text, esc_url( NS_CLONER_PRO_URL ) );
 	echo "<span class='ns-cloner-warning-message'>" . wp_kses( $message . ' ' . $pro_link, ns_wp_kses_allowed() ) . '</span>';
 	// No other warnings matter now.
@@ -69,14 +69,14 @@ if ( ! is_network_admin() && defined( 'NS_CLONER_PRO_VERSION' ) ) {
 	if ( is_plugin_active_for_network( plugin_basename( NS_CLONER_V4_PLUGIN_DIR . '/ns-cloner.php' ) ) ) {
 		$message = sprintf(
 			/* translators: URL to network cloner page */
-			__( 'Just a heads up: the NS Cloner is most powerful and has additional features available when used as a Multisite Network plugin. You can <a href="%s">go here to access the Network Cloner page</a>.', 'ns-cloner' ),
+			__( 'Just a heads up: the NS Cloner is most powerful and has additional features available when used as a Multisite Network plugin. You can <a href="%s">go here to access the Network Cloner page</a>.', 'ns-cloner-site-copier' ),
 			network_admin_url( 'admin.php?page=' . ns_cloner()->menu_slug )
 		);
 		echo "<span class='ns-cloner-info-message'>" . wp_kses( $message, ns_wp_kses_allowed() ) . '</span>';
 	} elseif ( is_multisite() ) {
 		$message = sprintf(
 			/* translators: URL to network plugins page */
-			__( 'Just a heads up: the NS Cloner is most powerful and has additional features available as a Network Activated plugin. You can go to <a href="%s">Network Admin > Plugins</a> to activate it.', 'ns-cloner' ),
+			__( 'Just a heads up: the NS Cloner is most powerful and has additional features available as a Network Activated plugin. You can go to <a href="%s">Network Admin > Plugins</a> to activate it.', 'ns-cloner-site-copier' ),
 			network_admin_url( 'plugins.php' )
 		);
 		echo "<span class='ns-cloner-info-message'>" . wp_kses( $message, ns_wp_kses_allowed() ) . '</span>';
@@ -89,7 +89,7 @@ if ( ! is_writeable( NS_CLONER_LOG_DIR ) ) {
 	echo wp_kses(
 		sprintf(
 			// translators: %s: path to logs directory.
-			__( 'The logs directory for NS Cloner (<code>%s</code>) is not writable by the server. The Cloner will still work, but logs won\'t be available in case anything needs debugging.', 'ns-cloner' ),
+			__( 'The logs directory for NS Cloner (<code>%s</code>) is not writable by the server. The Cloner will still work, but logs won\'t be available in case anything needs debugging.', 'ns-cloner-site-copier' ),
 			NS_CLONER_LOG_DIR
 		),
 		ns_wp_kses_allowed()
@@ -103,8 +103,8 @@ $max_execution_time = intval( ini_get( 'max_execution_time' ) );
 if ( $max_execution_time > 0 && $max_execution_time < 60 ) {
 	echo "<span class='ns-cloner-warning-message'>";
 	// translators: %d: max execution time in seconds.
-	echo esc_html( sprintf( __( 'This host\'s max_execution_time is set to %d seconds - we generally recommend at least 60 seconds for running the Cloner.', 'ns-cloner' ), $max_execution_time ) );
-	esc_html_e( 'You may want to increase the max_execution_time in php.ini (or wherever your host supports PHP configuration updates) to avoid any timeout errors.', 'ns-cloner' );
+	echo esc_html( sprintf( __( 'This host\'s max_execution_time is set to %d seconds - we generally recommend at least 60 seconds for running the Cloner.', 'ns-cloner-site-copier' ), $max_execution_time ) );
+	esc_html_e( 'You may want to increase the max_execution_time in php.ini (or wherever your host supports PHP configuration updates) to avoid any timeout errors.', 'ns-cloner-site-copier' );
 	echo '</span>';
 }
 
@@ -114,8 +114,8 @@ if ( function_exists( 'ini_get' ) ) {
 	if ( $memory_limit && -1 != $memory_limit && wp_convert_hr_to_bytes( $memory_limit ) < 128 * MB_IN_BYTES ) {
 		echo "<span class='ns-cloner-warning-message'>";
 		// translators: %d: memory limit in megabytes.
-		echo esc_html( sprintf( __( 'This host\'s memory_limit is set to %dMB - we generally recommend at least 128MB for running the Cloner.', 'ns-cloner' ), $memory_limit ) );
-		esc_html_e( 'You may want to increase the memory_limit in php.ini (or wherever your host supports PHP configuration updates) to avoid any out-of-memory errors.', 'ns-cloner' );
+		echo esc_html( sprintf( __( 'This host\'s memory_limit is set to %dMB - we generally recommend at least 128MB for running the Cloner.', 'ns-cloner-site-copier' ), $memory_limit ) );
+		esc_html_e( 'You may want to increase the memory_limit in php.ini (or wherever your host supports PHP configuration updates) to avoid any out-of-memory errors.', 'ns-cloner-site-copier' );
 		echo '</span>';
 	}
 }
@@ -140,7 +140,7 @@ if ( is_multisite() && ! iis7_supports_permalinks() ) {
 			printf(
 				wp_kses(
 					// translators: %s: url to network setup page.
-					__( 'Please check the recommended htaccess settings <a href="%s" target="_blank">here</a> and make sure your .htaccess file matches.', 'ns-cloner' ),
+					__( 'Please check the recommended htaccess settings <a href="%s" target="_blank">here</a> and make sure your .htaccess file matches.', 'ns-cloner-site-copier' ),
 					ns_wp_kses_allowed()
 				),
 				esc_url( network_admin_url( 'setup.php' ) )
@@ -154,12 +154,12 @@ if ( is_multisite() && ! iis7_supports_permalinks() ) {
 $test_response = wp_remote_get( admin_url( 'admin-ajax.php' ) );
 if ( is_wp_error( $test_response ) || 401 === wp_remote_retrieve_response_code( $test_response ) ) {
 	echo "<span class='ns-cloner-warning-message'>";
-	esc_html_e( 'It appears you have HTTP basic auth or something else blocking remote requests to your site, which means background cloning won\'t work. ', 'ns-cloner' );
-	esc_html_e( 'The Cloner will default to AJAX processing, so you should be able to still clone sites successfully, but progress will stop if you leave this page. ', 'ns-cloner' );
+	esc_html_e( 'It appears you have HTTP basic auth or something else blocking remote requests to your site, which means background cloning won\'t work. ', 'ns-cloner-site-copier' );
+	esc_html_e( 'The Cloner will default to AJAX processing, so you should be able to still clone sites successfully, but progress will stop if you leave this page. ', 'ns-cloner-site-copier' );
 	printf(
 		wp_kses(
 			// translators: %s: url to network setup page.
-			__( 'If you have basic auth enabled, you can <a href="%s" target="_blank">add a workaround</a>.', 'ns-cloner' ),
+			__( 'If you have basic auth enabled, you can <a href="%s" target="_blank">add a workaround</a>.', 'ns-cloner-site-copier' ),
 			ns_wp_kses_allowed()
 		),
 		'https://neversettle.it/documentation/ns-cloner/cloning-on-a-password-protected-site/'

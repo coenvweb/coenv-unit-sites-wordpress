@@ -3,13 +3,14 @@
  * Plugin Name: NS Cloner - Site Copier
  * Plugin URI: https://neversettle.it
  * Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out NS Cloner Pro for additional powerful add-ons and features!
- * Version: 4.1.4
+ * Version: 4.1.5.2
  * Author: Never Settle
  * Author URI: https://neversettle.it
  * Requires at least: 4.0.0
  * Tested up to: 5.6
+ * License: GPLv2 or later
  *
- * Text Domain: ns-cloner
+ * Text Domain: ns-cloner-site-copier
  * Domain Path: /languages
  *
  * @package   NeverSettle\NS-Cloner
@@ -66,7 +67,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.1.4';
+	public $version = '4.1.5.2';
 
 	/**
 	 * Menu Slug
@@ -224,7 +225,7 @@ final class NS_Cloner {
 		// Hook to WP 'all' hook to automatically log all hooks that start with ns_cloner.
 		add_action( 'all', [ $this, 'log_hooks' ] );
 
-		// Install custom tables after cloner init
+		// Install custom tables after cloner init.
 		add_action( 'ns_cloner_init', [ $this, 'install_tables' ] );
 	}
 
@@ -234,6 +235,7 @@ final class NS_Cloner {
 	 * The difference between this and the constructor is that anything that needs to use localization has to go here.
 	 */
 	public function init() {
+		load_plugin_textdomain( 'ns-cloner-site-copier', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 
 		// Setup class instances.
 		$this->process_manager = new NS_Cloner_Process_Manager();
@@ -257,9 +259,9 @@ final class NS_Cloner {
 			'ns_cloner_core_modes',
 			[
 				'core' => [
-					'title'       => __( 'Standard Clone', 'ns-cloner' ),
-					'button_text' => __( 'Clone', 'ns-cloner' ),
-					'description' => __( 'Take an existing site and create a brand new copy of it at another url.', 'ns-cloner' ),
+					'title'       => __( 'Standard Clone', 'ns-cloner-site-copier' ),
+					'button_text' => __( 'Clone', 'ns-cloner-site-copier' ),
+					'description' => __( 'Take an existing site and create a brand new copy of it at another url.', 'ns-cloner-site-copier' ),
 					'steps'       => [
 						[ $this->process_manager, 'create_site' ],
 						[ $this->process_manager, 'copy_tables' ],
@@ -267,13 +269,13 @@ final class NS_Cloner {
 					],
 					'report'      => function() {
 						// Success message.
-						ns_cloner()->report->add_report( '_message', __( 'Site cloned successfully!', 'ns-cloner' ) );
+						ns_cloner()->report->add_report( '_message', __( 'Site cloned successfully!', 'ns-cloner-site-copier' ) );
 						// Source site.
 						$source_id = ns_cloner_request()->get( 'source_id' );
-						ns_cloner()->report->add_report( __( 'Source Site', 'ns-cloner' ), ns_site_link( $source_id ) );
+						ns_cloner()->report->add_report( __( 'Source Site', 'ns-cloner-site-copier' ), ns_site_link( $source_id ) );
 						// Target site.
 						$target_id = ns_cloner_request()->get( 'target_id' );
-						ns_cloner()->report->add_report( __( 'Target Site', 'ns-cloner' ), ns_site_link( $target_id ) );
+						ns_cloner()->report->add_report( __( 'Target Site', 'ns-cloner-site-copier' ), ns_site_link( $target_id ) );
 					},
 				],
 			]
@@ -359,8 +361,8 @@ final class NS_Cloner {
 	 */
 	public function admin_menu_pages() {
 		add_menu_page(
-			__( 'NS Cloner', 'ns-cloner' ),
-			__( 'NS Cloner', 'ns-cloner' ),
+			__( 'NS Cloner', 'ns-cloner-site-copier' ),
+			__( 'NS Cloner', 'ns-cloner-site-copier' ),
 			$this->capability,
 			$this->menu_slug,
 			function() {
@@ -374,8 +376,8 @@ final class NS_Cloner {
 		// Add logs submenu at bottom.
 		$submenu['ns-cloner-logs'] = [
 			$this->menu_slug,
-			__( 'Logs / Status', 'ns-cloner' ),
-			__( 'Logs / Status', 'ns-cloner' ),
+			__( 'Logs / Status', 'ns-cloner-site-copier' ),
+			__( 'Logs / Status', 'ns-cloner-site-copier' ),
 			$this->capability,
 			'ns-cloner-logs',
 			function() {
@@ -501,7 +503,7 @@ final class NS_Cloner {
 				if ( wp_doing_ajax() ) {
 					wp_die( -1, 403 );
 				} else {
-					wp_die( esc_html( __( 'You don\'t have sufficient permissions for this action.', 'ns-cloner' ) ) );
+					wp_die( esc_html( __( 'You don\'t have sufficient permissions for this action.', 'ns-cloner-site-copier' ) ) );
 				}
 			} else {
 				return false;

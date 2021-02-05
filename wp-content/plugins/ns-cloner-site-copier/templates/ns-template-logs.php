@@ -14,6 +14,11 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 	ns_cloner()->log->delete_logs();
 }
 
+// Delete plugin data if submitted.
+if ( ns_cloner_request()->get( 'delete_plugin_data' ) && ns_cloner()->check_permissions() ) {
+	ns_cloner()->delete_plugin_data();
+}
+
 ?>
 
 <div class="ns-cloner-header">
@@ -21,7 +26,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 		<img src="<?php echo esc_url( NS_CLONER_V4_PLUGIN_URL . 'images/ns-cloner-top-logo.png' ); ?>" alt="NS Cloner" />
 	</a>
 	<span>/</span>
-	<h1><?php esc_html_e( 'Logs & Status', 'ns-cloner' ); ?></h1>
+	<h1><?php esc_html_e( 'Logs & Status', 'ns-cloner-site-copier' ); ?></h1>
 </div>
 
 <div class="ns-cloner-wrapper">
@@ -30,19 +35,19 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 
 		<div class="ns-cloner-section">
 			<div class="ns-cloner-section-header">
-				<h4><?php esc_html_e( 'Scheduled Operations', 'ns-cloner' ); ?></h4>
+				<h4><?php esc_html_e( 'Scheduled Operations', 'ns-cloner-site-copier' ); ?></h4>
 			</div>
 			<div class="ns-cloner-section-content">
 				<?php if ( empty( ns_cloner()->schedule->get() ) ) : ?>
-					<h5><?php esc_html_e( 'No scheduled cloning operations.', 'ns-cloner' ); ?></h5>
+					<h5><?php esc_html_e( 'No scheduled cloning operations.', 'ns-cloner-site-copier' ); ?></h5>
 				<?php else : ?>
 					<table class="ns-cloner-ops-table">
 						<tr>
-							<th class="date-col"><?php esc_html_e( 'Scheduled', 'ns-cloner' ); ?></th>
-							<th><?php esc_html_e( 'Type', 'ns-cloner' ); ?></th>
-							<th><?php esc_html_e( 'Created', 'ns-cloner' ); ?></th>
-							<th class="action-col"><?php esc_html_e( 'View', 'ns-cloner' ); ?></th>
-							<th class="action-col"><?php esc_html_e( 'Delete', 'ns-cloner' ); ?></th>
+							<th class="date-col"><?php esc_html_e( 'Scheduled', 'ns-cloner-site-copier' ); ?></th>
+							<th><?php esc_html_e( 'Type', 'ns-cloner-site-copier' ); ?></th>
+							<th><?php esc_html_e( 'Created', 'ns-cloner-site-copier' ); ?></th>
+							<th class="action-col"><?php esc_html_e( 'View', 'ns-cloner-site-copier' ); ?></th>
+							<th class="action-col"><?php esc_html_e( 'Delete', 'ns-cloner-site-copier' ); ?></th>
 						</tr>
 						<?php foreach ( ns_cloner()->schedule->get() as $i => $data ) : ?>
 							<tr data-index="<?php echo esc_attr( $i ); ?>">
@@ -59,7 +64,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 								</td>
 								<td>
 									<button class="button ns-cloner-scheduled-view" data-cloner-modal="<?php echo esc_attr( "op_$i" ); ?>">
-										<?php esc_html_e( 'View', 'ns-cloner' ); ?>
+										<?php esc_html_e( 'View', 'ns-cloner-site-copier' ); ?>
 									</button>
 									<div class="ns-cloner-extra-modal" id="<?php echo esc_attr( "op_$i" ); ?>">
 										<div class="ns-cloner-extra-modal-content">
@@ -70,7 +75,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 								</td>
 								<td>
 									<button class="button ns-cloner-scheduled-delete" data-index="<?php echo esc_attr( $i ); ?>">
-										<?php esc_html_e( 'Delete', 'ns-cloner' ); ?>
+										<?php esc_html_e( 'Delete', 'ns-cloner-site-copier' ); ?>
 									</button>
 								</td>
 							</tr>
@@ -78,15 +83,15 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 					</table>
 				<?php endif; ?>
 				<p class="description">
-					<?php esc_html_e( 'Scheduled operations are created when someone clicks the clone button while another cloning operation is still running.', 'ns-cloner' ); ?>
-					<?php esc_html_e( 'They may also be created via the command line or by frontend cloning (from member registrations) with Cloner Pro.', 'ns-cloner' ); ?>
+					<?php esc_html_e( 'Scheduled operations are created when someone clicks the clone button while another cloning operation is still running.', 'ns-cloner-site-copier' ); ?>
+					<?php esc_html_e( 'They may also be created via the command line or by frontend cloning (from member registrations) with Cloner Pro.', 'ns-cloner-site-copier' ); ?>
 				</p>
 			</div>
 		</div>
 
         <div class="ns-cloner-section">
             <div class="ns-cloner-section-header">
-                <h4><?php esc_html_e( 'NS Cloner Statistics', 'ns-cloner' ); ?></h4>
+                <h4><?php esc_html_e( 'NS Cloner Statistics', 'ns-cloner-site-copier' ); ?></h4>
             </div>
             <div class="ns-cloner-section-content" id="analytics-settings">
                 <?php
@@ -110,18 +115,18 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 
 		<div class="ns-cloner-section">
 			<div class="ns-cloner-section-header">
-				<h4><?php esc_html_e( 'Manage Logs', 'ns-cloner' ); ?></h4>
+				<h4><?php esc_html_e( 'Manage Logs', 'ns-cloner-site-copier' ); ?></h4>
 			</div>
 			<div class="ns-cloner-section-content">
 				<?php if ( empty( ns_cloner()->log->get_logs() ) ) : ?>
-					<h5><?php esc_html_e( 'No logs currently saved.', 'ns-cloner' ); ?></h5>
+					<h5><?php esc_html_e( 'No logs currently saved.', 'ns-cloner-site-copier' ); ?></h5>
 				<?php else : ?>
 					<p>
-						<?php esc_html_e( 'Logs may contain sensitive information from your database, so it\'s good security practice to clear them once no longer needed.', 'ns-cloner' ); ?>
-						<?php esc_html_e( 'Make sure that you don\'t need them for support or debugging, though, because they will be deleted permanently once cleared.', 'ns-cloner' ); ?>
+						<?php esc_html_e( 'Logs may contain sensitive information from your database, so it\'s good security practice to clear them once no longer needed.', 'ns-cloner-site-copier' ); ?>
+						<?php esc_html_e( 'Make sure that you don\'t need them for support or debugging, though, because they will be deleted permanently once cleared.', 'ns-cloner-site-copier' ); ?>
 					</p>
 					<p>
-						<input type="submit" name="delete_logs" class="button ns-cloner-form-button large" value="<?php esc_attr_e( 'Delete All Logs', 'ns-cloner' ); ?>" />
+						<input type="submit" name="delete_logs" class="button ns-cloner-form-button large" value="<?php esc_attr_e( 'Delete All Logs', 'ns-cloner-site-copier' ); ?>" />
 					</p>
 				<?php endif; ?>
 			</div>
@@ -129,18 +134,35 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 
 		<div class="ns-cloner-section">
 			<div class="ns-cloner-section-header">
-				<h4><?php esc_html_e( 'View Logs', 'ns-cloner' ); ?></h4>
+				<h4><?php esc_html_e( 'Clear Plugin Data', 'ns-cloner-site-copier' ); ?></h4>
+			</div>
+			<div class="ns-cloner-section-content">
+                <p>
+                    <?php esc_html_e( 'This will clear all plugin settings and any in-progress cloning data.', 'ns-cloner-site-copier' ); ?>
+                    <?php esc_html_e( 'This is helpful in cases where a cloning operation gets stuck in limbo and the cancel button isn\'t working.', 'ns-cloner-site-copier' ); ?>
+                </p>
+                <p>
+                    <a class="button ns-cloner-form-button large ns-cloner-options-delete">
+                        <?php _e( 'Delete All Plugin Data', 'ns-cloner-site-copier' ); ?>
+                    </a>
+                </p>
+			</div>
+		</div>
+
+		<div class="ns-cloner-section">
+			<div class="ns-cloner-section-header">
+				<h4><?php esc_html_e( 'View Logs', 'ns-cloner-site-copier' ); ?></h4>
 			</div>
 			<div class="ns-cloner-section-content">
 				<?php if ( empty( ns_cloner()->log->get_logs() ) ) : ?>
-					<h5><?php esc_html_e( 'No logs currently saved.', 'ns-cloner' ); ?></h5>
+					<h5><?php esc_html_e( 'No logs currently saved.', 'ns-cloner-site-copier' ); ?></h5>
 				<?php else : ?>
 					<table class="ns-cloner-logs-table">
 						<tr>
-							<th class="date-col"><?php esc_html_e( 'Date', 'ns-cloner' ); ?></th>
-							<th><?php esc_html_e( 'Log File', 'ns-cloner' ); ?></th>
-							<th><?php esc_html_e( 'Size', 'ns-cloner' ); ?></th>
-							<th class="action-col"><?php esc_html_e( 'View', 'ns-cloner' ); ?></th>
+							<th class="date-col"><?php esc_html_e( 'Date', 'ns-cloner-site-copier' ); ?></th>
+							<th><?php esc_html_e( 'Log File', 'ns-cloner-site-copier' ); ?></th>
+							<th><?php esc_html_e( 'Size', 'ns-cloner-site-copier' ); ?></th>
+							<th class="action-col"><?php esc_html_e( 'View', 'ns-cloner-site-copier' ); ?></th>
 						</tr>
 						<?php foreach ( ns_cloner()->log->get_logs() as $log ) : ?>
 							<tr>
@@ -157,7 +179,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 								</td>
 								<td>
 									<a class="button" href="<?php echo esc_url( $log['url'] ); ?>" target="_blank">
-										<?php esc_html_e( 'View Log', 'ns-cloner' ); ?>
+										<?php esc_html_e( 'View Log', 'ns-cloner-site-copier' ); ?>
 									</a>
 								</td>
 							</tr>

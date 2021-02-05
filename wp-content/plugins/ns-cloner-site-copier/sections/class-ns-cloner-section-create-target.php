@@ -44,24 +44,24 @@ class NS_Cloner_Section_Create_Target extends NS_Cloner_Section {
 		if ( ! is_multisite() ) {
 			return;
 		}
-		$this->open_section_box( __( 'Create New Site', 'ns-cloner' ), __( 'Create Site', 'ns-cloner' ) );
+		$this->open_section_box( __( 'Create New Site', 'ns-cloner-site-copier' ), __( 'Create Site', 'ns-cloner-site-copier' ) );
 		?>
-		<h5><label for="target_title"><?php esc_html_e( 'Give the target site a title', 'ns-cloner' ); ?></label></h5>
+		<h5><label for="target_title"><?php esc_html_e( 'Give the target site a title', 'ns-cloner-site-copier' ); ?></label></h5>
 		<div class="ns-cloner-input-group">
 			<input type="text" name="target_title"
-				placeholder="<?php esc_attr_e( 'New Site Title', 'ns-cloner' ); ?>"
-				data-label="<?php esc_attr_e( 'Site title', 'ns-cloner' ); ?>"
+				placeholder="<?php esc_attr_e( 'New Site Title', 'ns-cloner-site-copier' ); ?>"
+				data-label="<?php esc_attr_e( 'Site title', 'ns-cloner-site-copier' ); ?>"
 				data-required="1" />
 		</div>
-		<h5><label for="target_name"><?php esc_html_e( 'Give the target site a URL', 'ns-cloner' ); ?></label></h5>
+		<h5><label for="target_name"><?php esc_html_e( 'Give the target site a URL', 'ns-cloner-site-copier' ); ?></label></h5>
 		<div class="ns-cloner-input-group">
 		<?php if ( is_subdomain_install() ) : ?>
 			<label><?php echo is_ssl() ? 'https://' : 'http://'; ?></label>
-			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner' ); ?>" />
+			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner-site-copier' ); ?>" />
 			<label>.<?php echo esc_html( preg_replace( '|^www\.|', '', get_current_site()->domain ) ); ?></label>
 		<?php else : ?>
 			<label><?php echo esc_url( trailingslashit( site_url() ) ); ?></label>
-			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner' ); ?>" />
+			<input type="text" name="target_name" class="ns-cloner-quick-validate" data-label="<?php esc_attr_e( 'Site URL', 'ns-cloner-site-copier' ); ?>" />
 		<?php endif; ?>
 		</div>
 		<?php

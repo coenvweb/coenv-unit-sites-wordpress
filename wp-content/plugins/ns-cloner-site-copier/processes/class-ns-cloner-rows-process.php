@@ -72,7 +72,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->report_label = __( 'Rows', 'ns-cloner' );
+		$this->report_label = __( 'Rows', 'ns-cloner-site-copier' );
 
 		// Load stored primary keys from past processes.
 		$this->primary_keys = get_site_option( $this->identifier . '_primary_keys', [] );
