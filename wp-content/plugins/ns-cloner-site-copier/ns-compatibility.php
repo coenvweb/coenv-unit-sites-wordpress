@@ -89,3 +89,23 @@ add_action(
 	10,
 	99
 );
+
+/**
+ * SEO by Rank Math Pro runs activation that triggers a fatal error.
+ * Have to remove manually because Rank Math doesn't give any hook or access to use remove_action.
+ */
+add_action(
+	'ns_cloner_process_init',
+	function() {
+		if ( class_exists( '\RankMathPro\Installer' ) ) {
+			global $wp_filter;
+			foreach ( $wp_filter['wpmu_new_blog']->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $key => $fn ) {
+					if ( preg_match( '/activate_blog$/', $key ) ) {
+						unset( $wp_filter['wpmu_new_blog']->callbacks[ $priority ][ $key ] );
+					}
+				}
+			}
+		}
+	}
+);

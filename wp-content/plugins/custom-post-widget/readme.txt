@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 4.0
-Tested up to: 5.5.3
-Stable tag: 3.1.5
+Tested up to: 5.7
+Stable tag: 3.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,10 +29,10 @@ To add content to a widget, drag it to the required position in the sidebar and 
 
 * Swedish (sv_SE) by [Andreas Larsson](http://krokedil.se)
 * Spanish (es_ES) by [IBIDEM GROUP](https://www.ibidemgroup.com)
-* Polish (pl_PL) by [Kuba Skublicki](https://www.linkedin.com/in/kubecki)
 * Portuguese (pt_BR) by [Ronaldo Chevalier](http://www.hostmeta.com.br/)
-* Czech (cs_CZ) by [Martin Kucera](http://jsemweb.cz/)
+* Polish (pl_PL) by [Kuba Skublicki](https://www.linkedin.com/in/kubecki)
 * Dutch (nl_NL) by [Johan van der Wijk](http://vanderwijk.nl)
+* Czech (cs_CZ) by [Martin Kucera](http://jsemweb.cz/)
 
 [More translations are very welcome!](https://translate.wordpress.org/projects/wp-plugins/custom-post-widget)
 
@@ -130,6 +130,9 @@ DO NOT click the 'Broken' button in the compatibility area of the plugin directo
 Creating and supporting this plugin takes up a lot of my free time, therefore I would highly appreciate it if you could take a couple of minutes to [write a review](http://wordpress.org/support/view/plugin-reviews/custom-post-widget). This will help other WordPress users to start using this plugin and keep me motivated to maintain and support it. Also, if you have a twitter, Facebook or Google+ account, it would be fantastic if you could share the link to this plugin!
 
 == Changelog ==
+
+= 3.1.6 =
+Compatibility testing. Also tested on PHP8 and found no issues.
 
 = 3.1.5 =
 Spanish translation added and readme.txt file updates.
