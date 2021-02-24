@@ -2,36 +2,28 @@
 
 
 function customtaxorder_register_settings() {
-	register_setting('customtaxorder_settings', 'customtaxorder_settings', 'customtaxorder_settings_validate');
-	register_setting('customtaxorder_settings', 'customtaxorder_taxonomies', 'customtaxorder_taxonomies_validate');
+
+	register_setting(
+		'customtaxorder_settings',
+		'customtaxorder_settings',
+		array(
+			'type'              => 'string',
+			'show_in_rest'      => false,
+			'default'           => NULL,
+			'sanitize_callback' => 'customtaxorder_settings_validate'
+		));
+	register_setting(
+		'customtaxorder_settings',
+		'customtaxorder_taxonomies',
+		array(
+			'type'              => 'string',
+			'show_in_rest'      => false,
+			'default'           => NULL,
+			'sanitize_callback' => 'customtaxorder_taxonomies_validate'
+		));
+
 }
 add_action('admin_init', 'customtaxorder_register_settings');
-
-
-function customtaxorder_settings_validate($input) {
-
-	$taxonomies = customtaxorder_get_taxonomies() ;
-
-	foreach ( $taxonomies as $taxonomy ) {
-		if ( $input[$taxonomy->name] != 1 ) {
-			if ( $input[$taxonomy->name] != 2 ) {
-				if ( $input[$taxonomy->name] != 3 ) {
-					$input[$taxonomy->name] = 0; //default
-				}
-			}
-		}
-	}
-	$output = array();
-	foreach ( $input as $key => $value) {
-		$key = (string) sanitize_text_field( $key );
-		$output[$key] = (int) $value;
-	}
-	return $output;
-}
-function customtaxorder_taxonomies_validate($input) {
-	$input = (string) sanitize_text_field( $input );
-	return $input;
-}
 
 
 /*
@@ -82,7 +74,7 @@ function customtaxorder_js_libs() {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'customtaxorder', plugins_url( '/js/script.js', __FILE__ ), 'jquery-ui-sortable', CUSTOMTAXORDER_VER, true );
+			wp_enqueue_script( 'customtaxorder', plugins_url( '/js/customtaxorder.js', __FILE__ ), 'jquery-ui-sortable', CUSTOMTAXORDER_VER, true );
 		}
 	}
 }

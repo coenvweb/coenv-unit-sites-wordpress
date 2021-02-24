@@ -6,8 +6,8 @@ function custom_taxonomy_order() {
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
-	if ( function_exists('current_user_can') && !current_user_can( $custom_cap ) ) {
-		die(esc_html__( 'Cheatin&#8217; uh?', 'custom-taxonomy-order-ne' ));
+	if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+		die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 	}
 
 	if (isset($_POST['order-submit'])) {
@@ -84,6 +84,13 @@ function customtaxorder_update_taxonomies() {
 		return;
 	}
 
+	// Set your custom capability through this filter.
+	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
+
+	if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+		die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
+	}
+
 	if (isset($_POST['hidden-taxonomy-order']) && $_POST['hidden-taxonomy-order'] != "") {
 
 		$new_order = $_POST['hidden-taxonomy-order'];
@@ -94,8 +101,14 @@ function customtaxorder_update_taxonomies() {
 	} else {
 		echo '<div id="message" class="error fade notice is-dismissible"><p>'. esc_html__('An error occured, order has not been saved.', 'custom-taxonomy-order-ne').'</p></div>';
 	}
-}
 
+}
+function customtaxorder_taxonomies_validate($input) {
+
+	$input = (string) sanitize_text_field( $input );
+	return $input;
+
+}
 
 /*
  * Sort the taxonomies.

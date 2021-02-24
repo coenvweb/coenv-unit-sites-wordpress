@@ -8,30 +8,30 @@ jQuery(document).ready(function(jQuery) {
 
 	/* Submit button click event */
 	jQuery("#custom-loading").hide();
-	jQuery("#order-submit").click(function() {
+	jQuery("#order-submit").on( 'click', function() {
 		customtaxorder_ordersubmit();
 	});
 
 	/* Button to sort the list alphabetically */
-	jQuery("#order-alpha").click(function(e) {
+	jQuery("#order-alpha").on( 'click', function(e) {
 		e.preventDefault();
 		jQuery("#custom-loading").show();
 		customtaxorder_orderalpha();
 		setTimeout(function(){
 			jQuery("#custom-loading").hide();
 		},500);
-		jQuery("#order-alpha").blur();
+		jQuery("#order-alpha").trigger('blur');
 	});
 
 	/* Button to sort the list on slug */
-	jQuery("#order-slug").click(function(e) {
+	jQuery("#order-slug").on( 'click', function(e) {
 		e.preventDefault();
 		jQuery("#custom-loading").show();
 		customtaxorder_orderslug();
 		setTimeout(function(){
 			jQuery("#custom-loading").hide();
 		},500);
-		jQuery("#order-slug").blur();
+		jQuery("#order-slug").trigger('blur');
 	});
 
 });

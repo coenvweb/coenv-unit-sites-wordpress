@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.6
-Stable tag: 3.2.2
+Stable tag: 3.3.0
 License: GPLv2 or later
 
 
@@ -158,6 +158,13 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.3.0 =
+* 2021-02-23
+* Save settings per taxonomy with capability 'manage_categories', not 'manage_options'.
+* Rewrite some code for settings pages.
+* Fix deprecated jQuery calls with WP 5.6 and jQuery 3.5.
+* Rename script.js to customtaxorder.js.
 
 = 3.2.2 =
 * 2020-12-04
