@@ -2,9 +2,9 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,6 +183,16 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 
 ## Changelog ##
+
+### 2.8.3 ###
+*Release Date - March 9, 2021*
+
+= Improvements =
+* Taxonomy archive pages mechanism improved. When the pages are disabled (404) they are no more accessible by friendly URLs.
+
+= Compatibility =
+* WordPress 5.7 compatibility ensured
+
 
 ### 2.8.2 ###
 *Release Date - December 9, 2020*

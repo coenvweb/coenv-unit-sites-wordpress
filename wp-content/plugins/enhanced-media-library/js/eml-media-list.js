@@ -10,7 +10,7 @@
             $mainFilter = $('select[name="attachment-filter"]'),
             $taxFilters = $('select.eml-taxonomy-filters'),
             $resetFilters,
-            $_GET = $.parseJSON( l10n.$_GET );
+            $_GET = JSON.parse( l10n.$_GET );
 
 
         // Add "All Uncategorized" option

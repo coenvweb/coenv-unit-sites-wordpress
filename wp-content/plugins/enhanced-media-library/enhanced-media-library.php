@@ -3,14 +3,14 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: https://wpUXsolutions.com/plugins/enhanced-media-library
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.8.2
+Version: 2.8.3
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
 Domain Path: /languages
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-Copyright 2013-2020  wpUXsolutions  (email : wpUXsolutions@gmail.com)
+Copyright 2013-2021  wpUXsolutions  (email : wpUXsolutions@gmail.com)
 */
 
 
@@ -26,7 +26,7 @@ global $wp_version,
 
 
 
-if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.8.2' );
+if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.8.3' );
 if ( ! defined('EML_PRO') ) define( 'EML_PRO', false );
 
 
@@ -168,6 +168,7 @@ if ( ! function_exists( 'wpuxss_eml_on_init' ) ) {
     function wpuxss_eml_on_init() {
 
         $wpuxss_eml_taxonomies = get_option( 'wpuxss_eml_taxonomies', array() );
+        $wpuxss_eml_tax_options = get_option( 'wpuxss_eml_tax_options', array() );
 
         // register eml taxonomies
         foreach ( (array) $wpuxss_eml_taxonomies as $taxonomy => $params ) {
@@ -175,6 +176,10 @@ if ( ! function_exists( 'wpuxss_eml_on_init' ) ) {
             if ( $params['eml_media'] && ! empty( $params['labels']['singular_name'] ) && ! empty( $params['labels']['name'] ) ) {
 
                 $labels = array_map( 'sanitize_text_field', $params['labels'] );
+                $rewrite = ! (bool) $wpuxss_eml_tax_options['tax_archives'] ? false : array(
+                    'slug' => wpuxss_eml_sanitize_slug( $params['rewrite']['slug'] ),
+                    'with_front' => (bool) $params['rewrite']['with_front']
+                );
 
                 register_taxonomy(
                     $taxonomy,
@@ -189,10 +194,7 @@ if ( ! function_exists( 'wpuxss_eml_on_init' ) ) {
                         'sort' => (bool) $params['sort'],
                         'show_in_rest' => (bool) $params['show_in_rest'],
                         'query_var' => sanitize_key( $taxonomy ),
-                        'rewrite' => array(
-                            'slug' => wpuxss_eml_sanitize_slug( $params['rewrite']['slug'] ),
-                            'with_front' => (bool) $params['rewrite']['with_front']
-                        )
+                        'rewrite' => $rewrite
                     )
                 );
             }
