@@ -265,7 +265,7 @@ class Accordion_Shortcodes {
 		// Add this shortcodes settings instance to the global script data array
 		$this->script_data[] = $script_data;
 
-		return sprintf('<%2$s id="%3$s" class="accordion no-js%4$s" role="tablist" aria-multiselectable="true">%1$s</%2$s>',
+		return sprintf('<style type="text/css">p:empty:before {content:none};</style><%2$s id="%3$s" class="accordion no-js%4$s" role="tablist" aria-multiselectable="true">%1$s</%2$s>',
 			do_shortcode($content),
 			$this->wrapper_tag,
 			"accordion-$this->group_count",
