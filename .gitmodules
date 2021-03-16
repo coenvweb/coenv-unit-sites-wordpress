@@ -12,7 +12,7 @@
 	url = https://github.com/coenvweb/coenv-base.git
 [submodule "wp-content/themes/coenv-earthlab"]
 	path = wp-content/themes/coenv-earthlab
-	url = https://github.com/coenvweb/coenv-base.git
+	url = https://github.com/coenvweb/coenv-earthlab.git
 [submodule "wp-content/themes/coenv-fhl"]
 	path = wp-content/themes/coenv-fhl
 	url = https://github.com/coenvweb/coenv-base.git
