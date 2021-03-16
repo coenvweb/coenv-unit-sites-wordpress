@@ -1,3 +1,60 @@
 [submodule "wp-content/themes/coenv-base"]
 	path = wp-content/themes/coenv-base
 	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-cicoes"]
+	path = wp-content/themes/coenv-cicoes
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-cig"]
+	path = wp-content/themes/coenv-cig
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-cqs"]
+	path = wp-content/themes/coenv-cqs
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-earthlab"]
+	path = wp-content/themes/coenv-earthlab
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-fhl"]
+	path = wp-content/themes/coenv-fhl
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-fish"]
+	path = wp-content/themes/coenv-fish
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-freshwater"]
+	path = wp-content/themes/coenv-freshwater
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-hazards"]
+	path = wp-content/themes/coenv-hazards
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-marbio"]
+	path = wp-content/themes/coenv-marbio
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-naturehealth"]
+	path = wp-content/themes/coenv-naturehealth
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-nwcasc"]
+	path = wp-content/themes/coenv-nwcasc
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-oceannexus"]
+	path = wp-content/themes/coenv-oceannexus
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-pcc"]
+	path = wp-content/themes/coenv-pcc
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-poe"]
+	path = wp-content/themes/coenv-poe
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-qrc"]
+	path = wp-content/themes/coenv-qrc
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-sefs"]
+	path = wp-content/themes/coenv-sefs
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-smea"]
+	path = wp-content/themes/coenv-smea
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-uwbg"]
+	path = wp-content/themes/coenv-uwbg
+	url = https://github.com/coenvweb/coenv-base.git
+[submodule "wp-content/themes/coenv-woac"]
+	path = wp-content/themes/coenv-woac
+	url = https://github.com/coenvweb/coenv-base.git
