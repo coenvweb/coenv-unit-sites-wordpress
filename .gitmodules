@@ -1,0 +1,3 @@
+[submodule "wp-content/themes/coenv-base"]
+	path = wp-content/themes/coenv-base
+	url = https://github.com/coenvweb/coenv-base.git
