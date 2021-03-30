@@ -499,7 +499,7 @@ RewriteRule ^undergraduate-students/course-planning/course-requirements/capstone
 
 # FHL Redirects
 RewriteCond %{HTTP_HOST} !^fhl.uw\.edu [NC]
-RewriteRule .? - [S=17]
+RewriteRule .? - [S=18]
 RewriteRule ^news_index.html https://fhl.uw.edu/about/news-and-events/newsletters/ [R=301,L]
 RewriteRule ^res_index.html https://fhl.uw.edu/research/ [R=301,L]
 RewriteRule ^resAppInfo.html https://fhl.uw.edu/research/applying-for-research-space/ [R=301,L]
@@ -517,6 +517,7 @@ RewriteRule ^facMap.html https://fhl.uw.edu/about/campus-map/ [R=301,L]
 RewriteRule ^facilities.html https://fhl.uw.edu/facilities-resources/ [R=301,L]
 RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptions/summer-courses/ [R=301,L]
 RewriteRule ^discover/?$ https://www.youtube.com/watch?v=_ZqX2GRDO6M [R=301,L]
+RewriteRule ^adoptastudent/?$ https://www.youtube.com/watch?v=8N-0C-uRUbc [R=302,L]
 
 # QRC Redirects
 RewriteCond %{HTTP_HOST} !^qrc.uw\.edu [NC]
