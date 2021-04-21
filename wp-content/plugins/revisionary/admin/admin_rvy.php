@@ -179,6 +179,12 @@ class RevisionaryAdmin
 	}
 
 	public function fltDisableExceptionUI($disable, $src_name, $post_id, $post_type = '') {
+		global $pagenow;
+
+		if (!empty($pagenow) && ('term.php' == $pagenow)) {
+			return $disable;
+		}
+		
 		if (!$post_id) {
 			// Permissions version < 3.1.4 always passes zero value $post_id
 			$post_id = rvy_detect_post_id();
@@ -399,9 +405,9 @@ class RevisionaryAdmin
 
 			// Workaround for Gutenberg stripping published thumbnail, page template on revision creation
 			foreach(['_thumbnail_id', '_wp_page_template'] as $meta_key) {
-				if ($archived_val = get_post_meta($revised_post->ID, "_archive_{$meta_key}", true)) {
-					update_post_meta($revised_post->ID, $meta_key, $archived_val);
-					delete_post_meta($revised_post->ID, "_archive_{$meta_key}");
+				if ($archived_val = rvy_get_transient("_archive_{$meta_key}_{$revised_post->ID}")) {
+					rvy_update_post_meta($revised_post->ID, $meta_key, $archived_val);
+					rvy_delete_transient("_archive_{$meta_key}_{$revised_post->ID}");
 				}
 			}
 

@@ -3,11 +3,11 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.1.6
+Version: 2.2.0
 Author: Clever Widgets
 Author URI: https://themecheck.info
-Text Domain: upw
-Domain Path: /languages/
+Text Domain: ultimate-posts-widget
+Domain Path: /languages
 License: MIT
 */
 require_once 'analyst/main.php';
@@ -26,7 +26,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
       $widget_options = array(
         'classname' => 'widget_ultimate_posts',
-        'description' => __( 'Displays list of posts with an array of options', 'upw' )
+        'description' => __( 'Displays list of posts with an array of options', 'ultimate-posts-widget' )
       );
 
       $control_options = array(
@@ -35,7 +35,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
       parent::__construct(
         'sticky-posts',
-        __( 'Ultimate Posts', 'upw' ),
+        __( 'Ultimate Posts', 'ultimate-posts-widget' ),
         $widget_options,
         $control_options
       );
@@ -51,7 +51,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
         add_action('wp_enqueue_scripts', array(&$this, 'enqueue_theme_scripts'));
       }
 
-      load_plugin_textdomain('upw', false, basename( dirname( __FILE__ ) ) . '/languages' );
+      load_plugin_textdomain('ultimate-posts-widget', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
     }
 
@@ -296,7 +296,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
       // Set default arguments
       $instance = wp_parse_args( (array) $instance, array(
-        'title' => __('Ultimate Posts', 'upw'),
+        'title' => __('Ultimate Posts', 'ultimate-posts-widget'),
         'class' => '',
         'title_link' => '' ,
         'number' => '5',
@@ -307,7 +307,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
         'thumb_size' => 'thumbnail',
         'attag' => false,
         'excerpt_length' => 10,
-        'excerpt_readmore' => __('Read more &rarr;', 'upw'),
+        'excerpt_readmore' => __('Read more &rarr;', 'ultimate-posts-widget'),
         'order' => 'DESC',
         'orderby' => 'date',
         'meta_key' => '',
@@ -413,41 +413,41 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       ?>
 
       <div class="upw-tabs">
-        <a class="upw-tab-item active" data-toggle="upw-tab-general"><?php _e('General', 'upw'); ?></a>
-        <a class="upw-tab-item" data-toggle="upw-tab-display"><?php _e('Display', 'upw'); ?></a>
-        <a class="upw-tab-item" data-toggle="upw-tab-filter"><?php _e('Filter', 'upw'); ?></a>
-        <a class="upw-tab-item" data-toggle="upw-tab-order"><?php _e('Order', 'upw'); ?></a>
+        <a class="upw-tab-item active" data-toggle="upw-tab-general"><?php _e('General', 'ultimate-posts-widget'); ?></a>
+        <a class="upw-tab-item" data-toggle="upw-tab-display"><?php _e('Display', 'ultimate-posts-widget'); ?></a>
+        <a class="upw-tab-item" data-toggle="upw-tab-filter"><?php _e('Filter', 'ultimate-posts-widget'); ?></a>
+        <a class="upw-tab-item" data-toggle="upw-tab-order"><?php _e('Order', 'ultimate-posts-widget'); ?></a>
       </div>
 
       <div class="upw-tab upw-tab-general">
 
         <p>
-          <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id( 'title_link' ); ?>"><?php _e( 'Title URL', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'title_link' ); ?>"><?php _e( 'Title URL', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id( 'title_link' ); ?>" name="<?php echo $this->get_field_name( 'title_link' ); ?>" type="text" value="<?php echo $title_link; ?>" />
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id( 'class' ); ?>"><?php _e( 'CSS class', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'class' ); ?>"><?php _e( 'CSS class', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id( 'class' ); ?>" name="<?php echo $this->get_field_name( 'class' ); ?>" type="text" value="<?php echo $class; ?>" />
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id('before_posts'); ?>"><?php _e('Before posts', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('before_posts'); ?>"><?php _e('Before posts', 'ultimate-posts-widget'); ?>:</label>
           <textarea class="widefat" id="<?php echo $this->get_field_id('before_posts'); ?>" name="<?php echo $this->get_field_name('before_posts'); ?>" rows="5"><?php echo $before_posts; ?></textarea>
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id('after_posts'); ?>"><?php _e('After posts', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('after_posts'); ?>"><?php _e('After posts', 'ultimate-posts-widget'); ?>:</label>
           <textarea class="widefat" id="<?php echo $this->get_field_id('after_posts'); ?>" name="<?php echo $this->get_field_name('after_posts'); ?>" rows="5"><?php echo $after_posts; ?></textarea>
         </p>
 
 				<p>
-					<label for="<?php echo $this->get_field_id( 'custom_empty' ); ?>"><?php _e( 'No posts found message', 'upw' ); ?>:</label>
+					<label for="<?php echo $this->get_field_id( 'custom_empty' ); ?>"><?php _e( 'No posts found message', 'ultimate-posts-widget' ); ?>:</label>
 					<input class="widefat" id="<?php echo $this->get_field_id( 'custom_empty' ); ?>" name="<?php echo $this->get_field_name( 'custom_empty' ); ?>" type="text" value="<?php echo $custom_empty; ?>" placeholder="No posts found." />
 				</p>
 
@@ -456,73 +456,73 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       <div class="upw-tab upw-hide upw-tab-display">
 
         <p>
-          <label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('template'); ?>"><?php _e('Template', 'ultimate-posts-widget'); ?>:</label>
           <select name="<?php echo $this->get_field_name('template'); ?>" id="<?php echo $this->get_field_id('template'); ?>" class="widefat">
-            <option value="legacy"<?php if( $template == 'legacy') echo ' selected'; ?>><?php _e('Legacy', 'upw'); ?></option>
-            <option value="standard"<?php if( $template == 'standard') echo ' selected'; ?>><?php _e('Standard', 'upw'); ?></option>
-            <option value="custom"<?php if( $template == 'custom') echo ' selected'; ?>><?php _e('Custom', 'upw'); ?></option>
+            <option value="legacy"<?php if( $template == 'legacy') echo ' selected'; ?>><?php _e('Legacy', 'ultimate-posts-widget'); ?></option>
+            <option value="standard"<?php if( $template == 'standard') echo ' selected'; ?>><?php _e('Standard', 'ultimate-posts-widget'); ?></option>
+            <option value="custom"<?php if( $template == 'custom') echo ' selected'; ?>><?php _e('Custom', 'ultimate-posts-widget'); ?></option>
           </select>
         </p>
 
         <p<?php if ($template !== 'custom') echo ' style="display:none;"'; ?>>
-          <label for="<?php echo $this->get_field_id('template_custom'); ?>"><?php _e('Custom Template Name', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('template_custom'); ?>"><?php _e('Custom Template Name', 'ultimate-posts-widget'); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id('template_custom'); ?>" name="<?php echo $this->get_field_name('template_custom'); ?>" type="text" value="<?php echo $template_custom; ?>" />
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" value="<?php echo $number; ?>" min="-1" />
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_title' ); ?>" name="<?php echo $this->get_field_name( 'show_title' ); ?>" type="checkbox" <?php checked( (bool) $show_title, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_title' ); ?>"><?php _e( 'Show title', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'show_title' ); ?>"><?php _e( 'Show title', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p>
-          <input class="checkbox" id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" type="checkbox" <?php checked( (bool) $show_date, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Show published date', 'upw' ); ?></label>
+          <input class="box" id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" type="checkbox" <?php checked( (bool) $show_date, true ); ?> />
+          <label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Show published date', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p<?php if (!$show_date) echo ' style="display:none;"'; ?>>
-          <label for="<?php echo $this->get_field_id('date_format'); ?>"><?php _e( 'Date format', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id('date_format'); ?>"><?php _e( 'Date format', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" type="text" id="<?php echo $this->get_field_id('date_format'); ?>" name="<?php echo $this->get_field_name('date_format'); ?>" value="<?php echo $date_format; ?>" />
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_author' ); ?>" name="<?php echo $this->get_field_name( 'show_author' ); ?>" type="checkbox" <?php checked( (bool) $show_author, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_author' ); ?>"><?php _e( 'Show post author', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'show_author' ); ?>"><?php _e( 'Show post author', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_comments' ); ?>" name="<?php echo $this->get_field_name( 'show_comments' ); ?>" type="checkbox" <?php checked( (bool) $show_comments, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_comments' ); ?>"><?php _e( 'Show comments count', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'show_comments' ); ?>"><?php _e( 'Show comments count', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'exclude_current' ); ?>" name="<?php echo $this->get_field_name( 'exclude_current' ); ?>" type="checkbox" <?php checked( (bool) $exclude_current, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'exclude_current' ); ?>"><?php _e( 'Exclude current post from the list', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'exclude_current' ); ?>"><?php _e( 'Exclude current post from the list', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_excerpt' ); ?>" name="<?php echo $this->get_field_name( 'show_excerpt' ); ?>" type="checkbox" <?php checked( (bool) $show_excerpt, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_excerpt' ); ?>"><?php _e( 'Show excerpt', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'show_excerpt' ); ?>"><?php _e( 'Show excerpt', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p<?php if (!$show_excerpt) echo ' style="display:none;"'; ?>>
-          <label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e( 'Excerpt length (in words)', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id('excerpt_length'); ?>"><?php _e( 'Excerpt length (in words)', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" type="number" id="<?php echo $this->get_field_id('excerpt_length'); ?>" name="<?php echo $this->get_field_name('excerpt_length'); ?>" value="<?php echo $excerpt_length; ?>" min="-1" />
         </p>
 
         <p>
           <input class="checkbox" id="<?php echo $this->get_field_id( 'show_content' ); ?>" name="<?php echo $this->get_field_name( 'show_content' ); ?>" type="checkbox" <?php checked( (bool) $show_content, true ); ?> />
-          <label for="<?php echo $this->get_field_id( 'show_content' ); ?>"><?php _e( 'Show content', 'upw' ); ?></label>
+          <label for="<?php echo $this->get_field_id( 'show_content' ); ?>"><?php _e( 'Show content', 'ultimate-posts-widget' ); ?></label>
         </p>
 
         <p<?php if (!$show_excerpt && !$show_content) echo ' style="display:none;"'; ?>>
           <label for="<?php echo $this->get_field_id('show_readmore'); ?>">
           <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_readmore'); ?>" name="<?php echo $this->get_field_name('show_readmore'); ?>"<?php checked( (bool) $show_readmore, true ); ?> />
-          <?php _e( 'Show read more link', 'upw' ); ?>
+          <?php _e( 'Show read more link', 'ultimate-posts-widget' ); ?>
           </label>
         </p>
 
@@ -537,7 +537,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
           <p>
             <input class="checkbox" id="<?php echo $this->get_field_id( 'show_thumbnail' ); ?>" name="<?php echo $this->get_field_name( 'show_thumbnail' ); ?>" type="checkbox" <?php checked( (bool) $show_thumbnail, true ); ?> />
 
-            <label for="<?php echo $this->get_field_id( 'show_thumbnail' ); ?>"><?php _e( 'Show thumbnail', 'upw' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'show_thumbnail' ); ?>"><?php _e( 'Show thumbnail', 'ultimate-posts-widget' ); ?></label>
           </p>
 
           <p<?php if (!$show_thumbnail) echo ' style="display:none;"'; ?>>
@@ -553,16 +553,16 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
         <p>
           <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_cats'); ?>" name="<?php echo $this->get_field_name('show_cats'); ?>" <?php checked( (bool) $show_cats, true ); ?> />
-          <label for="<?php echo $this->get_field_id('show_cats'); ?>"> <?php _e('Show post categories', 'upw'); ?></label>
+          <label for="<?php echo $this->get_field_id('show_cats'); ?>"> <?php _e('Show post categories', 'ultimate-posts-widget'); ?></label>
         </p>
 
         <p>
           <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('show_tags'); ?>" name="<?php echo $this->get_field_name('show_tags'); ?>" <?php checked( (bool) $show_tags, true ); ?> />
-          <label for="<?php echo $this->get_field_id('show_tags'); ?>"> <?php _e('Show post tags', 'upw'); ?></label>
+          <label for="<?php echo $this->get_field_id('show_tags'); ?>"> <?php _e('Show post tags', 'ultimate-posts-widget'); ?></label>
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id( 'custom_fields' ); ?>"><?php _e( 'Show custom fields (comma separated)', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'custom_fields' ); ?>"><?php _e( 'Show custom fields (comma separated)', 'ultimate-posts-widget' ); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id( 'custom_fields' ); ?>" name="<?php echo $this->get_field_name( 'custom_fields' ); ?>" type="text" value="<?php echo $custom_fields; ?>" />
         </p>
 
@@ -572,11 +572,11 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
         <p>
           <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('atcat'); ?>" name="<?php echo $this->get_field_name('atcat'); ?>" <?php checked( (bool) $atcat, true ); ?> />
-          <label for="<?php echo $this->get_field_id('atcat'); ?>"> <?php _e('Show posts only from current category', 'upw');?></label>
+          <label for="<?php echo $this->get_field_id('atcat'); ?>"> <?php _e('Show posts only from current category', 'ultimate-posts-widget');?></label>
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id('cats'); ?>"><?php _e( 'Categories', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id('cats'); ?>"><?php _e( 'Categories', 'ultimate-posts-widget' ); ?>:</label>
           <select name="<?php echo $this->get_field_name('cats'); ?>[]" id="<?php echo $this->get_field_id('cats'); ?>" class="widefat" style="height: auto;" size="<?php echo $c ?>" multiple>
             <option value="" <?php if (empty($cats)) echo 'selected="selected"'; ?>><?php _e('&ndash; Show All &ndash;') ?></option>
             <?php
@@ -590,11 +590,11 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
         <?php if ($tag_list) : ?>
           <p>
             <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('attag'); ?>" name="<?php echo $this->get_field_name('attag'); ?>" <?php checked( (bool) $attag, true ); ?> />
-            <label for="<?php echo $this->get_field_id('attag'); ?>"> <?php _e('Show posts only from current tag', 'upw');?></label>
+            <label for="<?php echo $this->get_field_id('attag'); ?>"> <?php _e('Show posts only from current tag', 'ultimate-posts-widget');?></label>
           </p>
 
           <p>
-            <label for="<?php echo $this->get_field_id('tags'); ?>"><?php _e( 'Tags', 'upw' ); ?>:</label>
+            <label for="<?php echo $this->get_field_id('tags'); ?>"><?php _e( 'Tags', 'ultimate-posts-widget' ); ?>:</label>
             <select name="<?php echo $this->get_field_name('tags'); ?>[]" id="<?php echo $this->get_field_id('tags'); ?>" class="widefat" style="height: auto;" size="<?php echo $t ?>" multiple>
               <option value="" <?php if (empty($tags)) echo 'selected="selected"'; ?>><?php _e('&ndash; Show All &ndash;') ?></option>
               <?php
@@ -606,7 +606,7 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
         <?php endif; ?>
 
         <p>
-          <label for="<?php echo $this->get_field_id('types'); ?>"><?php _e( 'Post types', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id('types'); ?>"><?php _e( 'Post types', 'ultimate-posts-widget' ); ?>:</label>
           <select name="<?php echo $this->get_field_name('types'); ?>[]" id="<?php echo $this->get_field_id('types'); ?>" class="widefat" style="height: auto;" size="<?php echo $n ?>" multiple>
             <option value="" <?php if (empty($types)) echo 'selected="selected"'; ?>><?php _e('&ndash; Show All &ndash;') ?></option>
             <?php
@@ -619,11 +619,11 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e( 'Sticky posts', 'upw' ); ?>:</label>
+          <label for="<?php echo $this->get_field_id('sticky'); ?>"><?php _e( 'Sticky posts', 'ultimate-posts-widget' ); ?>:</label>
           <select name="<?php echo $this->get_field_name('sticky'); ?>" id="<?php echo $this->get_field_id('sticky'); ?>" class="widefat">
-            <option value="show"<?php if( $sticky === 'show') echo ' selected'; ?>><?php _e('Show All Posts', 'upw'); ?></option>
-            <option value="hide"<?php if( $sticky == 'hide') echo ' selected'; ?>><?php _e('Hide Sticky Posts', 'upw'); ?></option>
-            <option value="only"<?php if( $sticky == 'only') echo ' selected'; ?>><?php _e('Show Only Sticky Posts', 'upw'); ?></option>
+            <option value="show"<?php if( $sticky === 'show') echo ' selected'; ?>><?php _e('Show All Posts', 'ultimate-posts-widget'); ?></option>
+            <option value="hide"<?php if( $sticky == 'hide') echo ' selected'; ?>><?php _e('Hide Sticky Posts', 'ultimate-posts-widget'); ?></option>
+            <option value="only"<?php if( $sticky == 'only') echo ' selected'; ?>><?php _e('Show Only Sticky Posts', 'ultimate-posts-widget'); ?></option>
           </select>
         </p>
 
@@ -632,37 +632,41 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       <div class="upw-tab upw-hide upw-tab-order">
 
         <p>
-          <label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order by', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e('Order by', 'ultimate-posts-widget'); ?>:</label>
           <select name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>" class="widefat">
-            <option value="date"<?php if( $orderby == 'date') echo ' selected'; ?>><?php _e('Published Date', 'upw'); ?></option>
-            <option value="title"<?php if( $orderby == 'title') echo ' selected'; ?>><?php _e('Title', 'upw'); ?></option>
-            <option value="comment_count"<?php if( $orderby == 'comment_count') echo ' selected'; ?>><?php _e('Comment Count', 'upw'); ?></option>
+            <option value="date"<?php if( $orderby == 'date') echo ' selected'; ?>><?php _e('Published Date', 'ultimate-posts-widget'); ?></option>
+            <option value="title"<?php if( $orderby == 'title') echo ' selected'; ?>><?php _e('Title', 'ultimate-posts-widget'); ?></option>
+            <option value="comment_count"<?php if( $orderby == 'comment_count') echo ' selected'; ?>><?php _e('Comment Count', 'ultimate-posts-widget'); ?></option>
             <option value="rand"<?php if( $orderby == 'rand') echo ' selected'; ?>><?php _e('Random'); ?></option>
-            <option value="meta_value"<?php if( $orderby == 'meta_value') echo ' selected'; ?>><?php _e('Custom Field', 'upw'); ?></option>
-            <option value="menu_order"<?php if( $orderby == 'menu_order') echo ' selected'; ?>><?php _e('Menu Order', 'upw'); ?></option>
+            <option value="meta_value"<?php if( $orderby == 'meta_value') echo ' selected'; ?>><?php _e('Custom Field', 'ultimate-posts-widget'); ?></option>
+            <option value="menu_order"<?php if( $orderby == 'menu_order') echo ' selected'; ?>><?php _e('Menu Order', 'ultimate-posts-widget'); ?></option>
           </select>
         </p>
 
         <p<?php if ($orderby !== 'meta_value') echo ' style="display:none;"'; ?>>
-          <label for="<?php echo $this->get_field_id( 'meta_key' ); ?>"><?php _e('Custom field', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id( 'meta_key' ); ?>"><?php _e('Custom field', 'ultimate-posts-widget'); ?>:</label>
           <input class="widefat" id="<?php echo $this->get_field_id('meta_key'); ?>" name="<?php echo $this->get_field_name('meta_key'); ?>" type="text" value="<?php echo $meta_key; ?>" />
         </p>
 
         <p>
-          <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order', 'upw'); ?>:</label>
+          <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order', 'ultimate-posts-widget'); ?>:</label>
           <select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>" class="widefat">
-            <option value="DESC"<?php if( $order == 'DESC') echo ' selected'; ?>><?php _e('Descending', 'upw'); ?></option>
-            <option value="ASC"<?php if( $order == 'ASC') echo ' selected'; ?>><?php _e('Ascending', 'upw'); ?></option>
+            <option value="DESC"<?php if( $order == 'DESC') echo ' selected'; ?>><?php _e('Descending', 'ultimate-posts-widget'); ?></option>
+            <option value="ASC"<?php if( $order == 'ASC') echo ' selected'; ?>><?php _e('Ascending', 'ultimate-posts-widget'); ?></option>
           </select>
         </p>
 
       </div>
 
-			<?php if (!is_plugin_active('copy-delete-posts/copy-delete-posts.php')) { ?>
-      <p class="upw-cdp" data-url="<?php echo get_site_url(); ?>">
-        <?php _e('<b>Please check it out</b>: We released another cool plugin! It is called "Copy & Delete Posts" and it allows you to make (bulk) copies of your pages & posts and delete them again. <b><a href="#" id="wpse1_6817_install_btn">Install it now</a></b> or check out the <a href="https://bit.ly/34bgWdr" target="_blank"><b>plugin page</b></a>.<span id="wpse1_6817_dots"></span>', 'upw'); ?>
-      </p>
-			<?php } ?>
+			<div class="etw-carousel-ad-trigger">
+				<div class="etw-new-label">
+					New
+				</div>
+				<span>Please check out our other plugins too!</span>
+				<div class="etw-check-it-label">
+					Check it out
+				</div>
+			</div>
 
       <?php if ( $instance ) { ?>
 
@@ -770,71 +774,8 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
   add_action( 'widgets_init', 'init_wp_widget_ultimate_posts' );
 }
 
-/** –– **\
- * Notices handler
- * @since 1.4.8
- */
-	// Handle install
-	add_action('wp_ajax_wpse1_6817_install', function () {
+add_action('admin_init', function () {
 
-		if (get_option('_wps18472_now_already', false)) return;
-		else update_option('_wps18472_now_already', true);
+	require_once 'banner/misc.php';
 
-		function is_plugin_installed($slug) {
-			$all_plugins = get_plugins();
-
-			if (!empty($all_plugins[$slug])) return true;
-			else return false;
-		}
-
-		function install_plugin($plugin_zip) {
-			include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-			wp_cache_flush();
-
-			$upgrader = new Plugin_Upgrader();
-			$installed = $upgrader->install($plugin_zip);
-
-			return $installed;
-		}
-
-		function upgrade_plugin($plugin_slug) {
-			include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-			wp_cache_flush();
-
-			$upgrader = new Plugin_Upgrader();
-			$upgraded = $upgrader->upgrade($plugin_slug);
-
-			return $upgraded;
-		}
-
-	  $plugin_slug = 'copy-delete-posts/copy-delete-posts.php';
-	  $plugin_zip = 'https://downloads.wordpress.org/plugin/copy-delete-posts.latest-stable.zip';
-
-	  if (is_plugin_installed($plugin_slug)) {
-	    upgrade_plugin($plugin_slug);
-	    $installed = true;
-	  } else $installed = install_plugin($plugin_zip);
-
-	  if (!is_wp_error($installed) && $installed) {
-	    $activate = activate_plugin($plugin_slug);
-
-	    if (is_null($activate)) {
-				update_option('_cdp_cool_installation', true);
-				update_option('_wps18472_installed', true);
-				update_option('_wps18472_now_already', false);
-				echo json_encode(array('status' => 'success'));
-			}
-
-	  } else {
-			update_option('_wps18472_only_now', true);
-			update_option('_wps18472_now_already', false);
-			echo json_encode(array('status' => 'fail'));
-		}
-
-	});
-
-	// End the action
-	add_action('admin_footer', function () {
-		update_option('_wps18472_now_already', false);
-	});
-/** –– **/
+});
