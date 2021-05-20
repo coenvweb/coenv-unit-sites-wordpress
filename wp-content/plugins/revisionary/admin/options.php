@@ -21,7 +21,7 @@ class RvyOptionUI {
 	public static function instance($args = [])
     {
         if (is_null(self::$instance)) {
-            self::$instance = new RvyOptionUI($args);
+			self::$instance = new RvyOptionUI($args);
         }
 
         return self::$instance;
@@ -35,7 +35,7 @@ class RvyOptionUI {
 		$this->sitewide = $args['sitewide'];
 		$this->customize_defaults = $args['customize_defaults'];
 		$this->display_hints = rvy_get_option( 'display_hints' );
-    }
+	}
 	
 	function option_checkbox( $option_name, $tab_name, $section_name, $hint_text, $trailing_html, $args = '') {
 		$return = array( 'in_scope' => false, 'val' => '', 'subcaption' => '' );
@@ -114,7 +114,7 @@ $this->option_captions = apply_filters('revisionary_option_captions',
 	'revisor_hide_others_revisions' => 			__("Listing others&apos; revisions requires role capability", 'revisionary'),
 	'queue_query_all_posts' => 					__('Compatibility Mode', 'revisionary'),
 	'trigger_post_update_actions' => 			__('Revision publication triggers API actions to mimic post update', 'revisionary'),
-	'diff_display_strip_tags' => 				__('Strip html tags out of difference display', 'revisionary'),
+	'diff_display_strip_tags' => 				__('Hide html tags on Compare Revisions screen', 'revisionary'),
 	'async_scheduled_publish' => 				__('Asynchronous Publishing', 'revisionary'),
 	'scheduled_revision_update_post_date' => 	__('Update Publish Date', 'revisionary'),
 	'pending_revision_update_post_date' => 		__('Update Publish Date', 'revisionary'),
