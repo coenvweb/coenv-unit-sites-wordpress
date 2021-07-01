@@ -27,9 +27,9 @@ RewriteCond %{HTTP_USER_AGENT} "woriobot" [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} "heritrix" [NC,OR]    
 RewriteCond %{HTTP_USER_AGENT} "NetSeer" [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} "Rustbot/0.3" [NC,OR]
-RewriteCond %{HTTP_USER_AGENT} "Nutch" [NC]  
-RewriteCond %{HTTP_USER_AGENT} ^.*(Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|P
-RewriteRule ^(.*)$ - [F,L] 
+RewriteCond %{HTTP_USER_AGENT} "Nutch" [NC]    
+RewriteCond %{HTTP_USER_AGENT} Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot [NC]
+RewriteRule ^(.*)$ - [F, L] 
 
 # Begin Shibboleth
 AuthType shibboleth
