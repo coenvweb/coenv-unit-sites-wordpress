@@ -519,6 +519,11 @@ RewriteRule ^studentSummer2017.html https://fhl.uw.edu/courses/course-descriptio
 RewriteRule ^discover/?$ https://www.youtube.com/watch?v=_ZqX2GRDO6M [R=301,L]
 RewriteRule ^adoptastudent/?$ https://www.youtube.com/watch?v=8N-0C-uRUbc [R=302,L]
 
+# PCC Redirects
+RewriteCond %{HTTP_HOST} !^pcc.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^party-2021/?$ https://pcc.uw.edu/events/?mkt_tok=MTMxLUFRTy0yMjUAAAF-PDEjGpX097wXvWN-4CUkiAyGX_TutE4TJabGJeQ_AyCIiWduBARwdloNPOSYtxa4p5vSCrNp5LF3N1_f8ie8&trumbaEmbed=view%3Devent%26eventid%3D153273893 [R=302,L]
+
 # QRC Redirects
 RewriteCond %{HTTP_HOST} !^qrc.uw\.edu [NC]
 RewriteRule .? - [S=8]
