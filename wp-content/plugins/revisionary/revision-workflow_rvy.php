@@ -62,8 +62,8 @@ class Rvy_Revision_Workflow_UI {
                 }
                 
                 foreach ( $recipients as $_user ) {	
-                    $reqd_caps = map_meta_cap( $type_obj->cap->edit_post, $_user->ID, $object_id );
-    
+                    $reqd_caps = map_meta_cap( 'edit_post', $_user->ID, $object_id );
+
                     if ( ! array_diff( $reqd_caps, array_keys( array_intersect( $_user->allcaps, array( true, 1, '1' ) ) ) ) ) {
                         $post_publishers []= $_user;
                         $publisher_ids [$_user->ID] = true;
@@ -96,7 +96,7 @@ class Rvy_Revision_Workflow_UI {
                         $revisionary->skip_revision_allowance = false;
                     } else {
                         $_user = new WP_User($author_id);
-                        $reqd_caps = map_meta_cap( $type_obj->cap->edit_post, $_user->ID, $object_id );
+                        $reqd_caps = map_meta_cap( 'edit_post', $_user->ID, $object_id );
                         $author_notify = ! array_diff( $reqd_caps, array_keys( array_intersect( $_user->allcaps, array( true, 1, '1' ) ) ) );
                     }
     
@@ -146,6 +146,7 @@ class Rvy_Revision_Workflow_UI {
 
         $admin_notify = rvy_get_option( 'pending_rev_notify_admin' );
         $author_notify = rvy_get_option( 'pending_rev_notify_author' );
+
         if ( ( $admin_notify || $author_notify ) && $revision_id ) {
             $type_obj = get_post_type_object( $object_type );
             $type_caption = $type_obj->labels->singular_name;
@@ -158,9 +159,9 @@ class Rvy_Revision_Workflow_UI {
                 
                 $message = sprintf( __('A pending revision to the %1$s "%2$s" has been updated.', 'revisionary'), $type_caption, $post_arr['post_title'] ) . "\r\n\r\n";
             } else {
-            	$title = sprintf( __('[%s] Pending Revision Notification', 'revisionary'), $blogname );
-            
-            	$message = sprintf( __('A pending revision to the %1$s "%2$s" has been submitted.', 'revisionary'), $type_caption, $post_arr['post_title'] ) . "\r\n\r\n";
+                $title = sprintf( __('[%s] Pending Revision Notification', 'revisionary'), $blogname );
+                
+                $message = sprintf( __('A pending revision to the %1$s "%2$s" has been submitted.', 'revisionary'), $type_caption, $post_arr['post_title'] ) . "\r\n\r\n";
             }
 
             $message .= sprintf( __('It was submitted by %1$s.', 'revisionary' ), $current_user->display_name ) . "\r\n\r\n";
@@ -297,7 +298,7 @@ class Rvy_Revision_Workflow_UI {
                 $msg = __('Your modification was saved as a Scheduled Revision.', 'revisionary') . ' ';
             
                 $msg .= '<ul>';
-                
+
                 $links = [
                     'edit' => sprintf( '<a href="%s">' . __('Keep editing the revision', 'revisionary') . '</a>', "post.php?post={$revision->ID}&amp;action=edit" ),
                     'back' => sprintf( '<a href="%s">' . __('Go back to schedule another revision', 'revisionary') . '</a>', admin_url("post.php?post=$post_id&action=edit")),
@@ -358,13 +359,13 @@ class Rvy_Revision_Workflow_UI {
                 if (!empty($use_editor_message)) {
                     $msg = __('Your modification has been saved.', 'revisionary') . ' <br />';
                 } else {
-                    $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
-                    
-                    if ( $future_date ) {
-                        $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
-                    } else {
-                        $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
-                    }
+	                $msg = __('Your modification has been saved for editorial review.', 'revisionary') . ' <br /><br />';
+	                
+	                if ( $future_date ) {
+	                    $msg .= __('If approved by an editor, it will be published on the date you specified.', 'revisionary') . ' ';
+	                } else {
+	                    $msg .= __('It will be published when an editor approves it.', 'revisionary') . ' ';
+	                }
                 }
 
                 clean_post_cache($revision->ID);
@@ -383,7 +384,7 @@ class Rvy_Revision_Workflow_UI {
                 if ($show_preview_link = $type_obj && !empty($type_obj->public) && rvy_get_option('revision_preview_links') || current_user_can('administrator') || is_super_admin()) {
                     $preview_link = rvy_preview_url($revision);
                     $preview_link = remove_query_arg('preview_id', $preview_link);
-                    
+
                     $links = array_merge(
                         ['preview' => sprintf( '<a href="%s">' . __( 'Preview it', 'revisionary' ) . '</a>', $preview_link )],
                         $links
@@ -391,7 +392,7 @@ class Rvy_Revision_Workflow_UI {
                 }
 
                 $links = apply_filters('revisionary_submit_message_links', $links, $revision, $args);
-                
+
                 foreach($links as $link_id => $link) {
                     $msg .= "<li>{$links[$link_id]}<br /><br /></li>";                    
                 }
@@ -422,7 +423,7 @@ class Rvy_Revision_Workflow_UI {
 		}
 		
 		return $arr;
-    }
+	}
     
     static function getRecipients($notification_class, $args) {
         $defaults = ['type_obj' => false, 'published_post' => false];
@@ -481,8 +482,8 @@ class Rvy_Revision_Workflow_UI {
                     if ( $recipient_ids && $type_obj ) {
                         foreach( $recipient_ids as $key => $user_id ) {
                             $_user = new WP_User($user_id);
-                            $reqd_caps = map_meta_cap( $type_obj->cap->edit_post, $user_id, $published_post->ID );
-                            
+                            $reqd_caps = map_meta_cap( 'edit_post', $user_id, $published_post->ID );
+
                             if ( array_diff( $reqd_caps, array_keys( array_intersect( $_user->allcaps, array( true, 1, '1' ) ) ) ) ) {
                                 unset( $recipient_ids[$key] );
                             }

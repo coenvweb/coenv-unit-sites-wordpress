@@ -31,8 +31,8 @@ class RevisionCreation {
 		
         if ( empty( $postarr['ID'] ) || empty($revisionary->impose_pending_rev[ $postarr['ID'] ]) ) {
             return $data;
-		}
-		
+        }
+
 		if (!empty($postarr['post_type']) && empty($revisionary->enabled_post_types[$postarr['post_type']])) {
 			return $data;
 		}
@@ -121,10 +121,8 @@ class RevisionCreation {
 				return $status;
 			}
 
-			if ( $type_obj = get_post_type_object( $post_type ) ) {
-				if ( ! agp_user_can( $type_obj->cap->edit_post, $post_id, '', array( 'skip_revision_allowance' => true ) ) ) {
-					$revisionary->impose_pending_rev[$post_id] = true;
-				}
+			if (!agp_user_can('edit_post', $post_id, '', ['skip_revision_allowance' => true])) {
+				$revisionary->impose_pending_rev[$post_id] = true;
 			}
 		}
 		
@@ -220,8 +218,8 @@ class RevisionCreation {
 
         if (!empty($revision_id) && $post = get_post($revision_id)) {
             $post_ID = $revision_id;
-			$post_arr['post_ID'] = $revision_id;
-			$data = wp_unslash((array) $post);
+            $post_arr['post_ID'] = $revision_id;
+            $data = wp_unslash((array) $post);
         } else {
             $post_ID = 0;
             $previous_status = 'new';
@@ -560,10 +558,8 @@ class RevisionCreation {
 			}
 		}
 
-		if ( $type_obj = get_post_type_object( $published_post->post_type ) ) {
-			if ( ! agp_user_can( $type_obj->cap->edit_post, $published_post->ID, $current_user->ID, array( 'skip_revision_allowance' => true ) ) ) {
-				return $data;
-			}
+		if (!agp_user_can('edit_post', $published_post->ID, $current_user->ID, ['skip_revision_allowance' => true])) {
+			return $data;
 		}
 		
 		// @todo: need to filter post parent?
@@ -703,8 +699,8 @@ class RevisionCreation {
 		$archived_meta = [];
 		foreach(['_thumbnail_id', '_wp_page_template'] as $meta_key) {
 			if (!$archived_meta[$meta_key] = rvy_get_transient("_archive_{$meta_key}_{$published_post_id}")) {
-			$archived_meta[$meta_key] = get_post_meta($published_post_id, $meta_key, true);
-		}
+				$archived_meta[$meta_key] = get_post_meta($published_post_id, $meta_key, true);
+			}
 		}
 
 

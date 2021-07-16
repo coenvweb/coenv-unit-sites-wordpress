@@ -304,7 +304,6 @@ class RevisionaryHistory
 
     // port wp_ajax_get_revision_diffs() to support pending, scheduled revisions
     public function actAjaxRevisionDiffs() {
-
         if ( ! $post = get_post( (int) $_REQUEST['post_id'] ) ) {
             //wp_send_json_error();
             return;
@@ -850,6 +849,7 @@ class RevisionaryHistory
                     unset( $revisions[ $revision_id ] );
                 }
             }
+            
             $revisions = [$post->ID => $post] + $revisions;
         }
 
@@ -859,7 +859,7 @@ class RevisionaryHistory
 
         $type_obj = get_post_type_object($post->post_type);
         
-        $can_restore = agp_user_can( $type_obj->cap->edit_post, $post->ID, '', ['skip_revision_allowance' => true] );
+        $can_restore = agp_user_can('edit_post', $post->ID, '', ['skip_revision_allowance' => true]);
 
         $current_id  = false;
 

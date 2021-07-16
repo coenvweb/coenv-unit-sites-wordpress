@@ -1098,8 +1098,13 @@ function rvy_init() {
 	if ( is_admin() ) {
 		require_once( dirname(__FILE__).'/admin/admin-init_rvy.php' );
 		rvy_load_textdomain();
-		rvy_admin_init();
 
+		if (defined('REVISIONARY_BULK_ACTION_EARLY_EXECUTION') || !isset($_REQUEST['action2'])) {
+			rvy_admin_init();
+		} else {
+			// bulk approval fails on some sites due to post types not registered early enough
+			add_action('wp_loaded', 'rvy_admin_init');
+		}
 	} else {		// @todo: fix links instead
 		// fill in the missing args for Pending / Scheduled revision preview link from Edit Posts / Pages
 		if ( isset($_SERVER['HTTP_REFERER']) 
@@ -1279,6 +1284,10 @@ function rvy_preview_url($revision, $args = []) {
 
 	if (!strpos($preview_url, "post_type=")) {
 		$preview_url = add_query_arg('post_type', $post_type, $preview_url);
+	}
+
+	if (!defined('REVISIONARY_PREVIEW_NO_CACHEBUST')) {
+		$preview_url = add_query_arg('nc', substr(md5(rand()), 1, 8), $preview_url);
 	}
 
 	return apply_filters('revisionary_preview_url', $preview_url, $revision, $args);
