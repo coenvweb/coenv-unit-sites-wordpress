@@ -2,9 +2,9 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 5.0
-Tested up to: 5.7.1
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.8.5
+Stable tag: 2.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -184,6 +184,26 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 
 ## Changelog ##
+
+### 2.8.7 ###
+*Release Date - August 8, 2021*
+
+= Compatibility =
+* Enfold theme masonry gallery (latest version) compatibility ensured
+
+= Bugfixes =
+* Edit image wrong link fixed for the Grid mode
+
+
+### 2.8.6 ###
+*Release Date - August 5, 2021*
+
+= Compatibility =
+* WordPress 5.8 compatibility ensured
+
+= Bugfixes =
+* A minor ACF-related bug fixed
+
 
 ### 2.8.5 ###
 *Release Date - April 10, 2021*

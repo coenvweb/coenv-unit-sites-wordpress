@@ -3,8 +3,8 @@ Contributors: ironikus
 Tags: anti spam, protect, encode, encrypt, hide, antispam, phone number, spambot, secure, e-mail, email, mail
 Requires at least: 4.7
 Requires PHP: 5.1
-Tested up to: 5.7
-Stable tag: 2.1.1
+Tested up to: 5.8
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,13 @@ Yes, since version 1.3.0 also special characters are supported.
 * Title icon on Admin Options Page was made by [Jack Cai](http://www.doublejdesign.co.uk/)
 
 == Changelog ==
+
+= 2.1.2: July 30, 2021 =
+* Fix: Prevent notice on undefined post within the global object
+* Fix: Revalidate Display Text for the frontend encoder form (via [eeb_form] or eeb_form();) to prevent userbased cross site scripting
+* Fix: Fatal error if the content was not given
+* Tweak: Centrlalized encoding icon for a better usability
+* Dev: New filter eeb/validate/get_encoded_email_icon to cusotmize the encoding icon
 
 = 2.1.1: April 07, 2021 =
 * Tweak: Added svg images to the image exclude list

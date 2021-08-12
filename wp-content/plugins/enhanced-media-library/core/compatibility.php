@@ -46,7 +46,24 @@ if ( wpuxss_eml_enhance_media_shortcodes() ) {
      *  @created  9/10/20
      */
 
-	add_filter( 'shortcode_atts_av_masonry_entries', 'wpuxss_eml_shortcode_atts', 10, 3 );
+    $wp_theme = wp_get_theme();
+
+    if ( ! empty( $wp_theme ) ) {
+
+        $wp_parent_theme = $wp_theme->parent();
+
+        if ( ! empty( $wp_parent_theme ) ) {
+            $wp_theme = $wp_parent_theme;
+        }
+
+        if ( 'Enfold' === $wp_theme->get( 'Name' ) && version_compare( $wp_theme->get( 'Version' ), '4.8.4', '>=') ) {
+
+            add_filter( 'shortcode_atts_av_masonry_gallery', 'wpuxss_eml_shortcode_atts', 10, 3 );
+        }   
+        else {
+            add_filter( 'shortcode_atts_av_masonry_entries', 'wpuxss_eml_shortcode_atts', 10, 3 );
+        }
+    }
 
 
     /**
