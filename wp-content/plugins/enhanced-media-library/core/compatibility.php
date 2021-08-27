@@ -32,6 +32,31 @@ if ( ! function_exists( 'wpuxss_eml_elementor_scripts' ) ) {
 
 
 
+/**
+ *  Impreza Theme
+ *
+ *  @since    2.8.8
+ *  @created  08/2021
+ */
+
+add_action( 'after_setup_theme', 'wpuxss_after_setup_theme', 9 );
+
+if ( ! function_exists( 'wpuxss_after_setup_theme' ) ) {
+
+    function wpuxss_after_setup_theme() {
+
+        remove_filter( 'attachment_fields_to_edit', 'us_attachment_fields_to_edit_categories' );
+    }
+}
+
+
+
+/**
+ *  Media Shorcodes
+ *
+ *  @since    2.8
+ *  @created  10/2020
+ */
 
 if ( wpuxss_eml_enhance_media_shortcodes() ) {
 

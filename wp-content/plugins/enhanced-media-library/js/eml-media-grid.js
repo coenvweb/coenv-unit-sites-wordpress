@@ -1,4 +1,5 @@
 window.wp = window.wp || {};
+window.wpCookies = window.wpCookies || {};
 window.eml = window.eml || { l10n: {} };
 
 
@@ -86,7 +87,9 @@ window.eml = window.eml || { l10n: {} };
 
         toggleCollapse: function( event ) {
 
-            var collapsed = this.controller._attachmentDetailsCollapsed;
+            var collapsed = ( this.controller._attachmentDetailsCollapsed === 'true' ),
+                secure = ( 'https:' === window.location.protocol );
+
 
             if ( typeof event !== 'undefined' && 'eml-toggle-collapse' === event.currentTarget.className ) {
 
@@ -104,7 +107,8 @@ window.eml = window.eml || { l10n: {} };
                 return ! collapsed ? eml.l10n.less_details+' \u2191' : eml.l10n.more_details+' \u2193';
             });
 
-            this.controller._attachmentDetailsCollapsed = collapsed;
+            this.controller._attachmentDetailsCollapsed = collapsed ? 'true' : 'false';
+            wpCookies.set( 'eml-details-collapsed', collapsed, 30 * 24 * 60 * 60, false, false, secure );
         }
     });
 
@@ -342,7 +346,7 @@ window.eml = window.eml || { l10n: {} };
      */
     media.view.MediaFrame.emlGrid = media.view.MediaFrame.Select.extend({
 
-        _attachmentDetailsCollapsed: true,
+        _attachmentDetailsCollapsed: wpCookies.get( 'eml-details-collapsed' ) || 'true',
 
         initialize: function() {
 

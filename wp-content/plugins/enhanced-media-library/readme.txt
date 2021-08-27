@@ -4,7 +4,7 @@ Tags: media library, media category, media categories, media gallery, gallery sh
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.8.7
+Stable tag: 2.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -184,6 +184,15 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 
 ## Changelog ##
+
+### 2.8.8 ###
+*Release Date - August 26, 2021*
+
+= Improvements =
+* Media Library Grid Mode: "More Details" / "Less Details" button improved to remember the latest choice after page reload
+* Better third-party admin menu compatibility
+* Compatibility for Impreza theme categories added
+
 
 ### 2.8.7 ###
 *Release Date - August 8, 2021*
