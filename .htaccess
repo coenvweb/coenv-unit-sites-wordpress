@@ -1,24 +1,34 @@
-deny from 31.207.44.186
 # BEGIN WordPress
 
 # More post requests throttling from single IP
-<Limit POST>
-    Order Allow,Deny
-    Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 193.142.146 static.vnpt.vn
-</Limit>
+RewriteEngine On
+ <Limit POST>
+     Order Allow,Deny
+     Allow from all
+     # Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 51.11 52.247 54.175 193.142.146.42 193.142.146 41.198 124.171 183.171 103.147 84.65 186.249 187.252 103.160 103.79 221.203 203.95 112.158 78.22 103.210 190.249 78.101 78.185 52.78 100.27 156.251 203.162
+     # Deny from 203.162 118.232
+ </Limit>
 
-# Block WordPress xmlrpc.php requests
-<Files xmlrpc.php>
-order deny,allow
-deny from all
-# allow from xxx.xxx.xxx.xxx
+<Files xmlrpc.php> #404 xmlrpc 
+    RewriteRule ^(.*)$ - [L,R=404] 
 </Files>
+
+<Files wp-login.php> #404 wp-login bot attempts from Ubuntu and Windows NT
+    BrowserMatch "(Ubuntu|WOW64)" STOP=yes
+    RewriteCond "%{ENV:STOP}" "yes"
+    RewriteRule ^ - [R=404]
+</Files>
+
+BrowserMatch "(Googlebot|YandexBot)" BOT_STOP=yes
+RewriteEngine on
+RewriteCond "%{ENV:BOT_STOP}" "yes"
+#RewriteCond %{QUERY_STRING} .
+#RewriteRule ^(.*)$ - [L,R=404] 
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# block aws   
+# block aws and bad users
 RewriteCond %{HTTP_REFERER} ^http://.*amazonaws\.com [OR]    
 RewriteCond %{REMOTE_HOST} ^.*\.compute-1\.amazonaws\.com$ [NC,OR]  
 RewriteCond %{REMOTE_HOST} ^.*\.compute\.amazonaws\.com$ [NC,OR]  
@@ -28,8 +38,13 @@ RewriteCond %{HTTP_USER_AGENT} "heritrix" [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} "NetSeer" [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} "Rustbot/0.3" [NC,OR]
 RewriteCond %{HTTP_USER_AGENT} "Nutch" [NC]    
-RewriteCond %{HTTP_USER_AGENT} Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot [NC]
-RewriteRule ^(.*)$ - [F] 
+RewriteCond %{HTTP_USER_AGENT} ^.*(Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot|petalbot).*$ [NC]
+RewriteRule ^(.*)$ - [F,L] 
+
+SetEnvIfNoCase User-Agent (libwww-perl|wget|LieBaoFast|Mb2345Browser|PetalBot|petalbot) bad_bot
+Order Deny,Allow
+Deny from env=bad_bot
+
 
 # Begin Shibboleth
 AuthType shibboleth
@@ -78,6 +93,8 @@ php_value suhosin.request.max_vars 3000
 
 
 # Site redirects
+
+RewriteRule ^/wp-admin https://freshwater.uw.edu/$1 [R=301,NC]
 
 RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
 RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
