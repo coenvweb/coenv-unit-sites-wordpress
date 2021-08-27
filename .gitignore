@@ -23,6 +23,7 @@ wp-content/plugins/wp-pipes/cache
 
 # wordpress specific
 wp-config.php
+xmlrpc.php
 wp-content/uploads/
 wp-content/blogs.dir/
 wp-content/upgrade/*
@@ -107,3 +108,4 @@ wp-content/object-cache.php
 #Ignoring htaccess now
 .htaccess
 .htaccess-dev
+*.htaccess
