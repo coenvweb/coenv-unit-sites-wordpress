@@ -1,3 +1,9 @@
+= 4.1.7 - 2021.09.02 =
+* Apply styling tweaks to admin interface
+* Fix bug with networks where the root/main blog ID is not equal to 1
+* Fix bug with "Delete All Plugin Data" reset button not working fully
+* Fix compatibility issue with Collisimo Shipping Methods plugin
+
 = 4.1.6 - 2021.05.31 =
 * Update composer dependencies for PHP 8 compatibility
 

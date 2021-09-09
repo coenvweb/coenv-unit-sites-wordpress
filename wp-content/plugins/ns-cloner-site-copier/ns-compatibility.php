@@ -50,16 +50,18 @@ add_filter(
 	'ns_cloner_do_copy_row',
 	function( $do, $row ) {
 		$plugin_opts = [];
+		// Collisimo Shipping Methods for WooCommerce.
+		$plugin_opts = array_merge( $plugin_opts, [ 'lpc_db_version' ] );
 		// Jetpack.
 		$plugin_opts = array_merge( $plugin_opts, [ 'jetpack_activated', 'jetpack_private_options' ] );
-		// WC Multilingual
+		// WC Multilingual.
 		$plugin_opts = array_merge( $plugin_opts, [ 'wcml_currency_switcher_template_objects' ] );
 		// WP Mail SMTP.
 		$plugin_opts = array_merge( $plugin_opts, [ 'mail_bank_update_database', 'mail-bank-version-number', 'mb_admin_notice' ] );
 		// WordFence.
 		$plugin_opts = array_merge( $plugin_opts, [ 'wordfence_installed' ] );
 		// Yoast WP SEO.
-		$plugin_opts = array_merge( $plugin_opts, [ 'wpseo_ryte'] );
+		$plugin_opts = array_merge( $plugin_opts, [ 'wpseo_ryte' ] );
 		// Woo Discount Rules.
 		$plugin_opts = array_merge( $plugin_opts, [ 'awdr_activity_log_version' ] );
 		// Skip copying any of the above listed option rows.

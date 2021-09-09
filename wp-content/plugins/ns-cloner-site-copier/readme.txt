@@ -5,7 +5,7 @@ Tags: automate, duplicate, copy, copier, clone, cloner, multisite, network, temp
 Requires at least: 4.0.0
 Tested up to: 5.6
 Requires PHP: 7.0
-Stable tag: 4.1.6
+Stable tag: 4.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,12 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.1.7 - 2021.09.02 =
+* Apply styling tweaks to admin interface
+* Fix bug with networks where the root/main blog ID is not equal to 1
+* Fix bug with "Delete All Plugin Data" reset button not working fully
+* Fix compatibility issue with Collisimo Shipping Methods plugin
 
 = 4.1.6 - 2021.05.31 =
 * Update composer dependencies for PHP 8 compatibility
