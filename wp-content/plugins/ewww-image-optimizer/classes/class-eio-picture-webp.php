@@ -114,6 +114,9 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		if ( false !== strpos( $uri, '?brizy-edit' ) ) {
 			return false;
 		}
+		if ( false !== strpos( $uri, '&builder=true' ) ) {
+			return false;
+		}
 		if ( false !== strpos( $uri, 'cornerstone=' ) || false !== strpos( $uri, 'cornerstone-endpoint' ) ) {
 			return false;
 		}
@@ -132,6 +135,9 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		if ( false !== strpos( $uri, 'et_fb=' ) ) {
 			return false;
 		}
+		if ( false !== strpos( $uri, 'fb-edit=' ) ) {
+			return false;
+		}
 		if ( false !== strpos( $uri, '?fl_builder' ) ) {
 			return false;
 		}
@@ -147,8 +153,15 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		if ( ! empty( $_POST['action'] ) && 'tatsu_get_concepts' === sanitize_text_field( wp_unslash( $_POST['action'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			return false;
 		}
+		if ( is_customize_preview() ) {
+			$this->debug_message( 'is_customize_preview' );
+			return false;
+		}
 		global $wp_query;
-		if ( ! isset( $wp_query ) ) {
+		if ( ! isset( $wp_query ) || ! ( $wp_query instanceof WP_Query ) ) {
+			return $should_process;
+		}
+		if ( ! did_action( 'parse_query' ) ) {
 			return $should_process;
 		}
 		if ( $this->is_amp() ) {
@@ -160,10 +173,6 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		}
 		if ( is_feed() ) {
 			$this->debug_message( 'is_feed' );
-			return false;
-		}
-		if ( is_customize_preview() ) {
-			$this->debug_message( 'is_customize_preview' );
 			return false;
 		}
 		if ( is_preview() ) {
