@@ -64,10 +64,17 @@ add_filter(
 		$plugin_opts = array_merge( $plugin_opts, [ 'wpseo_ryte' ] );
 		// Woo Discount Rules.
 		$plugin_opts = array_merge( $plugin_opts, [ 'awdr_activity_log_version' ] );
+		// Freemius.
+		$plugin_opts = array_merge( $plugin_opts, [ 'fs_accounts' ] );
 		// Skip copying any of the above listed option rows.
 		if ( isset( $row['option_name'] ) && in_array( $row['option_name'], $plugin_opts, true ) ) {
 			$do = false;
 		}
+		// Handle other patterns that should be excluded.
+		if ( isset( $row['option_name'] ) && preg_match( '/^gadwp_cache/', $row['option_name'] ) ) {
+			$do = false;
+		}
+
 		return $do;
 	},
 	10,
