@@ -6,8 +6,8 @@ Author URI: https://publishpress.com
 Tags: revision, submit changes, workflow, collaboration, permissions, moderate, posts, schedule revisions
 Requires at least: 4.9.7
 Requires PHP: 5.6.20
-Tested up to: 5.7
-Stable tag: 2.6.1
+Tested up to: 5.8
+Stable tag: 2.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,7 +104,14 @@ Follow PublishPress on [Facebook](https://www.facebook.com/publishpress), [Twitt
 
 == Changelog ==
 
-= 2.6.1 - 14 Jul 2021 =
+= 2.6.3 - 11 Oct 2021 =
+* Fixed : Classic Editor - Error submitting a pending or scheduled revision
+
+= 2.6.2 - 7 Oct 2021 =
+* Change : Maintenance queries run at plugin activation to convert version 3.0 revisions back to 2.6 encoding
+* API : Support for WPML Translation Management support in Pro version
+
+= 2.6.1 - 15 Jul 2021 =
 * Fixed : Pending / Scheduled Revisions could become disassociated from main post due to third party plugin interactions
 * Compat : Permissions - Specific Permissions were not applied for editing / approval of custom post types under some conditions 
 * Fixed : Revision Update triggered redirect back to Revision Queue even if "Confirmation redirect on Revision Update" setting disabled

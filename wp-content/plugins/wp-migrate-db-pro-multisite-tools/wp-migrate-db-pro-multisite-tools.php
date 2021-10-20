@@ -4,7 +4,7 @@ Plugin Name: WP Migrate DB Pro Multisite Tools
 Plugin URI: https://deliciousbrains.com/wp-migrate-db-pro/
 Description: An extension to WP Migrate DB Pro, supporting Multisite migrations.
 Author: Delicious Brains
-Version: 1.3.1
+Version: 1.4.0
 Author URI: https://deliciousbrains.com
 Network: True
 */
@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
 require_once 'version.php';
 $GLOBALS['wpmdb_meta']['wp-migrate-db-pro-multisite-tools']['folder'] = basename(plugin_dir_path(__FILE__));
 
-const WPMDB_MST_REQUIRED_CORE_VERSION = '2.0';
+const WPMDB_MST_REQUIRED_CORE_VERSION = '2.2';
 
 function get_mdb_version_mst()
 {

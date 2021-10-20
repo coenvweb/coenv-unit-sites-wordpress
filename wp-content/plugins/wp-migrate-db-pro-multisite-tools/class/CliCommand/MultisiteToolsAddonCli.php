@@ -70,17 +70,23 @@ class MultisiteToolsAddonCli extends MultisiteToolsAddon
         add_filter('wpmdb_cli_default_find_and_replace', array($this, 'filter_cli_default_find_and_replace'), 10, 2);
 
         add_filter('wpmdb_cli_initiate_migration_args', [$this, 'filter_initiate_post_data_cli'], 10, 2);
-        add_filter('wpmdb_cli_filter_before_cli_initiate_migration', array($this, 'extend_mst_cli_migration'), 10, 2);
+        add_filter('wpmdb_cli_filter_before_migration', array($this, 'extend_mst_cli_migration'), 10, 2);
     }
 
-    public function extend_mst_cli_migration($profile, $post_data = [])
+     /**
+     * Add MST to profile.
+     *
+     * @param array $post_data
+     * @param array $profile
+     * @return array
+     */
+    public function extend_mst_cli_migration($profile, $post_data)
     {
         if (!isset($profile['multisite_tools'])) {
             return $profile;
         }
 
         $mst = $profile['multisite_tools'];
-
         if (!isset($mst['enabled']) || !$mst['enabled']) {
             return $profile;
         }
@@ -88,11 +94,17 @@ class MultisiteToolsAddonCli extends MultisiteToolsAddon
         if (!isset($mst['selected_subsite'], $mst['new_prefix'])) {
             return $profile;
         }
-
+        $mst_select_subsite = $profile['mst_select_subsite'] ? '1' : '0';
+        
+        $destination = ('pull' === $post_data['intent']) ? $post_data['site_details']['local'] : $post_data['site_details']['remote'];
+        $prefix = in_array($post_data['intent'], ['push', 'pull']) ? $destination['prefix'] : $mst['new_prefix'];
+        if ( "true" === $destination['is_multisite'] && 1 < $mst['selected_subsite']) {
+            $prefix .= $mst['selected_subsite'] . '_';
+        }
         $mst_args = [
-            'mst_select_subsite'   => '1',
+            'mst_select_subsite'   => $mst_select_subsite,
             'mst_selected_subsite' => (int)$mst['selected_subsite'],
-            'new_prefix'           => $mst['new_prefix'],
+            'new_prefix'           => $prefix,
         ];
 
         $profile = array_merge($profile, $mst_args);

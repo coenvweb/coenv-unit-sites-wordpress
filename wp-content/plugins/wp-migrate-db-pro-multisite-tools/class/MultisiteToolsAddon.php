@@ -658,16 +658,15 @@ class MultisiteToolsAddon extends AddonAbstract
         if (1 > $blog_id || 'backup' == $stage) {
             return $use;
         }
-
         $new_prefix = $state_data['new_prefix'];
 
         if (empty($new_prefix)) {
             return $row;
         }
-
+        
         global $wpdb;
 
-        $old_prefix = $wpdb->base_prefix;
+        $old_prefix = $state_data['source_prefix'];
         if (is_multisite() && 1 < $blog_id) {
             $old_prefix .= $blog_id . '_';
         }
@@ -678,12 +677,11 @@ class MultisiteToolsAddon extends AddonAbstract
                 $row->option_name = substr_replace($row->option_name, $new_prefix, 0, strlen($old_prefix));
             }
         }
-
         if ($this->table_helper->table_is('usermeta', $table_name)) {
             if (!$this->is_user_required_for_blog($row->user_id, $blog_id)) {
                 $use = false;
             } elseif (1 == $blog_id) {
-                $prefix_escaped = preg_quote($wpdb->base_prefix);
+                $prefix_escaped = preg_quote($state_data['source_prefix']);
                 if (1 === preg_match('/^' . $prefix_escaped . '([0-9]+)_/', $row->meta_key, $matches)) {
                     // Remove non-primary subsite records from usermeta when migrating primary subsite.
                     $use = false;
@@ -695,7 +693,7 @@ class MultisiteToolsAddon extends AddonAbstract
                 if (0 === stripos($row->meta_key, $old_prefix)) {
                     // Rename prefixed keys.
                     $row->meta_key = substr_replace($row->meta_key, $new_prefix, 0, strlen($old_prefix));
-                } elseif (0 === stripos($row->meta_key, $wpdb->base_prefix)) {
+                } elseif (0 === stripos($row->meta_key, $state_data['source_prefix'])) {
                     // Remove wp_* records from usermeta not for extracted subsite.
                     $use = false;
                 }
@@ -806,30 +804,28 @@ class MultisiteToolsAddon extends AddonAbstract
     {
         $intent       = $state_data['intent'];
         $site_details = $state_data['site_details'];
-
         if ('find_replace' === $intent) {
             return $table_name;
         }
 
-        $blog_id = $this->selected_subsite($state_data);
+        $blog_id = $state_data['mst_selected_subsite'];
 
         if (1 > $blog_id) {
             return $table_name;
         }
 
         $new_prefix = $state_data['new_prefix'];
-
         if (empty($new_prefix)) {
             return $table_name;
         }
 
         // During a MST migration we add a custom prefix to the global tables so that we can manipulate their data before use.
-        if (is_multisite() && $this->table_helper->table_is('', $table_name, 'global', $new_prefix, $blog_id)) {
+        $old_prefix = ('push' === $state_data['type']) ? $state_data['site_details']['local']['prefix'] : $state_data['site_details']['remote']['prefix'];
+        if (is_multisite() && $this->table_helper->table_is('', $table_name, 'global', $new_prefix, $blog_id, $old_prefix)) {
             $new_prefix .= 'wpmdbglobal_';
         }
 
-        $old_prefix = ('pull' === $intent ? $site_details['remote']['prefix'] : $site_details['local']['prefix']);
-        if (!is_multisite() && 1 < $blog_id && !$this->table_helper->table_is('', $table_name, 'global', $new_prefix, $blog_id)) {
+        if (!is_multisite() && 1 < $blog_id && !$this->table_helper->table_is('', $table_name, 'global', $new_prefix, $blog_id, $old_prefix)) {
             $old_prefix .= $blog_id . '_';
         }
 
@@ -966,27 +962,29 @@ class MultisiteToolsAddon extends AddonAbstract
         $target_postmeta_table = null;
         $comments_imported     = false;
         $target_comments_table = null;
+        $intent = isset($state_data['type']) ? $state_data['type'] : $state_data['intent'];
+        $source_prefix = ('pull' === $intent) ? $state_data['site_details']['remote']['prefix'] : $state_data['site_details']['local']['prefix'];
         foreach ($tables as $table) {
-            if (empty($source_users_table) && $this->table_helper->table_is('users', $table)) {
-                $target_users_table = $table;
+            if (empty($source_users_table) && $this->table_helper->table_is('users', $table, 'table', $source_prefix, 0, $source_prefix)) {
+                $target_users_table = Util::prefix_updater($table, $state_data['source_prefix'], $state_data['destination_prefix']);
                 $source_users_table = $this->filter_finalize_target_table_name($table, $state_data);
                 continue;
             }
-            if (empty($source_usermeta_table) && $this->table_helper->table_is('usermeta', $table)) {
-                $target_usermeta_table = $table;
+            if (empty($source_usermeta_table) && $this->table_helper->table_is('usermeta', $table, 'table', $source_prefix, 0, $source_prefix)) {
+                $target_usermeta_table = Util::prefix_updater($table, $state_data['source_prefix'], $state_data['destination_prefix']);
                 $source_usermeta_table = $this->filter_finalize_target_table_name($table, $state_data);
                 continue;
             }
-            if (!$posts_imported && $this->table_helper->table_is('posts', $table)) {
+            if (!$posts_imported && $this->table_helper->table_is('posts', $table, 'table', $source_prefix)) {
                 $posts_imported     = true;
                 $target_posts_table = $this->filter_finalize_target_table_name($table, $state_data);
                 continue;
             }
-            if ($this->table_helper->table_is('postmeta', $table)) {
+            if ($this->table_helper->table_is('postmeta', $table, 'table', $source_prefix)) {
                 $target_postmeta_table = $this->filter_finalize_target_table_name($table, $state_data);
                 continue;
             }
-            if (!$comments_imported && $this->table_helper->table_is('comments', $table)) {
+            if (!$comments_imported && $this->table_helper->table_is('comments', $table, 'table', $source_prefix)) {
                 $comments_imported     = true;
                 $target_comments_table = $this->filter_finalize_target_table_name($table, $state_data);
                 continue;
