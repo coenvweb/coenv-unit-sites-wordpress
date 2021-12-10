@@ -10,8 +10,8 @@ function customtaxorder_subpage() {
 
 	$options = customtaxorder_get_settings();
 	$taxonomies = customtaxorder_get_taxonomies();
-	$parent_ID = 0;
-	$this_page = $_GET['page'];
+	$parent_id = 0;
+	$this_page = sanitize_text_field( $_GET['page'] );
 
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
@@ -30,7 +30,7 @@ function customtaxorder_subpage() {
 		}
 	}
 
-	if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+	if ( ! current_user_can( $custom_cap ) ) {
 		die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 	}
 
@@ -38,7 +38,7 @@ function customtaxorder_subpage() {
 		customtaxorder_update_order();
 		$taxonomies = customtaxorder_get_taxonomies(); // get it fresh
 	}
-	if ( isset($_POST['option_page']) && $_POST['option_page'] == 'customtaxorder_settings' ) {
+	if ( isset($_POST['option_page']) && $_POST['option_page'] === 'customtaxorder_settings' ) {
 		customtaxorder_update_settings();
 		$options = customtaxorder_get_settings(); // get it fresh
 	}
@@ -61,7 +61,7 @@ function customtaxorder_subpage() {
 			echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-taxonomies' ) . '">' . esc_html__('Taxonomies', 'custom-taxonomy-order-ne') . '</a></li>
 				';
 			foreach ( $taxonomies as $taxonomy ) {
-				echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-' . $taxonomy->name ) . '">' . $taxonomy->label . '</a> &nbsp;(' . $taxonomy->name . ')</li>
+				echo '<li class="lineitem"><a href="' . esc_url( admin_url( 'admin.php?page=customtaxorder-' . $taxonomy->name ) ) . '">' . esc_html( $taxonomy->label ) . '</a> &nbsp;(' . esc_html( $taxonomy->name ) . ')</li>
 				';
 			}
 		}
@@ -89,35 +89,34 @@ function customtaxorder_subpage() {
 				$tax_label = $taxonomy->label;
 				$tax_name = $taxonomy->name;
 
-				$settings .= '<input name="customtaxorder_taxname" type="hidden" value="' . $tax_name . '" />';
+				$settings .= '<input name="customtaxorder_taxname" type="hidden" value="' . esc_attr( $tax_name ) . '" />';
 			}
 		}
 	}
 
-	$parent_ID_order = 0;
+	$parent_id_order = 0;
 	if (isset($_POST['go-sub-posts'])) {
-		$parent_ID = $_POST['sub-posts'];
-	}
-	elseif (isset($_POST['hidden-parent-id'])) {
+		$parent_id = (int) $_POST['sub-posts'];
+	} else if (isset($_POST['hidden-parent-id'])) {
 		$parent_term = get_term($_POST['hidden-parent-id'], $tax_name);
-		$parent_ID = $_POST['hidden-parent-id'];
+		$parent_id = (int) $_POST['hidden-parent-id'];
 		if ( is_object($parent_term) && isset($parent_term->term_order) ) {
-			$parent_ID_order = $parent_term->term_order;
+			$parent_id_order = (int) $parent_term->term_order;
 		}
 	}
 	if (isset($_POST['return-sub-posts'])) {
 		$parent_term = get_term($_POST['hidden-parent-id'], $tax_name);
-		$parent_ID = $parent_term->parent;
+		$parent_id = (int) $parent_term->parent;
 	}
 
 
 	// Terms in this taxonomy, ordered according to settings. */ ?>
-	<h1><?php echo esc_html__('Order ', 'custom-taxonomy-order-ne') . $tax_label; ?></h1>
+	<h1><?php echo esc_html__('Order ', 'custom-taxonomy-order-ne') . esc_html( $tax_label ); ?></h1>
 	<form name="custom-order-form" method="post" action=""><?php
 
 		/* Nonce */
 		$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
-		echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
+		echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . esc_attr( $nonce ) . '" />';
 
 		// Remove filters for WPML and add one filter of our own.
 		$active_plugins = get_option('active_plugins');
@@ -133,7 +132,7 @@ function customtaxorder_subpage() {
 			'orderby'    => 'term_order',
 			'order'      => 'ASC',
 			'hide_empty' => false,
-			'parent'     => $parent_ID,
+			'parent'     => $parent_id,
 		);
 		$terms = get_terms( $tax_name, $args );
 		if ( $terms ) {
@@ -141,16 +140,16 @@ function customtaxorder_subpage() {
 			?>
 			<div id="poststuff" class="metabox-holder">
 				<div class="widget order-widget">
-					<h2 class="widget-top"><?php esc_html_e( $tax_label ) ?> | <small><?php esc_html_e('Order the terms by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small></h2>
+					<h2 class="widget-top"><?php echo esc_html( $tax_label ) ?> | <small><?php esc_html_e('Order the terms by dragging and dropping them into the desired order.', 'custom-taxonomy-order-ne') ?></small></h2>
 					<div class="misc-pub-section">
 						<ul id="custom-order-list">
 							<?php foreach ( $terms as $term ) { ?>
-							<li id="id_<?php echo $term->term_id; ?>" data-slug="<?php echo $term->slug; ?>" class="lineitem"><?php echo $term->name; ?></li>
+							<li id="id_<?php echo (int) $term->term_id; ?>" data-slug="<?php echo esc_attr( $term->slug ); ?>" class="lineitem"><?php echo esc_html( $term->name ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
 					<div class="misc-pub-section misc-pub-section-last">
-						<?php if ($parent_ID != 0) { ?>
+						<?php if ( $parent_id !== 0 ) { ?>
 						<div id="publishing-action-return-sub-posts">
 							<input type="submit" class="button" id="return-sub-posts" name="return-sub-posts" value="<?php esc_html_e('Return to Parent', 'custom-taxonomy-order-ne'); ?>" />
 						</div>
@@ -165,14 +164,14 @@ function customtaxorder_subpage() {
 						<div class="clear"></div>
 					</div>
 					<input type="hidden" id="hidden-custom-order"    name="hidden-custom-order" />
-					<input type="hidden" id="hidden-parent-id"       name="hidden-parent-id" value="<?php echo $parent_ID; ?>" />
-					<input type="hidden" id="hidden-parent-id-order" name="hidden-parent-id-order" value="<?php echo $parent_ID_order; ?>" />
+					<input type="hidden" id="hidden-parent-id"       name="hidden-parent-id" value="<?php echo $parent_id; ?>" />
+					<input type="hidden" id="hidden-parent-id-order" name="hidden-parent-id-order" value="<?php echo $parent_id_order; ?>" />
 				</div>
 				<?php
 				$dropdown = customtaxorder_sub_query( $terms, $tax_name );
 				if( ! empty($dropdown) ) { ?>
 				<div class="widget order-widget">
-					<h2 class="widget-top"><?php print(__('Sub-', 'custom-taxonomy-order-ne') . $tax_label); ?> | <small><?php esc_html_e('Choose a term from the dropdown to order its sub-terms.', 'custom-taxonomy-order-ne'); ?></small></h2>
+					<h2 class="widget-top"><?php esc_html_e('Sub-', 'custom-taxonomy-order-ne') . esc_html( $tax_label ); ?> | <small><?php esc_html_e('Choose a term from the dropdown to order its sub-terms.', 'custom-taxonomy-order-ne'); ?></small></h2>
 					<div class="misc-pub-section misc-pub-section-last">
 						<select id="sub-posts" name="sub-posts">
 							<?php echo $dropdown; ?>
@@ -192,7 +191,7 @@ function customtaxorder_subpage() {
 		<?php
 		/* Nonce */
 		$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
-		echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
+		echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . esc_attr( $nonce ) . '" />';
 		settings_fields('customtaxorder_settings'); ?>
 		<div class="metabox-holder">
 			<div class="order-widget">
@@ -234,11 +233,11 @@ function customtaxorder_update_order() {
 		return;
 	}
 
-	if (isset($_POST['hidden-custom-order']) && $_POST['hidden-custom-order'] != "") {
+	if (isset($_POST['hidden-custom-order']) && $_POST['hidden-custom-order'] != '') {
 
 		$options = customtaxorder_get_settings();
 		$taxonomies = customtaxorder_get_taxonomies() ;
-		$this_page = $_GET['page'];
+		$this_page = sanitize_text_field( $_GET['page'] );
 
 		// Set your custom capability through this filter.
 		$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
@@ -246,7 +245,7 @@ function customtaxorder_update_order() {
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				$com_page = 'customtaxorder-' . $taxonomy->name;
-				if ( $this_page == $com_page ) {
+				if ( $this_page === $com_page ) {
 
 					// For this taxonomy, set your finegrained capability with this custom filter.
 					$custom_cap = apply_filters( 'customtaxorder_custom_cap_' . $taxonomy->name, $custom_cap );
@@ -255,7 +254,7 @@ function customtaxorder_update_order() {
 			}
 		}
 
-		if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+		if ( ! current_user_can( $custom_cap ) ) {
 			die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 		} else {
 
@@ -264,11 +263,11 @@ function customtaxorder_update_order() {
 				$parent_id_order = (int) $_POST['hidden-parent-id-order'] + 1;
 			}
 			$new_order = $_POST['hidden-custom-order'];
-			$submitted_ids = explode(",", $new_order);
+			$submitted_ids = explode(',', $new_order);
 			$updated_ids = array();
 			$result = count($submitted_ids);
 			for ( $i = 0; $i < $result; $i++ ) {
-				$term_id = (int) str_replace("id_", "", $submitted_ids[$i]);
+				$term_id = (int) str_replace('id_', '', $submitted_ids[$i]);
 				$term_order = $i + $parent_id_order;
 
 				customtaxorder_set_db_term_order( $term_id, $term_order );
@@ -317,7 +316,7 @@ function customtaxorder_update_settings() {
 
 		$options = customtaxorder_get_settings();
 		$taxonomies = customtaxorder_get_taxonomies() ;
-		$this_page = $_GET['page'];
+		$this_page = sanitize_text_field( $_GET['page'] );
 
 		// Set your custom capability through this filter.
 		$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
@@ -325,7 +324,7 @@ function customtaxorder_update_settings() {
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $taxonomy ) {
 				$com_page = 'customtaxorder-' . $taxonomy->name;
-				if ( $this_page == $com_page && $tax_name == $taxonomy->name ) {
+				if ( $this_page === $com_page && $tax_name === $taxonomy->name ) {
 
 					// For this taxonomy, set your finegrained capability with this custom filter.
 					$custom_cap = apply_filters( 'customtaxorder_custom_cap_' . $taxonomy->name, $custom_cap );
@@ -334,11 +333,11 @@ function customtaxorder_update_settings() {
 			}
 		}
 
-		if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+		if ( ! current_user_can( $custom_cap ) ) {
 			die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 		} else {
 			foreach ( $taxonomies as $taxonomy ) {
-				if ( $taxonomy->name == $tax_name ) {
+				if ( $taxonomy->name === $tax_name ) {
 
 					$options[$taxonomy->name] = $tax_setting;
 					$customtaxorder_settings = update_option( 'customtaxorder_settings', $options );
@@ -386,7 +385,7 @@ function customtaxorder_sub_query( $terms, $tax_name ) {
 		foreach ( $terms as $term ) {
 			$subterms = get_term_children( $term->term_id, $tax_name );
 			if ( $subterms ) {
-				$options .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+				$options .= '<option value="' . (int) $term->term_id . '">' . esc_html( $term->name ) . '</option>';
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Admin functions for Custom Taxonomy Order.
+ */
 
 function customtaxorder_register_settings() {
 
@@ -10,7 +12,7 @@ function customtaxorder_register_settings() {
 			'type'              => 'string',
 			'show_in_rest'      => false,
 			'default'           => NULL,
-			'sanitize_callback' => 'customtaxorder_settings_validate'
+			'sanitize_callback' => 'customtaxorder_settings_validate',
 		));
 	register_setting(
 		'customtaxorder_settings',
@@ -19,7 +21,7 @@ function customtaxorder_register_settings() {
 			'type'              => 'string',
 			'show_in_rest'      => false,
 			'default'           => NULL,
-			'sanitize_callback' => 'customtaxorder_taxonomies_validate'
+			'sanitize_callback' => 'customtaxorder_taxonomies_validate',
 		));
 
 }
@@ -54,10 +56,10 @@ add_action('admin_menu', 'customtaxorder_menu');
 
 function customtaxorder_css() {
 	if ( isset($_GET['page']) ) {
-		$pos_page = $_GET['page'];
+		$pos_page = sanitize_text_field( $_GET['page'] );
 		$pos_args = 'customtaxorder';
-		$pos = strpos($pos_page,$pos_args);
-		if ( $pos === false ) {} else {
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
 			wp_enqueue_style('customtaxorder', plugins_url( 'css/customtaxorder.css', __FILE__), false, CUSTOMTAXORDER_VER, 'screen' );
 		}
 	}
@@ -67,10 +69,10 @@ add_action('admin_print_styles', 'customtaxorder_css');
 
 function customtaxorder_js_libs() {
 	if ( isset($_GET['page']) ) {
-		$pos_page = $_GET['page'];
+		$pos_page = sanitize_text_field( $_GET['page'] );
 		$pos_args = 'customtaxorder';
-		$pos = strpos($pos_page,$pos_args);
-		if ( $pos === false ) {} else {
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'jquery-ui-sortable' );
@@ -138,7 +140,7 @@ function customtaxorder_term_order_edit_form_field( $term, $taxonomy ) {
 	$options = customtaxorder_get_settings();
 	if ( isset($options[$taxonomy]) && $options[$taxonomy] == 1 ) {
 		if ( is_object($term) && isset($term->term_order) ) {
-			$term_order = $term->term_order;
+			$term_order = (int) $term->term_order;
 		} else {
 			$term_order = 0;
 		}

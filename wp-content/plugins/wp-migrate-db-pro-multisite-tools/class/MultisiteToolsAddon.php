@@ -808,7 +808,7 @@ class MultisiteToolsAddon extends AddonAbstract
             return $table_name;
         }
 
-        $blog_id = $state_data['mst_selected_subsite'];
+        $blog_id = isset($state_data['mst_selected_subsite']) ? $state_data['mst_selected_subsite'] : 0;
 
         if (1 > $blog_id) {
             return $table_name;

@@ -6,7 +6,7 @@ function custom_taxonomy_order() {
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
-	if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+	if ( ! current_user_can( $custom_cap ) ) {
 		die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 	}
 
@@ -23,7 +23,7 @@ function custom_taxonomy_order() {
 
 			/* Nonce */
 			$nonce = wp_create_nonce( 'custom-taxonomy-order-ne-nonce' );
-			echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . $nonce . '" />';
+			echo '<input type="hidden" id="custom-taxonomy-order-ne-nonce" name="custom-taxonomy-order-ne-nonce" value="' . esc_attr( $nonce ) . '" />';
 
 			$taxonomies = customtaxorder_get_taxonomies() ;
 
@@ -42,7 +42,7 @@ function custom_taxonomy_order() {
 							<ul id="custom-taxonomy-list">
 								<?php
 								foreach ( $taxonomies_ordered as $taxonomy ) { ?>
-									<li id="<?php echo $taxonomy->name; ?>" class="lineitem"><?php echo  $taxonomy->label . ' &nbsp;(' . $taxonomy->name . ')';?></li>
+									<li id="<?php echo esc_attr( $taxonomy->name ); ?>" class="lineitem"><?php echo esc_html( $taxonomy->label ) . ' &nbsp;(' . esc_html( $taxonomy->name ) . ')';?></li>
 								<?php
 								} ?>
 							</ul>
@@ -87,14 +87,13 @@ function customtaxorder_update_taxonomies() {
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
-	if ( function_exists('current_user_can') && ! current_user_can( $custom_cap ) ) {
+	if ( ! current_user_can( $custom_cap ) ) {
 		die(esc_html__( 'You need a higher level of permission.', 'custom-taxonomy-order-ne' ));
 	}
 
-	if (isset($_POST['hidden-taxonomy-order']) && $_POST['hidden-taxonomy-order'] != "") {
+	if ( isset( $_POST['hidden-taxonomy-order'] ) && $_POST['hidden-taxonomy-order'] != '' ) {
 
-		$new_order = $_POST['hidden-taxonomy-order'];
-		$new_order = sanitize_text_field( $new_order );
+		$new_order = sanitize_text_field( $_POST['hidden-taxonomy-order'] );
 		update_option('customtaxorder_taxonomies', $new_order);
 
 		echo '<div id="message" class="updated fade notice is-dismissible"><p>'. esc_html__('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';
@@ -103,7 +102,7 @@ function customtaxorder_update_taxonomies() {
 	}
 
 }
-function customtaxorder_taxonomies_validate($input) {
+function customtaxorder_taxonomies_validate( $input ) {
 
 	$input = (string) sanitize_text_field( $input );
 	return $input;
@@ -122,7 +121,7 @@ function customtaxorder_taxonomies_validate($input) {
  */
 function customtaxorder_sort_taxonomies( $taxonomies = array() ) {
 	$order = get_option( 'customtaxorder_taxonomies', '' );
-	$order = explode( ",", $order );
+	$order = explode( ',', $order );
 	$taxonomies_ordered = array();
 
 	// Main sorted taxonomies.

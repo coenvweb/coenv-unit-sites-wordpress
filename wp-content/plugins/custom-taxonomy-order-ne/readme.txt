@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.6
-Stable tag: 3.3.0
+Tested up to: 5.8
+Stable tag: 3.3.1
 License: GPLv2 or later
 
 
@@ -28,6 +28,10 @@ It supports the following features:
 = Compatibility =
 
 This plugin is compatible with [ClassicPress](https://www.classicpress.net).
+
+= Contributions =
+
+This plugin is also available in [GitLab](https://gitlab.com/toomanybicycles/custom-taxonomy-order-ne)
 
 
 == Installation ==
@@ -158,6 +162,12 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.3.1 =
+* 2021-11-26
+* Bring back removed code for orderby clause in 'get_terms_orderby' filter.
+* No need to check if function 'current_user_can' and 'is_multisite' exist.
+* Use functions like 'esc_attr', 'esc_html' and 'esc_url' when appropriate.
 
 = 3.3.0 =
 * 2021-02-23

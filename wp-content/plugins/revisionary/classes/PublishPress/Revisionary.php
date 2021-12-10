@@ -21,13 +21,13 @@ class Revisions {
 
 	private function load($args = [])
     {
-		if (defined('REVISIONARY_PRO_VERSION')) {
+		if (defined('PUBLISHPRESS_REVISIONS_PRO_VERSION')) {
 			add_action('admin_init', [$this, 'load_updater']);
 		}
 	}
 
 	public function load_updater() {
-        if (defined('REVISIONARY_PRO_VERSION')) {
+        if (defined('PUBLISHPRESS_REVISIONS_PRO_VERSION')) {
 		    require_once(RVY_ABSPATH . '/includes-pro/library/Factory.php');
             $container = \PublishPress\Revisions\Factory::get_container();
 
@@ -37,7 +37,7 @@ class Revisions {
 
 	public function keyStatus($refresh = false)
     {
-        if (defined('REVISIONARY_PRO_VERSION')) {
+        if (defined('PUBLISHPRESS_REVISIONS_PRO_VERSION')) {
             require_once(RVY_ABSPATH . '/includes-pro/pro-key.php');
             return _revisionary_key_status($refresh);
         }
@@ -71,7 +71,7 @@ class Revisions {
             $sitewide = (isset($args['sitewide'])) ? $args['sitewide'] : -1;
             return rvy_delete_option($option_basename, $sitewide);
         }
-    }
+	}
     
     public function getUserRevision($post_id, $args = []) {
         global $wpdb, $current_user;

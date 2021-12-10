@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.3.0
+Version: 3.3.1
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -12,7 +12,7 @@ Domain Path: /lang/
 
 
 Copyright 2011 - 2011  Drew Gourley
-Copyright 2013 - 2021  Marcel Pol   (email: marcel@timelord.nl)
+Copyright 2013 - 2021  Marcel Pol   (marcel@timelord.nl)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.3.0');
+define('CUSTOMTAXORDER_VER', '3.3.1');
 
 
 /*
@@ -102,15 +102,15 @@ function customtaxorder_apply_order_filter( $orderby, $args ) {
 		$options[$taxonomy] = 0; // Default if it was not set in options yet.
 	}
 
-	if ( $args['orderby'] == 'term_order_' ) { // leave for now...
+	if ( $args['orderby'] == 'term_order' ) {
 		return 't.term_order';
-	} elseif ( $args['orderby'] == 'name_' ) {
+	} else if ( $args['orderby'] == 'name' ) {
 		return 't.name';
-	} elseif ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
 		return 't.term_order';
-	} elseif ( $options[$taxonomy] == 2 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 2 && ! isset($_GET['orderby']) ) {
 		return 't.name';
-	} elseif ( $options[$taxonomy] == 3 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 3 && ! isset($_GET['orderby']) ) {
 		return 't.slug';
 	} else {
 		return $orderby;
@@ -121,7 +121,7 @@ add_filter('get_terms_orderby', 'customtaxorder_apply_order_filter', 10, 2);
 
 /*
  * Set defaults in Class WP_Term_Query->parse_query();
- * Default is name now. Set it to term_order if desired.
+ * Default is name now. Set it to term_order or slug if desired.
  */
 function customtaxorder_get_terms_defaults( $query_var_defaults, $taxonomies ) {
 	$options = customtaxorder_get_settings();
@@ -139,9 +139,9 @@ function customtaxorder_get_terms_defaults( $query_var_defaults, $taxonomies ) {
 
 	if ( $options[$taxonomy] == 1 ) {
 		$query_var_defaults['orderby'] = 'term_order';
-	} elseif ( $options[$taxonomy] == 2 ) {
+	} else if ( $options[$taxonomy] == 2 ) {
 		$query_var_defaults['orderby'] = 'name';
-	} elseif ( $options[$taxonomy] == 3 ) {
+	} else if ( $options[$taxonomy] == 3 ) {
 		$query_var_defaults['orderby'] = 'slug';
 	}
 
@@ -189,8 +189,8 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		// filtering will happen in the tag_cloud_sort filter sometime later
 		// post_tag = default tags
 		// product_tag = woocommerce product tags
-		if ( current_filter() == 'get_terms' && !is_admin() ) {
-			$customtaxorder_exclude_taxonomies = array('post_tag', 'product_tag');
+		if ( current_filter() == 'get_terms' && ! is_admin() ) {
+			$customtaxorder_exclude_taxonomies = array( 'post_tag', 'product_tag' );
 			if ( in_array($taxonomy, apply_filters( 'customtaxorder_exclude_taxonomies', $customtaxorder_exclude_taxonomies )) ) {
 				return $terms;
 			}
@@ -201,8 +201,8 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 			if ( ! $term->parent == 0 ) {
 				$parents = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
 				if ( is_array($parents) && ! empty($parents) ) {
-					$ancestor_ID = array_pop( $parents );
-					$ancestor_term = get_term($ancestor_ID, $term->taxonomy);
+					$ancestor_id = array_pop( $parents );
+					$ancestor_term = get_term($ancestor_id, $term->taxonomy);
 					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
 						$float_front = (string) $ancestor_term->term_order;
 						$float_rear = (string) ( $term->term_order + 10000 ); // Make it sort correctly. Not many websites have more than 90000 subterms.
@@ -323,12 +323,12 @@ function _customtaxorder_activate() {
 }
 
 
-function customtaxorder_activate($networkwide) {
+function customtaxorder_activate( $networkwide ) {
 	global $wpdb;
-	if (function_exists('is_multisite') && is_multisite()) {
+	if ( is_multisite() ) {
 		$blogids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-		foreach ($blogids as $blog_id) {
-			switch_to_blog($blog_id);
+		foreach ( $blogids as $blog_id ) {
+			switch_to_blog( $blog_id );
 			_customtaxorder_activate();
 			restore_current_blog();
 		}
@@ -344,8 +344,8 @@ register_activation_hook( __FILE__, 'customtaxorder_activate' );
  * Deprecated action since WP 5.1.0.
  *
  */
-function customtaxorder_activate_new_site($blog_id) {
-	switch_to_blog($blog_id);
+function customtaxorder_activate_new_site( $blog_id ) {
+	switch_to_blog( $blog_id );
 	_customtaxorder_activate();
 	restore_current_blog();
 }
@@ -369,9 +369,9 @@ add_action( 'wp_initialize_site', 'customtaxorder_wp_initialize_site' );
 
 if ( is_admin() ) {
 	// Admin functions
-	include('admin-customtaxorder.php');
+	require_once 'admin-customtaxorder.php';
 	// Settingspage
-	include('page-customtaxorder.php');
+	require_once 'page-customtaxorder.php';
 }
 // functions for sorting taxonomies
-include('taxonomies.php');
+require_once 'taxonomies.php';
