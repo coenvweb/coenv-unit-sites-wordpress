@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.8
-Stable tag: 3.3.1
+Stable tag: 3.3.2
 License: GPLv2 or later
 
 
@@ -135,7 +135,7 @@ You could add the following example to your functions.php and work from there.
 	add_action('customtaxorder_update_order', 'custom_action');
 	?>
 
-'customtaxorder_terms_ordered' is being run after term array has been ordered with usort.
+'customtaxorder_terms_ordered' action is being run after term array has been ordered with usort.
 Please be aware that this can be triggered multiple times during a request.
 You could add the following example to your functions.php and work from there.
 
@@ -144,6 +144,22 @@ You could add the following example to your functions.php and work from there.
 		print_r( $terms_new_order );
 	}
 	add_action('customtaxorder_terms_ordered', 'custom_action', 10, 2);
+	?>
+
+= I use the GET parameter 'orderby' to order posts, but then it is ignoring term order =
+
+In case the GET parameter 'orderby' is set it is assumed it is used to order terms, instead of posts, users, or anything else.
+
+You can add a filter to possible ignore the orderby parameter in the case that is set in the GET request.
+That might be usefull if your GET parameter for orderby is used to sort posts, users, or just anything that is not terms.
+Example code for using the filter:
+
+	<?php
+	function my_customtaxorder_is_get_orderby_set( $get_orderby_set ) {
+		return false; // ignore orderby GET parameter
+		// return $get_orderby_set; // this would be default behaviour
+	}
+	add_filter( 'customtaxorder_is_get_orderby_set', 'my_customtaxorder_is_get_orderby_set' );
 	?>
 
 = How can I add my own translation? =
@@ -162,6 +178,15 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.3.2 =
+* 2021-12-24
+* Add function 'customtaxorder_is_get_orderby_set'.
+* Add filter 'customtaxorder_is_get_orderby_set' to optionally change the output of that function.
+* Fix warning on PHP 8.1.
+* Show taxonomy name as label on dashboard, if label is not set.
+* Remove old translation files from plugin, GlotPress should be used.
+* Do not show all submenu items on dashboard if they are over 100 (fix for Woo attributes).
 
 = 3.3.1 =
 * 2021-11-26

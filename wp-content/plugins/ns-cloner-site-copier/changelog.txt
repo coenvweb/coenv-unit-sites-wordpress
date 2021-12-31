@@ -1,3 +1,6 @@
+= 4.1.9 - 2021.12.23 =
+* Optimize performance by preventing initialization for non-admin requests
+
 = 4.1.8 - 2021.09.30 =
 * Optimize WP site list for networks with large numbers of sites
 * Add proactive resolution attempts for duplicate option keys during cloning

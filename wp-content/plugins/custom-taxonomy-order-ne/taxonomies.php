@@ -41,8 +41,15 @@ function custom_taxonomy_order() {
 						<div class="misc-pub-section">
 							<ul id="custom-taxonomy-list">
 								<?php
-								foreach ( $taxonomies_ordered as $taxonomy ) { ?>
-									<li id="<?php echo esc_attr( $taxonomy->name ); ?>" class="lineitem"><?php echo esc_html( $taxonomy->label ) . ' &nbsp;(' . esc_html( $taxonomy->name ) . ')';?></li>
+								foreach ( $taxonomies_ordered as $taxonomy ) {
+									$tax_label = $taxonomy->label;
+									if ( ! isset( $tax_label ) || strlen( $tax_label ) === 0 ) {
+										$tax_label = $taxonomy->name;
+									}
+									$tax_name = $taxonomy->name;
+
+									?>
+									<li id="<?php echo esc_attr( $tax_name ); ?>" class="lineitem"><?php echo esc_html( $tax_label ) . ' &nbsp;(' . esc_html( $tax_name ) . ')';?></li>
 								<?php
 								} ?>
 							</ul>

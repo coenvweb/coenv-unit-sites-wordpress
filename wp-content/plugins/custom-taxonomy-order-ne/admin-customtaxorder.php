@@ -33,23 +33,44 @@ add_action('admin_init', 'customtaxorder_register_settings');
  */
 function customtaxorder_menu() {
 
-	$taxonomies = customtaxorder_get_taxonomies() ;
-
-	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
 	//add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
-	add_menu_page(esc_html__('Term Order', 'custom-taxonomy-order-ne'), esc_html__('Term Order', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder', 'customtaxorder_subpage', 'dashicons-list-view', 122.35);
+	add_menu_page(esc_html__('Term Order', 'custom-taxonomy-order-ne'), esc_html__('Term Order', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder', 'customtaxorder_subpage', 'dashicons-list-view', 122);
 	//add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', int $position = null )
 	add_submenu_page('customtaxorder', esc_html__('Order Taxonomies', 'custom-taxonomy-order-ne'), esc_html__('Order Taxonomies', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-taxonomies', 'custom_taxonomy_order');
 
-	foreach ($taxonomies as $taxonomy ) {
-		// Set your finegrained capability for this taxonomy for this custom filter.
-		$custom_cap_tax = apply_filters( 'customtaxorder_custom_cap_' . $taxonomy->name, $custom_cap );
-		add_submenu_page('customtaxorder', esc_html__('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, esc_html__('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, $custom_cap_tax, 'customtaxorder-'.$taxonomy->name, 'customtaxorder_subpage');
+	$taxonomies = customtaxorder_get_taxonomies() ;
+	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
+	$tax_count = count( $taxonomies );
+
+	/* WooCommerce attributes cabn genarate lots of custom taxonomies. The submenu gets too large on non-taxorder pages. */
+	$page_customtaxorder = false;
+	if ( isset($_GET['page']) ) {
+		$pos_page = sanitize_text_field( $_GET['page'] );
+		$pos_args = 'customtaxorder';
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
+			$page_customtaxorder = true;
+		}
+	}
+
+	if ( $tax_count < 100 || $page_customtaxorder === true ) {
+		foreach ($taxonomies as $taxonomy ) {
+			$tax_label = $taxonomy->label;
+			if ( ! isset( $tax_label ) || strlen( $tax_label ) === 0 ) {
+				$tax_label = $taxonomy->name;
+			}
+			$tax_name = $taxonomy->name;
+
+			// Set your finegrained capability for this taxonomy for this custom filter.
+			$custom_cap_tax = apply_filters( 'customtaxorder_custom_cap_' . $tax_name, $custom_cap );
+			add_submenu_page('customtaxorder', esc_html__('Order ', 'custom-taxonomy-order-ne') . $tax_label, esc_html__('Order ', 'custom-taxonomy-order-ne') . $tax_label, $custom_cap_tax, 'customtaxorder-'.$tax_name, 'customtaxorder_subpage');
+		}
 	}
 	add_submenu_page('customtaxorder', esc_html__('About', 'custom-taxonomy-order-ne'), esc_html__('About', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-about', 'customtaxorder_about');
+
 }
 add_action('admin_menu', 'customtaxorder_menu');
 

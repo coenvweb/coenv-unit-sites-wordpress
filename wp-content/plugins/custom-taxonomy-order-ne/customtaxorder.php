@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.3.1
+Version: 3.3.2
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -106,11 +106,11 @@ function customtaxorder_apply_order_filter( $orderby, $args ) {
 		return 't.term_order';
 	} else if ( $args['orderby'] == 'name' ) {
 		return 't.name';
-	} else if ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 1 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.term_order';
-	} else if ( $options[$taxonomy] == 2 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 2 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.name';
-	} else if ( $options[$taxonomy] == 3 && ! isset($_GET['orderby']) ) {
+	} else if ( $options[$taxonomy] == 3 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.slug';
 	} else {
 		return $orderby;
@@ -183,7 +183,7 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 	if ( ! isset ( $options[$taxonomy] ) ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
 	}
-	if ( $options[$taxonomy] == 1 && ! isset($_GET['orderby']) ) {
+	if ( $options[$taxonomy] == 1 && ! customtaxorder_is_get_orderby_set() ) {
 
 		// no filtering so the test in wp_generate_tag_cloud() works out right for us
 		// filtering will happen in the tag_cloud_sort filter sometime later
@@ -271,7 +271,7 @@ function customtaxorder_order_categories( $categories ) {
 	if ( ! isset( $options['category'] ) ) {
 		$options['category'] = 0; // default if not set in options yet
 	}
-	if ( $options['category'] == 1 && ! isset($_GET['orderby']) ) {
+	if ( $options['category'] == 1 && ! customtaxorder_is_get_orderby_set() ) {
 		usort($categories, 'customtax_cmp');
 
 		$terms_new_order = $categories;
@@ -307,6 +307,47 @@ function customtaxorder_get_taxonomies() {
 	$taxonomies = get_taxonomies( $args, $output );
 
 	return $taxonomies;
+
+}
+
+
+/*
+ * Check if the GET parameter orderby is set.
+ * In case it is set it is assumed it is used to order terms, instead of posts, users, or anything else.
+ *
+ * @return bool true if the parameter is set. false if not set or if overridden by a filter.
+ *
+ * @since 3.3.2
+ */
+function customtaxorder_is_get_orderby_set() {
+
+	$get_orderby_set = false;
+
+	if ( isset( $_GET['orderby'] ) ) {
+		$get_orderby_set = true;
+	}
+
+	/*
+	 * Add filter to possible ignore the orderby parameter in the case that is set in the GET request.
+	 * Might be usefull if your _GET parameter for orderby is used to sort posts, users, or just anything that is not terms.
+	 *
+	 * @param  bool true if the orderby parameter in the GET request is set.
+	 * @return bool always return false in case you want to ignore this GET parameter.
+	 *
+	 * @since 3.3.2
+	 *
+	 * Example code for using the filter:
+	 *
+	 * function my_customtaxorder_is_get_orderby_set( $get_orderby_set ) {
+	 *     return false; // ignore orderby GET parameter
+	 *     // return $get_orderby_set; // this would be default behaviour
+	 * }
+	 * add_filter( 'customtaxorder_is_get_orderby_set', 'my_customtaxorder_is_get_orderby_set' );
+	 *
+	 */
+	$get_orderby_set = (bool) apply_filters( 'customtaxorder_is_get_orderby_set', $get_orderby_set );
+
+	return $get_orderby_set;
 
 }
 

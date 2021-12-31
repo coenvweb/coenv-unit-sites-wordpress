@@ -48,7 +48,7 @@ function customtaxorder_subpage() {
 		<div id="icon-customtaxorder"></div>
 
 	<?php
-	if ( $this_page == 'customtaxorder' ) {
+	if ( $this_page === 'customtaxorder' ) {
 		// Main admin page with just a set of links to the taxonomy pages.
 		?>
 		<h1>Custom Taxonomy Order</h1>
@@ -61,7 +61,15 @@ function customtaxorder_subpage() {
 			echo '<li class="lineitem"><a href="' . admin_url( 'admin.php?page=customtaxorder-taxonomies' ) . '">' . esc_html__('Taxonomies', 'custom-taxonomy-order-ne') . '</a></li>
 				';
 			foreach ( $taxonomies as $taxonomy ) {
-				echo '<li class="lineitem"><a href="' . esc_url( admin_url( 'admin.php?page=customtaxorder-' . $taxonomy->name ) ) . '">' . esc_html( $taxonomy->label ) . '</a> &nbsp;(' . esc_html( $taxonomy->name ) . ')</li>
+				$tax_label = $taxonomy->label;
+				if ( ! isset( $tax_label ) || strlen( $tax_label ) === 0 ) {
+					$tax_label = $taxonomy->name;
+				}
+				$tax_name = $taxonomy->name;
+				echo '
+				<li class="lineitem">
+					<a href="' . esc_url( admin_url( 'admin.php?page=customtaxorder-' . $tax_name ) ) . '">' . esc_html( $tax_label ) . '</a> &nbsp;(' . esc_html( $tax_name ) . ')
+				</li>
 				';
 			}
 		}
@@ -78,17 +86,19 @@ function customtaxorder_subpage() {
 				$options[$taxonomy->name] = 0; // default if not set in options yet
 			}
 			if ( $this_page == $com_page ) {
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="0" ' . checked('0', $options[$taxonomy->name], false) . ' /> ' . esc_html__('Order by ID (default).', 'custom-taxonomy-order-ne') . '</label><br />
-					';
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="1" ' . checked('1', $options[$taxonomy->name], false) . ' /> ' . esc_html__('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />
-					';
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="2" ' . checked('2', $options[$taxonomy->name], false) . ' /> ' . esc_html__('Alphabetical Order by name.', 'custom-taxonomy-order-ne') . '</label><br />
-					';
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="3" ' . checked('3', $options[$taxonomy->name], false) . ' /> ' . esc_html__('Alphabetical Order by slug.', 'custom-taxonomy-order-ne') . '</label><br />
-					';
 				$tax_label = $taxonomy->label;
+				if ( ! isset( $tax_label ) || strlen( $tax_label ) === 0 ) {
+					$tax_label = $taxonomy->name;
+				}
 				$tax_name = $taxonomy->name;
-
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="0" ' . checked('0', $options[$tax_name], false) . ' /> ' . esc_html__('Order by ID (default).', 'custom-taxonomy-order-ne') . '</label><br />
+					';
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="1" ' . checked('1', $options[$tax_name], false) . ' /> ' . esc_html__('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />
+					';
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="2" ' . checked('2', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by name.', 'custom-taxonomy-order-ne') . '</label><br />
+					';
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="3" ' . checked('3', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by slug.', 'custom-taxonomy-order-ne') . '</label><br />
+					';
 				$settings .= '<input name="customtaxorder_taxname" type="hidden" value="' . esc_attr( $tax_name ) . '" />';
 			}
 		}

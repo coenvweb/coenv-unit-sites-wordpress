@@ -3,7 +3,7 @@
  * Plugin Name: NS Cloner - Site Copier
  * Plugin URI: https://neversettle.it
  * Description: The amazing NS Cloner creates a new site as an exact clone / duplicate / copy of an existing site with theme and all plugins and settings intact in just a few steps. Check out NS Cloner Pro for additional powerful add-ons and features!
- * Version: 4.1.8
+ * Version: 4.1.9
  * Author: Never Settle
  * Author URI: https://neversettle.it
  * Requires at least: 4.0.0
@@ -67,7 +67,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.1.8';
+	public $version = '4.1.9';
 
 	/**
 	 * Menu Slug
@@ -219,14 +219,17 @@ final class NS_Cloner {
 		// Add quick-clone link.
 		add_action( 'manage_sites_action_links', [ $this, 'admin_quick_clone_link' ], 10, 2 );
 
-		// Do cloner specific setup once translation/localization is ready.
-		add_action( 'plugins_loaded', [ $this, 'init' ] );
-
-		// Hook to WP 'all' hook to automatically log all hooks that start with ns_cloner.
-		add_action( 'all', [ $this, 'log_hooks' ] );
-
 		// Install custom tables after cloner init.
 		add_action( 'ns_cloner_init', [ $this, 'install_tables' ] );
+
+		// Only load rest of plugin if it could be needed (not on frontend).
+		$should_load = is_admin() || (wp_doing_ajax() && is_user_logged_in()) || ( defined( 'WP_CLI' ) && WP_CLI );
+		if ( apply_filters( 'ns_cloner_should_load', $should_load ) ) {
+			// Bootstrap full cloner and addons once translation/localization is ready.
+			add_action( 'plugins_loaded', [ $this, 'init' ] );
+			// Hook to WP 'all' hook to automatically log all hooks that start with ns_cloner.
+			add_action( 'all', [ $this, 'log_hooks' ] );
+		}
 	}
 
 	/**
@@ -235,7 +238,11 @@ final class NS_Cloner {
 	 * The difference between this and the constructor is that anything that needs to use localization has to go here.
 	 */
 	public function init() {
-		load_plugin_textdomain( 'ns-cloner-site-copier', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain(
+			'ns-cloner-site-copier',
+			false,
+			NS_CLONER_V4_PLUGIN_DIR . 'languages/'
+		);
 
 		// Setup class instances.
 		$this->process_manager = new NS_Cloner_Process_Manager();
