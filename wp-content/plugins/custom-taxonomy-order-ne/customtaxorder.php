@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.3.2
+Version: 3.3.3
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -12,7 +12,7 @@ Domain Path: /lang/
 
 
 Copyright 2011 - 2011  Drew Gourley
-Copyright 2013 - 2021  Marcel Pol   (marcel@timelord.nl)
+Copyright 2013 - 2022  Marcel Pol   (marcel@timelord.nl)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,12 +40,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.3.1');
+define('CUSTOMTAXORDER_VER', '3.3.3');
 
 
 /*
- * Get settings for ordering this taxonomy.
- * $customtaxorder_settings is an array with key: $taxonomy->name and value: setting (0, 1, 2).
+ * Get settings for ordering each taxonomy.
+ * Settings:
+ * 0: orderby Term ID
+ * 1: orderby Custom Order
+ * 2: orderby Term Name (alphabetical)
+ * 3: orderby Term Slug (alphabetical)
+ *
+ * @return array $customtaxorder_settings an array with key: $taxonomy->name and value:
  */
 function customtaxorder_get_settings() {
 	$customtaxorder_defaults = array('category' => 0);
@@ -58,6 +64,8 @@ function customtaxorder_get_settings() {
 	$customtaxorder_defaults = apply_filters( 'customtaxorder_defaults', $customtaxorder_defaults );
 	$customtaxorder_settings = get_option( 'customtaxorder_settings' );
 	$customtaxorder_settings = wp_parse_args( $customtaxorder_settings, $customtaxorder_defaults );
+
+	$customtaxorder_settings = apply_filters( 'customtaxorder_settings', $customtaxorder_settings );
 
 	return $customtaxorder_settings;
 }
@@ -196,22 +204,28 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 			}
 		}
 
-		// Sort children after the ancestor, by using a float with "ancestor.child".
+		// Sort children after the ancestor, by using a float with "ancestor.childchildchild", traversing all parents.
 		foreach ($terms as $term) {
 			if ( ! $term->parent == 0 ) {
-				$parents = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
-				if ( is_array($parents) && ! empty($parents) ) {
-					$ancestor_id = array_pop( $parents );
-					$ancestor_term = get_term($ancestor_id, $term->taxonomy);
+				$ancestors = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
+				if ( is_array($ancestors) && ! empty($ancestors) ) {
+					$toplevel_ancestor_id = array_pop( $ancestors );
+					$ancestor_term = get_term($toplevel_ancestor_id, $term->taxonomy);
 					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
-						$float_front = (string) $ancestor_term->term_order;
-						$float_rear = (string) ( $term->term_order + 10000 ); // Make it sort correctly. Not many websites have more than 90000 subterms.
-						$term->term_order = (float) ( $float_front . '.' . $float_rear );
+						$front_of_float = (string) $ancestor_term->term_order;
+						$rear_of_float = '';
+						foreach ( $ancestors as $ancestor_id ) {
+							$ancestor_term = get_term($ancestor_id, $term->taxonomy);
+							if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
+								$rear_of_float .= (string) ($ancestor_term->term_order + 10000); // Make it sort correctly. Not many websites have more than 90000 subterms.
+							}
+						}
+						$rear_of_float .= (string) ($term->term_order + 10000);
+						$term->term_order = (float) ( $front_of_float . '.' . $rear_of_float );
 					}
 				}
 			}
 		}
-
 		usort($terms, 'customtax_cmp');
 
 		$terms_new_order = $terms;

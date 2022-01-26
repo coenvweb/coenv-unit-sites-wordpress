@@ -10,7 +10,6 @@ function customtaxorder_subpage() {
 
 	$options = customtaxorder_get_settings();
 	$taxonomies = customtaxorder_get_taxonomies();
-	$parent_id = 0;
 	$this_page = sanitize_text_field( $_GET['page'] );
 
 	// Set your custom capability through this filter.
@@ -104,15 +103,17 @@ function customtaxorder_subpage() {
 		}
 	}
 
+	$parent_id = 0;
 	$parent_id_order = 0;
 	if (isset($_POST['go-sub-posts'])) {
 		$parent_id = (int) $_POST['sub-posts'];
 	} else if (isset($_POST['hidden-parent-id'])) {
-		$parent_term = get_term($_POST['hidden-parent-id'], $tax_name);
 		$parent_id = (int) $_POST['hidden-parent-id'];
-		if ( is_object($parent_term) && isset($parent_term->term_order) ) {
-			$parent_id_order = (int) $parent_term->term_order;
-		}
+	}
+	$parent_term = get_term( $parent_id, $tax_name );
+
+	if ( is_object($parent_term) && isset($parent_term->term_order) ) {
+		$parent_id_order = (int) $parent_term->term_order;
 	}
 	if (isset($_POST['return-sub-posts'])) {
 		$parent_term = get_term($_POST['hidden-parent-id'], $tax_name);
@@ -270,7 +271,7 @@ function customtaxorder_update_order() {
 
 			$parent_id_order = 0;
 			if ( isset($_POST['hidden-parent-id-order']) && $_POST['hidden-parent-id-order'] > 0 ) {
-				$parent_id_order = (int) $_POST['hidden-parent-id-order'] + 1;
+				$parent_id_order = (int) $_POST['hidden-parent-id-order'] + 1; // Not sure if we really need this parent_id_order to be added since we use the funny floats of ancestor.childchildchild.
 			}
 			$new_order = $_POST['hidden-custom-order'];
 			$submitted_ids = explode(',', $new_order);

@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.8
-Stable tag: 3.3.2
+Tested up to: 5.9
+Stable tag: 3.3.3
 License: GPLv2 or later
 
 
@@ -121,19 +121,19 @@ You can use a function to sort taxonomies themselves like this:
 
 The function requires a parameter with an array of taxonomy objects.
 
-= Is there an API? =
-
-There are actions that you can use with add_action.
+= Can I hook into saving the term order on the dashboard page? =
 
 'customtaxorder_update_order' is being run when saving the order of terms in the admin page.
 You could add the following example to your functions.php and work from there.
 
 	<?php
-	function custom_action( $new_order ) {
+	function my_customtaxorder_update_order( $new_order ) {
 		print_r( $new_order );
 	}
-	add_action('customtaxorder_update_order', 'custom_action');
+	add_action('customtaxorder_update_order', 'my_customtaxorder_update_order');
 	?>
+
+= Can I hook into changing the term order on the frontend? =
 
 'customtaxorder_terms_ordered' action is being run after term array has been ordered with usort.
 Please be aware that this can be triggered multiple times during a request.
@@ -146,12 +146,45 @@ You could add the following example to your functions.php and work from there.
 	add_action('customtaxorder_terms_ordered', 'custom_action', 10, 2);
 	?>
 
+= Can I hook into the settings for each taxonomy to change the sorting behaviour? =
+
+'customtaxorder_settings' filter is being after fetching the settings for all taxonomies.
+You could add the following example to your functions.php and work from there.
+
+	<?php
+	/*
+	 * Example code to change the product_cat settings in WooCommerce on the main shop page.
+	 *
+	 * Settings:
+	 * 0: orderby Term ID
+	 * 1: orderby Custom Order
+	 * 2: orderby Term Name (alphabetical)
+	 * 3: orderby Term Slug (alphabetical)
+	 *
+	 * Taken from:
+	 * https://wordpress.org/support/topic/product-categories-sort-how-to-sort-just-the-sub-terms-sub-categories/
+	 *
+	 */
+	function my_customtaxorder_settings( $settings ) {
+		//var_dump( $settings['product_cat'] );
+		if ( function_exists( 'is_shop' ) ) {
+			if ( is_shop() ) {
+				$settings['product_cat'] = 1;
+			}
+		}
+		//var_dump( $settings['product_cat'] );
+		return $settings;
+	}
+	add_filter( 'customtaxorder_settings', 'my_customtaxorder_settings' );
+	?>
+
 = I use the GET parameter 'orderby' to order posts, but then it is ignoring term order =
 
-In case the GET parameter 'orderby' is set it is assumed it is used to order terms, instead of posts, users, or anything else.
+In case the GET parameter 'orderby' is set it will be used to order terms, instead of posts, users, or anything else.
+Therefore when that GET parameter is set, there is no custom order applied in this plugin.
 
-You can add a filter to possible ignore the orderby parameter in the case that is set in the GET request.
-That might be usefull if your GET parameter for orderby is used to sort posts, users, or just anything that is not terms.
+You can add a filter to possible ignore the orderby parameter in the GET request.
+That might be useful if your GET parameter for orderby is used to sort posts, users, or just anything that is not terms.
 Example code for using the filter:
 
 	<?php
@@ -178,6 +211,12 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.3.3 =
+* 2022-01-24
+* Traverse all parents for sorting child terms, not just the toplevel ancestor.
+* Some fixes on admin page for sorting subterms.
+* Add filter 'customtaxorder_settings'.
 
 = 3.3.2 =
 * 2021-12-24
