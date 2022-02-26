@@ -839,8 +839,8 @@ function expose_image_after_processing( $id, $size, $generate = false, $position
 		make_images_if_not_exists( $id, $sizes, $position, $quality );
 	}
 
-	$image = wp_get_attachment_metadata( $id );
 	clean_post_cache( $id );
+	$image = wp_get_attachment_metadata( $id );
 
 	if ( 'all' !== $sizes ) {
 		do_action( 'sirsc_image_processed', $id, $sizes );

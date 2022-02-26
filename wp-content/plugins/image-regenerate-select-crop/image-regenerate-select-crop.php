@@ -5,7 +5,7 @@
  * Description: Regenerate and crop images, details and actions for image sizes registered and image sizes generated, clean up, placeholders, custom rules, register new image sizes, crop medium settings, WP-CLI commands, optimize images.
  * Text Domain: sirsc
  * Domain Path: /langs
- * Version: 6.2.0
+ * Version: 6.2.1
  * Author: Iulia Cazan
  * Author URI: https://profiles.wordpress.org/iulia-cazan
  * Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JJA37EHZXWUTJ
@@ -13,7 +13,7 @@
  *
  * @package ic-devops
  *
- * Copyright (C) 2014-2021 Iulia Cazan
+ * Copyright (C) 2014-2022 Iulia Cazan
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -29,12 +29,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-define( 'SIRSC_PLUGIN_VER', 6.20 );
+define( 'SIRSC_PLUGIN_VER', 6.21 );
 define( 'SIRSC_PLUGIN_FOLDER', plugin_dir_path( __FILE__ ) );
 define( 'SIRSC_PLUGIN_DIR', SIRSC_PLUGIN_FOLDER );
 define( 'SIRSC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIRSC_PLUGIN_SLUG', 'sirsc' );
-define( 'SIRSC_ASSETS_VER', '20211205.1244' );
+define( 'SIRSC_ASSETS_VER', '20220219.1131' );
 define( 'SIRSC_ADONS_FOLDER', SIRSC_PLUGIN_DIR . 'adons/' );
 
 require_once SIRSC_PLUGIN_FOLDER . 'inc/debug.php';
@@ -56,7 +56,7 @@ class SIRSC_Image_Regenerate_Select_Crop {
 	const PLUGIN_SUPPORT_URL = 'https://wordpress.org/support/plugin/image-regenerate-select-crop/';
 	const PLUGIN_TRANSIENT   = 'sirsc-plugin-notice';
 	const BULK_PROCESS_DELAY = 800;
-	const BULK_CLEANUP_ITEMS = 10;
+	const BULK_CLEANUP_ITEMS = 20;
 	const PLUGIN_PAGE_SLUG   = 'image-regenerate-select-crop-settings';
 	const DEFAULT_QUALITY    = 82;
 

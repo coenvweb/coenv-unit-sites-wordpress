@@ -319,7 +319,7 @@ function log_read( string $name = 'tracer' ) : string {
 			$count = substr_count( $content, PHP_EOL );
 			if ( $count >= 5000 ) {
 				$lines   = explode( PHP_EOL, $content );
-				$lines   = array_slice( $lines, 0, 3500 );
+				$lines   = array_slice( $lines, 0, 2500 );
 				$content = implode( PHP_EOL, $lines );
 			}
 		}

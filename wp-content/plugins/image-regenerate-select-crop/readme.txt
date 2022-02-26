@@ -2,8 +2,8 @@
 Contributors: Iulia Cazan
 Tags: optimize images, image crop, image regenerate, image sizes details, image quality, default crop, wp-cli, media, image, image sizes, missing images, image placeholder, image debug, command line
 Requires at least: not tested
-Tested up to: 5.8.2
-Stable tag: 6.2.0
+Tested up to: 5.9
+Stable tag: 6.2.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,6 +43,10 @@ https://youtu.be/3hRSXMx3dcU
 None
 
 == Changelog ==
+= 6.2.1 =
+* Tested up to 5.9
+* Clear attachment cache before re-computing the object after image regenerate
+
 = 6.2.0 =
 * Tested up to 5.8.2.
 * Added placeholder fallback
@@ -300,6 +304,7 @@ None
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 == Version history ==
+6.2.1 - Tested up to 5.9, clear attachment cache before re-computing the object after image regenerate
 6.2.0 - Tested up to 5.8.2, placeholder fallback, change filter priority to apply earlier the available sizes, fix warnings for info not available in some of the core versions, fix warnings for estimated sizes missing width or height, attempt to bypass scaled size naming, updated sizes filter for backward compatibility, logs length limit, log the WP-CLI command executions, styles adjustments
 6.1.0 - Tested up to 5.8.1, add wp-cli commands hints for the bulk features, new wp-cli command to rename files for SEO adon active, new option that turns on/off the buttons from the media screen when switched to grid mode.
 6.0.3 - Implemented a save fallback for media settings, updated the media settings UI, default bulk action in reverse for new installs
