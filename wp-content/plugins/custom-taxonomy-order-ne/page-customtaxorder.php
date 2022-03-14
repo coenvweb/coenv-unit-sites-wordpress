@@ -94,9 +94,11 @@ function customtaxorder_subpage() {
 					';
 				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="1" ' . checked('1', $options[$tax_name], false) . ' /> ' . esc_html__('Custom Order as defined above.', 'custom-taxonomy-order-ne') . '</label><br />
 					';
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="2" ' . checked('2', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by name.', 'custom-taxonomy-order-ne') . '</label><br />
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="2" ' . checked('2', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by Name.', 'custom-taxonomy-order-ne') . '</label><br />
 					';
-				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="3" ' . checked('3', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by slug.', 'custom-taxonomy-order-ne') . '</label><br />
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="3" ' . checked('3', $options[$tax_name], false) . ' /> ' . esc_html__('Alphabetical Order by Slug.', 'custom-taxonomy-order-ne') . '</label><br />
+					';
+				$settings .= '<label><input type="radio" name="customtaxorder_settings" value="4" ' . checked('4', $options[$tax_name], false) . ' /> ' . esc_html__('Order by Post Count.', 'custom-taxonomy-order-ne') . '</label><br />
 					';
 				$settings .= '<input name="customtaxorder_taxname" type="hidden" value="' . esc_attr( $tax_name ) . '" />';
 			}
@@ -372,7 +374,9 @@ function customtaxorder_settings_validate( $input ) {
 		if ( $input[$taxonomy->name] != 1 ) {
 			if ( $input[$taxonomy->name] != 2 ) {
 				if ( $input[$taxonomy->name] != 3 ) {
-					$input[$taxonomy->name] = 0; //default
+					if ( $input[$taxonomy->name] != 4 ) {
+						$input[$taxonomy->name] = 0; //default
+					}
 				}
 			}
 		}

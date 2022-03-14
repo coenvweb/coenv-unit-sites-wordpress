@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.3.3
+Version: 3.4.0
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -34,13 +34,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * TODO:
  * - Add pagination, just like next_post_link().
  *   https://wordpress.org/support/topic/how-to-create-a-navigation-in-archivephp-with-the-given-order/
- * - Order by post count (and other orderby's)
- *   https://wordpress.org/support/topic/order-terms-by-post-count/
+ * - Support other orderby's.
  */
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.3.3');
+define('CUSTOMTAXORDER_VER', '3.4.0');
 
 
 /*
@@ -50,6 +49,7 @@ define('CUSTOMTAXORDER_VER', '3.3.3');
  * 1: orderby Custom Order
  * 2: orderby Term Name (alphabetical)
  * 3: orderby Term Slug (alphabetical)
+ * 4: orderby Post Count (based on term_taxonomy table)
  *
  * @return array $customtaxorder_settings an array with key: $taxonomy->name and value:
  */
@@ -114,12 +114,16 @@ function customtaxorder_apply_order_filter( $orderby, $args ) {
 		return 't.term_order';
 	} else if ( $args['orderby'] == 'name' ) {
 		return 't.name';
+	} else if ( $args['orderby'] == 'count' ) {
+		return 'tt.count'; // term_taxonomy table
 	} else if ( $options[$taxonomy] == 1 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.term_order';
 	} else if ( $options[$taxonomy] == 2 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.name';
 	} else if ( $options[$taxonomy] == 3 && ! customtaxorder_is_get_orderby_set() ) {
 		return 't.slug';
+	} else if ( $options[$taxonomy] == 4 && ! customtaxorder_is_get_orderby_set() ) {
+		return 'tt.count';
 	} else {
 		return $orderby;
 	}
@@ -151,6 +155,8 @@ function customtaxorder_get_terms_defaults( $query_var_defaults, $taxonomies ) {
 		$query_var_defaults['orderby'] = 'name';
 	} else if ( $options[$taxonomy] == 3 ) {
 		$query_var_defaults['orderby'] = 'slug';
+	}else if ( $options[$taxonomy] == 4 ) {
+		$query_var_defaults['orderby'] = 'count';
 	}
 
 	return $query_var_defaults;
@@ -319,6 +325,8 @@ function customtaxorder_get_taxonomies() {
 	$args = array(); // Just get them all and don't mess about with setting some taxonomies to public.
 	$output = 'objects';
 	$taxonomies = get_taxonomies( $args, $output );
+
+	$taxonomies = apply_filters( 'customtaxorder_get_taxonomies', $taxonomies );
 
 	return $taxonomies;
 

@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.9
-Stable tag: 3.3.3
+Stable tag: 3.4.0
 License: GPLv2 or later
 
 
@@ -160,6 +160,7 @@ You could add the following example to your functions.php and work from there.
 	 * 1: orderby Custom Order
 	 * 2: orderby Term Name (alphabetical)
 	 * 3: orderby Term Slug (alphabetical)
+	 * 4: orderby Post Count (based on term_taxonomy table)
 	 *
 	 * Taken from:
 	 * https://wordpress.org/support/topic/product-categories-sort-how-to-sort-just-the-sub-terms-sub-categories/
@@ -211,6 +212,11 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.4.0 =
+* 2022-03-14
+* Support order by post count.
+* Add filter 'customtaxorder_get_taxonomies'.
 
 = 3.3.3 =
 * 2022-01-24
