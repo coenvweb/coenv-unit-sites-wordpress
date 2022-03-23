@@ -5,7 +5,7 @@
  * Description: Regenerate and crop images, details and actions for image sizes registered and image sizes generated, clean up, placeholders, custom rules, register new image sizes, crop medium settings, WP-CLI commands, optimize images.
  * Text Domain: sirsc
  * Domain Path: /langs
- * Version: 6.2.1
+ * Version: 6.2.2
  * Author: Iulia Cazan
  * Author URI: https://profiles.wordpress.org/iulia-cazan
  * Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JJA37EHZXWUTJ
@@ -29,12 +29,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-define( 'SIRSC_PLUGIN_VER', 6.21 );
+define( 'SIRSC_PLUGIN_VER', 6.22 );
 define( 'SIRSC_PLUGIN_FOLDER', plugin_dir_path( __FILE__ ) );
 define( 'SIRSC_PLUGIN_DIR', SIRSC_PLUGIN_FOLDER );
 define( 'SIRSC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SIRSC_PLUGIN_SLUG', 'sirsc' );
-define( 'SIRSC_ASSETS_VER', '20220219.1131' );
+define( 'SIRSC_ASSETS_VER', '20220320.1036' );
 define( 'SIRSC_ADONS_FOLDER', SIRSC_PLUGIN_DIR . 'adons/' );
 
 require_once SIRSC_PLUGIN_FOLDER . 'inc/debug.php';
@@ -199,7 +199,7 @@ class SIRSC_Image_Regenerate_Select_Crop {
 
 		self::get_default_user_custom_rules();
 		self::$is_configured     = ( ! empty( self::$settings ) ) ? true : false;
-		self::$exclude_post_type = [ 'nav_menu_item', 'revision', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'attachment', 'wp_block', 'scheduled-action', 'shop_order', 'shop_order_refund', 'shop_coupon', 'wpcf7_contact_form', 'wp_template' ];
+		self::$exclude_post_type = [ 'nav_menu_item', 'revision', 'custom_css', 'customize_changeset', 'oembed_cache', 'user_request', 'attachment', 'wp_block', 'scheduled-action', 'shop_order', 'shop_order_refund', 'shop_coupon', 'wpcf7_contact_form', 'wp_template', 'wp_global_styles', 'wp_template_part', 'wp_navigation' ];
 
 		self::$wp_ver = (float) get_bloginfo( 'version', 'display' );
 		if ( is_admin() ) {
@@ -408,7 +408,7 @@ class SIRSC_Image_Regenerate_Select_Crop {
 					$sizes[ $name ] = [
 						'width'  => (int) get_option( $name . '_size_w' ),
 						'height' => (int) get_option( $name . '_size_h' ),
-						'crip'   => (int) get_option( $name . '_crop' ),
+						'crop'   => (int) get_option( $name . '_crop' ),
 					];
 				}
 			}

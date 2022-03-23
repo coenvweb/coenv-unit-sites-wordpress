@@ -260,6 +260,9 @@ function url( $alls, $dest, $dest_url, $selected_size, $alternative ) { //phpcs:
 		$eh = '0';
 	}
 
+	$iw = empty( $iw ) ? 1024 : abs( (int) $iw );
+	$ih = empty( $ih ) ? 1024 : abs( (int) $ih );
+
 	if ( ! wp_is_writable( SIRSC_PLACEHOLDER_FOLDER ) ) {
 		// By default set the dummy, the folder is not writtable.
 		$dest_url = make_placeholder_dummy( $dest, $iw, $ih, $ew, $eh, $selected_size );
@@ -332,8 +335,11 @@ function make_placeholder_dummy( $dest, $iw, $ih, $sw, $sh, $name = '' ) { //php
  * @return void
  */
 function make_placeholder_imagettftext( $dest, $iw, $ih, $name, $sw, $sh ) { //phpcs:ignore
+	if ( empty( $iw ) || empty( $ih ) ) {
+		return;
+	}
 	// phpcs:disable
-	$im    = @imagecreatetruecolor( $iw, $ih );
+	$im    = @imagecreatetruecolor( abs( (int) $iw ), abs( (int) $ih ) );
 	$white = @imagecolorallocate( $im, 255, 255, 255 );
 	$rand  = @imagecolorallocate( $im, wp_rand( 0, 150 ), wp_rand( 0, 150 ), wp_rand( 0, 150 ) );
 	@imagefill( $im, 0, 0, $rand );
@@ -358,6 +364,9 @@ function make_placeholder_imagettftext( $dest, $iw, $ih, $name, $sw, $sh ) { //p
  * @return void
  */
 function make_placeholder_imagick( $dest, $iw, $ih, $name, $sw, $sh ) { //phpcs:ignore
+	if ( empty( $iw ) || empty( $ih ) ) {
+		return;
+	}
 	$im    = new \Imagick();
 	$draw  = new \ImagickDraw();
 	$pixel = new \ImagickPixel( '#' . wp_rand( 10, 99 ) . wp_rand( 10, 99 ) . wp_rand( 10, 99 ) );
@@ -383,15 +392,18 @@ function make_placeholder_imagick( $dest, $iw, $ih, $name, $sw, $sh ) { //phpcs:
  * @return void
  */
 function make_placeholder_imagestring( $dest, $iw, $ih, $name, $sw, $sh ) { //phpcs:ignore
-	$im    = imagecreatetruecolor( $iw, $ih );
-	$white = imagecolorallocate( $im, 255, 255, 255 );
-	$rand  = imagecolorallocate( $im, wp_rand( 0, 150 ), wp_rand( 0, 150 ), wp_rand( 0, 150 ) );
-	imagefill( $im, 0, 0, $rand );
-	imagestring( $im, 2, 2, 2, 'placeholder', $white );
-	imagestring( $im, 2, 2, 12, $name, $white );
-	if ( $name !== $sw . 'x' . $sh ) {
-		imagestring( $im, 2, 2, 22, $sw . 'x' . $sh, $white );
+	if ( empty( $iw ) || empty( $ih ) ) {
+		return;
 	}
-	imagepng( $im, $dest, 9 );
-	imagedestroy( $im );
+	$im    = @imagecreatetruecolor( abs( (int) $iw ), abs( (int) $ih ) );
+	$white = @imagecolorallocate( $im, 255, 255, 255 );
+	$rand  = @imagecolorallocate( $im, wp_rand( 0, 150 ), wp_rand( 0, 150 ), wp_rand( 0, 150 ) );
+	@imagefill( $im, 0, 0, $rand );
+	@imagestring( $im, 2, 2, 2, 'placeholder', $white );
+	@imagestring( $im, 2, 2, 12, $name, $white );
+	if ( $name !== $sw . 'x' . $sh ) {
+		@imagestring( $im, 2, 2, 22, $sw . 'x' . $sh, $white );
+	}
+	@imagepng( $im, $dest, 9 );
+	@imagedestroy( $im );
 }
