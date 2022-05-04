@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.4.0
+Version: 3.4.3
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.4.0');
+define('CUSTOMTAXORDER_VER', '3.4.3');
 
 
 /*
@@ -178,7 +178,16 @@ add_filter('get_terms_defaults', 'customtaxorder_get_terms_defaults', 10, 2);
  *
  */
 function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
+
 	$options = customtaxorder_get_settings();
+
+	/*if ( is_admin() ) {
+		$doing_ajax = wp_doing_ajax();
+		if ( $doing_ajax && $_POST['action'] === 'get-tagcloud' ) {
+			var_dump($terms);
+			return $terms;
+		}
+	}*/
 
 	$terms_old_order = $terms;
 
@@ -193,6 +202,8 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 		}
 		break; // just the first one :)
 	}
+
+	$terms_count = count( $terms );
 
 	if ( ! isset ( $options[$taxonomy] ) ) {
 		$options[$taxonomy] = 0; // default if not set in options yet
@@ -216,24 +227,73 @@ function customtaxorder_wp_get_object_terms_order_filter( $terms ) {
 				$ancestors = get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' );
 				if ( is_array($ancestors) && ! empty($ancestors) ) {
 					$toplevel_ancestor_id = array_pop( $ancestors );
-					$ancestor_term = get_term($toplevel_ancestor_id, $term->taxonomy);
-					if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
-						$front_of_float = (string) $ancestor_term->term_order;
+					$toplevel_ancestor_term = get_term($toplevel_ancestor_id, $term->taxonomy);
+					if ( is_object($toplevel_ancestor_term) && isset($toplevel_ancestor_term->term_order) ) {
+						$front_of_float = (string) $toplevel_ancestor_term->term_order;
+
 						$rear_of_float = '';
+						$padding = 100; // Make it sort correctly. Not many websites have more than 900 subterms.
 						foreach ( $ancestors as $ancestor_id ) {
 							$ancestor_term = get_term($ancestor_id, $term->taxonomy);
 							if ( is_object($ancestor_term) && isset($ancestor_term->term_order) ) {
-								$rear_of_float .= (string) ($ancestor_term->term_order + 10000); // Make it sort correctly. Not many websites have more than 90000 subterms.
+
+								// calculate padding. Too much padding will have deep float calculations go wrong. See https://floating-point-gui.de/basic/
+								// Do not do this with too many terms, some WooCommerce pages are way too heavy with terms.
+								if ( $terms_count < 700 ) {
+									$args = array(
+										'orderby'    => 'term_order',
+										'order'      => 'ASC',
+										'hide_empty' => false,
+										'parent'     => $ancestor_id,
+									);
+									$sister_terms = get_term_children( $ancestor_id, $taxonomy );
+									if ( is_array( $sister_terms ) ) { // should always be an array, since this term does exist.
+										$count = count( $sister_terms );
+										if ( $count < 10 ) {
+											$padding = 0;
+										} else if ( $count < 100 ) {
+											$padding = 10;
+										} else if ( $count < 1000 ) {
+											$padding = 100;
+										} else if ( $count < 10000 ) {
+											$padding = 1000;
+										}
+									}
+								}
+								$rear_of_float .= (string) ($ancestor_term->term_order + $padding);
 							}
 						}
-						$rear_of_float .= (string) ($term->term_order + 10000);
+
+						// calculate padding. Too much padding will have deep float calculations go wrong. See https://floating-point-gui.de/basic/
+						// Do not do this with too many terms, some WooCommerce pages are way too heavy with terms.
+						if ( $terms_count < 700 ) {
+							$args = array(
+								'orderby'    => 'term_order',
+								'order'      => 'ASC',
+								'hide_empty' => false,
+								'parent'     => $term->parent,
+							);
+							$sister_terms = get_term_children( $term->parent, $taxonomy );
+							if ( is_array( $sister_terms ) ) { // should always be an array, since this term does exist.
+								$count = count( $sister_terms );
+								if ( $count < 10 ) {
+									$padding = 0;
+								} else if ( $count < 100 ) {
+									$padding = 10;
+								} else if ( $count < 1000 ) {
+									$padding = 100;
+								} else if ( $count < 10000 ) {
+									$padding = 1000;
+								}
+							}
+						}
+						$rear_of_float .= (string) ($term->term_order + $padding);
 						$term->term_order = (float) ( $front_of_float . '.' . $rear_of_float );
 					}
 				}
 			}
 		}
 		usort($terms, 'customtax_cmp');
-
 		$terms_new_order = $terms;
 		/*
 		* Fires after term array has been ordered with usort.

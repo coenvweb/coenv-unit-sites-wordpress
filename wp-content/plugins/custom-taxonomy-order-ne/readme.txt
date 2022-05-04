@@ -3,7 +3,7 @@ Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
 Tested up to: 5.9
-Stable tag: 3.4.0
+Stable tag: 3.4.3
 License: GPLv2 or later
 
 
@@ -212,6 +212,18 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.4.3 =
+* 2022-04-30
+* Ouch, don't do those calculations on frontend either when there are too many terms, it is too expensive.
+
+= 3.4.2 =
+* 2022-04-27
+* Do not use the previous change on admin dashboard, some WooCommerce pages are way too heavy with terms.
+
+= 3.4.1 =
+* 2022-04-27
+* Improve ordering nested sub-terms.
 
 = 3.4.0 =
 * 2022-03-14
