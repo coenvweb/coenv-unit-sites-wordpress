@@ -17,7 +17,12 @@ class GoogleSitemapGeneratorUI {
 	 * @var GoogleSitemapGenerator
 	 */
 	private $sg = null;
-
+	/**
+	 * Check if woo commerce is active or not .
+	 *
+	 * @var boolean
+	 */
+	private $has_woo_commerce = false;
 	/**
 	 * Constructor function.
 	 *
@@ -115,7 +120,17 @@ class GoogleSitemapGeneratorUI {
 			return '';
 		}
 	}
-
+	/**
+	 * Active Sitemap listing .
+	 */
+	public function active_plugins() {
+		$plugins = get_plugins();
+		foreach ( $plugins as $key => $val ) {
+			if ( 'WooCommerce' === $val['Name'] && is_plugin_active( $key ) ) {
+				$this->has_woo_commerce = true;
+			}
+		}
+	}
 	/**
 	 * Returns an formatted attribute. If the value is NULL, the name will be used.
 	 *
@@ -218,6 +233,7 @@ class GoogleSitemapGeneratorUI {
 		 * @author Arne Brachhold
 		 */
 	public function html_show_options_page() {
+		$this->active_plugins();
 		global $wp_version;
 		$snl = false; // SNL.
 
@@ -448,8 +464,8 @@ class GoogleSitemapGeneratorUI {
 					if ( 'sm_in_tax' === $k ) {
 
 						$enabled_taxonomies = array();
-
-						foreach ( array_keys( (array) array_map( 'sanitize_text_field', ( wp_unslash( $_POST[ $k ] ) ) ) ) as $tax_name ) {
+						$sm_in_tax          = isset( $_POST[ $k ] ) ? (array) array_map( 'sanitize_text_field', ( wp_unslash( is_array( $_POST[ $k ] ) ? $_POST[ $k ] : array() ) ) ) : array();
+						foreach ( array_keys( (array) $sm_in_tax ) as $tax_name ) {
 							if ( empty( $tax_name ) || ! taxonomy_exists( $tax_name ) ) {
 								continue;
 							}
@@ -461,8 +477,8 @@ class GoogleSitemapGeneratorUI {
 					} elseif ( 'sm_in_customtypes' === $k ) {
 
 						$enabled_post_types = array();
-
-						foreach ( array_keys( (array) array_map( 'sanitize_text_field', wp_unslash( $_POST[ $k ] ) ) ) as $post_type_name ) {
+						$sm_in_customtype   = isset( $_POST[ $k ] ) ? (array) array_map( 'sanitize_text_field', wp_unslash( is_array( $_POST[ $k ] ) ? $_POST[ $k ] : array() ) ) : array();
+						foreach ( array_keys( (array) $sm_in_customtype ) as $post_type_name ) {
 							if ( empty( $post_type_name ) || ! post_type_exists( $post_type_name ) ) {
 								continue;
 							}
@@ -481,7 +497,12 @@ class GoogleSitemapGeneratorUI {
 				} elseif ( substr( $k, 0, 6 ) === 'sm_pr_' ) {
 					$this->sg->set_option( $k, (float) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
 				} elseif ( 'sm_links_page' === $k ) {
-					$this->sg->set_option( $k, (float) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
+					$links_per_page = sanitize_text_field( wp_unslash( $_POST[ $k ] ) );
+					$links_per_page = (int) $links_per_page;
+					if ( 0 >= $links_per_page || is_nan( $links_per_page ) ) {
+						$links_per_page = 10;
+					}
+					$this->sg->set_option( $k, (float) $links_per_page );
 				} elseif ( substr( $k, 0, 3 ) === 'sm_' ) {
 					$this->sg->set_option( $k, (bool) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
 				}
@@ -591,17 +612,34 @@ class GoogleSitemapGeneratorUI {
 			<?php
 				exit;
 		} elseif ( ! empty( $_GET['sm_ping_main'] ) ) {
+			if ( null !== $this->sg->get_option( 'i_tid' ) && '' !== $this->sg->get_option( 'i_tid' ) ) {
+				check_admin_referer( 'sitemap' );
 
-			check_admin_referer( 'sitemap' );
+					// Check again, just for the case that something went wrong before.
+				if ( ! current_user_can( 'administrator' ) ) {
+					echo '<p>Please log in as admin</p>';
+					return;
+				}
 
-				// Check again, just for the case that something went wrong before.
-			if ( ! current_user_can( 'administrator' ) ) {
-				echo '<p>Please log in as admin</p>';
-				return;
+				$this->sg->send_ping();
+				$message = __( 'Ping was executed, please see below for the result.', 'sitemap' );
+			} else {
+				?>
+				<div class='error'>
+						<p>
+						<?php
+						$arr = array(
+							'br'     => array(),
+							'p'      => array(),
+							'strong' => array(),
+						);
+						/* translators: %s: search term */
+						echo wp_kses( __( 'Please add Google analytics tid in order to notify Google bots.', 'sitemap' ), $arr );
+						?>
+						</p>
+					</div>
+				<?php
 			}
-
-			$this->sg->send_ping();
-			$message = __( 'Ping was executed, please see below for the result.', 'sitemap' );
 		}
 
 		// Print out the message to the user, if any.
@@ -830,8 +868,8 @@ class GoogleSitemapGeneratorUI {
 					?>
 				</h2>
 				<?php
-
-				if ( get_option( 'blog_public' ) !== 1 ) {
+				$blog_public = (int) get_option( 'blog_public' );
+				if ( 1 !== $blog_public ) {
 					?>
 				<div class='error'>
 						<p>
@@ -1001,9 +1039,9 @@ class GoogleSitemapGeneratorUI {
 											}
 
 											?>
-											<?php if ( $this->sg->get_option( 'b_ping' ) || $this->sg->get_option( 'b_pingmsn' ) ) : ?>
+											<?php if ( $this->sg->get_option( 'b_ping' ) ) : ?>
 												<li>
-													Notify Search Engines about <a href='<?php echo esc_url( wp_nonce_url( $this->sg->get_back_link() . '&sm_ping_main=true', 'sitemap' ) ); ?>'>your sitemap </a> or <a href='#' onclick='window.open('<?php echo esc_html( wp_nonce_url( $this->sg->get_back_link() . '&sm_ping_all=true&noheader=true', 'sitemap' ) ); ?>','','width=650, height=500, resizable=yes'); return false;'>your main sitemap and all sub-sitemaps</a> now.
+													Notify Search Engines about <a href='<?php echo esc_url( wp_nonce_url( $this->sg->get_back_link() . '&sm_ping_main=true', 'sitemap' ) ); ?>'>your sitemap </a> or <a href='<?php echo esc_url( wp_nonce_url( $this->sg->get_back_link() . '&sm_ping_main=true', 'sitemap' ) ); ?>'>your main sitemap and all sub-sitemaps</a> now.
 												</li>
 											<?php endif; ?>
 											<?php
@@ -1081,24 +1119,6 @@ class GoogleSitemapGeneratorUI {
 											</small>
 										</li>
 										<li>
-											<input type='checkbox' id='sm_b_pingmsn' name='sm_b_pingmsn' <?php echo ( $this->sg->get_option( 'b_pingmsn' ) === true ? 'checked=\'checked\'' : '' ); ?> />
-											<label for='sm_b_pingmsn'><?php esc_html_e( 'Notify Bing (formerly MSN Live Search) about updates of your site', 'sitemap' ); ?></label><br />
-											<small>
-											<?php
-											$arr = array(
-												'br'     => array(),
-												'p'      => array(),
-												'a'      => array(
-													'href' => array(),
-												),
-												'strong' => array(),
-											);
-											/* translators: %s: search term */
-											echo wp_kses( str_replace( '%s', $this->sg->get_redirect_link( 'redir/sitemap-lwt' ), __( 'No registration required, but you can join the <a href=\'%s\'>Bing Webmaster Tools</a> to check crawling statistics.', 'sitemap' ) ), $arr );
-											?>
-											</small>
-										</li>
-										<li>
 											<label for='sm_b_robots'>
 												<input type='checkbox' id='sm_b_robots' name='sm_b_robots' <?php echo ( $this->sg->get_option( 'b_robots' ) === true ? 'checked=\'checked\'' : '' ); ?> />
 												<?php esc_html_e( 'Add sitemap URL to the virtual robots.txt file.', 'sitemap' ); ?>
@@ -1144,7 +1164,7 @@ class GoogleSitemapGeneratorUI {
 												<small><?php esc_html_e( 'Use this if you want to change the sitemap file name', 'sitemap' ); ?> <a href='<?php echo esc_url( $this->sg->get_redirect_link( 'sitemap-help-options-adv-baseurl' ) ); ?>'><?php esc_html_e( 'Learn more', 'sitemap' ); ?></a></small>
 											</li>
 											<li>
-												<label for='sm_i_tid'><?php esc_html_e( ' Add Google Analytics TID:', 'sitemap' ); ?> <input type='text' name='sm_i_tid' id='sm_i_tid' required value='<?php echo esc_attr( $this->sg->get_option( 'i_tid' ) ); ?>' /></label><br />
+												<label for='sm_i_tid'><?php esc_html_e( ' Add Google Analytics TID:', 'sitemap' ); ?> <input type='text' name='sm_i_tid' id='sm_i_tid' value='<?php echo esc_attr( $this->sg->get_option( 'i_tid' ) ); ?>' /></label><br />
 											</li>
 											<li>
 												<label for='sm_b_html'>
@@ -1230,7 +1250,8 @@ class GoogleSitemapGeneratorUI {
 														} else {
 															$fd = true;
 														}
-														echo '{url:"' . esc_url( $page->get_url() ) . '", priority:' . esc_html( number_format( $page->get_priority(), 1, '.', '' ) ) . ', changeFreq:\'' . esc_html( $page->get_change_freq() ) . '\', lastChanged:"' . esc_html( ( $page->get_last_mod() > 0 ? gmdate( 'Y-m-d', $page->get_last_mod() ) : '' ) ) . '"}';
+														$last_mod_date = ! empty( $page->_lastMod ) ? $page->_lastMod : $page->last_mod;
+														echo '{url:"' . esc_url( ! empty( $page->_url ) ? $page->_url : $page->url ) . '", priority:' . esc_html( number_format( ! empty( $page->_priority ) ? $page->_priority : $page->priority, 1, '.', '' ) ) . ', changeFreq:\'' . esc_html( ! empty( $page->_changeFreq ) ? $page->_changeFreq : $page->change_freq ) . '\', lastChanged:"' . esc_html( ( $last_mod_date > 0 ? gmdate( 'Y-m-d', $last_mod_date ) : '' ) ) . '"}';
 													}
 												}
 												?>
@@ -1268,14 +1289,16 @@ class GoogleSitemapGeneratorUI {
 
 									<p><?php esc_html_e( 'Please select how the priority of each post should be calculated:', 'sitemap' ); ?></p>
 									<ul>
-										<li>
-											<p><input type='radio' name='sm_b_prio_provider' id='sm_b_prio_provider__0' value='' <?php esc_attr( $this->html_get_checked( $this->sg->get_option( 'b_prio_provider' ), '' ) ); ?> /> <label for='sm_b_prio_provider__0'><?php esc_html_e( 'Do not use automatic priority calculation', 'sitemap' ); ?></label><br /><?php esc_html_e( 'All posts will have the same priority which is defined in &quot;Priorities&quot;', 'sitemap' ); ?></p>
-										</li>
 										<?php
 										$provs = $this->sg->get_prio_providers();
-										$len   = count( $provs );
+										array_unshift( $provs, '' );
+										$len = count( $provs );
 										for ( $i = 0; $i < $len; $i++ ) {
-											echo '<li><p><input type=\'radio\' id=\'sm_b_prio_provider_$i\' name=\'sm_b_prio_provider\' value=\'' . esc_attr( $provs[ $i ] ) . '\' ' . esc_attr( $this->html_get_checked( $this->sg->get_option( 'b_prio_provider' ), $provs[ $i ] ) ) . ' /> <label for=\'sm_b_prio_provider_$i\'>' . esc_html( call_user_func( array( $provs[ $i ], 'get_name' ) ) ) . '</label><br />' . esc_html( call_user_func( array( $provs[ $i ], 'get_description' ) ) ) . '</p></li>';
+											if ( 0 === $i ) {
+												echo '<li><p><input type=\'radio\' id=\'sm_b_prio_provider_' . esc_html( $i ) . '\' name=\'sm_b_prio_provider\' value=\'' . esc_attr( $provs[ $i ] ) . '\' ' . esc_attr( $this->html_get_checked( $this->sg->get_option( 'b_prio_provider' ), $provs[ $i ] ) ) . ' /> <label for=\'sm_b_prio_provider_' . esc_html( $i ) . '\'>' . esc_html( 'Do not use automatic priority calculation' ) . '</label><br />' . esc_html( 'All posts will have the same priority which is defined in &quot;Priorities&quot;' ) . '</p></li>';
+											} else {
+												echo '<li><p><input type=\'radio\' id=\'sm_b_prio_provider_' . esc_html( $i ) . '\' name=\'sm_b_prio_provider\' value=\'' . esc_attr( $provs[ $i ] ) . '\' ' . esc_attr( $this->html_get_checked( $this->sg->get_option( 'b_prio_provider' ), $provs[ $i ] ) ) . ' /> <label for=\'sm_b_prio_provider_' . esc_html( $i ) . '\'>' . esc_html( call_user_func( array( $provs[ $i ], 'get_name' ) ) ) . '</label><br />' . esc_html( call_user_func( array( $provs[ $i ], 'get_description' ) ) ) . '</p></li>';
+											}
 										}
 										?>
 									</ul>
@@ -1457,15 +1480,24 @@ class GoogleSitemapGeneratorUI {
 										</ul>
 										<ul>
 											<?php
-											$defaults = array(
-												'descendants_and_self' => 0,
-												'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
-												'popular_cats' => false,
-												'walker'   => null,
-												'taxonomy' => 'product_cat',
-												'checked_ontop' => true,
-												'echo'     => true,
-											);
+											$defaults = array();
+											if ( $this->has_woo_commerce ) {
+												$defaults = array(
+													'descendants_and_self' => 0,
+													'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
+													'popular_cats' => false,
+													'walker' => null,
+													'taxonomy' => 'product_cat',
+													'checked_ontop' => true,
+													'echo' => true,
+												);
+											} else {
+												$defaults = array(
+													'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
+													'echo' => true,
+												);
+											}
+
 											wp_terms_checklist( 0, $defaults );
 											?>
 										</ul>
@@ -1475,15 +1507,23 @@ class GoogleSitemapGeneratorUI {
 											?>
 											<ul>
 												<?php
-												$defaults = array(
-													'descendants_and_self' => 0,
-													'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
-													'popular_cats' => false,
-													'walker' => null,
-													'taxonomy' => $taxonomy,
-													'checked_ontop' => true,
-													'echo' => true,
-												);
+												$defaults = array();
+												if ( $this->has_woo_commerce ) {
+													$defaults = array(
+														'descendants_and_self' => 0,
+														'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
+														'popular_cats' => false,
+														'walker' => null,
+														'taxonomy' => $taxonomy,
+														'checked_ontop' => true,
+														'echo' => true,
+													);
+												} else {
+													$defaults = array(
+														'selected_cats' => $this->sg->get_option( 'b_exclude_cats' ),
+														'echo'     => true,
+													);
+												}
 												wp_terms_checklist( 0, $defaults );
 												?>
 											</ul>

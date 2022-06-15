@@ -385,18 +385,18 @@ class GoogleSitemapGeneratorPage {
 		}
 
 		$r  = '';
-		$r .= '\\t<url>\\n';
-		$r .= '\\t\\t<loc>' . $this->escape_xml( esc_url_raw( $this->url ) ) . '</loc>\\n';
+		$r .= "\t<url>\n";
+		$r .= "\t\t<loc>" . $this->escape_xml( esc_url_raw( $this->url ) ) . "</loc>\n";
 		if ( $this->last_mod > 0 ) {
-			$r .= '\\t\\t<lastmod>' . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . '</lastmod>\\n';
+			$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . "</lastmod>\n";
 		}
 		if ( ! empty( $this->change_freq ) ) {
-			$r .= '\\t\\t<changefreq>' . $this->change_freq . '</changefreq>\\n';
+			$r .= "\t\t<changefreq>" . $this->change_freq . "</changefreq>\n";
 		}
 		if ( false !== $this->priority && '' !== $this->priority ) {
-			$r .= '\\t\\t<priority>' . number_format( $this->priority, 1 ) . '</priority>\\n';
+			$r .= "\t\t<priority>" . number_format( $this->priority, 1 ) . "</priority>\n";
 		}
-		$r .= '\\t</url>\\n';
+		$r .= "\t</url>\n";
 		return $r;
 	}
 
@@ -538,12 +538,12 @@ class GoogleSitemapGeneratorSitemapEntry {
 		}
 
 		$r  = '';
-		$r .= '\\t<sitemap>\\n';
-		$r .= '\\t\\t<loc>' . $this->escape_xml( esc_url_raw( $this->url ) ) . '</loc>\\n';
+		$r .= "\t<sitemap>\n";
+		$r .= "\t\t<loc>" . $this->escape_xml( esc_url_raw( $this->url ) ) . "</loc>\n";
 		if ( $this->last_mod > 0 ) {
-			$r .= '\\t\\t<lastmod>' . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . '</lastmod>\\n';
+			$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . "</lastmod>\n";
 		}
-		$r .= '\\t</sitemap>\\n';
+		$r .= "\t</sitemap>\n";
 		return $r;
 	}
 
@@ -753,7 +753,7 @@ class GoogleSitemapGeneratorPrioByAverageProvider implements Google_Sitemap_Gene
 	public function get_post_priority( $post_id, $comment_count ) {
 
 		// Do not divide by zero !
-		if ( 0 === $this->average ) {
+		if ( 0 == $this->average ) {
 			if ( $comment_count > 0 ) {
 				$priority = 1;
 			} else {
@@ -1335,7 +1335,6 @@ final class GoogleSitemapGenerator {
 		$this->options['sm_b_prio_provider'] = 'GoogleSitemapGeneratorPrioByCountProvider'; // Provider for automatic priority calculation .
 		$this->options['sm_b_ping']          = true; // Auto ping Google .
 		$this->options['sm_b_stats']         = false; // Send anonymous stats .
-		$this->options['sm_b_pingmsn']       = true; // Auto ping MSN .
 		$this->options['sm_b_autozip']       = true; // Try to gzip the output .
 		$this->options['sm_b_memory']        = ''; // Set Memory Limit (e.g. 16M) .
 		$this->options['sm_b_time']          = -1; // Set time limit in seconds, 0 for unlimited, -1 for disabled .
@@ -1353,7 +1352,7 @@ final class GoogleSitemapGenerator {
 		$this->options['sm_in_pages']       = true; // Include static pages .
 		$this->options['sm_in_cats']        = false; // Include categories .
 		$this->options['sm_product_tags']   = true; // Hide product tags in sitemap .
-		$this->options['sm_in_product_cat'] = false; // Include product categories .
+		$this->options['sm_in_product_cat'] = true; // Include product categories .
 		$this->options['sm_in_arch']        = false; // Include archives .
 		$this->options['sm_in_auth']        = false; // Include author pages .
 		$this->options['sm_in_tags']        = false; // Include tag pages .
@@ -2304,15 +2303,6 @@ final class GoogleSitemapGenerator {
 				);
 			}
 
-			if ( $this->get_option( 'b_pingmsn' ) ) {
-				$pings['bing'] = array(
-					'name'  => 'Bing',
-					'url'   => 'http://www.bing.com/webmaster/ping.aspx?siteMap=%s',
-					'check' => ' ',
-					// No way to check, response is IP-language-based :-( .
-				);
-			}
-
 			foreach ( $pings as $service_id => $service ) {
 				$url = str_replace( '%s', rawurlencode( $ping_url ), $service['url'] );
 				$status->start_ping( $service_id, $url, $service['name'] );
@@ -2424,7 +2414,9 @@ final class GoogleSitemapGenerator {
 
 		// Try to get as much as debug / error output as possible .
 		$err_level = error_reporting( E_ALL );
-		define( 'WP_DEBUG_DISPLAY', true );
+		if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
+			define( 'WP_DEBUG_DISPLAY', true );
+		}
 
 		if ( ! defined( 'WP_DEBUG' ) ) {
 			define( 'WP_DEBUG', true );
