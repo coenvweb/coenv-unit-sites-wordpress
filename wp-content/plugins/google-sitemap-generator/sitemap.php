@@ -15,11 +15,11 @@
  * Info for WordPress:
  * ==============================================================================
  * Plugin Name: Google XML Sitemaps
- * Plugin URI: http://www.arnebrachhold.de/redir/sitemap-home/
+ * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.4
+ * Version: 4.1.5
  * Author: Auctollo
- * Author URI: http://www.arnebrachhold.de/
+ * Author URI: https://acutollo.com/
  * Text Domain: sitemap
  * Domain Path: /lang
 

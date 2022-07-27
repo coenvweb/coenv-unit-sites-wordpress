@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.9
-Stable tag: 3.4.3
+Tested up to: 6.0
+Stable tag: 3.4.4
 License: GPLv2 or later
 
 
@@ -212,6 +212,12 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.4.4 =
+* 2022-07-27
+* Use correct value for updating `term_relationships` table.
+  this should fix some reported issues where the problem was unclear.
+* On updating order, list the number of terms that were updated.
 
 = 3.4.3 =
 * 2022-04-30

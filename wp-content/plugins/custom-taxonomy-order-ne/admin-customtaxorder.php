@@ -220,38 +220,50 @@ add_action( 'edit_term',   'customtaxorder_add_term_order', 10, 3 );
 
 /*
  * Set `term_order` in database for term.
+ *
  * @since 3.1.0
+ *
  * @param  int     $term_id    The ID of the term.
  * @param  int     $term_order The order of the term.
  * @param  string  $taxonomy   Taxonomy of the term.
+ *
+ * @return int     0 if no term was updated, 1 if term was updated. Usefull for using a counter in a message. (since 3.4.4)
  */
 function customtaxorder_set_db_term_order( $term_id = 0, $term_order = 0, $taxonomy = '' ) {
 	global $wpdb;
 
 	if ( $term_id == 0 ) {
-		return;
+		return 0;
 	}
 	$term = get_term( $term_id, $taxonomy );
 	if ( ! is_object( $term ) ) {
-		return;
+		return 0;
 	}
 
-	$wpdb->query( $wpdb->prepare(
+	$result1 = $wpdb->query( $wpdb->prepare(
 		"
 			UPDATE $wpdb->terms SET term_order = '%d' WHERE term_id ='%d'
 		",
 		$term_order,
 		$term_id
 	) );
-	$wpdb->query( $wpdb->prepare(
+	$result2 = $wpdb->query( $wpdb->prepare(
 		"
 			UPDATE $wpdb->term_relationships SET term_order = '%d' WHERE term_taxonomy_id ='%d'
 		",
 		$term_order,
-		$term_id
+		$term->term_taxonomy_id
 	) );
 
 	clean_term_cache( $term_id, $taxonomy );
+
+	if ( $result1 > 0 && $result2 > 0 ) {
+		// results are the rows affected according to $wpdb->query()
+		return 1;
+
+	}
+	return 0;
+
 }
 
 

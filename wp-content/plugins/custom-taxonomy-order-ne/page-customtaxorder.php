@@ -279,16 +279,20 @@ function customtaxorder_update_order() {
 			$submitted_ids = explode(',', $new_order);
 			$updated_ids = array();
 			$result = count($submitted_ids);
+			$counter_updated_terms = 0;
 			for ( $i = 0; $i < $result; $i++ ) {
 				$term_id = (int) str_replace('id_', '', $submitted_ids[$i]);
 				$term_order = $i + $parent_id_order;
 
-				customtaxorder_set_db_term_order( $term_id, $term_order );
+				$counter = (int) customtaxorder_set_db_term_order( $term_id, $term_order );
+				$counter_updated_terms = $counter_updated_terms + $counter;
 
 				$updated_ids[] = $term_id;
 			}
-			echo '<div id="message" class="updated fade notice is-dismissible"><p>'. esc_html__('Order updated successfully.', 'custom-taxonomy-order-ne').'</p></div>';
-			do_action('customtaxorder_update_order', $updated_ids);
+			echo '<div id="message" class="updated fade notice is-dismissible"><p>' .
+				sprintf( _n( 'Order of %d term updated.', 'Order of %d terms updated.', $counter_updated_terms, 'custom-taxonomy-order-ne' ), $counter_updated_terms ) .
+				'</p></div>';
+			do_action('customtaxorder_update_order', $updated_ids, $counter_updated_terms);
 
 		}
 

@@ -3,7 +3,7 @@
 Plugin Name: Custom Taxonomy Order
 Plugin URI: https://wordpress.org/plugins/custom-taxonomy-order-ne/
 Description: Allows for the ordering of categories and custom taxonomy terms through a simple drag-and-drop interface.
-Version: 3.4.3
+Version: 3.4.4
 Author: Marcel Pol
 Author URI: https://timelord.nl/
 License: GPLv2 or later
@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 // Plugin Version
-define('CUSTOMTAXORDER_VER', '3.4.3');
+define('CUSTOMTAXORDER_VER', '3.4.4');
 
 
 /*

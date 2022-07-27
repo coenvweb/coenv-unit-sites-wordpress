@@ -2077,7 +2077,7 @@ final class GoogleSitemapGenerator {
 		if ( ! empty( $style_sheet ) ) {
 			$this->add_element( new GoogleSitemapGeneratorXmlEntry( '<' . '?xml-stylesheet type=\'text/xsl\' href=\'' . esc_url( $style_sheet ) . '\'?>' ) );
 		}
-		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'sitemap-generator-url=\'http://www.arnebrachhold.de\' sitemap-generator-version=\'' . $this->get_version() . '\'' ) );
+		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'sitemap-generator-url=\'https://auctollo.com\' sitemap-generator-version=\'' . $this->get_version() . '\'' ) );
 		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'generated-on=\'' . gmdate( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) . '\'' ) );
 
 		switch ( $format ) {
