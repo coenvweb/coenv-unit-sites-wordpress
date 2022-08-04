@@ -10,7 +10,7 @@
  *
  * Plugin Name:  User Switching
  * Description:  Instant switching between user accounts in WordPress
- * Version:      1.6.0
+ * Version:      1.7.0
  * Plugin URI:   https://wordpress.org/plugins/user-switching/
  * Author:       John Blackbourn & contributors
  * Author URI:   https://github.com/johnbillion/user-switching/graphs/contributors
@@ -46,6 +46,13 @@ class user_switching {
 	 */
 	public static $application = 'WordPress/User Switching';
 
+	const REDIRECT_TYPE_NONE = null;
+	const REDIRECT_TYPE_URL = 'url';
+	const REDIRECT_TYPE_POST = 'post';
+	const REDIRECT_TYPE_TERM = 'term';
+	const REDIRECT_TYPE_USER = 'user';
+	const REDIRECT_TYPE_COMMENT = 'comment';
+
 	/**
 	 * Sets up all the filters and actions.
 	 *
@@ -73,7 +80,7 @@ class user_switching {
 		add_action( 'admin_bar_menu', array( $this, 'action_admin_bar_menu' ), 11 );
 		add_action( 'bp_member_header_actions', array( $this, 'action_bp_button' ), 11 );
 		add_action( 'bp_directory_members_actions', array( $this, 'action_bp_button' ), 11 );
-		add_action( 'bbp_template_after_user_details', array( $this, 'action_bbpress_button' ) );
+		add_action( 'bbp_template_after_user_details_menu_items', array( $this, 'action_bbpress_button' ) );
 		add_action( 'woocommerce_login_form_start', array( $this, 'action_woocommerce_login_form_start' ), 10, 0 );
 		add_action( 'woocommerce_admin_order_data_after_order_details', array( $this, 'action_woocommerce_order_details' ), 1 );
 		add_filter( 'woocommerce_account_menu_items', array( $this, 'filter_woocommerce_account_menu_items' ), 999 );
@@ -254,7 +261,7 @@ class user_switching {
 				// Check authentication:
 				if ( ! $current_user || ! current_user_can( 'switch_off' ) ) {
 					/* Translators: "switch off" means to temporarily log out */
-					wp_die( esc_html__( 'Could not switch off.', 'user-switching' ) );
+					wp_die( esc_html__( 'Could not switch off.', 'user-switching' ), 403 );
 				}
 
 				// Check intent:
@@ -275,7 +282,7 @@ class user_switching {
 					exit;
 				} else {
 					/* Translators: "switch off" means to temporarily log out */
-					wp_die( esc_html__( 'Could not switch off.', 'user-switching' ) );
+					wp_die( esc_html__( 'Could not switch off.', 'user-switching' ), 403 );
 				}
 				break;
 
@@ -290,12 +297,77 @@ class user_switching {
 	 * @return string The URL to redirect to.
 	 */
 	protected static function get_redirect( WP_User $new_user = null, WP_User $old_user = null ) {
+		$redirect_to = '';
+		$requested_redirect_to = '';
+		$redirect_type = self::REDIRECT_TYPE_NONE;
+
 		if ( ! empty( $_REQUEST['redirect_to'] ) ) {
+			// URL
 			$redirect_to = self::remove_query_args( wp_unslash( $_REQUEST['redirect_to'] ) );
 			$requested_redirect_to = wp_unslash( $_REQUEST['redirect_to'] );
-		} else {
-			$redirect_to = '';
-			$requested_redirect_to = '';
+			$redirect_type = self::REDIRECT_TYPE_URL;
+		} elseif ( ! empty( $_GET['redirect_to_post'] ) ) {
+			// Post
+			$post_id = absint( $_GET['redirect_to_post'] );
+
+			if ( function_exists( 'is_post_publicly_viewable' ) && is_post_publicly_viewable( $post_id ) ) {
+				$link = get_permalink( $post_id );
+
+				if ( is_string( $link ) ) {
+					$redirect_to = $link;
+					$requested_redirect_to = $link;
+					$redirect_type = self::REDIRECT_TYPE_POST;
+				}
+			}
+		} elseif ( ! empty( $_GET['redirect_to_term'] ) ) {
+			// Term
+			$term = get_term( absint( $_GET['redirect_to_term'] ) );
+
+			if ( ( $term instanceof WP_Term ) && function_exists( 'is_taxonomy_viewable' ) && is_taxonomy_viewable( $term->taxonomy ) ) {
+				$link = get_term_link( $term );
+
+				if ( is_string( $link ) ) {
+					$redirect_to = $link;
+					$requested_redirect_to = $link;
+					$redirect_type = self::REDIRECT_TYPE_TERM;
+				}
+			}
+		} elseif ( ! empty( $_GET['redirect_to_user'] ) ) {
+			// User
+			$user = get_userdata( absint( $_GET['redirect_to_user'] ) );
+
+			if ( $user instanceof WP_User ) {
+				$link = get_author_posts_url( $user->ID );
+
+				if ( is_string( $link ) ) {
+					$redirect_to = $link;
+					$requested_redirect_to = $link;
+					$redirect_type = self::REDIRECT_TYPE_USER;
+				}
+			}
+		} elseif ( ! empty( $_GET['redirect_to_comment'] ) ) {
+			// Comment
+			$comment = get_comment( absint( $_GET['redirect_to_comment'] ) );
+
+			if ( $comment instanceof WP_Comment ) {
+				if ( 'approved' === wp_get_comment_status( $comment ) ) {
+					$link = get_comment_link( $comment );
+
+					if ( is_string( $link ) ) {
+						$redirect_to = $link;
+						$requested_redirect_to = $link;
+						$redirect_type = self::REDIRECT_TYPE_COMMENT;
+					}
+				} elseif ( function_exists( 'is_post_publicly_viewable' ) && is_post_publicly_viewable( (int) $comment->comment_post_ID ) ) {
+					$link = get_permalink( (int) $comment->comment_post_ID );
+
+					if ( is_string( $link ) ) {
+						$redirect_to = $link;
+						$requested_redirect_to = $link;
+						$redirect_type = self::REDIRECT_TYPE_POST;
+					}
+				}
+			}
 		}
 
 		if ( ! $new_user ) {
@@ -306,7 +378,17 @@ class user_switching {
 			$redirect_to = apply_filters( 'login_redirect', $redirect_to, $requested_redirect_to, $new_user );
 		}
 
-		return $redirect_to;
+		/**
+		 * Filters the redirect location after a user switches to another account or switches off.
+		 *
+		 * @since 1.7.0
+		 *
+		 * @param string       $redirect_to   The target redirect location, or an empty string if none is specified.
+		 * @param string|null  $redirect_type The redirect type, see the `user_switching::REDIRECT_*` constants.
+		 * @param WP_User|null $new_user      The user being switched to, or null if there is none.
+		 * @param WP_User|null $old_user      The user being switched from, or null if there is none.
+		 */
+		return apply_filters( 'user_switching_redirect_to', $redirect_to, $redirect_type, $new_user, $old_user );
 	}
 
 	/**
@@ -345,12 +427,7 @@ class user_switching {
 					$message = '';
 					$just_switched = isset( $_GET['user_switched'] );
 					if ( $just_switched ) {
-						$message = esc_html( sprintf(
-							/* Translators: 1: user display name; 2: username; */
-							__( 'Switched to %1$s (%2$s).', 'user-switching' ),
-							$user->display_name,
-							$user->user_login
-						) );
+						$message = esc_html( self::switched_to_message( $user ) );
 					}
 					$switch_back_url = add_query_arg( array(
 						'redirect_to' => urlencode( self::current_url() ),
@@ -359,12 +436,7 @@ class user_switching {
 					$message .= sprintf(
 						' <a href="%s">%s</a>.',
 						esc_url( $switch_back_url ),
-						esc_html( sprintf(
-							/* Translators: 1: user display name; 2: username; */
-							__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-							$old_user->display_name,
-							$old_user->user_login
-						) )
+						esc_html( self::switch_back_message( $old_user ) )
 					);
 
 					/**
@@ -398,19 +470,9 @@ class user_switching {
 				<p>
 				<?php
 					if ( isset( $_GET['switched_back'] ) ) {
-						echo esc_html( sprintf(
-							/* Translators: 1: user display name; 2: username; */
-							__( 'Switched back to %1$s (%2$s).', 'user-switching' ),
-							$user->display_name,
-							$user->user_login
-						) );
+						echo esc_html( self::switched_back_message( $user ) );
 					} else {
-						echo esc_html( sprintf(
-							/* Translators: 1: user display name; 2: username; */
-							__( 'Switched to %1$s (%2$s).', 'user-switching' ),
-							$user->display_name,
-							$user->user_login
-						) );
+						echo esc_html( self::switched_to_message( $user ) );
 					}
 				?>
 				</p>
@@ -483,12 +545,7 @@ class user_switching {
 			$wp_admin_bar->add_node( array(
 				'parent' => $parent,
 				'id' => 'switch-back',
-				'title' => esc_html( sprintf(
-					/* Translators: 1: user display name; 2: username; */
-					__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-					$old_user->display_name,
-					$old_user->user_login
-				) ),
+				'title' => esc_html( self::switch_back_message( $old_user ) ),
 				'href' => add_query_arg( array(
 					'redirect_to' => urlencode( self::current_url() ),
 				), self::switch_back_url( $old_user ) ),
@@ -497,10 +554,12 @@ class user_switching {
 
 		if ( current_user_can( 'switch_off' ) ) {
 			$url = self::switch_off_url( wp_get_current_user() );
-			if ( ! is_admin() ) {
-				$url = add_query_arg( array(
-					'redirect_to' => urlencode( self::current_url() ),
-				), $url );
+			$redirect_to = is_admin() ? self::get_admin_redirect_to() : array(
+				'redirect_to' => urlencode( self::current_url() ),
+			);
+
+			if ( is_array( $redirect_to ) ) {
+				$url = add_query_arg( $redirect_to, $url );
 			}
 
 			$wp_admin_bar->add_node( array(
@@ -517,12 +576,7 @@ class user_switching {
 				$wp_admin_bar->add_node( array(
 					'parent' => 'edit',
 					'id' => 'author-switch-back',
-					'title' => esc_html( sprintf(
-						/* Translators: 1: user display name; 2: username; */
-						__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-						$old_user->display_name,
-						$old_user->user_login
-					) ),
+					'title' => esc_html( self::switch_back_message( $old_user ) ),
 					'href' => add_query_arg( array(
 						'redirect_to' => urlencode( self::current_url() ),
 					), self::switch_back_url( $old_user ) ),
@@ -541,6 +595,39 @@ class user_switching {
 	}
 
 	/**
+	 * Returns a context-aware redirect parameter for use when switching off in the admin area.
+	 *
+	 * This is used to redirect the user to the URL of the item they're editing at the time.
+	 *
+	 * @return ?array<string, int>
+	 */
+	public static function get_admin_redirect_to() {
+		if ( ! empty( $_GET['post'] ) ) {
+			// Post
+			return array(
+				'redirect_to_post' => intval( $_GET['post'] ),
+			);
+		} elseif ( ! empty( $_GET['tag_ID'] ) ) {
+			// Term
+			return array(
+				'redirect_to_term' => intval( $_GET['tag_ID'] ),
+			);
+		} elseif ( ! empty( $_GET['user_id'] ) ) {
+			// User
+			return array(
+				'redirect_to_user' => intval( $_GET['user_id'] ),
+			);
+		} elseif ( ! empty( $_GET['c'] ) ) {
+			// Comment
+			return array(
+				'redirect_to_comment' => intval( $_GET['c'] ),
+			);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Adds a 'Switch back to {user}' link to the Meta sidebar widget.
 	 *
 	 * @return void
@@ -549,19 +636,13 @@ class user_switching {
 		$old_user = self::get_old_user();
 
 		if ( $old_user instanceof WP_User ) {
-			$link = sprintf(
-				/* Translators: 1: user display name; 2: username; */
-				__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-				$old_user->display_name,
-				$old_user->user_login
-			);
 			$url = add_query_arg( array(
 				'redirect_to' => urlencode( self::current_url() ),
 			), self::switch_back_url( $old_user ) );
 			printf(
 				'<li id="user_switching_switch_on"><a href="%s">%s</a></li>',
 				esc_url( $url ),
-				esc_html( $link )
+				esc_html( self::switch_back_message( $old_user ) )
 			);
 		}
 	}
@@ -590,19 +671,13 @@ class user_switching {
 		$old_user = self::get_old_user();
 
 		if ( $old_user instanceof WP_User ) {
-			$link = sprintf(
-				/* Translators: 1: user display name; 2: username; */
-				__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-				$old_user->display_name,
-				$old_user->user_login
-			);
 			$url = add_query_arg( array(
 				'redirect_to' => urlencode( self::current_url() ),
 			), self::switch_back_url( $old_user ) );
 			printf(
-				'<p id="user_switching_switch_on"><a href="%s">%s</a></p>',
+				'<p id="user_switching_switch_on" style="position:fixed;bottom:40px;padding:0;margin:0;left:10px;font-size:13px;z-index:99999;"><a href="%s">%s</a></p>',
 				esc_url( $url ),
-				esc_html( $link )
+				esc_html( self::switch_back_message( $old_user ) )
 			);
 		}
 	}
@@ -617,12 +692,6 @@ class user_switching {
 		$old_user = self::get_old_user();
 
 		if ( $old_user instanceof WP_User ) {
-			$link = sprintf(
-				/* Translators: 1: user display name; 2: username; */
-				__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-				$old_user->display_name,
-				$old_user->user_login
-			);
 			$url = self::switch_back_url( $old_user );
 
 			if ( ! empty( $_REQUEST['interim-login'] ) ) {
@@ -640,7 +709,7 @@ class user_switching {
 			$message .= sprintf(
 				'<a href="%1$s" onclick="window.location.href=\'%1$s\';return false;">%2$s</a>',
 				esc_url( $url ),
-				esc_html( $link )
+				esc_html( self::switch_back_message( $old_user ) )
 			);
 			$message .= '</p>';
 		}
@@ -837,6 +906,69 @@ class user_switching {
 	}
 
 	/**
+	 * Returns the message shown to the user when they've switched to a user.
+	 *
+	 * @param WP_User $user The concerned user.
+	 * @return string The message.
+	 */
+	public static function switched_to_message( WP_User $user ) {
+		$message = sprintf(
+			/* Translators: 1: user display name; 2: username; */
+			__( 'Switched to %1$s (%2$s).', 'user-switching' ),
+			$user->display_name,
+			$user->user_login
+		);
+
+		// Removes the user login from this message without invalidating existing translations
+		return str_replace( sprintf(
+			' (%s)',
+			$user->user_login
+		), '', $message );
+	}
+
+	/**
+	 * Returns the message shown to the user for the link to switch back to their original user.
+	 *
+	 * @param WP_User $user The concerned user.
+	 * @return string The message.
+	 */
+	public static function switch_back_message( WP_User $user ) {
+		$message = sprintf(
+			/* Translators: 1: user display name; 2: username; */
+			__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
+			$user->display_name,
+			$user->user_login
+		);
+
+		// Removes the user login from this message without invalidating existing translations
+		return str_replace( sprintf(
+			' (%s)',
+			$user->user_login
+		), '', $message );
+	}
+
+	/**
+	 * Returns the message shown to the user when they've switched back to their original user.
+	 *
+	 * @param WP_User $user The concerned user.
+	 * @return string The message.
+	 */
+	public static function switched_back_message( WP_User $user ) {
+		$message = sprintf(
+			/* Translators: 1: user display name; 2: username; */
+			__( 'Switched back to %1$s (%2$s).', 'user-switching' ),
+			$user->display_name,
+			$user->user_login
+		);
+
+		// Removes the user login from this message without invalidating existing translations
+		return str_replace( sprintf(
+			' (%s)',
+			$user->user_login
+		), '', $message );
+	}
+
+	/**
 	 * Returns the current URL.
 	 *
 	 * @return string The current URL.
@@ -930,12 +1062,7 @@ class user_switching {
 			return $items;
 		}
 
-		$items['user-switching-switch-back'] = sprintf(
-			/* Translators: 1: user display name; 2: username; */
-			__( 'Switch back to %1$s (%2$s)', 'user-switching' ),
-			$old_user->display_name,
-			$old_user->user_login
-		);
+		$items['user-switching-switch-back'] = self::switch_back_message( $old_user );
 
 		return $items;
 	}

@@ -1,6 +1,6 @@
 # User Switching
 
-Stable tag: 1.6.0  
+Stable tag: 1.7.0  
 Requires at least: 3.7  
 Tested up to: 6.0  
 Requires PHP: 5.3  
@@ -275,6 +275,15 @@ In addition, User Switching respects the following filters from WordPress core w
 
 ## Changelog ##
 
+### 1.7.0 ###
+
+* Redirect to the current post, term, user, or comment being edited when switching off
+* Clean up some user-facing messages
+* Apply basic styling to the Switch Back link that appears in the footer
+* Use a better placement for the Switch To menu on bbPress profiles
+* Use a more appropriate HTTP response code if switching off fails
+* Exclude `.editorconfig` from dist ZIP
+
 ### 1.6.0 ###
 
 * Add a 'Switch To' link to the order screen in WooCommerce
@@ -450,10 +459,4 @@ In addition, User Switching respects the following filters from WordPress core w
 - Hebrew translation by Rami Y.
 - Indonesian translation by Eko Ikhyar.
 - Portuguese translation by Raphael Mendonça.
-
-
-### 0.8.8 ###
-
-- Spanish Translation by Marcelo Pedra.
-- User Switching is now a network-only plugin when used on Multisite.
 
