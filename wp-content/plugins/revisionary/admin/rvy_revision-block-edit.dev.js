@@ -223,54 +223,21 @@ jQuery(document).ready(function ($) {
         }
     }, 100);
 
-	var submitCheckSaveInterval = false;
+    var redirectCheckSaveDoneInterval = false;
 
 	function rvyDoSubmission() {
-		if (submitCheckSaveInterval) {
-			return;
-        }
-        
-        if (wp.data.select('core/editor').isEditedPostDirty() || wp.data.select('core/editor').isSavingPost()) {
-            submitCheckSaveInterval = setInterval(function () {
-                let saving = wp.data.select('core/editor').isSavingPost();
-                
-                if (saving || $('div.edit-post-header button.is-saved').length) {
-                    clearInterval(submitCheckSaveInterval);
-                    var redirectCheckSaveDoneInterval = setInterval(function () {
-                        let saving = wp.data.select('core/editor').isSavingPost();
-                        
-                        if (!saving || $('div.edit-post-header button.is-saved').length) {
-                            clearInterval(redirectCheckSaveDoneInterval);
-                            submitCheckSaveInterval = false;
-
-                            rvySubmitCopy();
-                        }
-                    }, rvyObjEdit.submissionDelay);
-                }
-            }, 100);
-        } else {
-            rvySubmitCopy();
-        }
+       rvySubmitCopy();
     }
 
-    var approveCheckSaveInterval = false;
-
 	function rvyDoApproval() {
-		if (approveCheckSaveInterval) {
-			return;
-		}
-
-		approveCheckSaveInterval = setInterval(function () {
-			let saving = wp.data.select('core/editor').isSavingPost();
-			
-			if (saving || $('div.edit-post-header button.is-saved').length) {
-				clearInterval(approveCheckSaveInterval);
-				var redirectCheckSaveDoneInterval = setInterval(function () {
-					let saving = wp.data.select('core/editor').isSavingPost();
-					
-					if (!saving || $('div.edit-post-header button.is-saved').length) {
-						clearInterval(redirectCheckSaveDoneInterval);
-						approveCheckSaveInterval = false;
+        setTimeout(
+            function() {
+                var redirectCheckSaveDoneInterval = setInterval(function () {
+                    let saving = wp.data.select('core/editor').isSavingPost();
+                    
+                    if (!saving || $('div.edit-post-header button.is-saved').length) {
+                        clearInterval(redirectCheckSaveDoneInterval);
+                        approveCheckSaveInterval = false;
 
                         if (rvyRedirectURL != '') {
                             setTimeout(
@@ -280,10 +247,10 @@ jQuery(document).ready(function ($) {
                                 5000
                             );
                         }
-					}
-				}, 100);
-			}
-		}, 100);
+                    }
+                }, 100);
+            }, 500
+        );
 	}
 
 	var rvyRedirectURL = '';
@@ -295,25 +262,28 @@ jQuery(document).ready(function ($) {
 		
 		$('button.revision-approve').hide();
 		
-        if (isApproval) {
+		if (isApproval) {
             $('div.revision-approving').show().css('display', 'block');
             $('div.revision-approving span.ppr-submission-spinner').css('visibility', 'visible');
-		}
-        
-        if (wp.data.select('core/editor').isEditedPostDirty()) {
-		    wp.data.dispatch('core/editor').savePost();
-        }
 
-		if (isApproval) {
+            if (wp.data.select('core/editor').isEditedPostDirty()) {
+                wp.data.dispatch('core/editor').savePost();
+            }
 			rvyRedirectURL = $('div.rvy-creation-ui button.rvy-direct-approve').closest('a').attr('href');
 
 			if (rvyRedirectURL == '') {
 				rvyRedirectURL = $('div.rvy-creation-ui button.revision-approve').closest('a').attr('href');
 			}
+        } else {
+            rvyRedirectURL = $('div.rvy-creation-ui a').attr('href');
         }
-        
+
         if (isSubmission) {
             rvyDoSubmission();
+
+            if (wp.data.select('core/editor').isEditedPostDirty()) {
+                wp.data.dispatch('core/editor').savePost();
+            }
         } else {
             rvyDoApproval();
         }
