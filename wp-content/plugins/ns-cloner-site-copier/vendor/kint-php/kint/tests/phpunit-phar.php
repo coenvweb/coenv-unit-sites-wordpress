@@ -23,31 +23,32 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Kint\Renderer\Rich;
+\putenv('KINT_PHAR_TEST=1');
 
-use Kint\Zval\ElidedValues;
-use Kint\Zval\Value;
+/**
+ * This require loads a built file before phpunit, since using phpunit
+ * directly will load composer and automatically start using the loose files.
+ */
+require __DIR__.'/../build/kint.phar';
 
-class ElidedPlugin extends Plugin implements ValuePluginInterface
-{
-    public function renderValue(Value $o)
-    {
-        if ($s = $o->getSize()) {
-            $header = $this->renderer->renderHeaderWrapper(
-                $o,
-                true,
-                '<var>Elided</var> '.$s.' values'
-            );
-        } else {
-            $header = $this->renderer->renderHeaderWrapper($o, true, '<var>Elided</var>');
-        }
+$composer = require __DIR__.'/../vendor/autoload.php';
 
-        if ($o instanceof ElidedValues && null !== $o->description) {
-            $children = '<dd><pre>'.\implode('<br>', (array) $o->description).'</pre></dd>';
-        } else {
-            $children = '';
-        }
+// Register the composer autoloader after the phar autoloader
+$composer->unregister();
+$composer->register();
 
-        return '<dl>'.$header.$children.'</dl>';
-    }
+// All of this to trim the shabang off the script
+$bin = \file_get_contents(__DIR__.'/../vendor/bin/phpunit');
+$bin = \explode("\n", $bin);
+
+if ('#!' == \substr($bin[0], 0, 2)) {
+    \array_shift($bin);
 }
+
+$bin = \implode("\n", $bin);
+
+\file_put_contents(__DIR__.'/phpunit.tmp', $bin);
+
+require __DIR__.'/phpunit.tmp';
+
+\unlink(__DIR__.'/phpunit.tmp');

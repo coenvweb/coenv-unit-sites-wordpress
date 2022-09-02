@@ -91,6 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php
 						// Display the title of the current in progress clone mode if applicable.
 						if ( ns_cloner()->process_manager->is_in_progress() ) :
+                            // phpcs:ignore WordPress.WP.GlobalVariablesOverride -- local scope here
 							$mode = ns_cloner_request()->get( 'clone_mode' );
 							echo esc_html( $mode ? ns_cloner()->get_mode( $mode )->title : 'Unrecognized mode' );
 						endif;

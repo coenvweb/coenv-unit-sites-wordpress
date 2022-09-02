@@ -23,26 +23,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Kint\Zval;
+if (!KINT_PHP74) {
+    \class_alias('Kint\\Test\\Kint7TestCase', 'Kint\\Test\\KintTestCase');
+}
 
-class ElidedValues extends Value
-{
-    public $description = null;
-    public $hints = ['elide'];
-
-    /**
-     * @param int                  $size
-     * @param null|string|string[] $description
-     */
-    public function __construct($size, $description)
-    {
-        $this->description = $description;
-        $this->size = $size;
-        $this->value = null;
-    }
-
-    public function getAccessPath()
-    {
-        return null;
-    }
+if (KINT_PHP81) {
+    \class_alias('Kint\\Test\\Fixtures\\Mysqli81TestClass', 'Kint\\Test\\Fixtures\\MysqliTestClass');
 }

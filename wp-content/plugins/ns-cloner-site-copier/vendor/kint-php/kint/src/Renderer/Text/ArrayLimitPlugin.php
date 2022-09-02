@@ -27,7 +27,7 @@ namespace Kint\Renderer\Text;
 
 use Kint\Zval\Value;
 
-class ElidedPlugin extends Plugin
+class ArrayLimitPlugin extends Plugin
 {
     public function render(Value $o)
     {
@@ -37,13 +37,7 @@ class ElidedPlugin extends Plugin
             $out .= $this->renderer->colorTitle($this->renderer->renderTitle($o)).PHP_EOL;
         }
 
-        $out .= \str_repeat(' ', $o->depth * $this->renderer->indent_width);
-
-        if ($s = $o->getSize()) {
-            $out .= $this->renderer->colorValue('ELIDED '.$s.' VALUES').PHP_EOL;
-        } else {
-            $out .= $this->renderer->colorValue('ELIDED').PHP_EOL;
-        }
+        $out .= $this->renderer->renderHeader($o).' '.$this->renderer->colorValue('ARRAY LIMIT').PHP_EOL;
 
         return $out;
     }
