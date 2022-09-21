@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.2.0';
+	public $version = '4.2.1';
 
 	/**
 	 * Menu Slug
