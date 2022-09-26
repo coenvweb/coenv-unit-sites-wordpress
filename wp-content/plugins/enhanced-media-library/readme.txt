@@ -2,9 +2,9 @@
 Contributors: webbistro
 Tags: media library, media category, media categories, media gallery, gallery shortcode, media tag, media tags, media taxonomy, media taxonomies, media uploader, mime type, mime, mime types, file types, media types, media filter, attachment, gallery, image, images, media, ux, user experience, wp-admin, admin, taxonomy, taxonomies
 Requires at least: 5.0
-Tested up to: 5.7.1
+Tested up to: 5.8.3
 Requires PHP: 5.6
-Stable tag: 2.8.5
+Stable tag: 2.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 ## Description ##
 
-The plugin will be handy for those who need to manage a lot of media files.
+**The plugin will be handy for those who need to manage a lot of media files.**
+
+[SUPPORT](https://wpuxsolutions.com/support) | [DOCUMENTATION](https://wpuxsolutions.com/documents/enhanced-media-library) | [FAQs](https://wpuxsolutions.com/documents/enhanced-media-library/faqs) | [PREMIUM FEATURES](https://wpuxsolutions.com/plugins/enhanced-media-library-pro)
 
 
 ### Categorize by Anything! ###
@@ -34,6 +36,7 @@ The plugin will be handy for those who need to manage a lot of media files.
 * **Show captions:** title, filename, or caption field for each media item
 * **Bulk selection:** no special mode anymore, faster editing
 * **Drag'n'Drop re-order** right in the media library
+* **Infinite scroll** and manageable loads per page options
 
 
 ### Dynamic Galleries / Playlists ###
@@ -92,13 +95,6 @@ Additional comfort and even more convenient way to organize WordPress media libr
 ### Support ###
 
 Support is free for both versions of the plugin. "PRO"-users do not have priority. We do our best to respond in 24 hours if not sooner.
-
-
-### Available Languages ###
-
-You can see the list of available translations and their progress on [wpUXsolutions.com](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library). Many thanks to all involved!
-
-Assistance with translating is highly appreciated! If you'd like to be a translation editor or to suggest translations for your language please feel free to contribute to translation. All changes made are included in every new release of the plugin.
 
 
 ### Compatible with the Plugins: ###
@@ -184,6 +180,45 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 
 ## Changelog ##
+
+### 2.8.9 ###
+*Release Date - January 09, 2022*
+
+= Improvements =
+* Infinite scroll and manageable loads per page options added
+* SVG full support ensured
+* Taxonomy archive pages improved - are now fully disabled and not indexed if chosen 
+* Compatibility with SimpLy Gallery Blocks plugin added
+
+
+### 2.8.8 ###
+*Release Date - August 26, 2021*
+
+= Improvements =
+* Media Library Grid Mode: "More Details" / "Less Details" button improved to remember the latest choice after page reload
+* Better third-party admin menu compatibility
+* Compatibility for Impreza theme categories added
+
+
+### 2.8.7 ###
+*Release Date - August 8, 2021*
+
+= Compatibility =
+* Enfold theme masonry gallery (latest version) compatibility ensured
+
+= Bugfixes =
+* Edit image wrong link fixed for the Grid mode
+
+
+### 2.8.6 ###
+*Release Date - August 5, 2021*
+
+= Compatibility =
+* WordPress 5.8 compatibility ensured
+
+= Bugfixes =
+* A minor ACF-related bug fixed
+
 
 ### 2.8.5 ###
 *Release Date - April 10, 2021*

@@ -1,5 +1,7 @@
 <?php
-
+/*
+ * Admin functions for Custom Taxonomy Order.
+ */
 
 function customtaxorder_register_settings() {
 
@@ -10,7 +12,7 @@ function customtaxorder_register_settings() {
 			'type'              => 'string',
 			'show_in_rest'      => false,
 			'default'           => NULL,
-			'sanitize_callback' => 'customtaxorder_settings_validate'
+			'sanitize_callback' => 'customtaxorder_settings_validate',
 		));
 	register_setting(
 		'customtaxorder_settings',
@@ -19,7 +21,7 @@ function customtaxorder_register_settings() {
 			'type'              => 'string',
 			'show_in_rest'      => false,
 			'default'           => NULL,
-			'sanitize_callback' => 'customtaxorder_taxonomies_validate'
+			'sanitize_callback' => 'customtaxorder_taxonomies_validate',
 		));
 
 }
@@ -31,33 +33,54 @@ add_action('admin_init', 'customtaxorder_register_settings');
  */
 function customtaxorder_menu() {
 
-	$taxonomies = customtaxorder_get_taxonomies() ;
-
-	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
 	// Set your custom capability through this filter.
 	$custom_cap = apply_filters( 'customtaxorder_custom_cap', 'manage_categories' );
 
 	//add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
-	add_menu_page(esc_html__('Term Order', 'custom-taxonomy-order-ne'), esc_html__('Term Order', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder', 'customtaxorder_subpage', 'dashicons-list-view', 122.35);
+	add_menu_page(esc_html__('Term Order', 'custom-taxonomy-order-ne'), esc_html__('Term Order', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder', 'customtaxorder_subpage', 'dashicons-list-view', 122);
 	//add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', int $position = null )
 	add_submenu_page('customtaxorder', esc_html__('Order Taxonomies', 'custom-taxonomy-order-ne'), esc_html__('Order Taxonomies', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-taxonomies', 'custom_taxonomy_order');
 
-	foreach ($taxonomies as $taxonomy ) {
-		// Set your finegrained capability for this taxonomy for this custom filter.
-		$custom_cap_tax = apply_filters( 'customtaxorder_custom_cap_' . $taxonomy->name, $custom_cap );
-		add_submenu_page('customtaxorder', esc_html__('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, esc_html__('Order ', 'custom-taxonomy-order-ne') . $taxonomy->label, $custom_cap_tax, 'customtaxorder-'.$taxonomy->name, 'customtaxorder_subpage');
+	$taxonomies = customtaxorder_get_taxonomies() ;
+	$taxonomies = customtaxorder_sort_taxonomies( $taxonomies );
+	$tax_count = count( $taxonomies );
+
+	/* WooCommerce attributes cabn genarate lots of custom taxonomies. The submenu gets too large on non-taxorder pages. */
+	$page_customtaxorder = false;
+	if ( isset($_GET['page']) ) {
+		$pos_page = sanitize_text_field( $_GET['page'] );
+		$pos_args = 'customtaxorder';
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
+			$page_customtaxorder = true;
+		}
+	}
+
+	if ( $tax_count < 100 || $page_customtaxorder === true ) {
+		foreach ($taxonomies as $taxonomy ) {
+			$tax_label = $taxonomy->label;
+			if ( ! isset( $tax_label ) || strlen( $tax_label ) === 0 ) {
+				$tax_label = $taxonomy->name;
+			}
+			$tax_name = $taxonomy->name;
+
+			// Set your finegrained capability for this taxonomy for this custom filter.
+			$custom_cap_tax = apply_filters( 'customtaxorder_custom_cap_' . $tax_name, $custom_cap );
+			add_submenu_page('customtaxorder', esc_html__('Order ', 'custom-taxonomy-order-ne') . $tax_label, esc_html__('Order ', 'custom-taxonomy-order-ne') . $tax_label, $custom_cap_tax, 'customtaxorder-'.$tax_name, 'customtaxorder_subpage');
+		}
 	}
 	add_submenu_page('customtaxorder', esc_html__('About', 'custom-taxonomy-order-ne'), esc_html__('About', 'custom-taxonomy-order-ne'), $custom_cap, 'customtaxorder-about', 'customtaxorder_about');
+
 }
 add_action('admin_menu', 'customtaxorder_menu');
 
 
 function customtaxorder_css() {
 	if ( isset($_GET['page']) ) {
-		$pos_page = $_GET['page'];
+		$pos_page = sanitize_text_field( $_GET['page'] );
 		$pos_args = 'customtaxorder';
-		$pos = strpos($pos_page,$pos_args);
-		if ( $pos === false ) {} else {
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
 			wp_enqueue_style('customtaxorder', plugins_url( 'css/customtaxorder.css', __FILE__), false, CUSTOMTAXORDER_VER, 'screen' );
 		}
 	}
@@ -67,10 +90,10 @@ add_action('admin_print_styles', 'customtaxorder_css');
 
 function customtaxorder_js_libs() {
 	if ( isset($_GET['page']) ) {
-		$pos_page = $_GET['page'];
+		$pos_page = sanitize_text_field( $_GET['page'] );
 		$pos_args = 'customtaxorder';
-		$pos = strpos($pos_page,$pos_args);
-		if ( $pos === false ) {} else {
+		$pos = strpos($pos_page, $pos_args);
+		if ( $pos !== false ) {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'jquery-ui-core' );
 			wp_enqueue_script( 'jquery-ui-sortable' );
@@ -138,7 +161,7 @@ function customtaxorder_term_order_edit_form_field( $term, $taxonomy ) {
 	$options = customtaxorder_get_settings();
 	if ( isset($options[$taxonomy]) && $options[$taxonomy] == 1 ) {
 		if ( is_object($term) && isset($term->term_order) ) {
-			$term_order = $term->term_order;
+			$term_order = (int) $term->term_order;
 		} else {
 			$term_order = 0;
 		}
@@ -197,38 +220,50 @@ add_action( 'edit_term',   'customtaxorder_add_term_order', 10, 3 );
 
 /*
  * Set `term_order` in database for term.
+ *
  * @since 3.1.0
+ *
  * @param  int     $term_id    The ID of the term.
  * @param  int     $term_order The order of the term.
  * @param  string  $taxonomy   Taxonomy of the term.
+ *
+ * @return int     0 if no term was updated, 1 if term was updated. Usefull for using a counter in a message. (since 3.4.4)
  */
 function customtaxorder_set_db_term_order( $term_id = 0, $term_order = 0, $taxonomy = '' ) {
 	global $wpdb;
 
 	if ( $term_id == 0 ) {
-		return;
+		return 0;
 	}
 	$term = get_term( $term_id, $taxonomy );
 	if ( ! is_object( $term ) ) {
-		return;
+		return 0;
 	}
 
-	$wpdb->query( $wpdb->prepare(
+	$result1 = $wpdb->query( $wpdb->prepare(
 		"
 			UPDATE $wpdb->terms SET term_order = '%d' WHERE term_id ='%d'
 		",
 		$term_order,
 		$term_id
 	) );
-	$wpdb->query( $wpdb->prepare(
+	$result2 = $wpdb->query( $wpdb->prepare(
 		"
 			UPDATE $wpdb->term_relationships SET term_order = '%d' WHERE term_taxonomy_id ='%d'
 		",
 		$term_order,
-		$term_id
+		$term->term_taxonomy_id
 	) );
 
 	clean_term_cache( $term_id, $taxonomy );
+
+	if ( $result1 > 0 && $result2 > 0 ) {
+		// results are the rows affected according to $wpdb->query()
+		return 1;
+
+	}
+	return 0;
+
 }
 
 

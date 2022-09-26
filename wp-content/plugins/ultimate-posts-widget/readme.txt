@@ -5,8 +5,8 @@ License: MIT
 License URI: http://opensource.org/licenses/MIT
 Tags: widget, recent posts, custom post types, sticky posts, featured image, post thumbnail, excerpts, category, custom fields, list pages, widget query, microformats, customizable widget,  categories widget, tags widget, excerpt, widget templates, post author, post date, custom query, ultimate posts, comments, orderby, comment count
 Requires at least: 3.5
-Tested up to: 5.7.1
-Stable tag: 2.2.0
+Tested up to: 6.0
+Stable tag: 2.2.1
 
 The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
 
@@ -15,6 +15,8 @@ The ultimate widget for displaying posts, custom post types or sticky posts with
 **Try it out on your free dummy site: Click here => [https://tastewp.com/plugins/ultimate-posts-widget](https://tastewp.com/plugins/ultimate-posts-widget)**
 
 UPDATE: Plugin ownership changed for this plugin. We are currently evaluating possible enhancements for it. Stay tuned! If you have any suggestions yourself, please let us know in the Support Forum.
+
+Note: This is a **classic widget** type, in order for it to work on the latest version of WordPress you will need [Classic Widgets](https://wordpress.org/plugins/classic-widgets/) plugin installed on your site.
 
 The ultimate widget for displaying posts, custom post types or sticky posts with an array of options to customize the display.
 
@@ -55,6 +57,8 @@ See the [FAQ tab](https://wordpress.org/plugins/ultimate-posts-widget/faq/) for 
 For help please ask in the [Support Forum](http://wordpress.org/support/plugin/ultimate-posts-widget/)
 
 Enjoy this plugin? [Send a tip to support development](https://sellcodes.com/5U4SICyc).
+
+This plugin is part of the Inisev product family - [check out our other products](https://inisev.com).
 
 == Frequently Asked Questions ==
 
@@ -121,6 +125,10 @@ This plugin uses the [timthumb library](http://www.binarymoon.co.uk/projects/tim
 5. Order options tab
 
 == Changelog ==
+
+= 2.2.1 =
+* Tested up to WordPress 6.0
+* Tested with PHP 8.1
 
 = 2.2.0 =
 * Tested up to WordPress 5.7.1
@@ -296,10 +304,9 @@ This plugin uses the [timthumb library](http://www.binarymoon.co.uk/projects/tim
 
 == Upgrade Notice ==
 
-= 2.2.0 =
-* Tested up to WordPress 5.7.1
-* Added support for PHP 8
-* Updated banner
+= 2.2.1 =
+* Tested up to WordPress 6.0
+* Tested with PHP 8.1
 
 == Installation ==
 

@@ -733,6 +733,7 @@ jQuery(
                 ns_cloner.ajaxurl,
                 {
                     action: 'ns_cloner_save_analytics_mode',
+					nonce: ns_cloner.nonce,
                     mode: mode
                 },
                 function (response) {
@@ -775,10 +776,12 @@ jQuery.fn.nsRepeater = function () {
 	this.next( '.ns-repeater-add' ).click(
 		function () {
 				var repeater = jQuery( this ).prev( '.ns-repeater' );
-				var item     = repeater.find( 'li:last' ).clone();
+				var item     = repeater.children( 'li:last' ).clone();
 				item.show().removeClass( 'invisible' );
 				item.find( 'textarea,input,select' ).removeAttr( 'checked selected' ).val( '' );
 				repeater.append( item );
+				repeater.children('li:last').find('.chosen-container').remove();
+				repeater.children('li:last').find('select').chosen();
 		}
 	);
 };

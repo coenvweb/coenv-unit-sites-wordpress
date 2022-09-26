@@ -32,6 +32,21 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	protected $user_element_exclusions = array();
 
 	/**
+	 * A list of user-defined page/URL exclusions, populated by validate_user_exclusions().
+	 *
+	 * @access protected
+	 * @var array $user_page_exclusions
+	 */
+	protected $user_page_exclusions = array();
+
+	/**
+	 * Request URI.
+	 *
+	 * @var string $request_uri
+	 */
+	public $request_uri = '';
+
+	/**
 	 * Register (once) actions and filters for Picture WebP.
 	 */
 	function __construct() {
@@ -45,6 +60,25 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		parent::__construct();
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 
+		$this->request_uri = add_query_arg( null, null );
+		if ( false === strpos( $this->request_uri, 'page=ewww-image-optimizer-options' ) ) {
+			$this->debug_message( "request uri is {$this->request_uri}" );
+		} else {
+			$this->debug_message( 'request uri is EWWW IO settings' );
+		}
+
+		add_filter( 'eio_do_picture_webp', array( $this, 'should_process_page' ), 10, 2 );
+
+		/**
+		 * Allow pre-empting <picture> WebP by page.
+		 *
+		 * @param bool Whether to parse the page for images to rewrite for WebP, default true.
+		 * @param string The URI/path of the page.
+		 */
+		if ( ! apply_filters( 'eio_do_picture_webp', true, $this->request_uri ) ) {
+			return;
+		}
+
 		// Make sure gallery block images crop properly.
 		add_action( 'wp_head', array( $this, 'gallery_block_css' ) );
 		// Hook onto the output buffer function.
@@ -53,6 +87,8 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		} else {
 			add_filter( 'ewww_image_optimizer_filter_page_output', array( $this, 'filter_page_output' ), 10 );
 		}
+		// Filter for FacetWP JSON responses.
+		add_filter( 'facetwp_render_output', array( $this, 'filter_facetwp_json_output' ) );
 
 		$allowed_urls = ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_paths' );
 		if ( $this->is_iterable( $allowed_urls ) ) {
@@ -66,6 +102,120 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 		$this->debug_message( 'checking any images matching these URLs/patterns for webp: ' . implode( ',', $this->allowed_urls ) );
 		$this->debug_message( 'rewriting any images matching these domains to webp: ' . implode( ',', $this->allowed_domains ) );
 		$this->validate_user_exclusions();
+	}
+
+	/**
+	 * Check if pages should be processed, especially for things like page builders.
+	 *
+	 * @since 6.2.2
+	 *
+	 * @param boolean $should_process Whether <picture> WebP should process the page.
+	 * @param string  $uri The URI of the page (no domain or scheme included).
+	 * @return boolean True to process the page, false to skip.
+	 */
+	function should_process_page( $should_process = true, $uri = '' ) {
+		// Don't foul up the admin side of things, unless a plugin needs to.
+		if ( is_admin() &&
+			/**
+			 * Provide plugins a way of running <picture> WebP for images in the WordPress Admin, usually for admin-ajax.php.
+			 *
+			 * @param bool false Allow <picture> WebP to run on the Dashboard. Defaults to false.
+			 */
+			false === apply_filters( 'eio_allow_admin_picture_webp', false )
+		) {
+			$this->debug_message( 'is_admin' );
+			return false;
+		}
+		if ( ewww_image_optimizer_ce_webp_enabled() ) {
+			return false;
+		}
+		if ( empty( $uri ) ) {
+			$uri = $this->request_uri;
+		}
+		if ( $this->is_iterable( $this->user_page_exclusions ) ) {
+			foreach ( $this->user_page_exclusions as $page_exclusion ) {
+				if ( '/' === $page_exclusion && '/' === $uri ) {
+					return false;
+				} elseif ( '/' === $page_exclusion ) {
+					continue;
+				}
+				if ( false !== strpos( $uri, $page_exclusion ) ) {
+					return false;
+				}
+			}
+		}
+		if ( false !== strpos( $uri, 'bricks=run' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, '?brizy-edit' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, '&builder=true' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'cornerstone=' ) || false !== strpos( $uri, 'cornerstone-endpoint' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'ct_builder=' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'ct_render_shortcode=' ) || false !== strpos( $uri, 'action=oxy_render' ) ) {
+			return false;
+		}
+		if ( did_action( 'cornerstone_boot_app' ) || did_action( 'cs_before_preview_frame' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'elementor-preview=' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'et_fb=' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'fb-edit=' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, '?fl_builder' ) ) {
+			return false;
+		}
+		if ( '/print/' === substr( $uri, -7 ) ) {
+			return false;
+		}
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'tatsu=' ) ) {
+			return false;
+		}
+		if ( false !== strpos( $uri, 'tve=true' ) ) {
+			return false;
+		}
+		if ( ! empty( $_POST['action'] ) && 'tatsu_get_concepts' === sanitize_text_field( wp_unslash( $_POST['action'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return false;
+		}
+		if ( is_customize_preview() ) {
+			$this->debug_message( 'is_customize_preview' );
+			return false;
+		}
+		global $wp_query;
+		if ( ! isset( $wp_query ) || ! ( $wp_query instanceof WP_Query ) ) {
+			return $should_process;
+		}
+		if ( $this->is_amp() ) {
+			return false;
+		}
+		if ( is_feed() ) {
+			$this->debug_message( 'is_feed' );
+			return false;
+		}
+		if ( is_preview() ) {
+			$this->debug_message( 'is_preview' );
+			return false;
+		}
+		if ( wp_script_is( 'twentytwenty-twentytwenty', 'enqueued' ) ) {
+			$this->debug_message( 'twentytwenty enqueued' );
+			return false;
+		}
+		return $should_process;
 	}
 
 	/**
@@ -127,31 +277,22 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	 */
 	function filter_page_output( $buffer ) {
 		ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
-		// If any of this is true, don't filter the page.
-		$uri = add_query_arg( null, null );
-		$this->debug_message( "request uri is $uri" );
 		if (
 			empty( $buffer ) ||
-			is_admin() ||
-			strpos( $uri, 'cornerstone=' ) !== false ||
-			strpos( $uri, 'cornerstone-endpoint' ) !== false ||
-			did_action( 'cornerstone_boot_app' ) || did_action( 'cs_before_preview_frame' ) ||
-			'/print/' === substr( $uri, -7 ) ||
-			strpos( $uri, 'elementor-preview=' ) !== false ||
-			strpos( $uri, 'et_fb=' ) !== false ||
-			strpos( $uri, 'tatsu=' ) !== false ||
-			( ! empty( $_POST['action'] ) && 'tatsu_get_concepts' === sanitize_text_field( wp_unslash( $_POST['action'] ) ) ) || // phpcs:ignore WordPress.Security.NonceVerification
-			is_embed() ||
-			is_feed() ||
-			is_preview() ||
-			is_customize_preview() ||
-			( defined( 'REST_REQUEST' ) && REST_REQUEST ) ||
 			preg_match( '/^<\?xml/', $buffer ) ||
-			strpos( $buffer, 'amp-boilerplate' ) ||
-			$this->is_amp() ||
-			ewww_image_optimizer_ce_webp_enabled()
+			strpos( $buffer, 'amp-boilerplate' )
 		) {
-			ewwwio_debug_message( 'picture WebP disabled' );
+			$this->debug_message( 'picture WebP disabled' );
+			return $buffer;
+		}
+		if ( $this->is_json( $buffer ) ) {
+			return $buffer;
+		}
+		if ( ! $this->should_process_page() ) {
+			$this->debug_message( 'picture WebP should not process page' );
+			return $buffer;
+		}
+		if ( ! apply_filters( 'eio_do_picture_webp', true, $this->request_uri ) ) {
 			return $buffer;
 		}
 
@@ -233,6 +374,28 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	}
 
 	/**
+	 * Parse template data from FacetWP that will be included in JSON response.
+	 * https://facetwp.com/documentation/developers/output/facetwp_render_output/
+	 *
+	 * @param array $output The full array of FacetWP data.
+	 * @return array The FacetWP data with WebP images.
+	 */
+	function filter_facetwp_json_output( $output ) {
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		if ( empty( $output['template'] ) || ! is_string( $output['template'] ) ) {
+			return $output;
+		}
+
+		$template = $this->filter_page_output( $output['template'] );
+		if ( $template ) {
+			$this->debug_message( 'template data modified' );
+			$output['template'] = $template;
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Converts a URL to a file-system path and checks if the resulting path exists.
 	 *
 	 * @param string $url The URL to mangle.
@@ -256,6 +419,11 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 			if ( is_array( $user_exclusions ) ) {
 				foreach ( $user_exclusions as $exclusion ) {
 					if ( ! is_string( $exclusion ) ) {
+						continue;
+					}
+					$exclusion = trim( $exclusion );
+					if ( 0 === strpos( $exclusion, 'page:' ) ) {
+						$this->user_page_exclusions[] = str_replace( 'page:', '', $exclusion );
 						continue;
 					}
 					if (
@@ -354,21 +522,20 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	 * @return bool True if the file exists or matches a forced path, false otherwise.
 	 */
 	function validate_image_url( $image ) {
-		ewwwio_debug_message( __METHOD__ . "() webp validation for $image" );
-		if (
-			strpos( $image, 'base64,R0lGOD' ) ||
-			strpos( $image, 'lazy-load/images/1x1' ) ||
-			strpos( $image, '/assets/images/' )
-		) {
-			ewwwio_debug_message( 'lazy load placeholder' );
+		$this->debug_message( __METHOD__ . "() webp validation for $image" );
+		if ( $this->is_lazy_placeholder( $image ) ) {
 			return false;
 		}
+		// Cleanup the image from encoded HTML characters.
+		$image = str_replace( '&#038;', '&', $image );
+		$image = str_replace( '#038;', '&', $image );
+
 		$extension  = '';
 		$image_path = $this->parse_url( $image, PHP_URL_PATH );
 		if ( ! is_null( $image_path ) && $image_path ) {
 			$extension = strtolower( pathinfo( $image_path, PATHINFO_EXTENSION ) );
 		}
-		if ( $extension && 'gif' === $extension && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_force_gif2webp' ) ) {
+		if ( $extension && 'gif' === $extension && ! $this->get_option( 'ewww_image_optimizer_force_gif2webp' ) ) {
 			return false;
 		}
 		if ( $extension && 'svg' === $extension ) {
@@ -397,9 +564,7 @@ class EIO_Picture_Webp extends EIO_Page_Parser {
 	}
 
 	/**
-	 * Generate a WebP url.
-	 *
-	 * Adds .webp to the end.
+	 * Generate a WebP URL by appending .webp to the filename.
 	 *
 	 * @param string $url The image url.
 	 * @return string The WebP version of the image url.

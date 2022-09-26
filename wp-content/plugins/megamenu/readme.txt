@@ -2,8 +2,8 @@
 Contributors: megamenu
 Tags: menu, megamenu, mega menu, navigation, mobile
 Requires at least: 4.9
-Tested up to: 5.7
-Stable tag: 2.9.3
+Tested up to: 6.0
+Stable tag: 2.9.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,26 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 2.9.8 =
+
+* Fix: Delay forcing the mobile sub menu width until after the 'mega-menu-open' class has been added
+* Fix: Add quotes to font families that contain a number, e.g. 'Baloo 2'
+
+= 2.9.7 =
+
+* Fix: Position of Toggle Bar Designer in theme editor when using PHP 8
+* Update: Language files
+
+= 2.9.6 =
+
+* Fix: Text decoration CSS on top level item links
+* Fix: PHP warning in widget class
+* Fix: PHP 8 compatibility
+
+= 2.9.5 =
+
+* Improvement: Update Menu Locations screen design to make it clearer that locations can be expanded to view available options
 
 = 2.9.4 =
 

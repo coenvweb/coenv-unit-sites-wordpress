@@ -5,7 +5,7 @@
  * @package    User-Role-Editor
  * @subpackage Editor
  * @author     Vladimir Garagulya <support@role-editor.com>
- * @copyright  Copyright (c) 2010 - 2019, Vladimir Garagulia
+ * @copyright  Copyright (c) 2010 - 2021, Vladimir Garagulia
  **/
 class URE_Editor {
 
@@ -237,7 +237,8 @@ class URE_Editor {
                     esc_html__('does not exist', 'user-role-editor');
         } else {
             $this->current_role = $role_id;
-            $this->current_role_name = $this->roles[$this->current_role]['name'];
+            $roles = $this->lib->get_user_roles();
+            $this->current_role_name = $roles[$this->current_role]['name'];
             $mess = '';
         }
         
@@ -295,7 +296,11 @@ class URE_Editor {
      */
     protected function is_full_network_synch() {
         
-        if ( is_network_admin() ) {   // for Pro version
+        /* is_network_admin() returns wrong result for the AJAX calls from the network admin
+         * so have to use this way
+         */
+        $network_admin = $this->lib->get_request_var('network_admin', 'post', 'int');
+        if ( $network_admin==1 ) {   // for Pro version only
             $result = true;
         } else {
             $result = defined('URE_MULTISITE_DIRECT_UPDATE') && URE_MULTISITE_DIRECT_UPDATE == 1;
@@ -670,7 +675,7 @@ class URE_Editor {
         
         $select_primary_role = apply_filters( 'ure_users_select_primary_role', true );
         if ( $select_primary_role  || $this->lib->is_super_admin()) {
-            $role = isset( $_POST['values']['primary_role'] ) ? filter_var( $_POST['values']['primary_role'], FILTER_SANITIZE_STRING ) : false;  
+            $role = isset( $_POST['values']['primary_role'] ) ? URE_Base_Lib::filter_string_var( $_POST['values']['primary_role'] ) : false;  
             if ( empty( $role ) || !isset( $wp_roles->roles[$role] ) ) {
                 $role = '';
             }
@@ -1434,7 +1439,8 @@ class URE_Editor {
             } else {
                 $this->current_role = $this->get_last_role_id();
             }
-            $this->current_role_name = $this->roles[$this->current_role]['name'];
+            $roles = $this->lib->get_user_roles();
+            $this->current_role_name = $roles[$this->current_role]['name'];
         }
         
     }
@@ -1493,9 +1499,11 @@ class URE_Editor {
 ?>
                 </div>
 <?php
+/*
         if (!$this->lib->is_pro()) {
             $view->advertise_commercials();
-        }
+        } 
+ */
         $view->display_edit_dialogs();
         do_action( 'ure_dialogs_html' );
         URE_Role_View::output_confirmation_dialog();

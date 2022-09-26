@@ -3,7 +3,7 @@
 Plugin Name: Ultimate Posts Widget
 Plugin URI: http://wordpress.org/plugins/ultimate-posts-widget/
 Description: The ultimate widget for displaying posts, custom post types or sticky posts with an array of options.
-Version: 2.2.0
+Version: 2.2.1
 Author: Clever Widgets
 Author URI: https://themecheck.info
 Text Domain: ultimate-posts-widget
@@ -46,6 +46,9 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       add_action('deleted_post', array(&$this, 'flush_widget_cache'));
       add_action('switch_theme', array(&$this, 'flush_widget_cache'));
       add_action('admin_enqueue_scripts', array(&$this, 'enqueue_admin_scripts'));
+      
+      /* Admin notice to check Classic Widgets Plugin is not already installed and WordPress version 5.8 or higher */
+      add_action( 'admin_notices', array( &$this, 'flush_admin_notice__warning' ) );
 
       if (apply_filters('upw_enqueue_styles', true) && !is_admin()) {
         add_action('wp_enqueue_scripts', array(&$this, 'enqueue_theme_scripts'));
@@ -55,12 +58,43 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 
     }
 
+    function flush_admin_notice__warning() {
+      global $wp_version;
+      
+      if ( version_compare( $wp_version, '5.8' ) >= 0 && !is_plugin_active( 'classic-widgets/classic-widgets.php' ) ) {
+
+        $upw_hide_admin_notification = get_option( 'upw_hide_admin_notification' );
+        if( 'yes' === $upw_hide_admin_notification ) {
+          return;
+        }
+      ?>
+      <div class="notice notice-warning upw-notice-wrapper is-dismissible">
+        <p><?php
+          echo sprintf(
+            __( '%1$sUltimate Posts Widget:%2$s This plugin provides a classic widget type, and needs the %3$sClassic Widgets%4$s plugin to function properly on this WordPress version.', 'ultimate-posts-widget' ),
+            '<b>',
+            '</b>',
+            '<a href="https://wordpress.org/plugins/classic-widgets/" target="_blank">',
+            '</a>'
+          );
+        ?></p>
+      </div>
+      <?php
+      }
+    }
+
     function enqueue_admin_scripts() {
       wp_register_style('upw_admin_styles', plugins_url('css/upw-admin.min.css', __FILE__));
       wp_enqueue_style('upw_admin_styles');
 
       wp_register_script('upw_admin_scripts', plugins_url('js/upw-admin.min.js', __FILE__), array('jquery'), null, true);
       wp_enqueue_script('upw_admin_scripts');
+
+      wp_localize_script( 'upw_admin_scripts', 'upw_admin_scripts_ajax_object',
+        array( 
+          'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        )
+      );
     }
 
     function enqueue_theme_scripts() {
@@ -659,13 +693,9 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
       </div>
 
 			<div class="etw-carousel-ad-trigger">
-				<div class="etw-new-label">
-					New
-				</div>
-				<span>Please check out our other plugins too!</span>
-				<div class="etw-check-it-label">
-					Check it out
-				</div>
+				<div class="etw-new-label"><?php _e( 'New', 'ultimate-posts-widget' ); ?></div>
+				<span><?php _e( 'Please check out our other plugins too!', 'ultimate-posts-widget' ); ?></span>
+				<div class="etw-check-it-label"><?php _e( 'Check it out', 'ultimate-posts-widget' ); ?></div>
 			</div>
 
       <?php if ( $instance ) { ?>
@@ -775,7 +805,24 @@ if (!class_exists('WP_Widget_Ultimate_Posts')) {
 }
 
 add_action('admin_init', function () {
-
 	require_once 'banner/misc.php';
-
 });
+
+add_action( 'wp_ajax_nopriv_upw_hide_admin_notification', 'upw_hide_admin_notification_callback' );
+add_action( 'wp_ajax_upw_hide_admin_notification', 'upw_hide_admin_notification_callback' );
+
+function upw_hide_admin_notification_callback() {
+
+  $option_name = 'upw_hide_admin_notification';
+  $new_value = 'yes';
+
+  if ( get_option( $option_name ) !== false ) {
+    update_option( $option_name, $new_value );
+  } else {
+    $deprecated = null;
+    $autoload = 'no';
+    add_option( $option_name, $new_value, $deprecated, $autoload );
+  }
+  wp_send_json_success();
+  die;
+}

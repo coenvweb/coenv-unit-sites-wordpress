@@ -690,6 +690,7 @@ p.debug-actions {
 	overflow: auto;
 	height: 300px;
 	width: 800px;
+	margin-top: 5px;
 }
 #ewww-webp-rewrite #webp-rewrite-rules {
 	background-color: white;
@@ -712,8 +713,13 @@ div#ewww-webp-rewrite-status {
 p#ewww-webp-rewrite-status {
 	font-style: italic;
 }
-#ewwwio-easy-activate, #ewwwio-easy-deactivate {
+#ewwwio-easy-activate, #ewwwio-easy-deactivate, #ewwwio-easy-activate-network, #ewwwio-easy-register-network {
 	margin-top: 10px;
+}
+#ewwwio-easy-deregister {
+	vertical-align: bottom;
+	padding-left: 20px;
+	line-height: 2.15;
 }
 .ewwwio-notice {
 	background-color: white;
@@ -727,6 +733,9 @@ p#ewww-webp-rewrite-status {
 }
 .ewwwio-notice.notice-success {
 	border-left-color: #46b450;
+}
+#ewwwio-easy-register-failed {
+	display: none;
 }
 #ewwwio-api-activation-result, #ewwwio-easy-activation-result, #ewww-webp-rewrite-result {
 	display: none;
@@ -742,6 +751,9 @@ p#ewww-webp-rewrite-status {
 }
 #ewwwio-api-activation-result.error, #ewwwio-easy-activation-result.error, #ewww-webp-rewrite-result.error {
 	border-left-color: #dc3232;
+}
+#ewwwio-easy-activation-progressbar {
+	margin: 10px 0;
 }
 #ewww-webp-rewrite-result p {
 	/* margin: 0.5em 0; */

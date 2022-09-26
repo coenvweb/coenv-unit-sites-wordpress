@@ -35,6 +35,12 @@ float: left;
 margin: 0;
 }
 
+#rvy-features .rs-form-table {
+border: 1px solid #ccc;
+margin-top: 0;
+background-color: white;
+}
+
 .rs-form-table th {
 padding-left: 10px;
 }
@@ -44,14 +50,10 @@ vertical-align: text-bottom;
 }
 
 .rs-blue, .rs-blue a, .rs-blue a:link, .rs-blue a:visited {
-color: blue;	
+color: blue;
 }
 
 .rs-backtan {
-background-color: #FFFEEB;
-}
-
-.rs-settings {
 background-color: #FFFEEB;
 }
 
@@ -85,7 +87,7 @@ padding: 0.2em 0.5em 0.2em 0.5em;
 }
 
 .agp-unselected_agent {
-border: none;	
+border: none;
 }
 
 #wpbody-content .agp-selected_agent {
@@ -94,7 +96,7 @@ border-right: 1px solid #ccc;
 border-top: 1px solid #ccc;
 border-bottom: none;
 }
-	
+
 #wpbody-content .agp-selected_agent a{
 color: black;
 text-decoration: none;
@@ -138,7 +140,7 @@ float: left;
 width: 100%;
 }
 
-.rs-agents_list_auto li { 
+.rs-agents_list_auto li {
 list-style: none;
 float: left;
 margin: 0.3em 1.5em 0.3em 0;
@@ -149,12 +151,12 @@ margin: 0;
 font-size: auto;
 padding: 0;
 }
- 
+
 .rs-agents_emsized {
 clear: both;
 width: 100%;
 }
- 
+
 .rs-agents_emsized ul {
 margin: 0 0 1em 0;
 padding: 0;
@@ -239,24 +241,24 @@ color: #b00;
 width: 100%;
 }
 
-#rs-admin_table tr, #rs-realm_table tr, #realm_adjustments tr, #rs-advanced_table tr {
+#rs-realm_table tr, #realm_adjustments tr, #rs-advanced_table tr {
 background-color: #f1f1f1;
 border-bottom: 4px solid #FFFEEB;
 }
 
-.rs-backgreen #rs-admin_table tr, .rs-backgreen #rs-realm_table tr, .rs-backgreen #realm_adjustments tr, .rs-backgreen #rs-advanced_table tr {
+.rs-backgreen #rs-realm_table tr, .rs-backgreen #realm_adjustments tr, .rs-backgreen #rs-advanced_table tr {
 border-bottom: 4px solid #CDD7BA;
 }
 
-.rs-backgray #rs-admin_table tr, .rs-backgray #rs-realm_table tr, .rs-backgray #realm_adjustments tr, .rs-backgray #rs-advanced_table tr {
+.rs-backgray #rs-realm_table tr, .rs-backgray #realm_adjustments tr, .rs-backgray #rs-advanced_table tr {
 border-bottom: 4px solid #d8d8d8;
 }
-    
-#rs-admin_table tr td, #rs-realm_table tr td, #realm_adjustments tr td, #rs-advanced_table tr td {
+
+#rs-realm_table tr td, #realm_adjustments tr td, #rs-advanced_table tr td {
 padding: 1em 0 1em 0;
 }
 
-#rs-admin_table th, #rs-realm_table th, #realm_adjustments th, #rs-advanced_table th {
+#rs-realm_table th, #realm_adjustments th, #rs-advanced_table th {
 font-weight: bold;
 }
 
@@ -280,7 +282,7 @@ margin-left: 1.5em;
 }
 
 .rs-revision_top_action {
-font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 24px;
 font-style: normal;
 }
@@ -299,7 +301,7 @@ font-weight: bold;
 }
 
 .rvy_select_status a {
-margin-right: 1em;	
+margin-right: 1em;
 }
 
 .rvy_current_status a {
@@ -307,12 +309,12 @@ font-size: 150%;
 }
 
 .rvy-agents-checklist {
-padding:0.5em 0 0.5em 0.5em;	
+padding:0.5em 0 0.5em 0.5em;
 }
 
 #rvy-agents-checklist-spacer {
 clear: both;
-height: 1px;	
+height: 1px;
 }
 
 .rvy-list-horiz {
@@ -334,23 +336,23 @@ box-shadow: 0 0 0 1px #ddd;
 }
 
 .rvy-revision-row {
-white-space: nowrap;	
+white-space: nowrap;
 }
 
 .rvy-col1 {
-width: 35%;	
+width: 35%;
 }
 .rvy-col2 {
-width: 25%;	
+width: 25%;
 }
 .rvy-col3 {
-width: 10%;	
+width: 10%;
 }
 .rvy-col4 {
-width: 15%;	
+width: 15%;
 }
 .rvy-col5 {
-width: 15%;	
+width: 15%;
 }
 
 .rvy-editor-table {
@@ -365,15 +367,15 @@ margin: 0;
 }
 
 span.rvy-restore-link {
-margin-left: 2em;	
+margin-left: 2em;
 }
 
 div.rvy-restore-link {
-margin-top: 20px;	
+margin-top: 20px;
 }
 
 .rvy-message {
-margin-bottom: 0;	
+margin-bottom: 0;
 }
 
 .rvy-date-selection {
@@ -399,7 +401,7 @@ clear: both;
 }
 
 .rvy-revision-field {
-margin: 2em 0 0 0;	
+margin: 2em 0 0 0;
 }
 
 .rvy-agents-filter {
@@ -479,11 +481,7 @@ margin-top:30px;
 margin-right:120px;
 }
 #rvy_dashboard_message, .rvy-admin-notice, .rvy-admin-notice-plugin{
-padding:10px;	
-}
-
-#editor a.rvy-post-preview {
-padding-top:1px;
+padding:10px;
 }
 
 div.revisions-controls .author-card input[type="button"] {
@@ -536,15 +534,282 @@ margin-right: 6px;
 margin-top: 2px;
 }
 
-
-#rvy_save_as_revision {
-margin-right: 4px;
-}
-
 .toplevel_page_revisionary-q .pressshack-admin-wrapper a {
 color: #2271B1;
 }
 
 .pressshack-admin-wrapper footer a {
 color: #655997 !important;
+}
+
+div.components-panel div.revision-submitting {
+  margin: 6px 0 6px 0;
+}
+
+div.components-panel div.revision-creating {
+  margin: 15px 0 15px 0;
+  padding: 6px 0 9px 80px; /*  @todo: review this spacing relative to button.revision-created */
+}
+
+div.components-panel span.ppr-submission-spinner, div.components-panel div.revision-submitting span.spinner {
+float: none;
+height: 25px !important;
+}
+
+div.components-panel button.revision-approve,
+div.components-panel div.revision-created
+{
+	margin: 0 0 15px 0;
+}
+
+a.revision-approve button.is-primary {
+ margin-top: 15px;
+}
+
+.edit-post-sidebar .ppr-purple-button.components-button.is-tertiary,
+.edit-post-sidebar .ppr-purple-button.components-button.is-secondary {
+	padding: 0 7px;
+}
+
+div.rvy-revision-created {
+text-align: center;
+}
+
+span.revision-created, span.revision-scheduled {
+font-weight: bold;
+}
+
+div.components-panel div.revision-created {
+font-weight: bold;
+text-align: center;
+margin: 0;
+}
+
+div.components-panel div.revision-created a.revision-approve {
+margin-top: 5px;
+}
+
+div.revision-created-buttons {
+margin-top: 5px !important;
+margin-bottom: 5px;
+}
+
+button.revision-created {
+padding: 0;
+}
+
+#major-publishing-actions div.revision-created-wrapper {
+margin-top: 15px !important;
+margin-bottom: 20px !important;
+}
+
+#major-publishing-actions a.revision-preview, #major-publishing-actions a.revision-edit,
+div.rvy-creation-ui a.revision-preview, div.rvy-creation-ui a.revision-edit
+{
+margin-right: 5px !important;
+}
+
+div.edit-post-revision-status {
+justify-content: left;
+}
+
+div.edit-post-revision-status span {
+width: 35%;
+}
+
+div.edit-post-post-schedule span {
+width: 30%;
+}
+
+div.components-panel a.revision-edit {
+text-decoration: underline;
+color: #135e96;
+font-weight: normal;
+text-align: left;
+padding: 0 0 0 7px;
+}
+
+button.post-schedule-footnote {
+color: black !important;
+background-color: white !important;
+padding-left: 2px !important;
+}
+
+button.edit-post-post-schedule__toggle {
+padding-right: 2px !important;
+}
+
+div.components-panel a.revision-approve{
+text-decoration: none;
+margin: 15px 0 0 5px;
+}
+
+.components-button.editor-post-last-revision__title {
+height: auto;
+}
+
+/* Classic */
+#submitpost #revision-compare {
+margin: 5px 10px 10px 5px;
+}
+
+#submitpost div.rvy-revision-approve {
+line-height: 2.1;
+}
+
+#submitpost div.rvy-revision-approve a, #submitpost div.rvy-revision-approve a:link, #submitpost div.rvy-revision-approve a:visited {
+color: #070;
+font-weight: bold;
+}
+
+/* Primary button in purple requires these 3 classes together for <button> and <a> tags */
+.ppr-purple-button.components-button.is-primary {
+  background: #655997;
+}
+
+.ppr-purple-button.components-button.is-primary:hover,
+.ppr-purple-button.components-button.is-primary:focus,
+.ppr-purple-button.components-button.is-primary:active {
+  background: #483f6b;
+}
+
+.ppr-purple-button.components-button.is-primary:focus {
+  box-shadow: inset 0 0 0 1px #fff, 0 0 0 var(--wp-admin-border-width-focus) #483f6b;
+}
+
+/* Secondary button in purple requires these 3 classes together for <button> and <a> tags */
+.ppr-purple-button.components-button.is-secondary {
+  color: #655997;
+  box-shadow: inset 0 0 0 1px #655997;
+}
+
+.ppr-purple-button.components-button.is-secondary:hover,
+.ppr-purple-button.components-button.is-secondary:focus,
+.ppr-purple-button.components-button.is-secondary:active {
+  color: #483f6b;
+  box-shadow: inset 0 0 0 1px #483f6b;
+}
+
+/* Tertiary button in purple requires these 3 classes together for <button> and <a> tags */
+.ppr-purple-button.components-button.is-tertiary {
+  color: #655997;
+}
+
+.ppr-purple-button.components-button.is-tertiary:hover,
+.ppr-purple-button.components-button.is-tertiary:focus,
+.ppr-purple-button.components-button.is-tertiary:active {
+  box-shadow: inset 0 0 0 1px #483f6b;
+  color: #483f6b;
+}
+
+/* Disable default CSS properties for <button> tags that works as wrappers for <a> tags */
+.ppr-clear-button {
+  background: none;
+  border: none;
+}
+
+/* Button with icon */
+.ppr-purple-button > span.dashicons {
+  margin-right: 5px;
+}
+
+.pp-revisions-pro-promo-right-sidebar div.upgrade-btn {
+  margin-top: 25px;
+}
+
+.pp-revisions-pro-promo-right-sidebar .upgrade-btn {
+margin-bottom: 5px;
+}
+
+.pp-revisions-pro-promo-right-sidebar .upgrade-btn a {
+  background: #FCB223;
+  color: #000 !important;
+  font-weight: normal;
+  text-decoration: none;
+  padding: 9px 12px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  border: 1px solid #fca871;
+  break-inside: avoid;
+  white-space: nowrap;
+}
+
+.pp-revisions-pro-promo-right-sidebar .upgrade-btn a:hover {
+  background: #fcca46;
+  color: #000 !important;
+}
+
+.pp-revisions-pro-promo-right-sidebar h3.hndle {
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.ppseries-token-right-sidebar h3.hndle {
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pp-revisions-pro-promo-right-sidebar h3.hndle {
+  font-size: 14px;
+  padding: 8px 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul {
+  margin-bottom: 20px;
+}
+
+.pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul li {
+  position: relative;
+  padding-left: 22px;
+  font-weight: 600;
+  font-size: .9em;
+}
+
+.pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul li:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  background-color: #3C50FF;
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+  mask-size: 16px;
+  -webkit-mask-size: 16px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: left;
+  -webkit-mask-position: left;
+}
+
+.pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul li.no-icon:before {
+  display: none;
+}
+
+.pp-revisions-pro-promo-right-sidebar a.advert-link,
+.ppseries-content-promo-box a.advert-link {
+  display: block;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.pp-revisions-pro-promo-right-sidebar .advertisement-box-header,
+.ppseries-content-promo-box .advertisement-box-header {
+  background: #655897;
+  color: #ffffff;
+}
+
+.pp-revisions-pro-promo-right-sidebar .advertisement-box-content,
+.ppseries-content-promo-box.advertisement-box-content {
+  border: 1px solid #655897;
 }

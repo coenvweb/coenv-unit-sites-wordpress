@@ -134,12 +134,18 @@ class PluginHelper
             'sig'      => 'string',
             'date'     => 'string',
             'timezone' => 'string',
+            'is_cli_migration' => 'int',
         );
 
         $_POST['folders']  = stripslashes($_POST['folders']);
         $_POST['excludes'] = stripslashes($_POST['excludes']);
 
         $state_data = Persistence::setRemotePostData($key_rules, __METHOD__);
+
+        // Check for CLI migration and skip enabling recursive scanner if necessary.
+        if (!isset($state_data['is_cli_migration']) || 0 === (int)$state_data['is_cli_migration']) {
+            Util::enable_scandir_bottleneck();
+        }
 
         $filtered_post = $this->http_helper->filter_post_elements(
             $state_data,
@@ -149,9 +155,9 @@ class PluginHelper
                 'folders',
                 'excludes',
                 'stage',
+                'is_cli_migration'
             )
         );
-
         $verification = $this->http_helper->verify_signature($filtered_post, $this->settings['key']);
 
         if (!$verification) {
@@ -162,6 +168,14 @@ class PluginHelper
 
         if ('plugins' === $stage) {
             $abs_path = WP_PLUGIN_DIR;
+        }
+
+        if ('muplugins' === $stage) {
+            $abs_path = WPMU_PLUGIN_DIR;
+        }
+
+        if ('others' === $stage) {
+            $abs_path = WP_CONTENT_DIR;
         }
 
         if ('themes' === $stage) {
@@ -176,16 +190,12 @@ class PluginHelper
 
         $slashed  = $this->filesystem->slash_one_direction($abs_path);
         $date     = isset($_POST['date']) ? $state_data['date'] : null;
-        $timezone = isset($_POST['timezone']) ? $state_data['timezone'] : null;
+        $timezone = !empty($_POST['timezone']) ? $state_data['timezone'] : 'UTC';
 
         $folders = unserialize($state_data['folders']);
 
         if ('media_files' === $stage) {
             $folders = apply_filters('wpmdb_mf_remote_uploads_folder', $folders, $state_data);
-        }
-
-        if (empty($folders)) {
-            return $this->http->end_ajax(new \WP_Error('wpmdb_empty_folder_list', __('Empty folder path provided.', 'wp-migrate-db')));
         }
 
         $items = $folders;
@@ -304,14 +314,20 @@ class PluginHelper
     public function respond_to_post_file()
     {
         $key_rules = array(
-            'action'          => 'key',
-            'remote_state_id' => 'key',
-            'stage'           => 'string',
-            'intent'          => 'string',
-            'folders'         => 'array',
-            'theme_folders'   => 'array',
-            'plugin_folders'  => 'array',
-            'sig'             => 'string',
+            'action'           => 'key',
+            'remote_state_id'  => 'key',
+            'stage'            => 'string',
+            'intent'           => 'string',
+            'folders'          => 'array',
+            'theme_folders'    => 'array',
+            'themes_option'    => 'string',
+            'plugin_folders'   => 'array',
+            'plugins_option'   => 'string',
+            'muplugin_folders' => 'array',
+            'muplugins_option' => 'string',
+            'other_folders'    => 'array',
+            'others_option'    => 'string',
+            'sig'              => 'string',
         );
 
         //Sending ALL local state data, probably too much data and should be paired down
@@ -373,9 +389,11 @@ class PluginHelper
      */
     public function remove_tmp_files($stage, $env = 'local')
     {
-        if (in_array($stage, ['themes', 'plugins'])) {
+        if (in_array($stage, ['themes', 'plugins', 'muplugins', 'others'])) {
             $this->transfer_util->remove_tmp_folder('themes');
             $this->transfer_util->remove_tmp_folder('plugins');
+            $this->transfer_util->remove_tmp_folder('muplugins');
+            $this->transfer_util->remove_tmp_folder('others');
         }
 
         if ($stage === 'media_files') {
@@ -405,6 +423,8 @@ class PluginHelper
         delete_site_option('wpmdb_folder_transfers_media_files_' . $id);
         delete_site_option('wpmdb_folder_transfers_themes_' . $id);
         delete_site_option('wpmdb_folder_transfers_plugins_' . $id);
+        delete_site_option('wpmdb_folder_transfers_muplugins_' . $id);
+        delete_site_option('wpmdb_folder_transfers_others_' . $id);
     }
 
     public function remove_chunk_data($id, $env)

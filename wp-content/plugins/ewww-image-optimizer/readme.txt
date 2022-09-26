@@ -2,10 +2,10 @@
 Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
 Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, seo, scale
-Requires at least: 5.4
-Tested up to: 5.7
-Requires PHP: 7.1
-Stable tag: 6.1.9
+Requires at least: 5.8
+Tested up to: 6.0
+Requires PHP: 7.2
+Stable tag: 6.8.0
 License: GPLv3
 
 Smaller Images, Faster Sites, Happier Visitors. Comprehensive image optimization that doesn't require a degree in rocket science.
@@ -88,6 +88,11 @@ To find out if your webhost works with the EWWW Image Optimizer, you can check t
 
 == Frequently Asked Questions ==
 
+= Does the plugin remove EXIF and/or IPTC metadata?
+
+EWWW IO will remove metadata by default, but if you need to keep the EXIF/IPTC data for copyright purposes, you can disable the Remove Metadata option.
+EXIF data does not impact SEO, and it is recommended by Google (and just about everyone else) to remove EXIF data.
+
 = Google Pagespeed says my images need compressing or resizing, but I already optimized all my images. What do I do? =
 
 Try this for starters: [https://docs.ewww.io/article/5-pagespeed-says-my-images-need-more-work](https://docs.ewww.io/article/5-pagespeed-says-my-images-need-more-work)
@@ -114,7 +119,7 @@ See [https://docs.ewww.io/article/39-bulk-optimizer-failure](https://docs.ewww.i
 
 = What are the supported operating systems? =
 
-I've tested it on Windows (with Apache), Linux, Mac OSX, FreeBSD, and Solaris. The cloud API will work on any OS.
+I've tested it on Windows (with Apache), Linux, Mac OSX, FreeBSD, and Solaris. The Compress API and Easy IO CDN will work on any OS.
 
 = I want to know more about image optimization, and why you chose these options/tools. =
 
@@ -132,75 +137,60 @@ That's not a question, but since I made it up, I'll answer it. See this resource
 * Feature requests can be viewed and submitted on our [feedback portal](https://feedback.ewww.io/b/features)
 * If you would like to help translate this plugin in your language, [join the team](https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/)
 
-= 6.1.9 =
-* fixed: Easy IO's Include All Resources compat with Oxygen Builder and Beaver Builder
-* fixed: regex to detect SVG images in use elements caused excessive backtracking
-* fixed: WebP version of full-size image not removed when attachment deleted due to undefined variable
-* fixed: Easy IO adds invalid zoom parameter of 1920 to srcset URL
+= 6.8.0 =
+* added: ability to store image backups on local storage
+* added: tool to bulk restore images under Tools menu and WP-CLI
+* added: WebP cleanup tool can be resumed and run via WP-CLI
+* added: Delete Originals can be run via WP-CLI
+* added: remove originals after conversion (like PNG to JPG) via WP-CLI
+* added: exclude by page for Easy IO, Lazy Load, and WebP delivery methods
+* changed: ensure full-size image is optimized after resizing with Imsanity
+* fixed: incorrect cfasync attribute used for JS WebP scripts
 
-= 6.1.8 =
-* fixed: Lazy Load fails to auto-scale with img-crop class for Easy IO
-* fixed: WebP files sometimes fail to be re-generated after Photo Engine (WP/LR) sync
-* fixed: Lazy Load throws JS error in SCRIPT_DEBUG mode
+= 6.7.0 =
+* added: API keys can be used to auto-register sites for Easy IO, including sub-keys
+* changed: expose legacy resize dimensions with removal option
+* fixed: Lazy Load not using EWWWIO_CONTENT_DIR
+* fixed: Easy IO Premium/WebP compression disabled incorrectly when in Easy Mode
+* fixed: JS WebP body script throws error if wp_head script missing
+* fixed: Lazy Load Auto-scale adds query parameters to SVG images
+* fixed: JS WebP and Lazy Load prevent image loading in GiveWP iframe
+* fixed: Auto Scale crops too much for object-* images in Oxygen
+* fixed: trailing space on image URL handled incorrectly
+* updated: Gifsicle to version 1.93 and Pngquant to 2.17
+* removed: free binaries for SunOS, may use free cloud-based JPG compression instead
 
-= 6.1.7 =
-* fixed: syntax error due to trailing comma after last parameter in function call(s).
+= 6.6.0 =
+* added: AVIF support via Easy IO, enable on site management at ewww.io
+* added: sharpening setting to improve WP resizing via ImageMagick and WebP conversion
+* added: AVIF quality setting on Advanced tab
+* added: ability for Easy IO to get full-size path when using offloaded media
+* changed: JPG quality and WebP quality moved to Advanced tab
+* changed: allow .htaccess rules on Cloudways with notice about WebP Redirection toggle
+* fixed: front-end HTML parsers running within Bricks editor
+* fixed: Easy IO not finding scaled full-size for dynamic size generation
+* fixed: cover images not cropped properly by Easy IO
+* fixed: Easy IO URLs leaking into post editor with WP 6.0
 
-= 6.1.6 =
-* added: support for BuddyPress uploads via Vikinger theme.
-* added: compatibility with Weglot.
-* added: use 'img-crop' id/class, or data-img-crop attribute to force cropping with Easy IO + Lazy Load.
-* changed: Resize Existing enabled by default for new installs.
-* changed: Lazy Load JS moved to footer
-* fixed: prevent Resize Detection from flagging SVG files.
+= 6.5.2 =
+* added: automatic optimization for Crop Thumbnails plugin
+* added: filters to adjust sharpening parameters for core WP (ImageMagick) image resizing
+* changed: Easy IO WebP quality can be defined separately from the JPG quality used for resizing operations
+* fixed: Picture WebP rewriting disabled on embeds
+* fixed: Lazy Load integration with WooCommerce Product Recommendations handling AJAX output incorrectly
+* fixed: PHP notice when checking for presence of mod_rewrite/mod_headers
 
-= 6.1.5 =
-* changed: use core wp_getimagesize() for proper error handling
-* fixed: prevent erasing title attributes for admin users when Lazy Load and Resize Detection are enabled
-* fixed: creates empty file when image is too large for WebP conversion
+= 6.5.1 =
+* fixed: LQIP option not available on sub-domain multisite install unless Easy IO is active on site 1
+* fixed: API quota function doesn't handle expired status correctly
 
-= 6.1.4 =
-* changed: better handling for API quotas
-* fixed: picture elements not parsed when using JS WebP with Lazy Load
-* fixed: bundled tools don't work if the binary/tool directory is mounted on a filesystem separate from wp-content/
-* fixed: bulk optimizer not finding images from cloud storage (like S3) when local versions are removed
-
-= 6.1.3 =
-* changed: bulk optimizer no longer skips image types set to "no compression" in WebP-only mode
-* fixed: CNAME setting from WP Offload Media triggers "unknown" error in Easy IO
-* fixed: missing EIO_LL_THRESHOLD variable for minified JS
-
-= 6.1.2 =
-* fixed: bug from bypass/exclusion code for bulk scanner in 6.1.1
-* fixed: running is_file on system binaries may trigger open_basedir warnings, use EWWWIO_OPEN_BASEDIR to override PHP's open_basedir restriction
-
-= 6.1.1 =
-* change: added setting to enable adding of missing width/height dimensions, disabled by default
-* fixed: warning from plugins using core wp_lazy_load filter without second parameter/argument
-
-= 6.1.0 =
-* added: ability to use SVG placeholders for more efficient lazy load
-* added: Easy IO and Lazy Load add missing width and height to image elements
-* added: Lazy Load - right-sized placeholders can be generated for full-sized images
-* added: configure Lazy Load pre-load threshold via EIO_LL_THRESHOLD constant
-* changed: Lazy Load for external (non-inline) CSS images must be configured for specific elements
-* changed: Easy IO's Include All Resources unlocked for all plans
-* changed: native lazy loading is now disabled when using EWWW IO lazy load, override with EIO_ENABLE_NATIVE_LAZY constant
-* changed: Lazy Load pre-load threshold increased from 500px to 1000px
-* changed: Lazy Load picture elements use right-sized img placeholder instead of 1x1 inline GIF
-* changed: system-installed binary detection improved
-* fixed: native iframe lazy load disabled in WP 5.7+
-* fixed: detection for Shield Security plugin lock to location
-* fixed: relative path migration showing errors in site tools
-* fixed: WebP rewriters not handling relative image urls
-* fixed: existing <picture> elements ignored by <picture> WebP Rewriting
-* fixed: <img> elements inside <picture> elements incorrectly handled by JS WebP Rewriting
-* fixed: removing metadata clobbers APNG animations
-* fixed: some JSON elements still being altered by Lazy Load
-* fixed: Easy IO throws warnings when WP content is not in a sub-directory
-* updated: jpegtran to version 9d
-* updated: cwebp to version 1.2.0
-* updated: pngquant to version 2.13.1
+= 6.5.0 =
+* added: Lazy Load and Easy IO support for multiple background images and mixing with gradients
+* changed: all Easy IO settings available to all plan levels
+* changed: Easy IO CDN image links constrained to 2560px, use EIO_PRESERVE_LINKED_IMAGES to override
+* fixed: database upgrade fails on MySQL 5.6
+* fixed: LQIP and SVG placeholder options not auto-loaded correctly
+* fixed: regression in legacy translation loader
 
 = Earlier versions =
 Please refer to the separate changelog.txt file.

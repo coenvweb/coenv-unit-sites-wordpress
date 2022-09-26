@@ -1,3 +1,20 @@
+<IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI} ^/?wp\-content/+debug\.log$
+        RewriteRule .* - [F,L,NC]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+	<Files "debug.log">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order deny,allow
+		Deny from all
+	</IfModule>
+	</Files>
+</IfModule>
 deny from 31.207.44.186
 # BEGIN WordPress
 
@@ -36,11 +53,6 @@ AuthType shibboleth
 Require shibboleth
 # End Shibboleth
 
-<IfModule pagespeed_module>
-    ModPagespeedDisallow https://dev.atmos.uw.edu/*
-    ModPagespeedDisallow http://dev.atmos.uw.edu/*
-</IfModule>
-
 #don't look at our git
 RewriteRule "^(.*/)?\.git/" - [F,L]
 RedirectMatch 404 /\.git
@@ -60,7 +72,7 @@ RewriteCond %{REQUEST_URI} !^.*/wp-cron.php [NC]
 RewriteCond %{REQUEST_URI} !^.*/wp-login.php [NC]
 # Whitelist XML-RPC Pingbacks, JetPack and Remote Posting POST Requests
 RewriteCond %{REQUEST_URI} !^.*/xmlrpc.php [NC]
-# Whitelist Jetpack JSON POST Request
+# Whitelist Jetpack & WP Migrate JSON POST Request
 RewriteCond %{REQUEST_URI} !^.*/wp-json/jetpack/(.*) [NC]
 # Whitelist Network|Multisite Activate POST Form Requests
 RewriteCond %{REQUEST_URI} !^.*/wp-activate.php [NC]
@@ -68,13 +80,13 @@ RewriteCond %{REQUEST_URI} !^.*/wp-activate.php [NC]
 RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
 # Whitelist Comments POST Form Requests
 RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
-RewriteRule .* - [F,L]
+#RewriteRule .* - [F,L]
 
 # Increasing limits for giant menus - removed (4/12/18 - cbessee)
-php_value max_input_vars 3000
-php_value suhosin.get.max_vars 3000
-php_value suhosin.post.max_vars 3000
-php_value suhosin.request.max_vars 3000
+# php_value max_input_vars 3000
+# php_value suhosin.get.max_vars 3000
+# php_value suhosin.post.max_vars 3000
+# php_value suhosin.request.max_vars 3000
 
 
 # Site redirects
@@ -169,9 +181,9 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 # SSL on each domain
 
-RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
-RewriteRule ^(.*)$ https://cms.coenv.uw.edu/$1 [R=302,L]
+RewriteRule ^(.*)$ https://base.coenv.uw.edu/$1 [R=302,L]
 
 RewriteCond %{HTTP_HOST} ^cig.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
@@ -198,7 +210,7 @@ RewriteCond %{HTTP_HOST} ^hazards.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://hazards.uw.edu/$1 [R,L]
 
-RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^pcc/?(.*)$ https://dev.pcc.uw.edu/$1 [R,L]
 
@@ -579,7 +591,6 @@ RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
 RewriteRule .? - [S=2]
 # weird caching of old bug at launch
 # delete this soon
-RewriteRule ^about/news" about/news/ [R=301,L]
 RewriteRule ^currents/?$ about/student-blog/ [R=301,L]
 
 # WP rewrites
@@ -660,3 +671,35 @@ BrowserMatch ^Mozilla/4 gzip-only-text/html
 BrowserMatch ^Mozilla/4\.0[678] no-gzip
 BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
+
+
+# Wordfence WAF
+<IfModule mod_php5.c>
+	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<IfModule mod_php7.c>
+	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<IfModule mod_php.c>
+	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<Files ".user.ini">
+<IfModule mod_authz_core.c>
+	Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+	Order deny,allow
+	Deny from all
+</IfModule>
+</Files>
+
+# END Wordfence WAF
+
+
+
+
+
+
+
+
+

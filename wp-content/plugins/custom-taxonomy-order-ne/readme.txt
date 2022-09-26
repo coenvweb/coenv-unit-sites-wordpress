@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 3.7
-Tested up to: 5.6
-Stable tag: 3.3.0
+Tested up to: 6.0
+Stable tag: 3.4.4
 License: GPLv2 or later
 
 
@@ -28,6 +28,10 @@ It supports the following features:
 = Compatibility =
 
 This plugin is compatible with [ClassicPress](https://www.classicpress.net).
+
+= Contributions =
+
+This plugin is also available in [GitLab](https://gitlab.com/toomanybicycles/custom-taxonomy-order-ne)
 
 
 == Installation ==
@@ -117,21 +121,21 @@ You can use a function to sort taxonomies themselves like this:
 
 The function requires a parameter with an array of taxonomy objects.
 
-= Is there an API? =
-
-There are actions that you can use with add_action.
+= Can I hook into saving the term order on the dashboard page? =
 
 'customtaxorder_update_order' is being run when saving the order of terms in the admin page.
 You could add the following example to your functions.php and work from there.
 
 	<?php
-	function custom_action( $new_order ) {
+	function my_customtaxorder_update_order( $new_order ) {
 		print_r( $new_order );
 	}
-	add_action('customtaxorder_update_order', 'custom_action');
+	add_action('customtaxorder_update_order', 'my_customtaxorder_update_order');
 	?>
 
-'customtaxorder_terms_ordered' is being run after term array has been ordered with usort.
+= Can I hook into changing the term order on the frontend? =
+
+'customtaxorder_terms_ordered' action is being run after term array has been ordered with usort.
 Please be aware that this can be triggered multiple times during a request.
 You could add the following example to your functions.php and work from there.
 
@@ -140,6 +144,56 @@ You could add the following example to your functions.php and work from there.
 		print_r( $terms_new_order );
 	}
 	add_action('customtaxorder_terms_ordered', 'custom_action', 10, 2);
+	?>
+
+= Can I hook into the settings for each taxonomy to change the sorting behaviour? =
+
+'customtaxorder_settings' filter is being after fetching the settings for all taxonomies.
+You could add the following example to your functions.php and work from there.
+
+	<?php
+	/*
+	 * Example code to change the product_cat settings in WooCommerce on the main shop page.
+	 *
+	 * Settings:
+	 * 0: orderby Term ID
+	 * 1: orderby Custom Order
+	 * 2: orderby Term Name (alphabetical)
+	 * 3: orderby Term Slug (alphabetical)
+	 * 4: orderby Post Count (based on term_taxonomy table)
+	 *
+	 * Taken from:
+	 * https://wordpress.org/support/topic/product-categories-sort-how-to-sort-just-the-sub-terms-sub-categories/
+	 *
+	 */
+	function my_customtaxorder_settings( $settings ) {
+		//var_dump( $settings['product_cat'] );
+		if ( function_exists( 'is_shop' ) ) {
+			if ( is_shop() ) {
+				$settings['product_cat'] = 1;
+			}
+		}
+		//var_dump( $settings['product_cat'] );
+		return $settings;
+	}
+	add_filter( 'customtaxorder_settings', 'my_customtaxorder_settings' );
+	?>
+
+= I use the GET parameter 'orderby' to order posts, but then it is ignoring term order =
+
+In case the GET parameter 'orderby' is set it will be used to order terms, instead of posts, users, or anything else.
+Therefore when that GET parameter is set, there is no custom order applied in this plugin.
+
+You can add a filter to possible ignore the orderby parameter in the GET request.
+That might be useful if your GET parameter for orderby is used to sort posts, users, or just anything that is not terms.
+Example code for using the filter:
+
+	<?php
+	function my_customtaxorder_is_get_orderby_set( $get_orderby_set ) {
+		return false; // ignore orderby GET parameter
+		// return $get_orderby_set; // this would be default behaviour
+	}
+	add_filter( 'customtaxorder_is_get_orderby_set', 'my_customtaxorder_is_get_orderby_set' );
 	?>
 
 = How can I add my own translation? =
@@ -158,6 +212,50 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 3.4.4 =
+* 2022-07-27
+* Use correct value for updating `term_relationships` table.
+  this should fix some reported issues where the problem was unclear.
+* On updating order, list the number of terms that were updated.
+
+= 3.4.3 =
+* 2022-04-30
+* Ouch, don't do those calculations on frontend either when there are too many terms, it is too expensive.
+
+= 3.4.2 =
+* 2022-04-27
+* Do not use the previous change on admin dashboard, some WooCommerce pages are way too heavy with terms.
+
+= 3.4.1 =
+* 2022-04-27
+* Improve ordering nested sub-terms.
+
+= 3.4.0 =
+* 2022-03-14
+* Support order by post count.
+* Add filter 'customtaxorder_get_taxonomies'.
+
+= 3.3.3 =
+* 2022-01-24
+* Traverse all parents for sorting child terms, not just the toplevel ancestor.
+* Some fixes on admin page for sorting subterms.
+* Add filter 'customtaxorder_settings'.
+
+= 3.3.2 =
+* 2021-12-24
+* Add function 'customtaxorder_is_get_orderby_set'.
+* Add filter 'customtaxorder_is_get_orderby_set' to optionally change the output of that function.
+* Fix warning on PHP 8.1.
+* Show taxonomy name as label on dashboard, if label is not set.
+* Remove old translation files from plugin, GlotPress should be used.
+* Do not show all submenu items on dashboard if they are over 100 (fix for Woo attributes).
+
+= 3.3.1 =
+* 2021-11-26
+* Bring back removed code for orderby clause in 'get_terms_orderby' filter.
+* No need to check if function 'current_user_can' and 'is_multisite' exist.
+* Use functions like 'esc_attr', 'esc_html' and 'esc_url' when appropriate.
 
 = 3.3.0 =
 * 2021-02-23

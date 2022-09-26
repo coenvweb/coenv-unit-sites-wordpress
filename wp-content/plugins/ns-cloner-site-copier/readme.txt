@@ -2,10 +2,10 @@
 Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
 Tags: automate, duplicate, copy, copier, clone, cloner, multisite, network, template
-Requires at least: 4.0.0
-Tested up to: 5.6
+Requires at least: 4.6.0
+Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 4.1.6
+Stable tag: 4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,37 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.2.1 - 2022.09.19 =
+* Fix inaccurate memory limit warning
+* Fix default cloning mode selection
+* Remove unnecessary vendor files
+
+= 4.2.0 - 2022.08.25 =
+* Improve cache flushing logic
+* Improve internal coding standards
+* Fix handling for undefined classes in serialized values
+
+= 4.1.9.3 - 2022.01.06 =
+* Optimize with reduction of unnecessary all hook when not cloning
+
+= 4.1.9.2 - 2022.01.03 =
+* Fix compatibility issue with WP Simple Pay
+
+= 4.1.9.1 - 2021.12.23 =
+* Optimize performance by preventing initialization for non-admin requests
+* Fix unnecessary object cache flushes and add filter to disable entirely
+
+= 4.1.8 - 2021.09.30 =
+* Optimize WP site list for networks with large numbers of sites
+* Add proactive resolution attempts for duplicate option keys during cloning
+* Fix misc. other plugin compatibility issues
+
+= 4.1.7 - 2021.09.02 =
+* Apply styling tweaks to admin interface
+* Fix bug with networks where the root/main blog ID is not equal to 1
+* Fix bug with "Delete All Plugin Data" reset button not working fully
+* Fix compatibility issue with Collisimo Shipping Methods plugin
 
 = 4.1.6 - 2021.05.31 =
 * Update composer dependencies for PHP 8 compatibility
