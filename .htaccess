@@ -703,3 +703,21 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 
 
 
+
+# BEGIN Shibboleth
+# The directives (lines) between "BEGIN Shibboleth" and "END Shibboleth" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_shib>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.c>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.cpp>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+# END Shibboleth
