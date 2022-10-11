@@ -45,12 +45,6 @@ SetEnvIfNoCase User-Agent (libwww-perl|wget|LieBaoFast|Mb2345Browser|PetalBot|pe
 Order Deny,Allow
 Deny from env=bad_bot
 
-
-# Begin Shibboleth
-AuthType shibboleth
-Require shibboleth
-# End Shibboleth
-
 <IfModule pagespeed_module>
     ModPagespeedDisallow https://dev.atmos.uw.edu/*
     ModPagespeedDisallow http://dev.atmos.uw.edu/*
@@ -682,3 +676,21 @@ BrowserMatch ^Mozilla/4 gzip-only-text/html
 BrowserMatch ^Mozilla/4\.0[678] no-gzip
 BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
+
+# BEGIN Shibboleth
+# The directives (lines) between "BEGIN Shibboleth" and "END Shibboleth" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_shib>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.c>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.cpp>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+# END Shibboleth
