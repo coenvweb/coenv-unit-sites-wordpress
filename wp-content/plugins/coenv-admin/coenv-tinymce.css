@@ -1,0 +1,40 @@
+p {
+    font-family: "open-sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}    
+table {
+	width: 100% !important;
+}
+thead {
+	font-weight: bold;
+}
+.intro {
+    font-size: 25px;
+    line-height: 20px;
+}
+.button {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 3.5px 14px;
+    padding: 0.25rem 1rem;
+    font-family: "open-sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-size: 0.85714rem;
+    font-weight: 400;
+    background: #dddddd;
+    text-decoration: none;
+    color: #333333;
+    border-radius: 2px;
+}
+blockquote {
+    background-color: #ccc !important;
+    clear: both;  
+    margin: 20px 0; 
+    padding: 10px;
+}
+img.alignleft {
+    margin: 0 20px 20px 0;
+}
+img.alignright {
+    margin: 0 0 20px 20px;
+}
+

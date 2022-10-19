@@ -1,0 +1,10 @@
+table {
+	width: 100%;
+}
+thead {
+	font-weight: bold;
+}
+a#add-content-block,
+#add-content-block .dashicons-screenoptions {
+	display: none !important;
+}
