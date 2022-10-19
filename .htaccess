@@ -49,8 +49,8 @@ RewriteCond %{HTTP_USER_AGENT} Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_
 RewriteRule ^(.*)$ - [F] 
 
 # Begin Shibboleth
-AuthType shibboleth
-Require shibboleth
+#AuthType shibboleth
+#Require shibboleth
 # End Shibboleth
 
 #don't look at our git

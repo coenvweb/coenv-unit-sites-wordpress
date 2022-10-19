@@ -137,7 +137,7 @@ jQuery(document).ready(function ($) {
         }
 	}
 	var RvyHideInterval = setInterval(RvyHideElements, 50);
-	
+    
     var RvySubmissionUI = function () {
 		// @todo: use .edit-post-post-visibility if edit-post-post-schedule not available
         if ($('div.edit-post-post-schedule').length) {
@@ -187,7 +187,7 @@ jQuery(document).ready(function ($) {
                         + rvyObjEdit[rvyObjEdit.currentStatus + 'CompletedLinkCaption'] + '</a>';
 				}
 				
-                $(refSelector).after('<div class="rvy-creation-ui"><a href="' + url + '" class="revision-approve">'
+                $(refSelector).after('<div class="rvy-creation-ui rvy-submission-div"><a href="' + url + '" class="revision-approve">'
                     + '<button type="button" class="components-button revision-approve is-button is-primary ppr-purple-button">'
                     + '<span class="dashicons ' + mainDashicon + '"></span>'
                     + rvyObjEdit[rvyObjEdit.currentStatus + 'ActionCaption'] + '</button></a>'
@@ -203,7 +203,9 @@ jQuery(document).ready(function ($) {
                     + rvyObjEdit[rvyObjEdit.currentStatus + 'CompletedCaption'] + '</span> '
                     + rvyPreviewLink
                     + '</div>'
-					+ '</div>');
+                    + '</div>');
+
+                $('div.rvy-submission-div').trigger('loaded-ui');
             }
 
 			$('.edit-post-post-schedule__toggle').after('<button class="components-button is-tertiary post-schedule-footnote" disabled>' + rvyObjEdit.onApprovalCaption + '</button>');

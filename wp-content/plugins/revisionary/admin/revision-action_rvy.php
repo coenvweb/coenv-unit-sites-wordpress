@@ -358,7 +358,7 @@ function rvy_revision_approve($revision_id = 0) {
 				$wpdb->update( $wpdb->posts, array( 'post_mime_type' => 'future-revision' ), array( 'ID' => $revision->ID ) );
 				
 				rvy_update_next_publish_date(['revision_id' => $revision_id]);
-
+				
 				$db_action = true;
 				
 				clean_post_cache( $revision->ID );
@@ -785,6 +785,14 @@ function rvy_apply_revision( $revision_id, $actual_revision_status = '' ) {
 		$update_fields['post_parent'] = 0;
 	}
 
+	if ($author_selection = get_post_meta($revision_id, '_rvy_author_selection', true)) {
+		$user = get_user_by('ID', $author_selection);
+
+		if (is_a($user, 'WP_User')) {
+			$update_fields['post_author'] = $author_selection;
+		}
+	}
+
 	$wpdb->update($wpdb->posts, $update_fields, ['ID' => $post_id]);
 
 	// also copy all stored postmeta from revision
@@ -1208,11 +1216,11 @@ function rvy_publish_scheduled_revisions($args = []) {
 
 	if (!rvy_get_option('scheduled_publish_cron')) {
 		rvy_confirm_async_execution( 'publish_scheduled_revisions' );
-
+	
 		// Prevent this function from being triggered simultaneously by another site request
 		update_option( 'rvy_next_rev_publish_gmt', '2035-01-01 00:00:00' );
 	}
-
+	
 	$time_gmt = current_time('mysql', 1);
 	
 	$restored_post_ids = array();

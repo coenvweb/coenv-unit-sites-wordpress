@@ -296,9 +296,15 @@ class ThemePluginFilesCli extends ThemePluginFilesAddon
      */
     public function get_themes_to_migrate($profile, $themes)
     {
-        $themes_option     = @$profile['theme_plugin_files']['themes_option']?:null;
-        $themes_selected   = @$profile['theme_plugin_files']['themes_selected']?:null;
-        $themes_excluded   = @$profile['theme_plugin_files']['themes_excluded']?:null;
+        $themes_option     = isset($profile['theme_plugin_files']['themes_option'])
+            ? $profile['theme_plugin_files']['themes_option']
+            : null;
+        $themes_selected   = isset($profile['theme_plugin_files']['themes_selected'])
+            ? $profile['theme_plugin_files']['themes_selected']
+            : null;
+        $themes_excluded   = isset($profile['theme_plugin_files']['themes_excluded'])
+            ? $profile['theme_plugin_files']['themes_excluded']
+            : null;
         $themes_to_migrate = [];
 
         if ('all' === $themes_selected || 'all' === $themes_option) {
@@ -364,9 +370,15 @@ class ThemePluginFilesCli extends ThemePluginFilesAddon
      */
     public function get_plugins_to_migrate($profile, $plugins)
     {
-        $plugins_option     = @$profile['theme_plugin_files']['plugins_option']?:null;
-        $plugins_selected   = @$profile['theme_plugin_files']['plugins_selected']?:null;
-        $plugins_excluded   = @$profile['theme_plugin_files']['plugins_excluded']?:null;
+        $plugins_option     = isset($profile['theme_plugin_files']['plugins_option'])
+            ? $profile['theme_plugin_files']['plugins_option']
+            : null;
+        $plugins_selected   = isset($profile['theme_plugin_files']['plugins_selected'])
+            ? $profile['theme_plugin_files']['plugins_selected']
+            : null;
+        $plugins_excluded   = isset($profile['theme_plugin_files']['plugins_excluded'])
+            ? $profile['theme_plugin_files']['plugins_excluded']
+            : null;
         $plugins_to_migrate = [];
 
         if ('all' === $plugins_selected || 'all' === $plugins_option) {

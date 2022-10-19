@@ -101,7 +101,7 @@ class ThemePluginFilesFinalize
         $form_data = Persistence::getMigrationOptions();
 
         $current_migration = $form_data['current_migration'];
-       
+
         if (empty(array_diff(['theme_files', 'plugin_files', 'muplugin_files', 'other_files'], $current_migration['stages']))) {
             return;
         }
@@ -122,12 +122,12 @@ class ThemePluginFilesFinalize
                 'others'    => WP_CONTENT_DIR
             ];
             $dest_path = trailingslashit($paths[$stage]);
-            
+
             $tmp_path  = Receiver::get_temp_dir($stage);
             if ('pull' === $intent) {
                 $file_folders_list = $this->get_files_for_stage($stage, $state_data, $form_data);
             }
-            
+
             foreach ($folder as $file_folder) {
                 if ( 'pull' === $intent && !$this->in_file_folders_list($file_folders_list, $file_folder )) {
                     continue;
@@ -162,7 +162,7 @@ class ThemePluginFilesFinalize
      /**
      * @param string $stage
      * @param array $state_data
-     * 
+     *
      * @return array
      */
     public function get_files_for_stage($stage, $state_data, $form_data) {
@@ -334,15 +334,6 @@ class ThemePluginFilesFinalize
                 return $this->http->end_ajax(json_encode(array('wpmdb_error' => 1, 'body' => $e->getMessage())));
             }
         }
-    }
-
-     /**
-     * Remove cookie data stored in wp_options during migration
-     *
-     **/
-    public function cleanup_migration_cookie()
-    {
-        Persistence::removeRemoteWPECookie();
     }
 
 }

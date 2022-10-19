@@ -250,7 +250,7 @@ class PluginHelper
             return $this->transfer_util->ajax_error(__('Saving queue status to remote failed.'));
         }
 
-        $queue_status = filter_var($_POST['queue_status'], FILTER_SANITIZE_STRING);
+        $queue_status = filter_var($_POST['queue_status'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $queue_data   = unserialize(gzdecode(base64_decode($queue_status)));
 
         if ($queue_data) {
@@ -349,7 +349,7 @@ class PluginHelper
             throw new \Exception(__('Failed to respond to payload post.', 'wp-migrate-db'));
         }
 
-        $payload_content = filter_var($_POST['content'], FILTER_SANITIZE_STRING);
+        $payload_content = filter_var($_POST['content'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $receiver        = $this->receiver;
 
         try {
