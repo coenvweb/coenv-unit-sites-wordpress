@@ -10,4 +10,6 @@ die('MySQL Error: ' . mysqli_error());
 echo 'Database connection is working properly!';
 mysqli_close($testConnection);
 
+#phpinfo();
+
 passthru('whoami');
