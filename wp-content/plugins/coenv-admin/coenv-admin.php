@@ -9,9 +9,9 @@
 
  
  //register activation function
- register_activation_hook(__FILE__, 'coenv_admin_plugin_activate');
+ //register_activation_hook(__FILE__, 'coenv_admin_plugin_activate');
  //register deactivation function
- register_deactivation_hook(__FILE__, 'coenv_admin_plugin_deactivate');
+ //register_deactivation_hook(__FILE__, 'coenv_admin_plugin_deactivate');
 
 /**
   * Administration tweaks
