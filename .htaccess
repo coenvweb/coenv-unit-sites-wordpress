@@ -1,5 +1,22 @@
+# BEGIN WordPress Multisite
+# Using subfolder network type: https://wordpress.org/support/article/htaccess/#multisite
 
-# BEGIN WordPress
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+
+# add a trailing slash to /wp-admin
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+RewriteRule . index.php [L]
+
+# END WordPress Multisite
 
 # More post requests throttling from single IP
 <Limit POST>
@@ -271,17 +288,6 @@ RewriteRule ^adoptastudent/?$ https://www.youtube.com/watch?v=8N-0C-uRUbc [R=302
 # Earthlab Redirects
 # RewriteCond %{HTTP_HOST} !^earthlab.uw\.edu [NC]
 # RewriteRule .? - [S=0]
-
-# WP rewrites
-RewriteBase /
-RewriteRule ^index\.php$ - [L]
-
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
-RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
-RewriteRule . index.php [L]
 
 # Allow shib requests through
 RewriteCond %{REQUEST_URI} ^/Shibboleth.sso($|/)
