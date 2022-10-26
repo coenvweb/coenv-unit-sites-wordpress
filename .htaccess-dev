@@ -52,14 +52,6 @@ RewriteRule ^(.*)$ http://depts.washington.edu/uwbg/$1 [R=301,NC,L]
 
 # SSL on each domain
 
-# RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
-# RewriteCond %{SERVER_PORT} 80 
-# RewriteRule ^(.*)$ https://cms.coenv.uw.edu/$1 [R,L]
-
-# RewriteCond %{HTTP_HOST} ^dev.envstudies.uw\.edu [NC]
-# RewriteCond %{SERVER_PORT} 80 
-# RewriteRule ^(.*)$ https://dev.envstudies.uw.edu/$1 [R,L]
-
 RewriteCond %{HTTP_HOST} ^cig.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://cig.uw.edu/$1 [R,L]
@@ -85,11 +77,11 @@ RewriteCond %{HTTP_HOST} ^hazards.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80 
 RewriteRule ^(.*)$ https://hazards.uw.edu/$1 [R,L]
 
-RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^pcc/?(.*)$ https://dev.pcc.uw.edu/$1 [R,L]
 
-RewriteCond %{HTTP_HOST} ^cms.coenv.uw\.edu [NC]
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^fridayharborlabs/?(.*)$ https://dev.fhl.uw.edu/$1 [R,L]
 

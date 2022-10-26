@@ -3,7 +3,7 @@
 
 <?php
 
-$test = mysqli_connect('127.0.0.1', 'coenv_base', 'C1RTljH097kRncOttP');
+$test = mysqli_connect();
 if (!$test) {
 die('MySQL Error: ' . mysqli_error());
 }

@@ -675,13 +675,13 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 
 # Wordfence WAF
 <IfModule mod_php5.c>
-	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
 </IfModule>
 <IfModule mod_php7.c>
-	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
 </IfModule>
 <IfModule mod_php.c>
-	php_value auto_prepend_file '/data/www/cms.coenv.uw.edu/wordfence-waf.php'
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
 </IfModule>
 <Files ".user.ini">
 <IfModule mod_authz_core.c>
