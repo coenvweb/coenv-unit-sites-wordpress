@@ -1,35 +1,17 @@
-<IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteCond %{REQUEST_URI} ^/?wp\-content/+debug\.log$
-        RewriteRule .* - [F,L,NC]
-</IfModule>
 
-<IfModule !mod_rewrite.c>
-	<Files "debug.log">
-	<IfModule mod_authz_core.c>
-		Require all denied
-	</IfModule>
-	<IfModule !mod_authz_core.c>
-		Order deny,allow
-		Deny from all
-	</IfModule>
-	</Files>
-</IfModule>
-deny from 31.207.44.186
 # BEGIN WordPress
 
 # More post requests throttling from single IP
 <Limit POST>
     Order Allow,Deny
     Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186
 </Limit>
 
 # Block WordPress xmlrpc.php requests
 <Files xmlrpc.php>
 order deny,allow
 deny from all
-# allow from xxx.xxx.xxx.xxx
 </Files>
 
 <IfModule mod_rewrite.c>
@@ -587,12 +569,6 @@ RewriteRule ^walker2019 news-and-events/walker-lecture-series/ [R=302,L]
 RewriteRule ^walker-lecture-series/$ https://environment.uw.edu/alumni-and-community/calendar-events/2020-doug-walker-lecture/ [R=302,L]
 
 
-RewriteCond %{HTTP_HOST} !^smea.uw\.edu [NC]
-RewriteRule .? - [S=2]
-# weird caching of old bug at launch
-# delete this soon
-RewriteRule ^currents/?$ about/student-blog/ [R=301,L]
-
 # WP rewrites
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
@@ -672,6 +648,25 @@ BrowserMatch ^Mozilla/4\.0[678] no-gzip
 BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
 
+#mystery rules
+<IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI} ^/?wp\-content/+debug\.log$
+        RewriteRule .* - [F,L,NC]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+	<Files "debug.log">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order deny,allow
+		Deny from all
+	</IfModule>
+	</Files>
+</IfModule>
+
 
 # Wordfence WAF
 <IfModule mod_php5.c>
@@ -694,14 +689,6 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </Files>
 
 # END Wordfence WAF
-
-
-
-
-
-
-
-
 
 
 # BEGIN Shibboleth
