@@ -155,7 +155,8 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 */
 		public function admin_footer() {
 			$fix = filter_input( INPUT_GET, 'fix-install-button', FILTER_VALIDATE_BOOLEAN );
-			$tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
+			$tab = ! empty( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
+
 			if ( true === $fix && 'plugin-information' === $tab ) {
 				echo '<script>';
 				echo "jQuery('#plugin_install_from_iframe').on('click', function() { window.location.href = jQuery(this).attr('href'); return false;});";
