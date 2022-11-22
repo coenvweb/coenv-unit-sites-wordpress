@@ -156,7 +156,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		public function admin_footer() {
 			$fix = filter_input( INPUT_GET, 'fix-install-button', FILTER_VALIDATE_BOOLEAN );
 			$tab = ! empty( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
-
+            
 			if ( true === $fix && 'plugin-information' === $tab ) {
 				echo '<script>';
 				echo "jQuery('#plugin_install_from_iframe').on('click', function() { window.location.href = jQuery(this).attr('href'); return false;});";
@@ -876,7 +876,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 					__( 'Every %s hours', 'broken-link-checker' ),
 					sprintf(
 						'<input type="text" name="check_threshold" id="check_threshold" value="%d" size="5" maxlength="5" />',
-						$this->conf->options['check_threshold']
+						esc_attr( $this->conf->options['check_threshold'] )
 					)
 				);
 				?>
@@ -1112,7 +1112,7 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 								type="text"
 								name="youtube_api_key"
 								id="youtube_api_key"
-								value="<?php echo $this->conf->options['youtube_api_key']; ?>"
+								value="<?php echo esc_attr( $this->conf->options['youtube_api_key'] ); ?>"
 								class="regular-text ltr">
 						</label><br>
 						<span class="description">

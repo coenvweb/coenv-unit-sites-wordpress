@@ -170,9 +170,30 @@ class Utils {
 	 * @return mixed
 	 */
 	public static function recursively_slash_strings( $value ) {
-		return \map_deep( $value, [ self::class, 'addslashes_to_strings_only' ] );
+		return self::map_deep( $value, [ self::class, 'addslashes_to_strings_only' ] );
 	}
 	
+	public static function map_deep( $value, $callback ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $index => $item ) {
+				$value[ $index ] = self::map_deep( $item, $callback );
+			}
+		} elseif ( is_object( $value ) ) {
+			if ( get_class($value) === "__PHP_Incomplete_Class" ) { 
+				return $value;
+			}
+
+			$object_vars = get_object_vars( $value );
+			foreach ( $object_vars as $property_name => $property_value ) {
+				$value->$property_name = self::map_deep( $property_value, $callback );
+			}
+		} else {
+			$value = call_user_func( $callback, $value );
+		}
+	
+		return $value;
+	}
+
 	public static function get_post_autosave($post_id, $user_id) {
 		global $wpdb;
 
@@ -199,3 +220,4 @@ class Utils {
 		return get_post($autosave);
 	}
 }
+

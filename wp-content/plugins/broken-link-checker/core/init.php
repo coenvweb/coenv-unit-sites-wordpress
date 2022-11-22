@@ -271,7 +271,7 @@ if ( defined( 'BLC_ACTIVE' ) ) {
 			$init_done = true;
 
 			//Ensure the database is up to date
-			if ( BLC_DATABASE_VERSION !== $blc_config_manager->options['current_db_version'] ) {
+			if ( BLC_DATABASE_VERSION != $blc_config_manager->options['current_db_version'] ) {
 				require_once BLC_DIRECTORY . '/includes/admin/db-upgrade.php';
 				blcDatabaseUpgrader::upgrade_database(); //Also updates the DB ver. in options['current_db_version'].
 			}
