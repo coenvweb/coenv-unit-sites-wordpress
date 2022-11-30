@@ -9,7 +9,7 @@
 
 use function Bhittani\StarRating\functions\sanitize;
 /**
- * $Id: sitemap-core.php 935247 2014-06-19 17:13:03Z arnee $
+ * $Id: sitemap-core.php 2823802 2022-11-24 18:12:38Z auctollo $
  */
 
 // Enable for dev! Good code doesn't generate any notices...
@@ -753,7 +753,7 @@ class GoogleSitemapGeneratorPrioByAverageProvider implements Google_Sitemap_Gene
 	public function get_post_priority( $post_id, $comment_count ) {
 
 		// Do not divide by zero !
-		if ( 0 == $this->average ) {
+		if ( 0 === $this->average ) {
 			if ( $comment_count > 0 ) {
 				$priority = 1;
 			} else {
@@ -1360,6 +1360,7 @@ final class GoogleSitemapGenerator {
 		$this->options['sm_in_customtypes'] = array(); // Include custom post types .
 		$this->options['sm_in_lastmod']     = true; // Include the last modification date .
 		$this->options['sm_b_sitemap_name'] = 'sitemap'; // Name of custom sitemap.
+		$this->options['sm_b_old_sm_name']  = 'sitemap'; // Name of previously defined sitemap.
 		$this->options['sm_cf_home']        = 'daily'; // Change frequency of the homepage .
 		$this->options['sm_cf_posts']       = 'monthly'; // Change frequency of posts .
 		$this->options['sm_cf_pages']       = 'weekly'; // Change frequency of static pages .
@@ -1458,7 +1459,6 @@ final class GoogleSitemapGenerator {
 		if ( 0 !== strpos( $key, 'sm_' ) ) {
 			$key = 'sm_' . $key;
 		}
-
 		$this->options[ $key ] = $value;
 	}
 
@@ -1702,18 +1702,22 @@ final class GoogleSitemapGenerator {
 		// Manual override for root URL .
 		$base_url_settings = $this->get_option( 'b_baseurl' );
 		$sm_sitemap_name   = $this->get_option( 'b_sitemap_name' );
+		$old_sm_name       = $this->get_option( 'b_old_sm_name' );
 		if ( ! empty( $base_url_settings ) ) {
 			$base_url = $base_url_settings;
 		} elseif ( defined( 'SM_BASE_URL' ) && SM_BASE_URL ) {
 			$base_url = SM_BASE_URL;
 		}
 		global $wp_rewrite;
-		delete_option( 'sm_rewrite_done' );
-		wp_clear_scheduled_hook( 'sm_ping_daily' );
-		self::remove_rewrite_hooks();
-		$wp_rewrite->flush_rules( false );
-		self::setup_rewrite_hooks();
-		GoogleSitemapGeneratorLoader::activate_rewrite();
+		if ( $old_sm_name !== $sm_sitemap_name ) {
+			$this->set_option( 'sm_b_old_sm_name', $sm_sitemap_name );
+			delete_option( 'sm_rewrite_done' );
+			wp_clear_scheduled_hook( 'sm_ping_daily' );
+			self::remove_rewrite_hooks();
+			$wp_rewrite->flush_rules( false );
+			self::setup_rewrite_hooks();
+			GoogleSitemapGeneratorLoader::activate_rewrite();
+		}
 		if ( $pl ) {
 			return trailingslashit( $base_url ) . ( '' === $sm_sitemap_name ? 'sitemap' : $sm_sitemap_name ) . ( $options ? '-' . $options : '' ) . ( $html
 				? '.html' : '.xml' ) . ( $zip ? '.gz' : '' );
@@ -2077,7 +2081,7 @@ final class GoogleSitemapGenerator {
 		if ( ! empty( $style_sheet ) ) {
 			$this->add_element( new GoogleSitemapGeneratorXmlEntry( '<' . '?xml-stylesheet type=\'text/xsl\' href=\'' . esc_url( $style_sheet ) . '\'?>' ) );
 		}
-		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'sitemap-generator-url=\'https://auctollo.com\' sitemap-generator-version=\'' . $this->get_version() . '\'' ) );
+		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'sitemap-generator-url=\'http://www.arnebrachhold.de\' sitemap-generator-version=\'' . $this->get_version() . '\'' ) );
 		$this->add_element( new GoogleSitemapGeneratorDebugEntry( 'generated-on=\'' . gmdate( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) . '\'' ) );
 
 		switch ( $format ) {
@@ -2501,7 +2505,7 @@ final class GoogleSitemapGenerator {
 	 */
 	private function send_stats() {
 		global $wp_version, $wpdb;
-		$post_count = $wpdb->get_var( 'SELECT COUNT(*) FROM {$wpdb->posts} p WHERE p.post_status=\'publish\'' ); // db call ok; no-cache ok.
+		$post_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} p WHERE p.post_status='publish'" ); // db call ok; no-cache ok.
 
 		// Send simple post count statistic to get an idea in which direction this plugin should be optimized .
 		// Only a rough number is required, so we are rounding things up .
