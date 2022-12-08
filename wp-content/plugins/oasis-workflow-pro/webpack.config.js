@@ -1,43 +1,19 @@
-const path = require( 'path' );
-const webpack = require( 'webpack' );
-const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
-// const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-// Set different CSS extraction for editor only and common block styles
-const blockCSSPlugin = new ExtractTextPlugin( {
-  filename: './dist/ow-gutenberg.css',
-} );
-
-// Configuration for the ExtractTextPlugin.
-const extractConfig = {
-  use: [
-    { loader: 'raw-loader' },
-    {
-      loader: 'postcss-loader',
-      options: {
-        plugins: [ require( 'autoprefixer' ) ],
-      },
-    },
-    {
-      loader: 'sass-loader',
-      query: {
-        outputStyle:
-          'production' === process.env.NODE_ENV ? 'compressed' : 'nested',
-      },
-    },
-  ],
-};
 
 module.exports = {
+  mode: 'development',
   entry: {
-    './dist/ow-gutenberg' : './src/index.js',
+    './dist/ow-gutenberg': './src/index.js',
   },
   output: {
-    path: path.resolve( __dirname ),
+    path: path.resolve(__dirname),
     filename: '[name].js',
   },
-  watch: true,
-  devtool: 'cheap-eval-source-map',
+  // watch: true,
+  devtool: 'production' === process.env.NODE_ENV ? false : 'source-map',
   module: {
     rules: [
       {
@@ -46,18 +22,55 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['es2015', 'react']
-          }          
+            presets: ['@babel/preset-env']
+          },
         },
       },
       {
-        test: /style\.s?css$/,
-        use: blockCSSPlugin.extract( extractConfig ),
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    "autoprefixer",
+                  ],
+                ],
+              },
+            },
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                outputStyle: 'production' === process.env.NODE_ENV ? 'compressed' : 'expanded',
+              },
+            },
+          },
+        ],
       },
+      {
+        test: /\.(jpg|png)$/,
+        use: ['url-loader']
+      }
     ],
   },
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM',
+  },
   plugins: [
-    blockCSSPlugin,
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // all options are optional
+      filename: './dist/ow-gutenberg.css',
+      ignoreOrder: false, // Enable to remove warnings about conflicting order
+    }),
     // new BrowserSyncPlugin({
     //   // Load localhost:3333 to view proxied site
     //   host: 'localhost',

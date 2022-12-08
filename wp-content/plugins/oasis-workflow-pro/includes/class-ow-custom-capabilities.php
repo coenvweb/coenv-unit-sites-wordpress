@@ -10,7 +10,7 @@
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-   exit;
+	exit;
 }
 
 /**
@@ -21,23 +21,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 3.4
  */
-
 class OW_Custom_Capabilities {
 
 	/**
 	 * Add new custom capabilities
 	 *
 	 * @access public
-	 * @since  3.4
-	 * @global WP_Roles $wp_roles
 	 * @return void
+	 * @global WP_Roles $wp_roles
+	 * @since  3.4
 	 */
 	public function add_capabilities() {
 		global $wp_roles;
 
-		if ( class_exists('WP_Roles') ) {
+		if ( class_exists( 'WP_Roles' ) ) {
 			if ( ! isset( $wp_roles ) ) {
-				$wp_roles = new WP_Roles();
+				$wp_roles = new WP_Roles(); // phpcs:ignore
 			}
 		}
 
@@ -84,28 +83,28 @@ class OW_Custom_Capabilities {
 
 			// other capabilities
 			$wp_roles->add_cap( 'administrator', 'ow_skip_workflow' );
-         
-         // export-import workflows
-         $wp_roles->add_cap( 'administrator', 'ow_export_import_workflow' );
-         
-         // submit-to-workflow
-         $wp_roles->add_cap( 'administrator', 'ow_submit_to_workflow' );
-         $wp_roles->add_cap( 'editor', 'ow_submit_to_workflow' );
-         $wp_roles->add_cap( 'author', 'ow_submit_to_workflow' );
-         $wp_roles->add_cap( 'contributor', 'ow_submit_to_workflow' );
-         
-         // sign-of-workflow
-         $wp_roles->add_cap( 'administrator', 'ow_sign_off_step' );
-         $wp_roles->add_cap( 'editor', 'ow_sign_off_step' );
-         $wp_roles->add_cap( 'author', 'ow_sign_off_step' );
-         $wp_roles->add_cap( 'contributor', 'ow_sign_off_step' );
-         
-         // Duplicate Post
-         $wp_roles->add_cap( 'administrator', 'ow_duplicate_post' );
-         $wp_roles->add_cap( 'editor', 'ow_duplicate_post' );
-         $wp_roles->add_cap( 'author', 'ow_duplicate_post' );
-         $wp_roles->add_cap( 'contributor', 'ow_duplicate_post' );
-         
+
+			// export-import workflows
+			$wp_roles->add_cap( 'administrator', 'ow_export_import_workflow' );
+
+			// submit-to-workflow
+			$wp_roles->add_cap( 'administrator', 'ow_submit_to_workflow' );
+			$wp_roles->add_cap( 'editor', 'ow_submit_to_workflow' );
+			$wp_roles->add_cap( 'author', 'ow_submit_to_workflow' );
+			$wp_roles->add_cap( 'contributor', 'ow_submit_to_workflow' );
+
+			// sign-of-workflow
+			$wp_roles->add_cap( 'administrator', 'ow_sign_off_step' );
+			$wp_roles->add_cap( 'editor', 'ow_sign_off_step' );
+			$wp_roles->add_cap( 'author', 'ow_sign_off_step' );
+			$wp_roles->add_cap( 'contributor', 'ow_sign_off_step' );
+
+			// Duplicate Post
+			$wp_roles->add_cap( 'administrator', 'ow_duplicate_post' );
+			$wp_roles->add_cap( 'editor', 'ow_duplicate_post' );
+			$wp_roles->add_cap( 'author', 'ow_duplicate_post' );
+			$wp_roles->add_cap( 'contributor', 'ow_duplicate_post' );
+
 		}
 	}
 
@@ -113,16 +112,16 @@ class OW_Custom_Capabilities {
 	 * Remove the custom capabilities
 	 *
 	 * @access public
-	 * @since  3.4
-	 * @global WP_Roles $wp_roles
 	 * @return void
+	 * @global WP_Roles $wp_roles
+	 * @since  3.4
 	 */
 	public function remove_capabilities() {
 		global $wp_roles;
 
-		if ( class_exists('WP_Roles') ) {
+		if ( class_exists( 'WP_Roles' ) ) {
 			if ( ! isset( $wp_roles ) ) {
-				$wp_roles = new WP_Roles();
+				$wp_roles = new WP_Roles(); // phpcs:ignore
 			}
 		}
 
@@ -168,54 +167,56 @@ class OW_Custom_Capabilities {
 
 			// other capabilities
 			$wp_roles->remove_cap( 'administrator', 'ow_skip_workflow' );
-         
-         // export-import workflows
-         $wp_roles->remove_cap( 'administrator', 'ow_export_import_workflow' );
-         
-         // submit-to-workflow
-         $wp_roles->remove_cap( 'administrator', 'ow_submit_to_workflow' );
-         $wp_roles->remove_cap( 'editor', 'ow_submit_to_workflow' );
-         $wp_roles->remove_cap( 'author', 'ow_submit_to_workflow' );
-         $wp_roles->remove_cap( 'contributor', 'ow_submit_to_workflow' );
-         $wp_roles->remove_cap( 'subscriber', 'ow_submit_to_workflow' );
-         
-         // sign-of-workflow
-         $wp_roles->remove_cap( 'administrator', 'ow_sign_off_step' );
-         $wp_roles->remove_cap( 'editor', 'ow_sign_off_step' );
-         $wp_roles->remove_cap( 'author', 'ow_sign_off_step' );
-         $wp_roles->remove_cap( 'contributor', 'ow_sign_off_step' );
-         $wp_roles->remove_cap( 'subscriber', 'ow_sign_off_step' );
-         
+
+			// export-import workflows
+			$wp_roles->remove_cap( 'administrator', 'ow_export_import_workflow' );
+
+			// submit-to-workflow
+			$wp_roles->remove_cap( 'administrator', 'ow_submit_to_workflow' );
+			$wp_roles->remove_cap( 'editor', 'ow_submit_to_workflow' );
+			$wp_roles->remove_cap( 'author', 'ow_submit_to_workflow' );
+			$wp_roles->remove_cap( 'contributor', 'ow_submit_to_workflow' );
+			$wp_roles->remove_cap( 'subscriber', 'ow_submit_to_workflow' );
+
+			// sign-of-workflow
+			$wp_roles->remove_cap( 'administrator', 'ow_sign_off_step' );
+			$wp_roles->remove_cap( 'editor', 'ow_sign_off_step' );
+			$wp_roles->remove_cap( 'author', 'ow_sign_off_step' );
+			$wp_roles->remove_cap( 'contributor', 'ow_sign_off_step' );
+			$wp_roles->remove_cap( 'subscriber', 'ow_sign_off_step' );
+
 		}
 	}
 
-   /**
-    * Function - API to check if current user can abort workflow
-    *
-    * @return array
-    *
-    * @since 6.0
-    */
-   public function api_check_user_capabilities( $data ) {
-      
-      if ( ! wp_verify_nonce( $data->get_header('x_wp_nonce'), 'wp_rest' ) ) {
-         wp_die( __( 'Unauthorized access.', 'oasisworkflow' ) );
-      }
-      
-      if ( ! is_user_logged_in() ) {
-         return new WP_Error( 'owf_check_user_capabilities', __( 'You are not allowed to invoke this api.', 'oasisworkflow' ), array( 'status' => '403' )  );
-      }
+	/**
+	 * Function - API to check if current user can abort workflow
+	 *
+	 * @return array
+	 *
+	 * @since 6.0
+	 */
+	public function api_check_user_capabilities( $data ) {
 
-      $response = array (
-         "user_can" => [
-            "ow_abort_workflow" => current_user_can( 'ow_abort_workflow' ),
-            "ow_skip_workflow" => current_user_can( 'ow_skip_workflow' ),
-            "ow_reassign_task" => current_user_can( 'ow_reassign_task' ),
-         ]
-      );
+		if ( ! wp_verify_nonce( $data->get_header( 'x_wp_nonce' ), 'wp_rest' ) ) {
+			wp_die( esc_html__( 'Unauthorized access.', 'oasisworkflow' ) );
+		}
 
-      return $response;
-   }
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error( 'owf_check_user_capabilities',
+				esc_html__( 'You are not allowed to invoke this api.', 'oasisworkflow' ), array( 'status' => '403' ) );
+		}
+
+		$response = array(
+			"user_can" => [
+				"ow_abort_workflow" => current_user_can( 'ow_abort_workflow' ),
+				"ow_skip_workflow"  => current_user_can( 'ow_skip_workflow' ),
+				"ow_reassign_task"  => current_user_can( 'ow_reassign_task' ),
+			]
+		);
+
+		return $response;
+	}
 
 }
-?>
+
+

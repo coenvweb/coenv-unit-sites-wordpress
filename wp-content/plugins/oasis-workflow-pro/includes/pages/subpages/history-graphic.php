@@ -13,58 +13,62 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
-global $wpdb, $chkResult ;
+global $wpdb, $chkResult;
 
 $ow_workflow_service = new OW_Workflow_Service();
 
-if ( is_admin() && preg_match_all('/page=oasiswf(.*)|post-new\.(.*)|post\.(.*)/', $_SERVER['REQUEST_URI'], $matches ) ) {
-   wp_enqueue_script( 'owf-workflow-history',
-                      OASISWF_URL. 'js/pages/subpages/history-graphic.js',
-                      '',
-                      OASISWF_VERSION,
-                      true);
+$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( $_SERVER['REQUEST_URI'] ) : "";
+
+if ( is_admin() &&
+     preg_match_all( '/page=oasiswf(.*)|post-new\.(.*)|post\.(.*)/', $request_uri, $matches ) ) {
+	wp_enqueue_script( 'owf-workflow-history',
+		OASISWF_URL . 'js/pages/subpages/history-graphic.js',
+		'',
+		OASISWF_VERSION,
+		true );
 }
 
 $workflow = null;
-$post_id = intval( $_GET['post'] );
+$post_id  = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : ''; // phpcs:ignore
+
 if ( is_numeric( $chkResult ) ) {
-   $sql = "SELECT C.ID, C.wf_info
-   			FROM (
-   				(SELECT * FROM " . OW_Utility::instance()->get_action_history_table_name() . " WHERE ID = $chkResult) AS A
-   				LEFT JOIN " . OW_Utility::instance()->get_workflow_steps_table_name() . " AS B
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	$workflow = $wpdb->get_row( $wpdb->prepare( "SELECT C.ID, C.wf_info FROM (
+   				(SELECT * FROM " . $wpdb->fc_action_history . " WHERE ID = %d) AS A
+   				LEFT JOIN " . $wpdb->fc_workflow_steps . " AS B
    				ON A.step_id = B.ID
-   				LEFT JOIN " . OW_Utility::instance()->get_workflows_table_name() . " AS C
+   				LEFT JOIN " . $wpdb->fc_workflows . " AS C
    				ON B.workflow_id = C.ID
-   			)" ;
-   $workflow = $wpdb->get_row( $sql ) ;
+   			)", $chkResult ) );
 }
-if( $workflow ){
+if ( $workflow ) {
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	$processes = $wpdb->get_results(
+		$wpdb->prepare( "SELECT * FROM " . $wpdb->fc_action_history .
+		                " WHERE ID <= %d AND (action_status = 'processed' OR action_status = 'assignment') " .
+		                " AND post_id = %d ORDER BY ID",
+			$chkResult, $post_id ) );
 
-	$sql = "SELECT * FROM " .
-			 OW_Utility::instance()->get_action_history_table_name() .
-			 " WHERE ID <= $chkResult AND (action_status = 'processed' OR action_status = 'assignment') AND post_id = %d ORDER BY ID" ;
-	$processes = $wpdb->get_results( $wpdb->prepare( $sql, $post_id )) ;
+	if ( $processes ) {
 
-	if( $processes ){
-
-		$startid = "" ;
-		foreach ($processes as $process) {
-			if( $startid ){
-				$newconns[] = $ow_workflow_service->get_connection($workflow, $startid, $process->step_id) ;
+		$startid = "";
+		foreach ( $processes as $process ) {
+			if ( $startid ) {
+				$newconns[] = $ow_workflow_service->get_connection( $workflow, $startid, $process->step_id );
 			}
-			$startid = $process->step_id ;
+			$startid = $process->step_id;
 		}
 
-		$current_step_id = $ow_workflow_service->get_gpid_dbid($workflow->wf_info, $startid ) ;
+		$current_step_id = $ow_workflow_service->get_gpid_dbid( $workflow->wf_info, $startid );
 
-		$wf_info = $workflow->wf_info ;
+		$wf_info = $workflow->wf_info;
 	}
 
-	echo "<script type='text/javascript'>
-			var wfPluginUrl  = '" . OASISWF_URL . "' ;
-			var stepinfo='{$wf_info}' ;
-			var currentStepGpId='{$current_step_id}' ;
-		</script>" ;
+    echo '<script type="text/javascript">
+         var wfPluginUrl = "' . esc_url( OASISWF_URL ) . '";
+         var stepinfo = "' . esc_js( $wf_info ) . '";
+         var currentStepGpId = "' . esc_js( $current_step_id ) . '";
+      </script>';
 }
 ?>
 <div id="workflow-area" style="position:relative;width:100%;"></div>

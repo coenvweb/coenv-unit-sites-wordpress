@@ -2,8 +2,8 @@
 Contributors: nuggetsol
 Tags: workflow, work flow, review, assignment, publish, inbox, workflow history, audit
 Requires at least: 4.4
-Tested up to: 5.4
-Stable tag: 7.2
+Tested up to: 6.0.2
+Stable tag: 9.5
 
 Automate your WordPress Editorial Workflow with Oasis Workflow.
 
@@ -81,6 +81,140 @@ For [Frequently Asked Questions](http://oasisworkflow.com/faq) plus documentatio
 
 
 == Changelog ==
+
+= Version 9.5 =
+* Updated NPM packages and dependencies
+* Fix Elementor is_built_with_elementor due to deprecation.
+* Fixed `get_unsubmitted_posts` query.
+* Fixed `owf_submit_to_workflow_pre` filter on classic editor.
+* Added `owf_post_status_domain` filter for add post_status domain.
+
+= Version 9.4 =
+* Fixed block editor status changed issue with 'wp_insert_post' hook
+* Fixed to remove unnecessary enqueue script loading in block editor.
+* Modified to get acf active or not in block editor.
+* Fixed revision button condition in classic editor.
+* Added extra condition if not in workflow for `ow_revision_update_slug`
+* Added hook to change inbox default orderby `owf_default_inbox_items_orderby`
+* Added hook to add or change inbox default order `owf_default_inbox_items_order`
+* Added hook to add or change inbox default orderby clauses `owf_filter_inbox_items_order_by`
+* Added 'post_date' in inbox default orderby clauses list.
+* Fixed post status term conflict with others taxonomy - `ow_post_status_slug`
+
+= Version 9.3 =
+* Added extra parameter to 'owf_workflow_abort' hook called.
+* Fixed abort comment not sending to the mail issue.
+* Updated workflow list page default value as 'active' instead 'all'
+* Added new filter hook 'ow_workflow_list_default' so user can change workflow list page default list.
+* Added missing 'upgrade_database_63' method.
+
+= Version 9.2 =
+* Fixed cc & bcc error on workflow step settings.
+* Fixed uninstall/delete plugin issue.
+* Fixed required ACF field issue on classic and block editor.
+* Fixed ACF validation ajax issue.
+* Added extra arguments to 'ow_redirect_after_signoff_url' hook.
+* Added extra arguments to 'ow_workflow_completed' hook.
+* Added hook to rename "post_status" taxonomy slug - 'ow_post_status_slug'.
+
+= Version 9.1 =
+* Fixed WordPress Coding Standard/PHPCS.
+* Added hook to check if role is applicable - 'ow_is_role_applicable'.
+* Added hook for redirection url after workflow complete 'ow_redirect_after_signoff_url'.
+* Added hook for triggering JS after workflow complete 'ow_workflow_completed'.
+* Added CC & BCC recipients options for assignment and reminder email in workflow step settings.
+* Fixed issue with editing of Custom Statuses.
+
+= Version 9.0 =
+* Fixed some translation issue.
+* Updating plugin to be compatible with PHP 8.x
+
+= Version 8.9 =
+* Fixed Due Date field issue in block editor/gutenberg.
+* Add nudge option to inbox.
+
+= Version 8.8 =
+* Fixed Reusable blocks post type supports parameters.
+* Add cc and bcc for assignment email.
+* Changed cc and bcc value requirement. Now you can pass email address or user id.
+* Fixed escaping and translation issues.
+* Updated languages files.
+
+= Version 8.7 =
+* Fixed issue with browser popup related to "Are you sure you want to leave without saving" showing up during reassign and sign off.
+* Fixed CSS issue with Inbox All/Mine.
+* Fixed inbox popup issue when team are used.
+* Set workflow sidebar as default.
+
+= Version 8.6 =
+* Fixed issue with <br> showing up in comments.
+* Changed drop down for task assignment to be more intuitive.
+* Added more functionality to the Elementor integration. Now you can reassign and abort from Elementor UI.
+* Fixed issue with "Save Draft" causing to loose the workflow history ID.
+
+= Version 8.5 =
+* Changed temp upload location to upload folder to be compatible with WP VIP Platform.
+* Changed some queries to make it more efficient.
+* Fixed issue with Revision Compare UI/CSS.
+* Fixed missing image.
+
+= Version 8.4 =
+* Security Fix - Fixed output escaping issue where some of the strings were not properly escaped.
+* REST API Security - Added capability security to publicly accessible API endpoints.
+* PHP to JS Escaping - Javascript variables printed and defined through PHP variables were properly sanitized and escaped.
+* Unprepared SQL Queries - Fixed instances of SQL queries that were not properly escaped and prepared.
+* Added filters to allow for assignment and reminder email custom content.
+* Fixed issue with Priority field not getting set from the previous step in Gutenberg Editor.
+* Fixed issue with Teams drop down, not showing all team users.
+
+= Version 8.3 =
+* Fixed german localization text.
+* Made it compatible with WP 5.6.
+
+= Version 8.2 =
+* Added support for "Checklist Warning" feature.
+* Fixed issue with Applicable Post Types checkboxes checked automatically.
+
+= Version 8.1 =
+* Removed Browse Revisions link from Posts List Page for performance reasons.
+* Fixed issue with display due date in Gutenberg.
+
+= Version 8.0 =
+* Added new filters/actions to allow for customization.
+* Fixed issue with due date settings.
+
+= Version 7.9 =
+* Hide the Publish button, until the Submit to Workflow button is visible.
+* Added a new hook to allow hiding/showing of "Submit to Workflow" based on post attributes.
+* Sanitized workflow comments to disallow certain tags.
+* Fixed permalink issue for revision post without suffix/prefix.
+* Fixed overlap of External User Id with WP User Id.
+
+= Version 7.8 =
+* Fixed bugs related to JQuery attribute and prop checks.
+
+= Version 7.7 =
+* Reverted a change related to hiding the Publish button until the "Submit to Workflow" shows up.
+
+= Version 7.6 =
+* Hide the Publish button, until the Submit to Workflow button is visible.
+* Made it compatible with WP 5.5
+* Fixed issues with unicode characters in the content.
+
+= Version 7.5 =
+* Merged all the text-domain to a single type.
+* Show/Hide the Action options depending on the step connections.
+
+= Version 7.4 =
+* Added help text for Oasis Workflow sidebar.
+* Added German translation file.
+* Fixed issue with a user/usermeta query to account for the case where users DB is not in the same DB as the posts.
+* Improved Elementor integration by adding support for Teams and "Edit with Elementor".
+* Fixed an issue with conditional check for ow_make_revision and ow_make_revision_others.
+
+= Version 7.3 =
+* Added config to toggle workflow comments to be mandatory. By default the comments will not be required.
+* Integrated with Elementor. Now, the user can submit to workflow and sign off from within Elementor UI.
 
 = Version 7.2 =
 * Display and link unclaimed task count on dashboard widget.

@@ -10,7 +10,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /*
  * OW_Review_History Class
@@ -93,4 +95,4 @@ class OW_Review_History {
 
 }
 
-?>
+

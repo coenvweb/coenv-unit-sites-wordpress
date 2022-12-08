@@ -8,16 +8,16 @@
  *
  */
 
- // Exit if accessed directly
- if ( ! defined( 'ABSPATH' ) ) {
-    exit;
- }
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
- /*
-  * OW_Place_Holders Class
-  *
-  * @since 2.0
-  */
+/*
+ * OW_Place_Holders Class
+ *
+ * @since 2.0
+ */
 
 
 class OW_Place_Holders {
@@ -29,9 +29,9 @@ class OW_Place_Holders {
 	const POST_CATEGORY = "%category%";
 	const POST_LAST_MODIFIED_DATE = "%last_modified_date%";
 	const POST_PUBLISH_DATE = "%publish_date%";
-   const POST_AUTHOR = "%post_author%";
-   const BLOG_NAME = "%blog_name%";
-   const POST_SUBMITTER = "%post_submitter%";
+	const POST_AUTHOR = "%post_author%";
+	const BLOG_NAME = "%blog_name%";
+	const POST_SUBMITTER = "%post_submitter%";
 
 
 	/*
@@ -42,21 +42,23 @@ class OW_Place_Holders {
 	 * @since 2.0
 	 */
 	public function get_first_name( $user_id ) {
+		$nickname = "";
 		// sanitize the input
 		$user_id = intval( sanitize_text_field( $user_id ) );
-      
-      // get first name for external user as per unique 5 digit ID
-      if ( 1 === preg_match("/^\d{5}$/", $user_id )) {
-        $get_external_user_details = get_option("oasiswf_external_user_settings");
-        $user_detail = $get_external_user_details[ $user_id ];
-        $first_name = $user_detail["fname"];
-      } else {
-         $nickname = get_user_meta( $user_id, "nickname", true ) ;
-         $first_name = get_user_meta( $user_id, "first_name", true ) ;
 
-         // if first name empty then use nickname
-         $first_name = ( $first_name ) ? $first_name : $nickname ;
-      }
+		// get first name for external user as per unique 5 digit ID
+		if ( 1 === preg_match( "/^\d{5}$/", $user_id ) ) {
+			$get_external_user_details = get_option( "oasiswf_external_user_settings" );
+			$user_detail               = isset( $get_external_user_details[ $user_id ] )
+				? $get_external_user_details[ $user_id ] : array();
+			$first_name                = ( ! empty( $user_detail ) ) ? $user_detail["fname"] : "";
+		} else {
+			$nickname   = get_user_meta( $user_id, "nickname", true );
+			$first_name = get_user_meta( $user_id, "first_name", true );
+
+			// if first name empty then use nickname
+			$first_name = ( $first_name ) ? $first_name : $nickname;
+		}
 
 		return $first_name;
 	}
@@ -68,22 +70,24 @@ class OW_Place_Holders {
 	 * @return string last name of the user
 	 * @since 2.0
 	 */
-	public function get_last_name ( $user_id ) {
+	public function get_last_name( $user_id ) {
+		$nickname = "";
 		// sanitize the input
 		$user_id = intval( sanitize_text_field( $user_id ) );
-      
-      // get last name for external user as per unique 5 digit ID
-      if ( 1 === preg_match("/^\d{5}$/", $user_id )) {
-        $get_external_user_details = get_option("oasiswf_external_user_settings");
-        $user_detail = $get_external_user_details[ $user_id ];
-        $last_name = $user_detail["lname"];
-      } else {
-         $nickname = get_user_meta( $user_id, "nickname", true ) ;
-         $last_name = get_user_meta( $user_id, "last_name", true ) ;
-      }   
+
+		// get last name for external user as per unique 5 digit ID
+		if ( 1 === preg_match( "/^\d{5}$/", $user_id ) ) {
+			$get_external_user_details = get_option( "oasiswf_external_user_settings" );
+			$user_detail               = isset( $get_external_user_details[ $user_id ] )
+				? $get_external_user_details[ $user_id ] : array();
+			$last_name                 = ( ! empty( $user_detail ) ) ? $user_detail["lname"] : "";
+		} else {
+			$nickname  = get_user_meta( $user_id, "nickname", true );
+			$last_name = get_user_meta( $user_id, "last_name", true );
+		}
 
 		// if last name empty thne use nickname
-		$last_name = ( $last_name ) ? $last_name : $nickname ;
+		$last_name = ( $last_name ) ? $last_name : $nickname;
 
 		return $last_name;
 	}
@@ -100,26 +104,27 @@ class OW_Place_Holders {
 	 */
 	public function get_post_title( $post_id, $action_id, $link = true ) {
 		// sanitize the input
-		$post_id = intval( sanitize_text_field( $post_id ) );
+		$post_id   = intval( sanitize_text_field( $post_id ) );
 		$action_id = intval( sanitize_text_field( $action_id ) );
 
 		// get post details
-		$post = get_post( $post_id ) ;
-		$post_title = stripcslashes( $post->post_title );
-		$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit&oasiswf=' . $action_id );
-      
-      // Filter to add custom base url
-      $custom_admin_url = apply_filters( 'owf_custom_admin_url', get_admin_url() );
-      if( ! empty( $custom_admin_url ) ) {
-         $post_url = $custom_admin_url . 'post.php?post=' . $post_id . '&action=edit&oasiswf=' . $action_id;
-      }
+		$post       = get_post( $post_id );
+		$post_url   = admin_url( 'post.php?post=' . $post_id . '&action=edit&oasiswf=' . $action_id );
+
+		// Filter to add custom base url
+		$custom_admin_url = apply_filters( 'owf_custom_admin_url', get_admin_url() );
+		if ( ! empty( $custom_admin_url ) ) {
+			$post_url = $custom_admin_url . 'post.php?post=' . $post_id . '&action=edit&oasiswf=' . $action_id;
+		}
 
 		if ( $link ) {
-			$post_link = '<a href="' . $post_url . '" target="_blank">' . $post_title . '</a>';
+			$post_link = '<a href="' . esc_url( $post_url ) .
+			             '" target="_blank">' . esc_html( $post->post_title ) .
+			             '</a>';
 		} else {
-			$post_link = '"' . $post_title . '"';
+			$post_link = '"' . esc_html( $post->post_title ) . '"';
 		}
-      
+
 		return $post_link;
 	}
 
@@ -153,9 +158,9 @@ class OW_Place_Holders {
 		$post_id = intval( sanitize_text_field( $post_id ) );
 
 		// get post details
-		$post = get_post( $post_id ) ;
+		$post = get_post( $post_id );
 
-		$last_modified = date('d-m-Y h:i:s', strtotime($post->post_modified));
+		$last_modified = gmdate( 'd-m-Y h:i:s', strtotime( $post->post_modified ) );
 
 		return $last_modified;
 	}
@@ -172,33 +177,35 @@ class OW_Place_Holders {
 		$post_id = intval( sanitize_text_field( $post_id ) );
 
 		// get post details
-		$post = get_post( $post_id ) ;
+		$post = get_post( $post_id );
 
-		$publish_date = date( 'd-m-Y h:i:s', strtotime($post->post_date) );
+		$publish_date = gmdate( 'd-m-Y h:i:s', strtotime( $post->post_date ) );
 
 		return $publish_date;
 	}
 
-   public function get_author_display_name( $post_id ) {
-   	// sanitize the input
-      $post_id = intval( sanitize_text_field( $post_id ) );
-      $author_id = (int) get_post_field( 'post_author', $post_id );
+	public function get_author_display_name( $post_id ) {
+		// sanitize the input
+		$post_id   = intval( sanitize_text_field( $post_id ) );
+		$author_id = (int) get_post_field( 'post_author', $post_id );
 
-      return get_the_author_meta( 'display_name', $author_id );
-   }
-   
-   /*
-	 * get post submitter name	 *
-	 * @param int $user_id
-	 * @return string $user_name
-	 * @since 5.0
-	 */
-   public function get_post_submitter( $user_id ) {
-   	// sanitize the input
-		$user_id = intval( sanitize_text_field( $user_id ) );
-      $user_details  = get_userdata( $user_id );
-      $user_name     = $user_details->data->display_name;
-      return $user_name;
-   }
+		return get_the_author_meta( 'display_name', $author_id );
+	}
+
+	/*
+	  * get post submitter name	 *
+	  * @param int $user_id
+	  * @return string $user_name
+	  * @since 5.0
+	  */
+	public function get_post_submitter( $user_id ) {
+		// sanitize the input
+		$user_id      = intval( sanitize_text_field( $user_id ) );
+		$user_details = get_userdata( $user_id );
+		$user_name    = $user_details->data->display_name;
+
+		return $user_name;
+	}
 }
-?>
+
+

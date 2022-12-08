@@ -10,7 +10,7 @@
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-   exit();
+	exit();
 }
 
 $ow_tools_service = new OW_Tools_Service();
@@ -18,8 +18,10 @@ $ow_tools_service = new OW_Tools_Service();
 ?>
 
 <div class="wrap">
-   <textarea readonly="readonly" onclick="this.focus();this.select()" id="ow-system-info" name="ow-system-info" title="<?php echo __( 'To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac).', 'oasisworkflow' ); ?>">
-<?php echo $ow_tools_service->get_owf_system_info(); ?>
+   <textarea readonly="readonly" onclick="this.focus();this.select()" id="ow-system-info" name="ow-system-info"
+             title="<?php esc_attr_e( 'To copy the system info, click below then press Ctrl + C (PC) or Cmd + C (Mac).',
+	             'oasisworkflow' ); ?>">
+      <?php echo $ow_tools_service->get_owf_system_info(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
    </textarea>
 </div>      
 

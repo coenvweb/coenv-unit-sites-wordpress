@@ -234,6 +234,11 @@ div#workflow-edit-icon {
    width:95%;
 }
 
+.ow-select2 input:hover,
+.ow-select2 input:focus {
+    box-shadow: none !important;
+}
+
 .connection-status {
    border-bottom:1px dotted grey;
    padding:5px;
@@ -398,6 +403,7 @@ span.signoff-action label{
    -moz-border-radius:0.5em;
    border-radius:0.5em;
    padding:10px;
+   line-height: 150%;
 }
 .error-message {
    background-color:#FAEBD7;
@@ -674,7 +680,8 @@ a.owf_about_link:hover {
 
 #step-setting label{
    float:left;
-   width:130px;
+   min-width: 130px;
+   margin-right: 5px;
    margin-top:4px;
 }
 
@@ -995,6 +1002,10 @@ a.owf_about_link:hover {
    height: 100px;
 }
 
+.select-actors-list label{
+   padding-bottom: 5px;
+}
+
 .email-message-area {
    width: 100%;
    height: 250px;
@@ -1267,6 +1278,22 @@ ul#readonly-comments {
    margin: 0;
    font-size: 13px;
 }
+
+.column-comments .post-com-count-static-approved {
+	display: inline-block;
+	cursor: default;
+}
+
+.column-comments .post-com-count-static-approved:after {
+	content: "";
+	display: block;
+	margin-left: 8px;
+	width: 0;
+	height: 0;
+	border-top: 5px solid #72777c;
+	border-right: 5px solid transparent;
+}
+
 .clearfix {
    clear:both;
 }
@@ -1611,6 +1638,30 @@ div.no-external-user {
 .hide-unclaim-button,
 .hide-claim-button {
    display: none !important;
+}
+.owf-mandatory {
+   color: red;
+   font-weight: bold;
+}
+
+.ow-select2 {
+    margin-top: 4px;
+}
+
+.ow-select2-wrap {
+    margin-bottom: 5px;
+}
+
+body.admin_page_oasiswf-revision table.diff tbody tr td:nth-child(2) {
+    width: inherit;
+}
+
+.owduedatepicker-dropdown .components-datetime__time {
+    display: none !important;
+}
+
+.owduedatepicker-dropdown .components-datetime__date {
+    border-top: 0px solid transparent !important;
 }
 
 @media screen and (max-width: 782px) {
