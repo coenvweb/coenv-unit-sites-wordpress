@@ -359,6 +359,17 @@ function ns_sql_create_table_query( $source_table, $target_table, $source_prefix
 }
 
 /**
+ * Set the foreign key restraint for cloning process.
+ *
+ * @param integer $status Defaults to 1 Set to 0 to remove constraints.
+ *
+ * @return void
+ */
+function ns_sql_foreign_key_checks( $status = 1 ) {
+	ns_cloner()->db->query( ns_cloner()->db->prepare( 'SET foreign_key_checks = %d', $status ) );
+}
+
+/**
  * Add backquotes to tables and db names in SQL queries from phpMyAdmin.
  *
  * @param mixed $value Data to wrap in backquotes.

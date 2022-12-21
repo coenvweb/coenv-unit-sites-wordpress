@@ -1,3 +1,10 @@
+= 4.2.2.1 - 2022.12.19 =
+* Remove unnecessary vendor files
+
+= 4.2.2 - 2022.12.16 =
+* Fix table constraint issue when cloning
+* Update plugin url
+
 = 4.2.1 - 2022.09.19 =
 * Fix inaccurate memory limit warning
 * Fix default cloning mode selection
