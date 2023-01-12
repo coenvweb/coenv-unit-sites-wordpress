@@ -59,6 +59,8 @@ RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
 RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
 #RewriteRule .* - [F,L]
 
+
+
 #6/5 test to force non-www
 RewriteBase /
 RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
