@@ -7,7 +7,7 @@ class WidVis_Plugin implements ArrayAccess {
     }
 
     // ArrayAccess functions
-    public function offsetSet($offset, $value) {
+    public function offsetSet(mixed $offset, mixed $value): void {
         $this->contents[$offset] = $value;
     }
 
@@ -15,11 +15,11 @@ class WidVis_Plugin implements ArrayAccess {
         return isset($this->contents[$offset]);
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset(mixed $offset): void {
         unset($this->contents[$offset]);
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet(mixed $offset): mixed {
         if( is_callable($this->contents[$offset]) ){
             return $this->contents[$offset]( $this );
         }
