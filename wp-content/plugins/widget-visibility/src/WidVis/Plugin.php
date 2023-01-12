@@ -11,7 +11,7 @@ class WidVis_Plugin implements ArrayAccess {
         $this->contents[$offset] = $value;
     }
 
-    public function offsetExists($offset) {
+    public function offsetExists(mixed $offset): bool {
         return isset($this->contents[$offset]);
     }
 
