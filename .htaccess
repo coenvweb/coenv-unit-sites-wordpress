@@ -144,6 +144,9 @@ RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^www\.cicoes.uw.edu [NC]
 RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^futurerivers.washington.edu [NC]
++RewriteRule ^(.*)$ https://futurerivers.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]

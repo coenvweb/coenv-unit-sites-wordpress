@@ -2,8 +2,9 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
-Tested up to: 6.1
-Stable tag: 1.11.21
+Tested up to: 6.1.1
+Stable tag: 2.0.0
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +68,10 @@ To upgrade your installation
 
 == Changelog ==
 
+= 2.0.0 =
+* Version 2 release
+* Added connection to free Hub features for cloud based Broken Link Checker.
+
 = 1.11.21 =
 * Fix strict comparison causing db queries
 
@@ -79,9 +84,6 @@ To upgrade your installation
 
 = 1.11.18 =
 * Updated UA string
-
-= 1.11.17 =
-* Fix security vulnerability
 
 = 1.11.16 =
 * Enhance compatibility with PHP 8

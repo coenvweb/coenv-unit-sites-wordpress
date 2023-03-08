@@ -1,10 +1,10 @@
 === WP Super Cache ===
-Contributors: donncha, automattic
+Contributors: donncha, automattic, adnan007, mikemayhem3030, ppetrov2c, pyronaur, thingalon
 Tags: performance, caching, wp-cache, wp-super-cache, cache
 Requires at least: 5.9
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -268,13 +268,17 @@ Your theme is probably responsive which means it resizes the page to suit whatev
 
 
 == Changelog ==
-### 1.9.3-beta - 2023-01-23
+### 1.9.4-beta - 2023-03-02
 #### Added
-- Added new filters to set mod_expires rules and HTTP headers in the cache htaccess file.
+- Added a check to ensure preload cronjobs exist when updating preload settings.
+- Added new filter which controls cache clearing on post edit.
+
+#### Changed
+- Updated contributors list.
 
 #### Fixed
-- Fixed an issue that caused wp-config.php file permissions to change.
-- Fixed missing missing action 'wp_cache_cleared' when clearing the cache on post update.
+- Fixed deprecation warnings on PHP 8.1+.
+- Fixed undefined PHP variable when trying to delete a protected folder.
 
 --------
 
