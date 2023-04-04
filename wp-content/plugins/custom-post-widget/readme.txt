@@ -2,8 +2,8 @@
 Contributors: vanderwijk
 Tags: widget, sidebar, content block, block, custom, post, shortcode, wysiwyg, wpml, featured image
 Requires at least: 4.0
-Tested up to: 6.0
-Stable tag: 3.2.3
+Tested up to: 6.2
+Stable tag: 3.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,7 @@ These new features are on the to-do list:
 * Display the content block featured image when using the shortcode
 * Front-end editing of the content blocks
 * Visual Composer integration
+* Show the shortcode on the "View all Content Blocks" list view
 
 = How can I make advanced changes to the widget layout? =
 

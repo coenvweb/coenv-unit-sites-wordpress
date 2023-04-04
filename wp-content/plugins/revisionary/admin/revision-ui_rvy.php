@@ -54,11 +54,11 @@ function rvy_metabox_notification_list() {
  */
 function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_date', $args = array() ) {
 	global $revisionary;
-	
+
 	$defaults = array( 'post' => false, 'format' => 'list' );
 	$args = array_merge( $defaults, (array) $args );
 	foreach ( array_keys( $defaults ) as $var ) { $$var = $args[$var]; }
-	
+
 	if ( ! is_object($revision) )
 		if ( !$revision = get_post( $revision ) )
 			return $revision;
@@ -111,7 +111,7 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 			$date = sprintf( $currentf, $date, $revision_date );
 		}
 	}
-	
+
 	return $date;
 }
 
@@ -244,7 +244,7 @@ function rvy_list_post_revisions( $post_id = 0, $status = '', $args = null ) {
 			
 			$datef = __awp( 'M j, Y @ g:i a' );
 			
-			$rows .= "<tr class='" . esc_attr($class) . ">";
+			$rows .= "<tr class='" . esc_attr($class) . "'>";
 
 			if ( $post->ID != $revision->ID ) {
 				if ('inherit' == $revision->post_status) {

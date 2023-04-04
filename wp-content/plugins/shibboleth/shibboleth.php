@@ -9,7 +9,7 @@
  * Plugin URI: https://wordpress.org/plugins/shibboleth/
  * Description: Easily externalize user authentication to a <a href="https://www.incommon.org/software/shibboleth/">Shibboleth</a> Service Provider
  * Author: Michael McNeill, mitcho (Michael 芳貴 Erlewine), Will Norris
- * Version: 2.4
+ * Version: 2.4.1
  * Requires PHP: 5.6
  * Requires at least: 4.0
  * License: Apache 2 (https://www.apache.org/licenses/LICENSE-2.0.html)
@@ -18,7 +18,7 @@
 
 define( 'SHIBBOLETH_MINIMUM_WP_VERSION', '4.0' );
 define( 'SHIBBOLETH_MINIMUM_PHP_VERSION', '5.6' );
-define( 'SHIBBOLETH_PLUGIN_VERSION', '2.4' );
+define( 'SHIBBOLETH_PLUGIN_VERSION', '2.4.1' );
 
 /**
  * Determine if this is a new install or upgrade and, if so, run the
@@ -959,7 +959,7 @@ add_filter( 'lostpassword_url', 'shibboleth_custom_password_reset_url' );
 function shibboleth_login_form() {
 	global $wp;
 	$url = false;
-	if ( isset( $wp->request ) ) {
+	if ( ! empty( $wp->request ) ) {
 		$url = wp_login_url( home_url( $wp->request ) );
 	}
 	$login_url = add_query_arg( 'action', 'shibboleth', $url );
