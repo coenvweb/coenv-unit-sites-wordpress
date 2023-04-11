@@ -61,7 +61,7 @@ class Email_Encoder_Validate{
 
         $content = $this->filter_soft_dom_attributes( $content, 'char_encode' );
 
-        $htmlSplit = preg_split( '/(<body(([^>]*)>))/is', $content, null, PREG_SPLIT_DELIM_CAPTURE );
+        $htmlSplit = preg_split( '/(<body(([^>]*)>))/is', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
         
         if ( count( $htmlSplit ) < 4 ) {
             return $content;
@@ -199,7 +199,17 @@ class Email_Encoder_Validate{
         return preg_replace_callback( EEB()->settings->get_email_regex(), function ( $matches ) use ( $replace_by, $protection_method, $show_encoded_check, $self ) {
             // workaround to skip responsive image names containing @
             $extention = strtolower( $matches[4] );
-            $excludedList = array('.jpg', '.jpeg', '.png', '.gif', '.svg');
+            $excludedList = array( 
+                '.jpg', 
+                '.jpeg', 
+                '.png', 
+                '.gif', 
+                '.svg', 
+                '.webp',
+                '.bmp',
+                '.tiff',
+                '.avif',
+            );
 
             //Added in 2.1.1
             $excludedList = apply_filters( 'eeb/validate/excluded_image_urls', $excludedList );
@@ -280,7 +290,7 @@ class Email_Encoder_Validate{
         $self = $this;
 
         $callbackEncodeMailtoLinks = function ( $match ) use ( $self, $protection_method ) {
-            $attrs = shortcode_parse_atts( $match[1] );
+            $attrs = EEB()->helpers->parse_html_attributes( $match[1] );
             return $self->create_protected_mailto( $match[4], $attrs, $protection_method );
         };
 
