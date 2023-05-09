@@ -147,6 +147,21 @@ RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^futurerivers.washington.edu [NC]
 RewriteRule ^(.*)$ https://futurerivers.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^natureandhealth.washington.edu [NC]
+RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ice.washington.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ice.uw.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ess.uw.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ess.washington.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
 # SSL on each domain
 
 RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
@@ -225,6 +240,10 @@ RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R,L]
 RewriteCond %{HTTP_HOST} ^cicoes.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^natureandhealth.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R,L]
 
 
 # Site-specific redirects
