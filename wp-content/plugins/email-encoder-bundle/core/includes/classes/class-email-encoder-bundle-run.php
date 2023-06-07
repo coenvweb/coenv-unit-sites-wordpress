@@ -68,6 +68,7 @@ class Email_Encoder_Run{
 
 		do_action('eeb_ready', array($this, 'eeb_ready_callback_filter'), $this);
 
+		add_action( 'init', array( $this, 'reload_settings_for_integrations' ), 5 );
 	}
 
 	/**
@@ -95,6 +96,17 @@ class Email_Encoder_Run{
     }
 
 	/**
+	 * Reload the settings to reflect
+	 * Third party and integration changes
+	 *
+	 * @since 2.1.6
+	 * @return void
+	 */
+	public function reload_settings_for_integrations(){
+		EEB()->settings->reload_settings();
+	 }
+
+	/**
 	 * ######################
 	 * ###
 	 * #### PAGE BUFFERING & WIDGET FILTER
@@ -108,9 +120,35 @@ class Email_Encoder_Run{
 	  * @return void
 	  */
 	public function buffer_final_output(){
-        if ( ! defined( 'WP_CLI' ) ) {
-			ob_start( array( $this, 'apply_content_filter' ) );
+
+        if( 
+			defined( 'WP_CLI' ) //Bail if WP CLI command
+			|| defined( 'DOING_CRON' ) //Bail if it is a cron call
+		) {
+			return;
 		}
+
+		if( wp_doing_ajax() ){
+
+			//Maybe allow filtering for ajax requests
+			$filter_ajax_requests = (int) EEB()->settings->get_setting( 'ajax_requests', true, 'filter_body' );
+			if( $filter_ajax_requests !== 1 ){
+				return;
+			}
+			
+		}
+
+		if( is_admin() ){
+
+			//Maybe allow filtering for admin requests
+			$filter_admin_requests = (int) EEB()->settings->get_setting( 'admin_requests', true, 'filter_body' );
+			if( $filter_admin_requests !== 1 ){
+				return;
+			}
+
+		}
+
+		ob_start( array( $this, 'apply_content_filter' ) );
     }
 
 	 /**
@@ -378,9 +416,11 @@ class Email_Encoder_Run{
      * @param string  $content
      */
     public function shortcode_email_encoder_form( $atts = array(), $content = null ){
-		$display_encoder_form = (bool) EEB()->settings->get_setting( 'display_encoder_form', true, 'encoder_form' );
 
-		if( $display_encoder_form ){
+		if( 
+			EEB()->helpers->is_page( $this->page_name )
+			|| (bool) EEB()->settings->get_setting( 'encoder_form_frontend', true, 'encoder_form' )
+		 ){
 			return EEB()->validate->get_encoder_form();
 		}
 

@@ -205,10 +205,21 @@ function ns_wp_validate_site( $site_name, $site_title ) {
 			$errors[] = __( 'Sorry, that site already exists!', 'ns-cloner-site-copier' );
 		}
 		// Validate against WP illegal / reserved names.
-		$illegal_names  = get_site_option( 'illegal_names', array() );
-		$illegal_dirs   = get_subdirectory_reserved_names();
+		$illegal_names = get_site_option( 'illegal_names', array() );
+		$illegal_dirs  = get_subdirectory_reserved_names();
+
+		// This should never happen, but there are times the options is empty and this is not an array.
+		if ( ! is_array( $illegal_names ) ) {
+			$illegal_names = array();
+		}
+
+		// Check if directories is array as this can be overriden by a filter.
+		if ( ! is_array( $illegal_dirs ) ) {
+			$illegal_dirs = array();
+		}
+
 		$illegal_values = is_subdomain_install() ? $illegal_names : array_merge( $illegal_names, $illegal_dirs );
-		if ( in_array( $site_name, $illegal_values, true ) ) {
+		if ( is_array( $illegal_values ) && in_array( $site_name, $illegal_values, true ) ) {
 			$errors[] = __( 'That URL is reserved by WordPress.', 'ns-cloner-site-copier' );
 		}
 	}

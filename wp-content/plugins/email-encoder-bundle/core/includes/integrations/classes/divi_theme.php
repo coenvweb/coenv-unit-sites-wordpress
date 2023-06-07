@@ -47,7 +47,6 @@ if( ! class_exists( 'Email_Encoder_Integration_Divi' ) ){
          */
         private function add_hooks(){
             add_filter( 'eeb/settings/fields', array( $this, 'deactivate_logic' ), 10 );
-            add_action( 'init', array( $this, 'reload_settings_before_divi_builder' ), 5 );
         }
 
         /**
@@ -69,10 +68,6 @@ if( ! class_exists( 'Email_Encoder_Integration_Divi' ) ){
          * ###
          * ######################
          */
-
-         public function reload_settings_before_divi_builder(){
-            EEB()->settings->reload_settings();
-         }
         
         public function deactivate_logic( $fields ){
 

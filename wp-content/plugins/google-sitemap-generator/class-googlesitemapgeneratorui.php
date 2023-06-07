@@ -254,7 +254,7 @@ class GoogleSitemapGeneratorUI {
 				}
 
 				echo "<div class='wrap'>";
-				echo '<h2>' . esc_html( __( 'XML Sitemap Generator for WordPress', 'sitemap' ) ) . ' ' . esc_html( $this->sg->get_version() ) . '</h2>';
+				echo '<h2>' . esc_html( __( 'XML Sitemap Generator for Google', 'sitemap' ) ) . ' ' . esc_html( $this->sg->get_version() ) . '</h2>';
 				echo '<p>This is the debug mode of the XML Sitemap Generator. It will show all PHP notices and warnings as well as the internal logs, messages and configuration.</p>';
 				echo "<p style='font-weight:bold; color:red; padding:5px; border:1px red solid; text-align:center;'>DO NOT POST THIS INFORMATION ON PUBLIC PAGES LIKE SUPPORT FORUMS AS IT MAY CONTAIN PASSWORDS OR SECRET SERVER INFORMATION!</p>";
 				echo '<h3>WordPress and PHP Information</h3>';
@@ -966,7 +966,7 @@ class GoogleSitemapGeneratorUI {
 			<form method='post' action='<?php echo esc_url( $this->sg->get_back_link() ); ?>'>
 				<h2>
 					<?php
-					esc_html_e( 'XML Sitemap Generator for WordPress', 'sitemap' );
+					esc_html_e( 'XML Sitemap Generator for Google', 'sitemap' );
 					echo ' ' . esc_html( $this->sg->get_version() );
 					?>
 				</h2>
@@ -986,7 +986,7 @@ class GoogleSitemapGeneratorUI {
 							'strong' => array(),
 						);
 						/* translators: %s: search term */
-						echo wp_kses( str_replace( '%s', 'options-reading.php#blog_public', __( 'Your site is currently blocking search engines! Visit the <a href=\'%s\'>Reading Settings</a> to change this.', 'sitemap' ) ), $arr );
+						echo wp_kses( str_replace( '%s', 'options-reading.php#blog_public', __( 'Your <a href=\'%s\'>Reading Settings</a> signal to search engines not to index your website. While your sitemap will still be generated, the "Search engine visibility" setting should de-selected for optimal indexation.', 'sitemap' ) ), $arr );
 						?>
 						</p>
 					</div>
@@ -1215,7 +1215,7 @@ class GoogleSitemapGeneratorUI {
 												'strong' => array(),
 											);
 											/* translators: %s: search term */
-											echo wp_kses( str_replace( '%s', $this->sg->get_redirect_link( 'redir/sitemap-gwt' ), __( 'No registration required, but you can join the <a href=\'%s\' target=\'_blank\'>Google Webmaster Tools</a> to check crawling statistics.', 'sitemap' ) ), $arr );
+											echo wp_kses( str_replace( '%s', $this->sg->get_redirect_link( 'redir/sitemap-gwt' ), __( 'No registration required, but you can join the <a href=\'%s\' target=\'_blank\'>Google Search Console</a> to check crawling statistics.', 'sitemap' ) ), $arr );
 											?>
 											</small>
 										</li>
@@ -1775,7 +1775,7 @@ class GoogleSitemapGeneratorUI {
 								<div>
 									<label for='sm_user_consent' id="sm_user_consent_label">
 										<input type='checkbox' id='sm_user_consent' name='sm_user_consent' <?php echo ( get_option( 'sm_user_consent' ) === 'yes' ? 'checked=\'checked\'' : '' ); ?> />
-										<?php esc_html_e( 'Opt in for XML Sitemaps analytics events tracking and provide you better experience.', 'sitemap' ); ?>
+										<?php esc_html_e( 'Help improve the software by sharing anonymous usage data with the developers.', 'sitemap' ); ?>
 										<button class="more_info_button" id="more_info_button" type="button" ><img class='more_info' src='<?php echo esc_attr( $this->sg->get_plugin_url() . 'img/help.png' ); ?>' /></button>
 										</label>
 										</div>

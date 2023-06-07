@@ -17,6 +17,7 @@ class EEB_Integrations_Loader{
     public function load_integrations(){
 
         $plugins = array(
+            'bricks_builder' => 'bricks_builder.php',
             'maintenance' => 'maintenance.php',
             'divi_theme' => 'divi_theme.php',
             'google_site_kit' => 'google_site_kit.php',
@@ -25,7 +26,7 @@ class EEB_Integrations_Loader{
         );
 
         $services = array(
-            'foggy_email' => 'foggy_email.php'
+            //'foggy_email' => 'foggy_email.php' //Got discontinued
         );
 
         $integrations = array_merge( $plugins, $services );

@@ -1,5 +1,5 @@
 {
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "kint-php/kint": "^4.0",
@@ -12,5 +12,11 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
         "phpro/grumphp": "^1.13"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpro/grumphp": true
+        }
     }
 }

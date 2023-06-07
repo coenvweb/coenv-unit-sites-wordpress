@@ -1,3 +1,6 @@
+= 4.2.2.2 - 2023.05.09 =
+* Fix critical php error
+
 = 4.2.2.1 - 2022.12.19 =
 * Remove unnecessary vendor files
 

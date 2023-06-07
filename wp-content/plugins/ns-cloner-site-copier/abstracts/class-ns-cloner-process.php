@@ -455,7 +455,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 	 *
 	 * @return array
 	 */
-	private function get_batches() {
+	public function get_batches() {
 		$batches = array();
 		// Get all progress records for this bg process.
 		$progress_rows = ns_cloner()->db->get_results(
