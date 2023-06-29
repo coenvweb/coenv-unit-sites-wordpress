@@ -217,7 +217,7 @@ class Rvy_Revision_Workflow_UI {
 
                 foreach($recipient_ids as $user_id) {
                     $user = new WP_User($user_id);                
-                
+
                     if ($user->exists() && !empty($user->user_email)) {
                         $to_addresses[$user_id] = $user->user_email;
                     }

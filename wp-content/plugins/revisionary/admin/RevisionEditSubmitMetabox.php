@@ -70,7 +70,7 @@ class RvyRevisionEditSubmitMetabox
 
                 <div class="clear"></div>
             </div> <?php // major-publishing-actions ?>
-            
+
             <?php
             $html = apply_filters('revisionary_submit_revision_metabox_classic', ob_get_clean(), $post);
             echo $html;

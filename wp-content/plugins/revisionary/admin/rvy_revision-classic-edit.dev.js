@@ -51,11 +51,11 @@ jQuery(document).ready( function($) {
 
                     + '<div class="revision-created-wrapper" style="display: none; margin: 8px 0 0 2px">'
 					+ '<span class="revision-approve revision-created" style="color:green">'
-                    + rvyObjEdit[rvyObjEdit.currentStatus + 'CompletedCaption'] + '</span>'
+					+ rvyObjEdit[rvyObjEdit.currentStatus + 'CompletedCaption'] + '</span> '
                     + rvyPreviewLink
                     + '</div>'
-                    
-					+ '</div>'
+
+                    + '</div>'
 				);
             }
             
@@ -73,7 +73,7 @@ jQuery(document).ready( function($) {
             }
         }
 	}
-    var RvyUIInterval = setInterval(RvySubmissionUI, 100);
+	var RvyUIInterval = setInterval(RvySubmissionUI, 100);
 
     $('a.save-timestamp').click(function() {
         $('#save-post').val(rvyObjEdit.updateCaption);

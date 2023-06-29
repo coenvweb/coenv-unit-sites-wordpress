@@ -17,12 +17,12 @@ jQuery(document).ready( function($) {
 			+ rvyObjEdit.actionCaption + '</a>'
 			+ '<div class="revision-created-wrapper" style="display:none; margin: 10px 0 10px 5px; font-weight: bold">'
 			+ '<span class="revision-approve revision-created">' + rvyObjEdit.completedCaption + '</span> &nbsp;';
-
+			
 			if (rvyObjEdit.completedURL) {
 				html = html + '<a href="javascript:void(0)" class="revision-approve revision-preview" target="_blank">' 
 				+ rvyObjEdit.completedLinkCaption + '</a>&nbsp;';
 			}
-
+			
 			html = html + '<a href="javascript:void(0)" class="revision-approve revision-edit" target="_blank">' 
 			+ rvyObjEdit.completedEditLinkCaption + '</a>'
 			
@@ -44,7 +44,7 @@ jQuery(document).ready( function($) {
 						html += '&nbsp;<a href="javascript:void(0)" class="revision-approve revision-preview" target="_blank">' 
 						+ rvyObjEdit.scheduledLinkCaption + '</a>';
 					}
-
+					
 					html += '&nbsp;<a href="javascript:void(0)" class="revision-approve revision-edit" target="_blank">' 
 					+ rvyObjEdit.scheduledEditLinkCaption + '</a>'
 

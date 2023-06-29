@@ -58,7 +58,7 @@ define ('ELIGIBLE_ITEMS_RVY', 'eligible');
 		
 		if ( $agent_count[$agents_subset] > $filter_threshold ) {
 			$flt_checked = ( ! $default_hide_filtered_list ) ? " checked" : '';
-	
+
 			echo "<ul class='rs-list_horiz rvy-list-horiz'><li>"; // IE6 (at least) does not render label reliably without this
 
 			echo "<input type='checkbox' name='rs-jscheck[]' value='" . esc_attr("validate_me_{$agents_subset}_{$id_prefix}") . "' " 

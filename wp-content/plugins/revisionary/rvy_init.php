@@ -726,6 +726,10 @@ function rvy_detect_post_id() {
 function rvy_add_revisor_role( $requested_blog_id = '' ) {
 	global $wp_roles;
 	
+	if (defined('REVISIONARY_NO_REVISOR_ROLE')) {
+		return;
+	}
+
 	$wp_role_caps = array(
 		'read' => true,
 		'read_private_posts' => true,
@@ -793,6 +797,20 @@ function revisionary_refresh_postmeta($post_id, $args = []) {
 	} else {
 		delete_post_meta($post_id, '_rvy_has_revisions');
 	}
+}
+
+function rvy_post_revision_supported($post) {
+	$post_id = (is_scalar($post)) ? $post : $post->ID;
+
+	if ($post_id) {
+		if (1 === intval(rvy_get_option('revision_limit_per_post'))) {
+			if (rvy_get_post_meta($post_id, '_rvy_has_revisions')) {
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 if (!empty($_REQUEST['rvy_flush_flags'])) {

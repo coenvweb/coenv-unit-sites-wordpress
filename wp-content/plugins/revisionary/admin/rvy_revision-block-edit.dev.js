@@ -137,7 +137,7 @@ jQuery(document).ready(function ($) {
         }
 	}
 	var RvyHideInterval = setInterval(RvyHideElements, 50);
-    
+	
     var RvySubmissionUI = function () {
 		// @todo: use .edit-post-post-visibility if edit-post-post-schedule not available
         if ($('div.edit-post-post-schedule').length) {
@@ -203,7 +203,7 @@ jQuery(document).ready(function ($) {
                     + rvyObjEdit[rvyObjEdit.currentStatus + 'CompletedCaption'] + '</span> '
                     + rvyPreviewLink
                     + '</div>'
-                    + '</div>');
+					+ '</div>');
 
                 $('div.rvy-submission-div').trigger('loaded-ui');
             }
