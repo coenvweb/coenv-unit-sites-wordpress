@@ -254,9 +254,8 @@ RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R,L]
 #RewriteRule .? - [S=0]
 
 # SAFS Redirects
-RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
-RewriteRule .? - [S=1]
-RewriteRule ^seas-open-house/?$ https://fish.uw.edu/alumni-community/students-explore-aquatic-sciences-seas/ [R=302,L]
+#RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
+#RewriteRule .? - [S=0]
 
 # CIG Redirects
 RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
