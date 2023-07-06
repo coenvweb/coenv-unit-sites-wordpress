@@ -15,6 +15,8 @@ class CoreAdmin {
                 'screens' => [
                     ['base' => 'toplevel_page_revisionary-q'],
                     ['base' => 'revisions_page_revisionary-settings'],
+                    ['base' => 'revisions_page_revisionary-archive'],
+                    ['base' => 'toplevel_page_revisionary-archive'],
                 ]
             ];
 
@@ -23,15 +25,21 @@ class CoreAdmin {
     }
 
     function setUpgradeMenuLink() {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
         $url = 'https://publishpress.com/links/revisions-menu';
         ?>
         <style type="text/css">
         #toplevel_page_revisionary-q ul li:last-of-type a {font-weight: bold !important; color: #FEB123 !important;}
+        #toplevel_page_revisionary-archive ul li:last-of-type a {font-weight: bold !important; color: #FEB123 !important;}
         </style>
 
 		<script type="text/javascript">
             jQuery(document).ready(function($) {
                 $('#toplevel_page_revisionary-q ul li:last a').attr('href', '<?php echo $url;?>').attr('target', '_blank').css('font-weight', 'bold').css('color', '#FEB123');
+                $('#toplevel_page_revisionary-archive ul li:last a').attr('href', '<?php echo $url;?>').attr('target', '_blank').css('font-weight', 'bold').css('color', '#FEB123');
             });
         </script>
 		<?php

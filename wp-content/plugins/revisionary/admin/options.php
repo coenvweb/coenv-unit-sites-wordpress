@@ -395,7 +395,7 @@ if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 
 		$this->all_options []= $option_name;
 
-		esc_html_e('Enable revisions for these Post Types:', 'revisionary');
+		esc_html_e('Enable revision submission for these Post Types:', 'revisionary');
         echo '<br /><br />';
 
 		$hidden_types = ['attachment' => true, 'tablepress_table' => true, 'acf-field-group' => true, 'acf-field' => true, 'nav_menu_item' => true, 'custom_css' => true, 'customize_changeset' => true, 'wp_block' => true, 'wp_template' => true, 'wp_template_part' => true, 'wp_global_styles' => true, 'wp_navigation' => true];
@@ -527,6 +527,7 @@ if ( ! empty( $this->form_options[$tab][$section] ) ) :?>
 
 	do_action('revisionary_auto_submit_setting_ui', $this, $tab, $section);
 	?>
+
 	<br />
 	<?php
 	$hint = sprintf(esc_html__('If the user does not have a regular Edit link, recaption the %s link as "Edit"', 'revisionary'), pp_revisions_status_label('draft-revision', 'submit_short'));
