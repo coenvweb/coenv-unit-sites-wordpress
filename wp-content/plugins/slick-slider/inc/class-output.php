@@ -113,7 +113,7 @@ class Slick_Slider_Output {
 	 * @param integer $instance Unique numeric ID of this gallery shortcode instance.
 	 * @return string           Complete Slick Slider markup which can be modified by multiple filters.
 	 */
-	public static function slick_markup( $atts, $instance, $output = '') {
+	public static function slick_markup( $output = '', $atts = null, $instance = null ) {
 		
 		if ( isset( $atts['slick_active'] ) && 'true' === $atts['slick_active'] ) {
 
@@ -229,9 +229,24 @@ class Slick_Slider_Output {
 
 				$image_tag = wp_get_attachment_image( $id, $atts['size'] );
 
-
+				if ( class_exists( 'WPGalleryCustomLinks' ) && $link = get_post_meta( $id, '_gallery_link_url', true ) ) {
+					$slide[] = sprintf(
+						'<a href="%s" target="%s">%s</a>',
+						esc_html( apply_filters( 'wpgcl_filter_raw_gallery_link_url', $link, $id, $post->ID ) ),
+						esc_html( get_post_meta( $id, '_gallery_link_target', true ) ),
+						$image_tag
+					);
+				} elseif ( 'none' !== $atts['link'] ) {
+					$slide[] = wp_get_attachment_link(
+						$id,
+						$atts['size'],
+						'file' === $atts['link'] ? false : true,
+						false,
+						$image_tag
+					);
+				} else {
 					$slide[] = $image_tag;
-				
+				}
 
 				if ( isset( $options['showCaption'] ) && $options['showCaption'] ) {
 					$meta = wp_prepare_attachment_for_js( $id );

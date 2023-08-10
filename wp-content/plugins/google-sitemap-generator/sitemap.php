@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.php 2823802 2022-11-24 18:12:38Z auctollo $
+ * $Id: sitemap.php 2947864 2023-08-04 18:02:26Z auctollo $
 
  *  XML Sitemap Generator for Google
  * ==============================================================================
@@ -16,7 +16,7 @@
  * Plugin Name: XML Sitemap Generator for Google
  * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.11
+ * Version: 4.1.13
  * Author: Auctollo
  * Author URI: https://auctollo.com/
  * Text Domain: sitemap
@@ -45,7 +45,11 @@
  * Please see license.txt for the full license.
  */
 
-include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+global $wp_version;
+if ( (int) $wp_version > 4 ) {
+	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+}
+
 require_once trailingslashit( dirname( __FILE__ ) ) . 'sitemap-core.php';
 
 include_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -56,7 +60,7 @@ define( 'SM_SUPPORTFEED_URL', 'https://wordpress.org/support/plugin/google-sitem
 define( 'SM_BETA_USER_INFO_URL', 'https://api.auctollo.com/beta/consent' );
 define( 'SM_LEARN_MORE_API_URL', 'https://api.auctollo.com/lp' );
 define( 'SM_BANNER_HIDE_DURATION_IN_DAYS', 7 );
-
+define( 'SM_CONFLICT_PLUGIN_LIST', 'All in One SEO,Yoast SEO' );
 add_action( 'admin_init', 'register_consent', 1 );
 add_action( 'admin_head', 'ga_header' );
 add_action( 'admin_footer', 'ga_footer' );
@@ -113,6 +117,17 @@ function ga_header() {
 					document.querySelector(\"[id='enable-updates-form']\").submit();
 				});
 			}
+
+			var conflict_plugin = document.querySelectorAll('.conflict_plugin')
+			conflict_plugin.forEach((plugin,index)=>{
+				plugin.addEventListener('click', function (event) {
+					event.preventDefault();
+					console.log(plugin)
+					document.getElementById('disable_plugin').value = plugin.id;
+					document.querySelector(\"[id='disable-plugins-form']\").submit();
+				});
+			})
+
 			var more_info_button = document.getElementById('more_info_button')
 			if(more_info_button){
 				more_info_button.addEventListener('click',function(){
@@ -172,26 +187,35 @@ function ga_header() {
 				} else {
 					echo '<script>
 					setTimeout(()=>{
+						let discardContent = document.getElementById("discard_content");
 						
-					document.getElementById("discard_content").classList.add("discard_button_outside_settings")
-					document.getElementById("discard_content").classList.remove("discard_button")
-				},200);
+						if (discardContent) {
+							discardContent.classList.add("discard_button_outside_settings");
+							discardContent.classList.remove("discard_button");
+						}
+					}, 200);
 					</script>';
 				}
 			} else {
 				echo '<script>
 				setTimeout(()=>{
+					let discardContent = document.getElementById("discard_content");
 					
-				document.getElementById("discard_content").classList.add("discard_button_outside_settings")
-				document.getElementById("discard_content").classList.remove("discard_button")
-			},200);
+					if (discardContent) {
+						discardContent.classList.add("discard_button_outside_settings");
+						discardContent.classList.remove("discard_button");
+					}
+				}, 200);
 				</script>';
 			}
 		} else {
 			echo "<script>
 			setTimeout(()=>{
-				document.getElementById(\"discard_content\").classList.add(\"discard_button_outside_settings\")
-				document.getElementById(\"discard_content\").classList.remove(\"discard_button\")
+				let discardContent = document.getElementById(\"discard_content\");
+				if (discardContent) {
+					document.getElementById(\"discard_content\").classList.add(\"discard_button_outside_settings\")
+					document.getElementById(\"discard_content\").classList.remove(\"discard_button\")
+				}
 				if( document.getElementById(\"user-consent-form\") ){
 					const form = document.getElementById(\"user-consent-form\")
 					var plugin_version = document.createElement(\"input\")
@@ -336,6 +360,21 @@ function register_consent() {
 				update_option( 'auto_update_plugins', $auto_update_plugins );
 			} elseif ( 'false' === $_POST['enable_updates'] ) {
 				update_option( 'sm_hide_auto_update_banner', 'yes' );
+			}
+		}
+		if ( isset( $_POST['disable_plugin'] ) ) {
+			if ( strpos( $_POST['disable_plugin'], 'all_in_one' ) !== false  ) {
+				$default_value   = 'default';
+				$aio_seo_options = get_option( 'aioseo_options', $default_value );
+				if ( $aio_seo_options !== $default_value ) {
+					$aio_seo_options                           = json_decode( $aio_seo_options );
+					$aio_seo_options->sitemap->general->enable = 0;
+					update_option( 'aioseo_options', json_encode( $aio_seo_options ) );
+				}
+			} elseif( strpos( $_POST['disable_plugin'], 'wp-seo' ) !== false ) { 
+				$yoast_options = get_option( 'wpseo' );
+				$yoast_options['enable_xml_sitemap'] = false;
+				update_option( 'wpseo', $yoast_options );
 			}
 		}
 	}

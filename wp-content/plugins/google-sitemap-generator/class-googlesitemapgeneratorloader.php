@@ -338,9 +338,11 @@ class GoogleSitemapGeneratorLoader {
 				'id'    => array(),
 			),
 			'img'    => array(
-				'src'   => array(),
-				'class' => array(),
-				'id'    => array(),
+				'src'    => array(),
+				'class'  => array(),
+				'id'     => array(),
+				'height' => array(),
+				'width'  => array(),
 			),
 			'button' => array(
 				'onClick' => array(),
@@ -367,6 +369,7 @@ class GoogleSitemapGeneratorLoader {
 				),
 			),
 			'form'   => array(
+				'id'     => array(),
 				'method' => array(),
 				'action' => array(),
 				'style'  => array(
@@ -376,11 +379,138 @@ class GoogleSitemapGeneratorLoader {
 				),
 			),
 		);
+		$default_value = 'default';
+
+		$yoast_options    = get_option( 'wpseo', $default_value );
+		$yoast_sm_enabled = 0;
+		if ( $yoast_options !== $default_value && isset( $yoast_options['enable_xml_sitemap'] ) ) {
+			$yoast_sm_enabled = $yoast_options['enable_xml_sitemap'] ? $yoast_options['enable_xml_sitemap'] : 0;
+		}
+
+		$aio_seo_options    = get_option( 'aioseo_options', $default_value );
+		$aio_seo_sm_enabled = 0;
+
+		if ( $aio_seo_options !== $default_value ) {
+			$aio_seo_options    = json_decode( $aio_seo_options );
+			$aio_seo_sm_enabled = $aio_seo_options->sitemap->general->enable;
+		}
+		$sitemap_plugins  = array();
+		$plugins          = get_plugins();
+		foreach ( $plugins as $key => $value ) {
+			$plug = array();
+			if ( strpos( $key, 'google-sitemap-generator' ) !== false ) {
+				continue;
+			}
+			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false ) && is_plugin_active( ( $key ) ) ) {
+				array_push( $plug, $key );
+				foreach ( $value as $k => $v ) {
+					if ( 'Name' === $k ) {
+						array_push( $plug, $v );
+					}
+				}
+				array_push( $sitemap_plugins, $plug );
+			}
+		}
+		$conflict_plugins = explode( ',', SM_CONFLICT_PLUGIN_LIST );
+
+		$plugin_title = array();
+		$plugin_name  = array();
+		for ( $i = 0; $i < count( $sitemap_plugins ); $i++ ) {
+			if ( in_array( $sitemap_plugins[ $i ][1], $conflict_plugins ) ) {
+				array_push( $plugin_name, $sitemap_plugins[ $i ][1] );
+				array_push( $plugin_title, $sitemap_plugins[ $i ][0] );
+			}
+		}
+		if ( 'google-sitemap-generator/sitemap.php' === $current_page && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled ) ) {
+			?>
+			<style>
+				.plugin_lists{
+					font-style: italic;
+				}
+				.other_plugin_notice{
+					margin-bottom: 10px;
+				}
+				.content_div{
+					margin-top:0;
+					padding:0 10px 10px 10px;
+					box-shadow: 0 1px 2px #0003;
+					border-left: 4px solid #dc3232;
+					margin-bottom:10px;
+				}
+				.conflict_plugin{
+					background: white;
+					color: #2271b1;
+					border: 1px solid #2271b1;
+					border-color: #2271b1;
+					cursor: pointer;
+					padding: 8px;
+					text-decoration: none;
+					margin-right: 10px;
+					border-radius: 5px;
+				}
+				.disable_plugins{
+					background: #2271b1;
+					color: white;
+					border-color: #2271b1;
+					cursor: pointer;
+					padding: 8px;
+					text-decoration: none;
+				}
+				</style>
+				<div class="notice content_div" style="border-left-width:4px;justify-content:space-between;">
+
+				<?php
+				/* translators: %s: search term */
+				echo wp_kses(
+					__(
+						'
+						<h4>The following plugins conflict with proper indexation of your website. Use the buttons below to disable the extra sitemaps:
+						</h4>
+						<div >
+						<form method="post" id="disable-plugins-form">
+						<input type="hidden" id="disable_plugin" name="disable_plugin" value="false" />
+						<input type="hidden" id="plugin_list" name="plugin_list" value="' . implode( ',', $plugin_title ) . '" />
+						</form>
+						<div class="other_plugin_notice" id="other_plugin_notice">
+							
+						</div>
+						</div>
+						',
+						'sitemap'
+					),
+					$arr
+				);
+				?>
+				</div>
+				<script>
+					var plugin_name_list = '<?php echo implode( ',', $plugin_name ); ?>'
+					plugin_name_list = plugin_name_list.split(',')
+					var plugin_title_list = '<?php echo implode( ',', $plugin_title ); ?>'
+					plugin_title_list = plugin_title_list.split(',')
+					var all_in_one_enabled = Number('<?php echo $aio_seo_sm_enabled; ?>');
+					var yoast_enabled = Number('<?php echo $yoast_sm_enabled; ?>');
+					for( var i=0; i < plugin_name_list.length; i++ ) {
+						if ( 
+								(plugin_title_list[i].includes('all_in_one') && all_in_one_enabled !== 0 )
+								||( plugin_title_list[i].includes('wp-seo') && yoast_enabled !== 0 )
+							){
+							var anchor_element_plugin = document.createElement('a')
+							anchor_element_plugin.classList.add('conflict_plugin')
+							anchor_element_plugin.id = plugin_title_list[i]
+							anchor_element_plugin.name = plugin_name_list[i].replace(/ /g,'-')
+							anchor_element_plugin.innerText = 'Disable ' + plugin_name_list[i] + "'s sitemap"
+							var parent_div = document.getElementById('other_plugin_notice')
+							parent_div.appendChild(anchor_element_plugin)
+						}
+					}
+				</script>
+			<?php
+		}
 		$default_value    = 'show_banner';
 		$value            = get_option( 'sm_show_beta_banner', $default_value );
 		$now              = time();
 		$banner_discarded = strtotime( get_option( 'sm_beta_banner_discarded_on' ) );
-		$image_url        = trailingslashit( plugins_url( '', __FILE__ ) ) . 'img/close.jpg';
+		$image_url        = trailingslashit( plugins_url( '', __FILE__ ) ) . 'img/close.png';
 
 		$page_to_show_notice    = array( 'settings_page_google-sitemap-generator/sitemap', 'dashboard', 'plugins' );
 		$current_screen         = get_current_screen()->base;
@@ -400,7 +530,7 @@ class GoogleSitemapGeneratorLoader {
 				}
 				a.discard_button, a.discard_button_outside_settings{
 					border-radius: 50%;
-					border: 0px;
+					border: 0;
 					text-align: center;
 					justify-content: center;
 					align-items: center;
@@ -413,12 +543,12 @@ class GoogleSitemapGeneratorLoader {
 					font-size: small;
 					font-weight: bold;
 					width: 20px;
-					padding-bottom: 0px;
+					padding-bottom: 0;
 					text-decoration: none;
 				}
 				.reject_consent{
 					border-radius: 50%;
-					border: 0px;
+					border: 0;
 					text-align: center;
 					justify-content: center;
 					align-items: center;
@@ -500,7 +630,7 @@ class GoogleSitemapGeneratorLoader {
 					border: none;
 					height: 20px;
 					width: 25px;
-					padding: 0px;
+					padding: 0;
 					position: absolute;
 					right: 10px;
 					background-image: url( <?php echo $image_url; ?> );
@@ -539,9 +669,11 @@ class GoogleSitemapGeneratorLoader {
 						'id'    => array(),
 					),
 					'img'    => array(
-						'src'   => array(),
-						'id'    => array(),
-						'class' => array(),
+						'src'    => array(),
+						'id'     => array(),
+						'class'  => array(),
+						'height' => array(),
+						'width'  => array(),
 					),
 					'a'      => array(
 						'href'   => array(),
@@ -668,7 +800,7 @@ class GoogleSitemapGeneratorLoader {
 							<div class="modal-container">
 							<h3>Help Us Improve!</h3>
 								<button class="close_popup" id="close_popup">
-								<img class="close_cookie_information" src="' . $image_url . '" />
+								<img height="25" width="20" class="close_cookie_information" src="' . $image_url . '" />
 								</button>
 								<p>Would you help us improve our indexation technology by sharing usage data anonymously?</p>
 							</div>
@@ -699,7 +831,7 @@ class GoogleSitemapGeneratorLoader {
 				}
 				a.do_not_enable_auto_update{
 					border-radius: 50%;
-					border: 0px;
+					border: 0;
 					text-align: center;
 					justify-content: center;
 					align-items: center;
@@ -712,7 +844,7 @@ class GoogleSitemapGeneratorLoader {
 					font-size: small;
 					font-weight: bold;
 					width: 20px;
-					padding-bottom: 0px;
+					padding-bottom: 0;
 					text-decoration: none;
 				}
 				a.enable_auto_update {
@@ -741,8 +873,8 @@ class GoogleSitemapGeneratorLoader {
 						<input type="hidden" id="enable_updates" name="enable_updates" value="false" />
 						</form>
 						<div class="justify-content">
-						<a href="" id="enable_auto_update" class="enable_auto_update" name="enable_auto_update" >Enable Auto-Updates!</a>
-						<a href="" id="do_not_enable_auto_update" class="do_not_enable_auto_update" name="do_not_enable_auto_update">X</a>
+						<a id="enable_auto_update" class="enable_auto_update" name="enable_auto_update" >Enable Auto-Updates!</a>
+						<a id="do_not_enable_auto_update" class="do_not_enable_auto_update" name="do_not_enable_auto_update">X</a>
 
 						</div>
 						',
@@ -758,6 +890,7 @@ class GoogleSitemapGeneratorLoader {
 		</div>
 			<?php
 		}
+		
 	}
 	/**
 	 * Returns a nice icon for the Ozh Admin Menu if the {@param $hook} equals to the sitemap plugin

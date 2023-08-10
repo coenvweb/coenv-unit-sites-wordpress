@@ -9,7 +9,7 @@
 
 use function Bhittani\StarRating\functions\sanitize;
 /**
- * $Id: sitemap-core.php 2823802 2022-11-24 18:12:38Z auctollo $
+ * $Id: sitemap-core.php 2946865 2023-08-03 01:41:45Z auctollo $
  */
 
 // Enable for dev! Good code doesn't generate any notices...
@@ -1865,8 +1865,7 @@ final class GoogleSitemapGenerator {
 			wp_raise_memory_limit( $this->get_option( 'b_memory' ) );
 
 		}
-
-		if ( $this->get_option( 'b_time' ) !== -1 ) {
+		if ( $this->get_option( 'b_time' ) !== -1 && $this->get_option( 'b_time' ) !== null ) {
 			if ( strpos( $disable_functions, 'set_time_limit' ) === false ) {
 				set_time_limit( $this->get_option( 'b_time' ) );
 			}

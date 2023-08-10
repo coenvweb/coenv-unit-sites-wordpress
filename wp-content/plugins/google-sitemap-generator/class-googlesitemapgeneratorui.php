@@ -546,6 +546,7 @@ class GoogleSitemapGeneratorUI {
 			delete_option( 'sm_beta_notice_dismissed_from_wp_admin' );
 			delete_option( 'sm_user_consent' );
 			delete_option( 'sm_hide_auto_update_banner' );
+			delete_option( 'sm_disabe_other_plugin' );
 			$this->sg->init_options();
 			$this->sg->save_options();
 			$message .= __( 'The default configuration was restored.', 'sitemap' );
@@ -705,8 +706,33 @@ class GoogleSitemapGeneratorUI {
 				?>
 				<!--
 				<div class="updated">
-					<strong><p><?php echo esc_html( str_replace( '%s', $this->sg->get_redirect_link( 'redir/sitemap-donate-note' ), __( 'Thanks for using this plugin! You\'ve installed this plugin over a month ago. If it works and you are satisfied with the results, isn\'t it worth at least a few dollar? <a href="https://8rkh4sskhh.execute-api.us-east-1.amazonaws.com/gsg/v1/sitemap-donate-note">Donations</a> help me to continue support and development of this <i>free</i> software! <a href="https://8rkh4sskhh.execute-api.us-east-1.amazonaws.com/gsg/v1/sitemap-donate-note">Sure, no problem!</a>', 'sitemap' ) ) ); ?> <a href="<?php echo esc_url( $this->sg->get_back_link() ) . '&amp;sm_donated=true'; ?>" style="float:right; display:block; border:none; margin-left:10px;"><small style="font-weight:normal; "><?php esc_html_e( 'Sure, but I already did!', 'sitemap' ); ?></small></a> <a href="<?php echo esc_url( $this->sg->get_back_link() ) . '&amp;sm_hide_note=true'; ?>" style="float:right; display:block; border:none;"><small style="font-weight:normal; "><?php esc_html_e( 'No thanks, please don\'t bug me anymore!', 'sitemap' ); ?></small></a></p></strong>
+					<strong><p>
+						<?php
+						$arr = array(
+							'br'     => array(),
+							'p'      => array(),
+							'a'      => array(
+								'href' => array(),
+							),
+							'strong' => array(),
+						);
+						/* translators: %s: search term */
+						echo wp_kses(
+							str_replace(
+								'%s',
+								$this->sg->get_redirect_link( 'redir/sitemap-donate-note' ),
+								__(
+									'Thanks for using this plugin! You\'ve installed this plugin over a month ago. If it works and you are satisfied with the results, isn\'t it worth at least a few dollar? <a href="https://8rkh4sskhh.execute-api.us-east-1.amazonaws.com/gsg/v1/sitemap-donate-note">Donations</a> help me to continue support and development of this <i>free</i> software! <a href="https://8rkh4sskhh.execute-api.us-east-1.amazonaws.com/gsg/v1/sitemap-donate-note">Sure, no problem!</a>',
+									'sitemap'
+								)
+							),
+							$arr
+						);
+						?>
+						-->
+						<a href="<?php echo esc_url( $this->sg->get_back_link() ) . '&amp;sm_donated=true'; ?>" style="float:right; display:block; border:none; margin-left:10px;"><small style="font-weight:normal; "><?php esc_html_e( 'Sure, but I already did!', 'sitemap' ); ?></small></a> <a href="<?php echo esc_url( $this->sg->get_back_link() ) . '&amp;sm_hide_note=true'; ?>" style="float:right; display:block; border:none;"><small style="font-weight:normal; "><?php esc_html_e( 'No thanks, please don\'t bug me anymore!', 'sitemap' ); ?></small></a></p></strong>
 					<div style="clear:right;"></div>
+					<!--
 				</div>
 				-->
 				<?php
@@ -715,7 +741,24 @@ class GoogleSitemapGeneratorUI {
 				<div class='updated'>
 					<strong>
 					<?php /* translators: %s: search term */ ?>
-					<p><?php echo esc_html( str_replace( '%s', esc_html( $this->sg->get_redirect_link( 'redir/sitemap-works-note' ) ), esc_html( 'Thanks for using this plugin! You\'ve installed this plugin some time ago. If it works and your are satisfied, why not ' . esc_html( '<a href=\'%s\'>rate it</a>' ) . ' and <a href=\'%s\'>recommend it</a> to others? :-)' ) ) ); ?> <a href='<?php esc_url( $this->sg->get_back_link() ) . '&amp;sm_hide_works=true'; ?>' style='float:right; display:block; border:none;'><small style='font-weight:normal; '><?php esc_html_e( 'Don\'t show this me anymore', 'sitemap' ); ?></small></a></p>
+					<p>
+						<?php
+						$arr = array(
+							'br'     => array(),
+							'p'      => array(),
+							'a'      => array(
+								'href' => array(),
+							),
+							'strong' => array(),
+						);
+						/* translators: %s: search term */
+						echo wp_kses( str_replace( array( '%1$s', '%2$s' ), $this->sg->get_redirect_link( 'redir/sitemap-works-note' ), __( 'Thanks for using this plugin! You\'ve installed this plugin some time ago. If it works and your are satisfied, why not <a href=\'%1$s\'>rate it</a>. and <a href=\'%2$s\'>recommend it</a> to others? :-)', 'sitemap' ) ), $arr );
+						?>
+						<a href='<?php echo esc_url( $this->sg->get_back_link() ) . '&amp;sm_hide_works=true'; ?>' style='float:right; display:block; border:none;'><small style='font-weight:normal; '>
+						<?php
+						esc_html_e( 'Don\'t show this me anymore', 'sitemap' );
+						?>
+					</small></a></p>
 					</strong>
 					<div style='clear:right;'></div>
 				</div>
@@ -1786,7 +1829,7 @@ class GoogleSitemapGeneratorUI {
 									<p class='submit'>
 										<?php wp_nonce_field( 'sitemap' ); ?>
 										<input type='submit' class='button-primary update_plugin_options' id='update_plugin_options' name='sm_update' value='<?php esc_html_e( 'Update options', 'sitemap' ); ?>' />
-										<input type='submit' onclick='return confirm('Do you really want to reset your configuration?');' class='sm_warning' name='sm_reset_config' value='<?php esc_html_e( 'Reset options', 'sitemap' ); ?>' />
+										<input type='submit' onclick="return confirm('Do you really want to reset your configuration?');" class='sm_warning' name='sm_reset_config' value='<?php esc_html_e( 'Reset options', 'sitemap' ); ?>' />
 									</p>
 								</div>
 

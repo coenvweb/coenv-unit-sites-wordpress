@@ -4,7 +4,7 @@
    * File for our cool review ask in the header
    *
    * @category Child Plugin
-   * @version v0.1.0
+   * @version v0.1.2
    * @since v0.1.0
    * @author iClyde <kontakt@iclyde.pl>
    */
@@ -23,13 +23,13 @@
 
         function __construct($plugin_file, $plugin_dir, $plugin_name, $plugin_menu_page) {
 
-          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          if (!is_admin() || !current_user_can('install_plugins')) return;
+          if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             add_action('wp_ajax_tifm_notice_actions', [&$this, 'noticeAjax']);
           }
 
           global $pagenow;
           if (!($pagenow == 'plugin-install.php' || $pagenow == 'admin-ajax.php')) return;
-          if (!is_admin() || !current_user_can('install_plugins')) return;
           if (get_option('_tifm_disable_feature_forever', false) != false) return;
 
           $this->pluginDir = $plugin_dir;
