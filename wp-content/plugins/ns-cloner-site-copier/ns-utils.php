@@ -493,3 +493,16 @@ function ns_reorder_tables( $tables ) {
 	}
 	return $tables;
 }
+
+/**
+ * Check if site registration is active network wide.
+ * This does a check on network admin options if site registration is allowed.
+ * This function is mainly used to determine loading the plugin functionality for some frontend actions.
+ *
+ * @return bool
+ */
+function ns_is_signup_allowed() {
+	$active_signup = get_site_option( 'registration', 'none' );
+	$active_signup = apply_filters( 'wpmu_active_signup', $active_signup );
+	return ( 'none' !== $active_signup );
+}

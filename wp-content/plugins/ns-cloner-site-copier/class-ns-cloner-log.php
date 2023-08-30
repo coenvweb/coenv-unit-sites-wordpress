@@ -418,9 +418,8 @@ class NS_Cloner_Log {
 	 * @return string
 	 */
 	public function get_url( $file = null ) {
-		$log_file    = $file ?: $this->log_file;
-		$log_dir_url = NS_CLONER_V4_PLUGIN_URL . basename( NS_CLONER_LOG_DIR );
-		return $log_dir_url . '/' . basename( $log_file );
+		$log_file = $file ?: $this->log_file;
+		return NS_CLONER_LOG_URL . '/' . basename( $log_file );
 	}
 
 	/**

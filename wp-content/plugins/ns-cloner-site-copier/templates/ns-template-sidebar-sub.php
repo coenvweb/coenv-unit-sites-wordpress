@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php esc_html_e( 'Have any issues with the Cloner, or ideas on how to make it better? We\'d love to hear from you.', 'ns-cloner-site-copier' ); ?>
 			</p>
 			<p>
-				<a href="http://support.neversettle.it" class="button" data-cloner-modal="copy-logs" target="_blank">
+				<a href="https://wpsitecloner.com/support" class="button" data-cloner-modal="copy-logs" target="_blank">
 					<?php esc_html_e( 'Support & Feature Requests', 'ns-cloner-site-copier' ); ?>
 				</a>
 			</p>
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</p>
 				<textarea onclick="this.select();return false;"><?php echo esc_textarea( join( "\n", ns_cloner()->log->get_recent_logs() ) ); ?></textarea>
 				<p>
-					<a href="http://support.neversettle.it" class="button" target="_blank"><?php esc_html_e( 'Continue to Support', 'ns-cloner-site-copier' ); ?></a>
+					<a href="https://wpsitecloner.com/support" class="button" target="_blank"><?php esc_html_e( 'Continue to Support', 'ns-cloner-site-copier' ); ?></a>
 				</p>
 			</div>
 		</div>

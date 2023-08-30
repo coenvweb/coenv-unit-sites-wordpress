@@ -375,7 +375,7 @@ if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 // possible TODO: replace redundant hardcoded IDs with $id
 
 	if (defined('PUBLISHPRESS_REVISIONS_PRO_VERSION') && !empty($this->form_options['features']['license'])) {
-		require_once(RVY_ABSPATH . '/includes-pro/SettingsLicense.php');
+		require_once(REVISIONARY_PRO_ABSPATH . '/includes-pro/SettingsLicense.php');
 		$license_ui = new RevisionaryLicenseSettings();
 		?>
 		<table class="form-table rs-form-table" id="ppr-tab-license"<?php echo ($setActiveTab != 'license') ? ' style="display:none;"' : '' ?>>
@@ -457,7 +457,7 @@ if ( rvy_get_option('display_hints', $sitewide, $customize_defaults) ) {
 	<?php
 	esc_html_e('Note: Third party code may cause some post types to be incompatible with PublishPress Revisions.', 'revisionary');
 	?>
-	</p>
+	</div>
 
 	</td></tr></table>
 	<?php endif; // any options accessable in this section
@@ -527,7 +527,6 @@ if ( ! empty( $this->form_options[$tab][$section] ) ) :?>
 
 	do_action('revisionary_auto_submit_setting_ui', $this, $tab, $section);
 	?>
-
 	<br />
 	<?php
 	$hint = sprintf(esc_html__('If the user does not have a regular Edit link, recaption the %s link as "Edit"', 'revisionary'), pp_revisions_status_label('draft-revision', 'submit_short'));

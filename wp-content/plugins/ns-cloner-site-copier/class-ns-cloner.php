@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.2.2.2';
+	public $version = '4.3.3';
 
 	/**
 	 * Menu Slug
@@ -175,7 +175,7 @@ final class NS_Cloner {
 		add_action( 'ns_cloner_init', array( $this, 'install_tables' ) );
 
 		// Only load rest of plugin if it could be needed (not on frontend).
-		$should_load = is_admin() || ( wp_doing_ajax() && is_user_logged_in() ) || ( defined( 'WP_CLI' ) && WP_CLI );
+		$should_load = is_admin() || ( wp_doing_ajax() && is_user_logged_in() ) || ( defined( 'WP_CLI' ) && WP_CLI ) || ns_is_signup_allowed();
 		if ( apply_filters( 'ns_cloner_should_load', $should_load ) ) {
 			// Bootstrap full cloner and addons once translation/localization is ready.
 			add_action( 'plugins_loaded', array( $this, 'init' ) );
@@ -291,8 +291,8 @@ final class NS_Cloner {
 		// Only load cloner assets when on the main cloner page or a subpage of it.
 		if ( false !== strpos( get_current_screen()->id, 'ns-cloner' ) ) {
 			// Add libs / dependent assets.
-			wp_register_script( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'vendor/harvesthq/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.8.7', true );
-			wp_register_style( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'vendor/harvesthq/chosen/chosen.min.css', array(), '1.8.7' );
+			wp_register_script( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'lib/vendor/harvesthq/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.8.7', true );
+			wp_register_style( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'lib/vendor/harvesthq/chosen/chosen.min.css', array(), '1.8.7' );
 			// Add cloner assets.
 			wp_enqueue_style( 'ns-cloner', NS_CLONER_V4_PLUGIN_URL . 'css/ns-cloner.css', array( 'chosen' ), $this->version );
 			wp_enqueue_script( 'ns-cloner', NS_CLONER_V4_PLUGIN_URL . 'js/ns-cloner.js', array( 'chosen' ), $this->version, true );
