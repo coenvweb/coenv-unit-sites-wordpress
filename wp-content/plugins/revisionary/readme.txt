@@ -7,7 +7,7 @@ Tags: revision, submit changes, duplicate post, duplicate page, revisions, appro
 Requires at least: 5.5
 Requires PHP: 7.2.5
 Tested up to: 6.3
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -239,7 +239,13 @@ Divi is one of the most popular page-builders in WordPress, and it does integrat
 
 == Changelog ==
 
-= 3.5.2 - 14 Aug 2023 =
+= 3.5.3 - 30 Aug 2023 =
+* Feature : Option to enable deletion of revisions in Revision Archive 
+* Fixed : Category / taxonomy changes were cleared by revision preview, not applied at revision approval
+* Fixed : Revision Archive included autosaves
+* Fixed : PHP 8.1 - Warning for dynamic property creation in revision preview
+
+= 3.5.2 - 17 Aug 2023 =
 * Fixed : Pro - Fatal error on activation if plugin settings were not previously saved (packaging error reverted fix in 3.5.1)
 * Fixed : Revision Edit - No progress caption was shown after Submit button click
 * Fixed : Options screen - html markup error (missing closing div tag)
