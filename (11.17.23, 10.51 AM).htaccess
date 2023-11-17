@@ -1,0 +1,442 @@
+# BEGIN WordPress Multisite
+# Using subfolder network type: https://wordpress.org/support/article/htaccess/#multisite
+
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+
+# END WordPress Multisite
+
+# More post requests throttling from single IP
+<Limit POST>
+    Order Allow,Deny
+    Allow from all
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186
+</Limit>
+
+# Block WordPress xmlrpc.php requests
+<Files xmlrpc.php>
+order deny,allow
+deny from all
+</Files>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# block aws   
+RewriteCond %{HTTP_REFERER} ^http://.*amazonaws\.com [OR]    
+RewriteCond %{REMOTE_HOST} ^.*\.compute-1\.amazonaws\.com$ [NC,OR]  
+RewriteCond %{REMOTE_HOST} ^.*\.compute\.amazonaws\.com$ [NC,OR]    
+RewriteCond %{HTTP_USER_AGENT} Nutch|Rustbot/0.3|NetSeer|heritrix|woriobot|AISearchBot|Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot [NC]
+RewriteRule ^(.*)$ - [F] 
+
+#don't look at our git
+RewriteRule "^(.*/)?\.git/" - [F,L]
+RedirectMatch 404 /\.git
+
+# Added by request for UW-IT
+RewriteRule ^(server-|PubCookie\.reply) - [L]
+
+# block super aggresive baidu spider
+RewriteCond %{HTTP_USER_AGENT} ^Baiduspider.* [NC]
+RewriteRule .* - [F]
+
+# deny malicious POST requests 
+RewriteCond %{REQUEST_METHOD} POST [NC]
+RewriteCond %{REQUEST_URI} !^.*/wp-admin/ [NC]
+RewriteCond %{REQUEST_URI} !^.*/wp-cron.php [NC]
+RewriteCond %{REQUEST_URI} !^.*/wp-login.php [NC]
+# Whitelist XML-RPC Pingbacks, JetPack and Remote Posting POST Requests
+RewriteCond %{REQUEST_URI} !^.*/xmlrpc.php [NC]
+# Whitelist Jetpack & WP Migrate JSON POST Request
+RewriteCond %{REQUEST_URI} !^.*/wp-json/jetpack/(.*) [NC]
+# Whitelist Network|Multisite Activate POST Form Requests
+RewriteCond %{REQUEST_URI} !^.*/wp-activate.php [NC]
+# Whitelist Trackback POST Requests
+RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
+# Whitelist Comments POST Form Requests
+RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
+#RewriteRule .* - [F,L]
+
+
+
+#6/5 test to force non-www
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#/test
+
+# Site redirects
+
+RewriteCond %{HTTP_HOST} freshwater.washington.edu [NC]
+RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R=301,NC]
+
+RewriteCond %{HTTP_HOST} cig.washington.edu [NC]
+RewriteRule ^(.*)$ http://cig.uw.edu/$1 [R=301,NC]
+
+RewriteCond %{HTTP_HOST} smea.washington.edu [NC]
+RewriteRule ^(.*)$ http://smea.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} fish.washington.edu [NC]
+RewriteRule ^(.*)$ http://fish.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} envstudies.washington.edu [NC]
+RewriteRule ^(.*)$ http://envstudies.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} marinebiology.washington.edu [NC]
+RewriteRule ^(.*)$ http://marinebiology.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} m9.uw.edu [NC]
+RewriteRule ^(.*)$ http://hazards.uw.edu/geology/m9 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} hazards.washington.edu [NC]
+RewriteRule ^(.*)$ http://hazards.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} uwpcc.washington.edu [NC]
+RewriteRule ^(.*)$ https://pcc.uw.edu/ [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^qrc.washington.edu [NC]
+RewriteRule ^(.*)$ https://qrc.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^fhl.washington.edu [NC]
+RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^earthlab.washington.edu [NC]
+RewriteRule ^(.*)$ https://earthlab.uw.edu/ [R=307,NC,L]
+
+RewriteCond %{HTTP_HOST} ^poe.washington.edu [NC]
+RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^poe.uw.edu [NC]
+RewriteRule ^(.*)$ https://envstudies.uw.edu/ [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^jisao.washington.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^nwcasc.washington.edu [NC]
+RewriteRule ^(.*)$ https://nwcasc.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.jisao.washington.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.jisao.uw.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^jisao.uw.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^quantitative.washington.edu [NC]
+RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^sefs.washington.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^cfr.washington.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.cfr.washington.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.sefs.washington.edu [NC]
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.cicoes.uw.edu [NC]
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^futurerivers.washington.edu [NC]
+RewriteRule ^(.*)$ https://futurerivers.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^natureandhealth.washington.edu [NC]
+RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ice.washington.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ice.uw.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ess.uw.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^ess.washington.edu [NC]
+RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
+
+# SSL on each domain
+
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://base.coenv.uw.edu/$1 [R=302,L]
+
+RewriteCond %{HTTP_HOST} ^cig.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://cig.uw.edu/$1 [R,L]
+RewriteRule ^ps-sok/?$ /resources/special-reports/ps-sok/
+
+RewriteCond %{HTTP_HOST} ^fish.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://fish.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^smea.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://smea.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^envstudies.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://envstudies.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^marinebiology.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://marinebiology.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^hazards.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://hazards.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^pcc/?(.*)$ https://dev.pcc.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^pcc.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://pcc.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^botanicgardens.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^botanicgardens.washington\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://botanicgardens.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^fhl.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://fhl.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^earthlab.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://earthlab.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^qrc.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://qrc.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^jisao.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^freshwater.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://freshwater.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^quantitative.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://quantitative.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^sefs.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://sefs.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^cicoes.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://cicoes.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^natureandhealth.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R,L]
+
+
+# Site-specific redirects
+
+
+# Freshwater Redirects
+#RewriteCond %{HTTP_HOST} !^freshwater.uw\.edu [NC]
+#RewriteRule .? - [S=0]
+
+# SAFS Redirects
+RewriteCond %{HTTP_HOST} !^fish.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^seas-open-house/?$ https://fish.uw.edu/alumni-community/students-explore-aquatic-sciences-seas/ [R=302,L]
+
+# CIG Redirects
+RewriteCond %{HTTP_HOST} !^cig.uw\.edu [NC]
+RewriteRule .? - [S=1]
+RewriteRule ^pnwc/?$ learn/ [R=301,L]
+
+# Botanicgardens Redirects
+RewriteCond %{HTTP_HOST} !^botanicgardens.uw\.edu [NC]
+RewriteRule .? - [S=11]
+RewriteRule ^rarecare/?.*$ https://botanicgardens.uw.edu/science-conservation/rarecare/ [L,R=301]
+RewriteRule ^rentals/?$ https://botanicgardens.uw.edu/about/rental-space/ [L,R=301]
+RewriteRule ^youth/?$ https://botanicgardens.uw.edu/education/youth-family/ [L,R=301]
+RewriteRule ^arboretum/?$ https://botanicgardens.uw.edu/washington-park-arboretum/ [L,R=301]
+RewriteRule ^cuh/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/ [L,R=301]
+RewriteRule ^herbarium/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/visit/otis-douglas-hyde-herbarium/ [L,R=301]
+RewriteRule ^ren/?$ https://botanicgardens.uw.edu/science-conservation/restoration-ecology-network/ [L,R=301]
+RewriteRule ^map/?$ https://depts.washington.edu/uwbg/gardens/map.html [R=301,L]
+RewriteRule ^farm/?$ https://botanicgardens.uw.edu/center-for-urban-horticulture/garens/uw-farm/ [R=301,L]
+RewriteRule ^supportYFP/?$ https://www.washington.edu/giving/make-a-gift/?source_typ=3&source=WPAEDP [R=301,NC,L]
+RewriteRule ^tram-tours/?$ https://botanicgardens.uw.edu/washington-park-arboretum/activities/tours/ [R=302,NC,L]
+
+# Env Studies Redirects
+# RewriteCond %{HTTP_HOST} !^envstudies.uw\.edu [NC]
+# RewriteRule .? - [S=0]
+
+# FHL Redirects
+RewriteCond %{HTTP_HOST} !^fhl.uw\.edu [NC]
+RewriteRule .? - [S=2]
+RewriteRule ^discover/?$ https://www.youtube.com/watch?v=_ZqX2GRDO6M [R=301,L]
+RewriteRule ^adoptastudent/?$ https://www.youtube.com/watch?v=8N-0C-uRUbc [R=302,L]
+
+# QRC Redirects
+# RewriteCond %{HTTP_HOST} !^qrc.uw\.edu [NC]
+# RewriteRule .? - [S=0]
+
+# SEFS Redirects
+# RewriteCond %{HTTP_HOST} !^sefs.uw\.edu [NC]
+# RewriteRule .? - [S=0]
+
+# RewriteCond %{HTTP_HOST} !^www\.cfr.washington\.edu [NC]
+# RewriteRule .? - [S=0]
+
+# Earthlab Redirects
+# RewriteCond %{HTTP_HOST} !^earthlab.uw\.edu [NC]
+# RewriteRule .? - [S=0]
+
+# Allow shib requests through
+RewriteCond %{REQUEST_URI} ^/Shibboleth.sso($|/)
+RewriteRule . - [L]
+
+</IfModule>
+
+# END WordPress
+
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+FileETag MTime Size
+ExpiresActive On
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 year"
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType application/pdf "access plus 1 month"
+ExpiresByType text/x-javascript "access plus 1 month"
+ExpiresByType application/x-shockwave-flash "access plus 1 month"
+ExpiresByType image/x-icon "access plus 1 year"
+ExpiresByType video/mp4  "access plus 1 year"
+ExpiresByType video/ogg  "access plus 1 year"
+ExpiresByType video/webm  "access plus 1 year"
+ExpiresDefault "access plus 2 days"
+</IfModule>
+## EXPIRES CACHING ##
+
+## gzip compression ##
+<IfModule mod_deflate.c>
+# Compress HTML, CSS, JavaScript, Text, XML and fonts
+<IfModule mod_mime.c>
+Addtype font/truetype .ttf
+Addtype font/opentype .otf
+AddType application/x-font-woff .woff
+</IfModule>
+
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+AddOutputFilterByType DEFLATE application/x-font
+AddOutputFilterByType DEFLATE application/x-font-woff
+AddOutputFilterByType DEFLATE application/x-font-opentype
+AddOutputFilterByType DEFLATE application/x-font-otf
+AddOutputFilterByType DEFLATE application/x-font-truetype
+AddOutputFilterByType DEFLATE application/x-font-ttf
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE font/opentype
+AddOutputFilterByType DEFLATE font/truetype
+AddOutputFilterByType DEFLATE font/otf
+AddOutputFilterByType DEFLATE font/ttf
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilterByType DEFLATE image/x-icon
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/xml
+
+# Remove browser bugs (only needed for really old browsers)
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</IfModule>
+
+#mystery rules
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteCond %{REQUEST_URI} ^/?wp\-content/+debug\.log$
+	RewriteRule .* - [F,L,NC]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+	<Files "debug.log">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order deny,allow
+		Deny from all
+	</IfModule>
+	</Files>
+</IfModule>
+
+
+# Wordfence WAF
+<IfModule mod_php5.c>
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<IfModule mod_php7.c>
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<IfModule mod_php.c>
+	php_value auto_prepend_file '/data/www/base.coenv.uw.edu/wordfence-waf.php'
+</IfModule>
+<Files ".user.ini">
+<IfModule mod_authz_core.c>
+	Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+	Order deny,allow
+	Deny from all
+</IfModule>
+</Files>
+
+# END Wordfence WAF
+
+
+# BEGIN Shibboleth
+# The directives (lines) between "BEGIN Shibboleth" and "END Shibboleth" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_shib>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.c>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+<IfModule mod_shib.cpp>
+AuthType shibboleth
+Require shibboleth
+</IfModule>
+# END Shibboleth
+
+# add a trailing slash to /wp-admin (keep this last!)
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
+RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+RewriteRule . index.php [L]
