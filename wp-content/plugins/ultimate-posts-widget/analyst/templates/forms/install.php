@@ -19,10 +19,10 @@
 		<div class="analyst-modal-def-top-padding" id="analyst-permissions-block" style="display: none">
 			<span>You’re granting these permissions:</span>
 			<ul class="analyst-install-permissions-list">
-				<li><strong>Your profile information</strong> (name and email) ​</li>
+				<li><strong>Your profile information</strong> (name and email) </li>
 				<li><strong>Your site information</strong> (URL, WP version, PHP info, plugins & themes)</li>
 				<li><strong>Plugin notices</strong> (updates, announcements, marketing, no spam)</li>
-				<li><strong>Plugin events</strong> (activation, deactivation and uninstall)​</li>
+				<li><strong>Plugin events</strong> (activation, deactivation and uninstall)</li>
 			</ul>
 		</div>
 		<div class="analyst-install-footer analyst-modal-def-top-padding">
