@@ -365,6 +365,11 @@ class NS_Cloner_Log {
 		$this->log_break();
 
 		$this->log( 'PLUGIN DIAGNOSTICS:' );
+
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		foreach ( get_plugins() as $plugin_file => $data ) {
 			$network = true === $data['Network'] ? ' Network Enabled' : '';
 			$this->log( $data['Name'] . ' ' . $data['Version'] . ' by ' . $data['Author'] . ' ' . $network );

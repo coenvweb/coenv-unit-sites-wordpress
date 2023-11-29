@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.3.3';
+	public $version = '4.4';
 
 	/**
 	 * Menu Slug
@@ -291,24 +291,41 @@ final class NS_Cloner {
 		// Only load cloner assets when on the main cloner page or a subpage of it.
 		if ( false !== strpos( get_current_screen()->id, 'ns-cloner' ) ) {
 			// Add libs / dependent assets.
+			// Slider.
+			wp_register_script( 'js-slider', NS_CLONER_V4_PLUGIN_URL . 'js/jsslider.min.js', array( 'jquery' ), '1.0.0', true );
+
 			wp_register_script( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'lib/vendor/harvesthq/chosen/chosen.jquery.min.js', array( 'jquery' ), '1.8.7', true );
 			wp_register_style( 'chosen', NS_CLONER_V4_PLUGIN_URL . 'lib/vendor/harvesthq/chosen/chosen.min.css', array(), '1.8.7' );
 			// Add cloner assets.
 			wp_enqueue_style( 'ns-cloner', NS_CLONER_V4_PLUGIN_URL . 'css/ns-cloner.css', array( 'chosen' ), $this->version );
-			wp_enqueue_script( 'ns-cloner', NS_CLONER_V4_PLUGIN_URL . 'js/ns-cloner.js', array( 'chosen' ), $this->version, true );
+			wp_enqueue_script( 'ns-cloner', NS_CLONER_V4_PLUGIN_URL . 'js/ns-cloner.js', array( 'chosen', 'js-slider' ), $this->version, true );
 			wp_localize_script(
 				'ns-cloner',
 				'ns_cloner',
 				array(
 					'nonce'       => wp_create_nonce( 'ns_cloner' ),
-					'ajaxurl'     => admin_url( '/admin-ajax.php' ),
+					'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 					'loading_img' => NS_CLONER_V4_PLUGIN_URL . 'images/spinner.gif',
 					'in_progress' => $this->process_manager->is_in_progress( true ),
 				)
 			);
 			// Run action so addons can easily enqueue scripts only on cloner pages without having to use conditionals.
 			do_action( 'ns_cloner_enqueue_scripts' );
+
+			add_filter( 'admin_body_class', array( $this, 'add_body_class' ) );
 		}
+	}
+
+
+	/**
+	 * Add body class
+	 *
+	 * @param string $classes String of classes.
+	 *
+	 * @return string $classes
+	 */
+	public function add_body_class( $classes ) {
+		return "$classes ns-cloner";
 	}
 
 	/**

@@ -438,7 +438,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		$batch = parent::get_batch();
 
 		$this->batch_key = $batch->key;
-		
+
 		return $batch;
 	}
 

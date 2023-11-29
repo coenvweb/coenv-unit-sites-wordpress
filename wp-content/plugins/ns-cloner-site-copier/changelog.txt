@@ -1,3 +1,7 @@
+= 4.4 - 2023.11.20 =
+* New: Updated the admin area for a more modern experience.
+* Enhancement: Code improvements.
+
 = 4.3.3 - 2023.08.23 =
 * Enhancement: Better loading of cloner core files for frontend
 * Fix: Clone templates
