@@ -16,7 +16,7 @@
  * Plugin Name: XML Sitemap Generator for Google
  * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.13
+ * Version: 4.1.16
  * Author: Auctollo
  * Author URI: https://auctollo.com/
  * Text Domain: sitemap
@@ -293,7 +293,7 @@ function sm_setup() {
 function sm_add_wp_version_error() {
 	/* translators: %s: search term */
 
-	echo '<div id=\'sm-version-error\' class=\'error fade\'><p><strong>' . esc_html( __( 'Your WordPress version is too old for XML Sitemaps.', 'sitemap' ) ) . '</strong><br /> ' . esc_html( sprintf( __( 'Unfortunately this release of Google XML Sitemaps requires at least WordPress %4$s. You are using WordPress %2$s, which is out-dated and insecure. Please upgrade or go to <a href=\'%1$s\'>active plugins</a> and deactivate the Google XML Sitemaps plugin to hide this message. You can download an older version of this plugin from the <a href=\'%3$s\'>plugin website</a>.', 'sitemap' ), 'plugins.php?plugin_status=active', esc_html( $GLOBALS['wp_version'] ), 'http://www.arnebrachhold.de/redir/sitemap-home/', '3.3' ) ) . '</p></div>';
+	echo '<div id=\'sm-version-error\' class=\'error fade\'><p><strong>' . esc_html( __( 'Your WordPress version is too old for XML Sitemaps.', 'google-sitemap-generator' ) ) . '</strong><br /> ' . esc_html( sprintf( __( 'Unfortunately this release of Google XML Sitemaps requires at least WordPress %4$s. You are using WordPress %2$s, which is out-dated and insecure. Please upgrade or go to <a href=\'%1$s\'>active plugins</a> and deactivate the Google XML Sitemaps plugin to hide this message. You can download an older version of this plugin from the <a href=\'%3$s\'>plugin website</a>.', 'google-sitemap-generator' ), 'plugins.php?plugin_status=active', esc_html( $GLOBALS['wp_version'] ), 'http://www.arnebrachhold.de/redir/sitemap-home/', '3.3' ) ) . '</p></div>';
 }
 
 /**
@@ -305,7 +305,7 @@ function sm_add_wp_version_error() {
 function sm_add_php_version_error() {
 	/* translators: %s: search term */
 
-	echo '<div id=\'sm-version-error\' class=\'error fade\'><p><strong>' . esc_html( __( 'Your PHP version is too old for XML Sitemaps.', 'sitemap' ) ) . '</strong><br /> ' . esc_html( sprintf( __( 'Unfortunately this release of Google XML Sitemaps requires at least PHP %4$s. You are using PHP %2$s, which is out-dated and insecure. Please ask your web host to update your PHP installation or go to <a href=\'%1$s\'>active plugins</a> and deactivate the Google XML Sitemaps plugin to hide this message. You can download an older version of this plugin from the <a href=\'%3$s\'>plugin website</a>.', 'sitemap' ), 'plugins.php?plugin_status=active', PHP_VERSION, 'http://www.arnebrachhold.de/redir/sitemap-home/', '5.2' ) ) . '</p></div>';
+	echo '<div id=\'sm-version-error\' class=\'error fade\'><p><strong>' . esc_html( __( 'Your PHP version is too old for XML Sitemaps.', 'google-sitemap-generator' ) ) . '</strong><br /> ' . esc_html( sprintf( __( 'Unfortunately this release of Google XML Sitemaps requires at least PHP %4$s. You are using PHP %2$s, which is out-dated and insecure. Please ask your web host to update your PHP installation or go to <a href=\'%1$s\'>active plugins</a> and deactivate the Google XML Sitemaps plugin to hide this message. You can download an older version of this plugin from the <a href=\'%3$s\'>plugin website</a>.', 'google-sitemap-generator' ), 'plugins.php?plugin_status=active', PHP_VERSION, 'http://www.arnebrachhold.de/redir/sitemap-home/', '5.2' ) ) . '</p></div>';
 }
 
 /**
@@ -324,67 +324,116 @@ function sm_get_init_file() {
  */
 function register_consent() {
 	if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-		if ( isset( $_POST['user_consent_yes'] ) ) {
-			update_option( 'sm_user_consent', 'yes' );
-		}
-		if ( isset( $_POST['user_consent_no'] ) ) {
-			update_option( 'sm_user_consent', 'no' );
-		}
-		if ( isset( $_GET['action'] ) ) {
-			if ( 'no' === $_GET['action'] ) {
-				if ( $_SERVER['QUERY_STRING'] ) {
-					if( strpos( $_SERVER['QUERY_STRING'], 'google-sitemap-generator' ) ) {
-						update_option( 'sm_show_beta_banner', 'false' );
-						$count = get_option( 'sm_beta_banner_discarded_count' );
-						if ( gettype( $count ) !== 'boolean' ) {
-							update_option( 'sm_beta_banner_discarded_count', (int) $count + 1 );
+		if ( is_user_logged_in() && current_user_can( 'manage_options' ) ) {
+			if ( isset( $_POST['user_consent_yes'] ) ) {
+				if (isset($_POST['user_consent_yesno_nonce_token']) && check_admin_referer('user_consent_yesno_nonce', 'user_consent_yesno_nonce_token')){
+					update_option( 'sm_user_consent', 'yes' );
+				}
+			}
+			if ( isset( $_POST['user_consent_no'] ) ) {
+				if (isset($_POST['user_consent_yesno_nonce_token']) && check_admin_referer('user_consent_yesno_nonce', 'user_consent_yesno_nonce_token')){
+					update_option( 'sm_user_consent', 'no' );
+				}
+			}
+			if ( isset( $_GET['action'] ) ) {
+				if ( 'no' === $_GET['action'] ) {
+					if ( $_SERVER['QUERY_STRING'] ) {
+						if( strpos( $_SERVER['QUERY_STRING'], 'google-sitemap-generator' ) ) {
+							update_option( 'sm_show_beta_banner', 'false' );
+							$count = get_option( 'sm_beta_banner_discarded_count' );
+							if ( gettype( $count ) !== 'boolean' ) {
+								update_option( 'sm_beta_banner_discarded_count', (int) $count + 1 );
+							} else {
+								add_option( 'sm_beta_banner_discarded_on', gmdate( 'Y/m/d' ) );
+								update_option( 'sm_beta_banner_discarded_count', (int) 1 );
+							}
 						} else {
-							add_option( 'sm_beta_banner_discarded_on', gmdate( 'Y/m/d' ) );
-							update_option( 'sm_beta_banner_discarded_count', (int) 1 );
+							add_option( 'sm_beta_notice_dismissed_from_wp_admin', 'true' );
 						}
 					} else {
 						add_option( 'sm_beta_notice_dismissed_from_wp_admin', 'true' );
 					}
-				} else {
-					add_option( 'sm_beta_notice_dismissed_from_wp_admin', 'true' );
 				}
 			}
-		}
-		if ( isset( $_POST['enable_updates'] ) ) {
-			if ( 'true' === $_POST['enable_updates'] ) {
-				$auto_update_plugins = get_option( 'auto_update_plugins' );
-				if ( ! is_array( $auto_update_plugins ) ) {
-					$auto_update_plugins = array();
+			if ( isset( $_POST['enable_updates'] ) ) {
+				if (isset($_POST['enable_updates_nonce_token']) && check_admin_referer('enable_updates_nonce', 'enable_updates_nonce_token')){
+					if ( 'true' === $_POST['enable_updates'] ) {
+						$auto_update_plugins = get_option( 'auto_update_plugins' );
+						if ( ! is_array( $auto_update_plugins ) ) {
+							$auto_update_plugins = array();
+						}
+						array_push( $auto_update_plugins, 'google-sitemap-generator/sitemap.php' );
+						update_option( 'auto_update_plugins', $auto_update_plugins );
+					} elseif ( 'false' === $_POST['enable_updates'] ) {
+						update_option( 'sm_hide_auto_update_banner', 'yes' );
+					}
 				}
-				array_push( $auto_update_plugins, 'google-sitemap-generator/sitemap.php' );
-				update_option( 'auto_update_plugins', $auto_update_plugins );
-			} elseif ( 'false' === $_POST['enable_updates'] ) {
-				update_option( 'sm_hide_auto_update_banner', 'yes' );
 			}
-		}
-		if ( isset( $_POST['disable_plugin'] ) ) {
-			if ( strpos( $_POST['disable_plugin'], 'all_in_one' ) !== false  ) {
-				$default_value   = 'default';
-				$aio_seo_options = get_option( 'aioseo_options', $default_value );
-				if ( $aio_seo_options !== $default_value ) {
-					$aio_seo_options                           = json_decode( $aio_seo_options );
-					$aio_seo_options->sitemap->general->enable = 0;
-					update_option( 'aioseo_options', json_encode( $aio_seo_options ) );
+			/*
+			if ( isset( $_POST['disable_plugin'] ) ) {
+				if (isset($_POST['disable_plugin_sitemap_nonce_token']) && check_admin_referer('disable_plugin_sitemap_nonce', 'disable_plugin_sitemap_nonce_token')){
+					if ( strpos( $_POST['disable_plugin'], 'all_in_one' ) !== false  ) {
+						$default_value   = 'default';
+						$aio_seo_options = get_option( 'aioseo_options', $default_value );
+						if ( $aio_seo_options !== $default_value ) {
+							$aio_seo_options                           = json_decode( $aio_seo_options );
+							$aio_seo_options->sitemap->general->enable = 0;
+							update_option( 'aioseo_options', json_encode( $aio_seo_options ) );
+						}
+					} elseif( strpos( $_POST['disable_plugin'], 'wp-seo' ) !== false ) { 
+						$yoast_options = get_option( 'wpseo' );
+						$yoast_options['enable_xml_sitemap'] = false;
+						update_option( 'wpseo', $yoast_options );
+					}
 				}
-			} elseif( strpos( $_POST['disable_plugin'], 'wp-seo' ) !== false ) { 
-				$yoast_options = get_option( 'wpseo' );
-				$yoast_options['enable_xml_sitemap'] = false;
-				update_option( 'wpseo', $yoast_options );
 			}
+			*/
 		}
 	}
 }
 
+function disable_plugins_callback(){
+    if (current_user_can('manage_options')) {
+        check_ajax_referer('disable_plugin_sitemap_nonce', 'nonce');
+
+        $pluginList = sanitize_text_field($_POST['pluginList']);
+        $pluginsToDisable = explode(',', $pluginList);
+
+        foreach ($pluginsToDisable as $plugin) {
+            if ($plugin === 'all-in-one-seo-pack/all_in_one_seo_pack.php') {
+                /* all in one seo deactivation */
+                $aioseo_option_key = 'aioseo_options';
+                if ($aioseo_options = get_option($aioseo_option_key)) {
+                    $aioseo_options = json_decode($aioseo_options, true);
+                    $aioseo_options['sitemap']['general']['enable'] = false;
+                    update_option($aioseo_option_key, json_encode($aioseo_options));
+                }
+            }
+            if ($plugin === 'wordpress-seo/wp-seo.php') {
+                /* yoast sitemap deactivation */
+                if ($yoast_options = get_option('wpseo')) {
+                    $yoast_options['enable_xml_sitemap'] = false;
+                    update_option('wpseo', $yoast_options);
+                }
+            }
+        }
+
+        echo 'Plugins sitemaps disabled successfully';
+        wp_die();
+    }
+}
+
+ function conflict_plugins_admin_notice(){
+	GoogleSitemapGeneratorLoader::create_notice_conflict_plugin();
+ }
 
 // Don't do anything if this file was called directly.
 if ( defined( 'ABSPATH' ) && defined( 'WPINC' ) && ! class_exists( 'GoogleSitemapGeneratorLoader', false ) ) {
 	sm_setup();
 	add_filter( 'wp_sitemaps_enabled', '__return_false' );
+	
+	add_action('wp_ajax_disable_plugins', 'disable_plugins_callback');
+
+	add_action('admin_notices', 'conflict_plugins_admin_notice');
 
 }
-

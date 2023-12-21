@@ -1,6 +1,6 @@
 /*
  
- $Id: sitemap.js 2711594 2022-04-19 13:49:29Z auctollo $
+ $Id: sitemap.js 48032 2008-05-27 14:32:06Z arnee $
 
 */
 

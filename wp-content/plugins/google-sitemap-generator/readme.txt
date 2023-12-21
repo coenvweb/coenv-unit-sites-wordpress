@@ -1,9 +1,9 @@
 === XML Sitemap Generator for Google ===
 Contributors: auctollo
 Tags: sitemap, seo, xml sitemap, indexnow, google sitemaps, google search console, news sitemap, image sitemap, image seo, video sitemap, video seo, woo commerce, robots.txt, site kit, schema, bing, baidu, yandex
-Requires at least: 4.4
-Tested up to: 6.3
-Stable tag: 4.1.13
+Requires at least: 4.6
+Tested up to: 6.4.2
+Stable tag: 4.1.16
 Requires PHP: 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,21 @@ Please post your question at the [WordPress support forum](https://wordpress.org
 
 
 == Changelog ==
+
+= 4.1.16 (2023-12-18) =
+* Fixed a syntax error causing fatal errors for some users.
+
+= 4.1.15 (2023-12-14) =
+* Improved security by adding capability check via the current_user_can() calls
+* Changed the text domain from "sitemap" to "google-sitemap-generator"
+
+= 4.1.14 (2023-12-05) =
+* Improved security with authentication and plugin management anchors
+* Fixed an error in sitemap file name conventions
+* Fixed an issue with disabling conflicting sitemap generators
+* Added last modified date to category sitemaps
+* Added min and max option for number of posts per sitemap
+* Added support for local links in sitemap for different languages
 
 = 4.1.13 (2023-08-04) =
 * Fixed warning error displayed when Yoast SEO is not installed/active
@@ -558,5 +573,5 @@ The plugin comes with various translations, please refer to the [WordPress Codex
 
 == Upgrade Notice ==
 
-= 4.1.9 =
-Thanks for using XML Sitemaps! This release includes an important privacy improvements. Make sure to "Enable auto-updates!"
+= 4.1.16 =
+Thanks for using XML Sitemaps! This release includes important security improvements. Make sure to "Enable auto-updates!"

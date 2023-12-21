@@ -85,6 +85,7 @@ class GoogleSitemapGeneratorLoader {
 
 		// Disable the WP core XML sitemaps .
 		add_filter( 'wp_sitemaps_enabled', '__return_false' );
+
 	}
 
 	/**
@@ -125,10 +126,10 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function add_rewrite_rules( $wp_rules ) {
 		$sm_rules = array(
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.html.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
 		);
 		return array_merge( $sm_rules, $wp_rules );
 	}
@@ -140,10 +141,10 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function get_ngin_x_rules() {
 		return array(
-			'rewrite ^/sitemap(-+([a-zA-Z0-9_-]+))?\.xml$ "/index.php?xml_sitemap=params=$2" last;',
-			'rewrite ^/sitemap(-+([a-zA-Z0-9_-]+))?\.xml\.gz$ "/index.php?xml_sitemap=params=$2;zip=true" last;',
-			'rewrite ^/sitemap(-+([a-zA-Z0-9_-]+))?\.html$ "/index.php?xml_sitemap=params=$2;html=true" last;',
-			'rewrite ^/sitemap(-+([a-zA-Z0-9_-]+))?\.html.gz$ "/index.php?xml_sitemap=params=$2;html=true;zip=true" last;',
+			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$ "/index.php?xml_sitemap=params=$2" last;',
+			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$ "/index.php?xml_sitemap=params=$2;zip=true" last;',
+			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$ "/index.php?xml_sitemap=params=$2;html=true" last;',
+			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html.gz$ "/index.php?xml_sitemap=params=$2;html=true;zip=true" last;',
 		);
 
 	}
@@ -169,10 +170,10 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function remove_rewrite_rules( $wp_rules ) {
 		$sm_rules = array(
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
-			'sitemap(-+([a-zA-Z0-9_-]+))?\.html.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
 		);
 		foreach ( $wp_rules as $key => $value ) {
 			if ( array_key_exists( $key, $sm_rules ) ) {
@@ -258,7 +259,7 @@ class GoogleSitemapGeneratorLoader {
 	 * @uses add_options_page()
 	 */
 	public static function register_admin_page() {
-		add_options_page( __( 'XML-Sitemap Generator', 'sitemap' ), __( 'XML-Sitemap', 'sitemap' ), 'administrator', self::get_base_name(), array( __CLASS__, 'call_html_show_options_page' ) );
+		add_options_page( __( 'XML-Sitemap Generator', 'google-sitemap-generator' ), __( 'XML-Sitemap', 'google-sitemap-generator' ), 'administrator', self::get_base_name(), array( __CLASS__, 'call_html_show_options_page' ) );
 	}
 
 	/**
@@ -293,219 +294,10 @@ class GoogleSitemapGeneratorLoader {
 	 * Beta notice.
 	 */
 	public static function beta_notice() {
-		$window_url   = home_url() . $_SERVER[ 'REQUEST_URI' ];
-		$parts        = wp_parse_url( $window_url );
-		$current_page = '';
-		$current_url  = $_SERVER['REQUEST_URI'];
-		if ( isset( $parts['query'] ) ) {
-			parse_str( $parts['query'], $query );
-			if ( isset( $query['page'] ) ) {
-				$current_page = $query['page'];
-			}
-		}
-		$arr = array(
-			'br'     => array(),
-			'p'      => array(),
-			'h3'     => array(),
-			'div'    => array(
-				'style' => array(
-					'display'         => 'flex',
-					'justify-content' => 'space-between',
-				),
-				'class' => array(),
-				'id'    => array(),
-			),
-			'a'      => array(
-				'href'  => array(),
-				'name'  => array(),
-				'class' => array(),
-				'name'  => array(),
-				'id'    => array(),
-			),
-			'h4'     => array(
-				'style' => array(
-					'width'   => array(),
-					'display' => array(),
-				),
-				'id'    => array(),
-				'class' => array(),
-			),
-			'h3'     => array(
-				'style' => array(
-					'width'   => array(),
-					'display' => array(),
-				),
-				'id'    => array(),
-			),
-			'img'    => array(
-				'src'    => array(),
-				'class'  => array(),
-				'id'     => array(),
-				'height' => array(),
-				'width'  => array(),
-			),
-			'button' => array(
-				'onClick' => array(),
-				'type'    => array(),
-				'onclick' => array(),
-				'class'   => array(),
-				'id'      => array(),
-			),
-			'strong' => array(),
-			'input'  => array(
-				'type'  => array(),
-				'class' => array(),
-				'id'    => array(),
-				'name'  => array(),
-				'value' => array(),
-				'style' => array(
-					'position'     => array(),
-					'padding'      => array(),
-					'background'   => array(),
-					'right'        => array(),
-					'color'        => array(),
-					'border-color' => array(),
-					'cursor'       => array(),
-				),
-			),
-			'form'   => array(
-				'id'     => array(),
-				'method' => array(),
-				'action' => array(),
-				'style'  => array(
-					'margin-top'  => array(),
-					'margin-left' => array(),
-					'display'     => array(),
-				),
-			),
-		);
-		$default_value = 'default';
 
-		$yoast_options    = get_option( 'wpseo', $default_value );
-		$yoast_sm_enabled = 0;
-		if ( $yoast_options !== $default_value && isset( $yoast_options['enable_xml_sitemap'] ) ) {
-			$yoast_sm_enabled = $yoast_options['enable_xml_sitemap'] ? $yoast_options['enable_xml_sitemap'] : 0;
-		}
+		$current_page  = self::get_current_page_url();
+		$arr = self::get_tags_array();
 
-		$aio_seo_options    = get_option( 'aioseo_options', $default_value );
-		$aio_seo_sm_enabled = 0;
-
-		if ( $aio_seo_options !== $default_value ) {
-			$aio_seo_options    = json_decode( $aio_seo_options );
-			$aio_seo_sm_enabled = $aio_seo_options->sitemap->general->enable;
-		}
-		$sitemap_plugins  = array();
-		$plugins          = get_plugins();
-		foreach ( $plugins as $key => $value ) {
-			$plug = array();
-			if ( strpos( $key, 'google-sitemap-generator' ) !== false ) {
-				continue;
-			}
-			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false ) && is_plugin_active( ( $key ) ) ) {
-				array_push( $plug, $key );
-				foreach ( $value as $k => $v ) {
-					if ( 'Name' === $k ) {
-						array_push( $plug, $v );
-					}
-				}
-				array_push( $sitemap_plugins, $plug );
-			}
-		}
-		$conflict_plugins = explode( ',', SM_CONFLICT_PLUGIN_LIST );
-
-		$plugin_title = array();
-		$plugin_name  = array();
-		for ( $i = 0; $i < count( $sitemap_plugins ); $i++ ) {
-			if ( in_array( $sitemap_plugins[ $i ][1], $conflict_plugins ) ) {
-				array_push( $plugin_name, $sitemap_plugins[ $i ][1] );
-				array_push( $plugin_title, $sitemap_plugins[ $i ][0] );
-			}
-		}
-		if ( 'google-sitemap-generator/sitemap.php' === $current_page && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled ) ) {
-			?>
-			<style>
-				.plugin_lists{
-					font-style: italic;
-				}
-				.other_plugin_notice{
-					margin-bottom: 10px;
-				}
-				.content_div{
-					margin-top:0;
-					padding:0 10px 10px 10px;
-					box-shadow: 0 1px 2px #0003;
-					border-left: 4px solid #dc3232;
-					margin-bottom:10px;
-				}
-				.conflict_plugin{
-					background: white;
-					color: #2271b1;
-					border: 1px solid #2271b1;
-					border-color: #2271b1;
-					cursor: pointer;
-					padding: 8px;
-					text-decoration: none;
-					margin-right: 10px;
-					border-radius: 5px;
-				}
-				.disable_plugins{
-					background: #2271b1;
-					color: white;
-					border-color: #2271b1;
-					cursor: pointer;
-					padding: 8px;
-					text-decoration: none;
-				}
-				</style>
-				<div class="notice content_div" style="border-left-width:4px;justify-content:space-between;">
-
-				<?php
-				/* translators: %s: search term */
-				echo wp_kses(
-					__(
-						'
-						<h4>The following plugins conflict with proper indexation of your website. Use the buttons below to disable the extra sitemaps:
-						</h4>
-						<div >
-						<form method="post" id="disable-plugins-form">
-						<input type="hidden" id="disable_plugin" name="disable_plugin" value="false" />
-						<input type="hidden" id="plugin_list" name="plugin_list" value="' . implode( ',', $plugin_title ) . '" />
-						</form>
-						<div class="other_plugin_notice" id="other_plugin_notice">
-							
-						</div>
-						</div>
-						',
-						'sitemap'
-					),
-					$arr
-				);
-				?>
-				</div>
-				<script>
-					var plugin_name_list = '<?php echo implode( ',', $plugin_name ); ?>'
-					plugin_name_list = plugin_name_list.split(',')
-					var plugin_title_list = '<?php echo implode( ',', $plugin_title ); ?>'
-					plugin_title_list = plugin_title_list.split(',')
-					var all_in_one_enabled = Number('<?php echo $aio_seo_sm_enabled; ?>');
-					var yoast_enabled = Number('<?php echo $yoast_sm_enabled; ?>');
-					for( var i=0; i < plugin_name_list.length; i++ ) {
-						if ( 
-								(plugin_title_list[i].includes('all_in_one') && all_in_one_enabled !== 0 )
-								||( plugin_title_list[i].includes('wp-seo') && yoast_enabled !== 0 )
-							){
-							var anchor_element_plugin = document.createElement('a')
-							anchor_element_plugin.classList.add('conflict_plugin')
-							anchor_element_plugin.id = plugin_title_list[i]
-							anchor_element_plugin.name = plugin_name_list[i].replace(/ /g,'-')
-							anchor_element_plugin.innerText = 'Disable ' + plugin_name_list[i] + "'s sitemap"
-							var parent_div = document.getElementById('other_plugin_notice')
-							parent_div.appendChild(anchor_element_plugin)
-						}
-					}
-				</script>
-			<?php
-		}
 		$default_value    = 'show_banner';
 		$value            = get_option( 'sm_show_beta_banner', $default_value );
 		$now              = time();
@@ -738,16 +530,14 @@ class GoogleSitemapGeneratorLoader {
 				$qs = 'settings_page_google-sitemap-generator/sitemap' === $current_screen ? '&action=no' : '?action=no';
 				/* translators: %s: search term */
 				echo wp_kses(
-					__(
-						'
-						<h4>Do you want the best SEO indexation technology for your website? Join the Google XML Sitemaps Beta Program now!</h4>
+					__('<h4>Do you want the best SEO indexation technology for your website? Join the Google XML Sitemaps Beta Program now!</h4>
 						<input type="hidden" id="action" name="action" value="my_action" >
 						<div class="justify-content">
 						<a href="' . $consent_url . '?action=yes" id="user_consent" class="allow_beta_consent" target="blank" name="user_consent" >Yes, I am in</a>
 						<a href="' . $decline_consent_url . $qs . '" id="discard_content" class="discard_button" name="discard_consent">X</a>
 						</div>
 						',
-						'sitemap'
+						'google-sitemap-generator'
 					),
 					$arr
 				);
@@ -762,28 +552,20 @@ class GoogleSitemapGeneratorLoader {
 		if ( $default_value === $consent_value && 'google-sitemap-generator/sitemap.php' === $current_page ) {
 			/* translators: %s: search term */
 			echo wp_kses(
-				sprintf(
-					__(
-						'
-						<div class="modal-wrapper" id="modal-wrapper">
-							<div class="modal-container">
-							<h3>Help Us Improve!</h3>
-							<p>Would you help us improve Google XML Sitemaps by sharing anonymous usage data?</p>
-							<p>Understanding feature usage and use cases better means we can provide you with the best indexation and indexing performance.</p>
-							<p><a href="https://auctollo.com/policies/privacy/" target="_blank">We respect your privacy!</a></p>
-							<p>&nbsp;</p>
-							<form method="POST">
-								<input type="submit" name="user_consent_yes" class="allow_consent" value="I want the best!" />
-								<input type="submit" name="user_consent_no" class="decline_consent" value="I don\'t know what I want" />
-							</form>
-							</div>
+				__('<div class="modal-wrapper" id="modal-wrapper">
+						<div class="modal-container">
+						<h3>Help Us Improve!</h3>
+						<p>Would you help us improve Google XML Sitemaps by sharing anonymous usage data?</p>
+						<p>Understanding feature usage and use cases better means we can provide you with the best indexation and indexing performance.</p>
+						<p><a href="https://auctollo.com/policies/privacy/" target="_blank">We respect your privacy!</a></p>
+						<p>&nbsp;</p>
+						<form method="POST">
+							<input type="submit" name="user_consent_yes" class="allow_consent" value="I want the best!" />
+							<input type="submit" name="user_consent_no" class "decline_consent" value="I don\'t know what I want" />' . wp_nonce_field("user_consent_yesno_nonce", "user_consent_yesno_nonce_token") . 
+						'</form>
 						</div>
-						',
-						'sitemap'
-					),
-					function() {
-					}
-				),
+					</div>',
+					'google-sitemap-generator'),
 				$arr
 			);
 		}
@@ -793,23 +575,16 @@ class GoogleSitemapGeneratorLoader {
 		if ( 'google-sitemap-generator/sitemap.php' === $current_page ) {
 			/* translators: %s: search term */
 			echo wp_kses(
-				sprintf(
-					__(
-						'
-						<div class="cookie-info-banner-wrapper" id="cookie-info-banner-wrapper">
-							<div class="modal-container">
-							<h3>Help Us Improve!</h3>
-								<button class="close_popup" id="close_popup">
-								<img height="25" width="20" class="close_cookie_information" src="' . $image_url . '" />
-								</button>
-								<p>Would you help us improve our indexation technology by sharing usage data anonymously?</p>
-							</div>
+				__('<div class="cookie-info-banner-wrapper" id="cookie-info-banner-wrapper">
+						<div class="modal-container">
+						<h3>Help Us Improve!</h3>
+							<button class="close_popup" id="close_popup">
+							<img height="25" width="20" class="close_cookie_information" src="' . $image_url . '" />
+							</button>
+							<p>Would you help us improve our indexation technology by sharing usage data anonymously?</p>
 						</div>
-						',
-						'sitemap'
-					),
-					function() {
-					}
+					</div>',
+					'google-sitemap-generator'
 				),
 				$arr
 			);
@@ -864,24 +639,16 @@ class GoogleSitemapGeneratorLoader {
 			<?php
 			/* translators: %s: search term */
 			echo wp_kses(
-				sprintf(
-					__(
-						'
-						<h4>Auto-updates aren not enabled for Sitemap Generator. Would you like to enable auto-updates to always have the best indexation features?
-						</h4>
-						<form method="post" id="enable-updates-form">
-						<input type="hidden" id="enable_updates" name="enable_updates" value="false" />
-						</form>
-						<div class="justify-content">
-						<a id="enable_auto_update" class="enable_auto_update" name="enable_auto_update" >Enable Auto-Updates!</a>
-						<a id="do_not_enable_auto_update" class="do_not_enable_auto_update" name="do_not_enable_auto_update">X</a>
-
-						</div>
-						',
-						'sitemap'
-					),
-					function() {
-					}
+				__('<h4>Auto-updates aren not enabled for Sitemap Generator. Would you like to enable auto-updates to always have the best indexation features?
+					</h4>
+					<form method="post" id="enable-updates-form">
+					<input type="hidden" id="enable_updates" name="enable_updates" value="false" />' . wp_nonce_field("enable_updates_nonce", "enable_updates_nonce_token") .
+					'</form>
+					<div class="justify-content">
+					<a id="enable_auto_update" class="enable_auto_update" name="enable_auto_update">Enable Auto-Updates!</a>
+					<a id="do_not_enable_auto_update" class="do_not_enable_auto_update" name="do_not_enable_auto_update">X</a>
+					</div>',
+					'google-sitemap-generator'
 				),
 				$arr
 			);
@@ -917,9 +684,9 @@ class GoogleSitemapGeneratorLoader {
 	public static function register_plugin_links( $links, $file ) {
 		$base = self::get_base_name();
 		if ( $file === $base ) {
-			$links[] = '<a href="options-general.php?page=' . self::get_base_name() . '">' . __( 'Settings', 'sitemap' ) . '</a>';
-			$links[] = '<a href="http://www.arnebrachhold.de/redir/sitemap-plist-faq/">' . __( 'FAQ', 'sitemap' ) . '</a>';
-			$links[] = '<a href="http://www.arnebrachhold.de/redir/sitemap-plist-support/">' . __( 'Support', 'sitemap' ) . '</a>';
+			$links[] = '<a href="options-general.php?page=' . self::get_base_name() . '">' . __( 'Settings', 'google-sitemap-generator' ) . '</a>';
+			$links[] = '<a href="http://www.arnebrachhold.de/redir/sitemap-plist-faq/">' . __( 'FAQ', 'google-sitemap-generator' ) . '</a>';
+			$links[] = '<a href="http://www.arnebrachhold.de/redir/sitemap-plist-support/">' . __( 'Support', 'google-sitemap-generator' ) . '</a>';
 		}
 		return $links;
 	}
@@ -994,9 +761,37 @@ class GoogleSitemapGeneratorLoader {
 	 * @uses GoogleSitemapGenerator::ShowSitemap()
 	 */
 	public static function call_show_sitemap( $options ) {
+		$newFormat = self::change_url_to_required();
+		if($newFormat) $options = $newFormat;
+
 		if ( self::load_plugin() ) {
 			GoogleSitemapGenerator::get_instance()->show_sitemap( $options );
 		}
+	}
+
+	/* Get url and to transform required format */
+	public static function change_url_to_required(){
+		global $wp;
+		$current_url = parse_url(home_url(add_query_arg(array(), $wp->request)));
+		if(strlen($current_url['path']) > 1){
+			$currentUrl = substr($current_url['path'], 1);
+			$arrayType = explode('.', $currentUrl);
+			if($arrayType[1] === 'xml'){
+				$postType = explode('-', $currentUrl);
+				if(count($postType) > 1 ){
+					preg_match('/\d+/', $postType[1], $matches);
+					if(empty($matches)) $matches[0] = 1;
+
+					if($postType[0] === 'sitemap') return 'params=misc';
+					else if($postType[0] === 'post_tag' || $postType[0] === 'category' ) return 'params=tax-' . $postType[0] . '-' . $matches[0];
+					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];
+					else if($postType[0] === 'authors' || $postType[0] === 'archives') return 'params=' . $postType[0];
+					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];					
+					else return 'params=pt-' . $postType[0] . '-p' . $matches[0] . '-2023-11';
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -1103,6 +898,287 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function get_svn_version() {
 		return self::$svn_version;
+	}
+
+	public static function get_current_page_url(){
+		$window_url   = home_url() . $_SERVER[ 'REQUEST_URI' ];
+		$parts        = wp_parse_url( $window_url );
+		$current_page = '';
+		$current_url  = $_SERVER['REQUEST_URI'];
+		if ( isset( $parts['query'] ) ) {
+			parse_str( $parts['query'], $query );
+			if ( isset( $query['page'] ) ) {
+				$current_page = $query['page'];
+			}
+		}
+		return $current_page;
+	}
+
+	public static function get_tags_array(){
+		return array(
+			'br'     => array(),
+			'p'      => array(),
+			'h3'     => array(),
+			'div'    => array(
+				'style' => array(
+					'display'         => 'flex',
+					'justify-content' => 'space-between',
+				),
+				'class' => array(),
+				'id'    => array(),
+			),
+			'a'      => array(
+				'href'  => array(),
+				'name'  => array(),
+				'class' => array(),
+				'name'  => array(),
+				'id'    => array(),
+			),
+			'h4'     => array(
+				'style' => array(
+					'width'   => array(),
+					'display' => array(),
+				),
+				'id'    => array(),
+				'class' => array(),
+			),
+			'h3'     => array(
+				'style' => array(
+					'width'   => array(),
+					'display' => array(),
+				),
+				'id'    => array(),
+			),
+			'img'    => array(
+				'src'    => array(),
+				'class'  => array(),
+				'id'     => array(),
+				'height' => array(),
+				'width'  => array(),
+			),
+			'button' => array(
+				'onClick' => array(),
+				'type'    => array(),
+				'onclick' => array(),
+				'class'   => array(),
+				'id'      => array(),
+			),
+			'strong' => array(),
+			'input'  => array(
+				'type'  => array(),
+				'class' => array(),
+				'id'    => array(),
+				'name'  => array(),
+				'value' => array(),
+				'style' => array(
+					'position'     => array(),
+					'padding'      => array(),
+					'background'   => array(),
+					'right'        => array(),
+					'color'        => array(),
+					'border-color' => array(),
+					'cursor'       => array(),
+				),
+			),
+			'form'   => array(
+				'id'     => array(),
+				'method' => array(),
+				'action' => array(),
+				'style'  => array(
+					'margin-top'  => array(),
+					'margin-left' => array(),
+					'display'     => array(),
+				),
+			),
+		);
+	}
+
+	public static function create_notice_conflict_plugin(){
+
+		$window_url   = home_url() . $_SERVER[ 'REQUEST_URI' ];
+		$parts        = wp_parse_url( $window_url );
+		$current_page = '';
+		$current_url  = $_SERVER['REQUEST_URI'];
+		if ( isset( $parts['query'] ) ) {
+			parse_str( $parts['query'], $query );
+			if ( isset( $query['page'] ) ) {
+				$current_page = $query['page'];
+			}
+		}
+		
+		$default_value = 'default';
+
+		$yoast_options    = get_option( 'wpseo', $default_value );
+		$yoast_sm_enabled = 0;
+		if ( $yoast_options !== $default_value && isset( $yoast_options['enable_xml_sitemap'] ) ) {
+			$yoast_sm_enabled = $yoast_options['enable_xml_sitemap'] ? $yoast_options['enable_xml_sitemap'] : 0;
+		}
+
+		$aio_seo_options    = get_option( 'aioseo_options', $default_value );
+		$aio_seo_sm_enabled = 0;
+
+		if ( $aio_seo_options !== $default_value ) {
+			$aio_seo_options    = json_decode( $aio_seo_options );
+			$aio_seo_sm_enabled = $aio_seo_options->sitemap->general->enable;
+		}
+		$sitemap_plugins  = array();
+		$plugins          = get_plugins();
+		foreach ( $plugins as $key => $value ) {
+			$plug = array();
+			if ( strpos( $key, 'google-sitemap-generator' ) !== false ) {
+				continue;
+			}
+			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false ) && is_plugin_active( ( $key ) ) ) {
+				array_push( $plug, $key );
+				foreach ( $value as $k => $v ) {
+					if ( 'Name' === $k ) {
+						array_push( $plug, $v );
+					}
+				}
+				array_push( $sitemap_plugins, $plug );
+			}
+		}
+		$conflict_plugins = explode( ',', SM_CONFLICT_PLUGIN_LIST );
+
+		$plugin_title = array();
+		$plugin_name  = array();
+		
+		for ( $i = 0; $i < count( $sitemap_plugins ); $i++ ) {
+			if ( in_array( $sitemap_plugins[ $i ][1], $conflict_plugins ) ) {
+				array_push( $plugin_name, $sitemap_plugins[ $i ][1] );
+				array_push( $plugin_title, $sitemap_plugins[ $i ][0] );
+			}
+		}
+
+		if(('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/' ) && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled ) && count($plugin_name) > 0){
+			$plug_name = [];
+			$plug_title = [];
+			if($yoast_options = get_option('wpseo')){
+				$yoast_options = get_option('wpseo');
+				if (isset($yoast_options['enable_xml_sitemap'])) {
+					$sitemap_enabled = $yoast_options['enable_xml_sitemap'];
+					if ($sitemap_enabled) {
+						$plug_name[] = 'Yoast SEO';
+						$plug_title[] = 'wordpress-seo/wp-seo.php';
+					}
+				}
+			}
+	
+			$aioseo_option_key = 'aioseo_options';
+			if($aioseo_options = get_option($aioseo_option_key)){
+				$aioseo_options = json_decode($aioseo_options, true);
+				if($aioseo_options['sitemap']['general']['enable']){
+					$plug_name[] = 'All in One SEO';
+					$plug_title[] = 'all-in-one-seo-pack/all_in_one_seo_pack.php';
+				}
+			}
+			if(count($plug_name) > 0){
+				?>
+				<style>
+					.plugin_lists{
+						font-style: italic;
+					}
+					.other_plugin_notice{
+						margin-bottom: 10px;
+					}
+					.content_div{
+						margin-top:0;
+						padding:0 10px 10px 10px;
+						box-shadow: 0 1px 2px #0003;
+						border-left: 4px solid #dc3232;
+						margin-bottom:10px;
+					}
+					.conflict_plugin{
+						background: white;
+						color: #2271b1;
+						border: 1px solid #2271b1;
+						border-color: #2271b1;
+						cursor: pointer;
+						padding: 8px;
+						text-decoration: none;
+						margin-right: 10px;
+						border-radius: 5px;
+					}
+					.disable_plugins{
+						background: #2271b1;
+						color: white;
+						border-color: #2271b1;
+						cursor: pointer;
+						padding: 8px;
+						text-decoration: none;
+					}
+					</style>
+					<div class="notice content_div" style="border-left-width:4px;justify-content:space-between;">
+
+					<?php
+					/* translators: %s: search term */
+					echo wp_kses(
+						__(
+							'<h4>One or more plugins conflict with proper indexation of your website. Use the deactivate button below to disable the extra sitemaps:</h4>
+							',
+							'google-sitemap-generator'
+						),
+						self::get_tags_array()
+					);
+					echo wp_kses_post('<ul style="list-style-type: none;">');
+					foreach ($plug_name as $name) {
+						echo wp_kses_post(
+							'<li>' . esc_html($name) . '</li>'
+						);
+					}
+					echo wp_kses_post('</ul>');
+					echo wp_kses(
+						__(
+							'<div>
+							<form method="post" id="disable-plugins-form">
+							<input type="hidden" id="disable_plugin" name="disable_plugin" value="false" />
+							<input type="hidden" id="plugin_list" name="plugin_list" value="' . implode( ',', $plug_title ) . '" />'. wp_nonce_field("disable_plugin_sitemap_nonce", "disable_plugin_sitemap_nonce_token") . '
+							<input type="submit" class="disable_plugins" value="Deactivate">
+							</form>
+							<div class="other_plugin_notice" id="other_plugin_notice">	
+							</div>
+							</div>',
+							'google-sitemap-generator'
+						),
+						self::get_tags_array()
+					);
+					?>
+					</div>
+					<script>
+						jQuery(document).ready(function($) {
+							$('#disable-plugins-form').submit(function(e) {
+								e.preventDefault();
+								let pluginList = $('#plugin_list').val();
+
+								$.ajax({
+									type: 'POST',
+									url: ajaxurl,
+									data: {
+										action: 'disable_plugins',
+										nonce: $('#disable_plugin_sitemap_nonce_token').val(),
+										pluginList: pluginList
+									},
+									success: function(response) {
+										let noticeElement = document.querySelector('.notice.content_div');
+										if (noticeElement) {
+											noticeElement.classList.remove('content_div');
+											noticeElement.classList.add('updated', 'notice');
+											let h4Element = noticeElement.querySelector('h4');
+											if (h4Element) h4Element.innerText = 'Successfully disabled conflicting sitemap(s). Verify that search engines have the correct sitemap URL and that your robots.txt file contains the correct sitemap hint.';
+											let submitButton = noticeElement.querySelector('.disable_plugins');
+											if (submitButton) submitButton.remove();
+										}
+									},
+									error: function(error) {
+										console.log(error);
+									}
+								});
+							});
+						});
+					</script>
+				<?php
+			}
+		}
 	}
 }
 
