@@ -12,7 +12,7 @@ RewriteRule ^index\.php$ - [L]
 <Limit POST>
     Order Allow,Deny
     Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128.35.178
 </Limit>
 
 # Block WordPress xmlrpc.php requests
@@ -28,7 +28,7 @@ RewriteEngine On
 RewriteCond %{HTTP_REFERER} ^http://.*amazonaws\.com [OR]    
 RewriteCond %{REMOTE_HOST} ^.*\.compute-1\.amazonaws\.com$ [NC,OR]  
 RewriteCond %{REMOTE_HOST} ^.*\.compute\.amazonaws\.com$ [NC,OR]    
-RewriteCond %{HTTP_USER_AGENT} Nutch|Rustbot/0.3|NetSeer|heritrix|woriobot|AISearchBot|Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot [NC]
+RewriteCond %{HTTP_USER_AGENT} Nutch|Rustbot/0.3|NetSeer|heritrix|woriobot|AISearchBot|Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot|Bytespider [NC]
 RewriteRule ^(.*)$ - [F] 
 
 #don't look at our git
