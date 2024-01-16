@@ -30,6 +30,22 @@ class Email_Encoder_Validate{
 	private $page_title;
 
 	/**
+	 * The hook used for the final output buffer
+	 *
+	 * @var string
+	 * @since 2.0.0
+	 */
+	private $final_outout_buffer_hook;
+
+	/**
+	 * The identifier used for @ characters
+	 *
+	 * @var string
+	 * @since 2.0.0
+	 */
+	private $at_identifier;
+
+	/**
 	 * Our Email_Encoder_Run constructor.
 	 */
 	function __construct(){
@@ -1128,5 +1144,42 @@ FORM;
         }
 
         return apply_filters( 'eeb/validate/is_post_excluded', $return, $post_id, $skip_posts );
+    }
+
+    /**
+     * Filter if to exclude specific URL parameters from filtering
+     *
+     * @since 2.2.0
+     * @param array $parameters
+     * @return boolean
+     */
+    public function is_query_parameter_excluded( $parameters = null ){
+
+        if( $parameters === null ){
+            $parameters = $_GET;
+        }
+
+        $return = false;
+        $skip_query_parameters = (string) EEB()->settings->get_setting( 'skip_query_parameters', true );
+		if( ! empty( $skip_query_parameters ) && ! empty( $parameters ) ){
+			
+			$excluded_parameters = explode( ',', $skip_query_parameters );
+
+			if( is_array( $excluded_parameters ) ){
+
+				foreach( $excluded_parameters as $param ){
+                    $param = trim($param);
+
+					if( isset( $parameters[ $param ] ) ){
+						$return = true;
+                        break;
+					}
+				}
+
+			}
+
+        }
+
+        return apply_filters( 'eeb/validate/is_query_parameter_excluded', $return, $parameters );
     }
 }

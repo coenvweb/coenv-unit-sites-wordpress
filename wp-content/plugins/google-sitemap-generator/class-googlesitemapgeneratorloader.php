@@ -214,6 +214,8 @@ class GoogleSitemapGeneratorLoader {
 		self::setup_rewrite_hooks();
 		self::activate_rewrite();
 
+		self::activation_indexnow_setup(); //activtion indexNow
+
 		if ( self::load_plugin() ) {
 			$gsg = GoogleSitemapGenerator::get_instance();
 			if ( $gsg->old_file_exists() ) {
@@ -235,6 +237,7 @@ class GoogleSitemapGeneratorLoader {
 		wp_clear_scheduled_hook( 'sm_ping_daily' );
 		self::remove_rewrite_hooks();
 		$wp_rewrite->flush_rules( false );
+		self::deactivation_indexnow(); // deactivation indexNow plugin
 	}
 
 
@@ -596,7 +599,7 @@ class GoogleSitemapGeneratorLoader {
 		if ( ! is_array( $auto_update_plugins ) ) {
 			$auto_update_plugins = array();
 		}
-		if ( ! in_array( 'google-sitemap-generator/sitemap.php', $auto_update_plugins, true ) && 'google-sitemap-generator/sitemap.php' === $current_page && 'yes' !== $hide_auto_update_banner ) {
+		if ( (! in_array( 'google-sitemap-generator/sitemap.php', $auto_update_plugins, true ) && ('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/') && 'yes' !== $hide_auto_update_banner) ) {
 			?>
 			<style>
 				.justify-content{
@@ -776,17 +779,28 @@ class GoogleSitemapGeneratorLoader {
 		if(strlen($current_url['path']) > 1){
 			$currentUrl = substr($current_url['path'], 1);
 			$arrayType = explode('.', $currentUrl);
-			if($arrayType[1] === 'xml'){
-				$postType = explode('-', $currentUrl);
+			if (in_array($arrayType[1], array('xml', 'html'))){
+				if( strpos($arrayType[0], 'sitemap-misc') !== false ) {
+					$postType[0] = 'sitemap';
+					$postType[1] = $arrayType[1];
+				}
+				else $postType = explode('-sitemap', $currentUrl);
+
+				if (strpos($postType[0], '/') !== false){
+					$newType = explode('/', $postType[0]);
+					$postType[0] = end($newType);
+				}
+
 				if(count($postType) > 1 ){
 					preg_match('/\d+/', $postType[1], $matches);
 					if(empty($matches)) $matches[0] = 1;
 
 					if($postType[0] === 'sitemap') return 'params=misc';
-					else if($postType[0] === 'post_tag' || $postType[0] === 'category' ) return 'params=tax-' . $postType[0] . '-' . $matches[0];
+					else if($postType[0] === 'post_tag' || $postType[0] === 'category' || taxonomy_exists($postType[0])) return 'params=tax-' . $postType[0] . '-' . $matches[0];
 					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];
 					else if($postType[0] === 'authors' || $postType[0] === 'archives') return 'params=' . $postType[0];
-					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];					
+					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];
+					else if($postType[0] === 'producttags') return 'params=producttags-' . $matches[0];
 					else return 'params=pt-' . $postType[0] . '-p' . $matches[0] . '-2023-11';
 				}
 			}
@@ -1021,6 +1035,15 @@ class GoogleSitemapGeneratorLoader {
 			$aio_seo_options    = json_decode( $aio_seo_options );
 			$aio_seo_sm_enabled = $aio_seo_options->sitemap->general->enable;
 		}
+
+		$jetpack_options    = get_option( 'jetpack_active_modules', $default_value );
+		$jetpack_sm_enabled = 0;
+		if(is_array($jetpack_options)) {
+            if (in_array('sitemaps', $jetpack_options)) {
+                $jetpack_sm_enabled = 1;
+            }
+        }
+
 		$sitemap_plugins  = array();
 		$plugins          = get_plugins();
 		foreach ( $plugins as $key => $value ) {
@@ -1028,7 +1051,7 @@ class GoogleSitemapGeneratorLoader {
 			if ( strpos( $key, 'google-sitemap-generator' ) !== false ) {
 				continue;
 			}
-			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false ) && is_plugin_active( ( $key ) ) ) {
+			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false || $jetpack_sm_enabled ) && is_plugin_active( ( $key ) ) ) {
 				array_push( $plug, $key );
 				foreach ( $value as $k => $v ) {
 					if ( 'Name' === $k ) {
@@ -1038,6 +1061,7 @@ class GoogleSitemapGeneratorLoader {
 				array_push( $sitemap_plugins, $plug );
 			}
 		}
+
 		$conflict_plugins = explode( ',', SM_CONFLICT_PLUGIN_LIST );
 
 		$plugin_title = array();
@@ -1050,7 +1074,7 @@ class GoogleSitemapGeneratorLoader {
 			}
 		}
 
-		if(('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/' ) && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled ) && count($plugin_name) > 0){
+		if(('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/' ) && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled || 0 !== $jetpack_sm_enabled ) && count($plugin_name) > 0){
 			$plug_name = [];
 			$plug_title = [];
 			if($yoast_options = get_option('wpseo')){
@@ -1072,6 +1096,12 @@ class GoogleSitemapGeneratorLoader {
 					$plug_title[] = 'all-in-one-seo-pack/all_in_one_seo_pack.php';
 				}
 			}
+
+			if($jetpack_sm_enabled){
+				$plug_name[] = 'Jetpack Sitemap';
+				$plug_title[] = 'jetpack/jetpack.php';
+			}
+
 			if(count($plug_name) > 0){
 				?>
 				<style>
@@ -1180,6 +1210,31 @@ class GoogleSitemapGeneratorLoader {
 			}
 		}
 	}
+
+	/*
+	* activation indexNow and adding tables for indexation plugin
+	*/
+	public static function activation_indexnow_setup(){
+		$api_key = wp_generate_uuid4();
+		if(is_multisite()){
+			update_site_option('gsg_indexnow-is_valid_api_key', '2');
+			update_site_option('gsg_indexnow-admin_api_key', base64_encode( $api_key ));
+		} else {
+			update_option( 'gsg_indexnow-is_valid_api_key', '2' );
+			update_option( 'gsg_indexnow-admin_api_key', base64_encode( $api_key ) );
+		}
+	}
+
+	public static function deactivation_indexnow() {
+		if(is_multisite()){
+			delete_site_option( 'gsg_indexnow-is_valid_api_key' );
+			delete_site_option( 'gsg_indexnow-admin_api_key' );
+		} else {
+			delete_option( 'gsg_indexnow-is_valid_api_key' );
+			delete_option( 'gsg_indexnow-admin_api_key' );
+		}
+	}
+	
 }
 
 // Enable the plugin for the init hook, but only if WP is loaded. Calling this php file directly will do nothing.

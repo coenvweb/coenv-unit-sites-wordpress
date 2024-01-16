@@ -29,6 +29,126 @@ class Email_Encoder_Settings{
 	private $page_name;
 
 	/**
+	 * The page title
+	 *
+	 * @var string
+	 * @since 2.0.0
+	 */
+	private $page_title;
+
+	/**
+	 * The final output buffer hook
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $final_outout_buffer_hook;
+
+	/**
+	 * The widget callback
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $widget_callback_hook;
+
+	/**
+	 * The settings key
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $settings_key;
+
+	/**
+	 * The versions key
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $version_key;
+
+	/**
+	 * The image secret key
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $image_secret_key;
+
+	/**
+	 * The @ character identifier
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $at_identifier;
+
+	/**
+	 * The previous version
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $previous_version;
+
+	/**
+	 * The hook priorities
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $hook_priorities;
+
+	/**
+	 * The safe HTML attributes (against XSS)
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $safe_attr_html;
+
+	/**
+	 * The email regex
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $email_regex;
+
+	/**
+	 * The soft (HTML) attribute regex
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $soft_attribute_regex;
+
+	/**
+	 * The available settings
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $settings;
+
+	/**
+	 * The version
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $version;
+
+	/**
+	 * The email image secret
+	 *
+	 * @var string
+	 * @since 2.1.10
+	 */
+	private $email_image_secret;
+
+	/**
 	 * Email_Encoder_Settings constructor.
 	 *
 	 * We define all of our necessary settings in here.
@@ -62,6 +182,76 @@ class Email_Encoder_Settings{
 			'callback_rss_remove_shortcodes' => 10,
 			'load_ajax_scripts_styles' => 10,
 			'load_ajax_scripts_styles_admin' => 10,
+		);
+		$this->safe_attr_html = array(
+			'p' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'align' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'div' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'align' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'span' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'strong' => array(),
+			'center' => array(),
+			'ul' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'ol' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'li' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'a' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'href' => array(),
+				'title' => array(),
+				'rel' => array(),
+				'target' => array(),
+				'lang' => array(),
+				'dir' => array(),
+			),
+			'img' => array(
+				'id' => array(),
+				'class' => array(),
+				'style' => array(),
+				'src' => array(),
+				'alt' => array(),
+				'width' => array(),
+				'height' => array(),
+				'align' => array(),
+				'title' => array(),
+			),
 		);
 
 		//Regex
@@ -270,6 +460,17 @@ class Email_Encoder_Settings{
 				'description' => __('By comma separating post id\'s ( e.g. 123,4535,643), you are able to exclude these posts from the logic protection.', 'email-encoder-bundle')
 			),
 
+			'skip_query_parameters' => array(
+				'fieldset'    => array( 'slug' => 'main', 'label' => 'Label' ),
+				'id'          => 'skip_query_parameters',
+				'type'        => 'text',
+				'advanced' 	  => true,
+				'title'       => __('Exclude URL parameters from protection', 'email-encoder-bundle'),
+				'placeholder' => '',
+				'required'    => false,
+				'description' => __('By comma separating URL (Query) parameters ( e.g. param1,param2), you are able to exclude URLs with these parameters from the protection. URL or Query parameters are found at the end of your URL (e.g. domain.com?param1=test)', 'email-encoder-bundle')
+			),
+
 			'protection_text' => array(
 				'fieldset'    => array( 'slug' => 'main', 'label' => 'Label' ),
 				'id'          => 'protection_text',
@@ -325,7 +526,7 @@ class Email_Encoder_Settings{
 				'label'       => __('Mark emails on the site as successfully encoded', 'email-encoder-bundle') . '<i class="dashicons-before dashicons-lock" style="color:green;"></i>',
 				'placeholder' => '',
 				'required'    => false,
-				'description' => __('Only visible for admin users. If your emails look broken, simply deactivate this feature.', 'email-encoder-bundle')
+				'description' => __('Only visible for admin users. If your emails look broken, simply deactivate this feature. This also loads the dashicons style.', 'email-encoder-bundle')
 			),
 
 			'own_admin_menu' => array(
@@ -737,6 +938,15 @@ class Email_Encoder_Settings{
     }
 
 	/**
+	  * Get a collection of safe HTML attributes 
+	  *
+	  * @return array
+	  */
+	  public function get_safe_html_attr(){
+		return apply_filters( 'eeb/settings/get_safe_html_attr', $this->safe_attr_html );
+	}
+
+	/**
 	 * ######################
 	 * ###
 	 * #### Settings helper
@@ -775,7 +985,7 @@ class Email_Encoder_Settings{
 	 * @param $slug - the identifier for your specified setting
 	 * @param $single - wether you only want to return the value or the whole settings element
 	 * @param $group - in case you call a multi-input that contains multiple values (e.g. checkbox), you can set a sub-slug to grab the sub value
-	 * @return string - the default string
+	 * @return mixed - the default string
 	 */
 	public function get_setting( $slug = '', $single = false, $group = '' ){
 		$return = $this->settings;
