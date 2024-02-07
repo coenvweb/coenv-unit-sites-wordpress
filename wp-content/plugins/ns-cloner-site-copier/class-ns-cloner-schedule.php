@@ -135,7 +135,9 @@ class NS_Cloner_Schedule {
 	 */
 	public function handle() {
 		// Ensure that plugin functions are available in cron environment.
-		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 		$scheduled = $this->get();
 		if ( ns_cloner()->process_manager->is_in_progress() ) {
 			// Do wrap up for any hanging operations that didn't call their own finish() for one reason or another.

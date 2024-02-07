@@ -48,7 +48,8 @@
         url: ajaxurl,
         method: 'POST',
         data: {
-          action: 'analyst_install_' + pluginId
+          action: 'analyst_install_' + pluginId,
+          nonce: analyst_opt_localize.nonce
         },
         success: function (data) {
 		  if (data && !data.success) {
@@ -103,11 +104,14 @@
     })
 
 	$('#analyst-install-skip').click(function () {
-      var pluginId = $('#analyst-install-modal').attr('analyst-plugin-id')
+    var pluginId = $('#analyst-install-modal').attr('analyst-plugin-id')
 
-	  $.post(ajaxurl, {action: 'analyst_skip_install_' + pluginId}).done(function () {
-		$('#analyst-install-modal').hide()
-      })
+	  $.post(ajaxurl, {
+      action: 'analyst_skip_install_' + pluginId,
+      nonce: analyst_opt_localize.nonce
+    }).done(function () {
+		  $('#analyst-install-modal').hide()
+    })
     })
   })(jQuery)
 </script>

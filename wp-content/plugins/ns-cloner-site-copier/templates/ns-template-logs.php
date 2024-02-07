@@ -14,7 +14,7 @@ if ( ns_cloner_request()->get( 'delete_logs' ) && ns_cloner()->check_permissions
 	ns_cloner()->log->delete_logs();
 }
 
-ns_cloner()->render( 'mcf-header' ); ?>
+?>
 
 <div class="ns-cloner-wrapper">
 	<div class="ns-cloner-wrapper-content">

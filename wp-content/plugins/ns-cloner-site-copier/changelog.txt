@@ -1,3 +1,12 @@
+= 4.4.2 - 2024.01.30 =
+* Enhancement: Improved locale loading.
+* Fix: PHP notices.
+
+= 4.4.1 - 2024.01.25 =
+* New: Introduce new function `ns_cloner_perform_clone` to make it easier to perform cloning from other plugins.
+* Enhancement: Improved checks for file loading.
+* Fix: PHP notices.
+
 = 4.4 - 2023.11.20 =
 * New: Updated the admin area for a more modern experience.
 * Enhancement: Code improvements.

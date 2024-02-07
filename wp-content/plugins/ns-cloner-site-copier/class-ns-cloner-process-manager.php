@@ -145,9 +145,9 @@ class NS_Cloner_Process_Manager {
 		if ( ! empty( $this->errors ) ) {
 			$this->add_error( __( 'Validation errors found.', 'ns-cloner-site-copier' ) );
 			return;
-		} else {
-			do_action( 'ns_cloner_validated' );
 		}
+
+		do_action( 'ns_cloner_validated' );
 
 		// Delete the exit flag from the last time.
 		delete_site_option( 'ns_cloner_exited' );
