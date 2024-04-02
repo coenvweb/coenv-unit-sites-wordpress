@@ -2,8 +2,8 @@
 Contributors: auctollo
 Tags: sitemap, seo, xml sitemap, indexnow, google sitemaps, google search console, news sitemap, image sitemap, image seo, video sitemap, video seo, woocommerce, robots.txt, site kit, schema, bing, baidu, yandex
 Requires at least: 4.6
-Tested up to: 6.4.2
-Stable tag: 4.1.18
+Tested up to: 6.4.3
+Stable tag: 4.1.19
 Requires PHP: 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,7 +16,7 @@ Generate XML, HTML, RSS sitemaps for your website with ease using the XML Sitema
 
 The plugin supports all kinds of WordPress generated pages as well as custom URLs. Additionally it notifies all major search engines every time you create a post about the new content.
 
-Supported for more than a decade and [rated among the best](https://wordpress.org/plugins/browse/popular/page/2/), it will do exactly what it's supposed to do - providing a complete XML sitemap for search engines!
+Supported for more than a decade and [rated among the best](https://wordpress.org/plugins/browse/popular/page/2/#:~:text=XML%20Sitemap%20Generator%20for%20Google), it will do exactly what it's supposed to do - providing a complete XML sitemap for search engines!
 
 > If you like the plugin, feel free to rate it! :)
 
@@ -101,6 +101,15 @@ Please post your question at the [WordPress support forum](https://wordpress.org
 
 == Changelog ==
 
+= 4.1.19 (2024-01-31) =
+* Fixed "Links per page" bug causing sitemaps to not include all posts depending on the setting. Following Search Engine guidance is minimum links per sitemap is 1,000 pages.
+* Fixed Google Search Console errors including "Fetch error" and "noindex" header
+* Fixed the issue with "null" sitemaps
+* Fixed sitemap generation for tags, categories, etc for large sites
+* Improved performance by optimizing queries
+* Improved IndexNow implementation
+* Added WordPress' sitemap to the list of detected sitemaps for deactivation
+
 = 4.1.18 (2024-01-12) =
 * Resolved functionality regressions since v4.1.13
 * Improved IndexNow Protocol implementation
@@ -110,7 +119,6 @@ Please post your question at the [WordPress support forum](https://wordpress.org
 * Fixed auto update rewrite rule
 * Fixed rewrite issues during plugin upgrade
 * Fixed invalid XML syntax (cause of parsing issues in Google Search Console)
-
 
 = 4.1.17 (2024-01-05) =
 * Fixed sitemap URL issue in robots.txt etc

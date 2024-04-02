@@ -16,7 +16,7 @@
  * Plugin Name: XML Sitemap Generator for Google
  * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.18
+ * Version: 4.1.19
  * Author: Auctollo
  * Author URI: https://auctollo.com/
  * Text Domain: google-sitemap-generator
@@ -61,7 +61,7 @@ define( 'SM_SUPPORTFEED_URL', 'https://wordpress.org/support/plugin/google-sitem
 define( 'SM_BETA_USER_INFO_URL', 'https://api.auctollo.com/beta/consent' );
 define( 'SM_LEARN_MORE_API_URL', 'https://api.auctollo.com/lp' );
 define( 'SM_BANNER_HIDE_DURATION_IN_DAYS', 7 );
-define( 'SM_CONFLICT_PLUGIN_LIST', 'All in One SEO,Yoast SEO, Jetpack' );
+define( 'SM_CONFLICT_PLUGIN_LIST', 'All in One SEO,Yoast SEO, Jetpack, Wordpress Sitemap' );
 add_action( 'admin_init', 'register_consent', 1 );
 add_action( 'admin_head', 'ga_header' );
 add_action( 'admin_footer', 'ga_footer' );
@@ -71,7 +71,7 @@ add_action( 'plugins_loaded', function() {
 
 });
 
-add_action( 'save_post', 'indexnow_after_post_save', 10, 3 ); //send to indexNow
+add_action( 'transition_post_status', 'indexnow_after_post_save', 10, 3 ); //send to indexNow
 
 /**
  * Google analytics .
@@ -354,6 +354,8 @@ function register_consent() {
 								add_option( 'sm_beta_banner_discarded_on', gmdate( 'Y/m/d' ) );
 								update_option( 'sm_beta_banner_discarded_count', (int) 1 );
 							}
+							GoogleSitemapGeneratorLoader::setup_rewrite_hooks();
+							GoogleSitemapGeneratorLoader::activate_rewrite();
 						} else {
 							add_option( 'sm_beta_notice_dismissed_from_wp_admin', 'true' );
 						}
@@ -399,21 +401,35 @@ function register_consent() {
 		}
 	}
 	$updateUrlRules = get_option('sm_options');
-	if(!isset($updateUrlRules['sm_b_rewrites']) || $updateUrlRules['sm_b_rewrites'] == false){
+	if(!isset($updateUrlRules['sm_b_rewrites2']) || $updateUrlRules['sm_b_rewrites2'] == false){
 		GoogleSitemapGeneratorLoader::setup_rewrite_hooks();
 		GoogleSitemapGeneratorLoader::activate_rewrite();
 		GoogleSitemapGeneratorLoader::activation_indexnow_setup();
 
-		if (isset($updateUrlRules['sm_b_rewrites'])) {
-			$updateUrlRules['sm_b_rewrites'] = true;
+		if (isset($updateUrlRules['sm_b_rewrites2'])) {
+			$updateUrlRules['sm_b_rewrites2'] = true;
 			update_option('sm_options', $updateUrlRules);
 		} else {
-			$updateUrlRules['sm_b_rewrites'] = true;
+			$updateUrlRules['sm_b_rewrites2'] = true;
 			add_option('sm_options', $updateUrlRules);
 			update_option('sm_options', $updateUrlRules);
 		}
 		
 	}
+	if(isset($updateUrlRules['sm_links_page'] )){
+		$sm_links_page = intval($updateUrlRules['sm_links_page']);
+		if($sm_links_page < 1000) {
+			$updateUrlRules['sm_links_page'] = 1000;
+			update_option('sm_options', $updateUrlRules);
+		}
+	}
+
+	if(!isset($updateUrlRules['sm_b_activate_indexnow']) || $updateUrlRules['sm_b_activate_indexnow'] == false){
+		$updateUrlRules['sm_b_activate_indexnow'] = true;
+		$updateUrlRules['sm_b_indexnow'] = true;
+		update_option('sm_options', $updateUrlRules);
+	}
+	
 }
 
 function disable_plugins_callback(){
@@ -451,6 +467,13 @@ function disable_plugins_callback(){
 					}
 				}
             }
+			if ($plugin === 'wordpress-sitemap') {
+                /* Wordpress sitemap deactivation */
+                $options = get_option('sm_options', array());
+				if (isset($options['sm_wp_sitemap_status'])) $options['sm_wp_sitemap_status'] = false;
+				else $options['sm_wp_sitemap_status'] = false;
+				update_option('sm_options', $options);
+            }
         }
 
         echo 'Plugins sitemaps disabled successfully';
@@ -463,21 +486,38 @@ function conflict_plugins_admin_notice(){
 }
 
  /* send to index updated url */
-function indexnow_after_post_save( $post_ID, $post, $update ) {
+function indexnow_after_post_save($new_status, $old_status, $post) {
 	$indexnow = get_option('sm_options');
-	$indexNowStatus = false;
-	if(isset($indexnow['sm_b_indexnow'])) $indexNowStatus = $indexnow['sm_b_indexnow'];
-	if($indexNowStatus === true){
+	$indexNowStatus = isset($indexnow['sm_b_indexnow']) ? $indexnow['sm_b_indexnow'] : false;
+	if ($indexNowStatus === true) {
 	    $newUrlToIndex = new GoogleSitemapGeneratorIndexNow();
-        $newUrlToIndex->start( get_permalink( $post_ID ) );
+		$is_changed = false;
+		$type = "add";
+		if ($old_status === 'publish' && $new_status === 'publish') {
+			$is_changed = true;
+			$type = "update";
+		}
+		else if ($old_status != 'publish' && $new_status === 'publish') {
+			$is_changed = true;
+			$type = "add";
+		}
+		else if ($old_status === 'publish' && $new_status === 'trash') {
+			$is_changed = true;
+			$type = "delete";
+		}
+		if ($is_changed) $newUrlToIndex->start(get_permalink($post));
     }
-
 }
 
 // Don't do anything if this file was called directly.
 if ( defined( 'ABSPATH' ) && defined( 'WPINC' ) && ! class_exists( 'GoogleSitemapGeneratorLoader', false ) ) {
 	sm_setup();
-	add_filter( 'wp_sitemaps_enabled', '__return_false' );
+	
+	if(isset(get_option('sm_options')['sm_wp_sitemap_status']) ) $wp_sitemap_status = get_option('sm_options')['sm_wp_sitemap_status'];
+	else $wp_sitemap_status = true;
+	if($wp_sitemap_status = true) $wp_sitemap_status = '__return_true';
+	else $wp_sitemap_status = '__return_false';
+	add_filter( 'wp_sitemaps_enabled', $wp_sitemap_status );
 	
 	add_action('wp_ajax_disable_plugins', 'disable_plugins_callback');
 

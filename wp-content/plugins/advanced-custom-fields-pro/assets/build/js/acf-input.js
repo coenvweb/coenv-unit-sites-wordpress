@@ -6072,12 +6072,16 @@
     onChange: function () {
       // preview hack allows post to save with no title or content
       $('#_acf_changed').val(1);
-      if (typeof wp.data !== 'undefined') {
-        wp.data.dispatch('core/editor').editPost({
-          meta: {
-            _acf_changed: 1
-          }
-        });
+      if (acf.isGutenbergPostEditor()) {
+        try {
+          wp.data.dispatch('core/editor').editPost({
+            meta: {
+              _acf_changed: 1
+            }
+          });
+        } catch (error) {
+          console.log('ACF: Failed to update _acf_changed meta', error);
+        }
       }
     }
   });
@@ -8326,7 +8330,7 @@
         if (!options.templateSelection) {
           options.templateSelection = function (selection) {
             var $selection = $('<span class="acf-selection"></span>');
-            $selection.html(acf.escHtml(selection.text));
+            $selection.html(acf.strEscape(selection.text));
             $selection.data('element', selection.element);
             return $selection;
           };

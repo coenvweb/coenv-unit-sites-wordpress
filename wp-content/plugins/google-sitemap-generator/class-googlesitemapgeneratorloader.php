@@ -84,8 +84,24 @@ class GoogleSitemapGeneratorLoader {
 		}
 
 		// Disable the WP core XML sitemaps .
-		add_filter( 'wp_sitemaps_enabled', '__return_false' );
+		if(isset(get_option('sm_options')['sm_wp_sitemap_status']) ) $wp_sitemap_status = get_option('sm_options')['sm_wp_sitemap_status'];
+		else $wp_sitemap_status = true;
+		if($wp_sitemap_status === true) $wp_sitemap_status = '__return_true';
+		else $wp_sitemap_status = '__return_false';
+		add_filter( 'wp_sitemaps_enabled', $wp_sitemap_status );
 
+		// Create dynamically generated robots.txt
+		if (get_option('sm_options')['sm_b_robots']) {
+			add_filter('robots_txt', function($output, $public) {
+				$output = "User-agent: *\n";
+				if ('0' == $public ) {
+					$output .= "Disallow: /\nDisallow: /*\nDisallow: /*?\n";
+				} else {
+					$output .= "Disallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n";
+				}
+				return $output;
+			}, 99, 2);
+		}
 	}
 
 	/**
@@ -125,11 +141,25 @@ class GoogleSitemapGeneratorLoader {
 	 * @return Array An array containing the new rewrite rules
 	 */
 	public static function add_rewrite_rules( $wp_rules ) {
+		if(is_multisite()) {
+			if(isset(get_blog_option( get_current_blog_id(), 'sm_options' )['sm_b_sitemap_name'])) {
+				$sm_sitemap_name = get_blog_option( get_current_blog_id(), 'sm_options' )['sm_b_sitemap_name'];
+			}
+		} else if(isset(get_option('sm_options')['sm_b_sitemap_name'])) $sm_sitemap_name = get_option('sm_options')['sm_b_sitemap_name'];
+		if(!isset($sm_sitemap_name)) $sm_sitemap_name = 'sitemap';
 		$sm_rules = array(
-			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
-			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
-			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
-			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+			'.*-misc\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*-misc\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*-misc\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*-misc\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+			'.*sitemap(?:\d{1,4}(?!-misc)|-misc)?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*sitemap(?:\d{1,4}(?!-misc)|-misc)?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*sitemap(?:\d{1,4}(?!-misc)|-misc)?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*sitemap(?:\d{1,4}(?!-misc)|-misc)?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+			$sm_sitemap_name . '(?:\d{1,4}(?!-misc)|-misc)?\.xml$' => 'index.php?xml_sitemap=params=$matches[2]',
+			$sm_sitemap_name . '(?:\d{1,4}(?!-misc)|-misc)?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			$sm_sitemap_name . '(?:\d{1,4}(?!-misc)|-misc)?\.html$' => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			$sm_sitemap_name . '(?:\d{1,4}(?!-misc)|-misc)?\.html.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
 		);
 		return array_merge( $sm_rules, $wp_rules );
 	}
@@ -141,10 +171,15 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function get_ngin_x_rules() {
 		return array(
-			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$ "/index.php?xml_sitemap=params=$2" last;',
-			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$ "/index.php?xml_sitemap=params=$2;zip=true" last;',
-			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$ "/index.php?xml_sitemap=params=$2;html=true" last;',
-			'rewrite ^/.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html.gz$ "/index.php?xml_sitemap=params=$2;html=true;zip=true" last;',
+			'rewrite ^/.*-misc?\.xml$ "/index.php?xml_sitemap=params=$2" last;',
+			'rewrite ^/.*-misc?\.xml\.gz$ "/index.php?xml_sitemap=params=$2;zip=true" last;',
+			'rewrite ^/.*-misc?\.html$ "/index.php?xml_sitemap=params=$2;html=true" last;',
+			'rewrite ^/.*-misc?\.html.gz$ "/index.php?xml_sitemap=params=$2;html=true;zip=true" last;',
+
+			'rewrite ^/.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.xml$ "/index.php?xml_sitemap=params=$2" last;',
+			'rewrite ^/.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.xml\.gz$ "/index.php?xml_sitemap=params=$2;zip=true" last;',
+			'rewrite ^/.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.html$ "/index.php?xml_sitemap=params=$2;html=true" last;',
+			'rewrite ^/.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.html.gz$ "/index.php?xml_sitemap=params=$2;html=true;zip=true" last;',
 		);
 
 	}
@@ -170,10 +205,20 @@ class GoogleSitemapGeneratorLoader {
 	 */
 	public static function remove_rewrite_rules( $wp_rules ) {
 		$sm_rules = array(
+			'.*-misc\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*-misc\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*-misc\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*-misc\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+
 			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
 			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
 			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
 			'.*sitemap.*(-+([a-zA-Z0-9_-]+))?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
+
+			'.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.xml$'     => 'index.php?xml_sitemap=params=$matches[2]',
+			'.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.xml\.gz$' => 'index.php?xml_sitemap=params=$matches[2];zip=true',
+			'.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.html$'    => 'index.php?xml_sitemap=params=$matches[2];html=true',
+			'.*sitemap.*(?:\d{1,4}(?!-misc)|-misc)?\.html\.gz$' => 'index.php?xml_sitemap=params=$matches[2];html=true;zip=true',
 		);
 		foreach ( $wp_rules as $key => $value ) {
 			if ( array_key_exists( $key, $sm_rules ) ) {
@@ -776,11 +821,13 @@ class GoogleSitemapGeneratorLoader {
 	public static function change_url_to_required(){
 		global $wp;
 		$current_url = parse_url(home_url(add_query_arg(array(), $wp->request)));
-		if(strlen($current_url['path']) > 1){
+		if( isset($current_url['path']) && strlen($current_url['path']) > 1){
 			$currentUrl = substr($current_url['path'], 1);
 			$arrayType = explode('.', $currentUrl);
 			if (in_array($arrayType[1], array('xml', 'html'))){
-				if( strpos($arrayType[0], 'sitemap-misc') !== false ) {
+				if(isset(get_option('sm_options')['sm_b_sitemap_name']) && $arrayType[0] === get_option('sm_options')['sm_b_sitemap_name']){
+					$postType[0] = $arrayType[0] . '.' . $arrayType[1];
+				}else if( strpos($arrayType[0], '-misc') !== false ) {
 					$postType[0] = 'sitemap';
 					$postType[1] = $arrayType[1];
 				}
@@ -790,11 +837,10 @@ class GoogleSitemapGeneratorLoader {
 					$newType = explode('/', $postType[0]);
 					$postType[0] = end($newType);
 				}
-
+				
 				if(count($postType) > 1 ){
 					preg_match('/\d+/', $postType[1], $matches);
 					if(empty($matches)) $matches[0] = 1;
-
 					if($postType[0] === 'sitemap') return 'params=misc';
 					else if($postType[0] === 'post_tag' || $postType[0] === 'category' || taxonomy_exists($postType[0])) return 'params=tax-' . $postType[0] . '-' . $matches[0];
 					else if($postType[0] === 'productcat') return 'params=productcat-' . $matches[0];
@@ -1044,6 +1090,13 @@ class GoogleSitemapGeneratorLoader {
             }
         }
 
+		if(isset(get_option('sm_options')['sm_wp_sitemap_status']) ) $wordpress_options = get_option('sm_options')['sm_wp_sitemap_status'];
+		else $wordpress_options = true;
+		$wordpress_sm_enabled = 0;
+		if($wordpress_options) {
+            $wordpress_sm_enabled = 1;
+        }
+
 		$sitemap_plugins  = array();
 		$plugins          = get_plugins();
 		foreach ( $plugins as $key => $value ) {
@@ -1051,7 +1104,7 @@ class GoogleSitemapGeneratorLoader {
 			if ( strpos( $key, 'google-sitemap-generator' ) !== false ) {
 				continue;
 			}
-			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false || $jetpack_sm_enabled ) && is_plugin_active( ( $key ) ) ) {
+			if ( ( strpos( $key, 'sitemap' ) !== false || strpos( $key, 'seo' ) !== false || $jetpack_sm_enabled || $wordpress_sm_enabled) && is_plugin_active( ( $key ) ) ) {
 				array_push( $plug, $key );
 				foreach ( $value as $k => $v ) {
 					if ( 'Name' === $k ) {
@@ -1074,7 +1127,7 @@ class GoogleSitemapGeneratorLoader {
 			}
 		}
 
-		if(('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/' ) && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled || 0 !== $jetpack_sm_enabled ) && count($plugin_name) > 0){
+		if(('google-sitemap-generator/sitemap.php' === $current_page || $_SERVER['REQUEST_URI'] === '/wp-admin/index.php' || $_SERVER['REQUEST_URI'] === '/wp-admin/' ) && count( $sitemap_plugins ) > 0 && ( 0 !== $yoast_sm_enabled || 0 !== $aio_seo_sm_enabled || 0 !== $jetpack_sm_enabled || 0 !== $jetpack_sm_enabled) && count($plugin_name) > 0){
 			$plug_name = [];
 			$plug_title = [];
 			if($yoast_options = get_option('wpseo')){
@@ -1100,6 +1153,11 @@ class GoogleSitemapGeneratorLoader {
 			if($jetpack_sm_enabled){
 				$plug_name[] = 'Jetpack Sitemap';
 				$plug_title[] = 'jetpack/jetpack.php';
+			}
+
+			if($wordpress_sm_enabled){
+				$plug_name[] = 'Wordpress Sitemap';
+				$plug_title[] = 'wordpress-sitemap';
 			}
 
 			if(count($plug_name) > 0){
@@ -1216,6 +1274,7 @@ class GoogleSitemapGeneratorLoader {
 	*/
 	public static function activation_indexnow_setup(){
 		$api_key = wp_generate_uuid4();
+		$api_key = preg_replace('[-]', '', $api_key);
 		if(is_multisite()){
 			update_site_option('gsg_indexnow-is_valid_api_key', '2');
 			update_site_option('gsg_indexnow-admin_api_key', base64_encode( $api_key ));
