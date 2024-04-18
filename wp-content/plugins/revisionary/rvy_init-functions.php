@@ -686,8 +686,11 @@ function revisionary_refresh_postmeta($post_id, $args = []) {
 	global $wpdb;
 
 	$ignore_revisions = (!empty($args['ignore_revisions'])) ? $args['ignore_revisions'] : [];
-
 	$ignore_clause = ($ignore_revisions) ? " AND ID NOT IN (" . implode(",", array_map('intval', $ignore_revisions)) . ")" : '';
+
+	if (defined('REVISIONARY_LIMIT_IGNORE_UNSUBMITTED')) {
+		$ignore_clause .= " AND post_mime_type != 'draft-revision'";
+	}
 
 	$revision_status_csv = implode("','", array_map('sanitize_key', rvy_revision_statuses()));
 
@@ -701,9 +704,12 @@ function revisionary_refresh_postmeta($post_id, $args = []) {
 
 	$set_value = !empty($has_revisions);
 
-	if ($set_value) {
+	$_post = get_post($post_id);
+
+	if ($set_value && (empty($_post) || empty($_post->post_mime_type) || !in_array($_post->post_mime_type, ['draft-revision', 'pending-revision', 'future-revision']))) {
 		rvy_update_post_meta($post_id, '_rvy_has_revisions', $set_value);
-	} else {
+
+	} elseif (empty($args['insert_only'])) { // avoid redundant deletions
 		delete_post_meta($post_id, '_rvy_has_revisions');
 	}
 }
@@ -733,10 +739,18 @@ function revisionary_refresh_revision_flags($published_post_id = 0, $args = []) 
 
 	$status_csv = implode("','", array_map('sanitize_key', rvy_filtered_statuses()));
 	$revision_base_status_csv = implode("','", array_map('sanitize_key', rvy_revision_base_statuses()));
-	$revision_status_csv = implode("','", array_map('sanitize_key', rvy_revision_statuses()));
+	
+	$revision_statuses = rvy_revision_statuses();
+	
+	if (defined('REVISIONARY_LIMIT_IGNORE_UNSUBMITTED')) {
+		$revision_statuses = array_diff($revision_statuses, ['draft-revision']);
+	}
+	
+	$revision_status_csv = implode("','", array_map('sanitize_key', $revision_statuses));
 
 	$query = "SELECT r.comment_count FROM $wpdb->posts r INNER JOIN $wpdb->posts p ON r.comment_count = p.ID"
-	. " WHERE p.post_status IN ('$status_csv') AND r.post_status IN ('$revision_base_status_csv') AND r.post_mime_type IN ('$revision_status_csv')";
+	. " WHERE p.post_status IN ('$status_csv') AND r.post_status IN ('$revision_base_status_csv')"
+	. " AND r.post_mime_type IN ('$revision_status_csv') AND p.post_mime_type NOT IN ('$revision_status_csv')";
 
 	if ($published_post_id) {
 		$query = $wpdb->prepare("$query AND p.ID = %d", $published_post_id);
@@ -752,8 +766,9 @@ function revisionary_refresh_revision_flags($published_post_id = 0, $args = []) 
 	$have_revisions = implode("','", array_map('intval', array_unique($arr_have_revisions)));
 
 	if ($ids = $wpdb->get_col("SELECT meta_id FROM $wpdb->postmeta WHERE meta_key = '_rvy_has_revisions' AND post_id NOT IN ('$have_revisions')")) {
-		$id_csv = implode("','", array_map('intval', $ids));
-		$wpdb->query("DELETE FROM $wpdb->postmeta WHERE meta_id IN ('$id_csv')");
+		foreach ($ids as $post_id) {
+			rvy_delete_post_meta($post_id, '_rvy_has_revisions');
+		}
 	}
 
 	$query = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_rvy_has_revisions'";
@@ -1369,7 +1384,11 @@ function rvy_preview_url($revision, $args = []) {
 	}
 	$post_type = sanitize_key($post_type);
 
-	$link_type = rvy_get_option('preview_link_type');
+	$link_type = apply_filters(
+		'revisionary_preview_link_type',
+		rvy_get_option('preview_link_type'),
+		$revision
+	);
 
 	$status_obj = get_post_status_object(get_post_field('post_status', rvy_post_id($revision->ID)));
 	$post_is_published = $status_obj && (!empty($status_obj->public) || !empty($status_obj->private));

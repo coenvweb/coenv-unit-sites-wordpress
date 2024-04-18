@@ -5,7 +5,7 @@ if (!empty($_SERVER['SCRIPT_FILENAME']) && basename(__FILE__) == basename(esc_ur
 /**
  * @package     PublishPress\Revisions
  * @author      PublishPress <help@publishpress.com>
- * @copyright   Copyright (c) 2023 PublishPress. All rights reserved.
+ * @copyright   Copyright (c) 2024 PublishPress. All rights reserved.
  * @license     GPLv2 or later
  * @since       1.0.0
  */
@@ -118,6 +118,8 @@ class Revisionary
 		}
 		
 		add_action( 'wpmu_new_blog', array( $this, 'act_new_blog'), 10, 2 );
+
+		add_action('trashed_post', [$this, 'actTrashedPost']);
 		
 		add_action( 'deleted_post', [$this, 'actDeletedPost']);
 
@@ -474,6 +476,20 @@ class Revisionary
 		}
 	}
 
+	function actTrashedPost($revision_id) {
+		if (rvy_in_revision_workflow($revision_id, ['include_trash' => true])) {
+			$post_id = rvy_post_id($revision_id);
+
+			if (!$triggered_deletions = get_option('_rvy_trigger_deletion')) {
+				$triggered_deletions = [];
+			}
+
+			$triggered_deletions[$revision_id] = $post_id;
+
+			update_option('_rvy_trigger_deletion', $triggered_deletions);
+		}
+	}
+
 	// On post deletion, clear corresponding _rvy_has_revisions postmeta flag
 	function actDeletedPost($post_id) {
 		delete_post_meta($post_id, '_rvy_has_revisions');
@@ -534,7 +550,14 @@ class Revisionary
 				)
 			);
 
-			revisionary_refresh_postmeta(rvy_post_id($post->ID), ['ignore_revisions' => [$post->ID]]);
+			$meta_args = ['ignore_revisions' => [$post->ID]];
+
+			if (rvy_get_option('revision_limit_per_post')) {
+				delete_post_meta(rvy_post_id($post->ID), '_rvy_has_revisions');
+				$meta_args['insert_only'] = true;
+			}
+
+			revisionary_refresh_postmeta(rvy_post_id($post->ID), $meta_args);
 		}
 	}
 
@@ -1136,4 +1159,54 @@ class Revisionary
 
         return $statuses;
     }
+
+	static function applyRevisionLimit($post) {
+		if (!is_object($post) || empty($post->ID)) {
+			return;
+		}
+
+		$post_id = $post->ID;
+
+		/*
+		* If a limit for the number of revisions to keep has been set,
+		* delete the oldest ones.
+		*/
+		$revisions_to_keep = wp_revisions_to_keep( $post );
+
+		if ( $revisions_to_keep < 0 ) {
+			return;
+		}
+
+		$revisions = wp_get_post_revisions( $post_id, array( 'order' => 'ASC' ) );
+
+		/**
+		 * Filters the revisions to be considered for deletion.
+		 *
+		 * @since 6.2.0
+		 *
+		 * @param WP_Post[] $revisions Array of revisions, or an empty array if none.
+		 * @param int       $post_id   The ID of the post to save as a revision.
+		 */
+		$revisions = apply_filters(
+			'wp_save_post_revision_revisions_before_deletion',
+			$revisions,
+			$post_id
+		);
+
+		$delete = count( $revisions ) - $revisions_to_keep;
+
+		if ( $delete < 1 ) {
+			return $return;
+		}
+
+		$revisions = array_slice( $revisions, 0, $delete );
+
+		for ( $i = 0; isset( $revisions[ $i ] ); $i++ ) {
+			if ( str_contains( $revisions[ $i ]->post_name, 'autosave' ) ) {
+				continue;
+			}
+
+			wp_delete_post_revision( $revisions[ $i ]->ID );
+		}
+	}
 } // end Revisionary class

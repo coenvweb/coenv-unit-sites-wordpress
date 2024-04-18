@@ -5,7 +5,7 @@ if (!empty($_SERVER['SCRIPT_FILENAME']) && basename(__FILE__) == basename(esc_ur
 /**
  * @package     PublishPress\Revisions\RevisionaryOptions
  * @author      PublishPress <help@publishpress.com>
- * @copyright   Copyright (c) 2023 PublishPress. All rights reserved.
+ * @copyright   Copyright (c) 2024 PublishPress. All rights reserved.
  * @license     GPLv2 or later
  * @since       1.0.0
  */
@@ -48,7 +48,9 @@ function rvy_default_options_sitewide() {
 		'revision_preview_links' => true,
 		'preview_link_type' => true,
 		'preview_link_alternate_preview_arg' => true,
+		'home_preview_set_home_flag' => true,
 		'compare_revisions_direct_approval' => true,
+		'block_editor_extra_preview_button' => true,
 		'display_pp_branding' => true,
 		'revision_update_notifications' => true,
 		'trigger_post_update_actions' => true,
@@ -58,6 +60,7 @@ function rvy_default_options_sitewide() {
 		'rev_publication_delete_ed_comments' => true,
 		'deletion_queue' => true,
 		'revision_archive_deletion' => true,
+		'revision_restore_require_cap' => true,
 		'revision_limit_per_post' => true,
 	);
 
@@ -106,7 +109,9 @@ function rvy_default_options() {
 		'revision_preview_links' => 1,
 		'preview_link_type' => 'published_slug',
 		'preview_link_alternate_preview_arg' => 1,
+		'home_preview_set_home_flag' => 0,
 		'compare_revisions_direct_approval' => 0,
+		'block_editor_extra_preview_button' => 0,
 		'display_pp_branding' => 1,
 		'revision_update_notifications' => 0,
 		'trigger_post_update_actions' => 0,
@@ -116,6 +121,7 @@ function rvy_default_options() {
 		'rev_publication_delete_ed_comments' => 0,
 		'deletion_queue' => 0,
 		'revision_archive_deletion' => 0,
+		'revision_restore_require_cap' => 0,
 		'revision_limit_per_post' => 0,
 	);
 
