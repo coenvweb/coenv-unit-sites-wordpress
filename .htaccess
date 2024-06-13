@@ -166,8 +166,8 @@ RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
 RewriteCond %{HTTP_HOST} ^ess.washington.edu [NC]
 RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
 
-+RewriteCond %{HTTP_HOST} ^(?:www\.)?oceannexus\.uw\.edu$ [NC]
-+RewriteRule ^ https://oceannexus.org/ [L,R=302,NE]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?oceannexus\.uw\.edu$ [NC]
+RewriteRule ^ https://oceannexus.org/ [L,R=302,NE]
 
 # SSL on each domain
 
