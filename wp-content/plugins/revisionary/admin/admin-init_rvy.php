@@ -136,7 +136,9 @@ function rvy_admin_init() {
 	) {
 		$doaction = (!empty($_REQUEST['action']) && !is_numeric($_REQUEST['action'])) ? sanitize_key($_REQUEST['action']) : sanitize_key($_REQUEST['action2']);
 
-		if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], ['decline_revision'])) {
+		if (empty($_POST) && in_array($_REQUEST['action'], ['decline_revision'])) {
+			check_admin_referer('decline-revision');
+		} else {
 			check_admin_referer('bulk-revision-queue');
 		}
 
@@ -144,7 +146,7 @@ function rvy_admin_init() {
 			$url = admin_url("admin.php?page=revisionary-q");
 		}
 
-		$sendback = remove_query_arg( array('trashed', 'untrashed', 'submitted_count', 'declined_count', 'approved_count', 'published_count', 'deleted', 'locked', 'ids', 'posts', '_wp_nonce', '_wp_http_referer'), $url);
+		$sendback = remove_query_arg( array('trashed', 'untrashed', 'submitted_count', 'declined_count', 'approved_count', 'published_count', 'scheduled_count', 'unscheduled_count', 'deleted', 'locked', 'ids', 'posts', '_wp_nonce', '_wp_http_referer'), $url);
 	
 		if ( 'delete_all' == $doaction ) {
 			// Prepare for deletion of all posts with a specified post status (i.e. Empty trash).
@@ -338,6 +340,15 @@ function rvy_admin_init() {
 						}
 					} 
 	
+					// Work around Nested Pages plugin assuming get_current_screen() function declaration
+					if (class_exists('NestedPages')) {
+						if (!function_exists('get_current_screen')) {
+							function get_current_screen() {
+								return false;
+							}
+						}
+					}
+
 					if ( !wp_delete_post($post_id, true) )
 						wp_die( esc_html__('Error in deleting.') );
 	

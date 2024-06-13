@@ -227,11 +227,22 @@ body.upload-php.eml-grid #wpbody-content > #screen-meta {
 .media-frame.mode-eml-grid .attachments-browser .uploader-inline {
     top: 0;
 }
-.attachments-browser:not(.has-load-more) .attachments, 
-.attachments-browser.has-load-more .attachments-wrapper, 
-.attachments-browser .uploader-inline {
-    left: 0;
+
+/* a fix for infinite scroll */
+.attachments-browser:not(.has-load-more) .attachments {
+    position: static;
 }
+.attachments-browser.has-load-more .attachments-wrapper,
+.attachments-browser:not(.has-load-more) .attachments-wrapper {
+    position: absolute;
+    top: 72px;
+    left: 300px;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    outline: none;
+}
+
 .media-frame.mode-eml-grid .attachments-browser .attachments-wrapper,
 .media-frame.mode-eml-grid .attachments-browser .attachments {
     -webkit-transition: all 0.2s;
@@ -400,6 +411,38 @@ body.eml-media-css .attachment-details {
     display: inline-block;
     margin: 10px 0 0;
 }
+
+.media-sidebar h3, 
+.image-details .media-embed h3 {
+    position: relative;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #646970;
+    margin: 24px 0 8px;
+}
+
+.media-sidebar .setting label {
+    width: 80px;
+    text-align: right;
+}
+.media-sidebar .setting select {
+    box-sizing: border-box;
+    margin: 1px;
+    font-size: 13px;
+}
+
+.media-sidebar ul.eml-filter-based {
+    margin: 0;
+}
+.media-sidebar ul.eml-filter-based li {
+    font-size: 13px;
+    color: #646970;
+}
+.media-sidebar .eml-filter-based label {
+    font-size: 12px;
+}
+
 
 
 

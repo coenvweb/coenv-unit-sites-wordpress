@@ -1,7 +1,7 @@
 === NS Cloner - Site Copier ===
 Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
-Tags: automate, duplicate, copy, copier, clone, cloner, multisite, network, template
+Tags: automate, duplicate, copy, copier, clone, cloner, multisite, network
 Requires at least: 5.0
 Tested up to: 6.5
 Requires PHP: 7.0
@@ -100,6 +100,9 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.4.4 - 2024.05.13 =
+* Code updates and other improvements.
 
 = 4.4.2 - 2024.01.30 =
 * Enhancement: Improved locale loading.

@@ -1,10 +1,11 @@
 === Enhanced Media Library ===
 Contributors: webbistro
-Tags: media library, media folders, media taxonomies, media gallery, mime types
+Donate link: https://wpuxsolutions.com/plugins/enhanced-media-library-pro
+Tags: media library, media folders, media tags, media categories, mime types
 Requires at least: 6.0
-Tested up to: 6.5.2
+Tested up to: 6.5.3
 Requires PHP: 5.6
-Stable tag: 2.8.10
+Stable tag: 2.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,8 +15,7 @@ This plugin would be handy for those who need to manage a lot of media files.
 
 **Handy for those who need to manage a lot of media files.**
 
-[SUPPORT](https://wpuxsolutions.com/support) | [DOCUMENTATION](https://wpuxsolutions.com/documents/enhanced-media-library) | [FAQs](https://wpuxsolutions.com/documents/enhanced-media-library/faqs) | [PREMIUM FEATURES](https://wpuxsolutions.com/plugins/enhanced-media-library-pro)
-
+[Known Issues :: Support](https://wpuxsolutions.com/support) | [Changelog](https://wpuxsolutions.com/documents/enhanced-media-library/changelog) | [Usage Guide :: How to](https://wpuxsolutions.com/documents/enhanced-media-library) | [FAQs](https://wpuxsolutions.com/documents/enhanced-media-library/faqs-2) | [Premium Features](https://wpuxsolutions.com/plugins/enhanced-media-library-pro)
 
 ### Categorize by Anything! ###
 
@@ -111,7 +111,6 @@ Support is free for both versions of the plugin. "PRO"-users do not have priorit
 * [Justified Gallery](https://wordpress.org/plugins/justified-gallery/)
 * [Meow Gallery](https://wordpress.org/plugins/meow-gallery/)
 * [Meow Lightbox](https://wordpress.org/plugins/meow-lightbox/)
-* [Slick Slider](https://wordpress.org/plugins/slick-slider/)
 * [MetaSlider](https://wordpress.org/plugins/ml-slider/)
 * [Responsive Lightbox & Gallery](https://wordpress.org/plugins/responsive-lightbox/)
 * [Compress JPEG & PNG Images](https://wordpress.org/plugins/tiny-compress-images/) (TinyPNG)
@@ -131,8 +130,6 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 * [PRO version: more details](https://wpuxsolutions.com/plugins/enhanced-media-library-pro)
 * [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library)
 * [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs)
-* [Contribute to Translation](https://www.wpuxsolutions.com/l10n/projects/enhanced-media-library)
-
 
 
 ## Installation ##
@@ -149,7 +146,7 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 ## Frequently Asked Questions ##
 
-> [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs/) | [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library/)
+> [FAQs](https://www.wpuxsolutions.com/documents/enhanced-media-library/faqs-2/) | [Documentation](https://www.wpuxsolutions.com/documents/enhanced-media-library/)
 
 
 
@@ -181,11 +178,98 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 ## Changelog ##
 
-### 2.8.10 ###
-*Release Date - April 11, 2024*
+### 2.9.1 ###
+*Release Date - May 27, 2024*
 
 = SECURITY UPDATE =
-* A security issue related to MIME types upload fixed. Please update to the latest version on all your websites.
+* Security issue related to MIME types upload has been fixed since v2.8.10. Please update to the latest version on all your websites.
+
+= New =
+* WP native search performance improved for both free and PRO versions in Media Library Grid Mode
+* PRO only: new options added: `Search on enter`, `Auto search`, and `Minimun number of letters`
+
+= Bugfixes =
+* PRO only: plugin update module PHP-warnings issue fixed
+
+= Thank you! =
+For being EML users for so many years.
+* *This update has been issued in Ukraine under everyday missile attacks.*
+* *Please do not buy into ruzzian lies and propaganda. This aggression is unprovoked, illegal, and unfair. The people of Ukraine have all the right to live peacefully without ungrounded ruzzian claims and crimes committed.* 
+* *Support Ukraine. Western politicians lie to people about this war. We do not have enough weapons and lose people because ruzzian war criminals feel safe to bomb us without any fear of being hit in response as Ukraine is tightly restricted in Western weapons usage.*
+
+
+### 2.9 ###
+*Release Date - May 16, 2024*
+
+= New =
+* `Uploaded to this post by default` option added to the `Media` > `Media Library` > `Filters` section
+  *Enable the option to get media files initially filtered by "Uploaded to this post" in a Media Popup while adding or editing them for a post, page, or custom post type.*
+* Some changes made to the plugin's code and the PRO version updating mechanism in preparation for an upcoming major update EML v3.0
+
+= Bugfixes =
+* Tiny bugs fixed
+
+
+### 2.8.15 ###
+*Release Date - May 10, 2024*
+
+= Improvements =
+* Gallery / playlist shortcodes improved for better compatibility with other plugins
+* `AND` logic within a single taxonomy implemented for `[gallery]` and `[playlist]` shortcodes
+
+***Examples:***
+
+`[gallery media_category="california+flowers" genre="landscape"]`
+*— Displays images having **both** categories "california" **AND** "flowers" AND also from the genre "landscape"*
+
+`[gallery media_category="flowers,mosses" genre="garden"]`
+*— Displays imager **either** from "flowers" **OR** "mosses" category AND also from the genre "garden"*
+
+*Note: For performance it's better to use IDs instead of slugs in the gallery shortcodes.*
+
+= Bugfixes =
+* Layout issues fixed for the **media popup** with the `Infinite scrolling` option enabled
+* `Fatal Error – Too Few Arguments to function` fixed for two plugins: "cred-frontend-editor" and AJAX Thumbnail Rebuild
+* Minor CSS fixes
+
+
+### 2.8.14 ###
+*Release Date - April 30, 2024*
+
+= Improvements =
+* Divi Builder compatibility ensured on uploading font files
+*Note: Font files are allowed for upload with Divi Builder even if you haven't added them with the EML settings because Divi adds its own allowed file types.*
+
+
+### 2.8.13 ###
+*Release Date - April 26, 2024*
+
+= Bugfixes =
+* A bug since v2.8.10 with the right sidebar covering media library files when `Infinite scrolling` option is enabled fixed
+
+
+### 2.8.12 ###
+*Release Date - April 23, 2024*
+
+= Bugfixes =
+* A critical error bug of v2.8.11 with filtering by media taxonomies in the media library List View fixed
+
+
+### 2.8.11 ###
+*Release Date - April 19, 2024*
+
+= Improvements =
+* Database queries for taxonomies improved
+* A mechanism for vetting allowed mime types added
+
+= Bugfixes =
+* Deprecated notices for author filter fixed
+* Issue with uploading font mime types fixed (Report other mime types you experience issues uploading, please)
+* PRO only: Search issue fixed and the mechanism improved to ensure compatibility with other plugins
+
+
+### 2.8.10 ###
+*Release Date - April 11, 2024*
 
 = Improvements =
 * Plugin admin menu items order and compatibility improved
@@ -200,12 +284,6 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 = Bugfixes =
 * Duplicate listings when editing a single image edit in the list mode fixed
 * WP excess utility taxonomies hidden in the settings
-
-= Thank you! =
-For being EML users for so many years.
-* *This update has been issued in Ukraine under everyday missile attacks.*
-* *Please do not buy into ruzzian lies and propaganda. This aggression is unprovoked, illegal, and unfair. The people of Ukraine have all the right to live peacefully without ungrounded ruzzian claims and crimes committed.* 
-* *Support Ukraine. We are badly in need of weapons for defense.*
 
 
 ### 2.8.9 ###

@@ -581,8 +581,32 @@ function ns_cloner_perform_clone( $args = array() ) {
 
 	if ( ! empty( ns_cloner()->process_manager->get_errors() ) ) {
 		ns_cloner()->report->clear_all_reports();
-		return new \WP_Error( 'broke', implode( '', ns_cloner()->process_manager->get_errors() ) );
+		return new \WP_Error( 'broke', ns_cloner_implode( '', ns_cloner()->process_manager->get_errors() ) );
 	} else {
 		return array( 'message' => __( 'Success', 'ns-cloner-site-copier' ) );
 	}
+
+}
+
+/**
+ * Implode multidimenional array
+ *
+ * @param string $glue  The separator.
+ * @param array  $array The array.
+ *
+ * @return string
+ */
+function ns_cloner_implode( $glue, $array = null ) {
+	if ( ! is_array( $array ) ) {
+		return $array;
+	}
+
+	$flat = array();
+	array_walk_recursive(
+		$array,
+		function ( $element ) use ( &$flat ) {
+			$flat[] = $element;
+		}
+	);
+	return implode( $glue, $flat );
 }

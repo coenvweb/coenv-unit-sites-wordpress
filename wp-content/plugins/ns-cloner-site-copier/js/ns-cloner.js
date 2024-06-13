@@ -782,6 +782,16 @@ jQuery(
 				'speed': 10000
 			}).data('slider');
 		}
+
+		$( document ).on(
+			'click',
+			'.ns-cloner-report-collapse-warnings',
+			function( e ) {
+				e.preventDefault();
+				$( this ).parent().remove();
+				$( '.ns-cloner-report-collapsible' ).stop().slideToggle( 500 );
+			},
+		);
 	}
 );
 

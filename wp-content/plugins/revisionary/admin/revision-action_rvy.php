@@ -134,7 +134,8 @@ function rvy_revision_submit($revision_id = 0) {
 	}
 
 	if (empty($approval_error)) {
-		do_action( 'revision_submitted', $post->ID, $revision->ID );
+		$published_id = rvy_post_id($revision_id);
+		do_action( 'revision_submitted', $published_id, $revision_id );
 	}
 
 	if (!$batch_process) {
@@ -187,7 +188,7 @@ function rvy_revision_decline($revision_id = 0) {
 		}
 
 		if (!$batch_process) {
-			check_admin_referer( "submit-post_$post->ID|$revision->ID" );
+			check_admin_referer('decline-revision');
 		}
 
 		$status_obj = get_post_status_object( $revision->post_mime_type );
