@@ -1,15 +1,15 @@
 === NS Cloner - Site Copier ===
 Contributors: neversettle
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=53JXD4ENC8MM2&rm=2
-Tags: automate, duplicate, copy, copier, clone, cloner, multisite, network
+Tags: automate, duplicate, copy, copier, clone
 Requires at least: 5.0
 Tested up to: 6.5
 Requires PHP: 7.0
-Stable tag: 4.4.3
+Stable tag: 4.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The NS Cloner saves multisite admins and developers TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
+The NS Cloner saves TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
 
 == Description ==
 
@@ -100,6 +100,10 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.4.5 - 2024.06.20 =
+* Add hooks to bypass immediate cloning in the admin ajax action.
+* Fix initial form setting option loading. Hide those that are not for current clone option.
 
 = 4.4.4 - 2024.05.13 =
 * Code updates and other improvements.

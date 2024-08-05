@@ -10,8 +10,11 @@ if ( ! defined( 'ABSPATH' ) )
  *  @TODO: temporary solution
  *
  *  @since    2.5
+ *  @since    2.9.2 register scripts for Elementor added
  *  @created  28/01/18
  */
+
+add_action( 'elementor/editor/before_enqueue_scripts', 'wpuxss_eml_register_scripts' );
 
 add_action( 'elementor/editor/after_enqueue_scripts', 'wpuxss_eml_elementor_scripts' );
 
@@ -26,6 +29,8 @@ function wpuxss_eml_elementor_scripts() {
         $wpuxss_eml_dir . 'css/eml-admin-media.css'
     );
 }
+
+
 
 
 

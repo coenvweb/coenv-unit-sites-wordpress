@@ -1,9 +1,9 @@
 === XML Sitemap Generator for Google ===
 Contributors: auctollo
-Tags: sitemap, seo, xml sitemap, indexnow, google sitemaps, google search console, news sitemap, image sitemap, image seo, video sitemap, video seo, woocommerce, robots.txt, site kit, schema, bing, baidu, yandex
+Tags: SEO, xml sitemap, video sitemap, news sitemap, html sitemap
 Requires at least: 4.6
-Tested up to: 6.4.3
-Stable tag: 4.1.19
+Tested up to: 6.5
+Stable tag: 4.1.21
 Requires PHP: 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ Generate multiple types of sitemaps to improve SEO and get your website indexed 
 
 == Description ==
 
-Generate XML, HTML, RSS sitemaps for your website with ease using the XML Sitemap Generator for Google. This plugin enables you to improve your SEO rankings by creating page, news, video, HTML, and RSS sitemaps. It also supports custom post types and taxonomies, allowing you to ensure that all of your content is being indexed by search engines. With a user-friendly interface, you can easily configure the plugin to suit your needs and generate sitemaps in just a few clicks. Keep your website up-to-date and make sure that search engines are aware of all of your content by using the XML Sitemap Generator for Google.
+Generate XML and HTML sitemaps for your website with ease using the XML Sitemap Generator for Google. This plugin enables you to improve your SEO rankings by creating page, image, news, video, HTML, and RSS sitemaps. It also supports custom post types and taxonomies, allowing you to ensure that all of your content is being indexed by search engines. With a user-friendly interface, you can easily configure the plugin to suit your needs and generate sitemaps in just a few clicks. Keep your website up-to-date and make sure that search engines are aware of all of your content by using the XML Sitemap Generator for Google.
 
 The plugin supports all kinds of WordPress generated pages as well as custom URLs. Additionally it notifies all major search engines every time you create a post about the new content.
 
@@ -100,6 +100,31 @@ Please post your question at the [WordPress support forum](https://wordpress.org
 
 
 == Changelog ==
+
+= 4.1.21 (2024-04-21) =
+* Fixed a regression with saving post/page exclusions.
+* Fixed an issue with post/tag priority settings.
+
+= 4.1.20 (2024-04-14) =
+* Fixed empty ping error
+* Fixed response code issue with index sitemap
+* Fixed interoperability with existing robots.txt file
+* Fixed URL for guest authors
+* Fixed uninstalled plugin error
+* Fixed sitemap indexation
+* Fixed "Trying to access array offset on value of type bool..." warning
+* Fixed setting of custom taxonomy change frequency and priority
+* Fixed missing custom taxonomies issue
+* Fixed issue with hierarchical taxonomies
+* Fixed missing categories issue
+* Fixed sort order of URLs (changed from descending to ascending)
+* Improved WooCommerce support (added products sitemap)
+* Improved multisite support
+* Improved SEO plugin interoperability
+* Improved Nginx configuration
+* Improved sitemap generation performance for large sites
+* Added [filter support](https://auctollo.com/products/google-xml-sitemap-generator/help/#:~:text=not%20be%20useful.-,Filters,-Customize%20the%20behavior) for behavior/settings customization 
+* Added latest Microsoft Bing API Key to settings page
 
 = 4.1.19 (2024-01-31) =
 * Fixed "Links per page" bug causing sitemaps to not include all posts depending on the setting. Following Search Engine guidance is minimum links per sitemap is 1,000 pages.

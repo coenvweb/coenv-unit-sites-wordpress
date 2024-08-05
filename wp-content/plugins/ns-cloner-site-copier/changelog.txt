@@ -1,3 +1,7 @@
+= 4.4.5 - 2024.06.20 =
+* Add hooks to bypass immediate cloning in the admin ajax action.
+* Fix initial form setting option loading. Hide those that are not for current clone option.
+
 = 4.4.4 - 2024.05.13 =
 * Code updates and other improvements.
 

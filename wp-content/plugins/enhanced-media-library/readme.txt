@@ -3,9 +3,9 @@ Contributors: webbistro
 Donate link: https://wpuxsolutions.com/plugins/enhanced-media-library-pro
 Tags: media library, media folders, media tags, media categories, mime types
 Requires at least: 6.0
-Tested up to: 6.5.3
+Tested up to: 6.5.5
 Requires PHP: 5.6
-Stable tag: 2.9.1
+Stable tag: 2.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,12 @@ This plugin would be handy for those who need to manage a lot of media files.
 **Handy for those who need to manage a lot of media files.**
 
 [Known Issues :: Support](https://wpuxsolutions.com/support) | [Changelog](https://wpuxsolutions.com/documents/enhanced-media-library/changelog) | [Usage Guide :: How to](https://wpuxsolutions.com/documents/enhanced-media-library) | [FAQs](https://wpuxsolutions.com/documents/enhanced-media-library/faqs-2) | [Premium Features](https://wpuxsolutions.com/plugins/enhanced-media-library-pro)
+
+
+### Officially! **EML 3.0 Early Beta** is available for testing ###
+
+* [Give it a try](https://wpuxsolutions.com/plugins/enhanced-media-library-3-0), share feedback, report bugs, and **help the developer** to deliver it promptly!
+
 
 ### Categorize by Anything! ###
 
@@ -178,11 +184,47 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 ## Changelog ##
 
-### 2.9.1 ###
-*Release Date - May 27, 2024*
+### 2.9.4 ###
+*Release Date - July 15, 2024*
+
+= Improvement = 
+* Validation and transliteration on the Media Taxonomies admin page improved, minor bugs fixed
+
+= Bugfixes =
+* A fatal error bug while JetPack VideoPress syncing is probably fixed, requires confirmation
+
+= 3.0 Early Beta is available for testing! =
+* [Take a look &raquo;](https://wpuxsolutions.com/blog/enhanced-media-library-3-0-is-coming)
 
 = SECURITY UPDATE =
 * Security issue related to MIME types upload has been fixed since v2.8.10. Please update to the latest version on all your websites.
+
+= Notes =
+* EML is compatible with PHP 5.6, 7, and 8. Don't hesitate to update. If you previously had issues because of the PHP version, it's not the case anymore.
+
+= Thank you! =
+For being EML users for so many years.
+* *This update has been issued in Ukraine under everyday missile attacks.*
+* *Please do not buy into ruzzian lies and propaganda. This aggression is unprovoked, illegal, and unfair. The people of Ukraine have all the right to live peacefully without ungrounded ruzzian claims and crimes committed.* 
+* *Support Ukraine. It would be self-deception to believe that a neighboring country with the Nazi and anti-Western ideology, they are raising their young in, is heavily militarizing its economy and population so as never to pose a threat and never to attack the West.*
+
+
+### 2.9.3 ###
+*Release Date - June 19, 2024*
+
+= Improvement = 
+* `xlsm` file type upload ensured if allowed
+
+
+### 2.9.2 ###
+*Release Date - June 14, 2024*
+
+= Bugfixes =
+* Elementor compatibility bug of v2.9.1 (not showing filters in Elementor's media popup) fixed
+
+
+### 2.9.1 ###
+*Release Date - May 27, 2024*
 
 = New =
 * WP native search performance improved for both free and PRO versions in Media Library Grid Mode
@@ -190,12 +232,6 @@ Please notice that you use Enhanced Media Library with other plugins that add me
 
 = Bugfixes =
 * PRO only: plugin update module PHP-warnings issue fixed
-
-= Thank you! =
-For being EML users for so many years.
-* *This update has been issued in Ukraine under everyday missile attacks.*
-* *Please do not buy into ruzzian lies and propaganda. This aggression is unprovoked, illegal, and unfair. The people of Ukraine have all the right to live peacefully without ungrounded ruzzian claims and crimes committed.* 
-* *Support Ukraine. Western politicians lie to people about this war. We do not have enough weapons and lose people because ruzzian war criminals feel safe to bomb us without any fear of being hit in response as Ukraine is tightly restricted in Western weapons usage.*
 
 
 ### 2.9 ###

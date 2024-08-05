@@ -28,6 +28,11 @@ jQuery(
 			}
 		);
 
+		setTimeout(function() {
+			$( '.ns-cloner-main-form' ).trigger( 'ns_cloner_form_refresh' ); // refresh forms
+		}, 1000 );
+		
+
 		// Set up action when source site is changed.
 		$( '.ns-cloner-site-select' ).change(
 			function ( e ) {

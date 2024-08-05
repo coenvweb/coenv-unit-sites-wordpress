@@ -3,7 +3,7 @@
 Plugin Name: Enhanced Media Library
 Plugin URI: https://wpUXsolutions.com/plugins/enhanced-media-library
 Description: This plugin will be handy for those who need to manage a lot of media files.
-Version: 2.9.1
+Version: 2.9.4
 Author: wpUXsolutions
 Author URI: http://wpUXsolutions.com
 Text Domain: enhanced-media-library
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 
 
-if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.9.1' );
+if ( ! defined('EML_VERSION') ) define( 'EML_VERSION', '2.9.4' );
 
 
 
@@ -168,8 +168,16 @@ if ( ! function_exists( 'wpuxss_get_eml_slug' ) ) {
 
 
         // plugin action links
-        add_filter( 'plugin_action_links_' . wpuxss_get_eml_basename(), 'wpuxss_eml_settings_link' );
-        add_filter( 'network_admin_plugin_action_links_' . wpuxss_get_eml_basename(), 'wpuxss_eml_settings_link' );
+        add_filter( 
+            'plugin_action_links_' . wpuxss_get_eml_basename(),
+            'wpuxss_eml_settings_link', 10, 4 
+        );
+        add_filter( 
+            'network_admin_plugin_action_links_' . wpuxss_get_eml_basename(),
+            'wpuxss_eml_settings_link', 10, 4 
+        );
+
+        add_filter( 'plugin_row_meta', 'wpuxss_eml_plugin_row_meta', 10, 4 );
     }
 
 
@@ -419,8 +427,10 @@ if ( ! function_exists( 'wpuxss_get_eml_slug' ) ) {
 
     /**
      *  wpuxss_eml_register_scripts
+     * 
+     *  @todo :: make a separate one for Elementor if need be
      *
-     *  @since    2.9
+     *  @since    2.9.1
      *  @created  2024/05
      */
 
@@ -438,6 +448,14 @@ if ( ! function_exists( 'wpuxss_get_eml_slug' ) ) {
             'wpuxss-eml-media-views-script',
             $wpuxss_eml_dir . $rpath . 'eml-media-views' . $suffix . '.js',
             array('media-views'),
+            EML_VERSION,
+            true
+        );
+
+        wp_register_script(
+            'wpuxss-eml-taxonomies-options-script',
+            $wpuxss_eml_dir . $rpath . 'eml-taxonomies-options' . $suffix . '.js',
+            array( 'jquery', 'underscore', 'wpuxss-eml-admin-script' ),
             EML_VERSION,
             true
         );
@@ -897,6 +915,58 @@ if ( ! function_exists( 'wpuxss_get_eml_slug' ) ) {
         $wpuxss_eml_network_options = array_merge( $wpuxss_eml_network_options_defaults, $wpuxss_eml_network_options );
 
         update_site_option( 'wpuxss_eml_network_options', $wpuxss_eml_network_options );
+    }
+
+
+
+    /**
+     *  wpuxss_eml_settings_link
+     *
+     *  Add settings link to the plugin action links
+     *
+     *  @since    2.1
+     *  @created  27/10/15
+     */
+
+    function wpuxss_eml_settings_link( $actions ) {
+
+        $settings_page = is_network_admin() ? 'settings.php' : 'options-general.php';
+
+        if ( ! is_network_admin() ) {
+            $custom_links['settings'] = '<a href="' . self_admin_url($settings_page.'?page=media') . '">' . __( 'Media Settings', 'enhanced-media-library' ) . '</a>';
+        }
+
+        $custom_links['utility'] = '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utilities', 'enhanced-media-library' ) . '</a>';
+
+        return array_merge( $custom_links, $actions );
+    }
+
+
+
+    /**
+     *  wpuxss_eml_plugin_row_meta
+     *
+     *  @since    2.2.1
+     *  @created  11/04/15
+     */
+
+    function wpuxss_eml_plugin_row_meta( $plugin_meta, $plugin_file ) {
+
+        if ( wpuxss_get_eml_basename() !== $plugin_file ) {
+            return $plugin_meta;
+        }
+
+        $plugin_meta[] = '<a href="https://wpuxsolutions.com/documents/enhanced-media-library" target="_blank">' . __( 'Docs', 'enhanced-media-library' ) . '</a>';
+        $plugin_meta[] = '<a href="https://wpuxsolutions.com/support" target="_blank">' . __( 'Support', 'enhanced-media-library' ) . '</a>';
+
+        if ( ! defined( 'EML_IS_PRO' ) ) {
+
+            $plugin_meta[] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" class="eml-pro" target="_blank">' . __( 'Go PRO', 'enhanced-media-library' ) . '</a>';
+        }
+
+        $plugin_meta[] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-3-0" class="eml-pro" target="_blank">' . __( '3.0 Beta', 'enhanced-media-library' ) . '</a>';
+
+        return $plugin_meta;
     }
 
 

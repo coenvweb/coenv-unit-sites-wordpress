@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.4.4';
+	public $version = '4.4.5';
 
 	/**
 	 * Menu Slug
@@ -718,7 +718,9 @@ final class NS_Cloner {
 			'description'    => '',
 			'multisite_only' => true,
 			'steps'          => array(),
-			'report'         => function(){},
+			'report'         => function() {
+
+			},
 		);
 		// Register by adding to the clone_modes array.
 		$this->clone_modes[ $id ] = (object) wp_parse_args( $details, $defaults );

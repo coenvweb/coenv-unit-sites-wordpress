@@ -16,14 +16,14 @@
  * Plugin Name: XML Sitemap Generator for Google
  * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.19
+ * Version: 4.1.21
  * Author: Auctollo
  * Author URI: https://auctollo.com/
  * Text Domain: google-sitemap-generator
  * Domain Path: /lang
 
 
- * Copyright 2019 - 2023 AUCTOLLO
+ * Copyright 2019 - 2024 AUCTOLLO
  * Copyright 2005 - 2018 ARNE BRACHHOLD
 
  * This program is free software; you can redistribute it and/or modify
@@ -72,6 +72,36 @@ add_action( 'plugins_loaded', function() {
 });
 
 add_action( 'transition_post_status', 'indexnow_after_post_save', 10, 3 ); //send to indexNow
+
+add_action('wpmu_new_blog', 'disable_conflict_sitemaps_on_new_blog', 10, 6);
+
+function disable_conflict_sitemaps_on_new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta) {
+    switch_to_blog($blog_id);
+    $aioseo_option_key = 'aioseo_options';
+    if (get_option($aioseo_option_key) !== null) {
+        $aioseo_options = get_option($aioseo_option_key);
+        $aioseo_options = json_decode($aioseo_options, true);
+        $aioseo_options['sitemap']['general']['enable'] = false;
+        update_option($aioseo_option_key, json_encode($aioseo_options));
+    }
+    restore_current_blog();
+}
+
+add_action('parse_request', 'plugin_check_sitemap_request');
+function plugin_check_sitemap_request($wp) {
+	if(is_multisite()) {
+		if(isset(get_blog_option( get_current_blog_id(), 'sm_options' )['sm_b_sitemap_name'])) {
+			$sm_sitemap_name = get_blog_option( get_current_blog_id(), 'sm_options' )['sm_b_sitemap_name'];
+		}
+	} else if(isset(get_option('sm_options')['sm_b_sitemap_name'])) $sm_sitemap_name = get_option('sm_options')['sm_b_sitemap_name'];
+	
+    if(isset($wp->request) && $wp->request === 'wp-sitemap.xml' && $sm_sitemap_name !== 'sitemap') {
+        status_header(404);
+        nocache_headers();
+        include( get_query_template( '404' ) );
+        exit;
+    }
+}
 
 /**
  * Google analytics .

@@ -547,11 +547,11 @@ function wpuxss_eml_taxonomies_options_page_scripts() {
     global $wpuxss_eml_dir;
 
     wp_enqueue_script(
-        'wpuxss-eml-taxonomies-options-script',
-        $wpuxss_eml_dir . 'js/eml-taxonomies-options.js',
-        array( 'jquery', 'underscore', 'wpuxss-eml-admin-script' ),
-        EML_VERSION,
-        true
+        'wpuxss-eml-taxonomies-options-script'
+        // $wpuxss_eml_dir . 'js/eml-taxonomies-options.js',
+        // array( 'jquery', 'underscore', 'wpuxss-eml-admin-script' ),
+        // EML_VERSION,
+        // true
     );
 
     $l10n_data = array(
@@ -2650,58 +2650,6 @@ function wpuxss_eml_print_credits() { ?>
 
 
 /**
- *  wpuxss_eml_settings_link
- *
- *  Add settings link to the plugin action links
- *
- *  @since    2.1
- *  @created  27/10/15
- */
-
-function wpuxss_eml_settings_link( $links ) {
-
-    $settings_page = is_network_admin() ? 'settings.php' : 'options-general.php';
-
-    if ( ! is_network_admin() ) {
-        $custom_links['settings'] = '<a href="' . self_admin_url($settings_page.'?page=media') . '">' . __( 'Media Settings', 'enhanced-media-library' ) . '</a>';
-    }
-
-    $custom_links['utility'] = '<a href="' . self_admin_url($settings_page.'?page=eml-settings') . '">' . __( 'Utilities', 'enhanced-media-library' ) . '</a>';
-
-    if ( ! defined( 'EML_IS_PRO' ) ) {
-
-        $custom_links['go_pro'] = '<a href="https://wpuxsolutions.com/plugins/enhanced-media-library-pro" class="eml-pro" target="_blank">' . __( 'Go PRO', 'enhanced-media-library' ) . '</a>';
-    }
-
-    return array_merge( $custom_links, $links );
-}
-
-
-
-/**
- *  wpuxss_eml_plugin_row_meta
- *
- *  @since    2.2.1
- *  @created  11/04/15
- */
-
-add_filter( 'plugin_row_meta', 'wpuxss_eml_plugin_row_meta', 10, 2 );
-
-function wpuxss_eml_plugin_row_meta( $links, $file ) {
-
-    if ( wpuxss_get_eml_basename() !== $file ) {
-        return $links;
-    }
-
-    $links[] = '<a href="https://wpuxsolutions.com/documents/enhanced-media-library" target="_blank">' . __( 'Documentation', 'enhanced-media-library' ) . '</a>';
-    $links[] = '<a href="https://wpuxsolutions.com/support" target="_blank">' . __( 'Support', 'enhanced-media-library' ) . '</a>';
-
-    return $links;
-}
-
-
-
-/**
  *  wpuxss_eml_maybe_new_notice
  *
  *  Asks the remote and records a notice to the database
@@ -3023,10 +2971,11 @@ function wpuxss_eml_admin_notice_dismiss() {
  *  wpuxss_eml_get_notice_url
  *
  *  @since    2.8.10
+ *  @since    2.9.4    modified to /notices/
  *  @created  2024/04
  */
 
 function wpuxss_eml_get_notice_url() {
 
-    return 'https://wpuxsolutions.com/downloads/plugins/enhanced-media-library/';
+    return 'https://wpuxsolutions.com/notices/enhanced-media-library/';
 }
