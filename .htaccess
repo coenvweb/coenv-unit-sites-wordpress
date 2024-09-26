@@ -1,3 +1,10 @@
+# 2024-09-16 DoS incident INC3500634
+<Limit GET>
+    Order Allow,Deny
+    Allow from all
+    Deny from 49.51.0.0/16 101.32.0.0/16 43.156.0.0/16 150.109.0.0/16 43.133.0.0/16 129.226.0.0/16 43.159.0.0/16 43.130.0.0/16 170.106.0.0/16 43.135.0.0/16 43.134.0.0/16 43.153.0.0/16 43.163.0.0/16
+</Limit>
+
 # BEGIN WordPress Multisite
 # Using subfolder network type: https://wordpress.org/support/article/htaccess/#multisite
 
@@ -12,7 +19,7 @@ RewriteRule ^index\.php$ - [L]
 <Limit POST>
     Order Allow,Deny
     Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 128.208 97.113 85.208
 </Limit>
 
 # Block WordPress xmlrpc.php requests
