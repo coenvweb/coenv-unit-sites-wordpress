@@ -2,7 +2,7 @@
 Contributors: MadtownLems, kgraeme
 Tags: widgets
 Requires at least: 3.0
-Tested up to: 6.1.1
+Tested up to: 6.5.5
 Stable tag: trunk
 
 Easily control the display of widgets based on pages or categories
@@ -30,6 +30,8 @@ Standard Installation Procedure
 
 
 == Changelog ==
+= 3.2 =
+ * Tested through version 6.5.5
 = 3.1 =
  * Added message to readme explaining the future of Conditional widgets after WordPress 5.8
 = 3 =

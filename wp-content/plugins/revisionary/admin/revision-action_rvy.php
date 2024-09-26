@@ -32,7 +32,9 @@ function rvy_revision_create($post_id = 0, $args = []) {
 	if (!empty($args['force']) || current_user_can('copy_post', $main_post_id)) {
 		require_once( dirname(REVISIONARY_FILE).'/revision-creation_rvy.php' );
 		$rvy_creation = new PublishPress\Revisions\RevisionCreation();
-		$revision_id = $rvy_creation->createRevision($post_id, 'draft-revision', $args);
+
+		$revision_status = (rvy_get_option('auto_submit_revisions') && current_user_can('edit_post', $main_post_id)) ? 'pending-revision' : 'draft-revision';
+		$revision_id = $rvy_creation->createRevision($post_id, $revision_status, $args);
 	} else {
 		$revision_id = 0;
 	}
@@ -320,6 +322,17 @@ function rvy_revision_approve($revision_id = 0, $args = []) {
 		}
 
 		clean_post_cache($post->ID);
+
+		if ($post && rvy_get_option('publish_by_revision')) {
+			if (empty($post->post_name)) {
+				$data = [];
+				$data['post_name'] = wp_unique_post_slug(sanitize_title($post->post_title, $post->ID), $post->ID, 'publish', $post->post_type, $post->post_parent);
+
+				$wpdb->update($wpdb->posts, ['post_name' => $data['post_name']], ['ID' => $post->ID]);
+				clean_post_cache($post->ID);
+			}
+		}
+
 		$published_url = get_permalink($post->ID);
 
 		$db_action = false;

@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.4.5';
+	public $version = '4.4.7.2';
 
 	/**
 	 * Menu Slug
@@ -175,7 +175,7 @@ final class NS_Cloner {
 		add_action( 'ns_cloner_init', array( $this, 'install_tables' ) );
 
 		// Only load rest of plugin if it could be needed (not on frontend).
-		$should_load = is_admin() || ( wp_doing_ajax() && is_user_logged_in() ) || ( defined( 'WP_CLI' ) && WP_CLI ) || ns_is_signup_allowed();
+		$should_load = is_admin() || ( wp_doing_ajax() && is_user_logged_in() ) || ( defined( 'WP_CLI' ) && WP_CLI ) || ns_is_signup_allowed() || wp_doing_cron();
 		if ( apply_filters( 'ns_cloner_should_load', $should_load ) ) {
 			// Bootstrap full cloner and addons once translation/localization is ready.
 			add_action( 'plugins_loaded', array( $this, 'init' ) );

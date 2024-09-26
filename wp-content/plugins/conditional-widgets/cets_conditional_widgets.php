@@ -3,7 +3,7 @@
 Plugin Name: Conditional Widgets
 Plugin URI:  http://wordpress.org/extend/plugins/conditional-widgets/
 Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version:     3.1
+Version:     3.2
 Author:      Jason LeMahieu and Kevin Graeme
 License:     GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 /* CHANGELOG 
+	= 3.2 =
+		Updated tested to version
 	= 3.1 =
 		Added message to readme explaining the future of Conditional widgets after WordPress 5.8
 	= 3 =

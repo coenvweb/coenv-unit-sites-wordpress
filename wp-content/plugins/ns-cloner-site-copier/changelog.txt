@@ -1,3 +1,16 @@
+= 4.4.7.2 - 2024.08.28 =
+* Cron code execution fix
+
+= 4.4.7.1 - 2024.08.27 =
+* Code improvements
+
+= 4.4.7 - 2024.08.20 =
+* Fix PHP notices and other code improvements
+
+= 4.4.6 - 2024.08.08 =
+* Better handling of scheduled actions.
+* Code improvements.
+
 = 4.4.5 - 2024.06.20 =
 * Add hooks to bypass immediate cloning in the admin ajax action.
 * Fix initial form setting option loading. Hide those that are not for current clone option.

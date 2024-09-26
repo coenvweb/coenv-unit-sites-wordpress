@@ -231,9 +231,10 @@ final class Loader extends Base {
 		$options = array(
 			'screens'    => array( 'toplevel_page_blc_dash' ),
 			'extra_args' => array(
-				'register' => array( 
-					'connect_ref' => 'blc',
-					'utm_medium'  => 'plugin',
+				'register' => array(
+					'connect_ref'  => 'blc',
+					'utm_medium'   => 'plugin',
+					'utm_campaign' => 'blc_connector_main',
 				),
 			),
 		);

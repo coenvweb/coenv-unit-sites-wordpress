@@ -4,7 +4,7 @@ Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
 Tested up to: 6.6
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -117,6 +117,10 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.4.0 =
+* Enhance: Improved editing and unlinking of URLs.
+* Fix: Resolved issue with implicit conversion from float to int in YouTube links.
 
 = 2.3.0 =
 * New: Connect to the Cloud Engine API directly without installing the Dashboard plugin.
