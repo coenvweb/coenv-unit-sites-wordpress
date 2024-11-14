@@ -19,7 +19,7 @@ RewriteRule ^index\.php$ - [L]
 <Limit POST>
     Order Allow,Deny
     Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 128.208 97.113 85.208
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208
 </Limit>
 
 # Block WordPress xmlrpc.php requests
@@ -50,20 +50,20 @@ RewriteCond %{HTTP_USER_AGENT} ^Baiduspider.* [NC]
 RewriteRule .* - [F]
 
 # deny malicious POST requests 
-RewriteCond %{REQUEST_METHOD} POST [NC]
-RewriteCond %{REQUEST_URI} !^.*/wp-admin/ [NC]
-RewriteCond %{REQUEST_URI} !^.*/wp-cron.php [NC]
-RewriteCond %{REQUEST_URI} !^.*/wp-login.php [NC]
+#RewriteCond %{REQUEST_METHOD} POST [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-admin/ [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-cron.php [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-login.php [NC]
 # Whitelist XML-RPC Pingbacks, JetPack and Remote Posting POST Requests
-RewriteCond %{REQUEST_URI} !^.*/xmlrpc.php [NC]
+#RewriteCond %{REQUEST_URI} !^.*/xmlrpc.php [NC]
 # Whitelist Jetpack & WP Migrate JSON POST Request
-RewriteCond %{REQUEST_URI} !^.*/wp-json/jetpack/(.*) [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-json/jetpack/(.*) [NC]
 # Whitelist Network|Multisite Activate POST Form Requests
-RewriteCond %{REQUEST_URI} !^.*/wp-activate.php [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-activate.php [NC]
 # Whitelist Trackback POST Requests
-RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-trackback.php [NC]
 # Whitelist Comments POST Form Requests
-RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
+#RewriteCond %{REQUEST_URI} !^.*/wp-comments-post.php [NC]
 #RewriteRule .* - [F,L]
 
 #6/5 test to force non-www
