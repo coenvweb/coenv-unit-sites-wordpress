@@ -67,7 +67,9 @@ class NS_Cloner_Schedule {
 	 * @return void
 	 */
 	public function maybe_schedule_cron() {
-		if ( ! wp_next_scheduled( $this->cron_id ) ) {
+		if ( ! is_main_site() && wp_next_scheduled( $this->cron_id ) ) {
+			wp_clear_scheduled_hook( $this->cron_id );
+		} elseif ( ! wp_next_scheduled( $this->cron_id ) ) {
 			wp_schedule_event( time(), $this->cron_id . '_interval', $this->cron_id );
 		}
 	}
