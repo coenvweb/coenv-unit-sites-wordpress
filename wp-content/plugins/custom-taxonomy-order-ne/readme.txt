@@ -2,8 +2,8 @@
 Contributors: mpol
 Tags: term order, category order, taxonomy order, order
 Requires at least: 4.1
-Tested up to: 6.6
-Stable tag: 4.0.1
+Tested up to: 6.7
+Stable tag: 4.0.2
 License: GPLv2 or later
 Requires PHP: 7.0
 Forked from: https://plugins.trac.wordpress.org/browser/custom-taxonomy-order
@@ -216,6 +216,11 @@ The left metabox lists the toplevel terms. Right (or below) are the sub-terms.
 
 
 == Changelog ==
+
+= 4.0.2 =
+* 2024-11-27
+* Use transient for caching settings to have less database queries.
+
 = 4.0.1 =
 * 2024-10-02
 * Add option to show slugs of terms.

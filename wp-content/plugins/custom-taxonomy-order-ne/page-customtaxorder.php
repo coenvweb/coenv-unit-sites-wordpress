@@ -375,6 +375,7 @@ function customtaxorder_update_settings() {
 
 					$options[$taxonomy->name] = $tax_setting;
 					$customtaxorder_settings = update_option( 'customtaxorder_settings', $options );
+					delete_transient( 'customtaxorder_get_settings' );
 					echo '<div class="updated fade notice is-dismissible" id="message"><p>' . esc_html__('Settings have been saved', 'custom-taxonomy-order-ne') . '</p></div>';
 					return;
 
