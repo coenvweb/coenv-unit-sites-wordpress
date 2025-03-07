@@ -2,7 +2,7 @@
 Contributors: MadtownLems, kgraeme
 Tags: widgets
 Requires at least: 3.0
-Tested up to: 6.5.5
+Tested up to: 6.7.2
 Stable tag: trunk
 
 Easily control the display of widgets based on pages or categories
@@ -21,6 +21,36 @@ For each widget, you can choose criteria to either SHOW or HIDE the widget, base
 1. Each widget gets an expandable form at the bottom of it for controlling display options on the home page and for both pages and categories.
 
 
+== Frequently Asked Questions ==
+
+= Can I Use it with Custom Post Types or Taxonomies? =
+
+Yes and No.
+
+Conditional Widgets can be configured with additional Type/Taxonomy pairs (both native and custom), similar to how it functions with Posts and Categories. However, it does not support additional Custom Post Types the way it does Pages. (If I were going to write it from scratch, I would have definitely included that, but have no plans to add it given that Widgets themselves are on the way to becoming unsupported.)
+
+The following filter is available to take pairs of Post Type and Taxononmy slugs (use in functions.php or a small plugin):
+
+<pre>
+// Add Conditional Widgets support for Success Stories (Post Type) & Story Groups (Taxonomy)
+add_filter('conditional_widgets_type_tax_pairs', 'success_story_conditional_widget_type_tax_pairs' );
+
+function success_story_conditional_widget_type_tax_pairs( $pairs_array ) {
+
+	$success_story_pair = array(
+        'type'=> 'success-story',
+        'tax'=> 'story-group' 
+    );
+
+	$pairs_array[] = $success_story_pair;
+	return $pairs_array;
+
+}
+</pre>
+
+If you really want to be able to use Conditional Widgets to control Widget display on individual instances of a Custom Post Type (rather than based on a Taxonomy), the workaround would be to create unique Taxonomy terms for those Custom Posts.
+
+
 == Installation ==
 
 Standard Installation Procedure
@@ -30,6 +60,8 @@ Standard Installation Procedure
 
 
 == Changelog ==
+= 3.3 =
+		Updated tested to version, documented support for custom post type and taxonomy support
 = 3.2 =
  * Tested through version 6.5.5
 = 3.1 =

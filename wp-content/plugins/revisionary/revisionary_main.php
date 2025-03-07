@@ -5,7 +5,7 @@ if (!empty($_SERVER['SCRIPT_FILENAME']) && basename(__FILE__) == basename(esc_ur
 /**
  * @package     PublishPress\Revisions
  * @author      PublishPress <help@publishpress.com>
- * @copyright   Copyright (c) 2024 PublishPress. All rights reserved.
+ * @copyright   Copyright (c) 2025 PublishPress. All rights reserved.
  * @license     GPLv2 or later
  * @since       1.0.0
  */
@@ -113,6 +113,12 @@ class Revisionary
 
 		if ( ! is_content_administrator_rvy() ) {
 			add_filter( 'map_meta_cap', array($this, 'flt_post_map_meta_cap'), 5, 4);
+
+			add_filter('map_meta_cap', [$this, 'fltFixReadPreviewMetaCaps'], 99, 4 );
+			add_filter('presspermit_posts_clauses_intercept', [$this, 'fltAllowPreviewQuery'], 10, 4);
+
+			add_filter('presspermit_apply_posts_teaser', [$this, 'fltAllowTeaser'], 10, 2);
+
 			add_filter( 'user_has_cap', array( $this, 'flt_user_has_cap' ), 98, 3 );
 
 			add_filter( 'map_meta_cap', array( $this, 'flt_limit_others_drafts' ), 10, 4 );
@@ -284,7 +290,13 @@ class Revisionary
             $$var = $args[$var];
         }
 
-		if ($is_revisions_query || !empty($_wp_query->is_revisions_query) || !empty($_wp_query->query['is_revisions_query']) || (!empty($revisionary) && !empty($revisionary->is_revisions_query)) || $_wp_query->is_preview) {
+		if ($is_revisions_query 
+		|| !empty($_wp_query->is_revisions_query) 
+		|| !empty($_wp_query->query['is_revisions_query']) 
+		|| (!empty($revisionary) && !empty($revisionary->is_revisions_query)) 
+		|| $_wp_query->is_preview
+		|| (isset($_wp_query->query_vars) && isset($_wp_query->query_vars['hide_revision']) && !$_wp_query->query_vars['hide_revision'])
+		) {
 			return $clauses;
 		}
 
@@ -832,7 +844,7 @@ class Revisionary
 				$caps = array_diff_key($caps, [$cap => true]);
 			}
 		
-		} elseif ('set_revision_pending-revision' == $cap) {
+		} elseif (0 === strpos($cap, 'set_revision_')) {
 			if (!rvy_get_option('pending_revisions')) {
 				return array_diff_key($caps, [$cap => true]);
 			}
@@ -864,8 +876,10 @@ class Revisionary
 				}
 			}
 
+			$revision_status = substr($cap, strlen('set_revision_') - 1);
+
 			// allow PublishPress Permissions to apply 'revise' exceptions
-			if ($can_submit = apply_filters('revisionary_can_submit', $can_submit, $post_id, 'pending', 'pending-revision', $filter_args)) {
+			if ($can_submit = apply_filters('revisionary_can_submit', $can_submit, $post_id, 'pending', $revision_status, $filter_args)) {
 				$caps = ['read'];
 			}
 		}
@@ -886,6 +900,88 @@ class Revisionary
 		rvy_add_revisor_role( $blog_id );
 	}
 	
+	function fltAllowTeaser($allow, $post_id) {
+		$preview_arg = (defined('RVY_PREVIEW_ARG')) ? sanitize_key(constant('RVY_PREVIEW_ARG')) : 'rv_preview';	//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ((!empty($_REQUEST[$preview_arg]) || !empty($_GET['preview'])) 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& rvy_in_revision_workflow($post_id)
+		) {
+			$allow = false;
+		}
+
+		return $allow;
+	}
+	
+	function fltAllowPreviewQuery($intercept_clauses, $clauses, $_wp_query = false, $args = []) {
+		global $current_user;
+		
+		if (is_admin() 
+		|| (defined('REST_REQUEST') && REST_REQUEST) 
+		|| (defined('DOING_AJAX') && DOING_AJAX)
+		) {
+			return $intercept_clauses;
+		}
+
+		$required_operation = (!empty($args['required_operation'])) ? $args['required_operation'] : 'read';
+
+		if ('read' != $required_operation) {
+			return $intercept_clauses;
+		}
+
+		$preview_arg = (defined('RVY_PREVIEW_ARG')) ? sanitize_key(constant('RVY_PREVIEW_ARG')) : 'rv_preview';	//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ((!empty($_REQUEST[$preview_arg]) || !empty($_GET['preview'])) 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& (!empty($current_user->allcaps['preview_others_revisions']))
+		&& did_action('posts_selection') 
+		) {
+			if ($post = get_post(rvy_detect_post_id())) {
+				if (rvy_in_revision_workflow($post->ID)
+				&& ('inherit' != $post->post_status)
+				&& !empty($this->enabled_post_types[$post->post_type]) && $this->config_loaded
+				) {
+					$intercept_clauses = $clauses;
+				}
+			}
+		}
+
+		return $intercept_clauses;
+	}
+
+	function fltFixReadPreviewMetaCaps($caps, $cap, $user_id, $args) {
+		global $current_user;
+		
+		$preview_arg = (defined('RVY_PREVIEW_ARG')) ? sanitize_key(constant('RVY_PREVIEW_ARG')) : 'rv_preview';	//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if (in_array($cap, ['read_post', 'read_page'])	// WP Query imposes edit_post capability requirement for front end viewing of protected statuses 
+		&& (!empty($_REQUEST[$preview_arg]) || !empty($_GET['preview'])) 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& !empty($current_user->allcaps['preview_others_revisions'])
+		&& did_action('posts_selection') 
+		) {
+			if (!empty($args[0])) {
+				$post_id = (is_object($args[0])) ? $args[0]->ID : (int) $args[0];
+			} else {
+				$post_id = 0;
+			}
+	
+			if ($post = get_post($post_id)) {
+				if (('inherit' == $post->post_status)
+				|| empty($this->enabled_post_types[$post->post_type]) && $this->config_loaded
+				) {
+					return $caps;
+				}
+			}
+
+			$type_obj = get_post_type_object($post->post_type);
+
+			// Note: preview_others_revisions capability already confirmed
+			if (!empty($type_obj->cap->read_private_posts)) {
+				$caps = array_diff($caps, [$type_obj->cap->read_private_posts]);
+				$caps []= 'read';
+			}
+		}
+
+		return $caps;
+	}
 	
 	function flt_post_map_meta_cap($caps, $cap, $user_id, $args) {
 		global $current_user;
@@ -914,7 +1010,9 @@ class Revisionary
 			}
 		}
 
-		if ($post && (('future-revision' == $post->post_mime_type) || in_array($cap, ['read_post', 'read_page']))) {
+		if ($post && (('future-revision' == $post->post_mime_type) 
+		|| (in_array($cap, ['read_post', 'read_page']) && empty($current_user->allcaps['preview_others_revisions'])))
+		) {
 			if (in_array($cap, ['read_post', 'read_page'])) {
 				return $caps;
 			}
@@ -1122,32 +1220,53 @@ class Revisionary
 		return $data;
 	}
 
-	// @todo: confirm this is still needed
 	function flt_regulate_revision_status($data, $postarr) {
-		// Revisions are not published by wp_update_post() execution; Prevent setting to a non-revision status
-		if (rvy_get_post_meta($postarr['ID'], '_rvy_base_post_id', true) && ('trash' != $data['post_status'])) {
-			if (!$revision = get_post($postarr['ID'])) {
-				return $data;
+		if (rvy_is_revision_status($data['post_status'])) {
+			// If post_status is set to a revision status, mirror that to post_mime_type. This is meant to support post updates from one revision status to another.
+			if ($data['post_status'] != $data['post_mime_type']) {
+				$data['post_mime_type'] = $data['post_status'];
 			}
 
-			if (empty($this->enabled_post_types[$revision->post_type])) {
-				return $data;
+			// Prevent revision status being stored directly to post_status column unless Permissions Compat Mode is enabled.
+			if (!rvy_get_option('permissions_compat_mode')) {
+				$data['post_status'] = ('draft-revision' == $data['post_status']) ? 'draft' : 'pending';
 			}
+		} else {
+			// Revisions are not published by wp_update_post() execution; Prevent setting to a non-revision status
+			// @todo: confirm this is still needed
 
-			if (!rvy_is_revision_status($postarr['post_mime_type']) || !in_array($postarr['post_status'], rvy_revision_base_statuses())) {
-				$revert_status = true;
-
-			} elseif ($revision) {
-				if (($data['post_mime_type'] != $revision->post_mime_type) || ($data['post_status'] != $revision->post_status)
-				&& (('future-revision' == $revision->post_mime_type) || ('future-revision' == $postarr['post_mime_type']))
-				) {
-					$revert_status = true;
+			if (rvy_get_post_meta($postarr['ID'], '_rvy_base_post_id', true) 
+			&& ('trash' != $data['post_status'])
+			) {
+				if (!$revision = get_post($postarr['ID'])) {
+					return $data;
 				}
-			}
 
-			if (!empty($revert_status) && rvy_in_revision_workflow($revision)) {
-				$data['post_status'] = $revision->post_status;
-				$data['post_mime_type'] = $revision->post_mime_type;
+				if (!rvy_status_revisions_active($revision->post_type)) {
+					if (empty($this->enabled_post_types[$revision->post_type])) {
+						return $data;
+					}
+
+					if (!rvy_is_revision_status($postarr['post_mime_type']) || !in_array($postarr['post_status'], rvy_revision_base_statuses())) {
+						$revert_status = true;
+
+					} elseif ($revision) {
+						if (($data['post_mime_type'] != $revision->post_mime_type) || ($data['post_status'] != $revision->post_status)
+						&& (('future-revision' == $revision->post_mime_type) || ('future-revision' == $postarr['post_mime_type']))
+						) {
+							$revert_status = true;
+						}
+					}
+
+					if (!empty($revert_status) && rvy_in_revision_workflow($revision)) {
+						$data['post_status'] = $revision->post_status;
+						$data['post_mime_type'] = $revision->post_mime_type;
+					}
+				}
+
+				if (rvy_get_option('permissions_compat_mode') && ('revision' != $data['post_type'])) {
+					$data['post_status'] = $data['post_mime_type'];
+				}
 			}
 		}
 

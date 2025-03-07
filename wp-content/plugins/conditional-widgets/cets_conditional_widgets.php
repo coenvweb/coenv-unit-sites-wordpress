@@ -1,9 +1,9 @@
 <?php
-/**
+/*
 Plugin Name: Conditional Widgets
 Plugin URI:  http://wordpress.org/extend/plugins/conditional-widgets/
-Description: Grants users advanced control over which pages and categories each widget is displayed on
-Version:     3.2
+Description: When using Classic Widgets, grants users advanced control over which pages and categories each widget is displayed on
+Version:     3.3
 Author:      Jason LeMahieu and Kevin Graeme
 License:     GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -28,6 +28,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 /* CHANGELOG 
+	= 3.3 =
+		Updated tested to version, documented support for custom post type and taxonomy support
 	= 3.2 =
 		Updated tested to version
 	= 3.1 =

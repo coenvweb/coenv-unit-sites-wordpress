@@ -78,7 +78,6 @@ function conditional_widgets_form( $widget, $return, $instance ) {
 						}
 
 						// taxonomy applied to type
-						// @TODO - validate
 					
 						// for prefilling form fields..
 						if ( isset( $instance['cw_custom'][$type][$tax] ) ) {
@@ -258,7 +257,6 @@ function conditional_widgets_update( $new_instance, $old_instance ) {
 
 	foreach ( $type_tax_pairs as $pair ) {
 
-		// todo - validate
 		$type = $pair['type'];
 		$tax  = $pair['tax'];
 

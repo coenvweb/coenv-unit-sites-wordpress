@@ -220,7 +220,7 @@ function conditional_widgets_widget( $instance ) {
 					}
 				}
 
-				//is_object_in_taxonomy - TODO?
+				//is_object_in_taxonomy 
 			}
 		} else {
 			// we have no settings for this post type
@@ -288,13 +288,6 @@ function conditional_widgets_widget( $instance ) {
 
 	} // /is_category
 
-
-	// TODO
-	/*
-	if (is_tax()) {
-		
-	}
-	*/
 
 	//since 1.4
 	if ( is_home() ) {
