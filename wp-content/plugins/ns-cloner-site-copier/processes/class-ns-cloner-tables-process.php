@@ -115,7 +115,5 @@ class NS_Cloner_Tables_Process extends NS_Cloner_Process {
 		}
 
 		return parent::task( $item );
-
 	}
-
 }

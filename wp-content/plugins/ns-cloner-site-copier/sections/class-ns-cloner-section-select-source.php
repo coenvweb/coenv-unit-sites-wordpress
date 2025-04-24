@@ -80,5 +80,4 @@ class NS_Cloner_Section_Select_Source extends NS_Cloner_Section {
 		}
 		$this->close_section_box();
 	}
-
 }

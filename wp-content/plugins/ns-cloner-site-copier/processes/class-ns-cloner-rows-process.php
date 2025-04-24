@@ -163,7 +163,6 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		$this->insert_row( $row, $target_table );
 
 		return parent::task( $item );
-
 	}
 
 	/**
@@ -276,7 +275,7 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		$formats             = implode( ', ', ns_prepare_row_formats( $row, $target_table ) );
 		$this->insert_query .= ns_cloner()->db->prepare( "( $formats )\n", $row );
 		$this->current_table = $target_table;
-		$this->rows_count++;
+		++$this->rows_count;
 
 		// Insert the previous accumulated query and start new, if reaching max query size.
 		if ( ! empty( $this->insert_query ) && $this->is_query_maxed() ) {
@@ -362,6 +361,4 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 		$exceeded_row_max    = $this->rows_count >= $rows_per_query;
 		return $exceeded_row_max || $exceeded_packet_max;
 	}
-
-
 }

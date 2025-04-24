@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 add_filter(
 	'ns_cloner_global_table_patterns',
-	function( $global_patterns ) {
+	function ( $global_patterns ) {
 		$plugin_patterns = array(
 			'domain_mapping.*',   // Domain mapping tables.
 			'3wp_broadcast_.*',   // 3wp broadcast tables.
@@ -32,7 +32,7 @@ add_filter(
  */
 add_filter(
 	'ns_cloner_do_drop_target_table',
-	function( $do, $table ) {
+	function ( $do, $table ) {
 		if ( strpos( $table, 'slim_stats' ) !== false ) {
 			$do = false;
 		}
@@ -48,7 +48,7 @@ add_filter(
  */
 add_filter(
 	'ns_cloner_do_copy_row',
-	function( $do, $row ) {
+	function ( $do, $row ) {
 		$plugin_opts = array();
 		// Collisimo Shipping Methods for WooCommerce.
 		$plugin_opts = array_merge( $plugin_opts, array( 'lpc_db_version' ) );
@@ -87,7 +87,7 @@ add_filter(
  */
 add_filter(
 	'ns_cloner_do_search_replace',
-	function( $do, $row ) {
+	function ( $do, $row ) {
 		$excluded_meta = array();
 		// WP Simple Pay has Stripe plan objects encoded.
 		$excluded_meta = array_merge( $excluded_meta, array( '_single_plan_object' ) );
@@ -109,7 +109,7 @@ add_filter(
  */
 add_action(
 	'ns_cloner_process_finish',
-	function() {
+	function () {
 		if ( defined( 'PWP_NAME' ) ) {
 			$wpe_nonce    = wp_create_nonce( PWP_NAME . '-config' );
 			$wpe_endpoint = 'admin.php?page=wpengine-common&purge-all=1&_wpnonce=' . $wpe_nonce;
@@ -126,7 +126,7 @@ add_action(
  */
 add_action(
 	'ns_cloner_process_init',
-	function() {
+	function () {
 		if ( class_exists( '\RankMathPro\Installer' ) ) {
 			global $wp_filter;
 			foreach ( $wp_filter['wpmu_new_blog']->callbacks as $priority => $callbacks ) {

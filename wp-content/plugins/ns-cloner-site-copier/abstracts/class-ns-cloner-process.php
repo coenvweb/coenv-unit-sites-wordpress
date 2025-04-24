@@ -91,7 +91,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 			// Only items without an ignore_progress key will affect the total and completed progress values.
 			$tracked_items = array_filter(
 				$this->data,
-				function( $item ) {
+				function ( $item ) {
 					return ! isset( $item['ignore_progress'] );
 				}
 			);
@@ -254,7 +254,7 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		// If we want to have an item whose progress is not tracked, we can add 'ignore_progress' to it.
 		// Only items without an ignore_progress key will affect the total and completed progress values.
 		if ( ! isset( $item['ignore_progress'] ) ) {
-			$this->task_count++;
+			++$this->task_count;
 		}
 		// Update task count only if it's above threshold. Update too often and you lose performance,
 		// update too seldom and you lose responsiveness in the progress UI.
@@ -536,6 +536,4 @@ abstract class NS_Cloner_Process extends WP_Background_Process {
 		}
 		return $progress;
 	}
-
 }
-

@@ -347,7 +347,7 @@ function rvy_status_registrations() {
 			'future-revision' => [
 				'name' => esc_html__('Scheduled Revision', 'revisionary'),
 				'submit' => esc_html__('Schedule Revision', 'revisionary'), 
-				'submit_short' => esc_html__('Schedule Revision', 'revisionary'), 
+				'submit_short' => esc_html__('Schedule', 'revisionary'), 
 				'submitting' => esc_html__('Scheduling Revision...', 'revisionary'),
 				'submitted' => ($block_editor) ? esc_html__('The Revision is Scheduled', 'revisionary') :  esc_html__('Revision Scheduled', 'revisionary'),
 				'approve' => esc_html__('Approve Revision', 'revisionary'), 
@@ -863,6 +863,9 @@ function rvy_refresh_options_sitewide() {
 
 		$rvy_options_sitewide = array_fill_keys( array_merge( $custom_options_sitewide, $unreviewed_default_sitewide ), true );
 	}
+
+	// Settings which are always controlled network-wide
+	$rvy_options_sitewide['delete_settings_on_uninstall'] = true;
 
 	$rvy_options_sitewide = array_filter( $rvy_options_sitewide );
 }

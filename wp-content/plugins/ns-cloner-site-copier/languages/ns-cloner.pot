@@ -1,15 +1,15 @@
-# Copyright (C) 2024 Never Settle
+# Copyright (C) 2025 Never Settle
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: NS Cloner - Site Copier 4.4.7.4\n"
+"Project-Id-Version: NS Cloner - Site Copier 4.4.8\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/ns-cloner-site-copier\n"
-"POT-Creation-Date: 2024-11-13 08:49:34+00:00\n"
+"POT-Creation-Date: 2025-04-24 11:27:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -83,27 +83,27 @@ msgstr ""
 msgid "An unknown error occurred. Check the logs for info."
 msgstr ""
 
-#: class-ns-cloner.php:215
+#: class-ns-cloner.php:216
 msgid "Standard Clone"
 msgstr ""
 
-#: class-ns-cloner.php:216
+#: class-ns-cloner.php:217
 msgid "Clone"
 msgstr ""
 
-#: class-ns-cloner.php:217
+#: class-ns-cloner.php:218
 msgid "Take an existing site and create a brand new copy of it at another url."
 msgstr ""
 
-#: class-ns-cloner.php:225
+#: class-ns-cloner.php:226
 msgid "Site cloned successfully!"
 msgstr ""
 
-#: class-ns-cloner.php:228
+#: class-ns-cloner.php:229
 msgid "Source Site"
 msgstr ""
 
-#: class-ns-cloner.php:231
+#: class-ns-cloner.php:232
 msgid "Target Site"
 msgstr ""
 
@@ -162,23 +162,23 @@ msgstr ""
 msgid "A site title is required"
 msgstr ""
 
-#: ns-utils.php:532
+#: ns-utils.php:530
 msgid "This function must be called with the cloner plugin active"
 msgstr ""
 
-#: ns-utils.php:556
+#: ns-utils.php:554
 msgid "Source id is required"
 msgstr ""
 
-#: ns-utils.php:560
+#: ns-utils.php:558
 msgid "Target name is required"
 msgstr ""
 
-#: ns-utils.php:564
+#: ns-utils.php:562
 msgid "Target title is required"
 msgstr ""
 
-#: ns-utils.php:586
+#: ns-utils.php:584
 msgid "Success"
 msgstr ""
 
@@ -892,28 +892,4 @@ msgstr ""
 msgid ""
 "If you have basic auth enabled, you can <a href=\"%s\" "
 "target=\"_blank\">add a workaround</a>."
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "NS Cloner - Site Copier"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://wpsitecloner.com/"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid ""
-"The amazing NS Cloner creates a new site as an exact clone / duplicate / "
-"copy of an existing site with theme and all plugins and settings intact in "
-"just a few steps. Check out NS Cloner Pro for additional powerful add-ons "
-"and features!"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Never Settle"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://neversettle.it"
 msgstr ""

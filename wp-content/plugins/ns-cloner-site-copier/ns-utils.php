@@ -31,7 +31,7 @@ function ns_set_search_replace_sequence( &$search, &$replace, $case_sensitive = 
 	$search_replace = array_combine( $search, $replace );
 	uksort(
 		$search_replace,
-		function( $a, $b ) {
+		function ( $a, $b ) {
 			return strlen( $b ) - strlen( $a );
 		}
 	);
@@ -73,10 +73,10 @@ function ns_set_search_replace_sequence( &$search, &$replace, $case_sensitive = 
 				$conflicting_search = $replace_func( $search_text, $replace_text, $conflicting_replacement );
 				array_splice( $new_search, $fix_insertion_index, 0, $conflicting_search );
 				array_splice( $new_replace, $fix_insertion_index, 0, $conflicting_replacement );
-				$fix_insertion_index ++;
+				++$fix_insertion_index;
 			}
 		}
-		$fix_insertion_index ++;
+		++$fix_insertion_index;
 	}
 
 	// Update variables by reference - no return needed.
@@ -156,7 +156,7 @@ function ns_recursive_dir_copy_by_process( $src, $dst, $process, $num = 0 ) {
 		}
 	} elseif ( file_exists( $src ) ) {
 		$file = array(
-			'number'      => ++ $num,
+			'number'      => ++$num,
 			'source'      => $src,
 			'destination' => $dst,
 		);
@@ -406,12 +406,10 @@ function ns_sql_backquote( $value ) {
 function ns_sql_quote( $value ) {
 	if ( is_array( $value ) ) {
 		return array_map( 'ns_sql_quote', $value );
-	} else {
-		if ( is_null( $value ) ) {
+	} elseif ( is_null( $value ) ) {
 			return 'NULL';
-		} else {
-			return "'" . esc_sql( $value ) . "'";
-		}
+	} else {
+		return "'" . esc_sql( $value ) . "'";
 	}
 }
 
@@ -585,7 +583,6 @@ function ns_cloner_perform_clone( $args = array() ) {
 	} else {
 		return array( 'message' => __( 'Success', 'ns-cloner-site-copier' ) );
 	}
-
 }
 
 /**
@@ -620,14 +617,24 @@ function ns_cloner_implode( $glue, $array = null ) {
  * @return void
  */
 function ns_cloner_set_theme( $source_site_id, $target_site_id ) {
+	$source_site_id = (int) $source_site_id;
+	if ( ! $target_site_id ) {
+		ns_cloner()->log->log( 'No target site id  to set theme' );
+		return;
+	}
+
+	$target_site_id    = (int) $target_site_id;
 	$source_stylesheet = get_blog_option( $source_site_id, 'stylesheet' );
 	$source_template   = get_blog_option( $source_site_id, 'template' );
 
 	if ( $source_stylesheet ) {
+		ns_cloner()->log->log( 'SETTING theme for target site id ' . $target_site_id . ' to ' . $source_stylesheet );
 		update_blog_option( $target_site_id, 'stylesheet', $source_stylesheet );
+		update_blog_option( $target_site_id, 'current_theme', $source_template );
 	}
 
 	if ( $source_template ) {
+		ns_cloner()->log->log( 'SETTING template for target site id ' . $target_site_id . ' to ' . $source_template );
 		update_blog_option( $target_site_id, 'template', $source_template );
 	}
 }

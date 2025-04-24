@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.4.7.5';
+	public $version = '4.4.8';
 
 	/**
 	 * Menu Slug
@@ -221,7 +221,7 @@ final class NS_Cloner {
 						array( $this->process_manager, 'copy_tables' ),
 						array( $this->process_manager, 'copy_files' ),
 					),
-					'report'      => function() {
+					'report'      => function () {
 						// Success message.
 						ns_cloner()->report->add_report( '_message', __( 'Site cloned successfully!', 'ns-cloner-site-copier' ) );
 						// Source site.
@@ -269,7 +269,6 @@ final class NS_Cloner {
 		 * This action automatically triggers the init() function for each registered addon.
 		 */
 		do_action( 'ns_cloner_init' );
-
 	}
 
 	/**
@@ -359,7 +358,7 @@ final class NS_Cloner {
 			__( 'NS Cloner', 'ns-cloner-site-copier' ),
 			$this->capability,
 			$this->menu_slug,
-			function() {
+			function () {
 				ns_cloner()->render( 'main' );
 			},
 			plugin_dir_url( __FILE__ ) . 'images/cloner-admin-icon.png',
@@ -374,7 +373,7 @@ final class NS_Cloner {
 			__( 'Logs / Status', 'ns-cloner-site-copier' ),
 			$this->capability,
 			'ns-cloner-logs',
-			function() {
+			function () {
 				ns_cloner()->render( 'logs' );
 			},
 		);
@@ -477,7 +476,7 @@ final class NS_Cloner {
 			if ( $has_base_prefix ) {
 				$tables = array_filter(
 					$tables,
-					function( $table ) use ( $global_pattern, $subsite_pattern, $temp_pattern ) {
+					function ( $table ) use ( $global_pattern, $subsite_pattern, $temp_pattern ) {
 						return ! preg_match( $global_pattern, $table )
 							&& ! preg_match( $subsite_pattern, $table )
 							&& ! preg_match( $temp_pattern, $table );
@@ -490,7 +489,7 @@ final class NS_Cloner {
 			$all_tables = $this->db->get_col( "SHOW TABLES LIKE '{$prefix}%'" );
 			$tables     = array_filter(
 				$all_tables,
-				function( $table ) use ( $global_pattern, $subsite_pattern, $temp_pattern, $site_id, $exclude_global ) {
+				function ( $table ) use ( $global_pattern, $subsite_pattern, $temp_pattern, $site_id, $exclude_global ) {
 					if ( $this->db->base_prefix !== $this->db->get_blog_prefix( $site_id ) ) {
 						// For sites where main ID != 1 (example: base = wp_, main site prefix = wp_2_),
 						// anything that matches the prefix (example: wp_2_) counts as a site table.
@@ -719,8 +718,7 @@ final class NS_Cloner {
 			'description'    => '',
 			'multisite_only' => true,
 			'steps'          => array(),
-			'report'         => function() {
-
+			'report'         => function () {
 			},
 		);
 		// Register by adding to the clone_modes array.
@@ -792,7 +790,7 @@ final class NS_Cloner {
 		foreach ( $clone_modes as $clone_mode_id ) {
 			add_action(
 				"ns_cloner_process_{$clone_mode_id}",
-				function() use ( $callback ) {
+				function () use ( $callback ) {
 					// Get the function name to refer to and log it.
 					$callback_name = is_array( $callback ) ? $callback[1] : $callback;
 					$callback_ref  = is_array( $callback ) ? get_class( $callback[0] ) . '::' . $callback[1] : $callback;

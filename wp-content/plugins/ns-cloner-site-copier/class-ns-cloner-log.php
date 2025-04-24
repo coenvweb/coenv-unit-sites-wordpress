@@ -285,7 +285,6 @@ class NS_Cloner_Log {
 		fwrite( $this->log_handle, $message_row );
 		add_action( 'all', array( $this, 'log_hook' ) );
 		return true;
-
 	}
 
 	/**
@@ -490,5 +489,4 @@ class NS_Cloner_Log {
 			}
 		}
 	}
-
 }

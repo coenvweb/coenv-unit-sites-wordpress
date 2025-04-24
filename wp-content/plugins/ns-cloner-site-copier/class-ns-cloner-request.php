@@ -306,4 +306,3 @@ final class NS_Cloner_Request {
 function ns_cloner_request() {
 	return NS_Cloner_Request::instance();
 }
-

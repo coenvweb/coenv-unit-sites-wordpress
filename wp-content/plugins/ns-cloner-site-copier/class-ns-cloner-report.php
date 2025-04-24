@@ -163,5 +163,4 @@ class NS_Cloner_Report {
 		$date = DateTime::createFromFormat( 'U.u', $time );
 		return $date ? $date->format( 'Y-m-d H:i:s' ) : '';
 	}
-
 }

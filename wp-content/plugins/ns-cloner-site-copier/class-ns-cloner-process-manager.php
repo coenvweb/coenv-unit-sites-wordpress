@@ -311,7 +311,7 @@ class NS_Cloner_Process_Manager {
 		$end_time   = ns_cloner()->report->get_end_time();
 		$total_time = ns_cloner()->report->get_elapsed_time();
 		$minutes    = floor( $total_time / 60 );
-		$seconds    = ceil( round( $total_time % 60 ) );
+		$seconds    = (int) round( $total_time % 60 );
 		ns_cloner()->report->add_report( __( 'Start Time', 'ns-cloner-site-copier' ), $start_time );
 		ns_cloner()->report->add_report( __( 'End Time', 'ns-cloner-site-copier' ), $end_time );
 		ns_cloner()->report->add_report( __( 'Total Time', 'ns-cloner-site-copier' ), "{$minutes} min. {$seconds} sec." );
@@ -558,7 +558,7 @@ class NS_Cloner_Process_Manager {
 		if ( empty( $processes ) && empty( ns_cloner()->report->get_all_reports() ) ) {
 			// Try to get error message.
 			$default_error = __( 'An unknown error occurred. Check the logs for info.', 'ns-cloner-site-copier' );
-			$this->add_error( ns_cloner()->report->get_report( '_error' ) ?: $default_error );
+			$this->add_error( ns_cloner()->report->get_report( '_error' ) ? ns_cloner()->report->get_report( '_error' ) : $default_error );
 			return false;
 		}
 
@@ -637,5 +637,4 @@ class NS_Cloner_Process_Manager {
 	public function is_in_progress( $suppress_filters = false ) {
 		return count( $this->get_current_processes( $suppress_filters ) ) > 0;
 	}
-
 }

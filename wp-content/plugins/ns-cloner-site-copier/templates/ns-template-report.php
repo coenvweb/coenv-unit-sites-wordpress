@@ -34,7 +34,7 @@ if ( ! empty( $reports ) && ! ns_cloner()->process_manager->is_in_progress() ) {
 				</div>
 				<p>
 				<?php
-				echo sprintf(
+				printf(
 					'%s, <a href="#" class="ns-cloner-report-collapse-warnings">%s</a> %s.',
 					esc_html__( 'During the cloning process we encountered some errors', 'ns-cloner-site-copier' ),
 					esc_html__( 'click here', 'ns-cloner-site-copier' ),

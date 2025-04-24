@@ -157,5 +157,4 @@ class NS_Cloner_Section_Additional_Settings extends NS_Cloner_Section {
 	public function filter_skip_constraints( $default ) {
 		return (bool) ns_cloner_request()->get( 'skip_constraints', false );
 	}
-
 }

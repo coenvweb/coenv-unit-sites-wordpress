@@ -81,7 +81,6 @@ class NS_Cloner_Files_Process extends NS_Cloner_Process {
 			ns_cloner()->log->log( "Failed copying file <b>$source</b> to <b>$destination</b>." );
 			return false;
 		}
-
 	}
 
 	/**
@@ -93,5 +92,4 @@ class NS_Cloner_Files_Process extends NS_Cloner_Process {
 	public function max_batch( $max ) {
 		return 2500;
 	}
-
 }
