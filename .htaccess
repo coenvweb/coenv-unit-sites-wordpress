@@ -2,8 +2,22 @@
 <Limit GET>
     Order Allow,Deny
     Allow from all
-    Deny from 49.51.0.0/16 101.32.0.0/16 43.156.0.0/16 150.109.0.0/16 43.133.0.0/16 129.226.0.0/16 43.159.0.0/16 43.130.0.0/16 170.106.0.0/16 43.135.0.0/16 43.134.0.0/16 43.153.0.0/16 43.163.0.0/16
+    Deny from 49.51.0.0/16 101.32.0.0/16 43.156.0.0/16 150.109.0.0/16 43.133.0.0/16 129.226.0.0/16 43.159.0.0/16 43.130.0.0/16 170.106.0.0/16 43.135.0.0/16 43.134.0.0/16 43.153.0.0/16 43.163.0.0/16 47.79.0.0/16 47.82.0.0/16
 </Limit>
+
+# Allow server-status access without rewriting
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/server-status
+RewriteRule .* - [L]
+</IfModule>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REMOTE_ADDR} ^128\.208\.61\.208$
+RewriteCond %{REQUEST_URI} ^/wp-content/themes/coenv-fish/assets/img/safs-default\.jpg$
+RewriteRule .* - [F,L]
+</IfModule>
 
 # BEGIN WordPress Multisite
 # Using subfolder network type: https://wordpress.org/support/article/htaccess/#multisite
@@ -19,7 +33,7 @@ RewriteRule ^index\.php$ - [L]
 <Limit POST>
     Order Allow,Deny
     Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208 52.164 47.82 47.79 57.141
 </Limit>
 
 # Block WordPress xmlrpc.php requests
@@ -176,6 +190,15 @@ RewriteRule ^(.*)$ https://ess.uw.edu/$1 [R=302,NC,L]
 RewriteCond %{HTTP_HOST} ^(?:www\.)?oceannexus\.uw\.edu$ [NC]
 RewriteRule ^ https://oceannexus.org/ [L,R=302,NE]
 
+RewriteCond %{HTTP_HOST} ^climate.washington.edu [NC]
+RewriteRule ^(.*)$ http://climate.uw.edu/$1 [R=302,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.climate.uw.edu [NC]
+RewriteRule ^(.*)$ https://climate.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^www\.climate.washington.edu [NC]
+RewriteRule ^(.*)$ https://climate.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
@@ -253,6 +276,16 @@ RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R,L]
 
 
 # Site-specific redirects
+
+
+# Botanicgardens Redirects
+RewriteCond %{HTTP_HOST} !^climate.uw\.edu [NC]
+RewriteRule .? - [S=5]
+RewriteRule ^climate-data/trendanalysisapp/?.*$ https://climate.uw.edu/our-work/wasco-tools/trend-tool/ [L,R=302]
+RewriteRule ^climate-data/snowdepth/?$ https://climate.uw.edu/our-work/wasco-tools/snow-depth-tool/ [L,R=302]
+RewriteRule ^climate-data/?$ https://climate.uw.edu/data-and-resources/data-and-tools-library/ [L,R=302]
+RewriteRule ^newsletter/?$ https://climate.uw.edu/news/newsletter-archive [L,R=302]
+RewriteRule ^outlook/?$ https://climate.uw.edu/washingtons-climate/climate-outlook/ [L,R=302]
 
 
 # Freshwater Redirects
