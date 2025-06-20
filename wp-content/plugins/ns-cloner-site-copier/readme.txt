@@ -5,13 +5,15 @@ Tags: automate, duplicate, copy, copier, clone
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 4.4.8
+Stable tag: 4.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 The NS Cloner saves TONS of time by cloning existing sites in a multisite network to a completely new site in a few seconds.
 
 == Description ==
+
+For even more powerful functionality, [check out NS Cloner Pro](https://wpsitecloner.com/pricing/?utm_campaign=in+plugin+referral&utm_source=ns-cloner&utm_medium=plugin&utm_content=pro+pricing)
 
 This is by far the easiest, fastest, and most user-friendly way you will ever create fully configured sites on your multisite networks. The NS Cloner will take any existing site on your WordPress multisite network and clone it into a new site that is completely identical in theme & theme settings, plugins & plugin configurations, content, pictures, videos, and site settings.
 
@@ -100,6 +102,10 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.4.9 - 2025.06.10 =
+* Fix: Custom code for cloning from external plugins.
+* Code improvements
 
 = 4.4.8 - 2025.04.24 =
 * Fix: Cron scheduling - do not schedule cloner cron on sub-sites

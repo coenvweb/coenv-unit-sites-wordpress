@@ -1,3 +1,7 @@
+= 4.4.9 - 2025.06.10 =
+* Fix: Custom code for cloning from external plugins.
+* Code improvements
+
 = 4.4.8 - 2025.04.24 =
 * Fix: Cron scheduling - do not schedule cloner cron on sub-sites
 * Fix: PHP notice on number precision

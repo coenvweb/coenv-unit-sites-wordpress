@@ -52,7 +52,6 @@ function rvy_default_options_sitewide() {
 		'home_preview_set_home_flag' => true,
 		'compare_revisions_direct_approval' => true,
 		'block_editor_extra_preview_button' => true,
-		'display_pp_branding' => true,
 		'revision_update_notifications' => true,
 		'trigger_post_update_actions' => true,
 		'copy_revision_comments_to_post' => true,
@@ -68,6 +67,7 @@ function rvy_default_options_sitewide() {
 		'permissions_compat_mode' => true,
 		'planner_notifications_access_limited' => false,
 		'archive_postmeta' => true,
+		'extended_archive' => true,
 		'delete_settings_on_uninstall' => true
 	);
 
@@ -120,7 +120,6 @@ function rvy_default_options() {
 		'home_preview_set_home_flag' => 0,
 		'compare_revisions_direct_approval' => 0,
 		'block_editor_extra_preview_button' => 0,
-		'display_pp_branding' => 1,
 		'revision_update_notifications' => 0,
 		'trigger_post_update_actions' => 0,
 		'copy_revision_comments_to_post' => 0,
@@ -136,6 +135,7 @@ function rvy_default_options() {
 		'permissions_compat_mode' => 0,
 		'planner_notifications_access_limited' => 0,
 		'archive_postmeta' => 0,
+		'extended_archive' => 0,
 		'delete_settings_on_uninstall' => 0,
 	);
 
