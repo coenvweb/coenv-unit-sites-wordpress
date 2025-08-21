@@ -51,7 +51,6 @@ function rvy_default_options_sitewide() {
 		'preview_link_alternate_preview_arg' => true,
 		'home_preview_set_home_flag' => true,
 		'compare_revisions_direct_approval' => true,
-		'block_editor_extra_preview_button' => true,
 		'revision_update_notifications' => true,
 		'trigger_post_update_actions' => true,
 		'copy_revision_comments_to_post' => true,
@@ -68,7 +67,8 @@ function rvy_default_options_sitewide() {
 		'planner_notifications_access_limited' => false,
 		'archive_postmeta' => true,
 		'extended_archive' => true,
-		'delete_settings_on_uninstall' => true
+		'delete_settings_on_uninstall' => true,
+		'apply_post_exceptions' => true,
 	);
 
 	if ( $other_options = array_diff_key( rvy_default_options(), $def ) ) {
@@ -119,7 +119,6 @@ function rvy_default_options() {
 		'preview_link_alternate_preview_arg' => 1,
 		'home_preview_set_home_flag' => 0,
 		'compare_revisions_direct_approval' => 0,
-		'block_editor_extra_preview_button' => 0,
 		'revision_update_notifications' => 0,
 		'trigger_post_update_actions' => 0,
 		'copy_revision_comments_to_post' => 0,
@@ -137,6 +136,7 @@ function rvy_default_options() {
 		'archive_postmeta' => 0,
 		'extended_archive' => 0,
 		'delete_settings_on_uninstall' => 0,
+		'apply_post_exceptions' => 0,
 	);
 
 	return $def;

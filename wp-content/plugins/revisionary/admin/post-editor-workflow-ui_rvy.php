@@ -7,7 +7,7 @@ class PostEditorWorkflowUI {
         $args = array_merge( $defaults, $args );
         foreach( array_keys($defaults) as $var ) { $$var = $args[$var]; }
 
-        global $wp_version;
+        global $wp_version, $revisionary;
 
         if (empty($post)) {
             return [];
@@ -32,6 +32,16 @@ class PostEditorWorkflowUI {
             'ajaxurl' => rvy_admin_url(''),
             'currentPostAuthor' => get_post_field('post_author', $published_post_id),
             'onApprovalCaption' => esc_html__('(on approval)', 'revisionary'),
+            'saveRevisionTooltip' =>  htmlEntities(
+                wp_get_admin_notice(
+                    $revisionary->admin->tooltipText(
+                        __('Save changes to continue.', 'revisionary'),
+                        __('Please save changes to the revision before submitting it.', 'revisionary'),
+                        false
+                    ),
+                    ['type' => 'info', 'additional_classes' => ['rvy-save-revision-tip']]
+                )
+            ),
             'canPublish' => $can_publish
         ];
 
@@ -53,7 +63,6 @@ class PostEditorWorkflowUI {
 
         $vars['disableRecaption'] = version_compare($wp_version, '5.9-beta', '>=') || is_plugin_active('gutenberg/gutenberg.php');
         $vars['viewTitle'] = '';
-        $vars['viewTitleExtra'] = '';
 
         if (rvy_get_option('revision_preview_links') || current_user_can('administrator') || is_super_admin()) {
             $vars['viewURL'] = rvy_preview_url($post);
@@ -70,18 +79,9 @@ class PostEditorWorkflowUI {
                     $vars['viewCaption'] = ('future-revision' == $post->post_mime_type) ? esc_html__('View / Publish', 'revisionary') : esc_html__('View / Approve', 'revisionary');
                 }
 
-                if (rvy_get_option('block_editor_extra_preview_button')) {
-                    $vars['viewTitleExtra'] = esc_html__('View revision', 'revisionary');
-                }
-
                 $vars['viewTitle'] =  esc_html__('View / Moderate saved revision', 'revisionary');
             } else {
                 $vars['viewCaption'] = version_compare($wp_version, '5.5-beta', '>=') ? esc_html__('Preview / Submit') :  esc_html__('View / Submit');
-
-                if (rvy_get_option('block_editor_extra_preview_button')) {
-                    $vars['viewTitleExtra'] = esc_html__('View saved revision', 'revisionary');
-                }
-
                 $vars['viewTitle'] =  esc_html__('View / Submit saved revision', 'revisionary');
             }
 

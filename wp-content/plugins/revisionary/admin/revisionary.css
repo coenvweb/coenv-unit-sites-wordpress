@@ -41,6 +41,7 @@ background-color: white;
 }
 
 #rvy_post_types_frame td {
+vertical-align: top;
 padding-top: 0;
 }
 
@@ -425,14 +426,7 @@ width: 99%;
 vertical-align: top;
 }
 
-body.toplevel_page_revisionary-q h1 span.dashicons,
-body.revisions_page_revisionary-deletion h1 span.dashicons,
-body.revisions_page_revisionary-settings h1 span.dashicons,
-body.revisions_page_rvy-net_options h1 span.dashicons,
-body.revisions_page_rvy-default_options h1 span.dashicons,
-body.revisions_page_revisionary-archive h1 span.dashicons,
-body.toplevel_page_revisionary-archive h1 span.dashicons,
-body.toplevel_page_revisionary-settings h1 span.dashicons
+body.revisionary h1 span.dashicons
 {
 padding-top:5px;
 }
@@ -450,14 +444,12 @@ padding-top: 4px;
 padding-bottom: 4px;
 }
 
-body.revisions_page_revisionary-settings #poststuff,
-body.toplevel_page_revisionary-settings #poststuff
+body.revisionary-settings #poststuff
 {
 padding-top: 0;
 }
 
-body.revisions_page_revisionary-settings .form-table td,
-body.toplevel_page_revisionary-settings .form-table td
+body.revisionary-settings .form-table td
 {
 padding-top: 10px;
 }
@@ -469,10 +461,6 @@ padding-right: 4px;
 overflow: auto;
 max-height: calc(80vh - 150px);
 */
-}
-
-#rvy-features > div > table > tbody > tr > td > div.rvy-opt-wrap > div {
-padding-top: 2px;
 }
 
 #rvy-features div.submit
@@ -511,8 +499,32 @@ color: black
 }
 
 #ppr-tab-post_types [data-toggle="tooltip"] .tooltip-text {
-  min-width: 260px;
+  min-width: 250px;
   font-size: 14px;
+}
+
+#publishpress-revisions-settings-tabs .nav-tab span.pp-integrations {
+display: inline-block;
+vertical-align: top;
+box-sizing: border-box;
+margin: 1px 0 -1px 0;
+padding: 0 5px;
+min-width: 18px;
+height: 18px;
+border-radius: 9px;
+color: #fff;
+font-size: 11px;
+line-height: 1.6;
+text-align: center;
+z-index: 26;
+}
+
+#publishpress-revisions-settings-tabs .nav-tab span.pp-integrations-missing {
+background-color: #d63638;
+}
+
+#publishpress-revisions-settings-tabs .nav-tab span.pp-integrations-active {
+background-color: #3f9716;
 }
 
 @media only screen and (max-height: 768px) {
@@ -532,10 +544,6 @@ color: black
   #rvy-features div.rvy-subtext {
   display: none;
   }
-}
-
-body.admin_page_rvy-revisions table.diff td, table.diff th {
-max-width: 400px;
 }
 
 body.admin_page_rvy-revisions #title {
@@ -648,7 +656,7 @@ margin-right: 6px;
 margin-top: 2px;
 }
 
-.toplevel_page_revisionary-q .pressshack-admin-wrapper a, .revisions_page_revisionary-deletion .pressshack-admin-wrapper a {
+body.revisionary-q .pressshack-admin-wrapper a, body.revisionary-deletion .pressshack-admin-wrapper a {
 color: #2271B1;
 }
 
@@ -778,6 +786,25 @@ color: #070;
 font-weight: bold;
 }
 
+.pp-version-notice-bold-purple {
+margin-right: -20px
+}
+
+.pp-version-notice-bold-purple-button a, .pp-version-notice-bold-purple-button a:active, .pp-version-notice-bold-purple-button a:visited {
+text-decoration: none !important;
+color: black !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .pp-version-notice-bold-purple-message {
+  width: auto !important;
+  }
+
+  .pp-version-notice-bold-purple-button {
+  width: auto !important;
+  }
+}
+
 /* Primary button in purple requires these 3 classes together for <button> and <a> tags */
 .ppr-purple-button.components-button.is-primary {
   background: #655997;
@@ -831,6 +858,7 @@ font-weight: bold;
 
 .pp-revisions-pro-promo-right-sidebar div.upgrade-btn {
   margin-top: 25px;
+  text-align: center;
 }
 
 .pp-revisions-pro-promo-right-sidebar .upgrade-btn {
@@ -878,15 +906,11 @@ margin-bottom: 5px;
   line-height: 1.4;
 }
 
-.pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul {
-  margin-bottom: 20px;
-}
-
 .pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul li {
   position: relative;
   padding-left: 22px;
   font-weight: 600;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .pp-revisions-pro-promo-right-sidebar .postbox-container .inside ul li:before {

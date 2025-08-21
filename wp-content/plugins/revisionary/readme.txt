@@ -7,7 +7,7 @@ Tags: revision, submit changes, duplicate post, approve changes, scheduled chang
 Requires at least: 5.5
 Requires PHP: 7.2.5
 Tested up to: 6.8
-Stable tag: 3.7.0
+Stable tag: 3.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,19 +95,20 @@ By upgrading to Revisions Pro, you also gain advanced permissions control throug
 
 The Pro versions of the PublishPress plugins are well worth your investment. The Pro versions have extra features and faster support. [Click here to join PublishPress](https://publishpress.com/pricing/).
 
-Join PublishPress and you'll get access to these nine Pro plugins:
+Join PublishPress and you'll get access to these ten Pro plugins:
 
 * [PublishPress Authors Pro](https://publishpress.com/authors) allows you to add multiple authors and guest authors to WordPress posts.
 * [PublishPress Blocks Pro](https://publishpress.com/blocks) has everything you need to build professional websites with the WordPress block editor.
 * [PublishPress Capabilities Pro](https://publishpress.com/capabilities) is the plugin to manage your WordPress user roles, permissions, and capabilities.
 * [PublishPress Checklists Pro](https://publishpress.com/checklists) enables you to define tasks that must be completed before content is published.
 * [PublishPress Future Pro](https://publishpress.com/future)  is the plugin for scheduling changes to your posts.
-* [PublishPress Permissions Pro](https://publishpress.com/permissions) is the plugin for advanced WordPress permissions.
+* [PublishPress Permissions Pro](https://publishpress.com/permissions)  is the plugin for restricted content and advanced WordPress permissions.
 * [PublishPress Planner Pro](https://publishpress.com/publishpress) is the plugin for managing and scheduling WordPress content.
 * [PublishPress Revisions Pro](https://publishpress.com/revisions) allows you to update your published pages with teamwork and precision.
-* [PublishPress Series Pro](https://publishpress.com/series) enables you to group content together into a series 
+* [PublishPress Series Pro](https://publishpress.com/series) enables you to group content together into a series.
+* [PublishPress Statuses Pro](https://publishpress.com/series) enables you to create additional publishing steps for your posts.
 
-Together, these plugins are a suite of powerful publishing tools for WordPress. If you need to create a professional workflow in WordPress, with moderation, revisions, permissions and more... then you should try PublishPress.
+Together, these plugins are a suite of powerful publishing tools for WordPress. If you need to create a professional workflow in WordPress, with moderation, revisions, permissions and more, then you should try PublishPress.
 
 ## Bug Reports ## 
 Bug reports for PublishPress Revisions are welcomed in our [repository on GitHub](https://github.com/publishpress/publishpress-revisions). Please note that GitHub is not a support forum, and that issues that aren't properly qualified as bugs will be closed.
@@ -243,6 +244,53 @@ Divi is one of the most popular page-builders in WordPress, and it does integrat
 Fixed: Security issue. Please update.
 
 == Changelog ==
+
+= 3.7.9 - 14 Aug 2025 =
+* Compat : PublishPress Permissions - Permissions assigned directly to revisions were not applied (also requires Permissions 4.4.3)
+* Compat : PublishPress Permissions - Option for Post Permissions to be applied to revisions (also requires Permissions 4.4.3)
+* Fixed : Posts listing did not show Has Revision caption if Revisions compatibility mode set to Enhanced Revision access control
+* Fixed : Revision metadata "_rvy_has_revisions" (and Has Revision caption) was not cleared after revision publication
+* Compat : Multiple Authors - Revision Queue was incorrectly filtered on author queries
+* Fixed : Some custom post types had non-functional edit links displayed to Revisors
+* Change : Styling and content adjustments to Revisions > Settings > Integration tab
+* Change : Right sidebar on Revisions > Settings was too wide
+* Change : Display Pro Settings tabs last
+
+= 3.7.8 - 31 Jul 2025 =
+* Change : Improvements to Settings > Integration tab contents
+* Change : Settings screen includes more descriptive contextual promo nudges for Pro plugin
+
+= 3.7.7 - 29 Jul 2025 =
+* Change : Settings > Integration tab detailing active or available third party plugin compatibility
+
+= 3.7.6 - 24 Jul 2025 =
+* Fixed : Scheduled Revisions publication failed if asynchronous setting enabled
+
+= 3.7.5 - 21 Jul 2025 =
+* Fixed : Scheduled Revision publication failed under some configurations
+* Fixed : Revision Preview of Current Revision had an extra trailing bullet after Edit link
+* Fixed : Unnecessary database queries on Edit Tags screen
+* Change : Edit Revision - If revision submit / approve buttons are disabled, display explanatory tooltip
+* Change : Edit Revision - Don't disable submission buttons prior to post save if Divi plugin is active
+
+= 3.7.4 - 8 Jul 2025 =
+* Compat : WooCommerce - Edit links on Products screen (and other Woo post types) were hidden under some conditions
+* Compat : Various third party plugins - invalid data output on posts listing screen for custom post type
+
+= 3.7.3 - 7 Jul 2025 =
+* Compat : WooCommerce - Administrators and Editors did not have Edit links on Products screen
+* Compat : CMS Tree Page View - JSON output on Page Tree View screen
+
+= 3.7.2 - 3 Jul 2025 =
+* Compat : Better support for custom post types registered as non-public
+* Fixed : PHP Warnings on Edit Posts screen for Revisors and other roles which cannot edit published posts
+* Change : Revisions > Settings > Compare tab removed, options moved to other tabs
+* Change : wordpress-version-notices 2.1.4
+
+= 3.7.1 - 23 Jun 2025 =
+* Feature : Setting to control maximum Past Revisions per post
+* Feature : Setting to disable Archive by post type
+* Change : Improve styling of Features tab tool tips
 
 = 3.7.0 - 19 Jun 2025 =
 * Change : Rearranged Settings to highlight distinction between Past Revisions and New Revisions
