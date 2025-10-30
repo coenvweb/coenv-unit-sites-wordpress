@@ -5,7 +5,7 @@ Tags: clean, database, optimize, performance, postmeta
 Requires at least: 3.1.0
 Requires PHP: 5.0
 Tested up to: 6.8
-Stable tag: 3.1.6
+Stable tag: 3.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,10 @@ This section describes how to install the plugin. In general, there are 3 ways t
 8. Overview and settings page
 
 == Changelog ==
+
+= 3.1.7 - 22/10/2025 =
+- Fix: enhanced security by adding a missing nonce (thanks to Bao – BlueRock via Wordfence)
+- Announcement: stay tuned! A completely new version will be available by the end of November 2025, featuring a brand-new design and exciting new features. The PRO version has also been significantly improved with additional functionality.
 
 = 3.1.6 - 24/03/2025 =
 - Fix: names containing HTML were not displayed correctly.

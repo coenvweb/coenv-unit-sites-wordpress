@@ -152,15 +152,21 @@ jQuery(document).ready(function ($) {
         var selectedDate = new Date( selectedDateHTML );
         var currentDate = new Date();
 
-        RvyTimeSelection = selectedDate.getTime() - ((currentDate.getTimezoneOffset() * 60 - rvyObjEdit.timezoneOffset) * 1000);
+        RvyTimeSelection = selectedDate.getTime();
 
         if (RvyTimeSelection - currentDate.getTime() > 1000) {
             var approveCaption = rvyObjEdit['scheduleCaption'];
+
+            if ('future' == rvyObjEdit.currentStatus) {
+                approveCaption = rvyObjEdit['futureActionCaption'];
+            } else {
+                approveCaption = rvyObjEdit['scheduleCaption'];
+            }
         } else {
             var approveCaption = rvyObjEdit['approveCaption'];
         }
 
-        if (!$('div.editor-post-schedule__panel-dropdown:visible').length) {
+        if ($('div.edit-post-post-schedule').length && !$('div.editor-post-schedule__panel-dropdown:visible').length) {
             $('.rvy-creation-ui').remove();
         }
 
@@ -241,27 +247,28 @@ jQuery(document).ready(function ($) {
                     rvyUI
                 );
             } else {
-                var rvyUI = '<div class="components-panel__row rvy-creation-ui edit-post-revision-status">'
-                + labelOpen + rvyObjEdit.statusLabel + labelClose;
+            var rvyUI = '<div class="components-panel__row rvy-creation-ui edit-post-revision-status">'
+            + labelOpen + rvyObjEdit.statusLabel + labelClose;
 
-                if (statusWrapperClass) {
-                    rvyUI += '<div class="' + statusWrapperClass + '">';
-                }
+            if (statusWrapperClass) {
+                rvyUI += '<div class="' + statusWrapperClass + '">';
+            }
 
-                rvyUI += '<div class="components-dropdown rvy-current-status">'
-                + currentStatusCaption
-                + '</div>';
+            rvyUI += '<div class="components-dropdown rvy-current-status">'
+            + currentStatusCaption
+            + '</div>';
 
-                if (statusWrapperClass) {
-                    rvyUI += '</div>';
-                }
-
+            if (statusWrapperClass) {
                 rvyUI += '</div>';
+            }
+
+            rvyUI += '</div>';
 
                 $(refSelector).before(
                     rvyUI
                 );
             }
+
 			
             if (rvyObjEdit[rvyObjEdit.currentStatus + 'ActionURL']) {
                 var url = rvyObjEdit[rvyObjEdit.currentStatus + 'ActionURL'];
@@ -340,7 +347,9 @@ jQuery(document).ready(function ($) {
 
         $('button.editor-post-trash').parent().css('text-align', 'right');
 	}
+
     var RvyUIInterval = setInterval(RvySubmissionUI, 100);
+
     setInterval(function () {
         if (rvyObjEdit.deleteCaption && $('button.editor-post-trash').length && ($('button.editor-post-trash').html() != rvyObjEdit.deleteCaption)) {
             $('button.editor-post-trash').html(rvyObjEdit.deleteCaption).closest('div').show();
@@ -374,25 +383,59 @@ jQuery(document).ready(function ($) {
         );
 	}
 
-    if (rvyObjEdit.disableSubmitUntilSave) {
-        $(document).on('click', 'div.postbox-container,div.acf-postbox,.editor-post-schedule__dialog-toggle', function() {
-            rvyCreationDisabled = true;
-            $('button.revision-approve, button.revision-schedule').attr('disabled', 'disabled');
-            $('div.rvy-save-revision-tip').show();
-            $('a.revision-approve').attr('title', rvyObjEdit.actionDisabledTitle);
-            $('a.revision-schedule').attr('title', rvyObjEdit.scheduleDisabledTitle);
-        });
+    rvyObjEdit.creationDisabled = false;
 
-        var intSaveWatch = setInterval(() => {
-            if (wp.data.select('core/editor').isSavingPost()) {
-                rvyCreationDisabled = false;
+    function rvyDisableSubmitApprove() {
+        if (rvyObjEdit.creationDisabled) {
+            return;
+        }
+
+        rvyObjEdit.creationDisabled = true;
+                    
+        $('a.revision-approve').attr('title', rvyObjEdit.actionDisabledTitle);
+        $('a.revision-schedule').attr('title', rvyObjEdit.scheduleDisabledTitle);
+        $('button.revision-approve, button.revision-schedule').prop('disabled', 'disabled');
+        $('a.revision-approve, a.revision-schedule').css('pointer-events', 'none');
+        $('div.rvy-save-revision-tip').show();
+
+        $('div.editor-sidebar__panel-tabs div button').on('click', function() {
+            setInterval(
+                function() {
+                    if (rvyObjEdit.creationDisabled) {
+                        $('button.revision-approve, button.revision-schedule').prop('disabled', 'disabled');
+                        $('a.revision-approve, a.revision-schedule').css('pointer-events', 'none');
+                        $('div.rvy-save-revision-tip').show();
+                    }
+                },
+                500
+            );
+        });
+        
+        intSaveWatch = setInterval(() => {
+            if (!$('button.editor-post-save-draft:visible').length || wp.data.select('core/editor').isSavingPost()) {
+                rvyObjEdit.creationDisabled = false;
                 $('button.revision-approve').prop('disabled', false);
                 $('button.revision-schedule').prop('disabled', false);
+                $('a.revision-approve, a.revision-schedule').css('pointer-events', 'auto');
                 $('div.rvy-save-revision-tip').hide();
                 $('a.revision-approve').attr('title', rvyObjEdit.actionTitle);
                 $('a.revision-schedule').attr('title', rvyObjEdit.scheduleTitle);
+
+                clearInterval(intSaveWatch);
             }
-        }, 5000);
+        }, 500);
+    }
+
+    if (rvyObjEdit.disableSubmitUntilSave) {
+        var intSaveWatch;
+        
+        setTimeout(
+            function() {
+                $(document).on('click', 'div.postbox-container,button.components-button:not(.revision-approve):not(.revision-schedule),div.acf-postbox,.editor-post-schedule__dialog-toggle', function() {
+                    rvyDisableSubmitApprove();
+                });
+            }, 200
+        );
     }
 
 	var rvyRedirectURL = '';
@@ -456,7 +499,7 @@ jQuery(document).ready(function ($) {
             if ((typeof PPCustomStatuses != 'undefined') && (typeof PPCustomStatuses.statusRestProperty != 'undefined')) {
                 var ret = new Object();
                 ret[PPCustomStatuses.statusRestProperty] = 'pending-revision';
-                dispatch('core/editor').editPost(ret);
+                wp.data.dispatch('core/editor').editPost(ret);
             }
         }
 		

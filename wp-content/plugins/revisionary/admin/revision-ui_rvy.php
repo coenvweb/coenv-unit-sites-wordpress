@@ -106,14 +106,19 @@ function rvy_post_revision_title( $revision, $link = true, $date_field = 'post_d
 		if ( $post->post_date != $revision->post_date ) {
 			$datef = _x( 'j F, Y, g:i a', 'revision schedule date format', 'revisionary' );
 			$revision_date = agp_date_i18n( $datef, strtotime( $revision->post_date ) );
-		
-			if ( 'pending-revision' == $revision->post_status ) {
-				$currentf  = __( '%1$s <span>(Requested publication: %2$s)</span>', 'revisionary' );
-			} else {
-				$currentf  = __( '%1$s <span>(Publish date: %2$s)</span>', 'revisionary' );
-			}
+			
+			if (strtotime($revision->post_date) > agp_time_gmt()) {
+				if ('future-revision' == $revision->post_status) {
+					$currentf  = __( '%1$s <span>(Publish date: %2$s)</span>', 'revisionary' );
+				} else {
+					$currentf  = __( '%1$s <span>(Requested publication: %2$s)</span>', 'revisionary' );
+				}
 
-			$date = sprintf( $currentf, $date, $revision_date );
+				$date = sprintf( $currentf, $date, $revision_date );
+			} else {
+				$currentf  = __('%1$s');
+				$date = sprintf( $currentf, $date );
+			}
 		}
 	}
 	
@@ -376,7 +381,7 @@ esc_html_e( 'Modified Date', 'revisionary' );
 ?></th>
 	<th scope="col"></th>
 	<th scope="col"><?php echo esc_html(__awp( 'Author' )); ?></th>
-	<th scope="col" class="action-links"><?php echo esc_html_e( 'Actions' ); ?></th>
+	<th scope="col" class="action-links"><?php esc_html_e( 'Actions' ); ?></th>
 	<th scope="col"  style='text-align:right'><input id='rvy-rev-checkall' type='checkbox' name='rvy-rev-checkall' value='' /></th>
 </tr>
 </thead>
@@ -397,7 +402,7 @@ echo $rows; 														// phpcs:ignore WordPress.Security.EscapeOutput.Output
 <option value="" selected="selected"><?php esc_html_e('Bulk Actions'); ?></option>
 <option value="bulk-delete"><?php esc_html_e('Delete'); ?></option>
 </select>
-<input type="submit" value="<?php echo esc_attr('Apply'); ?>" name="rvy-action" id="rvy-action" class="button-secondary action" />
+<input type="submit" value="<?php echo esc_attr__('Apply'); ?>" name="rvy-action" id="rvy-action" class="button-secondary action" />
 </div>
 <?php endif; ?>
 

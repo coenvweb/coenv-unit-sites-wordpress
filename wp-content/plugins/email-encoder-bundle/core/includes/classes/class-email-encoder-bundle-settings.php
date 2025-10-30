@@ -272,7 +272,9 @@ class Email_Encoder_Settings{
 		);
 
 		//Load data
-		$this->settings        			= $this->load_settings();
+		// $this->settings        			= $this->load_settings();
+        add_action( 'admin_init', [ $this, 'load_settings' ] );
+
 		$this->version        			= $this->load_version();
 		$this->email_image_secret       = $this->load_email_image_secret();
 	}
@@ -290,7 +292,7 @@ class Email_Encoder_Settings{
 	  *
 	  * @return array - An array with all available settings and filled values
 	  */
-	private function load_settings(){
+	public function load_settings(){
 		$fields = array(
 
 			'protect' => array(
@@ -299,7 +301,7 @@ class Email_Encoder_Settings{
 				'type'        => 'multi-input',
 				'input-type'  => 'radio',
 				'title'       => __( 'Protect emails', 'email-encoder-bundle' ),
-				'inputs' 	  => array( 
+				'inputs' 	  => array(
 					1 => array(
 						'label' => __( 'Full-page scan', 'email-encoder-bundle' ),
 						'description' => __('This will check the whole page against any mails and secures them.', 'email-encoder-bundle' )
@@ -323,7 +325,7 @@ class Email_Encoder_Settings{
 				'type'        => 'multi-input',
 				'input-type'  => 'radio',
 				'title'       => __( 'Protect emails using', 'email-encoder-bundle' ),
-				'inputs' 	  => array( 
+				'inputs' 	  => array(
 					'with_javascript' => array(
 						'label' => __( 'automatically the best method (including javascript)', 'email-encoder-bundle' )
 					),
@@ -600,84 +602,85 @@ class Email_Encoder_Settings{
 		);
 		$values = get_option( $this->settings_key );
 
-		if( empty( $values ) && ! is_array( $values ) ){
+		if ( empty( $values ) && ! is_array( $values ) ){
 			update_option( $this->settings_key, $default_values );
 			$values = $default_values;
 		}
-		
+
 		//Bakwards compatibility
-		if( ! isset( $values['protect_using'] ) ){
+		if ( ! isset( $values['protect_using'] ) ){
 			$values['protect_using'] = 'with_javascript';
 			$values['encoder_form_frontend'] = 1;
 		}
 
 		//In case the mailto functiinality was deactivated, we will set it do "Do nothing" as well.
-		if( ! isset( $values['protect'] ) ){
+		if ( ! isset( $values['protect'] ) ){
 			$values['protect'] = 1;
 		}
 		///Backwards compatibility
 
 		//Value corrections
-		if( ! isset( $values['image_color'] ) ){
+		if ( ! isset( $values['image_color'] ) ){
 			$values['image_color'] = $default_values['image_color'];
 		}
 		$image_color = explode( ',', $values['image_color'] );
-		if( count( $image_color ) != 3 ){
+		if ( count( $image_color ) != 3 ){
 			$values['image_color'] = $default_values['image_color'];
 		}
 		foreach( explode( ',', $values['image_color'] ) as $image_color_key => $image_color_single ){
-			if( ! is_numeric( trim( $image_color_single ) ) ){
+			if ( ! is_numeric( trim( $image_color_single ) ) ){
 				$values['image_color'] = $default_values['image_color'];
 			}
 		}
 
-		if( ! isset( $values['image_background_color'] ) ){
+		if ( ! isset( $values['image_background_color'] ) ){
 			$values['image_background_color'] = $default_values['image_background_color'];
 		}
 		$image_background_color = explode( ',', $values['image_background_color'] );
-		if( count( $image_background_color ) != 3 ){
+		if ( count( $image_background_color ) != 3 ){
 			$values['image_background_color'] = $default_values['image_background_color'];
 		}
 		foreach( explode( ',', $values['image_background_color'] ) as $image_background_color_key => $image_background_color_single ){
-			if( ! is_numeric( trim( $image_background_color_single ) ) ){
+			if ( ! is_numeric( trim( $image_background_color_single ) ) ){
 				$values['image_background_color'] = $default_values['image_background_color'];
 			}
 		}
 
-		if( ! isset( $values['image_text_opacity'] ) || ! is_numeric( $values['image_text_opacity'] ) ){
+		if ( ! isset( $values['image_text_opacity'] ) || ! is_numeric( $values['image_text_opacity'] ) ){
 			$values['image_text_opacity'] = $default_values['image_text_opacity'];
 		}
-		if( ! isset( $values['image_background_opacity'] ) || ! is_numeric( $values['image_background_opacity'] ) ){
+		if ( ! isset( $values['image_background_opacity'] ) || ! is_numeric( $values['image_background_opacity'] ) ){
 			$values['image_background_opacity'] = $default_values['image_background_opacity'];
 		}
-		if( ! isset( $values['image_font_size'] ) || ! is_numeric( $values['image_font_size'] ) ){
+		if ( ! isset( $values['image_font_size'] ) || ! is_numeric( $values['image_font_size'] ) ){
 			$values['image_font_size'] = $default_values['image_font_size'];
 		}
 		///Value corrections
 
 		foreach( $fields as $key => $field ){
-			if( $field['type'] === 'multi-input' ){
+			if ( $field['type'] === 'multi-input' ){
 				foreach( $field['inputs'] as $smi_key => $smi_data ){
 
-					if( $field['input-type'] === 'radio' ){
-						if( isset( $values[ $key ] ) && (string) $values[ $key ] === (string) $smi_key ){
+					if ( $field['input-type'] === 'radio' ){
+						if ( isset( $values[ $key ] ) && (string) $values[ $key ] === (string) $smi_key ){
 							$fields[ $key ]['value'] = $values[ $key ];
 						}
 					} else {
-						if( isset( $values[ $smi_key ] ) ){
+						if ( isset( $values[ $smi_key ] ) ){
 							$fields[ $key ]['inputs'][ $smi_key ]['value'] = $values[ $smi_key ];
 						}
 					}
-					
+
 				}
 			} else {
-				if( isset( $values[ $key ] ) ){
+				if ( isset( $values[ $key ] ) ){
 					$fields[ $key ]['value'] = $values[ $key ];
 				}
 			}
 		}
 
-		return apply_filters( 'eeb/settings/fields', $fields );
+		$this->settings = apply_filters( 'eeb/settings/fields', $fields );
+        return $this->settings;
 	}
 
 	/**
@@ -692,13 +695,13 @@ class Email_Encoder_Settings{
 
 		$current_version = get_option( $this->get_version_key() );
 
-		if( empty( $current_version ) ){
+		if ( empty( $current_version ) ){
 			$current_version = EEB_VERSION;
 			update_option( $this->get_version_key(), $current_version );
 
 			add_action( 'init', array( $this, 'first_version_init' ), $this->get_hook_priorities( 'first_version_init' ) );
 		} else {
-			if( $current_version !== EEB_VERSION ){
+			if ( $current_version !== EEB_VERSION ){
 				$this->previous_version = $current_version;
 				$current_version = EEB_VERSION;
 				update_option( $this->get_version_key(), $current_version );
@@ -712,13 +715,13 @@ class Email_Encoder_Settings{
 
 	 public function load_email_image_secret(){
 
-		if( ! (bool) $this->get_setting( 'convert_plain_to_image', true, 'filter_body' ) ){
+		if ( ! (bool) $this->get_setting( 'convert_plain_to_image', true, 'filter_body' ) ){
 			return false;
 		}
 
 		$image_descret = get_option( $this->get_image_secret_key() );
 
-		if( ! empty( $image_descret ) ){
+		if ( ! empty( $image_descret ) ){
 			return $image_descret;
 		}
 
@@ -901,10 +904,10 @@ class Email_Encoder_Settings{
 
 		return apply_filters( 'eeb/settings/get_email_regex', $return, $include );
 	}
-	
+
 	/**
 	 * Get Woocommerce variation attribute regex
-	 * 
+	 *
      * @param boolean $include
      * @return string
      */
@@ -912,8 +915,8 @@ class Email_Encoder_Settings{
 
 		$return = $this->soft_attribute_regex;
 
-		if( $single !== null ){
-			if( isset( $this->soft_attribute_regex[ $single ] ) ){
+		if ( $single !== null ){
+			if ( isset( $this->soft_attribute_regex[ $single ] ) ){
 				$return = $this->soft_attribute_regex[ $single ];
 			} else {
 				$return = false;
@@ -925,7 +928,7 @@ class Email_Encoder_Settings{
 
 	/**
      * Get hook priorities
-	 * 
+	 *
      * @param boolean $single - wether you want to return only a single hook priority or not
      * @return mixed - An array or string of hook priority(-ies)
      */
@@ -933,9 +936,9 @@ class Email_Encoder_Settings{
 
 		$return = $this->hook_priorities;
 		$default = false;
-		
-		if( $single ){
-			if( isset( $this->hook_priorities[ $single ] ) ){
+
+		if ( $single ){
+			if ( isset( $this->hook_priorities[ $single ] ) ){
 				$return = $this->hook_priorities[ $single ];
 			} else {
 				$return = 10;
@@ -947,7 +950,7 @@ class Email_Encoder_Settings{
     }
 
 	/**
-	  * Get a collection of safe HTML attributes 
+	  * Get a collection of safe HTML attributes
 	  *
 	  * @return array
 	  */
@@ -999,40 +1002,40 @@ class Email_Encoder_Settings{
 	public function get_setting( $slug = '', $single = false, $group = '' ){
 		$return = $this->settings;
 
-		if( empty( $slug ) ){
+		if ( empty( $slug ) ){
 			return $return;
 		}
 
-		if( isset( $this->settings[ $slug ] ) || ( ! empty( $group ) && isset( $this->settings[ $group ] ) ) ){
-			if( $single ){
+		if ( isset( $this->settings[ $slug ] ) || ( ! empty( $group ) && isset( $this->settings[ $group ] ) ) ){
+			if ( $single ){
 				$return = false; // Default false
 
 				//Set default to the main valie if available given with radio buttons)
-				if( isset( $this->settings[ $slug ]['value'] ) ){
+				if ( isset( $this->settings[ $slug ]['value'] ) ){
 					$return = $this->settings[ $slug ]['value'];
 				}
 
-				if( 
+				if (
 					! empty( $group )
 					&& isset( $this->settings[ $group ]['type'] )
 					&& $this->settings[ $group ]['type'] === 'multi-input'
 					)
 				{
-					if( isset( $this->settings[ $group ]['inputs'][ $slug ] ) && isset( $this->settings[ $group ]['inputs'][ $slug ]['value'] ) ){
+					if ( isset( $this->settings[ $group ]['inputs'][ $slug ] ) && isset( $this->settings[ $group ]['inputs'][ $slug ]['value'] ) ){
 						$return = $this->settings[ $group ]['inputs'][ $slug ]['value'];
 					}
 				}
-				
+
 			} else {
 
-				if( ! empty( $group ) && isset( $this->settings[ $group ] ) ){
+				if ( ! empty( $group ) && isset( $this->settings[ $group ] ) ){
 					$return = $this->settings[ $group ];
 				} else {
 					$return = $this->settings[ $slug ];
 				}
-				
+
 			}
-			
+
 		}
 
 		return $return;
