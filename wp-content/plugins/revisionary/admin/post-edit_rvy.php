@@ -172,7 +172,9 @@ class RvyPostEdit {
     function actPostSubmitboxActions($post) {
         global $revisionary;
 
-        if ((rvy_in_revision_workflow($post) && empty($revisionary->enabled_post_types[$post->post_type]))
+        if (
+        !empty($_REQUEST['rvy_new'])
+        || (rvy_in_revision_workflow($post) && empty($revisionary->enabled_post_types[$post->post_type]))
         || (!rvy_in_revision_workflow($post) && empty($revisionary->enabled_post_types_archive[$post->post_type]))
         ) {
             return;
@@ -202,7 +204,7 @@ class RvyPostEdit {
             return;
         }
 
-        if (!rvy_in_revision_workflow($post->ID)) {
+        if (!empty($_REQUEST['rvy_new']) || !rvy_in_revision_workflow($post->ID)) {
             return;
         }
 
@@ -300,11 +302,15 @@ class RvyPostEdit {
         global $post;
 
         if (defined('PUBLISHPRESS_MULTIPLE_AUTHORS_VERSION')) {
-            return [];
+            return;
         }
 
         if (!$type_obj = get_post_type_object($post->post_type)) {
-            return [];
+            return;
+        }
+
+        if (!rvy_get_option('allow_post_author_revision')) {
+            return;
         }
 
         $published_post_id = rvy_post_id($post->ID);

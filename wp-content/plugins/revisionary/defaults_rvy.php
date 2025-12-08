@@ -42,6 +42,7 @@ function rvy_default_options_sitewide() {
 		'admin_revisions_to_own_posts' => true,
 		'require_edit_others_drafts' => true,
 		'diff_display_strip_tags' => false,
+		'compare_revisions_hide_copy_buttons' => true,
 		'scheduled_revision_update_post_date' => true,
 		'scheduled_revision_update_modified_date' => true,
 		'pending_revision_update_post_date' => true,
@@ -72,6 +73,7 @@ function rvy_default_options_sitewide() {
 		'apply_post_exceptions' => true,
 		'legacy_notifications' => true,
 		'approve_button_verbose' => true,
+		'allow_post_author_revision' => true,
 		'create_revision_direct_link' => true,
 		'revision_edit_disable_rank_math' => true,
 	);
@@ -115,6 +117,7 @@ function rvy_default_options() {
 		'admin_revisions_to_own_posts' => 1,
 		'require_edit_others_drafts' => 1,
 		'diff_display_strip_tags' => 0,
+		'compare_revisions_hide_copy_buttons' => 0,
 		'scheduled_revision_update_post_date' => 1,
 		'pending_revision_update_post_date' => 0,
 		'scheduled_revision_update_modified_date' => 1,
@@ -145,6 +148,7 @@ function rvy_default_options() {
 		'apply_post_exceptions' => 0,
 		'legacy_notifications' => 0,
 		'approve_button_verbose' => 0,
+		'allow_post_author_revision' => 1,
 		'create_revision_direct_link' => 0,
 		'revision_edit_disable_rank_math' => 1,
 	);

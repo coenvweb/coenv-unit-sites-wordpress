@@ -479,6 +479,17 @@ class NS_Cloner_Process_Manager {
 		$source_id      = ns_cloner_request()->get( 'source_id' );
 		$target_id      = ns_cloner_request()->get( 'target_id' );
 
+		// Save the remote upload directory URL when selecting the 'do not copy media' option.
+		if ( ! ns_cloner_request()->get( 'do_copy_files' ) ) {
+			$source_dir = ns_cloner_request()->get( 'source_url' ) . '/' . ns_cloner_request()->get( 'source_upload_dir_relative' );
+			$source_dir = str_replace( array( '.', '/' ), array( '-!dot!-', '-!slash!-' ), $source_dir );
+			if ( is_multisite() ) {
+				update_blog_option( $source_id, 'ns-media-source-site-url', $source_dir );
+			} else {
+				update_option( 'ns-media-source-site-url', $source_dir );
+			}
+		}
+
 		// Makes sure that the target prefix is not somehow the same as the source.
 		// Shouldn't be possible, but is irreversibly destructive if it does, so make sure.
 		if ( $source_prefix === $target_prefix ) {

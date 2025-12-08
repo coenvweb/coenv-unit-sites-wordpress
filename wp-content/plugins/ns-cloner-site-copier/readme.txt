@@ -103,6 +103,10 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 
 == Changelog ==
 
+= 4.4.9.1 - 2025.11.26 =
+* Fix translation notices
+* Other code fixes
+
 = 4.4.9 - 2025.06.10 =
 * Fix: Custom code for cloning from external plugins.
 * Code improvements

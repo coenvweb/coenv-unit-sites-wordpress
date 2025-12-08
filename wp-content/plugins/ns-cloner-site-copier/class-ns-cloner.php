@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.4.9';
+	public $version = '4.4.9.1';
 
 	/**
 	 * Menu Slug
@@ -174,7 +174,7 @@ final class NS_Cloner {
 		// Install custom tables after cloner init.
 		add_action( 'ns_cloner_init', array( $this, 'install_tables' ) );
 
-		add_action( 'after_setup_theme', array( $this, 'load_text_domain' ) );
+		add_action( 'init', array( $this, 'load_text_domain' ) );
 
 		// Only load rest of plugin if it could be needed (not on frontend).
 		$should_load = is_admin() || ( wp_doing_ajax() && is_user_logged_in() ) || ( defined( 'WP_CLI' ) && WP_CLI ) || ns_is_signup_allowed() || wp_doing_cron();
