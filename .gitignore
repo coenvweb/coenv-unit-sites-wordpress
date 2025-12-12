@@ -20,7 +20,7 @@ cig-static/*
 # Plugin junk
 wp-content/plugins/ns-cloner-site-copier/logs/ns-cloner-summary.log
 wp-content/plugins/wp-pipes/cache
-wp-content/plugins/wordfence
+#wp-content/plugins/wordfence
 wp-content/wflogs/
 
 # wordpress specific
