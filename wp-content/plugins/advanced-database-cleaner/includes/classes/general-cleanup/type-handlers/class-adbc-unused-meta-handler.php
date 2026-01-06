@@ -43,7 +43,8 @@ abstract class ADBC_Cleanup_Unused_Meta_Handler_Base extends ADBC_Abstract_Clean
 		];
 	}
 	protected function delete_helper() {
-		return fn( $mid ) => delete_metadata_by_mid( $this->meta_type(), $mid );
+		return function ($mid) {
+			return delete_metadata_by_mid( $this->meta_type(), $mid ); };
 	}
 	protected function extra_joins() {
 		return $this->parent_join();
@@ -284,7 +285,8 @@ class ADBC_Cleanup_Oembed_Cache_Meta_Handler extends ADBC_Abstract_Cleanup_Handl
 		];
 	}
 	protected function delete_helper() {
-		return fn( $mid ) => delete_metadata_by_mid( 'post', $mid );
+		return function ($mid) {
+			return delete_metadata_by_mid( 'post', $mid ); };
 	}
 
 }

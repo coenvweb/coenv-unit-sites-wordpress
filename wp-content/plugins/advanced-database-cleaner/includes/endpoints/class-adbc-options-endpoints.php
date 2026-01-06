@@ -156,6 +156,46 @@ class ADBC_Options_Endpoints {
 		}
 	}
 
+	/**
+	 * Count the size of all autoloaded options in the wp_options table.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_big_options() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Options::count_big_options() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
+	/**
+	 * Count the total number of options that are not scanned.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_total_not_scanned_options() {
+
+		try {
+			return ADBC_Rest::success( "", ADBC_Options::count_total_not_scanned_options() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
+	/**
+	 * Count the health of the autoloaded options.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function get_autoload_health() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Options::count_autoload_size_using_sql() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
 }
 
 

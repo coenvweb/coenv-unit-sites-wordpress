@@ -25,11 +25,22 @@ abstract class ADBC_Cleanup_Duplicated_Meta_Handler_Base extends ADBC_Abstract_C
 
 		return "
 			EXISTS (
-				SELECT 1 FROM {$table} dup
-				WHERE  dup.{$parent}    = main.{$parent}
-					AND  dup.meta_key     = main.meta_key
-					AND  CRC32(dup.meta_value)   = CRC32(main.meta_value)
-					AND  dup.{$pk}       < main.{$pk}
+				SELECT 1
+				FROM (
+					SELECT
+						{$parent}                 AS parent_id,
+						meta_key,
+						CRC32(meta_value)        AS vhash,
+						MIN({$pk})               AS min_pk,
+						COUNT(*)                 AS cnt
+					FROM {$table}
+					GROUP BY {$parent}, meta_key, CRC32(meta_value)
+					HAVING cnt > 1
+				) AS dupg
+				WHERE dupg.parent_id = main.{$parent}
+					AND dupg.meta_key  = main.meta_key
+					AND dupg.vhash     = CRC32(main.meta_value)
+					AND main.{$pk}     > dupg.min_pk
 	        )";
 
 	}
@@ -53,7 +64,9 @@ abstract class ADBC_Cleanup_Duplicated_Meta_Handler_Base extends ADBC_Abstract_C
 		];
 	}
 	protected function delete_helper() {
-		return fn( $mid ) => (bool) delete_metadata_by_mid( $this->meta_type(), $mid );
+		return function ($mid) {
+			return (bool) delete_metadata_by_mid( $this->meta_type(), $mid );
+		};
 	}
 	protected function date_column() {
 		return null; // not used

@@ -212,4 +212,56 @@ class ADBC_Tables_Endpoints {
 		}
 	}
 
+	/**
+	 * Count the total number of tables that are not scanned.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_total_not_scanned_tables() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Tables::count_total_not_scanned_tables() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
+	/**
+	 * Count the total number of tables that are not repaired.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_total_tables_to_repair() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Tables::count_total_tables_to_repair() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
+	/**
+	 * Count the total number of tables that are not optimized.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_total_tables_to_optimize() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Tables::count_total_tables_to_optimize() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
+	/**
+	 * Count the total number of tables that have invalid prefix.
+	 *
+	 * @return WP_REST_Response The response.
+	 */
+	public static function count_total_tables_with_invalid_prefix() {
+		try {
+			return ADBC_Rest::success( "", ADBC_Tables::get_total_tables_with_invalid_prefix_count() );
+		} catch (Throwable $e) {
+			return ADBC_Rest::error_for_uncaught_exception( __METHOD__, $e );
+		}
+	}
+
 }
