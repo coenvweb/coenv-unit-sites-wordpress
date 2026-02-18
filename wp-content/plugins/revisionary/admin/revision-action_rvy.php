@@ -99,7 +99,7 @@ function rvy_revision_submit($revision_id = 0) {
 			break;
 		}
 
-		if (!current_user_can('administrator') && !current_user_can('set_revision_pending-revision', $revision_id)) {
+		if (!is_content_administrator_rvy() && !current_user_can('set_revision_pending-revision', $revision_id)) {
 			break;
 		}
 
@@ -206,7 +206,7 @@ function rvy_revision_decline($revision_id = 0) {
 			break;
 		}
 
-		if (!current_user_can('administrator') && !current_user_can('set_revision_pending-revision', $revision_id)) {
+		if (!is_content_administrator_rvy() && !current_user_can('set_revision_pending-revision', $revision_id)) {
 			break;
 		}
 
@@ -332,7 +332,7 @@ function rvy_revision_approve($revision_id = 0, $args = []) {
 			break;
 		}
 
-		if (!current_user_can('edit_post', $post->ID)) {
+		if (!current_user_can('approve_revision', $revision_id) && !current_user_can('edit_post', $post->ID)) {
 			if ($batch_process) {
 				break;
 			} else {

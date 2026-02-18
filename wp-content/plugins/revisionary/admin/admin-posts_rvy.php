@@ -111,7 +111,9 @@ class RevisionaryAdminPosts {
 
 	// Prevent PHP warnings for Revisors who can't edit published posts (but should still see the post listed with New Revision link)
 	public function actUserHasCap($wp_blogcaps, $reqd_caps, $args) {
-		if (!defined('REVISIONARY_NO_REVISOR_POSTS_CAPS_WORKAROUND') && !$this->skip_has_cap_filtering && !empty($args[2]) && array_diff($reqd_caps, array_keys(array_filter($wp_blogcaps)))) {
+		global $revisionary;
+
+		if (!defined('REVISIONARY_NO_REVISOR_POSTS_CAPS_WORKAROUND') && empty($revisionary->skip_revisor_post_caps_workaround) && !$this->skip_has_cap_filtering && !empty($args[2]) && array_diff($reqd_caps, array_keys(array_filter($wp_blogcaps)))) {
 			if (!empty($args[0]) && in_array($args[0], ['edit_post', 'edit_page'])) {
 				$this->filtering_edit_link[$args[2]] = true;
 				$wp_blogcaps = array_merge($wp_blogcaps, array_fill_keys($reqd_caps, true));
@@ -349,8 +351,9 @@ class RevisionaryAdminPosts {
         
         // todo: use 'wp_count_posts' filter instead?
 
-        if ((strpos($query, "ELECT post_status, COUNT( * ) AS num_posts ") || (strpos($query, "ELECT COUNT( 1 )") && $pos_from && (!$pos_where || ($pos_from < $pos_where)))) 
-        && preg_match("/FROM\s*{$posts}\s*WHERE post_type\s*=\s*'([^ ]+)'/", $query, $matches)
+		if ((preg_match("/ELECT post_status, COUNT\(\s*\*\s*\) AS num_posts/", $query) || (strpos($query, "ELECT COUNT( 1 )") 
+			&& $pos_from && (!$pos_where || ($pos_from < $pos_where))))                                                 
+	   		&& preg_match("/FROM\s+{$posts}\s+WHERE post_type\s*=\s*'([^ ]+)'/", $query, $matches) 
         ) {
             $_post_type = (!empty($matches[1])) ? $matches[1] : PWP::findPostType();
 

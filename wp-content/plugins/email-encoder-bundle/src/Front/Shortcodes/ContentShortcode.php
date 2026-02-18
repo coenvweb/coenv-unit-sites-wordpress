@@ -4,27 +4,34 @@ namespace OnlineOptimisation\EmailEncoderBundle\Front\Shortcodes;
 
 use OnlineOptimisation\EmailEncoderBundle\Traits\PluginHelper;
 
-class ContentShortcode {
-
+class ContentShortcode
+{
     use PluginHelper;
 
     protected string $tag = 'eeb_content';
     protected string $newTag = 'eeb_protect_content';
 
-    public function tag(): string {
+
+    public function tag(): string
+    {
         return $this->tag;
     }
 
 
-	public function handle( array $atts = [], ?string $content = null ): string {
-
+    /**
+     * @param array< string, string > $atts
+     * @param string $content
+     * @return string
+     */
+    public function handle( array $atts = [], string $content = '' ): string
+    {
         _doing_it_wrong(
             __METHOD__,
             sprintf( 'The [%s] shortcode is deprecated. Use [%s] instead.', $this->tag, $this->newTag ),
             '2.3.0'
         );
 
-        return ( new ProtectContentShortcode )->handle( $atts, $content );
-	}
+        return ( new ProtectContentShortcode() )->handle( $atts, $content );
+    }
 
 }

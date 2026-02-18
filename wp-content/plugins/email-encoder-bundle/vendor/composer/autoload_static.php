@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1
+class ComposerStaticInitc7f9db5d6e6cce05d281debaf3d18e1a
 {
     public static $prefixLengthsPsr4 = array (
         'O' =>
@@ -22,10 +22,10 @@ class ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Legacy\\EmailEncoderBundle\\Email_Encoder' => __DIR__ . '/../..' . '/core/class-email-encoder-bundle.php',
         'Legacy\\EmailEncoderBundle\\Email_Encoder_Ajax' => __DIR__ . '/../..' . '/core/includes/classes/class-email-encoder-bundle-ajax.php',
         'Legacy\\EmailEncoderBundle\\Email_Encoder_Helpers' => __DIR__ . '/../..' . '/core/includes/classes/class-email-encoder-bundle-helpers.php',
         'Legacy\\EmailEncoderBundle\\Email_Encoder_Settings' => __DIR__ . '/../..' . '/core/includes/classes/class-email-encoder-bundle-settings.php',
-        'Legacy\\EmailEncoderBundle\\Email_Encoder_Validate' => __DIR__ . '/../..' . '/core/includes/classes/class-email-encoder-bundle-validate.php',
         'Legacy\\EmailEncoderBundle\\Integration\\AvadaBuilder' => __DIR__ . '/../..' . '/core/includes/integrations/classes/avada_builder.php',
         'Legacy\\EmailEncoderBundle\\Integration\\BricksBuilder' => __DIR__ . '/../..' . '/core/includes/integrations/classes/bricks_builder.php',
         'Legacy\\EmailEncoderBundle\\Integration\\DiviTheme' => __DIR__ . '/../..' . '/core/includes/integrations/classes/divi_theme.php',
@@ -35,14 +35,41 @@ class ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1
         'Legacy\\EmailEncoderBundle\\Integration\\Maintenance' => __DIR__ . '/../..' . '/core/includes/integrations/classes/maintenance.php',
         'Legacy\\EmailEncoderBundle\\Integration\\OxygenBuilder' => __DIR__ . '/../..' . '/core/includes/integrations/classes/oxygen_builder.php',
         'Legacy\\EmailEncoderBundle\\Integration\\Wpml' => __DIR__ . '/../..' . '/core/includes/integrations/classes/wpml.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\Admin' => __DIR__ . '/../..' . '/src/Admin/Admin.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminEnqueue' => __DIR__ . '/../..' . '/src/Admin/AdminEnqueue.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminHelp' => __DIR__ . '/../..' . '/src/Admin/AdminHelp.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMenu' => __DIR__ . '/../..' . '/src/Admin/AdminMenu.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMetaBox' => __DIR__ . '/../..' . '/src/Admin/AdminMetaBox.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\PluginActionLinks' => __DIR__ . '/../..' . '/src/Admin/PluginActionLinks.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\DisplayEmailImage' => __DIR__ . '/../..' . '/src/Front/DisplayEmailImage.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Front' => __DIR__ . '/../..' . '/src/Front/Front.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\FrontBuffering' => __DIR__ . '/../..' . '/src/Front/FrontBuffering.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\FrontCore' => __DIR__ . '/../..' . '/src/Front/FrontCore.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\FrontEnqueue' => __DIR__ . '/../..' . '/src/Front/FrontEnqueue.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\FrontTemplateTags' => __DIR__ . '/../..' . '/src/Front/FrontTemplateTags.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\ContentShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/ContentShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\EmailEncoderFormShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/EmailEncoderFormShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\EmailShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/EmailShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\MailtoShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/MailtoShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\ProtectContentShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/ProtectContentShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\ProtectEmailsShortcode' => __DIR__ . '/../..' . '/src/Front/Shortcodes/ProtectEmailsShortcode.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Front\\Shortcodes\\Shortcodes' => __DIR__ . '/../..' . '/src/Front/Shortcodes/Shortcodes.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Functions' => __DIR__ . '/../..' . '/src/Functions.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Integrations\\IntegrationInterface' => __DIR__ . '/../..' . '/src/Integrations/IntegrationInterface.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Tester' => __DIR__ . '/../..' . '/src/Tester.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Traits\\PluginHelper' => __DIR__ . '/../..' . '/src/Traits/PluginHelper.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Validate\\EncoderForm' => __DIR__ . '/../..' . '/src/Validate/EncoderForm.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Validate\\Encoding' => __DIR__ . '/../..' . '/src/Validate/Encoding.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Validate\\Filters' => __DIR__ . '/../..' . '/src/Validate/Filters.php',
+        'OnlineOptimisation\\EmailEncoderBundle\\Validate\\Validate' => __DIR__ . '/../..' . '/src/Validate/Validate.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb07f440863fb6a3a85ad8d3ec4ccf8a1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc7f9db5d6e6cce05d281debaf3d18e1a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc7f9db5d6e6cce05d281debaf3d18e1a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc7f9db5d6e6cce05d281debaf3d18e1a::$classMap;
 
         }, null, ClassLoader::class);
     }

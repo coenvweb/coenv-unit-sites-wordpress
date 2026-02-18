@@ -3,6 +3,7 @@
 namespace OnlineOptimisation\EmailEncoderBundle\Admin;
 
 use OnlineOptimisation\EmailEncoderBundle\Traits\PluginHelper;
+use WP_Screen;
 
 class AdminHelp
 {
@@ -13,14 +14,17 @@ class AdminHelp
     // }
 
 
-	public function add_help_tabs(): void {
+    public function add_help_tabs(): void
+    {
+        $screen = get_current_screen();
+        if ( $screen === null ) {
+            return;
+        }
 
-		$screen = get_current_screen();
-
-		$defaults = [
-			'content'   => '',
-			'callback'  => [ $this, 'load_help_tabs' ],
-		];
+        $defaults = [
+            'content'   => '',
+            'callback'  => [ $this, 'load_help_tabs' ],
+        ];
 
         $tabs = [
             [ 'id' => 'general',       'title' => 'General'       ],
@@ -34,19 +38,24 @@ class AdminHelp
                 'title'     => __( $tab['title'], 'email-encoder-bundle' ),
             ], $defaults ) );
         }
-	}
+    }
 
 
-	public function load_help_tabs( \WP_Screen $screen, array $args ): void {
-
-		if ( empty( $args['id'] ) ) {
+    /**
+     * @param WP_Screen $screen
+     * @param array< string, string > $args
+     * @return void
+     */
+    public function load_help_tabs( WP_Screen $screen, array $args ): void
+    {
+        if ( empty( $args['id'] ) ) {
             return;
         }
 
         $allowed_attr_html = $this->getSafeHtmlAttr();
 
-        include EEB_PLUGIN_DIR . 'templates/help-tabs/' . $args['id'] . '.php';
-	}
+        include \EEB_PLUGIN_DIR . 'templates/help-tabs/' . $args['id'] . '.php';
+    }
 
 
 }

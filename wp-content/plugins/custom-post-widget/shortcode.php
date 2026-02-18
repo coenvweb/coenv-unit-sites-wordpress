@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 // Add the ability to display the content block in a reqular post using a shortcode
 function custom_post_widget_shortcode ( $atts ) {
 	$params = shortcode_atts ( array (
@@ -28,7 +30,11 @@ function custom_post_widget_shortcode ( $atts ) {
 	if ( ! in_array( $title_tag, $allowed_tags ) ) {
 		$title_tag = 'h3'; // Default to 'h3' if the specified tag is not allowed
 	}
-	$markup = sanitize_text_field ( $params['markup'] );
+	$markup = strtolower( sanitize_text_field( $params['markup'] ) );
+	$allowed_markup_tags = array( 'div', 'section', 'article', 'aside', 'header', 'footer', 'main', 'span', 'p' );
+	if ( ! in_array( $markup, $allowed_markup_tags, true ) ) {
+		$markup = 'div';
+	}
 	$template = sanitize_text_field ( $params['template'] );
 
 	if ( $slug ) {

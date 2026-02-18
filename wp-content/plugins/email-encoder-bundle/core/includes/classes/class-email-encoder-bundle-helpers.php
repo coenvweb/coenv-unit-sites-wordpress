@@ -27,7 +27,7 @@ class Email_Encoder_Helpers {
 	/**
 	 * Creates a formatted admin notice
 	 *
-	 * @param $content - notice content
+	 * @param string|array< string > $content - notice content
 	 * @param string $type - Status of the specified notice
 	 * @param bool $is_dismissible - If the message should be dismissible
 	 * @return string - The formatted admin notice
@@ -82,18 +82,18 @@ class Email_Encoder_Helpers {
 		<?php
 		$res = ob_get_clean();
 
-		return $res;
+		return (string) $res;
 	}
 
 	/**
 	 * Formats a specific date to datetime
 	 *
-	 * @param $date
-	 * @return DateTime
+	 * @param non-empty-string $date
+	 * @return \DateTime
 	 */
 	public function get_datetime( $date ) {
-		$date_new = date( 'Y-m-d H:i:s', strtotime( $date ) );
-		$date_new_formatted = new DateTime( $date_new );
+		$date_new = date( 'Y-m-d H:i:s', (int) strtotime( $date ) );
+		$date_new_formatted = new \DateTime( $date_new );
 
 		return $date_new_formatted;
 	}
@@ -101,11 +101,11 @@ class Email_Encoder_Helpers {
 	/**
 	 * Builds an url out of the mai values
 	 *
-	 * @param $url - the default url to set the params to
-	 * @param $args - the available args
+	 * @param string $url - the default url to set the params to
+	 * @param array< string, string > $args - the available args
 	 * @return string - the url
 	 */
-	public function built_url( $url, $args ) {
+	public function built_url( string $url, array $args = [] ): string {
 		if( ! empty( $args ) ) {
 			$url .= '?' . http_build_query( $args );
 		}
@@ -116,26 +116,26 @@ class Email_Encoder_Helpers {
 	/**
 	 * Get Parameters from URL string
 	 *
-	 * @param $url - the url
-	 *
-	 * @return array - the parameters of the url
+	 * @param string $url - the url
+	 * @return array< mixed > - the parameters of the url
 	 */
 	public function get_parameters_from_url( $url ) {
 
 		$parts = parse_url( $url );
+        $url_parameter = [];
 
-		parse_str( $parts['query'], $url_parameter );
+        if ( ! empty( $parts['query'] ) ) {
+            parse_str( $parts['query'], $url_parameter );
+        }
 
-		return empty( $url_parameter ) ? array() : $url_parameter;
-
+		return empty( $url_parameter ) ? [] : $url_parameter;
 	}
 
 	/**
 	 * Builds an url out of the main values
 	 *
-	 * @param $url - the default url to set the params to
-	 * @param $args - the available args
-	 * @return string - the url
+	 * @param bool $with_args
+	 * @return string
 	 */
 	public function get_current_url( $with_args = true ) {
 
@@ -163,7 +163,7 @@ class Email_Encoder_Helpers {
 	/**
      * This is the opponent of JavaScripts decodeURIComponent()
      * @link http://stackoverflow.com/questions/1734250/what-is-the-equivalent-of-javascripts-encodeuricomponent-in-php
-     * @param string $str
+     * @param string $content
      * @return string
      */
     public function encode_uri_components( $content ) {
@@ -184,13 +184,14 @@ class Email_Encoder_Helpers {
 	 * Better attribute parsing for HTML strings
 	 *
 	 * @since 2.1.4
+     * @param string $text
 	 * @return mixed Array on success, empty string otherwise
 	 */
-	public function parse_html_attributes( $text ) {
+	public function parse_html_attributes( string $text ) {
 
 		$attributes = shortcode_parse_atts( $text );
 
-		if( is_array( $attributes ) ) {
+		// if( is_array( $attributes ) ) {
 			foreach( $attributes as $ak => $av ){
 
 				//Check if a given string contains an @ as this breaks attributes by default
@@ -199,13 +200,13 @@ class Email_Encoder_Helpers {
 					$validated_attribute = substr( $av, strlen( $ident ) );
 					$new_attr = shortcode_parse_atts( $validated_attribute );
 
-					if( is_array( $new_attr ) ){
+					// if( is_array( $new_attr ) ){
 						foreach( $new_attr as $nak => $nav ){
 
 							$index = array_search( $ak , array_keys( $attributes ) );
 
 							// Create a new array with the updated key and value.
-							$new_array = array();
+							$new_array = [];
 							$i = 0;
 							foreach( $attributes as $key => $value ) {
 								if ($i == $index) {
@@ -219,11 +220,11 @@ class Email_Encoder_Helpers {
 
 							$attributes = $new_array;
 						}
-					}
+					// }
 				}
 
 			}
-		}
+		// }
 
 		return apply_filters( 'eeb/helpers/parse_html_attributes', $attributes, $text );
 	}
@@ -242,7 +243,7 @@ class Email_Encoder_Helpers {
 		// Use a regular expression to match attributes and their values
 		preg_match_all('/(\w+)=("[^"]*"|\'[^\']*\')/', $extra_attrs, $matches, PREG_SET_ORDER);
 
-		$sanitized_attrs = array();
+		$sanitized_attrs = [];
 
 		foreach ( $matches as $match ) {
 
