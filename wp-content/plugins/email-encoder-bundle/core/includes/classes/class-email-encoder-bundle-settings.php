@@ -2,6 +2,8 @@
 
 namespace Legacy\EmailEncoderBundle;
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Email_Encoder_Settings {
 
     public const PROTECT_FULL_PAGE    = 1;
@@ -53,6 +55,9 @@ class Email_Encoder_Settings {
     /** @var array< string, array< string, mixed > > */
 	private array $settings = [];
 
+    /** @var array< string, mixed > */
+	private array $values = [];
+
 	private string $version;
 	private string $email_image_secret;
 
@@ -89,6 +94,7 @@ class Email_Encoder_Settings {
 		$this->page_title = EEB_NAME;
 		$this->safe_attr_html = require EEB_PLUGIN_DIR . '/config/SafeHtmlConfig.php';
 
+		add_action( 'init', [ $this, 'load_values' ], 1 );
 		add_action( 'init', [ $this, 'load_settings' ] );
 		add_action( 'init', [ $this, 'load_version' ] );
 		add_action( 'init', [ $this, 'load_email_image_secret' ] );
@@ -100,6 +106,16 @@ class Email_Encoder_Settings {
     public function get_saved(): array {
         return get_option( $this->settings_key, [] );
     }
+
+    /**
+     * @return array< string, mixed >
+     */
+    public function get_values(): array {
+        if ( $this->values === [] ) {
+            $this->load_values();
+        }
+        return $this->values;
+    }
 	/**
 	 * ######################
 	 * ###
@@ -108,6 +124,24 @@ class Email_Encoder_Settings {
 	 * ######################
 	 */
 
+	/**
+	 * Load setting values from the database without triggering translations.
+	 *
+	 * This runs early (init:1) so that get_setting() can return values
+	 * before load_settings() populates the full field definitions.
+	 * Prevents _load_textdomain_just_in_time warnings on WP 6.7+.
+	 *
+	 * @return void
+	 */
+	public function load_values(): void {
+		$saved_values = get_option( $this->settings_key, [] );
+		$this->values = array_replace_recursive( $this->default_values, $saved_values );
+
+		if ( $this->values != $saved_values ) {
+			update_option( $this->settings_key, $this->values );
+		}
+	}
+
 	 /**
 	  * Load the settings for our admin settings page
 	  *
@@ -115,17 +149,14 @@ class Email_Encoder_Settings {
 	  */
 	public function load_settings() {
 
+		if ( $this->values === [] ) {
+			$this->load_values();
+		}
+
 		$fields = require EEB_PLUGIN_DIR . '/config/SettingsConfig.php';
 		$fields = apply_filters( 'eeb/settings/pre_filter_fields', $fields );
 
-		$saved_values = get_option( $this->settings_key, [] );
-		$values = array_replace_recursive( $this->default_values, $saved_values );
-
-
-		if ( $values != $saved_values ) {
-			update_option( $this->settings_key, $values );
-			error_log( 'Updated option ' . $this->settings_key);
-		}
+		$values = $this->values;
 
 		foreach ( $fields as $key => $field ) {
 			if ( $field['type'] === 'multi-input' ) {
@@ -206,7 +237,7 @@ class Email_Encoder_Settings {
 		$key = '';
 
 		for ( $i = 0; $i < 265; $i++ ) {
-			$key .= chr( mt_rand( 33, 126 ) );
+			$key .= chr( wp_rand( 33, 126 ) );
 		}
 
 		update_option( $this->get_image_secret_key(), $key );
@@ -463,6 +494,7 @@ class Email_Encoder_Settings {
 	 * @return void
 	 */
 	public function reload_settings() {
+		$this->load_values();
 		$this->load_settings();
 	}
 
@@ -476,13 +508,21 @@ class Email_Encoder_Settings {
 	 */
 	public function get_setting( $slug = '', $single = false, $group = '' ) {
 
-        // temporary fix to resolve calls before class is properly booted
-        if ( $this->settings === [] ) {
-            error_log( 'EmailEncoderBundle: Method get_settings() is accessed too early!' );
-            $this->load_settings();
-        }
-        // end of fix
+		// When only the value is needed and full field definitions haven't loaded yet,
+		// return directly from the lightweight values array to avoid triggering
+		// translation loading (SettingsConfig.php) too early.
+		if ( $this->settings === [] && $single && $slug !== '' ) {
+			if ( $this->values === [] ) {
+				$this->load_values();
+			}
 
+			return $this->values[ $slug ] ?? false;
+		}
+
+		// Full field structure requested — ensure fields are loaded
+		if ( $this->settings === [] ) {
+			$this->load_settings();
+		}
 
 		$return = $this->settings;
 

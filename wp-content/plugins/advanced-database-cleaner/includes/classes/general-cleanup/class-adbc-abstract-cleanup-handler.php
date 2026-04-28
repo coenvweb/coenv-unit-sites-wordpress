@@ -967,14 +967,5 @@ abstract class ADBC_Abstract_Cleanup_Handler implements ADBC_Cleanup_Type_Handle
 		return $this->date_column() !== null;
 	}
 
-	/**
-	 * Returns the documentation URL for this handler.
-	 *
-	 * @return string The documentation URL for this handler.
-	 */
-	public function get_documentation_url() {
-		return $this->documentation_url();
-	}
-
 }
 

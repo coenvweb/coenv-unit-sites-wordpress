@@ -11,10 +11,12 @@ const translations = [
   __("Collapse sidebar", "advanced-database-cleaner"),
   __("Expand sidebar", "advanced-database-cleaner"),
   __("Free", "advanced-database-cleaner"),
+  __("Pro-lifetime", "advanced-database-cleaner"),
   __("Premium", "advanced-database-cleaner"),
   __("By", "advanced-database-cleaner"),
   __("Support", "advanced-database-cleaner"),
   __("Docs", "advanced-database-cleaner"),
+  __("Pro - lifetime", "advanced-database-cleaner"),
   __("Please activate your license key to receive plugin updates.", "advanced-database-cleaner"),
   __("Activate now", "advanced-database-cleaner"),
   __(
@@ -39,6 +41,7 @@ const translations = [
   __("User meta", "advanced-database-cleaner"),
   __("Transients", "advanced-database-cleaner"),
   __("Cron jobs", "advanced-database-cleaner"),
+  __("Post types", "advanced-database-cleaner"),
   __("Automation", "advanced-database-cleaner"),
   __("DB analytics", "advanced-database-cleaner"),
   __("Addons activity", "advanced-database-cleaner"),
@@ -51,6 +54,12 @@ const translations = [
   ),
   __("Once emptied, this action cannot be undone!", "advanced-database-cleaner"),
   __("Empty", "advanced-database-cleaner"),
+  __("Convert table to InnoDB?", "advanced-database-cleaner"),
+  __(
+    "Converting a table to InnoDB will alter its storage engine. Are you sure you want to proceed?",
+    "advanced-database-cleaner"
+  ),
+  __("Convert", "advanced-database-cleaner"),
   sprintf(
     /* translators: %d: number of items */
     _n("Delete %d item?", "Delete %d items?", variable, "advanced-database-cleaner"),
@@ -165,6 +174,10 @@ const translations = [
   __("Plugins cron jobs", "advanced-database-cleaner"),
   __("Themes cron jobs", "advanced-database-cleaner"),
   __("WP cron jobs", "advanced-database-cleaner"),
+  __("All post types", "advanced-database-cleaner"),
+  __("Plugins post types", "advanced-database-cleaner"),
+  __("Themes post types", "advanced-database-cleaner"),
+  __("WP post types", "advanced-database-cleaner"),
   __("All items", "advanced-database-cleaner"),
   __("Plugins items", "advanced-database-cleaner"),
   __("Themes items", "advanced-database-cleaner"),
@@ -254,6 +267,7 @@ const translations = [
   __("Start a scan for user meta", "advanced-database-cleaner"),
   __("Start a scan for transients", "advanced-database-cleaner"),
   __("Start a scan for cron jobs", "advanced-database-cleaner"),
+  __("Start a scan for post types", "advanced-database-cleaner"),
   __(
     "We couldn't verify your license. Please check that your license key is active for the current website.",
     "advanced-database-cleaner"
@@ -278,6 +292,11 @@ const translations = [
     "The remote server is under maintenance. Please try again later.",
     "advanced-database-cleaner"
   ),
+  __("Invalid credit code. Please check and try again.", "advanced-database-cleaner"),
+  __(
+    "This credit code has already been redeemed. Please close this pop-up and click the 'Refresh credits info' button to refresh your credit balance",
+    "advanced-database-cleaner"
+  ),
   __("Invalid or empty system information", "advanced-database-cleaner"),
   __("Generated on:", "advanced-database-cleaner"),
   __("[Server time]", "advanced-database-cleaner"),
@@ -286,16 +305,37 @@ const translations = [
   __("(to optimize)", "advanced-database-cleaner"),
   __("Name not found!", "advanced-database-cleaner"),
   sprintf(
+    /* translators: %s: percentage value (e.g. "12.5") - meaning this table's size vs total database size */
+    __("%s%% of total database size", "advanced-database-cleaner"),
+    variable
+  ),
+  sprintf(
     /* translators: %s: formatted time interval */
     __("Every %s", "advanced-database-cleaner"),
     variable
   ),
+  __("Defined in:", "advanced-database-cleaner"),
   __("Yes", "advanced-database-cleaner"),
   __("Expires at:", "advanced-database-cleaner"),
   __("(local time)", "advanced-database-cleaner"),
   __("In", "advanced-database-cleaner"),
   __("Never expires", "advanced-database-cleaner"),
   __("No", "advanced-database-cleaner"),
+  __("Current Database Size", "advanced-database-cleaner"),
+  __(
+    "You must first activate your plugin license before synchronizing your balance.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "No remote scan credits available. Buy or redeem credits to use remote scan.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "Remote scan daily limit reached. Wait for reset or upgrade for higher limits.",
+    "advanced-database-cleaner"
+  ),
+  __("Remote Scan Credits", "advanced-database-cleaner"),
+  __("Remote Scan Credits:", "advanced-database-cleaner"),
   __("Not supported!", "advanced-database-cleaner"),
   __("Cancel", "advanced-database-cleaner"),
   __("Don't forget to make a backup of your database first!", "advanced-database-cleaner"),
@@ -602,7 +642,7 @@ const translations = [
     "The scan allows the identification of the plugins or themes to which the items belong.",
     "advanced-database-cleaner"
   ),
-  __("Edit scan result", "advanced-database-cleaner"),
+  __("Edit -Belongs to-", "advanced-database-cleaner"),
   __(
     "You can edit the scan results to correctly associate items with their respective plugins or themes if you are certain of their belonging.",
     "advanced-database-cleaner"
@@ -639,6 +679,11 @@ const translations = [
   __("You can save:", "advanced-database-cleaner"),
   __("Calculating...", "advanced-database-cleaner"),
   __("All items cleaned!", "advanced-database-cleaner"),
+  __("Auto count", "advanced-database-cleaner"),
+  __(
+    "When enabled, the plugin automatically counts cleanable items and estimates the potential space savings. You can disable it for items with a large number of entries to improve performance.",
+    "advanced-database-cleaner"
+  ),
   __("Count", "advanced-database-cleaner"),
   __("Lost space", "advanced-database-cleaner"),
   __("View", "advanced-database-cleaner"),
@@ -703,6 +748,15 @@ const translations = [
     "Setting autoload to No can improve the performance of your website by reducing the number of options loaded on each page.",
     "advanced-database-cleaner"
   ),
+  __("Post type", "advanced-database-cleaner"),
+  __("Posts count", "advanced-database-cleaner"),
+  __("Visibility", "advanced-database-cleaner"),
+  __(
+    "Whether a post type is intended for use publicly either via the admin interface or by front-end users",
+    "advanced-database-cleaner"
+  ),
+  __("Delete posts", "advanced-database-cleaner"),
+  __("Delete all posts of the selected post types.", "advanced-database-cleaner"),
   __("19 standard cleanup tools", "advanced-database-cleaner"),
   __(
     "Revisions, Auto drafts, unused postmeta, unused usermeta, expired transients, and more.",
@@ -823,7 +877,7 @@ const translations = [
   __("Other settings to configure the plugin behavior.", "advanced-database-cleaner"),
   __("Remote scan credits", "advanced-database-cleaner"),
   __(
-    "Daily credit balance for enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
+    "Enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
     "advanced-database-cleaner"
   ),
   __("Table name", "advanced-database-cleaner"),
@@ -833,7 +887,6 @@ const translations = [
     "Total disk space wasted by table overhead, which can be recovered by optimizing the table.",
     "advanced-database-cleaner"
   ),
-  __("Edit -Belongs to-", "advanced-database-cleaner"),
   __("Optimize", "advanced-database-cleaner"),
   __(
     "The optimization reorganizes the physical storage of table data to reduce storage space and improve efficiency when accessing the table",
@@ -844,6 +897,9 @@ const translations = [
     "Repair a possibly corrupted table (for certain storage engines only).",
     "advanced-database-cleaner"
   ),
+  __("Convert to InnoDB", "advanced-database-cleaner"),
+  __("Convert the table storage engine to InnoDB.", "advanced-database-cleaner"),
+  __("Refresh the statistics for the selected tables.", "advanced-database-cleaner"),
   __("Empty rows", "advanced-database-cleaner"),
   __(
     "Delete all data from a table without deleting the table itself.",
@@ -907,6 +963,10 @@ const translations = [
   ),
   __(
     "Items below have not been scanned yet. Click the button above to scan them and identify their associated plugin or theme.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "Items below are non-public post types with a high number of posts. Only delete them if you are sure they are safe to remove.",
     "advanced-database-cleaner"
   ),
   sprintf(
@@ -975,8 +1035,68 @@ const translations = [
     "advanced-database-cleaner"
   ),
   __("Send this correction anonymously to the plugin server?", "advanced-database-cleaner"),
+  __("Post type:", "advanced-database-cleaner"),
+  __("No data found.", "advanced-database-cleaner"),
+  __("Show all", "advanced-database-cleaner"),
+  __("Hide all", "advanced-database-cleaner"),
+  __("No credits found associated with your license.", "advanced-database-cleaner"),
+  __("Failed to sync balance.", "advanced-database-cleaner"),
+  __("Synchronize balance", "advanced-database-cleaner"),
   __(
-    "Daily credit balance for enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
+    "You must first activate your plugin license before synchronizing your balance.",
+    "advanced-database-cleaner"
+  ),
+  __("Go to settings to activate license", "advanced-database-cleaner"),
+  __("Synchronizing your balance...", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %d: number of remaining credits */
+    __("You have %d remaining credits to use.", "advanced-database-cleaner"),
+    variable
+  ),
+  __("Your balance has been synchronized.", "advanced-database-cleaner"),
+  __("OK", "advanced-database-cleaner"),
+  __("Please enter a credit code.", "advanced-database-cleaner"),
+  __("An error occurred.", "advanced-database-cleaner"),
+  __("Failed to update balance.", "advanced-database-cleaner"),
+  __("Redeem credit code", "advanced-database-cleaner"),
+  __(
+    "You must first activate your plugin license before redeeming a credit code.",
+    "advanced-database-cleaner"
+  ),
+  __("Credit code", "advanced-database-cleaner"),
+  __("Enter your credit code", "advanced-database-cleaner"),
+  __("Redeeming...", "advanced-database-cleaner"),
+  __("Redeem", "advanced-database-cleaner"),
+  __("Where to find my credit codes?", "advanced-database-cleaner"),
+  __("Done", "advanced-database-cleaner"),
+  __("Updating balance...", "advanced-database-cleaner"),
+  __("Update balance", "advanced-database-cleaner"),
+  __(
+    "Enhancing local scan accuracy via remote server analysis. Each credit enables one request to improve detection of tables, options, and other elements linked to specific plugins and themes.",
+    "advanced-database-cleaner"
+  ),
+  __("Table:", "advanced-database-cleaner"),
+  __("Table Rows", "advanced-database-cleaner"),
+  __("Table Structure", "advanced-database-cleaner"),
+  __("No structure data available.", "advanced-database-cleaner"),
+  __("Indexes", "advanced-database-cleaner"),
+  __("Table Status", "advanced-database-cleaner"),
+  __("Create Statement", "advanced-database-cleaner"),
+  __("No columns found.", "advanced-database-cleaner"),
+  __("Primary key", "advanced-database-cleaner"),
+  __("Index", "advanced-database-cleaner"),
+  __("No indexes found.", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %d is the number of columns in this index */
+    __("%d column(s) in this index", "advanced-database-cleaner"),
+    variable
+  ),
+  __("Unique", "advanced-database-cleaner"),
+  __("No status data available.", "advanced-database-cleaner"),
+  __("Property", "advanced-database-cleaner"),
+  __("No create statement available.", "advanced-database-cleaner"),
+  __(
+    "The SQL statement used to create this table. Useful for documentation or recreating the table structure elsewhere.",
     "advanced-database-cleaner"
   ),
   __("Show original value", "advanced-database-cleaner"),
@@ -985,6 +1105,8 @@ const translations = [
   _n("item", "items", variable, "advanced-database-cleaner"),
   __("[Filter applied]", "advanced-database-cleaner"),
   __("of", "advanced-database-cleaner"),
+  __("Public", "advanced-database-cleaner"),
+  __("Non-public", "advanced-database-cleaner"),
   __("Invalid", "advanced-database-cleaner"),
   __("Disabled", "advanced-database-cleaner"),
   __("Invalid item ID", "advanced-database-cleaner"),
@@ -1053,6 +1175,16 @@ const translations = [
   __("Places the plugin menu on the left side of your WP Admin", "advanced-database-cleaner"),
   __("Submenu under tools", "advanced-database-cleaner"),
   __("Places the plugin menu under the WP Tools menu", "advanced-database-cleaner"),
+  __("Disable confirmation on cleanup actions?", "advanced-database-cleaner"),
+  __(
+    "If you disable this, all cleanup actions (like delete and empty) will be executed immediately after you click on the clean button, without showing a confirmation modal. This could lead to accidental data loss, as you won't have the chance to review your action. Are you sure?",
+    "advanced-database-cleaner"
+  ),
+  __("Allow actions on WordPress items?", "advanced-database-cleaner"),
+  __(
+    "If you disable this, you will be able to take actions (like delete) on items that belong to WordPress core. This could break your site. Are you sure?",
+    "advanced-database-cleaner"
+  ),
   __("Enable analytics", "advanced-database-cleaner"),
   __(
     "If enabled, the plugin will run a daily task to analyze your database and tables locally, so you can view relevant statistics in the plugin dashboard.",
@@ -1068,6 +1200,17 @@ const translations = [
     "If enabled, the plugin will list every table in your database, including those with invalid prefix, typically belonging to other WordPress installations or unrelated projects. If you're unsure, keep this option disabled.",
     "advanced-database-cleaner"
   ),
+  __("Prevent taking action on WordPress items", "advanced-database-cleaner"),
+  __(
+    "If enabled, the plugin will prevent taking dangerous actions (like delete) on items that belong to WordPress core, in order to prevent breaking the site. We recommend keeping this enabled for safety reasons.",
+    "advanced-database-cleaner"
+  ),
+  __("Always show confirmation on dangerous actions", "advanced-database-cleaner"),
+  __(
+    "If disabled, dangerous actions (like delete and empty) will be executed immediately after you click on the corresponding clean button, without showing a confirmation modal. This could lead to accidental data loss, as you won't have the chance to review your action. We recommend keeping this enabled for safety reasons.",
+    "advanced-database-cleaner"
+  ),
+  __("Disable", "advanced-database-cleaner"),
   __("Please enter a valid number", "advanced-database-cleaner"),
   sprintf(
     /* translators: 1: minimum value, 2: maximum value */
@@ -1088,7 +1231,6 @@ const translations = [
     "This method uses WordPress native functions for cleanup operations. This ensures compatibility with WordPress but may be slower. For example, when deleting trashed posts, this method will trigger all associated hooks and actions to delete related metadata, taxonomies, and other linked data, ensuring a thorough cleanup.",
     "advanced-database-cleaner"
   ),
-  __("Please enter valid numbers for the performance settings", "advanced-database-cleaner"),
   __(
     "Choose the method used for database cleanup operations. SQL offers direct database manipulation, while Native uses WordPress functions.",
     "advanced-database-cleaner"
@@ -1101,15 +1243,37 @@ const translations = [
   ),
   __("Save settings", "advanced-database-cleaner"),
   __("Today's usage", "advanced-database-cleaner"),
+  __("Total credits used:", "advanced-database-cleaner"),
+  sprintf(
+    // translators: %s is the number of remaining credits
+    __("(You have %s credits left)", "advanced-database-cleaner"),
+    variable
+  ),
+  __("(You have used all your credits)", "advanced-database-cleaner"),
   __("Credits used today:", "advanced-database-cleaner"),
-  __("Credits reset in:", "advanced-database-cleaner"),
+  __("Daily limit will reset in:", "advanced-database-cleaner"),
+  __("Last info refresh:", "advanced-database-cleaner"),
   __("Refreshing...", "advanced-database-cleaner"),
-  __("Last refresh:", "advanced-database-cleaner"),
+  __("Refresh credits info", "advanced-database-cleaner"),
+  __("Buy credits", "advanced-database-cleaner"),
+  __(
+    "You have reached your daily limit for remote server requests. Please wait for your credits to reset.",
+    "advanced-database-cleaner"
+  ),
   __(
     "You have reached your daily limit for remote server requests. Please wait for your credits to reset or upgrade your license for a higher limit.",
     "advanced-database-cleaner"
   ),
   __("Upgrade my license", "advanced-database-cleaner"),
+  __(
+    "You have used all your total credits. Buy more credits or redeem a credit code to continue using the remote scan.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "No credits found for your Pro license. Please buy or redeem credits to use the remote scan feature.",
+    "advanced-database-cleaner"
+  ),
+  __("Where to track my credits usage?", "advanced-database-cleaner"),
   sprintf(
     /* translators: 1: minimum value, 2: maximum value */
     __("Value must be between %1$s and %2$s", "advanced-database-cleaner"),
@@ -1158,7 +1322,6 @@ const translations = [
 
     // %2$s
   ),
-  __("Please enter valid numbers for the scan settings", "advanced-database-cleaner"),
   __("Use full CPU power", "advanced-database-cleaner"),
   __(
     "When enabled, the plugin will utilize the full CPU power during scans, which may lead to faster scan times but could impact server performance. Disabling this option will make the plugin use less CPU, potentially reducing performance impact on your server during scans.",
@@ -1192,8 +1355,6 @@ const translations = [
   __("Orphans", "advanced-database-cleaner"),
   __("Unknown", "advanced-database-cleaner"),
   __("Not scanned", "advanced-database-cleaner"),
-  __("Less filters", "advanced-database-cleaner"),
-  __("More filters", "advanced-database-cleaner"),
   __("Show manual corrections only", "advanced-database-cleaner"),
   __("Local scan only", "advanced-database-cleaner"),
   __("Less accurate", "advanced-database-cleaner"),
@@ -1207,6 +1368,8 @@ const translations = [
     "The plugin will begin by scanning items against your local files, then it will anonymously send the scan results to a secure remote database for more accurate results.",
     "advanced-database-cleaner"
   ),
+  __("Buy V4 bundled with remote scan", "advanced-database-cleaner"),
+  __("Use credits", "advanced-database-cleaner"),
   __("Selected", "advanced-database-cleaner"),
   __(
     "A scan is already in progress. Please reload the page to see the current scan status.",
@@ -1219,6 +1382,27 @@ const translations = [
   ),
   __("Scan type", "advanced-database-cleaner"),
   __("Recommended", "advanced-database-cleaner"),
+  __(
+    "The remote scan is a powerful feature that enhances largely the accuracy of the scan results. Since it costs ongoing charges to maintain, it is not included in the lifetime plan. There are two ways to use it:",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "You can upgrade to the full Version 4, which includes the Remote Scan and Cloud features, available on an annual subscription.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "As a lifetime license holder, you'll receive a permanent 50% discount, applied to your first purchase and all future renewals.",
+    "advanced-database-cleaner"
+  ),
+  __("Get the full version 4", "advanced-database-cleaner"),
+  __(
+    "Buy credits to use the Remote Scan feature and pay only when you need it. Or simply redeem a credit code if you already have one.",
+    "advanced-database-cleaner"
+  ),
+  __(
+    "Please activate your plugin license first to perform a remote scan.",
+    "advanced-database-cleaner"
+  ),
   __("Items to scan", "advanced-database-cleaner"),
   __("Override manual corrections?", "advanced-database-cleaner"),
   __(
@@ -1235,9 +1419,9 @@ const translations = [
   __("Regex scan (skipped)", "advanced-database-cleaner"),
   __("Exact match scan", "advanced-database-cleaner"),
   __("Partial match scan", "advanced-database-cleaner"),
+  __("skipped", "advanced-database-cleaner"),
   __("Preparing local scan results", "advanced-database-cleaner"),
   __("Requesting remote scan", "advanced-database-cleaner"),
-  __("skipped", "advanced-database-cleaner"),
   __("Remote scan", "advanced-database-cleaner"),
   __("corrected items:", "advanced-database-cleaner"),
   __("The scan cannot start!", "advanced-database-cleaner"),
@@ -1377,6 +1561,17 @@ const translations = [
   ),
   __("Unused", "advanced-database-cleaner"),
   __("Duplicated", "advanced-database-cleaner"),
+  sprintf(
+    /* translators: %s: number of post types not scanned */
+    __("%s post types not scanned", "advanced-database-cleaner"),
+    variable
+  ),
+  sprintf(
+    /* translators: %s: number of non-public post types */
+    __("%s non-public post types with many posts", "advanced-database-cleaner"),
+    variable
+  ),
+  __("Posts count >", "advanced-database-cleaner"),
   __("To optimize", "advanced-database-cleaner"),
   __("To repair", "advanced-database-cleaner"),
   __("Valid prefix", "advanced-database-cleaner"),

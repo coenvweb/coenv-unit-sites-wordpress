@@ -34,7 +34,7 @@ add_filter('mce_external_plugins', 'coenv_admin_tinymce_plugins');
 */ 
 function coenv_admin_tinymce_buttons_remove_1( $buttons ) {  
  	
- 	$remove = array('formatselect', 'wp_adv', 'blockquote');
+ 	$remove = array('formatselect', 'wp_adv');
 	return array_diff($buttons,$remove);
 
 }
@@ -64,8 +64,6 @@ add_filter( 'tiny_mce_before_init', 'changeMceDefaults' );
 function coenv_admin_tinymce_buttons_add($buttons) {
 
     $buttons[] = 'anchor';
-    $buttons[] = 'BlockquoteLeft';
-    $buttons[] = 'BlockquoteRight';
     return $buttons;
 
 }

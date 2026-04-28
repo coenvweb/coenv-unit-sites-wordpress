@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
 <div id="support" class="postbox">
     <div class="inside">
         <ul>
@@ -32,6 +33,15 @@
             <a href="http://wordpress.org/support/view/plugin-reviews/email-encoder-bundle" target="_blank">
                 <i class="dashicons-before dashicons-thumbs-up"></i>
                 <strong>Rate the plugin!</strong>
+            </a>
+        </p>
+
+        <hr>
+        <?php $support_text = ( new \OnlineOptimisation\EmailEncoderBundle\Admin\SupportExport() )->generate(); ?>
+        <p>
+            <a href="#" id="eeb-copy-support-info" data-support-text="<?php echo esc_attr( $support_text ); ?>">
+                <i class="dashicons-before dashicons-clipboard"></i>
+                <strong><?php esc_html_e( 'Copy Support Info', 'email-encoder-bundle' ); ?></strong>
             </a>
         </p>
 

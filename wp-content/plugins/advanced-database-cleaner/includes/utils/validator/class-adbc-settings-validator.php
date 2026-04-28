@@ -173,7 +173,7 @@ class ADBC_Settings_Validator {
 		if ( ! is_array( $api_scan_balance ) )
 			return false;
 		foreach ( $api_scan_balance as $scan_key => $value ) {
-			if ( ! in_array( $scan_key, array( 'quota', 'usage', 'ttl', 'updated_at' ), true ) )
+			if ( ! in_array( $scan_key, array( 'quota', 'usage', 'ttl', 'total_quota', 'total_consumed', 'updated_at' ), true ) )
 				return false;
 			if ( ! is_int( $value ) && $value < 0 )
 				return false;
@@ -276,6 +276,27 @@ class ADBC_Settings_Validator {
 			default:
 				return false;
 		}
+	}
+
+	/**
+	 * Checks if the given value is a valid general cleanup auto count setting.
+	 *
+	 * @param string $key The setting key. (not used in this function, but kept for consistency)
+	 * @param array $value The value to check.
+	 * 
+	 * @return bool True if the value is valid, false otherwise.
+	 */
+	public static function is_general_cleanup_auto_count_valid( $key, $value ) {
+
+		if ( ! is_array( $value ) )
+			return false;
+
+		foreach ( $value as $items_type )
+			if ( ! ADBC_Cleanup_Type_Registry::is_valid_items_type( $items_type ) )
+				return false;
+
+		return true;
+
 	}
 
 }

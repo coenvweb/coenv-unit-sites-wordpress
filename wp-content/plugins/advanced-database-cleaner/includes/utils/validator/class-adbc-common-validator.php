@@ -46,10 +46,11 @@ class ADBC_Common_Validator {
 			'end_date' => $filters_request->get_param( 'endDate' ),
 			'frequency' => sanitize_key( $filters_request->get_param( 'frequency' ) ),
 			'interval' => $filters_request->get_param( 'interval' ),
+			'post_types_posts_count' => sanitize_key( $filters_request->get_param( 'postTypesPostsCount' ) ),
+			'post_types_visibility' => sanitize_key( $filters_request->get_param( 'postTypesVisibility' ) ),
 		];
 
-
-		// Sanitize filters
+		// Sanitize and validate common filters
 		$sanitized_filters['size'] = absint( $sanitized_filters['size'] );
 		$sanitized_filters['size_unit'] = in_array( $sanitized_filters['size_unit'], [ 'B', 'KB', 'MB', 'GB' ] ) ? $sanitized_filters['size_unit'] : 'KB';
 		$sanitized_filters['table_status'] = in_array( $sanitized_filters['table_status'], [ 'all', 'to_optimize', 'to_repair' ] ) ? $sanitized_filters['table_status'] : 'all';
@@ -67,6 +68,7 @@ class ADBC_Common_Validator {
 		$sanitized_filters['has_action'] = in_array( $sanitized_filters['has_action'], [ 'all', 'yes', 'no' ], true ) ? $sanitized_filters['has_action'] : 'all';
 		$sanitized_filters['autoload'] = in_array( $sanitized_filters['autoload'], [ 'all', 'yes', 'no' ] ) ? $sanitized_filters['autoload'] : 'all';
 
+		// In free set premium filters to default values since they are not supported in free version.
 		if ( ADBC_VERSION_TYPE === "FREE" ) {
 			$sanitized_filters['search_for'] = '';
 			$sanitized_filters['search_in'] = 'name';
@@ -78,7 +80,10 @@ class ADBC_Common_Validator {
 			$sanitized_filters['end_date'] = null;
 			$sanitized_filters['frequency'] = 'all';
 			$sanitized_filters['interval'] = 'all';
+			$sanitized_filters['post_types_posts_count'] = 0;
+			$sanitized_filters['post_types_visibility'] = 'all';
 		} else {
+			// In premium, sanitize the premium filters.
 			ADBC_Premium_Common_Validator::sanitize_filters( $sanitized_filters );
 		}
 
@@ -429,6 +434,7 @@ class ADBC_Common_Validator {
 				'transients',
 				'posts_meta',
 				'users_meta',
+				'post_types',
 			],
 			ADBC_Cleanup_Type_Registry::get_all_items_type()
 		);
