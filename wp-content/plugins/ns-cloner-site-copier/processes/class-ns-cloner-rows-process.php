@@ -218,6 +218,27 @@ class NS_Cloner_Rows_Process extends NS_Cloner_Process {
 				$limit = "LIMIT $row_num, $preload_amount";
 				$order = '';
 			}
+
+			$post_types = ns_cloner_request()->get( 'post_types_to_clone' );
+			// Only filter if post types is real array - if blank, assume all post types.
+			if ( is_array( $post_types ) ) {
+				$types = join( "', '", array_map( 'esc_sql', $post_types ) );
+				// Posts table.
+				if ( $source_prefix . 'posts' === $source_table ) {
+					$where .= " AND post_type IN ('$types')";
+				}
+				// Postmeta table.
+				if ( $source_prefix . 'postmeta' === $source_table ) {
+					$join  = "JOIN {$source_prefix}posts as p on post_id = p.ID ";
+					$where = $join . $where . " AND p.post_type IN ('$types')";
+				}
+				// Term relationships table.
+				if ( $source_prefix . 'term_relationships' === $source_table ) {
+					$join  = "JOIN {$source_prefix}posts as p on object_id = p.ID ";
+					$where = $join . $where . " AND post_type IN ('$types')";
+				}
+			}
+
 			// Compile query, and add filters so that content filtering can be applied at query
 			// time for things like excluding certain post types, etc.
 			$query = "SELECT $source_table.* FROM `$source_table`"

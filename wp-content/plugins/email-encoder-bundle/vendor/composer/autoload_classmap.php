@@ -24,7 +24,6 @@ return array(
     'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminEnqueue' => $baseDir . '/src/Admin/AdminEnqueue.php',
     'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminHelp' => $baseDir . '/src/Admin/AdminHelp.php',
     'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMenu' => $baseDir . '/src/Admin/AdminMenu.php',
-    'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMetaBox' => $baseDir . '/src/Admin/AdminMetaBox.php',
     'OnlineOptimisation\\EmailEncoderBundle\\Admin\\PluginActionLinks' => $baseDir . '/src/Admin/PluginActionLinks.php',
     'OnlineOptimisation\\EmailEncoderBundle\\Admin\\SupportExport' => $baseDir . '/src/Admin/SupportExport.php',
     'OnlineOptimisation\\EmailEncoderBundle\\Front\\DisplayEmailImage' => $baseDir . '/src/Front/DisplayEmailImage.php',

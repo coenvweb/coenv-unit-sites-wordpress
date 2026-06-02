@@ -220,6 +220,10 @@ class Encoding
         $custom_class = (string) $this->getSetting( 'class_name', true );
         $show_encoded_check = (string) $this->getSetting( 'show_encoded_check', true );
 
+        if ( ! empty( $attrs['href'] ) && stripos( $attrs['href'], 'mailto:' ) === 0 ) {
+            $email = substr( $attrs['href'], 7 );
+        }
+
         // set user-defined class
         if ( $custom_class !== '' && strpos( $class_ori, $custom_class ) === false ) {
             $attrs['class'] = ( empty( $attrs['class'] ) ) ? $custom_class : $attrs['class'] . ' ' . $custom_class;
@@ -241,9 +245,6 @@ class Encoding
                 if ( $protection_method === 'without_javascript' ) {
                     $link .= $key . '="' . antispambot( $value ) . '" ';
                 } else {
-                    // get email from href
-                    $email = substr($value, 7);
-
                     $encoded_email = $this->get_encoded_email( $email );
 
                     // set attrs
@@ -261,7 +262,17 @@ class Encoding
 
         $link .= '>';
 
-        $link .= ( preg_match( $this->settings()->get_email_regex(), $display) > 0 ) ? $this->get_protected_display( $display, $protection_method ) : $display;
+        // Only scramble the display when it IS the email (classic <a href="mailto:x">x</a> shape).
+        // When the display holds richer content (e.g. a builder-wrapped <span>Email us at x</span>),
+        // keep the markup intact — the final filterPlainEmails pass below entity-encodes any emails
+        // still embedded in it so bots can't harvest them.
+        $display_is_just_email = ( $email !== '' && trim( strip_tags( (string) $display ) ) === $email );
+
+        if ( $display_is_just_email ) {
+            $link .= $this->get_protected_display( $display, $protection_method );
+        } else {
+            $link .= $display;
+        }
 
         $link .= '</a>';
 
@@ -363,7 +374,20 @@ class Encoding
         }
 
         if ( $convert_plain_to_image ) {
-            $display = '<img src="' . $this->generate_email_image_url( $display ) . '" />';
+            // generate_email_image_url() requires a bare email address (it runs is_email()
+            // on its input and returns false otherwise). Page builders like WPForms, Divi,
+            // and Elementor commonly wrap the email in HTML (<span>x</span>) or surround
+            // it with copy ("Contact us at x"), which previously produced <img src="">
+            // — the broken image rendered invisibly on the frontend.
+            $email_for_image = $display;
+            if ( ! is_email( (string) $display ) ) {
+                $stripped = wp_strip_all_tags( (string) $display );
+                $email_match = [];
+                if ( preg_match( $this->settings()->get_email_regex(), $stripped, $email_match ) ) {
+                    $email_for_image = $email_match[0];
+                }
+            }
+            $display = '<img src="' . $this->generate_email_image_url( $email_for_image ) . '" />';
         } elseif ( $protection_method !== 'without_javascript' ) {
             $display = $this->dynamic_js_email_encoding( $display, $protection_text );
         } else {
@@ -432,12 +456,22 @@ class Encoding
         while ( $offset < $length ) {
             $protected .= '<span class="eeb-sd">' . antispambot( substr( $rev, $offset, $interval ) ) . '</span>';
 
-            // setup dummy content
-            $protected .= '<span class="eeb-nodis">' . $dummy_data . '</span>';
+            // Dummy content between real segments confuses scrapers. It's kept hidden from
+            // humans via CSS, but we also inline display:none so it never leaks as visible
+            // text if the plugin's stylesheet fails to load (page builders that defer/strip
+            // CSS, caching layers, or other plugins dropping the eeb-css-frontend handle).
+            $protected .= '<span class="eeb-nodis" style="display:none">' . $dummy_data . '</span>';
             $offset += $interval;
         }
 
-        $protected = '<span class="' . $protection_classes . '">' . $protected . '</span>';
+        // Inline the bidi-override / word-break styles for the same reason the dummy spans
+        // inline display:none — the email must still render correctly (forward, not reversed)
+        // when the stylesheet isn't loaded.
+        $wrapper_style = $deactivate_rtl
+            ? 'word-break:break-all'
+            : 'unicode-bidi:bidi-override;direction:rtl';
+
+        $protected = '<span class="' . $protection_classes . '" style="' . $wrapper_style . '">' . $protected . '</span>';
 
         return $protected;
     }

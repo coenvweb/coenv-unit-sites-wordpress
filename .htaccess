@@ -2,7 +2,7 @@
 <Limit GET>
     Order Allow,Deny
     Allow from all
-    Deny from 49.51.0.0/16 101.32.0.0/16 43.156.0.0/16 150.109.0.0/16 43.133.0.0/16 129.226.0.0/16 43.159.0.0/16 43.130.0.0/16 170.106.0.0/16 43.135.0.0/16 43.134.0.0/16 43.153.0.0/16 43.163.0.0/16 47.79.0.0/16 47.82.0.0/16
+	Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 31.207 ec2-54-175-29-131.compute-1.amazonaws.com petalbot-114-119-156-60.petalsearch.com 47.128 43.134 43.135 43.153 43.133 43.156 43.159 43.163 124.156 47.82 47.79 57.141
 </Limit>
 
 # Allow server-status access without rewriting
@@ -32,8 +32,8 @@ RewriteRule ^index\.php$ - [L]
 # More post requests throttling from single IP
 <Limit POST>
     Order Allow,Deny
-    Allow from all
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208 52.164 47.82 47.79 57.141
+    Allow from all 
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208 52.164 47.82 47.79 57.141 37.60 78.142 85.11
 </Limit>
 
 # Block WordPress xmlrpc.php requests
@@ -199,6 +199,21 @@ RewriteRule ^(.*)$ https://climate.uw.edu/$1 [R=301,NC,L]
 RewriteCond %{HTTP_HOST} ^www\.climate.washington.edu [NC]
 RewriteRule ^(.*)$ https://climate.uw.edu/$1 [R=301,NC,L]
 
+RewriteCond %{HTTP_HOST} ^waseagrant.washington.edu [NC]
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^wsg.washington.edu [NC]
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^wsg.uw.edu [NC]
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^seagrant.washington.edu [NC]
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R=301,NC,L]
+
+RewriteCond %{HTTP_HOST} ^seagrant.uw.edu [NC]
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R=301,NC,L]
+
 # SSL on each domain
 
 RewriteCond %{HTTP_HOST} ^base.coenv.uw\.edu [NC]
@@ -274,11 +289,70 @@ RewriteCond %{HTTP_HOST} ^natureandhealth.uw\.edu [NC]
 RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://natureandhealth.uw.edu/$1 [R,L]
 
+RewriteCond %{HTTP_HOST} ^waseagrant.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^seagrant.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^seagrant.washington\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^wsg.uw\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
+
+RewriteCond %{HTTP_HOST} ^wsg.washington\.edu [NC]
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
+
+
+
 
 # Site-specific redirects
 
 
-# Botanicgardens Redirects
+# Seagrant Redirects
+RewriteCond %{HTTP_HOST} !^waseagrant.uw\.edu [NC]
+RewriteRule .? - [S=32]
+RewriteRule ^community-outreach/rapid-response-network/?.*$ https://waseagrant.uw.edu/our-programs/seafood-fisheries-aquaculture/aquaculture/rapid-response-network/ [L,R=302]
+RewriteRule ^about-wsg/staff-portal/code-of-conduct/?$ https://waseagrant.uw.edu/about-us/engagement-code-of-conduct/ [L,R=302]
+RewriteRule ^students-teachers/drill-instructor-training/?$ https://waseagrant.uw.edu/education-training/workforce-training/fishermen/ [L,R=302]
+RewriteRule ^community-outreach/outreach-detail-pages/crabbertowboat-lane-agreements-download-charts-data-and-meetings/?$ https://waseagrant.uw.edu/our-programs/marine-economy-workforce-development/crabber-towboat-lane-agreement/ [L,R=302]
+RewriteRule ^fisheries-aquaculture-and-seafood/?$ https://waseagrant.uw.edu/our-programs/seafood-fisheries-aquaculture/ [L,R=302]
+RewriteRule ^crabteam/?.*$ https://wsgcrabteam.uw.edu/ [L,R=302]
+RewriteRule ^moltsearch/?$ https://wsgcrabteam.uw.edu/programs-2/molt-search/ [L,R=302]
+RewriteRule ^students-teachers/fellowship/keystone/?$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/wsg-keystone-fellowship/ [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/wSeafood-wheel-magnet2024_5x3.3.png/?$ https://waseagrant.uw.edu/funding-research/publications-library/seafood-wheel-magnet/ [L,R=302]
+RewriteRule ^students-teachers/fellowships/wsg-hershman-fellowship-2/?$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/wsg-hershman-fellowship/ [L,R=302]
+RewriteRule ^students-teachers/fellowships/washington-sea-grant-coastal-resilience-fellowship/?.*$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/washington-sea-grant-coastal-resilience-fellowship/ [L,R=302]
+RewriteRule ^students-teachers/fellowships/wa-applied-sustainability-internship/?$ https://waseagrant.uw.edu/fellowships/undergraduate-opportunities/washington-applied-sustainability-internship/ [L,R=302]
+RewriteRule ^west-coast-fisheries-participation-study/?$ / [L,R=302]
+RewriteRule ^students-teachers/tides-out/?$ https://waseagrant.uw.edu/education-training/workforce-training/tides-out-aquaculture-workforce-development/ [L,R=302]
+RewriteRule ^students-teachers/tides-out-training/?$ https://waseagrant.uw.edu/education-training/workforce-training/tides-out-aquaculture-workforce-development/ [L,R=302]
+RewriteRule ^wghec/?.*$ / [L,R=302]
+RewriteRule ^event/wsg-seaweed-office-hours-40/all/?$ https://waseagrant.uw.edu/our-programs/seafood-fisheries-aquaculture/aquaculture/kelp-and-seaweed/ [L,R=302]
+RewriteRule ^wacoast/?$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/washington-sea-grant-coastal-resilience-fellowship/ [L,R=302]
+RewriteRule ^community-outreach/hazard-resilience-and-climate-adaptation/king-tides/calendar/?$ https://waseagrant.uw.edu/our-programs/coastal-hazards-climate-resilience/king-tides/king-tides-calendar/ [L,R=302]
+RewriteRule ^community-outreach/outreach-detail-pages/river-and-ocean-film-festival/?$ https://waseagrant.uw.edu/education-training/lifelong-learning/river-and-ocean-film-festival/ [L,R=302]
+RewriteRule ^crabteam/getinvolved/toolbox/?.*$ https://wsgcrabteam.uw.edu/programs-2/monitoring-network/monitor-toolkit/ [L,R=302]
+RewriteRule ^crabteam/greencrab/report/?$ https://wsgcrabteam.uw.edu/report-a-sighting-2/ [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/SculpinIDSlides.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-4.26.45-PM.png [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/Sculpin-ID.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/05/Sculpin-ID.pdf [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/MEGRvCAPRvMEMA-Slides.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/MEGRvCAPRvMEMA-Slides.pdf [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/6.-CAMA-v-Everything-Slides.pdf/?.*$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/6.-CAMA-v-Everything-Slides.pdf [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/2026MonitorHandbook.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/05/2026MonitorHandbook.pdf [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/2026TideCalendars.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/05/2026TideCalendars.pdf [L,R=302]
+RewriteRule ^events/category/outreach/green-crab/?$ https://wsgcrabteam.uw.edu/events-calendar/ [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/WSGCrabTeamIDGuide.23-1.pdf?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/WSGCrabTeamIDGuide.23-1.pdf [L,R=302]
+RewriteRule ^wordpress/wp-content/uploads/FINAL-MAST-REPORT-Octoberr-2021-copy.pdf/?.*$ https://waseagrant.uw.edu/funding-research/publications-library/marine-alternative-shorelines-training-needs-assessment-report/ [L,R=302]
+RewriteRule ^community-outreach/olympic-oa-rva/?$ https://waseagrant.uw.edu/our-programs/coastal-hazards-climate-resilience/ocean-acidification/ocean-acidification-on-the-olympic-coast/ [L,R=302]
+
+
+# Climate Redirects
 RewriteCond %{HTTP_HOST} !^climate.uw\.edu [NC]
 RewriteRule .? - [S=5]
 RewriteRule ^climate-data/trendanalysisapp/?.*$ https://climate.uw.edu/our-work/wasco-tools/trend-tool/ [L,R=302]

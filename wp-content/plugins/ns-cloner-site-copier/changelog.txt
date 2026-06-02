@@ -1,3 +1,7 @@
+= 4.4.9.2 - 2026.05.04 =
+* Fix: Handle hooks when a site is being created to avoid errors with site activated plugins
+* Code improvements
+
 = 4.4.9.1 - 2025.11.26 =
 * Fix translation notices
 * Other code fixes

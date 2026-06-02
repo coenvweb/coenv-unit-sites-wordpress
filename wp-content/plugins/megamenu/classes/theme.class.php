@@ -90,10 +90,12 @@ if ( ! class_exists( 'Mega_Menu_Theme' ) ) :
 					'arrow_down'                           => 'dash-f140',
 					'arrow_left'                           => 'dash-f141',
 					'arrow_right'                          => 'dash-f139',
+					'arrow_rotate'                         => 'off',
 					'close_icon'                           => 'dash-f158',
 					'close_icon_font_size'                 => '16px',
 					'close_icon_color'                     => '#fff',
 					'close_icon_label'                     => 'Close',
+					'menu_font_family'                     => 'inherit',
 					'font_size'                            => '14px', // deprecated
 					'font_color'                           => '#666', // deprecated
 					'font_family'                          => 'inherit', // deprecated

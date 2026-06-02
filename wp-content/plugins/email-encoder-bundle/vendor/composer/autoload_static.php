@@ -39,7 +39,6 @@ class ComposerStaticInitc7f9db5d6e6cce05d281debaf3d18e1a
         'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminEnqueue' => __DIR__ . '/../..' . '/src/Admin/AdminEnqueue.php',
         'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminHelp' => __DIR__ . '/../..' . '/src/Admin/AdminHelp.php',
         'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMenu' => __DIR__ . '/../..' . '/src/Admin/AdminMenu.php',
-        'OnlineOptimisation\\EmailEncoderBundle\\Admin\\AdminMetaBox' => __DIR__ . '/../..' . '/src/Admin/AdminMetaBox.php',
         'OnlineOptimisation\\EmailEncoderBundle\\Admin\\PluginActionLinks' => __DIR__ . '/../..' . '/src/Admin/PluginActionLinks.php',
         'OnlineOptimisation\\EmailEncoderBundle\\Admin\\SupportExport' => __DIR__ . '/../..' . '/src/Admin/SupportExport.php',
         'OnlineOptimisation\\EmailEncoderBundle\\Front\\DisplayEmailImage' => __DIR__ . '/../..' . '/src/Front/DisplayEmailImage.php',

@@ -5,6 +5,8 @@ WP-Cache Config Sample File
 See wp-cache.php for author details.
 */
 
+$wpsc_ignore_tracking_parameters = 1;
+$wpsc_tracking_parameters = array ( 0 => 'brid', 1 => 'fbclid', 2 => 'ref', 3 => 'gclid', 4 => 'fb_source', 5 => 'mc_cid', 6 => 'mc_eid', 7 => 'utm_source', 8 => 'utm_medium', 9 => 'utm_campaign', 10 => 'utm_term', 11 => 'utm_content', 12 => 'utm_expid', 13 => 'mtm_source', 14 => 'mtm_medium', 15 => 'mtm_campaign', 16 => 'mtm_keyword', 17 => 'mtm_content', 18 => 'mtm_cid', 19 => 'mtm_group', 20 => 'mtm_placement', 21 => 'ysclid', 22 => 'srsltid', 23 => 'yclid', );
 $wp_cache_debug_username = '52a17c33ccc8917eaaefd38ba217b497';
 $wp_cache_home_path = '/';
 $wp_cache_slash_check = 1;
@@ -62,7 +64,7 @@ $wp_super_cache_front_page_notification = '0';
 $wp_cache_anon_only = 0;
 $wp_supercache_cache_list = 0;
 $wp_cache_debug_to_file = 0;
-$wp_super_cache_debug = 0;
+$wp_super_cache_debug = 1;
 $wp_cache_debug_level = 5;
 $wp_cache_debug_ip = '';
 $wp_cache_debug_log = 'fdf96bdc199f2139af91d18c7d84a2bf.php';

@@ -5,7 +5,7 @@ Tags: automate, duplicate, copy, copier, clone
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 4.4.9
+Stable tag: 4.4.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,10 @@ You're in luck! NS Cloner V4 has new background cloning capability, so you shoul
 2. Cloning in progress.
 
 == Changelog ==
+
+= 4.4.9.2 - 2026.05.04 =
+* Fix: Handle hooks when a site is being created to avoid errors with site activated plugins
+* Code improvements
 
 = 4.4.9.1 - 2025.11.26 =
 * Fix translation notices

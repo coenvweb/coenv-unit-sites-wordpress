@@ -19,7 +19,7 @@ final class NS_Cloner {
 	 *
 	 * @var string
 	 */
-	public $version = '4.4.9.1';
+	public $version = '4.4.9.2';
 
 	/**
 	 * Menu Slug
@@ -513,15 +513,15 @@ final class NS_Cloner {
 	/**
 	 * Check whether the current user can run a clone operation and whether nonce is valid, then optionally die or return false.
 	 *
-	 * @param bool $die Whether to die on failure.
+	 * @param bool $fail Whether to die on failure.
 	 * @return bool
 	 */
-	public function check_permissions( $die = true ) {
+	public function check_permissions( $fail = true ) {
 		$current_action      = ns_cloner_request()->get( 'action', 'default' );
 		$required_capability = apply_filters( "ns_cloner_capability_{$current_action}", $this->capability );
 		// Check that current user has sufficient permissions.
 		if ( ! current_user_can( $required_capability ) ) {
-			if ( $die ) {
+			if ( $fail ) {
 				if ( wp_doing_ajax() ) {
 					wp_die( -1, 403 );
 				} else {
@@ -532,7 +532,7 @@ final class NS_Cloner {
 			}
 		}
 		// Check that there is a valid nonce present.
-		$valid_nonce = check_ajax_referer( 'ns_cloner', 'clone_nonce', $die );
+		$valid_nonce = check_ajax_referer( 'ns_cloner', 'clone_nonce', $fail );
 		if ( ! $valid_nonce ) {
 			return false;
 		}
