@@ -5572,7 +5572,6 @@ body.maxmegamenu-admin {
 	}
 
 	.mmm-icon-selector-list {
-		max-height: 250px;
 		overflow-y: auto;
 		padding: 4px;
 	}
@@ -5678,10 +5677,11 @@ body.maxmegamenu-admin {
 	}
 
 	.mmm-multi-preview {
-		display: flex;
-		align-items: center;
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
+		place-items: center;
 		width: 100%;
-		justify-content: space-between;
 
 		.mmm-multi-preview-item {
 			display: inline-flex;
@@ -5703,9 +5703,9 @@ body.maxmegamenu-admin {
 				font-size: 16px;
 				width: 16px;
 				height: 16px;
-				line-height: 1;
-				display: inline-block;
-				text-align: center;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
 			}
 		}
 	}
@@ -5723,7 +5723,18 @@ body.maxmegamenu-admin {
 		}
 
 		.mmm-icon-selector-dropdown {
-			width: 200px;
+			width: 400px;
+		}
+
+		.mmm-icon-selector-list {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 8px;
+			align-items: start;
+		}
+
+		.mmm-icon-selector-item[data-value="disabled"] {
+			grid-column: 1 / -1;
 		}
 
 		.mmm-icon-selector-group-container {
@@ -5736,7 +5747,7 @@ body.maxmegamenu-admin {
 		.mmm-icon-selector-item {
 			width: 100%;
 			height: 32px;
-			padding: 0 16px;
+			padding: 0;
 			box-sizing: border-box;
 
 			&[data-value="disabled"] {

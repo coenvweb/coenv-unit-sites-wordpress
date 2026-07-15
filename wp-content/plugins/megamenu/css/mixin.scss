@@ -424,7 +424,8 @@
         #{$menu} input:focus,
         #{$menu} li.mega-menu-item .mega-menu-link:focus,
         #{$menu} form.mega-search-open:has(input[type=text]:focus),
-        #{$menu} + button.mega-close:focus {
+        #{$menu} + button.mega-close:focus,
+        #{$menu} .mega-mobile-back > button:focus {
             outline-style: solid;
             outline-width: $keyboard_highlight_width;
             outline-color: $keyboard_highlight_color;

@@ -434,7 +434,8 @@ if ( ! class_exists( 'Mega_Menu_Toggle_Blocks' ) ) :
 							'icon_position' => isset( $settings['icon_position'] ) ? "'" . $settings['icon_position'] . "'" : 'after',
 							'text_size'     => isset( $settings['text_size'] ) && strlen( $settings['text_size'] ) ? $settings['text_size'] : '14px',
 							'icon_size'     => isset( $settings['icon_size'] ) && strlen( $settings['icon_size'] ) ? $settings['icon_size'] : '24px',
-							'icon_font'     => $icon_font,
+							'icon_font'        => $icon_font,
+						'icon_font_weight' => $this->get_toggle_icon_font_weight( ! empty( $closed_icon_raw ) ? $closed_icon_raw : $open_icon_raw ),
 						];
 
 						$menu_toggle_blocks[ $index ] = $styles;
@@ -1065,7 +1066,11 @@ if ( ! class_exists( 'Mega_Menu_Toggle_Blocks' ) ) :
 			if ( strpos( $icon_raw, 'mat-' ) === 0 ) {
 				return "'Material Symbols'";
 			}
-			return "''";
+			return apply_filters( 'megamenu_toggle_icon_font', "''", $icon_raw );
+		}
+
+		private function get_toggle_icon_font_weight( $icon_raw ) {
+			return apply_filters( 'megamenu_toggle_icon_font_weight', 'normal', $icon_raw );
 		}
 
 	}

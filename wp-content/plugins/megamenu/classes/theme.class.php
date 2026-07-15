@@ -67,6 +67,18 @@ if ( ! class_exists( 'Mega_Menu_Theme' ) ) :
 
 
 		/**
+		 * Return the full SCSS source for this theme (without compiling), using a
+		 * dummy location — the same source that test_compilation() would compile.
+		 *
+		 * @return string Full SCSS source string.
+		 */
+		public function get_scss() {
+			$test_location = new Mega_Menu_Location( 'test', 'Test', [] );
+			return $test_location->get_scss( $this );
+		}
+
+
+		/**
 		 * Return the default theme settings array.
 		 *
 		 * @return self

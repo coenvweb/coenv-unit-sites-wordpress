@@ -72,6 +72,8 @@
                             cls += ' ' + icon;
                         } else if (baseCls === 'mega-material-symbol') {
                             attrStr += ' data-ms-icon="' + icon + '"';
+                        } else if (icon) {
+                            cls = icon.includes(' ') ? icon : cls + ' ' + icon;
                         }
                         
                         html += '<span class="mmm-multi-preview-item mmm-font-preview"><i class="' + cls + '"' + attrStr + '></i></span>';
@@ -278,8 +280,15 @@
                     });
 
                     if (groupHasItems) {
-                        this.$optionsList.append($groupTitle);
-                        this.$optionsList.append($groupContainer);
+                        if (this.isMultiDirectional) {
+                            const $groupWrapper = $('<div class="mmm-icon-selector-group"></div>');
+                            $groupWrapper.append($groupTitle);
+                            $groupWrapper.append($groupContainer);
+                            this.$optionsList.append($groupWrapper);
+                        } else {
+                            this.$optionsList.append($groupTitle);
+                            this.$optionsList.append($groupContainer);
+                        }
                     }
                 });
             } else {

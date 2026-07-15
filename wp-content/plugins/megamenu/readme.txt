@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, responsive menu, mega menu, navigation, mobile menu
 Requires at least: 6.2
 Tested up to: 7.0
-Stable tag: 3.10.4
+Stable tag: 3.10.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,7 +16,7 @@ Max Mega Menu is a complete menu management plugin for WordPress, built for the 
 
 Create new menus from scratch or enhance your existing ones. With Max Mega Menu you can add WordPress widgets, blocks or custom HTML to your sub menus, style everything with the built in theme editor, and fine tune behaviour with powerful settings.
 
-Place menus via a block, page builder element (Bricks, Divi & Elementor), shortcode, widget or `wp_nav_menu`. The result is a light weight, user friendly, accessible and touch ready mega menu with just a few clicks.
+Place menus via a block, page builder element (Bricks, Breakdance, Divi & Elementor), shortcode, widget or `wp_nav_menu`. The result is a light weight, user friendly, accessible and touch ready mega menu with just a few clicks.
 
 Documentation & Demo: [https://www.megamenu.com](https://www.megamenu.com)
 
@@ -34,61 +34,59 @@ Documentation & Demo: [https://www.megamenu.com](https://www.megamenu.com)
 * Extends the native WordPress menu system
 * Restores the Appearance > Menus screen in full site editing themes
 * Supports multiple menu locations, each with its own configuration
+* Fully customise menu styling with the built in theme editor
+* Google Font support via integration with the WordPress 7.0 Font Library
 * Organise sub-menu content into rows and columns with the grid layout builder
 * Display any WordPress widget or Block Pattern in your menu
 * Traditional Flyout or Mega Menu sub-menu styles
 * Hover, hover intent, or click to open sub-menus
 * Sub-menu transitions: fade, fade up, slide up, or slide
-* Fully customise menu styling with the built in theme editor
 * Add icons to menu items
 * Per item options: hide text, disable link, hide on mobile and more
 * Align items to the left or right of the menu bar
 * Align sub-menus to the left or right of their parent item
 * Off-canvas (slide in from left or right) or standard dropdown mobile menu
 * Place your menu via block, widget, shortcode, or automatic integration
-* Native Divi module and Elementor widget
+* Native modules for Bricks, Breakdance, Divi & Elementor
 
 ###Accessibility
 
 * Keyboard Navigation built in
-* `TAB` activates keyboard navigation and navigates through the menu
+* `TAB` activates keyboard navigation and navigates through the menu on both desktop and mobile
 * `ENTER` or `SPACE` on a sub menu arrow indicator shows/hides the sub menu
 * `ESC` closes all open sub menus
 
 Max Mega Menu is developed with a focus on code quality, performance and usability.
 
-* No `!important`, inline or block CSS - menus are styled via a single static CSS file
+* No `!important`, inline or block CSS - menu locations are styled via a single static CSS file
 * Less than 2kb of JavaScript (gzipped)
 * Responsive, touch and retina ready
 * Keyboard navigation supported
 * Tested across all modern desktop and mobile browsers
 * Low memory footprint
-* Supports all core `nav_menu_*` filters (prefix with mega_)
+* Supports all core `nav_menu_*` filters (prefix with `mega_`)
 * In-depth documentation included
 * Basic support included with the free version
 
 ####Pro Features:
 
+> * Sliding Panels Mobile Menu
 > * Tabbed Mega Menus
 > * Sticky Menu
 > * Vertical & Accordion Menus
-> * FontAwesome, Genericon & Custom Icons
+> * Font Awesome & Custom Icons
 > * Custom Item Styling
 > * Menu Logo
 > * Search Box
 > * WooCommerce & EDD support
-> * Google Fonts
 > * Roles & Restrictions
-> * Mobile toggle blocks
+> * Extended mobile toggle blocks
 > * Automatic updates
 > * Priority Support
 >
 > Find out more: [https://www.megamenu.com/upgrade/](https://www.megamenu.com/upgrade/)
 
 == Frequently Asked Questions ==
-
-= Is it compatible with Elementor? =
-Yes! See: [https://www.megamenu.com/documentation/elementor/](https://www.megamenu.com/documentation/elementor/)
 
 = Where do I start? =
 [https://www.megamenu.com/documentation/installation/](https://www.megamenu.com/documentation/installation/)
@@ -133,6 +131,14 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 3.10.6 =
+
+* Improvement: Divi integration - set `overflow: visible;` on header row when Max Mega Menu is present within
+* Improvement: Divi integration - remove unnecessary file include
+* Improvement: Add filters to allow Pro users to choose Font Awesome icons in icon pickers
+* Improvement: Add debug option to show full menu scss
+* Fix: Gentle refactor of maxmegamenu.js, fix tab key navigation for sliding panels mobile menu
 
 = 3.10.5 =
 

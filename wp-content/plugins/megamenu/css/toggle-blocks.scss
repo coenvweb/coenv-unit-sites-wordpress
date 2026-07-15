@@ -11,8 +11,9 @@
             $icon_color:    nth($item, 8);
             $icon_position: nth($item, 9);
             $text_size:     nth($item, 10);
-            $icon_size:     nth($item, 11);
-            $icon_font:     nth($item, 12);
+            $icon_size:         nth($item, 11);
+            $icon_font:         nth($item, 12);
+            $icon_font_weight:  nth($item, 13);
 
             @if type-of($id) == number {
 
@@ -57,6 +58,7 @@
                             display: inline-block;
                             content: $closed_icon;
                             font-family: $icon_font;
+                            font-weight: $icon_font_weight;
                             font-size: $icon_size;
                             color: $icon_color;
                         }

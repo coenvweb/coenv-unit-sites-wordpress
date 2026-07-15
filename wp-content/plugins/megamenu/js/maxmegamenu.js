@@ -30,6 +30,10 @@
 
         const collapse_children_parents = $("li.mega-menu-megamenu li.mega-menu-item-has-children.mega-collapse-children > a.mega-menu-link", $menu);
 
+        // Focusable link elements inside a menu item, shared by the keyboard
+        // navigation helpers so the matched set cannot drift between them.
+        const focusable_selector = "a.mega-menu-link, button.mega-menu-link, .mega-search span[role=button]";
+
         // --- Keyboard key identifiers (KeyboardEvent.key values) ---
         const tab_key         = "Tab";
         const escape_key      = "Escape";
@@ -137,16 +141,25 @@
             return plugin.isMobileView() && plugin.isMobileOffCanvas() && plugin.settings.mobile_direction === "horizontal";
         };
 
-        plugin.getFocusableItemsInSubmenu = function($submenu, include_back_link = true) {
-            let $focusable = $submenu
-                .find("a.mega-menu-link, button.mega-menu-link, .mega-search span[role=button]")
-                .filter(":visible");
+        const getBackLink = function($submenu) {
+            return $submenu.find("> li.mega-mobile-back:visible > button.mega-mobile-back-link").first();
+        };
 
-            if (!include_back_link) {
-                $focusable = $focusable.not(".mega-mobile-back-link");
-            }
+        // The open submenu of the most deeply nested toggled-on menu item.
+        const getDeepestOpenPanel = function() {
+            return $("li.mega-toggle-on:not(.mega-collapse-children) > ul.mega-sub-menu", $menu).last();
+        };
 
-            return $focusable;
+        plugin.getFocusableItemsInSubmenu = function($submenu) {
+            // jQuery :visible checks layout dimensions but ignores CSS visibility:hidden.
+            // Sliding sub-panels use visibility:hidden (not display:none) for the closed
+            // state, so we must also check computed visibility to exclude their items.
+            return $submenu
+                .find(focusable_selector)
+                .not(".mega-mobile-back-link")
+                .filter(function() {
+                    return $(this).is(":visible") && window.getComputedStyle(this).visibility !== 'hidden';
+                });
         };
 
         plugin.focusFirstItemInOpenedSubmenu = function($item) {
@@ -164,7 +177,7 @@
             // megamenu panels (where links are nested inside li.mega-menu-row > li.mega-menu-column)
             // are handled the same as flat flyout panels.
             const $firstFocusable = $submenu
-                .find("a.mega-menu-link, button.mega-menu-link, .mega-search span[role=button]")
+                .find(focusable_selector)
                 .not(".mega-mobile-back-link")
                 .filter(":visible")
                 .first();
@@ -172,7 +185,7 @@
             if ($firstFocusable.length) {
                 $firstFocusable.trigger("focus");
             } else {
-                $submenu.find("> li.mega-mobile-back:visible > button.mega-menu-link.mega-mobile-back-link").first().trigger("focus");
+                getBackLink($submenu).trigger("focus");
             }
         };
 
@@ -193,12 +206,22 @@
             }, delay);
         };
 
-        plugin.showPanel = function(anchor, immediate) {
+        // Accepts a menu item ID (number or numeric string), a li.mega-menu-item or an
+        // anchor, and returns the item's anchor.
+        const resolveAnchor = function(anchor) {
             if ( typeof anchor === 'number' || ( typeof anchor === 'string' && anchor.trim() !== '' && !isNaN(anchor) ) ) {
-                anchor = $("li.mega-menu-item-" + anchor, $menu).find("a.mega-menu-link").first();
-            } else if ( anchor.is("li.mega-menu-item") ) {
-                anchor = anchor.find("a.mega-menu-link").first();
+                return $("li.mega-menu-item-" + anchor, $menu).find("a.mega-menu-link").first();
             }
+
+            if ( anchor.is("li.mega-menu-item") ) {
+                return anchor.find("a.mega-menu-link").first();
+            }
+
+            return anchor;
+        };
+
+        plugin.showPanel = function(anchor, immediate) {
+            anchor = resolveAnchor(anchor);
 
             const $item = anchor.parent();
             const isDesktop = plugin.isDesktopView();
@@ -269,11 +292,7 @@
 
 
         plugin.hidePanel = function(anchor, immediate) {
-            if ( typeof anchor === 'number' || ( typeof anchor === 'string' && anchor.trim() !== '' && !isNaN(anchor) ) ) {
-                anchor = $("li.mega-menu-item-" + anchor, $menu).find("a.mega-menu-link").first();
-            } else if ( anchor.is("li.mega-menu-item") ) {
-                anchor = anchor.find("a.mega-menu-link").first();
-            }
+            anchor = resolveAnchor(anchor);
 
             const $item = anchor.parent();
             const $submenu = anchor.siblings(".mega-sub-menu");
@@ -311,6 +330,11 @@
             plugin.addAnimatingClass($item);
         };
 
+        // Resolve a panel width setting ('$menu', '$wrap' or a CSS selector) to elements.
+        const resolveWidthEl = function(val) {
+            return val === '$menu' ? $menu : val === '$wrap' ? $wrap : $(val);
+        };
+
         plugin.calculateDynamicSubmenuWidths = function(anchor) {
             const $item = anchor.parent();
             const $submenu = anchor.siblings(".mega-sub-menu");
@@ -329,7 +353,7 @@
                             left: (target_offset.left - submenu_offset.left) + "px"
                         });
                     } else {
-                        const $panel_width_el = plugin.settings.panel_width === '$menu' ? $menu : plugin.settings.panel_width === '$wrap' ? $wrap : $(plugin.settings.panel_width);
+                        const $panel_width_el = resolveWidthEl(plugin.settings.panel_width);
 
                         if ( $panel_width_el.length > 0 ) {
                             $submenu.css({
@@ -348,7 +372,7 @@
 
             // apply inner width to sub menu by adding padding to the left and right of the mega menu
             if (isTopLevelMegamenu && plugin.settings.panel_inner_width) {
-                const $panel_inner_width_el = plugin.settings.panel_inner_width === '$menu' ? $menu : plugin.settings.panel_inner_width === '$wrap' ? $wrap : $(plugin.settings.panel_inner_width);
+                const $panel_inner_width_el = resolveWidthEl(plugin.settings.panel_inner_width);
 
                 if ($panel_inner_width_el.length > 0) {
                     const target_width = parseInt($panel_inner_width_el.width(), 10);
@@ -368,6 +392,10 @@
                     }
                 }
             }
+        };
+
+        const recalculateSubmenuWidths = function() {
+            plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
         };
 
         plugin.bindClickEvents = function() {
@@ -500,14 +528,9 @@
         plugin.bindKeyboardEvents = function() {
             const $firstFocusable = $menu.find("a.mega-menu-link").first();
             const $lastFocusable  = $wrap.find("button.mega-close").first();
-            // Matches the focusable link element inside a visible menu list item.
-            // Must stay in sync with getFocusableItemsInSubmenu.
-            const focusableLinkSelector = "> a.mega-menu-link, > button.mega-menu-link, > .mega-search span[role=button]";
-
-            const getActiveSubmenuBackLink = function() {
-                const $activeSubmenu = $("li.mega-toggle-on:not(.mega-collapse-children) > ul.mega-sub-menu", $menu).last();
-                return $activeSubmenu.find("> li.mega-mobile-back:visible > button.mega-menu-link.mega-mobile-back-link").first();
-            };
+            // Direct-child variant of focusable_selector: matches only the link element
+            // belonging to the item itself, not links inside nested submenus.
+            const focusableLinkSelector = focusable_selector.split(", ").map(s => "> " + s).join(", ");
 
             const togglePanelForAnchor = function(anchor) {
                 if ( !anchor || !anchor.length ) return;
@@ -537,13 +560,11 @@
                     if ( !e.shiftKey ) {
                         // Tab → forward to back link (if a flyout is open) or first menu item
                         e.preventDefault();
-                        const $backLink = isOffCanvasHorizontal ? getActiveSubmenuBackLink() : $();
+                        const $backLink = isOffCanvasHorizontal ? getBackLink(getDeepestOpenPanel()) : $();
                         ( $backLink.length ? $backLink : $firstFocusable ).trigger('focus');
                     } else if ( isOffCanvasHorizontal ) {
                         // Shift+Tab → last item in the active submenu
-                        const $last = plugin.getFocusableItemsInSubmenu(
-                            $("li.mega-toggle-on:not(.mega-collapse-children) > ul.mega-sub-menu", $menu).last(), false
-                        ).last();
+                        const $last = plugin.getFocusableItemsInSubmenu(getDeepestOpenPanel()).last();
                         if ( $last.length ) { e.preventDefault(); $last.trigger('focus'); }
                     }
                     return;
@@ -558,6 +579,21 @@
 
                 // Inside an offcanvas horizontal submenu: keep focus trapped within the panel
                 if ( isOffCanvasHorizontal ) {
+                    const $deepestPanel = getDeepestOpenPanel();
+
+                    // Ghost-item guard: a panel is open but focus escaped to an item outside it
+                    // (top-level links, or parent-panel items covered by a child panel).
+                    if ( $deepestPanel.length && !$deepestPanel.has($active).length ) {
+                        e.preventDefault();
+                        if ( !e.shiftKey ) {
+                            const $backLink = getBackLink($deepestPanel);
+                            ( $backLink.length ? $backLink : plugin.getFocusableItemsInSubmenu($deepestPanel).first() ).trigger('focus');
+                        } else {
+                            $lastFocusable.trigger('focus');
+                        }
+                        return;
+                    }
+
                     // Walk up to the nearest ul.mega-sub-menu whose parent li has mega-toggle-on.
                     // For mega menus, $active may be inside a column ul rather than the panel ul itself.
                     const $submenu = $active.parentsUntil($menu, "ul.mega-sub-menu")
@@ -569,7 +605,7 @@
                     if ( $submenu.length ) {
                         if ( !e.shiftKey ) {
                             // Tab forward: when on the last item, hand off to the close button
-                            const $items = plugin.getFocusableItemsInSubmenu($submenu, false);
+                            const $items = plugin.getFocusableItemsInSubmenu($submenu);
                             if ( $items.length && $active.is($items.last()) ) {
                                 e.preventDefault();
                                 $lastFocusable.trigger('focus');
@@ -580,8 +616,8 @@
                             $lastFocusable.trigger('focus');
                         } else {
                             // Shift+Tab on first item → back link
-                            const $items   = plugin.getFocusableItemsInSubmenu($submenu, false);
-                            const $backLink = $submenu.find("> li.mega-mobile-back:visible > button.mega-menu-link.mega-mobile-back-link").first();
+                            const $items   = plugin.getFocusableItemsInSubmenu($submenu);
+                            const $backLink = getBackLink($submenu);
                             if ( $items.length && $backLink.length && $active.is($items.first()) ) {
                                 e.preventDefault();
                                 $backLink.trigger('focus');
@@ -635,14 +671,14 @@
 
             const handleArrowUpDown = function(e, goingDown) {
                 e.preventDefault();
-                const $activeSubmenu = $("li.mega-toggle-on:not(.mega-collapse-children) > ul.mega-sub-menu", $menu).last();
+                const $activeSubmenu = getDeepestOpenPanel();
 
                 if ( $activeSubmenu.length ) {
                     // Inside a flyout panel: cycle through the same sequence as Tab/Shift+Tab —
                     // back-link → items → close-button — using an explicit ordered array so
                     // the back button (li.mega-mobile-back, not li.mega-menu-item) is included.
-                    const $backLink  = $activeSubmenu.find("> li.mega-mobile-back:visible > button.mega-menu-link.mega-mobile-back-link").first();
-                    const $items     = plugin.getFocusableItemsInSubmenu($activeSubmenu, false);
+                    const $backLink  = getBackLink($activeSubmenu);
+                    const $items     = plugin.getFocusableItemsInSubmenu($activeSubmenu);
                     const focusOrder = [];
                     if ( $backLink.length ) focusOrder.push($backLink[0]);
                     $items.each(function() { focusOrder.push(this); });
@@ -693,7 +729,7 @@
                 }
             });
 
-            $wrap.on("keydown.megamenu", "a.mega-menu-link, button.mega-menu-link, .mega-indicator, .mega-menu-toggle-block, .mega-menu-toggle-animated-block button, button.mega-close", function(e) {
+            $wrap.on("keydown.megamenu", "a.mega-menu-link, button.mega-menu-link, button.mega-mobile-back-link, .mega-indicator, .mega-menu-toggle-block, .mega-menu-toggle-animated-block button, button.mega-close", function(e) {
                 if ( !$wrap.hasClass("mega-keyboard-navigation") ) return;
 
                 const key = e.key;
@@ -824,7 +860,7 @@
                 plugin.switchToDesktop();
             }
 
-            plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
+            recalculateSubmenuWidths();
         };
 
         plugin.reverseRightAlignedItems = function() {
@@ -936,27 +972,22 @@
 
             $(".mega-toggle-label, .mega-toggle-animated", $toggle_bar).attr("aria-expanded", "false");
 
-            if (plugin.settings.effect_mobile === "slide" && ! force ) {
-                $menu.animate({"height":"hide"}, plugin.settings.effect_speed_mobile, function() {
-                    $menu.css({
-                        width: "",
-                        left: "",
-                        display: ""
-                    });
-
-                    $toggle_bar.removeClass("mega-menu-open");
-                });
-            } else {
+            const resetMenuStyles = function() {
                 $menu.css({
                     width: "",
                     left: "",
                     display: ""
                 });
-                    
+
                 $toggle_bar.removeClass("mega-menu-open");
+            };
+
+            if (plugin.settings.effect_mobile === "slide" && ! force ) {
+                $menu.animate({"height":"hide"}, plugin.settings.effect_speed_mobile, resetMenuStyles);
+            } else {
+                resetMenuStyles();
             }
 
-            
             $menu.triggerHandler("mmm:hideMobileMenu");
         };
 
@@ -1012,8 +1043,6 @@
 
             const cssWidthRegex = /^((\d+(\.\d+)?(px|%|em|rem|vw|vh|ch|ex|cm|mm|in|pt|pc))|auto)$/i;
 
-            const resolveWidthEl = (val) => val === '$menu' ? $menu : val === '$wrap' ? $wrap : $(val);
-
             if (plugin.settings.panel_width !== undefined && ! cssWidthRegex.test(plugin.settings.panel_width) && ! resolveWidthEl(plugin.settings.panel_width).length ) {
                 console.warn('Max Mega Menu #' + $wrap.attr('id') + ': Panel Width (Outer) element (' + plugin.settings.panel_width + ') not found');
             }
@@ -1040,11 +1069,9 @@
             }
 
             if ( document.readyState === 'complete' ) {
-                plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
+                recalculateSubmenuWidths();
             } else {
-                $(window).on("load", function() {
-                    plugin.calculateDynamicSubmenuWidths($("> li.mega-menu-megamenu > a.mega-menu-link", $menu));
-                });
+                $(window).on("load", recalculateSubmenuWidths);
             }
 
             if ( plugin.isDesktopView() ) {

@@ -160,6 +160,18 @@ if ( ! class_exists( 'Mega_Menu_Location' ) ) :
 		}
 
 
+		/**
+		 * Return the full SCSS source that would be sent to the compiler for this
+		 * location and theme, without compiling it. Useful for debugging.
+		 *
+		 * @param  Mega_Menu_Theme $theme The theme to use.
+		 * @return string Full SCSS source string.
+		 */
+		public function get_scss( Mega_Menu_Theme $theme ) {
+			return $this->get_complete_scss( $theme );
+		}
+
+
 		// -------------------------------------------------------------------------
 		// Private: SCSS compilation
 		// -------------------------------------------------------------------------

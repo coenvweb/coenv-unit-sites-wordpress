@@ -635,6 +635,16 @@ if ( ! class_exists( 'Mega_Menu_Themes' ) ) :
 				<?php
 			}
 
+			if ( isset( $_GET['debug'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['debug'] ) ) ) {
+				$scss = Mega_Menu_Theme::from_settings( $this->active_theme )->get_scss();
+				?>
+				<div class="notice notice-info">
+					<p><label for="megamenu-debug-scss"><strong><?php esc_html_e( 'Debug: Full SCSS source', 'megamenu' ); ?></strong></label></p>
+					<textarea id="megamenu-debug-scss" readonly="readonly" rows="18" class="large-text code" style="width:100%;box-sizing:border-box;"><?php echo esc_textarea( $scss ); ?></textarea>
+				</div>
+				<?php
+			}
+
 			if ( isset( $_GET['deleted'] ) && 'false' === sanitize_text_field( wp_unslash( $_GET['deleted'] ) ) ) {
 				?>
 				<div class="notice notice-error is-dismissible">
