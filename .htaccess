@@ -1,8 +1,35 @@
-# 2024-09-16 DoS incident INC3500634
-<Limit GET>
+# Disable Directory Browsing
+Options -Indexes
+
+# Protect wp-config.php and .htaccess from Direct Access
+<Files wp-config.php>
+    Order Allow,Deny
+    Deny from all
+</Files>
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block Execution of PHP Scripts in WP-Uploads Directory (Safe Method)
+<FilesMatch "^.*\.(php|php5|phtml)$">
+    <IfModule mod_rewrite.c>
+        RewriteCond %{REQUEST_URI} /wp-content/uploads/ [NC]
+        RewriteRule .* - [F,L]
+    </IfModule>
+</FilesMatch>
+
+# More post requests throttling from single IP/Host patterns
+<Limit POST>
     Order Allow,Deny
     Allow from all
-	Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 31.207 ec2-54-175-29-131.compute-1.amazonaws.com petalbot-114-119-156-60.petalsearch.com 47.128 43.134 43.135 43.153 43.133 43.156 43.159 43.163 124.156 47.82 47.79 57.141
+    
+    # Specific IP Blocks / Subnets
+    Deny from 93.152.221.
+    Deny from 130.210.6.
+    Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247
+    Deny from 47.128. 43.134. 43.135. 43.153. 43.133. 43.156. 43.159. 43.163. 124.156. 47.82. 47.79. 57.141.
+    Deny from 101.47.29.104 104.168.46.178 91.92.40.168 94.26.106.167 138.199.42.160
 </Limit>
 
 # Allow server-status access without rewriting
@@ -19,6 +46,9 @@ RewriteCond %{REQUEST_URI} ^/wp-content/themes/coenv-fish/assets/img/safs-defaul
 RewriteRule .* - [F,L]
 </IfModule>
 
+RewriteCond %{QUERY_STRING} (^|&)(fbclid|gclid|_gl|mc_cid|mc_eid|utm_[^=]+)= [NC]
+RewriteRule ^ %{REQUEST_URI}? [R=302,L]
+
 # BEGIN WordPress Multisite
 # Using subfolder network type: https://wordpress.org/support/article/htaccess/#multisite
 
@@ -33,7 +63,7 @@ RewriteRule ^index\.php$ - [L]
 <Limit POST>
     Order Allow,Deny
     Allow from all 
-        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208 52.164 47.82 47.79 57.141 37.60 78.142 85.11
+        Deny from 115.192 115.206 116.89 42.56 115.204 183.128 31.207 168.61 201.92 114.119 51.11 52.247 ec2-54-175-29-131.compute-1.amazonaws.com 193.142.146.42 31.207.44.186 47.128 85.208 52.164 47.82 47.79 57.141 37.60 78.142 85.11 20.104 91.92 94.26 138.199 78.142
 </Limit>
 
 # Block WordPress xmlrpc.php requests
@@ -49,7 +79,7 @@ RewriteEngine On
 RewriteCond %{HTTP_REFERER} ^http://.*amazonaws\.com [OR]    
 RewriteCond %{REMOTE_HOST} ^.*\.compute-1\.amazonaws\.com$ [NC,OR]  
 RewriteCond %{REMOTE_HOST} ^.*\.compute\.amazonaws\.com$ [NC,OR]    
-RewriteCond %{HTTP_USER_AGENT} Nutch|Rustbot/0.3|NetSeer|heritrix|woriobot|AISearchBot|Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot|Bytespider [NC]
+RewriteCond %{HTTP_USER_AGENT} Nutch|Rustbot/0.3|NetSeer|heritrix|woriobot|AISearchBot|Mb2345Browser|LieBaoFast|zh-CN|MicroMessenger|zh_CN|Kinza|Datanyze|serpstatbot|spaziodati|OPPO\sA33|AspiegelBot|aspiegel|PetalBot|Bytespider|MSIE\ 7.0.*360S [NC]
 RewriteRule ^(.*)$ - [F] 
 
 #don't look at our git
@@ -317,12 +347,15 @@ RewriteRule ^(.*)$ https://waseagrant.uw.edu/$1 [R,L]
 
 # Seagrant Redirects
 RewriteCond %{HTTP_HOST} !^waseagrant.uw\.edu [NC]
-RewriteRule .? - [S=32]
+RewriteRule .? - [S=33]
 RewriteRule ^community-outreach/rapid-response-network/?.*$ https://waseagrant.uw.edu/our-programs/seafood-fisheries-aquaculture/aquaculture/rapid-response-network/ [L,R=302]
 RewriteRule ^about-wsg/staff-portal/code-of-conduct/?$ https://waseagrant.uw.edu/about-us/engagement-code-of-conduct/ [L,R=302]
 RewriteRule ^students-teachers/drill-instructor-training/?$ https://waseagrant.uw.edu/education-training/workforce-training/fishermen/ [L,R=302]
 RewriteRule ^community-outreach/outreach-detail-pages/crabbertowboat-lane-agreements-download-charts-data-and-meetings/?$ https://waseagrant.uw.edu/our-programs/marine-economy-workforce-development/crabber-towboat-lane-agreement/ [L,R=302]
 RewriteRule ^fisheries-aquaculture-and-seafood/?$ https://waseagrant.uw.edu/our-programs/seafood-fisheries-aquaculture/ [L,R=302]
+RewriteRule ^crabteamblog/volunteerresources/?$ https://wsgcrabteam.uw.edu/programs/monitoring-network/monitor-toolkit/ [L,R=302]
+RewriteRule ^crabteam/getinvolved/toolbox/?.*$ https://wsgcrabteam.uw.edu/programs-2/monitoring-network/monitor-toolkit/ [L,R=302]
+RewriteRule ^crabteam/greencrab/report/?$ https://wsgcrabteam.uw.edu/report-a-sighting-2/ [L,R=302]
 RewriteRule ^crabteam/?.*$ https://wsgcrabteam.uw.edu/ [L,R=302]
 RewriteRule ^moltsearch/?$ https://wsgcrabteam.uw.edu/programs-2/molt-search/ [L,R=302]
 RewriteRule ^students-teachers/fellowship/keystone/?$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/wsg-keystone-fellowship/ [L,R=302]
@@ -338,8 +371,6 @@ RewriteRule ^event/wsg-seaweed-office-hours-40/all/?$ https://waseagrant.uw.edu/
 RewriteRule ^wacoast/?$ https://waseagrant.uw.edu/fellowships/graduate-opportunities/washington-sea-grant-coastal-resilience-fellowship/ [L,R=302]
 RewriteRule ^community-outreach/hazard-resilience-and-climate-adaptation/king-tides/calendar/?$ https://waseagrant.uw.edu/our-programs/coastal-hazards-climate-resilience/king-tides/king-tides-calendar/ [L,R=302]
 RewriteRule ^community-outreach/outreach-detail-pages/river-and-ocean-film-festival/?$ https://waseagrant.uw.edu/education-training/lifelong-learning/river-and-ocean-film-festival/ [L,R=302]
-RewriteRule ^crabteam/getinvolved/toolbox/?.*$ https://wsgcrabteam.uw.edu/programs-2/monitoring-network/monitor-toolkit/ [L,R=302]
-RewriteRule ^crabteam/greencrab/report/?$ https://wsgcrabteam.uw.edu/report-a-sighting-2/ [L,R=302]
 RewriteRule ^wordpress/wp-content/uploads/SculpinIDSlides.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/Screenshot-2026-04-29-at-4.26.45-PM.png [L,R=302]
 RewriteRule ^wordpress/wp-content/uploads/Sculpin-ID.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/05/Sculpin-ID.pdf [L,R=302]
 RewriteRule ^wordpress/wp-content/uploads/MEGRvCAPRvMEMA-Slides.pdf/?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/MEGRvCAPRvMEMA-Slides.pdf [L,R=302]
@@ -350,6 +381,7 @@ RewriteRule ^events/category/outreach/green-crab/?$ https://wsgcrabteam.uw.edu/e
 RewriteRule ^wordpress/wp-content/uploads/WSGCrabTeamIDGuide.23-1.pdf?$ https://wsgcrabteam.uw.edu/wp-content/uploads/2026/04/WSGCrabTeamIDGuide.23-1.pdf [L,R=302]
 RewriteRule ^wordpress/wp-content/uploads/FINAL-MAST-REPORT-Octoberr-2021-copy.pdf/?.*$ https://waseagrant.uw.edu/funding-research/publications-library/marine-alternative-shorelines-training-needs-assessment-report/ [L,R=302]
 RewriteRule ^community-outreach/olympic-oa-rva/?$ https://waseagrant.uw.edu/our-programs/coastal-hazards-climate-resilience/ocean-acidification/ocean-acidification-on-the-olympic-coast/ [L,R=302]
+
 
 
 # Climate Redirects
