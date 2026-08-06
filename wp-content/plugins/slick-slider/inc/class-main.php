@@ -221,7 +221,8 @@ class Slick_Slider_Main {
 	 */
 	public static function get_plugin_data( $field = NULL ) {
 
-		if ( ! $plugin_data = Slick_Slider_Cache::get( 'plugin_data' ) ) {
+		$plugin_data = Slick_Slider_Cache::get( 'plugin_data' );
+		if ( ! $plugin_data ) {
 			if ( ! function_exists( 'get_plugin_data' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 			}
@@ -255,11 +256,11 @@ class Slick_Slider_Main {
 					$difference[ $key ] = $value;
 				} else  {
 					$new_diff = self::array_diff_assoc_recursive( $value, $array_2[ $key ] );
-					if ( $new_diff != false ) {
+					if ( ! empty( $new_diff ) ) {
 						$difference[ $key ] = $new_diff;
 					}
 				}
-			} elseif ( ! isset( $array_2[ $key ] ) || $array_2[ $key ] != $value ) {
+			} elseif ( ! isset( $array_2[ $key ] ) || $array_2[ $key ] !== $value ) {
 				$difference[ $key ] = $value;
 			}
 		}

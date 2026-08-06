@@ -49,10 +49,10 @@ class Slick_Slider_Template {
 			<div class="clear"></div>
 			<div class="slick-slider-settings">
 				<hr>
-				<h3><?php _e( 'Slick Slider', 'slick-slider' ); ?></h3>
+				<h3><?php esc_html_e( 'Slick Slider', 'slick-slider' ); ?></h3>
 				<div class="slick-slider-toggle-settings">
 					<label class="setting">
-						<span><?php _e( 'Use Slick Slider', 'slick-slider' ); ?></span>
+						<span><?php esc_html_e( 'Use Slick Slider', 'slick-slider' ); ?></span>
 						<input
 							type="checkbox"
 							data-setting="slick_active"
@@ -79,14 +79,15 @@ class Slick_Slider_Template {
 	 */
 	public static function print_slider_defaults() {
 
-		$options_json = json_encode( Slick_Slider_Options::get() );
+		$options_json = wp_json_encode( Slick_Slider_Options::get(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
 
 		$output = [];
 		$output[] = '<script type="text/javascript">';
 		$output[] = sprintf( 'var slider_defaults = %s;', $options_json );
 		$output[] = '</script>';
 
-		echo implode( "\n", $output );
+		// $options_json is safely encoded via wp_json_encode() with hex flags above; the remaining markup is static.
+		echo implode( "\n", $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 	}
 

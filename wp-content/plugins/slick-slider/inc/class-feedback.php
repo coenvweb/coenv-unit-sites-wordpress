@@ -42,8 +42,8 @@ class Slick_Slider_Feedback {
 
 		if ( empty( $type ) || empty( $msg ) || ! in_array( $type, array(
 			'critical',
-			'notice' 
-		) ) ) {
+			'notice'
+		), true ) ) {
 			return false;
 		}
 		$data = (array) Slick_Slider_Cache::get( 'feedback' );
@@ -71,8 +71,8 @@ class Slick_Slider_Feedback {
 		}
 		if ( in_array( $type, array(
 			'critical',
-			'notice' 
-		) ) && ! empty( $data[ $type ] ) ) {
+			'notice'
+		), true ) && ! empty( $data[ $type ] ) ) {
 			return $data[ $type ];
 		}
 		return false;
@@ -112,7 +112,8 @@ class Slick_Slider_Feedback {
 	 */
 	private static function _display() {
 
-		if ( ! $errors = self::get() ) {
+		$errors = self::get();
+		if ( ! $errors ) {
 			return false;
 		}
 		$matrix = array(
@@ -123,7 +124,7 @@ class Slick_Slider_Feedback {
 			echo sprintf(
 				'<div class="notice notice-%s is-dismissible"><p>%s</p></div>',
 				esc_attr( $matrix[ $type ] ),
-				$msg
+				esc_html( $msg )
 			);
 		}
 

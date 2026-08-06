@@ -188,7 +188,7 @@ class Slick_Slider_Output {
 			if ( apply_filters( 'slick_slider_show_caption', false ) ) {
 
 				/* translators: Replacement string ("Use %3$s instead."), see https://developer.wordpress.org/reference/functions/_deprecated_function/ */
-				_deprecated_function( 'add_filter( \'slick_slider_show_caption\' )', 0.5, __( 'the new option “Show caption”', 'slick-slider' ) );
+				_deprecated_function( 'add_filter( \'slick_slider_show_caption\' )', 0.5, esc_html__( 'the new option “Show caption”', 'slick-slider' ) );
 
 				$options['showCaption'] = true;
 			}
@@ -214,7 +214,7 @@ class Slick_Slider_Output {
 				! empty( $options )
 					? sprintf(
 						"data-slick='%s'",
-						json_encode( $options )
+						esc_attr( json_encode( $options ) )
 					)
 					: ''
 			);
@@ -229,7 +229,8 @@ class Slick_Slider_Output {
 
 				$image_tag = wp_get_attachment_image( $id, $atts['size'] );
 
-				if ( class_exists( 'WPGalleryCustomLinks' ) && $link = get_post_meta( $id, '_gallery_link_url', true ) ) {
+				$link = class_exists( 'WPGalleryCustomLinks' ) ? get_post_meta( $id, '_gallery_link_url', true ) : '';
+				if ( $link ) {
 					$slide[] = sprintf(
 						'<a href="%s" target="%s">%s</a>',
 						esc_html( apply_filters( 'wpgcl_filter_raw_gallery_link_url', $link, $id, $post->ID ) ),
@@ -293,6 +294,8 @@ class Slick_Slider_Output {
 
 			return apply_filters( 'slick_slider_html', $output, $post->ID, self::$slick_instance );
 		}
+
+		return $output;
 
 	}
 

@@ -161,7 +161,7 @@ class Slick_Slider_Options {
 			} elseif ( is_numeric( $value ) ) {
 				$value = floatval( $value );
 			}
-			$key = array_search( $option, array_column( $options_db, 'setting' ) );
+			$key = array_search( $option, array_column( $options_db, 'setting' ), true );
 			$options_slider[ $keys[ $key ] ] = $value;
 		}
 
@@ -188,22 +188,22 @@ class Slick_Slider_Options {
 				foreach ( $options as $option => $array_values ) {
 					add_settings_field(
 						$option,
-						sprintf( '<label for="%s">%s</label><small>%s</small>', $option, $array_values['name'], $array_values['desc'] ),
+						sprintf( '<label for="%s">%s</label><small>%s</small>', esc_attr( $option ), esc_html( $array_values['name'] ), esc_html( $array_values['desc'] ) ),
 						function() use ( $option, $array_values ) {
 							switch ( $array_values['type'] ) {
 								case 'boolean' :
 									printf(
 										'<input type="checkbox" id="%s" name="%s" %s />',
-										$option,
-										$option,
+										esc_attr( $option ),
+										esc_attr( $option ),
 										$array_values['value'] ? 'checked' : ''
 									);
 									break;
 								case 'integer' :
 									printf(
 										'<input type="number" id="%s" name="%s" value="%s" %s />',
-										$option,
-										$option,
+										esc_attr( $option ),
+										esc_attr( $option ),
 										esc_attr( $array_values['value'] ),
 										'edgeFriction' === $option ? 'step="0.01"' : ''
 									);
@@ -211,38 +211,38 @@ class Slick_Slider_Options {
 								case 'string' :
 									printf(
 										'<input type="text" id="%s" name="%s" value="%s" />',
-										$option,
-										$option,
+										esc_attr( $option ),
+										esc_attr( $option ),
 										esc_attr( $array_values['value'] )
 									);
 									break;
 								case 'select' :
-									$select_options = [];
+									printf(
+										'<select id="%s" name="%s">',
+										esc_attr( $option ),
+										esc_attr( $option )
+									);
 									foreach ( $array_values['values'] as $value ) {
-										$select_options[] = sprintf(
+										printf(
 											'<option %s>%s</option>',
-											$value === $array_values['value'] ? 'selected' : '', $value
+											selected( $value, $array_values['value'], false ),
+											esc_html( $value )
 										);
 									}
-									printf(
-										'<select id="%s" name="%s">%s</select>',
-										$option,
-										$option,
-										implode( "\n", $select_options )
-									);
+									echo '</select>';
 									break;
 								case 'function' :
 									printf(
 										'<textarea id="%s" name="%s">%s</textarea>',
-										$option,
-										$option,
-										$array_values['value']
+										esc_attr( $option ),
+										esc_attr( $option ),
+										esc_textarea( $array_values['value'] )
 									);
 									break;
 								case 'object' :
 									printf(
 										'<button class="slick-slider-add-breakpoint">%s</button>',
-										__( 'Add breakpoint', 'slick-slider' ) );
+										esc_html__( 'Add breakpoint', 'slick-slider' ) );
 									break;
 								default:
 									break;
@@ -262,15 +262,15 @@ class Slick_Slider_Options {
 				foreach ( $options as $option => $array_values ) {
 					if ( false === $array_values['showOnSingleGallery'] ) continue; ?>
 					<label class="setting">
-						<span><?php echo $array_values['name']; ?></span><small data-hint="<?php echo $array_values['desc']; ?>">[?]</small>
+						<span><?php echo esc_html( $array_values['name'] ); ?></span><small data-hint="<?php echo esc_attr( $array_values['desc'] ); ?>">[?]</small>
 						<?php switch ( $array_values['type'] ) {
 							case 'boolean' :
 								printf(
 									'<input type="checkbox" data-setting="%s" %s />',
-									$array_values['setting'],
+									esc_attr( $array_values['setting'] ),
 									sprintf(
 										'<# if ( slider_defaults.%s.value ) { #> checked="checked" <# } #>',
-										$option
+										esc_attr( $option )
 									)
 								);
 								break;
@@ -279,28 +279,28 @@ class Slick_Slider_Options {
 								printf(
 									'<input type="%s" data-setting="%s" value="%s" />',
 									'text',
-									$array_values['setting'],
+									esc_attr( $array_values['setting'] ),
 									sprintf(
 										'{{ slider_defaults.%s.value }}',
-										$option
+										esc_attr( $option )
 									)
 								);
 								break;
 							case 'select' :
 								printf(
 									'<select data-setting="%s">',
-									$array_values['setting']
+									esc_attr( $array_values['setting'] )
 								);
 								foreach ( $array_values['values'] as $value ) :
 									printf(
 										'<option value="%s" %s>%s</option>',
-										$value,
+										esc_attr( $value ),
 										sprintf(
 											'<# if ( "%s" === slider_defaults.%s.value ) { #> selected="selected" <# } #>',
-											$value,
-											$option
+											esc_js( $value ),
+											esc_attr( $option )
 										),
-										$value
+										esc_html( $value )
 									);
 								endforeach;
 								echo '</select>';
@@ -308,10 +308,10 @@ class Slick_Slider_Options {
 							case 'function' :
 								printf(
 									'<textarea data-setting="%s">%s</textarea>',
-									$array_values['setting'],
+									esc_attr( $array_values['setting'] ),
 									sprintf(
 										'{{ slider_defaults.%s.value }}',
-										$option
+										esc_attr( $option )
 									)
 								);
 								break;

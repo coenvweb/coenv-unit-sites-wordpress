@@ -139,8 +139,8 @@ class Slick_Slider_Gui {
 		submit_button( __( 'Reset Slick Slider settings', 'slick-slider' ), 'delete', '_slick_reset' );
 		echo sprintf(
 			'<span class="button collapse-header hidden" data-collapse-header-text="%s">%s</span>',
-			__( 'Collapse settings', 'slick-slider' ),
-			__( 'Expand settings', 'slick-slider' )
+			esc_attr__( 'Collapse settings', 'slick-slider' ),
+			esc_html__( 'Expand settings', 'slick-slider' )
 		);
 
 	}
@@ -161,7 +161,7 @@ class Slick_Slider_Gui {
 		if ( ! isset( $_POST['_slick_nonce'] ) ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $_POST['_slick_nonce'], '_slick__settings_nonce' ) ) {
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_slick_nonce'] ) ), '_slick__settings_nonce' ) ) {
 			return;
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {
