@@ -734,6 +734,16 @@ jQuery(function ($) {
 
         $(".theme_result_message").remove();
 
+        // Flush every CodeMirror instance in the form (custom CSS, and any
+        // companion-plugin textareas such as Pro's toggle bar HTML block) back
+        // into its textarea before serializing — CodeMirror doesn't keep the
+        // underlying textarea's value in sync on every keystroke, so without
+        // this a save triggered before an individual field's own blur/change
+        // handler runs submits stale (often empty) content for that field.
+        $form.find("textarea").each(function () {
+            window.megamenuCodeEditor.save(this);
+        });
+
         $.ajax({
             url:  ajaxurl,
             data: $form.serialize(),
