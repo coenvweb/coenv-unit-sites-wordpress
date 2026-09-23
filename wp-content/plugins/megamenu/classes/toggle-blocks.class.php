@@ -335,9 +335,11 @@ if ( ! class_exists( 'Mega_Menu_Toggle_Blocks' ) ) :
 		 * @return array Sanitized settings.
 		 */
 		private function sanitize_toggle_block_settings( $settings ) {
-			foreach ( $settings as &$value ) {
+			foreach ( $settings as $key => &$value ) {
 				if ( is_array( $value ) ) {
 					$value = $this->sanitize_toggle_block_settings( $value );
+				} elseif ( 'html' === $key ) {
+					$value = current_user_can( 'unfiltered_html' ) ? wp_unslash( $value ) : wp_kses_post( wp_unslash( $value ) );
 				} else {
 					$value = sanitize_text_field( wp_unslash( $value ) );
 				}

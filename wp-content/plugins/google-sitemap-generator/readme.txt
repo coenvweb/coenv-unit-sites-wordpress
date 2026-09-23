@@ -2,8 +2,8 @@
 Contributors: auctollo
 Tags: SEO, xml sitemap, video sitemap, news sitemap, html sitemap
 Requires at least: 4.6
-Tested up to: 7.0
-Stable tag: 4.1.24
+Tested up to: 7.1
+Stable tag: 4.1.25
 Requires PHP: 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,14 @@ Please post your question at the [WordPress support forum](https://wordpress.org
 
 
 == Changelog ==
+
+= 4.1.25 (2026-09-18) =
+* Fixed "XML parsing error: XML or text declaration not at the beginning of the entity" on sitemap.xml. If a theme or another plugin printed anything before the sitemap started — a blank line after a closing PHP tag, a UTF-8 BOM, a debug notice — it landed in front of the XML declaration and the whole document failed to parse. That output is now discarded before the sitemap is sent. This works where the stray output is still held in a PHP output buffer, which is the usual case; if your server runs with output_buffering disabled the output has already left for the browser before the plugin can act, and the offending blank line or BOM has to be removed from the file that emits it.
+* Fixed the plugin overwriting robots.txt rules added by WordPress and other plugins. The robots.txt filter replaced the whole file body, so WooCommerce's Disallow lines (wc-logs, woocommerce_uploads, add-to-cart) and any custom rules were silently dropped, and sites with "Discourage search engines" enabled were left with a bare "Disallow: /". Rules are now additive: existing directives are preserved, and the redundant non-standard "Disallow: /*" and "Disallow: /*?" lines are gone. With "Discourage search engines" on, the "Disallow: /" is added to every user-agent group in the file rather than only to the "User-agent: *" one — a crawler that your robots.txt names specifically follows its own group and ignores the wildcard, so fencing only the wildcard would have left those crawlers free. If your robots.txt has no "User-agent: *" group at all, one is added, so crawlers your file never mentions are covered too. An "Allow:" covering the whole site is removed from the "User-agent: *" group, and from any other group at the point a block is added to it, because robots.txt resolves an exact-length tie in favour of the more permissive rule and that one line would otherwise cancel the block outright. A group where you have written both "Disallow: /" and "Allow: /" yourself is left alone — that pair is yours, and removing half of it would change what you asked for rather than enforce it. A group naming a specific crawler is left exactly as you wrote it — nothing added, nothing removed — when it grants that crawler the whole site and restricts nothing, so a deliberate exception, written either as "Allow: /" or as the bare "Disallow:" that Google's own AdSense example uses, still works. A group that carries rules of its own is not an exception and is blocked like any other, so a group some other plugin wrote for Googlebot — "Disallow: /wp-admin/", say — does not quietly exempt Googlebot from the setting. Path-specific "Allow:" rules, such as the one WordPress adds for admin-ajax.php, are never touched and still take precedence for their own path. Nor is "Allow: /$", which grants only your homepage rather than the whole site. If you deliberately keep "Allow: /" in your "User-agent: *" group so that crawlers can still fetch pages and see the noindex meta tag WordPress emits — which since WordPress 5.3 is how core itself prefers to keep a site out of results — then this setting is working against you, and the line will be removed while it is on. Turn "Discourage search engines" off, or turn off the option below, if that is your strategy. All of this applies only while "Add sitemap URL to the virtual robots.txt file" is enabled, which is what lets the plugin touch robots.txt at all; with it off the plugin leaves the file alone entirely, as it did before. And robots.txt is a crawl hint, not access control: a staging site that must stay out of search needs HTTP authentication or a noindex header.
+* Fixed "Links per sitemap file" refusing any value below 1000. The field advertised a minimum of 1000, and a separate repair that ran on every admin page load reset anything smaller, so a value you saved appeared not to stick. The minimum is now 100, that repair is gone, and the range is enforced in one place when the sitemap is built — so the number shown in settings is the number actually used.
+* Fixed a future date appearing as <lastmod> for categories, tags, product terms and custom post type archives. The dates were read from the site-local database columns while WordPress runs PHP in UTC, so on any timezone ahead of UTC every entry was dated hours into the future — and the most recently updated categories looked the furthest ahead. Those dates are now read from the UTC columns. The category query was also picking up scheduled and draft posts when deciding how recently a category changed; it now only considers published ones. Where a date would still be genuinely in the future, that entry's lastmod is left out rather than replaced with the current time, which would otherwise make the entry report a brand-new modification date on every fetch and teach search engines to ignore the field.
+* Fixed the "Join the Beta Program" and "Enable Auto-Updates" banner buttons rendering with unreadable link-coloured, underlined text on WordPress 7.0 and later. Core 7.0 started colouring every link inside an admin notice, and its rule outranked the plugin's button styles.
+* Compatibility: marked as tested with WordPress 7.1.
 
 = 4.1.24 (2026-05-22) =
 * Security: mitigated CVE-2026-42945 (NGINX Rift, CVSS 9.2) in the dashboard's suggested Nginx rewrite rules. The rules now use named PCRE captures (?&lt;slug&gt;...) instead of unnamed $1/$2, which avoids the heap-overflow trigger in ngx_http_rewrite_module. If you previously copied the Nginx rules from Settings &rarr; XML-Sitemap into your nginx config, please re-copy the updated block.
@@ -635,6 +643,9 @@ Good news, this plugin is free for everyone! Since it's released under the GPL, 
 The plugin comes with various translations, please refer to the [WordPress Codex](http://codex.wordpress.org/Installing_WordPress_in_Your_Language "Installing WordPress in Your Language") for more information about activating the translation. If you want to help to translate the plugin to your language, please have a look at the sitemap.pot file which contains all definitions and may be used with a [gettext](http://www.gnu.org/software/gettext/) editor like [Poedit](http://www.poedit.net/) (Windows).
 
 == Upgrade Notice ==
+
+= 4.1.25 =
+Fixes XML parsing errors on sitemap.xml, stops the plugin from overwriting robots.txt rules added by WordPress and other plugins, allows fewer than 1000 links per sitemap file, and prevents future dates appearing as lastmod.
 
 = 4.1.24 =
 Security: Mitigates CVE-2026-42945 in the suggested Nginx rewrite rules. If you previously copied the Nginx config from Settings &rarr; XML-Sitemap, please re-copy the updated rules from the dashboard.

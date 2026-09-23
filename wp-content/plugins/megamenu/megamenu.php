@@ -3,7 +3,7 @@
  * Plugin Name: Max Mega Menu
  * Plugin URI:  https://www.megamenu.com
  * Description: An easy to use mega menu plugin. Written the WordPress way.
- * Version:     3.10.7
+ * Version:     3.10.8
  * Requires PHP: 7.4
  * Author:      megamenu.com
  * Author URI:  https://www.megamenu.com
@@ -36,7 +36,7 @@ if ( ! class_exists( 'Mega_Menu' ) ) :
 		 *
 		 * @var string
 		 */
-		public $version = '3.10.7';
+		public $version = '3.10.8';
 
 
 		/**

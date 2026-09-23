@@ -316,10 +316,22 @@ class GoogleSitemapGeneratorStandardBuilder {
 							$priority = $minimum_priority;
 						}
 
+						// Both GMT columns are checked against the zero-date
+						// sentinel. get_timestamp_from_my_sql() splits
+						// '0000-00-00 00:00:00' without complaint and mktime()
+						// turns it into 1999-11-30, which the clamp cannot
+						// catch because it is in the past — the post would
+						// simply advertise a wrong date forever.
+						$post_gmt = '';
+						if ( ! empty( $post->post_modified_gmt ) && '0000-00-00 00:00:00' !== $post->post_modified_gmt ) {
+							$post_gmt = $post->post_modified_gmt;
+						} elseif ( ! empty( $post->post_date_gmt ) && '0000-00-00 00:00:00' !== $post->post_date_gmt ) {
+							$post_gmt = $post->post_date_gmt;
+						}
 						// Add the URL to the sitemap.
 						$gsg->add_url(
 							$permalink,
-							$gsg->get_timestamp_from_my_sql( $post->post_modified_gmt && '0000-00-00 00:00:00' !== $post->post_modified_gmt ? $post->post_modified_gmt : $post->post_date_gmt ),
+							( '' !== $post_gmt ? $gsg->get_timestamp_from_my_sql( $post_gmt ) : 0 ),
 							( 'page' === $post_type ? $change_frequency_for_pages : $change_frequency_for_posts ),
 							$priority,
 							$post->ID
@@ -406,13 +418,45 @@ class GoogleSitemapGeneratorStandardBuilder {
 			);
 
 			if ( $latest->have_posts() ) {
-				$modified_date = $latest->posts[0]->post_modified;
-				if ( gmdate( 'n', strtotime( $modified_date ) ) === gmdate( 'n' ) && gmdate( 'Y', strtotime( $modified_date ) ) === gmdate( 'Y' ) ) {
+				// post_modified_gmt, because get_timestamp_from_my_sql() builds
+				// its timestamp with mktime() under WordPress's UTC default
+				// timezone — handing it the site-local post_modified column
+				// shifts the archive's lastmod by the site's UTC offset, and
+				// on UTC+ sites into the future.
+				//
+				// When that column is zeroed the local one is CONVERTED
+				// rather than simply relabelled as UTC. Appending '+0000' to
+				// a local timestamp asserts something untrue and reproduces
+				// the very offset this is fixing — which the clamp would
+				// then turn into a silently missing element. With no
+				// converter available the date is left unknown: an absent
+				// lastmod is honest, a wrong one is not.
+				$modified_date = ! empty( $latest->posts[0]->post_modified_gmt ) && '0000-00-00 00:00:00' !== $latest->posts[0]->post_modified_gmt
+					? $latest->posts[0]->post_modified_gmt
+					: ( function_exists( 'get_gmt_from_date' )
+						&& ! empty( $latest->posts[0]->post_modified )
+						&& '0000-00-00 00:00:00' !== $latest->posts[0]->post_modified
+						? get_gmt_from_date( $latest->posts[0]->post_modified )
+						: '' );
+				// > 0, not merely truthy: get_gmt_from_date() on an unusable
+				// date yields a year -0001 string rather than false, and the
+				// resulting large NEGATIVE timestamp is truthy — enough to
+				// pass a bare check and pick the wrong change frequency.
+				$modified_ts = ! empty( $modified_date ) ? (int) strtotime( $modified_date . ' +0000' ) : 0;
+				if ( $modified_ts < 0 ) {
+					$modified_ts = 0;
+				}
+				if ( $modified_ts && gmdate( 'n', $modified_ts ) === gmdate( 'n' ) && gmdate( 'Y', $modified_ts ) === gmdate( 'Y' ) ) {
 					$change_freq = $gsg->get_option( 'cf_arch_curr' );
 				} else { // Archive is older.
 					$change_freq = $gsg->get_option( 'cf_arch_old' );
 				}
-				$gsg->add_url( get_post_type_archive_link( $post_type_custom ), $gsg->get_timestamp_from_my_sql( $modified_date ), $change_freq, $gsg->get_option( 'pr_arch' ), 0, array(), array(), '' );
+				// $modified_ts, not $modified_date: get_timestamp_from_my_sql()
+				// explodes its argument on ' ', '-' and ':' with no guard, so
+				// an empty string raises a run of undefined-offset notices and
+				// returns a 1999 timestamp — advertising a wrong date instead
+				// of omitting an unknown one.
+				$gsg->add_url( get_post_type_archive_link( $post_type_custom ), $modified_ts, $change_freq, $gsg->get_option( 'pr_arch' ), 0, array(), array(), '' );
 			}
 		}
 	}
@@ -423,7 +467,22 @@ class GoogleSitemapGeneratorStandardBuilder {
 	 * @param GoogleSitemapGenerator $gsg instence of sitemap generator class.
 	 */
 	public function build_misc( $gsg ) {
-		$lm = get_lastpostmodified( 'gmt' );
+		/*
+		 * The same resolver index() uses, so one site-wide value cannot
+		 * produce two different answers inside a single build. It already
+		 * rejects the '0000-00-00 00:00:00' sentinel — which this function
+		 * used to hand to get_timestamp_from_my_sql(), turning it into a
+		 * 1999 date on the home page — and it applies the future-poison
+		 * recovery, which this function did not have at all: on a site with
+		 * one bogus future row the index entries were being rescued while
+		 * the home page and the HTML sitemap silently lost their <lastmod>.
+		 *
+		 * It returns a UTC timestamp rather than a MySQL string, so the
+		 * conversions below are gone. 0 means unknown, which both render
+		 * sites already omit — never time(), which would move on every
+		 * request and teach crawlers to ignore the field.
+		 */
+		$lm = self::resolve_blog_lastmod();
 
 		if ( $gsg->get_option( 'in_home' ) ) {
 			$home = get_bloginfo( 'url' );
@@ -434,9 +493,21 @@ class GoogleSitemapGeneratorStandardBuilder {
 					$page_on_front = get_option( 'page_on_front' );
 					$p             = get_post( $page_on_front );
 					if ( $p ) {
+						// Both columns are checked against the zero-date
+						// sentinel, not just the first. get_timestamp_from_my_sql()
+						// splits '0000-00-00 00:00:00' happily and mktime()
+						// turns it into 1999-11-30, so an unguarded fallback
+						// ships that as the home page's <lastmod>. When
+						// neither column holds a date the element is omitted.
+						$front_gmt = '';
+						if ( ! empty( $p->post_modified_gmt ) && '0000-00-00 00:00:00' !== $p->post_modified_gmt ) {
+							$front_gmt = $p->post_modified_gmt;
+						} elseif ( ! empty( $p->post_date_gmt ) && '0000-00-00 00:00:00' !== $p->post_date_gmt ) {
+							$front_gmt = $p->post_date_gmt;
+						}
 						$gsg->add_url(
 							trailingslashit( $home ),
-							$gsg->get_timestamp_from_my_sql( ( $p->post_modified_gmt && '0000-00-00 00:00:00' !== $p->post_modified_gmt ? $p->post_modified_gmt : $p->post_date_gmt ) ),
+							( '' !== $front_gmt ? $gsg->get_timestamp_from_my_sql( $front_gmt ) : 0 ),
 							$gsg->get_option( 'cf_home' ),
 							$gsg->get_option( 'pr_home' )
 						);
@@ -444,7 +515,7 @@ class GoogleSitemapGeneratorStandardBuilder {
 				} else {
 					$gsg->add_url(
 						trailingslashit( $home ),
-						( $lm ? $gsg->get_timestamp_from_my_sql( $lm ) : time() ),
+						$lm,
 						$gsg->get_option( 'cf_home' ),
 						$gsg->get_option( 'pr_home' )
 					);
@@ -461,7 +532,7 @@ class GoogleSitemapGeneratorStandardBuilder {
 			if(!isset($sm_sitemap_name)) $sm_sitemap_name = 'sitemap';
 			$gsg->add_url(
 				str_replace('.html', $sm_sitemap_name . '.html', $gsg->get_xml_url( 'main', '', array( 'html' => true ) ) ),
-				( $lm ? $gsg->get_timestamp_from_my_sql( $lm ) : time() )
+				$lm
 			);
 		}
 
@@ -551,6 +622,16 @@ class GoogleSitemapGeneratorStandardBuilder {
 	 * @return string[]
 	 */
 	public function filter_terms_query( $selects ) {
+		/*
+		 * The value this adds is not read anywhere. Its only live consumer,
+		 * the product_cat branch of build_taxonomies(), gets its terms from
+		 * this class's own raw get_terms() — plain SQL that the
+		 * get_terms_fields filter never touches — so on every product-tag
+		 * and product-category sitemap the database computes a correlated
+		 * MAX() per term and the result is discarded. Removing the filter
+		 * changes the SQL of every get_terms() call it wraps, which is more
+		 * than a release-triage patch should do; tracked in #913.
+		 */
 		/**
 		 * Global variable in functional scope for database
 		 *
@@ -560,7 +641,12 @@ class GoogleSitemapGeneratorStandardBuilder {
 		$selects[] = "
 		( /* ADDED BY XML SITEMAPS */
 			SELECT
-				UNIX_TIMESTAMP(MAX(p.post_date_gmt)) as _mod_date
+				/* TIMESTAMPDIFF from the epoch, not UNIX_TIMESTAMP(): the latter
+				   reads its argument as being in MySQL's session time zone, which
+				   WordPress never sets, so on a server whose zone is not UTC it
+				   shifts an already-UTC post_date_gmt by that offset. Subtracting
+				   two plain datetimes involves no zone at all. */
+				TIMESTAMPDIFF(SECOND, '1970-01-01 00:00:00', MAX(p.post_date_gmt)) as _mod_date
 			FROM
 				{$wpdb->posts} p,
 				{$wpdb->term_relationships} r
@@ -660,6 +746,17 @@ class GoogleSitemapGeneratorStandardBuilder {
 
 			$step          = 1;
 			$size_of_terms = count( $terms );
+
+			// One grouped query for the whole page, instead of one per term
+			// inside the loop below.
+			$term_ids_on_page = array();
+			foreach ( $terms as $term_to_prime ) {
+				if ( isset( $term_to_prime->term_id ) ) {
+					$term_ids_on_page[] = $term_to_prime->term_id;
+				}
+			}
+			$this->primeTaxonomyUpdatedDates( $term_ids_on_page );
+
 			for ( $tax_count = 0; $tax_count < $size_of_terms; $tax_count++ ) {
 				$term = $terms[ $tax_count ];
 
@@ -673,7 +770,19 @@ class GoogleSitemapGeneratorStandardBuilder {
 						$gsg->add_url( get_term_link( $term, $step ), $this->getTaxonomyUpdatedDate($term->term_id) ?: 0, $gsg->get_option( 'cf_cats' ), $gsg->get_option( 'pr_cats' ) );
 						break;
 					case 'product_cat':
-						$gsg->add_url( get_term_link( $term, $step ), $term->_mod_date, $gsg->get_option( 'cf_product_cat' ), $gsg->get_option( 'pr_product_cat' ) );
+						// _mod_date comes from filter_terms_query()'s aggregate,
+						// which only exists when the terms were fetched through
+						// WP_Term_Query. This method's terms come from the
+						// class's own raw get_terms(), which selects from terms
+						// and term_taxonomy alone — so the property is simply
+						// absent here, raising a PHP 8 warning (itself enough to
+						// corrupt an XML response) and passing null as the
+						// lastmod. Fall back to the same per-term lookup the
+						// other branches use.
+						$product_cat_mod = isset( $term->_mod_date )
+							? $term->_mod_date
+							: ( $this->getTaxonomyUpdatedDate( $term->term_id ) ?: 0 );
+						$gsg->add_url( get_term_link( $term, $step ), $product_cat_mod, $gsg->get_option( 'cf_product_cat' ), $gsg->get_option( 'pr_product_cat' ) );
 						break;
 					case 'post_tag':
 						$gsg->add_url( get_term_link( $term, $step ), $this->getTaxonomyUpdatedDate($term->term_id) ?: 0, $gsg->get_option( 'cf_tags' ), $gsg->get_option( 'pr_tags' ) );
@@ -691,24 +800,260 @@ class GoogleSitemapGeneratorStandardBuilder {
 		get last updated date of taxonomy post 
 		returns timestamp (int)
 	*/
+	/**
+	 * Per-request memo for getTaxonomyUpdatedDate().
+	 *
+	 * Keyed by term id. A null value means "looked up, no usable date",
+	 * which is distinct from a key being absent.
+	 *
+	 * @since 4.1.25
+	 * @var array
+	 */
+	private static $taxonomyUpdatedDateCache = array();
+
+	/**
+	 * Resolve the newest post date for many terms in one query.
+	 *
+	 * getTaxonomyUpdatedDate() answers for a single term, and a taxonomy
+	 * sitemap asks about every term on the page — a thousand by default. Run
+	 * per term that is a thousand three-table joins on one request, which is
+	 * a real timeout risk on a large catalogue and was the reason the
+	 * product_cat branch originally read a precomputed column instead.
+	 *
+	 * This asks the same question once, grouped, fills the memo, resolves
+	 * the legacy no-GMT case in one more grouped query, and finally records
+	 * a null for any term that has no usable date at all — so the per-term
+	 * path never re-asks for a term this has already considered.
+	 *
+	 * @since 4.1.25
+	 * @param array $term_ids Term ids about to be rendered.
+	 * @return void
+	 */
+	private function primeTaxonomyUpdatedDates( $term_ids ) {
+		global $wpdb;
+
+		$wanted = array();
+		foreach ( (array) $term_ids as $term_id ) {
+			$term_id = (int) $term_id;
+			if ( $term_id > 0 && ! array_key_exists( $term_id, self::$taxonomyUpdatedDateCache ) ) {
+				$wanted[ $term_id ] = true;
+			}
+		}
+		if ( empty( $wanted ) ) {
+			return;
+		}
+
+		$wanted = array_keys( $wanted );
+
+		/*
+		 * Chunked, for two reasons.
+		 *
+		 * A page can carry up to sm_links_page terms, and that ceiling is
+		 * 50,000 — one bound parameter each would build a statement large
+		 * enough for the server to reject outright.
+		 *
+		 * And failure is recorded per chunk rather than per page. A rejected
+		 * or timed-out statement is indistinguishable from "no rows" here,
+		 * so the ids it covered have to be treated as answered to stop the
+		 * per-term path re-asking about each of them; without chunking, one
+		 * failure would do that to every term on the page and cost the whole
+		 * taxonomy sitemap its <lastmod>. Confined to a chunk, the rest of
+		 * the page still resolves normally.
+		 */
+		foreach ( array_chunk( $wanted, 500 ) as $chunk ) {
+			$chunk_failed = false;
+			$placeholders = implode( ', ', array_fill( 0, count( $chunk ), '%d' ) );
+
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders are generated, values are bound below.
+					"SELECT tt.term_id AS term_id, MAX(p.post_date_gmt) AS newest
+					FROM {$wpdb->posts} p
+					INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+					WHERE tt.term_id IN ($placeholders)
+						AND p.post_status = 'publish'
+						AND p.post_date_gmt > '0000-00-00 00:00:00'
+					GROUP BY tt.term_id",
+					$chunk
+				)
+			);
+
+			if ( ! empty( $wpdb->last_error ) ) {
+				$chunk_failed = true;
+			}
+
+			foreach ( (array) $rows as $row ) {
+				if ( empty( $row->newest ) ) {
+					continue;
+				}
+				$timestamp = strtotime( $row->newest . ' +0000' );
+				if ( $timestamp > 0 ) {
+					self::$taxonomyUpdatedDateCache[ (int) $row->term_id ] = $timestamp;
+				}
+			}
+
+			// Whatever the first query did not answer is resolved here, in
+			// one more grouped query for the same chunk. Skipped once that
+			// chunk has already failed: the second query is aimed at the
+			// same database and would only add load.
+			$unresolved = array();
+			foreach ( $chunk as $term_id ) {
+				if ( ! array_key_exists( $term_id, self::$taxonomyUpdatedDateCache ) ) {
+					$unresolved[] = $term_id;
+				}
+			}
+
+			if ( ! $chunk_failed && ! empty( $unresolved ) && function_exists( 'get_gmt_from_date' ) ) {
+				$legacy_placeholders = implode( ', ', array_fill( 0, count( $unresolved ), '%d' ) );
+				$legacy_rows         = $wpdb->get_results(
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders are generated, values are bound below.
+						"SELECT tt.term_id AS term_id, MAX(p.post_date) AS newest
+						FROM {$wpdb->posts} p
+						INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+						INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+						WHERE tt.term_id IN ($legacy_placeholders)
+							AND p.post_status = 'publish'
+						GROUP BY tt.term_id",
+						$unresolved
+					)
+				);
+
+				foreach ( (array) $legacy_rows as $row ) {
+					if ( empty( $row->newest ) || '0000-00-00 00:00:00' === $row->newest ) {
+						continue;
+					}
+					$timestamp = strtotime( get_gmt_from_date( $row->newest ) . ' +0000' );
+					if ( $timestamp > 0 ) {
+						self::$taxonomyUpdatedDateCache[ (int) $row->term_id ] = $timestamp;
+					}
+				}
+			}
+		}
+
+		/*
+		 * Anything still unanswered has no usable date — or belonged to a
+		 * chunk whose query failed, which is indistinguishable from that
+		 * here. Either way it is recorded.
+		 *
+		 * The alternative, leaving failed ids absent so the per-term path
+		 * retries them, was tried and rejected: within this request that is
+		 * one or two three-table joins for every such term, up to 500 per
+		 * failed chunk, aimed at a database that has just told us it cannot
+		 * serve queries. The governing rule when the database is failing is
+		 * bounded work and degraded output, not unbounded retries — a
+		 * sitemap missing some <lastmod> hints is a far better outcome than
+		 * one that finishes the job of taking the database down.
+		 *
+		 * The cost is contained on both axes: chunking limits a failure to
+		 * the terms it actually touched, and this memo lives for one
+		 * request, so the next request starts empty and tries again.
+		 */
+		foreach ( $wanted as $term_id ) {
+			if ( ! array_key_exists( $term_id, self::$taxonomyUpdatedDateCache ) ) {
+				self::$taxonomyUpdatedDateCache[ $term_id ] = null;
+			}
+		}
+	}
+
 	private function getTaxonomyUpdatedDate($term_id){
 		global $wpdb;
 
-		$query = $wpdb->prepare("
-			SELECT p.*
+		/*
+		 * Memoised for the request, in a property rather than a local
+		 * static so primeTaxonomyUpdatedDates() can fill it in bulk. This
+		 * is called once per term while a taxonomy sitemap is built — up to
+		 * sm_links_page terms, 1000 by default — and each call is a
+		 * three-table join with a filesort, so on a large catalogue the
+		 * prime is the difference between one query and a thousand.
+		 */
+		$cache   = &self::$taxonomyUpdatedDateCache;
+		$term_id = (int) $term_id;
+		if ( array_key_exists( $term_id, $cache ) ) {
+			return $cache[ $term_id ];
+		}
+
+		/*
+		 * Two corrections here, both of which produced a <lastmod> in the
+		 * future — the symptom this release was reported for.
+		 *
+		 * post_date_gmt, not post_date. WordPress pins PHP's default
+		 * timezone to UTC, so strtotime() on the site-local post_date
+		 * column reads the wall-clock time as though it were UTC. On a
+		 * UTC+11 site that puts every fresh term 11 hours ahead, and the
+		 * newest categories — the ones that matter most — were the ones
+		 * that looked furthest into the future.
+		 *
+		 * post_status = 'publish'. The query had no status filter, so a
+		 * scheduled post (post_status 'future') or a draft could be picked
+		 * as the term's newest, dating the term to a post that is not in
+		 * the sitemap and has not been published yet.
+		 *
+		 * A zeroed post_date_gmt — left behind by older WordPress versions
+		 * and by direct SQL imports — cannot be ordered correctly in SQL at
+		 * all, because substituting the local column would compare one row's
+		 * UTC value against another row's local value; on a UTC+11 site a
+		 * zeroed row could then outrank a genuinely newer one by the whole
+		 * offset.
+		 *
+		 * So the two cases are asked separately, and each query returns the
+		 * single row it needs. The common one orders by post_date_gmt among
+		 * rows that actually have it, which is a straight UTC comparison.
+		 * Only when a term has no such row at all does the legacy query run,
+		 * ordering by the local column and converting the result. This is
+		 * called once per term, so hydrating a batch of candidates per call
+		 * — 50 rows across a thousand-term taxonomy is fifty thousand — to
+		 * cover a case that is rare and, in a mixed database, not fully
+		 * solvable in SQL anyway, is not a trade worth making.
+		 *
+		 * In a database mixing zeroed and populated rows the newest
+		 * populated row wins. That can be slightly older than the true
+		 * newest, which is the safe direction to be wrong in: a lastmod
+		 * that lags is a weaker hint, not a false claim.
+		 */
+		$newest_gmt = $wpdb->get_var($wpdb->prepare("
+			SELECT p.post_date_gmt
 			FROM {$wpdb->posts} p
 			INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
 			INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
-			WHERE tt.term_id = %d
+			WHERE tt.term_id = %d AND p.post_status = 'publish'
+				AND p.post_date_gmt > '0000-00-00 00:00:00'
+			ORDER BY p.post_date_gmt DESC
+			LIMIT 1
+		", $term_id));
+
+		if (!empty($newest_gmt)) {
+			$timestamp       = strtotime($newest_gmt . ' +0000');
+			$cache[$term_id] = $timestamp > 0 ? $timestamp : null;
+			return $cache[$term_id];
+		}
+
+		// Legacy fallback: this term has no row carrying a GMT date.
+		if (!function_exists('get_gmt_from_date')) {
+			$cache[$term_id] = null;
+			return $cache[$term_id];
+		}
+
+		$newest_local = $wpdb->get_var($wpdb->prepare("
+			SELECT p.post_date
+			FROM {$wpdb->posts} p
+			INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+			INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+			WHERE tt.term_id = %d AND p.post_status = 'publish'
 			ORDER BY p.post_date DESC
 			LIMIT 1
-		", $term_id);
-	
-		$post = $wpdb->get_row($query);
-	
-		if ($post) {
-			return strtotime($post->post_date);
+		", $term_id));
+
+		if (empty($newest_local) || '0000-00-00 00:00:00' === $newest_local) {
+			$cache[$term_id] = null;
+			return $cache[$term_id];
 		}
+
+		$timestamp       = strtotime(get_gmt_from_date($newest_local) . ' +0000');
+		$cache[$term_id] = $timestamp > 0 ? $timestamp : null;
+
+		return $cache[$term_id];
 	}
 
 	/**
@@ -827,9 +1172,15 @@ class GoogleSitemapGeneratorStandardBuilder {
 
 		if ($product_results) {
 			$product = array_shift($product_results);
-			$updated_date = strtotime($product->get_date_modified()->date('Y-m-d H:i:s'));
-	
-			return $updated_date;
+			// getTimestamp() is a true UTC epoch. Formatting the WC_DateTime
+			// to 'Y-m-d H:i:s' first renders it in the store's local zone
+			// and strtotime() then reads it back as UTC, shifting every
+			// product term by the site's offset.
+			$date_modified = $product->get_date_modified();
+			if (!$date_modified) {
+				return false;
+			}
+			return $date_modified->getTimestamp();
 		}
 		return false;
 	}
@@ -855,9 +1206,236 @@ class GoogleSitemapGeneratorStandardBuilder {
 				 *
 				 * @var $page GoogleSitemapGeneratorPage
 				 */
-				$gsg->add_url( $url, $last_mod, $change_freq, $priority );
+				$gsg->add_url( $url, self::normalise_external_last_mod( $last_mod ), $change_freq, $priority );
 			}
 		}
+	}
+
+	/**
+	 * Keep an admin-entered external-page date out of the clamp's teeth.
+	 *
+	 * These dates are not read from the database: an administrator typed a
+	 * DATE into the settings screen, and it is stored at UTC midnight of
+	 * that day. On a site ahead of UTC, midnight of "today" is still in the
+	 * future for the rest of the local morning, so gsg_clamp_lastmod() would
+	 * refuse it and the entry would lose its <lastmod> entirely — for a
+	 * completely routine admin action, and where 4.1.24 did emit something.
+	 *
+	 * The test is on the DATE, not on how many hours ahead the timestamp is.
+	 * A window measured from the current instant gives different answers for
+	 * the same stored value as the day goes on — a page dated tomorrow would
+	 * fall outside a fourteen-hour window at 09:00 UTC and inside it at
+	 * 11:00 — so the rescue would come and go by the hour. Comparing the
+	 * entered date against today's date in the site's own timezone answers
+	 * the question actually being asked: did the administrator mean "today"?
+	 *
+	 * If they did, it is reported as the start of the current UTC day: never
+	 * in the future, and stable, moving once a day rather than on every
+	 * request. Note this will read as the PREVIOUS date to an administrator
+	 * on a UTC-ahead site for as long as UTC has not reached their date
+	 * yet. That is not worth engineering around — <lastmod> is emitted in
+	 * UTC, so any instant chosen inside that window renders on the same UTC
+	 * date, and a date that lags by hours is a weaker hint rather than a
+	 * false claim. Advertising the future date instead is the thing that
+	 * costs something.
+	 *
+	 * Once UTC passes the entered midnight the stored value is used
+	 * unchanged.
+	 *
+	 * Any other future date is a deliberate choice and is left for the clamp
+	 * to drop. The storage convention itself is tracked in #912.
+	 *
+	 * @since 4.1.25
+	 * @param mixed $last_mod Stored timestamp, 0 when unset.
+	 * @return int Timestamp safe to render, or 0 when unknown.
+	 */
+	private static function normalise_external_last_mod( $last_mod ) {
+		$last_mod = (int) $last_mod;
+		if ( $last_mod <= 0 ) {
+			return 0;
+		}
+
+		$now = time();
+		if ( $last_mod <= $now ) {
+			return $last_mod;
+		}
+
+		// Stored at UTC midnight of the day the administrator typed, so the
+		// date is read back the same way. current_time() gives today's date
+		// in the site's timezone, which is the calendar they were looking at.
+		$entered_date = gmdate( 'Y-m-d', $last_mod );
+		$local_today  = function_exists( 'current_time' ) ? current_time( 'Y-m-d' ) : gmdate( 'Y-m-d', $now );
+
+		if ( $entered_date === $local_today ) {
+			return (int) strtotime( gmdate( 'Y-m-d', $now ) . ' 00:00:00 +0000' );
+		}
+
+		return $last_mod;
+	}
+
+	/**
+	 * The site-wide "anything changed" timestamp, with poisoned rows handled.
+	 *
+	 * Shared because two callers need the same answer: index() gives it to
+	 * nearly every <sitemap> entry, and build_misc() gives it to the home
+	 * page and the HTML sitemap. While only index() applied the recovery, a
+	 * site with one bogus future row got rescued dates in the index while
+	 * the home page silently lost its <lastmod> — one value producing two
+	 * different outcomes inside a single build.
+	 *
+	 * @since 4.1.25
+	 * @return int UTC timestamp, or 0 when the site has no usable date.
+	 */
+	private static function resolve_blog_lastmod() {
+		global $wpdb;
+
+		/*
+		 * Memoised for the request. Both callers can run in one build, and
+		 * on a poisoned site the work behind this is a full unindexed scan
+		 * plus two option writes — worth doing once, not once per caller.
+		 * A null means "not resolved yet", which is distinct from the 0 this
+		 * legitimately returns for a site with no usable date.
+		 */
+		static $resolved = null;
+		if ( null !== $resolved ) {
+			return $resolved;
+		}
+
+		/*
+		 * Guarded because get_lastpostmodified() returns false on a site
+		 * with no published posts, and `false . ' +0000'` is the string
+		 * ' +0000', which strtotime() resolves to the CURRENT TIME rather
+		 * than failing. That would hand every entry in the index a lastmod
+		 * that moves on every request — the churn gsg_clamp_lastmod() is
+		 * written to avoid, and one it cannot detect, because "now" is
+		 * always a plausible date.
+		 */
+		$last_post_modified = get_lastpostmodified( 'gmt' );
+		$blog_update        = ( ! empty( $last_post_modified ) && '0000-00-00 00:00:00' !== $last_post_modified )
+			? strtotime( $last_post_modified . ' +0000' )
+			: 0;
+
+		/*
+		 * This one value is handed to nearly every entry in the index —
+		 * misc, each taxonomy, product tags, product categories, externals,
+		 * authors and archives all receive it. That makes it a single point
+		 * of failure for the whole file: gsg_clamp_lastmod() drops a date it
+		 * cannot trust, so if this value is untrustworthy EVERY <sitemap>
+		 * element loses its <lastmod> at once rather than just the offending
+		 * one.
+		 *
+		 * get_lastpostmodified() takes the maximum across published posts,
+		 * so a single row with a bogus future post_modified_gmt — importers
+		 * write these, as does wp_insert_post() with an explicit future date
+		 * and status 'publish' — is enough to poison it.
+		 *
+		 * So when the value is implausibly far ahead, ask for the newest row
+		 * that is NOT in the future instead of surrendering the whole index.
+		 * Healthy sites never reach this branch and pay no extra query.
+		 * Per-entry timestamps would confine the loss properly; see #910.
+		 */
+		if ( $blog_update && $blog_update > ( time() + GSG_LASTMOD_SKEW_TOLERANCE ) ) {
+			/*
+			 * Cached, because nothing here repairs the row that triggered
+			 * it: get_lastpostmodified() keeps returning the poisoned value,
+			 * so without a cache every sitemap-index request on an affected
+			 * site would repeat the scan below, permanently, and only for
+			 * the sites already in trouble. An hour is short enough that a
+			 * corrected row shows up promptly and long enough that crawler
+			 * traffic cannot turn this into a load problem.
+			 */
+			$newest_settled = get_transient( 'sm_lastmod_settled' );
+
+			if ( false === $newest_settled ) {
+				/*
+				 * Restricted to public post types, as _get_last_post_time()
+				 * is. nav_menu_item, wp_block, wp_navigation and
+				 * wp_template_part rows all carry post_status 'publish', so
+				 * an unrestricted MAX() would answer "when the menu or a
+				 * template was last saved" and hand that to every entry.
+				 */
+				$public_types = get_post_types( array( 'public' => true ) );
+				if ( empty( $public_types ) ) {
+					$public_types = array( 'post', 'page' );
+				}
+				$type_placeholders = implode( ', ', array_fill( 0, count( $public_types ), '%s' ) );
+
+				/*
+				 * Claim the cache slot BEFORE the scan, not after. The column
+				 * is unindexed, so this is a full pass over every published
+				 * row; without the early write, an expiry under crawler
+				 * traffic sends several concurrent requests into their own
+				 * scan at once. Requests arriving during the scan read this
+				 * placeholder, skip the recovery, and omit the lastmod for
+				 * that one response.
+				 *
+				 * Minutes, not the hour the real answer gets — and not
+				 * seconds either. Both ends have a failure mode.
+				 *
+				 * Too long: the scan is exactly what might kill the request
+				 * (max_execution_time, a database timeout, memory) on
+				 * precisely the large sites that reach this branch, and an
+				 * hour-long placeholder would survive the death that wrote
+				 * it, suppressing the recovery for an hour while the whole
+				 * index plus the home page lose <lastmod>.
+				 *
+				 * Too short: the placeholder has to outlive the scan, and a
+				 * full pass over an unindexed column on a large table is
+				 * not a sub-minute operation. Expiring mid-scan lets every
+				 * subsequent request start its own — the stampede this
+				 * exists to prevent, on the sites it was written for.
+				 *
+				 * Five minutes clears any scan that was going to finish
+				 * within PHP's usual execution limit, and bounds the
+				 * suppression after a fatal to the same five minutes.
+				 */
+				set_transient( 'sm_lastmod_settled', '', 5 * MINUTE_IN_SECONDS );
+
+				$newest_settled = $wpdb->get_var(
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders are generated, values are bound below.
+						"SELECT MAX(post_modified_gmt) FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ($type_placeholders) AND post_modified_gmt <= %s",
+						array_merge( array_values( $public_types ), array( gmdate( 'Y-m-d H:i:s' ) ) )
+					)
+				);
+				/*
+				 * Overwrite the placeholder with the real answer. A miss is
+				 * still stored as '', so a site with nothing settled does
+				 * not re-run the scan on every request either — but only
+				 * when the query actually ran. get_var() returns null for a
+				 * killed or timed-out query exactly as it does for "no
+				 * rows", and this scan is the one most likely to be killed:
+				 * an unindexed full pass over a large table. Caching a
+				 * failure as a miss would leave the poisoned value in use
+				 * for the next hour, stripping <lastmod> from every index
+				 * entry plus the home page — precisely what the recovery
+				 * exists to prevent.
+				 *
+				 * On failure the placeholder is shortened rather than
+				 * deleted. Deleting it removes the only backoff, and these
+				 * failures — max_statement_time, a lost connection, a lock
+				 * timeout on an unindexed full-table MAX() — are
+				 * deterministic on the very sites that reach this branch, so
+				 * every subsequent and concurrent request would re-run the
+				 * same doomed scan. A short negative window retries promptly
+				 * without turning a database problem into a load problem.
+				 */
+				if ( ! empty( $wpdb->last_error ) ) {
+					set_transient( 'sm_lastmod_settled', '', MINUTE_IN_SECONDS );
+					$newest_settled = false;
+				} else {
+					set_transient( 'sm_lastmod_settled', ( null === $newest_settled ? '' : $newest_settled ), HOUR_IN_SECONDS );
+				}
+			}
+
+			if ( ! empty( $newest_settled ) && '0000-00-00 00:00:00' !== $newest_settled ) {
+				$blog_update = strtotime( $newest_settled . ' +0000' );
+			}
+		}
+
+		$resolved = (int) $blog_update;
+
+		return $resolved;
 	}
 
 	/**
@@ -872,7 +1450,8 @@ class GoogleSitemapGeneratorStandardBuilder {
 		 * @var $wpdb wpdb
 		 */
 		global $wpdb;
-		$blog_update    = strtotime( get_lastpostmodified( 'gmt' ) );
+		$blog_update = self::resolve_blog_lastmod();
+
 		$links_per_page = $gsg->get_entries_per_page();
 		if ( 0 === $links_per_page || is_nan( $links_per_page ) ) {
 			$links_per_page = $this->linkPerPage;
@@ -1090,10 +1669,41 @@ class GoogleSitemapGeneratorStandardBuilder {
 	public function get_sitemap_url_for_post( array $urls, $gsg, $post_id ) {
 		$post = get_post( $post_id );
 		if ( $post ) {
-			$last_modified = $gsg->get_timestamp_from_my_sql( $post->post_modified_gmt );
+			/*
+			 * The zero-date sentinel matters more here than anywhere else in
+			 * this file. get_timestamp_from_my_sql('0000-00-00 00:00:00')
+			 * returns a 1999 timestamp, and this one does not merely become
+			 * a wrong <lastmod> — it is formatted into the sitemap's URL, so
+			 * the post would be pointed at pt/<type>-1999-11.
+			 *
+			 * Note this only stops a zero date from producing a nonsense
+			 * URL. The <type>-<Y-m> shape itself does not match any sitemap
+			 * this plugin registers — index() uses <type>-sitemap[N] — so
+			 * the URL is wrong whatever date reaches it. That is older than
+			 * this release and is tracked separately in #911.
+			 */
+			$candidates = array();
+			if ( ! empty( $post->post_modified_gmt ) && '0000-00-00 00:00:00' !== $post->post_modified_gmt ) {
+				$candidates[] = $post->post_modified_gmt;
+			}
+			if ( ! empty( $post->post_date_gmt ) && '0000-00-00 00:00:00' !== $post->post_date_gmt ) {
+				$candidates[] = $post->post_date_gmt;
+			}
+			if ( empty( $candidates ) && function_exists( 'get_gmt_from_date' ) ) {
+				foreach ( array( $post->post_modified, $post->post_date ) as $local ) {
+					if ( ! empty( $local ) && '0000-00-00 00:00:00' !== $local ) {
+						$candidates[] = get_gmt_from_date( $local );
+						break;
+					}
+				}
+			}
 
-			$url    = $gsg->get_xml_url( 'pt', $post->post_type . '-' . gmdate( 'Y-m', $last_modified ) );
-			$urls[] = $url;
+			if ( ! empty( $candidates ) ) {
+				$last_modified = $gsg->get_timestamp_from_my_sql( $candidates[0] );
+				if ( $last_modified > 0 ) {
+					$urls[] = $gsg->get_xml_url( 'pt', $post->post_type . '-' . gmdate( 'Y-m', $last_modified ) );
+				}
+			}
 		}
 
 		return $urls;

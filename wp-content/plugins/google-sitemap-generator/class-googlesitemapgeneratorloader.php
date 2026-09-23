@@ -90,7 +90,18 @@ class GoogleSitemapGeneratorLoader {
 		else $wp_sitemap_status = '__return_false';
 		add_filter( 'wp_sitemaps_enabled', $wp_sitemap_status );
 
-		// Create dynamically generated robots.txt
+		/*
+		 * Gated on sm_b_robots, as it was before 4.1.25.
+		 *
+		 * That option is what decides whether this plugin contributes to the
+		 * virtual robots.txt at all, so with it off the filter never runs —
+		 * and the clobbering this release fixes never happened either, since
+		 * the clobbering WAS this filter. The fix therefore reaches exactly
+		 * the installs the bug reached. Worth stating because the group
+		 * fencing below reads like a site-wide guarantee and is not one:
+		 * turn this off and the plugin leaves robots.txt entirely alone,
+		 * including the "Discourage search engines" fence.
+		 */
 		if (isset(get_option('sm_options')['sm_b_robots'])) {
 			if (get_option('sm_options')['sm_b_robots'] === true) {
 				add_filter('robots_txt', array( __CLASS__, 'filter_robots' ), 99, 2);
@@ -99,20 +110,393 @@ class GoogleSitemapGeneratorLoader {
 	}
 
 	/**
-	 * Overwriting all existing robots.txt contents
+	 * Add the plugin's rules to robots.txt without discarding anyone else's.
 	 *
-	 * @param [type] $output
-	 * @param [type] $public
-	 * @return void
+	 * Before 4.1.25 this replaced the entire body, which silently deleted
+	 * WooCommerce's Disallow lines and every custom rule. It is additive now.
+	 *
+	 * @since 4.1.25 Rewritten from destructive to additive.
+	 * @param string $output robots.txt body assembled so far.
+	 * @param mixed  $public The site's public status.
+	 * @return string The augmented robots.txt body.
 	 */
 	public static function filter_robots($output, $public) {
-		$output = "User-agent: *\n";
-		if ('0' == $public ) {
-			$output .= "Disallow: /\nDisallow: /*\nDisallow: /*?\n";
-		} else {
-			$output .= "Disallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n";
+		$output = (string) $output;
+
+		// Public site: WordPress core and every other plugin have already
+		// contributed their rules to $output. Return it untouched.
+		if ( ! self::gsg_is_discouraged( $public ) ) {
+			return $output;
 		}
-		return $output;
+
+		/*
+		 * Every group is fenced, not just `User-agent: *`.
+		 *
+		 * Under RFC 9309 a crawler obeys exactly one group: its own, if the
+		 * file names it, and the wildcard group only when it does not. So a
+		 * body that already contains `User-agent: Googlebot-Image` gives
+		 * that crawler a group with no `Disallow: /` in it, and putting the
+		 * rule solely in the wildcard group leaves it free to crawl the
+		 * whole site. The 4.1.24 behaviour of overwriting the body hid this
+		 * by deleting such groups outright; now that the filter is additive
+		 * they survive, and each one has to be fenced on its own.
+		 *
+		 * A group that already blocks everything gains nothing, which is
+		 * what keeps this idempotent. The one thing that can still be
+		 * removed is a site-wide `Allow:`, and only where its presence
+		 * would leave a block inert — see gsg_fence_all_groups().
+		 */
+		return self::gsg_fence_all_groups( $output, 'Disallow: /' );
+	}
+
+	/**
+	 * Ensure every user-agent group in the body disallows everything.
+	 *
+	 * Consecutive User-agent lines declare ONE group with several agents,
+	 * so the directive goes after the whole run — inserting after the first
+	 * of them would split a legal multi-agent group and silently re-scope
+	 * every rule below it. A group that already carries the directive is
+	 * skipped. When the body declares no groups at all, a wildcard group is
+	 * appended — after any orphan directives, so that they stay inert
+	 * rather than being adopted into the group being created.
+	 *
+	 * A site-wide `Allow` is the one kind of line that is removed rather than
+	 * kept, and only on a site that is discouraging crawlers — from the
+	 * wildcard group, and from a named group where a block is being added. RFC 9309 §2.2.2 picks the longest matching rule and breaks
+	 * an exact tie in favour of the LEAST restrictive one, so every form of
+	 * "allow everything" defeats the fence: `Allow: /` ties at one octet and
+	 * wins the tie, and `Allow: /*` is longer and simply outranks it. Either
+	 * way the site would stay fully crawlable with the fence sitting
+	 * uselessly beside it, which makes the setting a no-op.
+	 *
+	 * The wildcard group is always fenced. It is the catch-all for every
+	 * crawler the file does not name, and the setting it implements is
+	 * site-wide, so an `Allow: /` sitting there contradicts the setting
+	 * outright rather than carving anything out — it is removed and the
+	 * group is fenced like any other.
+	 *
+	 * For a NAMED group, what decides it is whether the group is an
+	 * exception. A group that grants the whole site and restricts nothing is
+	 * one: `User-agent: Googlebot` + `Allow: /` is an operator saying
+	 * "discourage everyone except this crawler", and so is the bare
+	 * `Disallow:` of the RFC's own idiom. Such a group is skipped entirely —
+	 * nothing added, nothing removed — and every other crawler is still
+	 * blocked by the wildcard group.
+	 *
+	 * A named group carrying a real rule of its own is not an exception,
+	 * whichever idiom it also contains, and is fenced like any other.
+	 * `User-agent: Googlebot` + `Disallow: /wp-admin/` is an ordinary group,
+	 * and leaving the site's most important crawler unfenced because some
+	 * SEO plugin wrote a group for it would gut the setting.
+	 *
+	 * A site-wide `Allow:` is removed only where removing it enforces
+	 * something: always from the wildcard group, and from a named group
+	 * only when a fence is actually being inserted there. Leaving it in
+	 * either of those cases would make the fence purely decorative, since
+	 * the exact-length tie resolves to the least restrictive rule. A named
+	 * group that already carries `Disallow: /` beside an `Allow: /` is the
+	 * operator's own contradictory pair and is left exactly as written —
+	 * deleting the Allow would add nothing and would quietly turn a crawler
+	 * they had allowed into a blocked one. An exception is never edited.
+	 *
+	 * Only patterns that grant the whole site are candidates — `/`, and
+	 * anything containing a wildcard such as `/*`, `*`, `/*$` — with or
+	 * without the leading slash. `/$` is NOT one of them: the `$` anchors
+	 * the match to the end of the path, so it grants the site root alone.
+	 * Nothing else is touched:
+	 * `Allow: /wp-admin/admin-ajax.php` and every other path-specific rule
+	 * legitimately outranks the fence for its own path and is left alone.
+	 *
+	 * @since 4.1.25
+	 * @param string $output robots.txt body to augment.
+	 * @param string $line   Directive to insert, e.g. 'Disallow: /'.
+	 * @return string The augmented robots.txt body.
+	 */
+	private static function gsg_fence_all_groups( $output, $line ) {
+		$line = (string) $line;
+		if ( '' === $line ) {
+			return $output;
+		}
+
+		// CRLF first, then any lone CR: a classic-Mac body would otherwise
+		// arrive as a single enormous line, be read as one directive, and
+		// come back different on a second pass.
+		$output = str_replace( array( "\r\n", "\r" ), "\n", (string) $output );
+		$lines  = explode( "\n", $output );
+
+		$groups       = array();
+		$current      = -1;
+		$in_agent_run = false;
+
+		foreach ( $lines as $index => $raw ) {
+			$trimmed = trim( self::gsg_strip_robots_comment( $raw ) );
+
+			if ( '' === $trimmed ) {
+				continue;
+			}
+
+			if ( preg_match( '/^user-agent:/i', $trimmed ) ) {
+				if ( ! $in_agent_run ) {
+					$groups[]     = array(
+						'run_end'       => $index,
+						'blocked'       => false,
+						'wildcard'      => false,
+						'allows_all'    => false,
+						'has_disallow'  => false,
+						'allow_root'    => array(),
+					);
+					$current      = count( $groups ) - 1;
+					$in_agent_run = true;
+				}
+				// A run naming '*' anywhere in it is the wildcard group.
+				if ( preg_match( '/^user-agent:\s*\*\s*$/i', $trimmed ) ) {
+					$groups[ $current ]['wildcard'] = true;
+				}
+				$groups[ $current ]['run_end'] = $index;
+				continue;
+			}
+
+			$in_agent_run = false;
+
+			// Lines before any User-agent belong to no group and cannot
+			// satisfy one. They are left alone: the group-less branch below
+			// appends its group after them, so they stay as inert as the
+			// crawler already treats them.
+			if ( $current < 0 ) {
+				continue;
+			}
+
+			if ( preg_match( '/^disallow:\s*\/$/i', $trimmed ) ) {
+				$groups[ $current ]['blocked']      = true;
+				$groups[ $current ]['has_disallow'] = true;
+				continue;
+			}
+
+			// Any Disallow carrying a path is a real restriction, and its
+			// presence is what separates a deliberate "allow everything"
+			// group from one that merely happens to contain a stray empty
+			// Disallow line.
+			if ( preg_match( '/^disallow:\s*\S/i', $trimmed ) ) {
+				$groups[ $current ]['has_disallow'] = true;
+			}
+
+			/*
+			 * "Grants the whole site" means the bare prefix '/' or any
+			 * pattern containing a wildcard: '/*', '/**', '/*$', '*', '*$'.
+			 * The leading slash is optional because a crawler matches
+			 * 'Allow: *' against any path just the same.
+			 *
+			 * '/$' is deliberately NOT in that set. The '$' anchors the
+			 * match to the end of the path, so it grants exactly the site
+			 * root and nothing else — a homepage-only exception, which is
+			 * a real and reasonable thing to write. Removing it would
+			 * delete an operator's rule and then block the root as well.
+			 * An empty value grants nothing and is likewise left alone.
+			 *
+			 * Recorded for every group; the decision about which ones to
+			 * act on is made below, once it is known whether the group is
+			 * an exception and whether a block is being added to it. An
+			 * exempt group is skipped before any edit, so its Allow always
+			 * survives; elsewhere the line is removed where leaving it
+			 * would make a block inert, because the exact-length tie
+			 * resolves to the least restrictive rule and the crawler would
+			 * be fully unfenced while the file looked fenced.
+			 */
+			if ( preg_match( '/^allow:\s*(?:\/|\/?\*[*$]*)\s*$/i', $trimmed ) ) {
+				$groups[ $current ]['allow_root'][] = $index;
+			}
+
+			/*
+			 * Two ways a group can say "everything is permitted here": an
+			 * explicit site-wide Allow, or the RFC-canonical empty
+			 * `Disallow:` that Google's own Mediapartners example uses.
+			 *
+			 * They are recorded differently. A site-wide Allow is an
+			 * unambiguous grant. An empty Disallow is only a no-op line, and
+			 * it is the group's ONLY rule that makes it mean "allow
+			 * everything" — a group reading `Disallow:` followed by
+			 * `Disallow: /private/` is not an exception at all, it is a
+			 * restricted group with a stray line of boilerplate in it, and
+			 * treating that as a blanket exemption would hand the crawler
+			 * the whole site. So the empty form is resolved after the walk,
+			 * once it is known whether the group carries a real rule.
+			 */
+			if ( preg_match( '/^allow:\s*(?:\/|\/?\*[*$]*)\s*$/i', $trimmed ) ) {
+				$groups[ $current ]['allows_all'] = true;
+				continue;
+			}
+
+			if ( preg_match( '/^disallow:\s*$/i', $trimmed ) ) {
+				$groups[ $current ]['empty_disallow'] = true;
+			}
+		}
+
+
+		// Walked back to front so the recorded offsets stay valid; earlier
+		// edits would otherwise shift every index after them. Within a
+		// group the Allow removals run first and descending, and they all
+		// sit after run_end, so the insertion point is never disturbed.
+		for ( $i = count( $groups ) - 1; $i >= 0; $i-- ) {
+			// A NAMED group that says "allow everything" — by a site-wide
+			// Allow or by an empty Disallow — is a deliberate per-crawler
+			// exception, and is left exactly as the operator wrote it. Both
+			// idioms mean the same thing, so both have to behave the same
+			// way; fencing the empty-Disallow form would block that crawler
+			// outright, since an empty Disallow matches no path at all and
+			// so loses to an inserted `Disallow: /`.
+			/*
+			 * Both idioms are put through the same test, including the
+			 * "carries no real rule of its own" part. Exempting a group
+			 * that grants everything AND restricts a path, while fencing
+			 * its empty-Disallow twin, would have applied two different
+			 * operations to two spellings of one thing.
+			 *
+			 * What the file then DOES with them can still differ, because
+			 * nothing here deletes an operator's line: a surviving
+			 * `Allow: /` ties with an inserted `Disallow: /` and wins the
+			 * tie, whereas an empty `Disallow:` matches no path and loses.
+			 * That is robots.txt precedence resolving the operator's own
+			 * rules, which is the correct thing to defer to — forcing the
+			 * two to the same outcome would mean deleting the Allow, and
+			 * deleting rules the plugin did not author is what this release
+			 * exists to stop.
+			 */
+			$is_exception = ( $groups[ $i ]['allows_all'] || ! empty( $groups[ $i ]['empty_disallow'] ) )
+				&& ! $groups[ $i ]['has_disallow'];
+
+			if ( ! $groups[ $i ]['wildcard'] && $is_exception ) {
+				continue;
+			}
+
+			/*
+			 * The site-wide Allow only goes when removing it actually
+			 * enforces something.
+			 *
+			 * For the wildcard group that is always: it is the catch-all
+			 * implementing a site-wide setting, and an `Allow: /` there
+			 * nullifies the block whether the block was already present or
+			 * is being added now.
+			 *
+			 * For a NAMED group it is only when a fence is being inserted.
+			 * A named group that already carries `Disallow: /` beside an
+			 * `Allow: /` is an operator's own contradictory pair, and the
+			 * Allow wins it — deleting the Allow would silently convert a
+			 * crawler they had allowed into a blocked one, and would delete
+			 * a rule this plugin did not write while adding nothing in its
+			 * place. Nothing is enforced by that, so nothing is touched.
+			 */
+			$inserting_fence = ! $groups[ $i ]['blocked'];
+
+			if ( $groups[ $i ]['wildcard'] || $inserting_fence ) {
+				$allow_root = $groups[ $i ]['allow_root'];
+				rsort( $allow_root );
+				foreach ( $allow_root as $allow_index ) {
+					array_splice( $lines, $allow_index, 1 );
+				}
+			}
+
+			if ( $inserting_fence ) {
+				array_splice( $lines, $groups[ $i ]['run_end'] + 1, 0, array( $line ) );
+			}
+		}
+
+		/*
+		 * A wildcard group is synthesised whenever the body does not already
+		 * declare one — whether it declares no groups at all, or only named
+		 * ones.
+		 *
+		 * The named-only case is the one that is easy to miss and matters
+		 * most: under RFC 9309 a crawler obeys the wildcard group only when
+		 * the file does not name it, so a body containing nothing but
+		 * `User-agent: Googlebot` leaves every OTHER crawler matching no
+		 * group at all — and a crawler that matches no group is unrestricted.
+		 * Fencing only what is written would leave a discouraged site open
+		 * to everything it forgot to mention, where 4.1.24 emitted a
+		 * wildcard block.
+		 *
+		 * Appended, not prepended. A directive that appears before any
+		 * User-agent line belongs to no group and crawlers ignore it; putting
+		 * a new header ABOVE such lines would adopt them into the group being
+		 * created and bring them to life, so a stray `Allow: /uploads/`
+		 * sitting inertly in the file would suddenly outrank the fence for
+		 * that path. Adding the group at the end leaves them as inert as they
+		 * were, which is also more faithful to this filter being additive.
+		 */
+		$has_wildcard = false;
+		foreach ( $groups as $group ) {
+			if ( $group['wildcard'] ) {
+				$has_wildcard = true;
+				break;
+			}
+		}
+
+		if ( ! $has_wildcard ) {
+			// explode() leaves a trailing '' for a body that ended in a
+			// newline; appending after it would consume that newline and
+			// leave the file without one. A later robots_txt filter doing
+			// `$output .= "Sitemap: …"` would then fuse its line onto this
+			// one: "Disallow: /Sitemap: https://…".
+			if ( ! empty( $lines ) && '' === end( $lines ) ) {
+				array_pop( $lines );
+			}
+			$lines[] = '';
+			$lines[] = 'User-agent: *';
+			$lines[] = $line;
+			$lines[] = '';
+		}
+
+		return implode( "\n", $lines );
+	}
+
+	/**
+	 * Whether the site is flagged "Discourage search engines".
+	 *
+	 * Core changed the type it passes here: do_robots() handed the filter the
+	 * raw get_option( 'blog_public' ) string ('1' or '0') up to WordPress 6.9,
+	 * and casts it to bool from 7.0. Both forms are answered, because this
+	 * plugin supports both ranges of core.
+	 *
+	 * @since 4.1.25
+	 * @param mixed $public The site's public status: bool from WP 7.0, the
+	 *                      stored '0'/'1' string before that.
+	 * @return bool True when the site discourages search engines.
+	 */
+	private static function gsg_is_discouraged( $public ) {
+		/*
+		 * A bool is core's own verdict and is taken at face value — from 7.0
+		 * onwards it is the ONLY thing that arrives, so reading false as
+		 * "public" would switch the fence off on every current WordPress.
+		 * An earlier draft did exactly that, on the theory that a bool meant
+		 * a missing option; the live run on 7.1 showed the consequence.
+		 *
+		 * A string is the pre-7.0 form: only an explicit '0' counts. A null
+		 * (no option at all) resolves to public, which is what the Settings
+		 * > Reading checkbox shows for a missing value, and of the two ways
+		 * to be wrong, hiding a live site from search is the more expensive.
+		 */
+		if ( is_bool( $public ) ) {
+			return ! $public;
+		}
+		if ( null === $public ) {
+			return false;
+		}
+
+		return '0' === trim( (string) $public );
+	}
+
+	/**
+	 * Strip an inline `#` comment from a robots.txt line.
+	 *
+	 * RFC 9309 section 2.2.1 allows a comment anywhere on a line, so
+	 * `User-agent: *  # staging` is a legal wildcard group header.
+	 *
+	 * @since 4.1.25
+	 * @param string $line Raw robots.txt line.
+	 * @return string The line with any comment removed (not trimmed).
+	 */
+	private static function gsg_strip_robots_comment( $line ) {
+		$pos = strpos( (string) $line, '#' );
+		return false === $pos ? (string) $line : substr( (string) $line, 0, $pos );
 	}
 
 	/**
@@ -500,6 +884,29 @@ class GoogleSitemapGeneratorLoader {
 				button.allow_beta_consent{
 					border: none;
 				}
+				/*
+				 * WordPress 7.0 added `div.notice a, div.updated a` to core's
+				 * common.css, colouring and underlining every link inside a
+				 * notice with the admin theme colour. That selector (0,1,2)
+				 * outranks the single-class rules above (0,1,1), so from 7.0
+				 * the button text and the close glyph rendered in link-blue.
+				 * Re-assert the intended colours at a higher specificity.
+				 *
+				 * @since 4.1.25
+				 */
+				div.updated.notice a.allow_beta_consent,
+				div.updated.notice a.allow_beta_consent:hover,
+				div.updated.notice a.allow_beta_consent:focus,
+				div.updated.notice a.discard_button,
+				div.updated.notice a.discard_button:hover,
+				div.updated.notice a.discard_button:focus,
+				div.updated.notice a.discard_button_outside_settings,
+				div.updated.notice a.discard_button_outside_settings:hover,
+				div.updated.notice a.discard_button_outside_settings:focus {
+					color: #fff;
+					text-decoration: none;
+					box-shadow: none;
+				}
 		</style>
 		<div class="updated notice" style="display: flex;justify-content:space-between;">
 				<?php
@@ -687,6 +1094,17 @@ class GoogleSitemapGeneratorLoader {
 				.enable_auto_update:hover{
 					color: white;
 					outline: 1px solid #2271b1;
+				}
+				/* Same WordPress 7.0 `div.notice a` override as the beta banner above. @since 4.1.25 */
+				div.updated.notice a.enable_auto_update,
+				div.updated.notice a.enable_auto_update:hover,
+				div.updated.notice a.enable_auto_update:focus,
+				div.updated.notice a.do_not_enable_auto_update,
+				div.updated.notice a.do_not_enable_auto_update:hover,
+				div.updated.notice a.do_not_enable_auto_update:focus {
+					color: #fff;
+					text-decoration: none;
+					box-shadow: none;
 				}
 		</style>
 		<div class="updated notice" style="display: flex;justify-content:space-between;">

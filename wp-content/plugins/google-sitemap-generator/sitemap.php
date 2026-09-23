@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: sitemap.php 3426561 2025-12-24 00:45:27Z auctollo $
+ * $Id: sitemap.php 3701250 2026-09-18 03:39:01Z auctollo $
 
  *  XML Sitemap Generator for Google
  * ==============================================================================
@@ -16,7 +16,7 @@
  * Plugin Name: XML Sitemap Generator for Google
  * Plugin URI: https://auctollo.com/
  * Description: This plugin improves SEO using sitemaps for best indexation by search engines like Google, Bing, Yahoo and others.
- * Version: 4.1.24
+ * Version: 4.1.25
  * Author: Auctollo
  * Author URI: https://auctollo.com/
  * Text Domain: google-sitemap-generator
@@ -446,13 +446,23 @@ function register_consent() {
 		}
 		
 	}
-	if(isset($updateUrlRules['sm_links_page'] )){
-		$sm_links_page = intval($updateUrlRules['sm_links_page']);
-		if($sm_links_page < 1000) {
-			$updateUrlRules['sm_links_page'] = 1000;
-			update_option('sm_options', $updateUrlRules);
-		}
-	}
+	/*
+	 * There is deliberately no links-per-page repair here any more.
+	 *
+	 * This function runs on admin_init at priority 1, so anything it
+	 * writes is written on EVERY admin page load. The old repair forced
+	 * any value below 1000 back up to 1000, which silently undid a smaller
+	 * number the operator had deliberately saved — the setting appeared
+	 * not to "stick", and no amount of fixing the settings form could have
+	 * helped, because this ran afterwards on the next page view.
+	 *
+	 * An out-of-range value is now corrected by gsg_clamp_links_per_page()
+	 * where the builder READS the option, which protects the build without
+	 * touching the stored row and without an unconditional database write
+	 * on every request into wp-admin.
+	 *
+	 * @since 4.1.25
+	 */
 
 	if(!isset($updateUrlRules['sm_b_activate_indexnow']) || $updateUrlRules['sm_b_activate_indexnow'] == false){
 		$updateUrlRules['sm_b_activate_indexnow'] = true;

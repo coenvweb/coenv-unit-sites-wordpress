@@ -9,13 +9,173 @@
 
 use function Bhittani\StarRating\functions\sanitize;
 /**
- * $Id: sitemap-core.php 3105873 2024-06-22 03:26:37Z auctollo $
+ * $Id: sitemap-core.php 3701250 2026-09-18 03:39:01Z auctollo $
  */
 
 // Enable for dev! Good code doesn't generate any notices...
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1); .
 
+
+if ( ! defined( 'GSG_LASTMOD_SKEW_TOLERANCE' ) ) {
+	/**
+	 * How far ahead of now a `<lastmod>` may sit and still be trusted.
+	 *
+	 * Covers clock drift between the PHP host and the database server.
+	 * Deliberately far below the smallest real UTC offset (30 minutes), so
+	 * a timezone bug cannot hide inside this window.
+	 *
+	 * @since 4.1.25
+	 */
+	define( 'GSG_LASTMOD_SKEW_TOLERANCE', 300 );
+}
+
+if ( ! function_exists( 'gsg_clamp_lastmod' ) ) {
+	/**
+	 * Clamp a `<lastmod>` timestamp so it is never in the future.
+	 *
+	 * A sitemap `<lastmod>` states when a URL last changed. A value in the
+	 * future is meaningless: search engines treat it as untrusted and may
+	 * discount the whole file. Sites with scheduled content, importers that
+	 * write `post_date` ahead of `post_modified`, and clock skew between PHP
+	 * and MySQL all produce them.
+	 *
+	 * Applied at both render boundaries below — the per-URL entry and the
+	 * sitemap-index entry — so no build path can emit a future date
+	 * regardless of where the timestamp came from.
+	 *
+	 * A clearly-future timestamp is reported as "unknown" (0) rather than
+	 * substituted with the current time. Substituting looks tidier but is
+	 * worse: this line regenerates its sitemaps per request, so an entry
+	 * whose underlying date stays in the future would report a brand-new
+	 * `<lastmod>` on every single fetch. A URL that appears to change
+	 * continuously teaches crawlers to distrust the field entirely, which
+	 * costs more than the missing element does — `<lastmod>` is optional
+	 * in the sitemaps protocol, so omitting it is well-formed and honest.
+	 *
+	 * This is a backstop, not the fix. Dates arriving from the future were
+	 * mostly a timezone error at the source: the builders read site-local
+	 * MySQL columns while WordPress pins PHP's timezone to UTC, so every
+	 * term on a UTC+ site looked hours ahead. Those reads now use the _gmt
+	 * columns. Dropping a `<lastmod>` is a real loss of information, so
+	 * this function must never become the thing that hides such a bug.
+	 *
+	 * Hence the tolerance. A timestamp a little ahead of now is ordinary
+	 * clock drift between PHP and MySQL, and is passed through UNCHANGED —
+	 * not capped — so it stays stable across rebuilds. Only a date beyond
+	 * any plausible drift, which means genuinely scheduled content, is
+	 * dropped. The window is far smaller than the smallest UTC offset, so
+	 * a timezone regression would show up as missing elements rather than
+	 * being quietly absorbed.
+	 *
+	 * Know the blast radius before widening what this drops: index() gives
+	 * most of its sub-sitemap entries ONE shared site-wide timestamp from
+	 * get_lastpostmodified('gmt'). If that single value is rejected — a
+	 * database clock minutes ahead of PHP, or one published row carrying a
+	 * bogus future post_modified_gmt from a bad import — every entry in the
+	 * index loses its `<lastmod>` together, not just an offending URL. That
+	 * is the intended trade against advertising a date that is wrong, but
+	 * it is an all-or-nothing one. Tracked in #910.
+	 *
+	 * @since 4.1.25
+	 * @param int $timestamp Unix timestamp; 0 or negative means "unknown".
+	 * @return int The timestamp, or 0 when unknown or genuinely in the future.
+	 */
+	function gsg_clamp_lastmod( $timestamp ) {
+		$timestamp = (int) $timestamp;
+		if ( $timestamp <= 0 ) {
+			return 0;
+		}
+		return $timestamp > ( time() + GSG_LASTMOD_SKEW_TOLERANCE ) ? 0 : $timestamp;
+	}
+}
+
+if ( ! defined( 'GSG_MIN_LINKS_PER_PAGE' ) ) {
+	/**
+	 * Smallest links-per-page value the plugin will build with.
+	 *
+	 * @since 4.1.25
+	 */
+	define( 'GSG_MIN_LINKS_PER_PAGE', 100 );
+}
+
+if ( ! defined( 'GSG_MAX_LINKS_PER_PAGE' ) ) {
+	/**
+	 * Largest links-per-page value the plugin will build with.
+	 *
+	 * The sitemaps protocol caps a single file at 50,000 URLs.
+	 *
+	 * @since 4.1.25
+	 */
+	define( 'GSG_MAX_LINKS_PER_PAGE', 50000 );
+}
+
+if ( ! defined( 'GSG_DEFAULT_LINKS_PER_PAGE' ) ) {
+	/**
+	 * Links per page used when the option is missing or unreadable.
+	 *
+	 * Matches the shipped default for sm_links_page. Falling back to the
+	 * FLOOR instead would quietly re-paginate an install whose option row
+	 * went missing: 50,000 posts at 100 per file is 500 sub-sitemaps where
+	 * the default produces 50.
+	 *
+	 * @since 4.1.25
+	 */
+	define( 'GSG_DEFAULT_LINKS_PER_PAGE', 1000 );
+}
+
+if ( ! function_exists( 'gsg_clamp_links_per_page' ) ) {
+	/**
+	 * Clamp a links-per-page value to the range the builder can honour.
+	 *
+	 * This is the single authority on the range. It is applied where the
+	 * builder READS the option rather than only where the UI writes it,
+	 * which is what keeps the three views of the setting in agreement:
+	 * the number shown in the settings field, the number a save stores,
+	 * and the number the pager actually divides by are now all this
+	 * function's output for the same input.
+	 *
+	 * Enforcing it on read also covers values this version never wrote —
+	 * a 4.1.24 install carrying a stored 50, or a row edited directly in
+	 * the database. Clamping only on save left those to reach the pager
+	 * untouched, so a stored 5 produced a 10,000-entry index on a 50k-post
+	 * site while the settings screen calmly displayed 100.
+	 *
+	 * A non-numeric value means the option is absent or corrupt, and that
+	 * resolves to the DEFAULT rather than the floor. get_option() returns
+	 * null for a missing key, so treating "unset" as "smallest allowed"
+	 * would silently re-paginate an install that had simply lost its row.
+	 *
+	 * Zero and negatives resolve to the default for the same reason. They
+	 * are not a page size anyone chose — they are what a failed write or an
+	 * older bug leaves behind, and the repair this release removed from
+	 * register_consent() reset exactly those to 1000. Sending them to the
+	 * floor instead would turn a broken row into 500 sub-sitemaps on a
+	 * 50,000-post site where the default produces 50, and would silently
+	 * move every sub-sitemap URL. Only a positive value below the floor is
+	 * treated as a deliberate choice and raised to it.
+	 *
+	 * @since 4.1.25
+	 * @param mixed $value Stored or submitted value; non-numeric means "unset".
+	 * @return int A value within [GSG_MIN_LINKS_PER_PAGE, GSG_MAX_LINKS_PER_PAGE].
+	 */
+	function gsg_clamp_links_per_page( $value ) {
+		if ( ! is_numeric( $value ) ) {
+			return GSG_DEFAULT_LINKS_PER_PAGE;
+		}
+		$value = (int) $value;
+		if ( $value <= 0 ) {
+			return GSG_DEFAULT_LINKS_PER_PAGE;
+		}
+		if ( $value < GSG_MIN_LINKS_PER_PAGE ) {
+			return GSG_MIN_LINKS_PER_PAGE;
+		}
+		if ( $value > GSG_MAX_LINKS_PER_PAGE ) {
+			return GSG_MAX_LINKS_PER_PAGE;
+		}
+		return $value;
+	}
+}
 
 /**
  * Represents the status (successes and failures) of a ping process
@@ -388,9 +548,10 @@ class GoogleSitemapGeneratorPage {
 		$r .= "\t<url>\n";
 		$r .= "\t\t<loc>" . $this->escape_xml( esc_url_raw( $this->url ) ) . "</loc>\n";
 
-		if ( $this->last_mod > 0 ) {
-			//$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . "</lastmod>\n";
-			$r .= "\t\t<lastmod>"  . gmdate( 'Y-m-d\TH:i:sP', $this->last_mod ) .  "</lastmod>\n";
+		// Never advertise a future modification date — see gsg_clamp_lastmod().
+		$render_last_mod = gsg_clamp_lastmod( $this->last_mod );
+		if ( $render_last_mod > 0 ) {
+			$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:sP', $render_last_mod ) . "</lastmod>\n";
 		}
 
 		if ( ! empty( $this->change_freq ) ) {
@@ -544,8 +705,10 @@ class GoogleSitemapGeneratorSitemapEntry {
 		$r  = '';
 		$r .= "\t<sitemap>\n";
 		$r .= "\t\t<loc>" . $this->escape_xml( esc_url_raw( $this->url ) ) . "</loc>\n";
-		if ( $this->last_mod > 0 ) {
-			$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:s+00:00', $this->last_mod ) . "</lastmod>\n";
+		// Never advertise a future modification date on a sub-sitemap.
+		$render_last_mod = gsg_clamp_lastmod( $this->last_mod );
+		if ( $render_last_mod > 0 ) {
+			$r .= "\t\t<lastmod>" . gmdate( 'Y-m-d\TH:i:s+00:00', $render_last_mod ) . "</lastmod>\n";
 		}
 		$r .= "\t</sitemap>\n";
 		return $r;
@@ -997,10 +1160,68 @@ final class GoogleSitemapGenerator {
 	 * @return int The time in seconds
 	 */
 	public static function get_timestamp_from_my_sql( $mysql_date_time ) {
-		list( $date, $hours)       = explode( ' ', $mysql_date_time );
-		list( $year, $month, $day) = explode( '-', $date );
-		list( $hour, $min, $sec)   = explode( ':', $hours );
-		return mktime( intval( $hour ), intval( $min ), intval( $sec ), intval( $month ), intval( $day ), intval( $year ) );
+		/*
+		 * Guarded here rather than at each call site, because the callers
+		 * are many and several pass a SQL alias (last_mod, last_post) whose
+		 * shape is not obvious from the variable name.
+		 *
+		 * '0000-00-00 00:00:00' is what MySQL stores for a missing date, and
+		 * the old implementation split it happily: mktime() read the zeros
+		 * as month 0, day 0, year 0 and returned 1999-11-30. A row with no
+		 * date therefore advertised a confident wrong one, which the future
+		 * clamp cannot catch because 1999 is in the past. One caller formats
+		 * this value into a sitemap URL, so it also produced links to files
+		 * that do not exist.
+		 *
+		 * Malformed input used to raise undefined-offset notices as well —
+		 * which, in a sitemap response, is itself a way to break the XML.
+		 *
+		 * 0 means "unknown", and every render site already omits <lastmod>
+		 * for it.
+		 */
+		$mysql_date_time = trim( (string) $mysql_date_time );
+
+		if ( '' === $mysql_date_time || 0 === strpos( $mysql_date_time, '0000-00-00' ) ) {
+			return 0;
+		}
+
+		$parts = explode( ' ', $mysql_date_time );
+		$date  = explode( '-', $parts[0] );
+
+		if ( count( $date ) < 3 ) {
+			return 0;
+		}
+
+		// The parts have to be checked, not just counted. 'not-a-date' also
+		// splits into three, and casting those to int gives mktime(0,0,0,0,
+		// 0,0) — which is 1999-11-30 again, the exact value this guard
+		// exists to prevent.
+		foreach ( array( $date[0], $date[1], $date[2] ) as $date_part ) {
+			if ( ! is_numeric( $date_part ) ) {
+				return 0;
+			}
+		}
+
+		$year  = (int) $date[0];
+		$month = (int) $date[1];
+		$day   = (int) $date[2];
+
+		if ( $year <= 0 || $month < 1 || $month > 12 || $day < 1 || $day > 31 ) {
+			return 0;
+		}
+
+		$time = isset( $parts[1] ) ? explode( ':', $parts[1] ) : array();
+
+		$timestamp = mktime(
+			(int) ( isset( $time[0] ) ? $time[0] : 0 ),
+			(int) ( isset( $time[1] ) ? $time[1] : 0 ),
+			(int) ( isset( $time[2] ) ? $time[2] : 0 ),
+			$month,
+			$day,
+			$year
+		);
+
+		return false === $timestamp ? 0 : $timestamp;
 	}
 
 
@@ -1636,7 +1857,35 @@ final class GoogleSitemapGenerator {
 		 *
 		 * @param int $entries The maximum number of entries per XML sitemap.
 		 */
-		$entries = (int) apply_filters( 'sm_sitemap_entries_per_page', $this->get_option( 'links_page' ) );
+		// Clamp the stored value BEFORE the filter runs, so what is
+		// corrected here is the plugin's own option — which may carry
+		// anything an older version or a direct database edit left behind —
+		// while a third party filtering the hook still gets to choose a
+		// smaller page size than the plugin's own floor.
+		$entries = (int) apply_filters(
+			'sm_sitemap_entries_per_page',
+			gsg_clamp_links_per_page( $this->get_option( 'links_page' ) )
+		);
+
+		// A filtered value below 1 would make the pager divide by zero and
+		// emit an unbounded index, so it cannot be honoured. It falls back
+		// to the default rather than the floor: the floor is the smallest
+		// value an operator may deliberately choose, which is not the right
+		// answer for a value nobody chose at all. On a 50,000-post site the
+		// difference is 50 sub-sitemaps instead of 500.
+		if ( $entries < 1 ) {
+			$entries = GSG_DEFAULT_LINKS_PER_PAGE;
+		}
+
+		// The ceiling, unlike the floor, IS imposed on the filter. 50,000 is
+		// the sitemaps.org hard limit rather than a preference of this
+		// plugin's, and index() caps its own pagination there while the
+		// content builders do not — so a larger value does not produce
+		// bigger files, it desynchronises the index from the sitemaps it
+		// points at and starts dropping or repeating URLs.
+		if ( $entries > GSG_MAX_LINKS_PER_PAGE ) {
+			$entries = GSG_MAX_LINKS_PER_PAGE;
+		}
 
 		return $entries;
 	}
@@ -2042,6 +2291,138 @@ final class GoogleSitemapGenerator {
 			|| ( isset( $_SERVER['HTTP_X_VARNISH'] ) && is_numeric( $_SERVER['HTTP_X_VARNISH'] ) ) // Behind a Varnish proxy.
 		) {
 			$pack = false;
+		}
+
+		// A sitemap is XML, and any PHP notice printed into the response
+		// corrupts it exactly as a stray BOM does — including one provoked
+		// by the drain below, when a plugin whose buffer was closed here
+		// later calls ob_get_clean() and PHP warns "Failed to delete
+		// buffer". Turning display off for this response closes that whole
+		// class of failure rather than the one instance. Errors are still
+		// raised and still reach the error log; only their echo into the
+		// document is suppressed.
+		// Skipped only when the site is actually in debug mode: a developer
+		// who turned WP_DEBUG on with display enabled is debugging this
+		// build, and silently handing them a blank page instead of a fatal
+		// is worse than a malformed document they can read.
+		//
+		// Both constants have to be tested. WordPress core defines
+		// WP_DEBUG_DISPLAY as true in wp_initial_constants() on every
+		// install, so testing it alone would be true on a stock production
+		// site and make this suppression dead code.
+		//
+		// null is not false. wp_debug_mode() only forces display_errors off
+		// when WP_DEBUG_DISPLAY is set and NOT null; null means "leave it
+		// as php.ini has it", which on a developer's machine is usually on.
+		// Treating null as "not debugging" would suppress errors for exactly
+		// the person who asked to see them — the outcome this check exists
+		// to avoid.
+		$gsg_debugging = defined( 'WP_DEBUG' ) && WP_DEBUG
+			&& ( ! defined( 'WP_DEBUG_DISPLAY' ) || null === WP_DEBUG_DISPLAY || WP_DEBUG_DISPLAY );
+		if ( ! $gsg_debugging ) {
+			@ini_set( 'display_errors', '0' ); // phpcs:ignore
+		}
+
+		// Discard anything a theme or another plugin has already emitted.
+		// This output — a stray blank line after a closing PHP tag, a UTF-8 BOM
+		// at the top of wp-config.php or functions.php, a debug notice —
+		// otherwise precedes the `<?xml` declaration and the document fails
+		// to parse with "XML or text declaration not at the beginning of the
+		// entity". The sitemap itself is fine underneath.
+		//
+		// This can only recover output that is still BUFFERED. With
+		// output_buffering=Off and no other plugin holding a buffer, stray
+		// output has already gone to the client and the response headers
+		// with it; headers_sent() is true by the time this runs and nothing
+		// here can un-send those bytes. Most production php.ini files set
+		// output_buffering=4096 (php.ini-production does), which is why this
+		// helps in practice, but it is not a universal fix — see #909 for
+		// capturing earlier in the request instead.
+		//
+		// This class streams its output (add_element() echoes each entry as
+		// it is built), so the only place to clean up is here, before the
+		// first echo. It runs AFTER the gzip decision above deliberately:
+		// that decision reads ob_get_contents() / ob_get_level(), and it
+		// must run BEFORE the ob_gzhandler buffer is opened below, or the
+		// drain would discard the compression buffer itself.
+		//
+		// Whether to drain at all is decided first, because closing a
+		// buffer also discards the callback it was opened with. Draining
+		// unconditionally would destroy an `ob_start($cb)` that another
+		// plugin intends to collect at shutdown; its `ob_get_clean()` then
+		// fails and, with display_errors on, prints a notice AFTER
+		// `</urlset>` — trading "declaration not at the beginning" for
+		// "extra content at the end" and fixing nothing.
+		//
+		// The test has to see every level, not just the innermost one.
+		// Stray output is emitted while files load, whereas a plugin that
+		// opens a buffer usually does so later on a hook, so the ordering
+		// that matters in practice is garbage UNDERNEATH an empty buffer.
+		// Peeking at ob_get_contents() alone reports "nothing buffered" for
+		// exactly that case and would leave the reported bug unfixed.
+		// ob_get_status(true) reports buffer_used for each active level, so
+		// the whole stack can be inspected without closing anything.
+		$gsg_buffered      = ( '' !== (string) ob_get_contents() ) ? 1 : 0;
+		$gsg_all_removable = true;
+		foreach ( ob_get_status( true ) as $gsg_ob_status ) {
+			if ( ! empty( $gsg_ob_status['buffer_used'] ) ) {
+				++$gsg_buffered;
+			}
+			// A buffer PHP will not let go of — zlib.output_compression
+			// creates one — stops the drain partway through. Because levels
+			// close innermost-first, that would mean destroying a caching
+			// plugin's buffer on the way down and still leaving the stray
+			// bytes in the level below, doing harm without fixing anything.
+			// So the drain is all-or-nothing: if any level is unremovable,
+			// nothing is touched.
+			// Unverifiable counts as unremovable. Reading this the other way
+			// round — assuming a level is fine when the flags cannot be
+			// inspected — would quietly restore the partial-drain behaviour
+			// on exactly the runtimes where it cannot be checked, and a
+			// partial drain destroys bystanders without fixing the XML.
+			if ( ! defined( 'PHP_OUTPUT_HANDLER_REMOVABLE' )
+				|| ! isset( $gsg_ob_status['flags'] )
+				|| ! ( $gsg_ob_status['flags'] & PHP_OUTPUT_HANDLER_REMOVABLE ) ) {
+				$gsg_all_removable = false;
+			}
+		}
+
+		// On the overwhelmingly common request nothing is buffered and no
+		// buffer is touched at all. When something IS buffered the whole
+		// stack goes, because that is the only way to reach output sitting
+		// below another plugin's buffer — and a sitemap no parser accepts
+		// is a worse outcome for the site than a bystander losing its
+		// callback on this one request.
+		//
+		// Closing a buffer does not merely drop its callback: PHP INVOKES
+		// the callback with the discarded content (CLEAN | FINAL). The
+		// return value goes nowhere, but a full-page-cache handler such as
+		// wp_cache_ob_callback() writes its cache file as a side effect,
+		// and could store the stray output as the cached /sitemap.xml.
+		// DONOTCACHEPAGE is the opt-out every major caching plugin honours,
+		// so it is set first; a sitemap is generated per request and should
+		// not be sitting in a page cache in any case.
+		//
+		// ob_end_clean() returns false when no buffer exists, which
+		// terminates the loop on the SAPI's implicit buffer.
+		//
+		// A side effect worth knowing: the gzip test above already refuses
+		// to compress when ob_get_contents() is non-empty, so a request that
+		// needed this drain serves the sitemap uncompressed. Valid XML at
+		// full size beats a compressed document no parser will accept.
+		if ( ! headers_sent() && $gsg_buffered > 0 && $gsg_all_removable ) {
+			if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+				define( 'DONOTCACHEPAGE', true );
+			}
+			// Every level was confirmed removable above, so a failure here is
+			// not expected. The break is only there so an unexpected refusal
+			// cannot spin forever; it leaves the stack partially drained,
+			// which is the one case this design cannot make clean.
+			while ( ob_get_level() > 0 ) {
+				if ( ! @ob_end_clean() ) { // phpcs:ignore
+					break;
+				}
+			}
 		}
 
 		$packed = false;

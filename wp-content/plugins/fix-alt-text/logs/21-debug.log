@@ -1,0 +1,53 @@
+
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: ---------------------------------- Debug mode is on for site http://cicoes.uw.local ----------------------------------
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: Check for migrations needed.
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: Scan_Process init
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: get_recent_scan params: full  Array
+(
+)
+ 0
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: $scan details: full  Array
+(
+)
+ 0
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: We found the specific scan
+2026-09-17 20:17:13 - 0 - unknown - info - Fix Alt Text: Scan_Process init done
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: ---------------------------------- Cron - Debug mode is on for site http://cicoes.uw.local ----------------------------------
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: Check for migrations needed.
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: Scan_Process init
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: get_recent_scan params: full  Array
+(
+)
+ 0
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: $scan details: full  Array
+(
+)
+ 0
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: We found the specific scan
+2026-09-17 20:17:16 - 0 - wp_cron - info - Fix Alt Text: Scan_Process init done
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: ---------------------------------- Debug mode is on for site http://cicoes.uw.local ----------------------------------
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: Check for migrations needed.
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: Scan_Process init
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: get_recent_scan params: full  Array
+(
+)
+ 0
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: $scan details: full  Array
+(
+)
+ 0
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: We found the specific scan
+2026-09-17 20:17:24 - 0 - unknown - info - Fix Alt Text: Scan_Process init done
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: ---------------------------------- Debug mode is on for site http://cicoes.uw.local ----------------------------------
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: Check for migrations needed.
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: Scan_Process init
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: get_recent_scan params: full  Array
+(
+)
+ 0
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: $scan details: full  Array
+(
+)
+ 0
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: We found the specific scan
+2026-09-17 20:17:28 - 0 - unknown - info - Fix Alt Text: Scan_Process init done

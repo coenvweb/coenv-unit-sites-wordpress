@@ -3,7 +3,7 @@ Contributors: megamenu
 Tags: menu, responsive menu, mega menu, navigation, mobile menu
 Requires at least: 6.2
 Tested up to: 7.1
-Stable tag: 3.10.6
+Stable tag: 3.10.8
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -131,6 +131,13 @@ See https://www.megamenu.com for more screenshots
 5. Back end: Use the theme editor to change the appearance of your menus
 
 == Changelog ==
+
+= 3.10.8 =
+
+* Improvement: Serve minified frontend JS (maxmegamenu.min.js) for a smaller page-load footprint
+* Fix: Reactivate save buttons when toggle bar blocks are dragged/reordered
+* Fix: HTML mobile toggle block was stripping all HTML tags on save
+* Fix: Guard nav_menu_locations cache invalidation to genuine save contexts
 
 = 3.10.7 =
 

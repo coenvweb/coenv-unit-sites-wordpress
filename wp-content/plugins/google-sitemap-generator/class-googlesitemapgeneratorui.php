@@ -25,9 +25,67 @@ class GoogleSitemapGeneratorUI {
 	 */
 	private $has_woo_commerce = false;
 
-	/** min and max post data **/
-	private $minLinksPerPage = 1000;
-	private $maxLinksPerPage = 50000;
+	/**
+	 * Minimum links per sitemap file that may be configured.
+	 *
+	 * The sitemaps protocol sets no lower bound. This floor exists only to
+	 * stop a pathological value (0, 1) from generating a sitemap index with
+	 * tens of thousands of entries. Operators on constrained shared hosting
+	 * legitimately want smaller files, so it sits well below the 1000
+	 * default.
+	 *
+	 * Mirrors GSG_MIN_LINKS_PER_PAGE rather than restating it. Before
+	 * 4.1.25 this bound was written out in four places that could drift
+	 * apart, and did: the field's `min` attribute, the blur handler, the
+	 * save-handler clamp, and a repair in register_consent() (sitemap.php)
+	 * that ran on every admin page load. gsg_clamp_links_per_page() is now
+	 * the only place the range is decided, and it is applied where the
+	 * builder reads the option, so the settings screen cannot disagree
+	 * with what the pager actually does.
+	 *
+	 * @since 4.1.25 Lowered from 1000; now derived from GSG_MIN_LINKS_PER_PAGE.
+	 * @var int
+	 */
+	private $minLinksPerPage;
+
+	/**
+	 * Maximum links per sitemap file that may be configured.
+	 *
+	 * 50,000 is the hard ceiling in the sitemaps.org protocol, and matches
+	 * GoogleSitemapGeneratorStandardBuilder::$maxLinksPerPage, which is what
+	 * actually paginates the build. Mirrors GSG_MAX_LINKS_PER_PAGE.
+	 *
+	 * @var int
+	 */
+	private $maxLinksPerPage;
+	/**
+	 * Render a stored "Last Changed" timestamp for the settings field.
+	 *
+	 * The read side of the "Last Changed" field, and the exact inverse of
+	 * what html_apply_pages() does on save. The two have to agree or the
+	 * value does not round-trip: the whole pages table is resubmitted on
+	 * every "Save changes", so a read and a write that disagree would walk
+	 * each external page's date by the site's UTC offset on every save.
+	 * They are both UTC today; see #912.
+	 *
+	 * @since 4.1.25
+	 * @param int $timestamp UTC timestamp.
+	 * @return string Y-m-d in UTC, or '' when unknown. UTC because that is
+	 *                what the save side stores; see the note in the body.
+	 */
+	private static function gsg_local_date_from_timestamp( $timestamp ) {
+		$timestamp = (int) $timestamp;
+		if ( $timestamp <= 0 ) {
+			return '';
+		}
+		// UTC, because html_apply_pages() stores what the admin typed as
+		// UTC. Rendering through get_date_from_gmt() while saving that way
+		// would not round-trip, and every "Save changes" resubmits the whole
+		// table — so each save would walk the date backwards by the site's
+		// offset. When #912 changes the save side, change this with it.
+		return gmdate( 'Y-m-d', $timestamp );
+	}
+
 	/**
 	 * Constructor function.
 	 *
@@ -36,6 +94,11 @@ class GoogleSitemapGeneratorUI {
 	public function __construct( GoogleSitemapGenerator $sitemap_builder, GoogleSitemapGeneratorIndexNow $index_now) {
 		$this->sg = $sitemap_builder;
 		$this->index_now = $index_now;
+		// Assigned here rather than as property defaults so the constants
+		// from sitemap-core.php are resolved at construction time, with no
+		// dependence on which file the parser happens to reach first.
+		$this->minLinksPerPage = GSG_MIN_LINKS_PER_PAGE;
+		$this->maxLinksPerPage = GSG_MAX_LINKS_PER_PAGE;
 	}
 	/**
 	 * Constructor function.
@@ -192,9 +255,30 @@ class GoogleSitemapGeneratorUI {
 				$p->set_url( $pages_ur[ $i ] );
 				$p->set_priority( $pages_pr[ $i ] );
 				$p->set_change_freq( $pages_cf[ $i ] );
-				// Try to parse last modified, if -1 (note ===) automatic will be used (0).
+				/*
+				 * Deliberately still read as UTC, matching 4.1.24.
+				 *
+				 * The value is a wall-clock date typed in the site's own
+				 * timezone while WordPress pins PHP to UTC, so on a site
+				 * ahead of UTC a date entered for today lands slightly in
+				 * the future and gsg_clamp_lastmod() omits that entry's
+				 * <lastmod> until UTC catches up. That is a real defect, and
+				 * it is tracked in #912 rather than fixed here: converting
+				 * on save without migrating the values already stored would
+				 * reinterpret every external page saved by an earlier
+				 * release, and on a site behind UTC each one would shift a
+				 * day the first time its row was re-saved. A hotfix should
+				 * not move data that is already correct.
+				 *
+				 * Whatever the fix, the read side at
+				 * gsg_local_date_from_timestamp() has to move with it: the
+				 * whole pages table is resubmitted on every "Save changes",
+				 * so the two must stay exact inverses or the value walks.
+				 *
+				 * -1 (note ===) means "automatic", which is stored as 0.
+				 */
 				$lm = ( ! empty( $pages_lm[ $i ] ) ? strtotime( $pages_lm[ $i ], time() ) : -1 );
-				if ( -1 === $lm ) {
+				if ( -1 === $lm || false === $lm ) {
 					$p->set_last_mod( 0 );
 				} else {
 					$p->set_last_mod( $lm );
@@ -523,12 +607,14 @@ class GoogleSitemapGeneratorUI {
 				} elseif ( substr( $k, 0, 6 ) === 'sm_pr_' ) {
 					$this->sg->set_option( $k, (float) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
 				} elseif ( 'sm_links_page' === $k ) {
-					$links_per_page = sanitize_text_field( wp_unslash( $_POST[ $k ] ) );
-					$links_per_page = (int) $links_per_page;
-					if ( 0 >= $links_per_page || is_nan( $links_per_page ) ) {
-						$links_per_page = 1000;
+					$links_per_page = trim( (string) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
+					// An empty or non-numeric field means "leave it alone".
+					// Casting '' to int yields 0, which the old code turned
+					// into 1000 — silently overwriting a deliberately chosen
+					// value whenever the browser submitted nothing parseable.
+					if ( '' !== $links_per_page && is_numeric( $links_per_page ) ) {
+						$this->sg->set_option( $k, gsg_clamp_links_per_page( $links_per_page ) );
 					}
-					$this->sg->set_option( $k, (int) $links_per_page );
 				} elseif ( substr( $k, 0, 3 ) === 'sm_' ) {
 					$this->sg->set_option( $k, (bool) sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
 				}
@@ -1469,7 +1555,7 @@ class GoogleSitemapGeneratorUI {
 															$fd = true;
 														}
 														$last_mod_date = ! empty( $page->_lastMod ) ? $page->_lastMod : $page->last_mod;
-														echo '{url:"' . esc_url( ! empty( $page->_url ) ? $page->_url : $page->url ) . '", priority:' . esc_html( number_format( ! empty( $page->_priority ) ? $page->_priority : $page->priority, 1, '.', '' ) ) . ', changeFreq:\'' . esc_html( ! empty( $page->_changeFreq ) ? $page->_changeFreq : $page->change_freq ) . '\', lastChanged:"' . esc_html( ( $last_mod_date > 0 ? gmdate( 'Y-m-d', $last_mod_date ) : '' ) ) . '"}';
+														echo '{url:"' . esc_url( ! empty( $page->_url ) ? $page->_url : $page->url ) . '", priority:' . esc_html( number_format( ! empty( $page->_priority ) ? $page->_priority : $page->priority, 1, '.', '' ) ) . ', changeFreq:\'' . esc_html( ! empty( $page->_changeFreq ) ? $page->_changeFreq : $page->change_freq ) . '\', lastChanged:"' . esc_html( ( $last_mod_date > 0 ? self::gsg_local_date_from_timestamp( $last_mod_date ) : '' ) ) . '"}';
 													}
 												}
 												?>
@@ -1699,7 +1785,18 @@ class GoogleSitemapGeneratorUI {
 										<li>
 											<label for='sm_links_page'>
 												<b><?php esc_html_e( 'Links per page', 'google-sitemap-generator' ); ?>:</b>
-												<input type='number' name='sm_links_page' id='sm_links_page' style='width:70px; margin-left:10px;' value='<?php echo esc_attr( $this->sg->get_option( 'links_page' ) ); ?>' min="<?php echo $this->minLinksPerPage ?>" max="<?php echo $this->maxLinksPerPage ?>" />
+												<?php
+												// The same clamp the builder applies when it reads the
+												// option, so the number on screen is the number that will
+												// actually paginate the build — not a display-only tidy-up
+												// that would show 100 while a stored 50 quietly did the
+												// work. It also keeps the field inside its own min/max: an
+												// out-of-range value fails HTML5 validation and blocks the
+												// whole settings form from submitting, taking every
+												// unrelated option on the page down with it.
+												$sm_links_page_value = gsg_clamp_links_per_page( $this->sg->get_option( 'links_page' ) );
+												?>
+												<input type='number' name='sm_links_page' id='sm_links_page' style='width:70px; margin-left:10px;' value='<?php echo esc_attr( $sm_links_page_value ); ?>' min="<?php echo esc_attr( $this->minLinksPerPage ); ?>" max="<?php echo esc_attr( $this->maxLinksPerPage ); ?>" step="1" />
 											</label>
 										</li>
 									</ul>
