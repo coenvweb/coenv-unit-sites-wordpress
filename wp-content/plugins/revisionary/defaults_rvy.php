@@ -1,7 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 /**
  * @package     PublishPress\Revisions\RevisionaryOptions
@@ -16,6 +14,7 @@ function rvy_default_options_sitewide() {
 	$def = array(
 		'revision_queue_capability' => true,
 		'manage_unsubmitted_capability' => true,
+		'duplicate_posts_capability' => true,
 		'copy_posts_capability' => true,
 		'revision_statuses_noun_labels' => true,
 		'caption_copy_as_edit' => true,
@@ -104,6 +103,7 @@ function rvy_default_options() {
 	$def = array(
 		'revision_queue_capability' => 0,
 		'manage_unsubmitted_capability' => 0,
+		'duplicate_posts_capability' => 0,
 		'copy_posts_capability' => 0,
 		'revision_statuses_noun_labels' => 0,
 		'caption_copy_as_edit' => 0,
@@ -155,12 +155,13 @@ function rvy_default_options() {
 		'revision_archive_deletion' => 0,
 		'revision_restore_require_cap' => 0,
 		'revision_limit_per_post' => 0,
+		'create_revision_reuse_unsubmitted' => 0,
 		'revision_unfiltered_html_check' => 0,
 		'revision_limit_compat_mode' => 0,
 		'permissions_compat_mode' => 0,
 		'planner_notifications_access_limited' => 0,
 		'archive_postmeta' => 1,
-        'archive_postmeta_on_edit' => 1,
+        'archive_postmeta_on_edit' => 0,
 		'extended_archive' => 0,
 		'delete_settings_on_uninstall' => 0,
 		'apply_post_exceptions' => 0,
@@ -177,6 +178,9 @@ function rvy_default_options() {
 		'admin_menu_pending_count_icon' => 0,
 		'approve_capability' => defined('REVISIONARY_REQUIRE_APPROVE_CAP') && REVISIONARY_REQUIRE_APPROVE_CAP,
 		'visual_compare' => 1,
+        'visual_compare_javascript' => 1,
+        'builder_compare_external_requests' => 1,
+        'divi4_revisor_backend_workaround' => 0,
 		'rvy_compare_other_internal_fields' => 1,
 	);
 

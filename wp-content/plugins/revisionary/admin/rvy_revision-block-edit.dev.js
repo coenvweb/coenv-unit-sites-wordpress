@@ -6,9 +6,39 @@
 * Copyright 2026, PublishPress
 */
 jQuery(document).ready(function ($) {
+
+	// Announce workflow progress and results to screen readers (WCAG 4.1.3)
+	var rvySpeak = function(msg) {
+		if (msg && window.wp && wp.a11y && wp.a11y.speak) {
+			wp.a11y.speak($('<div>').html(msg).text());
+		}
+	};
 	var RvyIsNativeRevisionComparison = function() {
 		return !!document.querySelector('.editor-revisions-header');
 	};
+
+	// Temporary workaround pending Gutenberg #77014 / Core #65024.
+	// This asset is loaded only for workflow revision editing. Replace only
+	// the native successful draft-save notice, preserving its ID and actions.
+	if (window.wp && wp.data && wp.i18n) {
+		var rvyUpdatingSaveNotice = false;
+		wp.data.subscribe(function () {
+			if (rvyUpdatingSaveNotice || RvyIsNativeRevisionComparison()) return;
+			var store = wp.data.select('core/notices');
+			if (!store || !store.getNotices) return;
+			var draftSaved = wp.i18n.__('Draft saved.');
+			store.getNotices().forEach(function (notice) {
+				if (notice.status !== 'success' || notice.content !== draftSaved) return;
+				rvyUpdatingSaveNotice = true;
+				try {
+					wp.data.dispatch('core/notices').createNotice('success', wp.i18n.__('Revision updated', 'revisionary'), {
+						id: notice.id, type: notice.type, isDismissible: notice.isDismissible,
+						actions: notice.actions, speak: notice.speak
+					});
+				} finally { rvyUpdatingSaveNotice = false; }
+			});
+		});
+	}
 
 	// Initialization operations to perform once React loads the relevant elements
     var RvyInitializeBlockEditorModifications = function () {
@@ -19,7 +49,6 @@ jQuery(document).ready(function ($) {
             $('button.editor-post-trash').parent().show();
             $('button.editor-post-switch-to-draft').hide();
 
-			$('div.components-notice-list').hide();	// autosave notice
         }
 	}
 	var RvyInitInterval = setInterval(RvyInitializeBlockEditorModifications, 50);
@@ -40,7 +69,6 @@ jQuery(document).ready(function ($) {
             $(ediv + 'button.editor-post-trash').parent().show();
             $(ediv + 'button.editor-post-switch-to-draft').hide();
             $(ediv + 'div.editor-post-link').parent().hide();
-			$(ediv + 'div.components-notice-list').hide();	// autosave notice
 			
             if (!rvyObjEdit.scheduledRevisionsEnabled) {
                 $(ediv + 'div.edit-post-post-schedule').hide();
@@ -58,10 +86,66 @@ jQuery(document).ready(function ($) {
         	}
         }
 
-        ediv = null;
+		ediv = null;
 	}
-	var RvyHideInterval = setInterval(RvyHideElements, 50);
-	
+	var RvyHideUpdateScheduled = false;
+	var RvyHideObserver;
+	var RvyHideObserverOptions = {
+		childList: true,
+		subtree: true,
+		attributes: true,
+		attributeOldValue: true,
+		attributeFilter: ['class', 'style', 'hidden', 'aria-hidden']
+	};
+	var RvyVisibilityTargets = 'div.edit-post-sidebar, button.editor-post-publish-button, button.editor-post-save-draft, button.editor-post-saved-stated, #icl_div';
+	var RvyContainsVisibilityTarget = function (node) {
+		return node.nodeType === 1 && (node.matches(RvyVisibilityTargets) || !!node.querySelector(RvyVisibilityTargets));
+	};
+	var RvyVisibilityMutations = function (records) {
+		var relevant = records.some(function (record) {
+			// React and other integrations may set an existing value again.
+			if (record.type === 'attributes' && record.oldValue === record.target.getAttribute(record.attributeName)) {
+				return false;
+			}
+			if (record.target.nodeType === 1 && record.target.closest(RvyVisibilityTargets)) {
+				return true;
+			}
+			if (record.type === 'attributes') {
+				// Ancestor visibility can change without changing a control.
+				return RvyContainsVisibilityTarget(record.target);
+			}
+			return Array.prototype.some.call(record.addedNodes, RvyContainsVisibilityTarget)
+				|| Array.prototype.some.call(record.removedNodes, RvyContainsVisibilityTarget);
+		});
+		if (relevant) {
+			RvyScheduleHideElements();
+		}
+	};
+	var RvyScheduleHideElements = function () {
+		if (RvyHideUpdateScheduled) {
+			return;
+		}
+		RvyHideUpdateScheduled = true;
+		window.requestAnimationFrame(function () {
+			RvyHideUpdateScheduled = false;
+			// Do not observe our own show/hide writes: they would schedule
+			// another frame indefinitely. Restore observation even on failure.
+			RvyHideObserver.disconnect();
+			try {
+				RvyHideElements();
+			} finally {
+				RvyHideObserver.observe(document.documentElement, RvyHideObserverOptions);
+			}
+		});
+	};
+
+	RvyHideElements();
+	RvyHideObserver = new MutationObserver(RvyVisibilityMutations);
+	RvyHideObserver.observe(document.documentElement, RvyHideObserverOptions);
+	window.addEventListener('resize', RvyScheduleHideElements);
+	document.addEventListener('change', RvyScheduleHideElements, true);
+	document.addEventListener('click', RvyScheduleHideElements, true);
+
     var RvySubmissionUI = function () {
 		if (RvyIsNativeRevisionComparison()) {
 			$('div.rvy-creation-ui').remove();
@@ -209,15 +293,15 @@ jQuery(document).ready(function ($) {
 				var mainDashicon = '';
 				
                 if (rvyObjEdit.canPublish && ('future' != rvyObjEdit.currentStatus)) {
-                    approveButtonHTML = '<a href="' + rvyObjEdit['pendingActionURL'] + '" class="revision-approve">'
+                    approveButtonHTML = '<a tabindex="-1" href="' + rvyObjEdit['pendingActionURL'] + '" class="revision-approve">'
                         + '<button type="button" class="components-button revision-approve is-button is-primary ppr-purple-button rvy-direct-approve">'
-                        + '<span class="dashicons dashicons-yes"></span>'
+                        + '<span class="dashicons dashicons-yes" aria-hidden="true"></span>'
                         + '<span class="rvy-caption">' + rvyObjEdit['approveCaption'] + '</span></button></a>';
                         
                     if ('draft' != rvyObjEdit.currentStatus) {
-                        approveButtonHTML += '<a href="' + rvyObjEdit['declineURL'] + '" class="revision-decline">'
+                        approveButtonHTML += '<a tabindex="-1" href="' + rvyObjEdit['declineURL'] + '" class="revision-decline">'
                         + '<button type="button" class="components-button revision-approve is-button is-primary ppr-purple-button rvy-direct-decline">'
-                        + '<span class="dashicons dashicons-no"></span>'
+                        + '<span class="dashicons dashicons-no" aria-hidden="true"></span>'
                         + '<span class="rvy-caption">' + rvyObjEdit['declineCaption'] + '</span></button></a>';
                     }
 
@@ -233,7 +317,7 @@ jQuery(document).ready(function ($) {
 				var rvyPreviewLink = '';
                 
                 if (rvyObjEdit['viewCaption']) {
-                    rvyPreviewLink = '<a class="revision-preview" href="' + rvyObjEdit['viewURL'] + '" target="_blank"><button class="revision-preview components-button is-secondary ppr-purple-button" target="pp_revisions_preview">'
+                    rvyPreviewLink = '<a tabindex="-1" class="revision-preview" href="' + rvyObjEdit['viewURL'] + '" target="_blank"><button type="button" class="revision-preview components-button is-secondary ppr-purple-button" target="pp_revisions_preview">'
                         + rvyObjEdit['viewCaption'] + '</button></a>';
                 }
                 
@@ -253,21 +337,21 @@ jQuery(document).ready(function ($) {
                     var buttonUI = '<div class="rvy-creation-ui rvy-submission-div' + divClass + '">';
                     
                     if (('pending' != rvyObjEdit.currentStatus) && ((!approveButtonHTML && rvyObjEdit.canPublish) || !rvyObjEdit.approveButtonReplacesSubmit)) {
-                        buttonUI += '<a href="' + url + '" class="revision-approve">'
+                        buttonUI += '<a tabindex="-1" href="' + url + '" class="revision-approve">'
                         + '<button type="button" class="components-button revision-approve is-button is-primary ppr-purple-button">'
-                        + '<span class="dashicons ' + mainDashicon + '"></span>'
+                        + '<span class="dashicons ' + mainDashicon + '" aria-hidden="true"></span>'
                         + '<span class="rvy-caption">' + rvyObjEdit[rvyObjEdit.currentStatus + 'ActionCaption'] + '</span></button></a>';
                     }
 
                     if (!approveButtonHTML && rvyObjEdit.canPublish) {
-                        buttonUI += '<a href="' + rvyObjEdit['declineURL'] + '" class="revision-decline">'
+                        buttonUI += '<a tabindex="-1" href="' + rvyObjEdit['declineURL'] + '" class="revision-decline">'
                         + '<button type="button" class="components-button revision-approve is-button is-primary ppr-purple-button rvy-direct-decline">'
-                        + '<span class="dashicons dashicons-no"></span>'
+                        + '<span class="dashicons dashicons-no" aria-hidden="true"></span>'
                         + '<span class="rvy-caption">' + rvyObjEdit['declineCaption'] + '</span></button></a>';
                     }
 
                     buttonUI += approveButtonHTML
-                        + rvyObjEdit.saveRevisionTooltip
+    
                         + '<div class="revision-submitting" style="display: none;">'
                         + '<span class="revision-approve revision-submitting">'
                         + rvyObjEdit[rvyObjEdit.currentStatus + 'InProcessCaption'] + '</span><span class="spinner ppr-submission-spinner" style=""></span></div>'
@@ -311,157 +395,41 @@ jQuery(document).ready(function ($) {
         }
     }, 100);
 
-	function rvyDoSubmission() {
-       rvySubmitCopy();
-    }
 
-	function rvyWaitForEditorSave(saveRequest) {
-        var waitForIdle = function() {
-            return new Promise(function(resolve) {
-                var editor = wp.data.select('core/editor');
-                if (!editor.isSavingPost() && !editor.isAutosavingPost()) {
-                    resolve();
-                    return;
-                }
-
-                var unsubscribe = wp.data.subscribe(function() {
-                    var currentEditor = wp.data.select('core/editor');
-                    if (!currentEditor.isSavingPost() && !currentEditor.isAutosavingPost()) {
-                        unsubscribe();
-                        resolve();
-                    }
-                });
-            });
-        };
-
-        return saveRequest && typeof saveRequest.then === 'function'
-            ? saveRequest.then(waitForIdle)
-            : waitForIdle();
-	}
-
-	function rvyDoApproval(saveRequest) {
-        rvyWaitForEditorSave(saveRequest).then(function() {
-            if (rvyRedirectURL != '') {
-                window.location.href = rvyRedirectURL;
-            }
-        }).catch(function() {
-            $('button.revision-approve').show();
-            $('div.revision-approving').hide();
+    var rvyTransitionBusy = false;
+    $(document).on('click', 'button.revision-approve, button.revision-schedule', function (event) {
+        event.preventDefault();
+        if (rvyTransitionBusy) return false;
+        var control = $(this);
+        var isDecline = control.hasClass('rvy-direct-decline');
+        var url = control.closest('a').attr('href') || '';
+        var isSubmission = !isDecline && (!url || url === 'javascript:void(0)');
+        if (isDecline) { if (url) window.location.href = url; return false; }
+        rvyTransitionBusy = true;
+        $('button.revision-approve, button.revision-schedule').prop('disabled', true);
+        $('div.revision-approving').show();
+        rvySpeak(rvyObjEdit.approvingCaption);
+        window.RevisionaryEditorSave.block().then(function () {
+            if (isSubmission) return rvySubmitCopy();
+            if (!url) throw new Error(rvyObjEdit.saveError);
+            var destination = new URL(url, window.location.href);
+            destination.searchParams.delete('editor'); // Full save completed; do not reapply an autosave.
+            window.location.href = destination.href;
+        }).catch(function (error) {
+            var notice = $('div.rvy-editor-save-error');
+            if (!notice.length) notice = $('<div class="notice notice-error rvy-editor-save-error" role="alert"><p></p></div>').insertBefore('div.rvy-creation-ui');
+            notice.find('p').text(error.message || rvyObjEdit.saveError);
+            rvySpeak(error.message || rvyObjEdit.saveError);
+        }).finally(function () {
+            rvyTransitionBusy = false;
+            $('button.revision-approve, button.revision-schedule').prop('disabled', false);
+            $('div.revision-approving, div.revision-submitting').hide();
         });
-	}
+        return false;
+    });
 
-    rvyObjEdit.creationDisabled = false;
-
-    function rvyDisableSubmitApprove() {
-        if (rvyObjEdit.creationDisabled) {
-            return;
-        }
-
-        rvyObjEdit.creationDisabled = true;
-                    
-        $('a.revision-approve').attr('title', rvyObjEdit.actionDisabledTitle);
-        $('a.revision-schedule').attr('title', rvyObjEdit.scheduleDisabledTitle);
-        $('button.revision-approve, button.revision-schedule').prop('disabled', 'disabled');
-        $('a.revision-approve, a.revision-schedule').css('pointer-events', 'none');
-        $('div.rvy-save-revision-tip').show();
-
-        $('div.editor-sidebar__panel-tabs div button').on('click', function() {
-            setInterval(
-                function() {
-                    if (rvyObjEdit.creationDisabled) {
-                        $('button.revision-approve, button.revision-schedule').prop('disabled', 'disabled');
-                        $('a.revision-approve, a.revision-schedule').css('pointer-events', 'none');
-                        $('div.rvy-save-revision-tip').show();
-                    }
-                },
-                500
-            );
-        });
-        
-        intSaveWatch = setInterval(() => {
-            if (!$('button.editor-post-save-draft:visible').length || wp.data.select('core/editor').isSavingPost()) {
-                rvyObjEdit.creationDisabled = false;
-                $('button.revision-approve').prop('disabled', false);
-                $('button.revision-schedule').prop('disabled', false);
-                $('a.revision-approve, a.revision-schedule').css('pointer-events', 'auto');
-                $('div.rvy-save-revision-tip').hide();
-                $('a.revision-approve').attr('title', rvyObjEdit.actionTitle);
-                $('a.revision-schedule').attr('title', rvyObjEdit.scheduleTitle);
-
-                clearInterval(intSaveWatch);
-            }
-        }, 500);
-    }
-
-    if (rvyObjEdit.disableSubmitUntilSave) {
-        var intSaveWatch;
-        
-        setTimeout(
-            function() {
-                $(document).on('click', 'div.postbox-container,button.components-button:not(.revision-approve):not(.revision-schedule),div.acf-postbox,.editor-post-schedule__dialog-toggle', function() {
-                    rvyDisableSubmitApprove();
-                });
-            }, 200
-        );
-    }
-
-	var rvyRedirectURL = '';
-
-    $(document).on('click', 'button.revision-approve', function () {
-        // If autosave approvals are ever enabled, we will need this
-        var isApproval = $(this).hasClass('rvy-direct-approve');
-        var isDecline = $(this).hasClass('rvy-direct-decline');
-		var isSubmission = (rvyObjEdit[rvyObjEdit.currentStatus + 'ActionURL'] == "") && !isApproval && !isDecline;
-		
-		$('button.revision-approve').hide();
-		var saveRequest = null;
-		
-		if (!isSubmission && (isApproval || isDecline || ('future' == rvyObjEdit.currentStatus) || ('future-revision' == rvyObjEdit.currentStatus))) {
-            $('div.revision-approving').show().css('display', 'block');
-            $('div.revision-approving span.ppr-submission-spinner').css('visibility', 'visible');
-        }
-
-        if (isApproval) {
-            if (wp.data.select('core/editor').isEditedPostDirty()) {
-                saveRequest = wp.data.dispatch('core/editor').savePost();
-            }
-			rvyRedirectURL = $('div.rvy-creation-ui button.rvy-direct-approve').closest('a').attr('href');
-
-			if (rvyRedirectURL == '') {
-				rvyRedirectURL = $('div.rvy-creation-ui button.revision-approve').closest('a').attr('href');
-			}
-        } else {
-            if (isDecline) {
-                rvyRedirectURL = $('div.rvy-creation-ui button.rvy-direct-decline').closest('a').attr('href');
-
-                if (rvyRedirectURL == '') {
-                    rvyRedirectURL = $('div.rvy-creation-ui button.revision-decline').closest('a').attr('href');
-                }
-            } else {
-                rvyRedirectURL = $('div.rvy-creation-ui a').attr('href');
-            }
-        }
-
-        if (isSubmission) {
-            $('div.revision-submitting').show();
-            $('div.revision-submitting .spinner').css('visibility', 'visible');
-            rvyDoSubmission();
-        } else {
-            rvyDoApproval(saveRequest);
-        }
-
-        isApproval = null;
-        isSubmission = null;
-
-		return false;
-	});
-	
     function rvySubmitCopy() {
         var revisionaryCreateDone = function () {
-            if (wp.data.select('core/editor').isEditedPostDirty()) {
-                wp.data.dispatch('core/editor').savePost();
-            }
-
             $('.revision-approve').hide();
             $('div.revision-submitting').hide();
             $('.revision-created').show();
@@ -479,13 +447,14 @@ jQuery(document).ready(function ($) {
             }
         }
 		
-        $.ajax({
+        return $.ajax({
             url: rvyObjEdit.ajaxurl,
             data: {'rvy_ajax_field': rvyObjEdit[rvyObjEdit.currentStatus + 'AjaxField'], 'rvy_ajax_value': wp.data.select('core/editor').getCurrentPostId(), '_rvynonce': rvyObjEdit.revisionActionNonce},
             dataType: "html",
             success: revisionaryCreateDone,
             error: function (data, txtStatus) {
                 $('div.rvy-creation-ui').html(rvyObjEdit[rvyObjEdit.currentStatus + 'ErrorCaption']);
+                rvySpeak(rvyObjEdit[rvyObjEdit.currentStatus + 'ErrorCaption']);
             }
         });
     }

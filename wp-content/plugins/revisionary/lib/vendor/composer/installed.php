@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'v4.1.0',
-        'version' => '4.1.0.0',
-        'reference' => '81b29abd911ec3f3e022114dabb768b31d810b4a',
+        'pretty_version' => '4.3.1',
+        'version' => '4.3.1.0',
+        'reference' => 'a7dee726baf2ca1cf4c5e86c72f923e4e680d94a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,18 +11,18 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'v4.1.0',
-            'version' => '4.1.0.0',
-            'reference' => '81b29abd911ec3f3e022114dabb768b31d810b4a',
+            'pretty_version' => '4.3.1',
+            'version' => '4.3.1.0',
+            'reference' => 'a7dee726baf2ca1cf4c5e86c72f923e4e680d94a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'publishpress/bundled-translations' => array(
-            'pretty_version' => 'v1.0.3',
-            'version' => '1.0.3.0',
-            'reference' => '95b06baed793a3a4ec44c5d932b68785302a0559',
+            'pretty_version' => 'v1.0.6',
+            'version' => '1.0.6.0',
+            'reference' => '29e91e3dddcdf63fa635d3e6fa43b0a43b0ddeb6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../publishpress/bundled-translations',
             'aliases' => array(),

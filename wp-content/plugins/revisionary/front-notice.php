@@ -1,6 +1,8 @@
 <?php
 namespace PublishPress\Revisions;
 
+\defined('ABSPATH') || exit;
+
 class FrontNotice {
     var $post_id = 0;
 
@@ -13,7 +15,7 @@ class FrontNotice {
     }
 
     function revisionsIndicator() {
-        if (!$this->post_id) {
+        if (!$this->post_id || apply_filters('revisionary_hide_front_revision_indicator', false, $this->post_id)) {
             return;
         }
         ?>
@@ -56,7 +58,7 @@ class FrontNotice {
                 <span id="rvyRevisionIndicator">
                 <a href="<?php echo esc_url($url);?>" class="button button-secondary">
                 <img src="<?php echo esc_url(plugins_url('', REVISIONARY_FILE) . '/common/img/dashicons-future.png');?>" alt="" aria-hidden="true">
-                <span><?php _e('Revisions', 'revisionary');?></span>
+                <span><?php esc_html_e('Revisions', 'revisionary');?></span>
                 </a></span>
                 <?php
             }

@@ -1,7 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined('ABSPATH') || exit;
 
 require_once(__DIR__ . '/rvy_init-functions.php');
 
@@ -140,8 +138,10 @@ function revisionary_copy_postmeta($from_post, $to_post_id, $args = []) {
         $from_post = get_post($from_post);
     }
 
+    do_action('revisionary_pre_copy_postmeta', $from_post, $to_post_id, $args);
     $source_meta_keys = \get_post_custom_keys( $from_post->ID );
     if ( empty( $source_meta_keys ) ) {
+        do_action('revisionary_post_copy_postmeta', $from_post, $to_post_id, $args);
         return;
     }
 
@@ -202,7 +202,8 @@ function revisionary_copy_postmeta($from_post, $to_post_id, $args = []) {
 
         if (!empty($meta_values)) {
             if (count($meta_values) > 1) {
-                delete_post_meta($to_post_id, $meta_key);
+                // delete_post_meta() redirects native revisions to the live post.
+                delete_metadata('post', $to_post_id, $meta_key);
 
                 foreach ( $meta_values as $meta_value ) {
                     $meta_value = maybe_unserialize( $meta_value );
@@ -218,13 +219,14 @@ function revisionary_copy_postmeta($from_post, $to_post_id, $args = []) {
     }
 
     if (!$empty_target_only && !empty($target_meta_keys) && is_array($target_meta_keys)) {
-        if ($delete_meta_keys = array_diff($target_meta_keys, $meta_keys, revisionary_unrevisioned_postmeta())) {
+        if ($delete_meta_keys = array_diff($target_meta_keys, $meta_keys, $skip_meta_keys, revisionary_unrevisioned_postmeta())) {
             $deletable_keys = apply_filters('revisionary_deletable_postmeta_keys', ['_links_to', '_links_to_target']);
         }
         
         foreach($delete_meta_keys as $meta_key) {
             if (in_array($meta_key, $deletable_keys, true) || !empty($args['apply_deletions']) || defined('PP_REVISIONS_APPLY_POSTMETA_DELETION')) {
-                delete_post_meta($to_post_id, $meta_key);
+                // delete_post_meta() redirects native revisions to the live post.
+                delete_metadata('post', $to_post_id, $meta_key);
             }
         }
     }
@@ -235,6 +237,7 @@ function revisionary_copy_postmeta($from_post, $to_post_id, $args = []) {
     );
 
     do_action('revisionary_copy_postmeta', $from_post, $to_post_id, $args);
+    do_action('revisionary_post_copy_postmeta', $from_post, $to_post_id, $args);
 }
 
 function rvy_revision_base_statuses($args = []) {
@@ -472,12 +475,10 @@ function publishpress_get_revision_info($post) {
     $main_post_id = rvy_post_id($post->ID);
 
     if (!empty($from_revision_workflow)) {
-        switch ($from_revision_workflow) {
-            case 'future-revision':
-                $arr['publish_method'] = esc_html__('Scheduled Revision Publication', 'revisionary');
-                break;
-
-            default:
+        // $from_revision_workflow may be boolean true, which a loose switch comparison would match to 'future-revision'
+        if ('future-revision' === $from_revision_workflow) {
+            $arr['publish_method'] = esc_html__('Scheduled Revision Publication', 'revisionary');
+        } else {
             $arr['publish_method'] = esc_html__('Revision Publication', 'revisionary');
         }
     } elseif (!empty($parent_in_revision_workflow)) {
@@ -653,8 +654,14 @@ function pp_revisions_plugin_updated($current_version, $args = []) {
 
     if (version_compare($last_ver, '3.0.1', '<')) {
         // convert pending / scheduled revisions to v3.0 format
-		$revision_status_csv = implode("','", array_map('sanitize_key', rvy_revision_statuses()));
-		$wpdb->query("UPDATE $wpdb->posts SET post_mime_type = post_status WHERE post_status IN ('$revision_status_csv')");                             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$revision_statuses     = array_map('sanitize_key', rvy_revision_statuses());
+		$status_placeholders   = implode(', ', array_fill(0, count($revision_statuses), '%s'));
+		$wpdb->query(                                                                                                                                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"UPDATE $wpdb->posts SET post_mime_type = post_status WHERE post_status IN ($status_placeholders)",                                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count.
+				$revision_statuses
+			)
+		);
 		$wpdb->query("UPDATE $wpdb->posts SET post_status = 'draft', post_mime_type = 'draft-revision' WHERE post_status IN ('draft-revision')");       // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query("UPDATE $wpdb->posts SET post_status = 'pending', post_mime_type = 'pending-revision' WHERE post_status IN ('pending-revision')"); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query("UPDATE $wpdb->posts SET post_status = 'pending', post_mime_type = 'future-revision' WHERE post_status IN ('future-revision')");   // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -678,6 +685,9 @@ function pp_revisions_plugin_updated($current_version, $args = []) {
     if ($current_version != $last_ver) {
         require_once( dirname(__FILE__).'/lib/agapetry_wp_core_lib.php');
         require_once(dirname(__FILE__).'/rvy_init.php');
+        // Silent update reactivation skips activation hooks. Reconcile with the
+        // selected schema; enhanced mode intentionally retains custom statuses.
+        rvy_sync_revision_storage_schema();
         revisionary_refresh_revision_flags();
 
         // mirror to REVISIONARY_VERSION
@@ -728,13 +738,34 @@ function pp_revisions_get_revision_statuses() {
 function rvy_bulk_remove_revision_statuses() {
     global $wpdb;
 
-    $revision_status_csv = implode("','", array_map('sanitize_key', pp_revisions_get_revision_statuses()));
+    $revision_statuses   = array_map('sanitize_key', pp_revisions_get_revision_statuses());
+    $status_placeholders = implode(', ', array_fill(0, count($revision_statuses), '%s'));
 
-    $wpdb->query("UPDATE $wpdb->posts SET post_mime_type = post_status WHERE post_status IN ('$revision_status_csv')");                             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-    
-    $wpdb->query("UPDATE $wpdb->posts SET post_status = 'pending' WHERE post_status IN ('$revision_status_csv') AND post_status != 'draft-revision'");  // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+    $revision_ids = $wpdb->get_col($wpdb->prepare(
+        "SELECT ID FROM $wpdb->posts WHERE post_status IN ($status_placeholders)",      // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+        $revision_statuses
+    ));
+                                                                                                                                                //  -- Placeholders are generated from the value count.
+    $wpdb->query(                                                                                                                               // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->prepare(                                                                                                                         // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+            "UPDATE $wpdb->posts SET post_mime_type = post_status WHERE post_status IN ($status_placeholders)",                                 // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+            $revision_statuses
+        )
+    );
+                                                                                                                                                //  -- Placeholders are generated from the value count.
+    $wpdb->query(                                                                                                                               // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->prepare(                                                                                                                         // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+            "UPDATE $wpdb->posts SET post_status = 'pending' WHERE post_status IN ($status_placeholders) AND post_status != 'draft-revision'",  // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+            $revision_statuses
+        )
+    );
     
     $wpdb->query("UPDATE $wpdb->posts SET post_status = 'draft' WHERE post_status IN ('draft-revision')");       // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+    foreach ($revision_ids as $revision_id) {
+        clean_post_cache((int) $revision_id);
+    }
 }
 
 function rvy_bulk_apply_revision_statuses() {
@@ -764,9 +795,21 @@ function rvy_bulk_apply_revision_statuses() {
         }
     }
 
-    $revision_status_csv = implode("','", array_map('sanitize_key', $revision_statuses));
+    $revision_statuses   = array_map('sanitize_key', $revision_statuses);
+    $status_placeholders = implode(', ', array_fill(0, count($revision_statuses), '%s'));
 
-    $wpdb->query("UPDATE $wpdb->posts SET post_status = post_mime_type WHERE post_mime_type IN ('$revision_status_csv')");                          // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared   
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+    $revision_ids = $wpdb->get_col($wpdb->prepare(                                                          // -- Placeholders are generated from the value count.
+        "SELECT ID FROM $wpdb->posts WHERE post_mime_type IN ($status_placeholders)", $revision_statuses    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+    ));
+                                                                                                                                                // -- Placeholders are generated from the value count.
+    $wpdb->query(                                                                                                                               // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $wpdb->prepare(
+            "UPDATE $wpdb->posts SET post_status = post_mime_type WHERE post_mime_type IN ($status_placeholders)",                              // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+            $revision_statuses
+        )
+    );
+    foreach ($revision_ids as $revision_id) { clean_post_cache((int) $revision_id); }
 }
 
 function pp_revisions_plugin_activation() {
@@ -778,10 +821,16 @@ function pp_revisions_plugin_activation() {
     require_once(dirname(__FILE__).'/functions.php');
 
     if (!defined('REVISIONARY_DISABLE_ACTIVATION_TRASH_QUERY')) {
-        $revision_status_csv = implode("','", array_map('sanitize_key', pp_revisions_get_revision_statuses()));
+        $revision_statuses   = array_map('sanitize_key', pp_revisions_get_revision_statuses());
+        $status_placeholders = implode(', ', array_fill(0, count($revision_statuses), '%s'));
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $results = $wpdb->get_results("SELECT ID, comment_count FROM $wpdb->posts WHERE post_mime_type IN ('$revision_status_csv') AND post_status = 'trash'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT ID, comment_count FROM $wpdb->posts WHERE post_mime_type IN ($status_placeholders) AND post_status = 'trash'",           // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count.
+                $revision_statuses
+            )
+        );
 
         $trashed_ids = [];
 
@@ -789,13 +838,30 @@ function pp_revisions_plugin_activation() {
             $trashed_ids[$row->comment_count] = $row->ID;
         }
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $revision_post_ids = $wpdb->get_col("SELECT comment_count FROM $wpdb->posts WHERE post_mime_type IN ('$revision_status_csv')");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $revision_post_ids = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT comment_count FROM $wpdb->posts WHERE post_mime_type IN ($status_placeholders)",                                      // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count.
+                $revision_statuses
+            )
+        );
 
-        $id_csv = implode("','", $revision_post_ids);
+        $revision_post_ids = array_map('intval', $revision_post_ids);
 
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
-        $deleted_ids = $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE post_id NOT IN ('" . $id_csv . "') AND meta_key = '_rvy_base_post_id'");
+        if ($revision_post_ids) {
+            $id_placeholders = implode(', ', array_fill(0, count($revision_post_ids), '%d'));
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $deleted_ids = $wpdb->get_col(
+                $wpdb->prepare(
+                    "SELECT post_id FROM $wpdb->postmeta WHERE post_id NOT IN ($id_placeholders) AND meta_key = '_rvy_base_post_id'",            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders are generated from the value count.
+                    $revision_post_ids
+                )
+            );
+        } else {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $deleted_ids = $wpdb->get_col("SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_rvy_base_post_id'");
+        }
 
         foreach (array_merge($trashed_ids, $deleted_ids) as $revision_id) {
             delete_post_meta($revision_id, '_rvy_base_post_id', true);
@@ -816,15 +882,14 @@ function pp_revisions_plugin_activation() {
     }
 
     // Revisions were prevented from being being listed as regular drafts / pending posts after plugin deactivation
-    if (rvy_get_option('permissions_compat_mode')) {
-        rvy_bulk_apply_revision_statuses();
-    } else {
-        rvy_bulk_remove_revision_statuses();
-    }
+    rvy_sync_revision_storage_schema();
 }
 
 function pp_revisions_plugin_deactivation() {
     global $wpdb;
+
+    // Also covers silent reactivation of the SAME version (no upgrade callback).
+    update_option('rvy_storage_schema_pending', 1);
 
     require_once(dirname(__FILE__).'/functions.php');
 
@@ -840,3 +905,120 @@ function pp_revisions_plugin_deactivation() {
         wp_unschedule_event($timestamp,'rvy_mail_buffer_hook');
     }
 }
+
+/**
+ * Resolve only the explicitly requested, authorized native archive preview.
+ * Renderers may use the parent for relations, but must overlay revision content.
+ *
+ * @return WP_Post|null
+ */
+function rvy_get_native_revision_preview($revision_id) {
+    $preview_arg = defined('RVY_PREVIEW_ARG') ? sanitize_key(RVY_PREVIEW_ARG) : 'rv_preview';
+    if (is_admin() || empty($_GET[$preview_arg]) || !is_user_logged_in()) {                                         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return null;
+    }
+    $requested_id = !empty($_GET['page_id']) ? wp_unslash($_GET['page_id']) : (isset($_GET['p']) ? wp_unslash($_GET['p']) : 0);             // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+    if (!is_scalar($requested_id) || ((int) $requested_id !== (int) $revision_id)) {
+        return null;
+    }
+    $revision = get_post($revision_id);
+    if (!$revision || 'revision' !== $revision->post_type || 'inherit' !== $revision->post_status) {
+        return null;
+    }
+    $parent = get_post($revision->post_parent);
+    if (!$parent || 'revision' === $parent->post_type
+        || (!current_user_can('edit_post', $revision_id) && !current_user_can('edit_post', $parent->ID))) {
+        return null;
+    }
+    return clone $revision;
+}
+
+/** Identify revision contributors by primitive capabilities, without role names.
+ * Accept a role's capabilities or a user's resolved allcaps. Avoid has_cap()
+ * here because this helper is also called from user_has_cap filters.
+ */
+function rvy_has_revisor_capabilities($caps) {
+    foreach (get_post_types(['show_ui' => true], 'objects') as $type) {
+        if (!empty($caps[$type->cap->edit_posts]) && !empty($caps[$type->cap->edit_others_posts])
+            && empty($caps[$type->cap->publish_posts]) && empty($caps[$type->cap->edit_published_posts])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+add_action('rest_api_init', function () {
+    foreach (get_post_types(['show_in_rest' => true], 'objects') as $type) {
+        add_filter('rest_pre_insert_' . $type->name, function ($prepared, $request) use ($type) {
+            if (is_wp_error($prepared)) { return $prepared; }
+            $id = absint($request->get_param('id'));
+            $alias = absint($request->get_param('post'));
+            if (!$id && $alias && rvy_in_revision_workflow($alias)) {
+                return new WP_Error('revisionary_invalid_rest_create', __('A workflow revision cannot be published through a post creation request.', 'revisionary'), ['status' => 403]);
+            }
+            if ($id && rvy_in_revision_workflow($id)) {
+                $status = isset($prepared->post_status) ? $prepared->post_status : $request->get_param('status');
+                $status_object = get_post_status_object($status);
+                if (('future' === $status || ($status_object && ($status_object->public || $status_object->private)))
+                    && !current_user_can($type->cap->publish_posts)) {
+                    return new WP_Error('revisionary_cannot_publish', __('You are not allowed to publish this post type.', 'revisionary'), ['status' => 403]);
+                }
+            }
+            return $prepared;
+        }, PHP_INT_MAX, 2);
+    }
+});
+
+/**
+ * Authorize every source, including the parent behind a workflow/native revision.
+ * A creation nonce and copy capabilities do not grant access to source content.
+ */
+function rvy_can_access_copy_source($post_id, $revise = false) {
+    $seen = [];
+    $post_id = (int) $post_id;
+
+    while ($post_id > 0 && !isset($seen[$post_id])) {
+        $seen[$post_id] = true;
+        $source = get_post($post_id);
+        if (!$source) {
+            return false;
+        }
+
+        // Duplicating workflow changes is an editing operation on the source
+        // revision, followed by a duplication permission check on its parent.
+        // Do not map duplicate_post against the revision itself.
+        if (!$revise && rvy_in_revision_workflow($source)) {
+            if (!current_user_can('edit_post', $source->ID)) {
+                return false;
+            }
+            $post_id = (int) $source->comment_count;
+            continue;
+        }
+
+        if (!current_user_can('read_post', $source->ID)) {
+            return false;
+        }
+
+        if (!$revise && !current_user_can('duplicate_post', $source->ID)) {
+            return false;
+        }
+
+        if ('revision' === $source->post_type) {
+            $post_id = (int) $source->post_parent;
+        } elseif (rvy_in_revision_workflow($source)) {
+            $post_id = (int) $source->comment_count;
+        } else {
+            // copy_post is the plugin's post-specific Create Revision capability.
+            // It includes configured copy/revise permissions and full editors,
+            // without requiring direct editing access to the published source.
+            return !$revise || current_user_can('copy_post', $source->ID);
+        }
+    }
+
+    // Missing parents and cyclic revision associations fail closed.
+    return false;
+}
+
+require_once __DIR__ . '/admin/duplicate-capabilities_rvy.php';
+
+require_once __DIR__ . '/permissions-read_rvy.php';

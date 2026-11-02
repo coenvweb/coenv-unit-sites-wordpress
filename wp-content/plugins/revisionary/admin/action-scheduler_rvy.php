@@ -1,5 +1,24 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+defined('ABSPATH') || exit;
+require_once __DIR__ . '/scheduled-publication-mode_rvy.php';
+
+/** Move upcoming revisions to the selected trigger when a scheduler setting changes. */
+function rvy_reschedule_upcoming_revisions_for_trigger_change() {
+	if ( function_exists( 'rvy_refresh_options' ) ) rvy_refresh_options();
+	if ( ! rvy_use_wp_cron_for_revision_publication() ) return;
+	$now = time();
+	foreach ( rvy_future_revision_ids() as $revision_id ) {
+		$revision = get_post( $revision_id );
+		if ( ! $revision || 'future-revision' !== $revision->post_mime_type ) continue;
+		$timestamp = strtotime( $revision->post_date_gmt . ' UTC' );
+		if ( ! $timestamp || $timestamp <= $now ) continue;
+		rvy_reschedule_revision_publication( $revision_id, $revision->post_date_gmt );
+	}
+}
+add_action( 'update_option_rvy_scheduled_publish_cron', 'rvy_reschedule_upcoming_revisions_for_trigger_change', 20, 2 );
+
+add_action( 'add_option_rvy_scheduled_publish_cron', 'rvy_reschedule_upcoming_revisions_for_trigger_change', 20, 2 );
+
 
 function rvy_scheduled_revision_cron_events() {
 	$events = [];
@@ -13,6 +32,9 @@ function rvy_scheduled_revision_cron_events() {
 			$events[$revision_id][] = [
 				'timestamp' => (int) $timestamp,
 				'args' => $args,
+                'hook' => 'publish_revision_rvy',
+                'schedule' => isset($event['schedule']) ? $event['schedule'] : false,
+                'interval' => isset($event['interval']) ? (int) $event['interval'] : 0,
 			];
 		}
 	}
@@ -81,6 +103,7 @@ function rvy_scheduled_revision_migration_ui() {
 function rvy_ajax_migrate_scheduled_revisions() {
 	check_ajax_referer( 'rvy-migrate-scheduled-revisions' );
 	if ( ! is_content_administrator_rvy() ) wp_send_json_error( [ 'message' => __( 'Permission denied.', 'revisionary' ) ], 403 );
+	
 	if ( ! function_exists( 'as_schedule_single_action' ) ) wp_send_json_error( [ 'message' => __( 'Action Scheduler is unavailable.', 'revisionary' ) ], 500 );
 
 	update_option( 'rvy_scheduled_publish_cron', '0' );
@@ -166,7 +189,7 @@ function rvy_get_scheduling_log_table() {
 				$this->table_header = __( 'Scheduling Log', 'revisionary' );
 				$this->columns = [
 					'revision' => __( 'Revision', 'revisionary' ),
-					'preview' => '',
+					'preview' => '<span class="screen-reader-text">' . __( 'Preview', 'revisionary' ) . '</span>',
 					'hook' => __( 'Hook', 'revisionary' ),
 					'status' => __( 'Publication', 'revisionary' ),
 					'args' => __( 'Arguments', 'revisionary' ),
@@ -232,13 +255,14 @@ function rvy_get_scheduling_log_table() {
 			public function column_preview( $row ) {
 				$revision_id = rvy_scheduling_log_revision_id( $row );
 				if ( ! $revision_id ) return '';
-				return sprintf( '<a href="%s"><span class="dashicons dashicons-cover-image" title="%s"></span></a>', esc_url( rvy_preview_url( $revision_id ) ), esc_attr__( 'View preview', 'revisionary' ) );
+				return sprintf( '<a href="%s" aria-label="%s"><span class="dashicons dashicons-cover-image" title="%s" aria-hidden="true"></span></a>', esc_url( rvy_preview_url( $revision_id ) ), esc_attr__( 'View preview', 'revisionary' ), esc_attr__( 'View preview', 'revisionary' ) );
+				}
 			}
-		}
 	}
 	$table = new Revisionary_Scheduling_Log_Table( ActionScheduler::store(), ActionScheduler::logger(), ActionScheduler::runner() );
 	return $table;
 }
+
 
 function rvy_scheduling_log_revision_cell( $revision ) {
 	static $renderer;
@@ -298,7 +322,7 @@ function rvy_scheduled_revision_action_rows() {
 	static $rows;
 	if ( isset( $rows ) ) return $rows;
 	$rows = [];
-	if ( rvy_get_option( 'scheduled_publish_cron' ) || ! class_exists( 'ActionScheduler' ) ) return $rows;
+	if ( ! class_exists( 'ActionScheduler' ) ) return $rows;
 
 	$store = ActionScheduler::store();
 	$logger = ActionScheduler::logger();
@@ -338,18 +362,65 @@ function rvy_scheduled_revision_action_rows() {
 	return $rows;
 }
 
+/** Display the current WP-Cron schedule, without inventing execution history. */
+function rvy_scheduled_revision_wp_cron_cell($revision, $events) {
+    $format = get_option('date_format') . ' ' . get_option('time_format');
+    usort($events, static function ($a, $b) { return $a['timestamp'] <=> $b['timestamp']; });
+    $timestamp = $events ? $events[0]['timestamp'] : strtotime($revision->post_date_gmt . ' UTC');
+    $missed = $timestamp && current_time('timestamp', true) >= $timestamp + MINUTE_IN_SECONDS;
+    $label = $missed ? __('Missed Schedule', 'revisionary') : __('Scheduled', 'revisionary');
+    $modal_id = 'rvy-wp-cron-' . (int) $revision->ID;
+    $details = '<dl class="rvy-scheduled-action-details">'
+        . '<dt>' . esc_html__('Scheduler', 'revisionary') . '</dt><dd>' . esc_html__('WP-Cron', 'revisionary') . '</dd>';
+    if ($events) {
+        foreach ($events as $event) {
+            $recurrence = !empty($event['schedule']) ? $event['schedule'] : __('Non-repeating', 'revisionary');
+            if (!empty($event['interval'])) {
+                $recurrence .= ' (' . sprintf(__('%s seconds', 'revisionary'), number_format_i18n($event['interval'])) . ')';
+            }
+            $details .= '<dt>' . esc_html__('Hook', 'revisionary') . '</dt><dd><code>publish_revision_rvy</code></dd>'
+                . '<dt>' . esc_html__('Arguments', 'revisionary') . '</dt><dd><code>' . esc_html(wp_json_encode($event['args'])) . '</code></dd>'
+                . '<dt>' . esc_html__('Scheduled Date', 'revisionary') . '</dt><dd>' . esc_html(wp_date($format, $event['timestamp'])) . '</dd>'
+                . '<dt>' . esc_html__('Recurrence', 'revisionary') . '</dt><dd>' . esc_html($recurrence) . '</dd>';
+        }
+    } else {
+        $details .= '<dt>' . esc_html__('Requested Publication', 'revisionary') . '</dt><dd>'
+            . esc_html(mysql2date($format, $revision->post_date)) . '</dd>'
+            . '<dt>' . esc_html__('Event', 'revisionary') . '</dt><dd>'
+            . esc_html__('No matching WP-Cron event was found.', 'revisionary') . '</dd>';
+    }
+    $details .= '<dt>' . esc_html__('Log', 'revisionary') . '</dt><dd>'
+        . esc_html__('WP-Cron does not retain an execution log. These details show the currently registered events only.', 'revisionary') . '</dd></dl>';
+    return '<a href="#' . esc_attr($modal_id) . '" class="rvy-publication-modal-open rvy-action-status rvy-action-status--pending" data-modal="'
+        . esc_attr($modal_id) . '" title="' . esc_attr__('Click to view scheduling log.', 'revisionary') . '" role="button" aria-haspopup="dialog">'
+        . esc_html($label) . '<span class="screen-reader-text"> ' . esc_html__('(view scheduling log)', 'revisionary')
+        . '</span></a><div id="' . esc_attr($modal_id) . '" class="rvy-scheduled-action-modal" title="'
+        . esc_attr__('Scheduled Revision Publication', 'revisionary') . '" hidden>' . $details . '</div>';
+}
+
 function rvy_scheduled_revision_publication_cell( $row, $revision_id ) {
+    static $cron_events;
+    if (!isset($cron_events)) $cron_events = rvy_scheduled_revision_cron_events();
+    $revision = get_post($revision_id);
+    $events = isset($cron_events[$revision_id]) ? $cron_events[$revision_id] : [];
+    $view = isset($_REQUEST['action_status']) ? sanitize_key(wp_unslash($_REQUEST['action_status'])) : 'pending';				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+    if ($revision && 'future-revision' === $revision->post_mime_type
+        && rvy_use_wp_cron_for_revision_publication()
+        && (empty($row) || ($events && 'pending' !== $row['status_name'] && in_array($view, ['pending', 'all'], true)))) {
+        return rvy_scheduled_revision_wp_cron_cell($revision, $events);
+    }
+
 	if ( empty( $row ) ) {
 		$revision = get_post( $revision_id );
 
 		if ( $revision && ( 'future-revision' === $revision->post_mime_type ) ) {
 			$publication_time = strtotime( $revision->post_date_gmt . ' UTC' );
 
-			if ( $publication_time && ( $publication_time > current_time( 'timestamp', true ) ) ) {
-				return esc_html__( 'Scheduled', 'revisionary' );
+			if ( $publication_time && ( current_time( 'timestamp', true ) >= $publication_time + MINUTE_IN_SECONDS ) ) {
+				return esc_html__( 'Missed Schedule', 'revisionary' );
 			}
 
-			return esc_html__( 'Missed Schedule', 'revisionary' );
+			return esc_html__( 'Scheduled', 'revisionary' );
 		}
 
 		return '<span aria-hidden="true">—</span>';
@@ -369,18 +440,18 @@ function rvy_scheduled_revision_publication_cell( $row, $revision_id ) {
 		. '<dt>' . esc_html__( 'Scheduled Date', 'revisionary' ) . '</dt><dd>' . $table->column_schedule( $row ) . '</dd>'
 		. '<dt>' . esc_html__( 'Log', 'revisionary' ) . '</dt><dd><div class="rvy-scheduled-action-log">' . $log_html . '</div></dd></dl>';
 	return '<a href="#' . esc_attr( $modal_id ) . '" class="rvy-publication-modal-open rvy-action-status rvy-action-status--' . esc_attr( sanitize_html_class( $row['status_name'] ) ) . '" data-modal="' . esc_attr( $modal_id )
-		. '" title="' . esc_attr__( 'Click to view scheduling log.', 'revisionary' ) . '">'
-		. esc_html( $status_label ) . '</a><div id="' . esc_attr( $modal_id ) . '" class="rvy-scheduled-action-modal" title="'
+		. '" title="' . esc_attr__( 'Click to view scheduling log.', 'revisionary' ) . '" role="button" aria-haspopup="dialog">'
+		. esc_html( $status_label ) . '<span class="screen-reader-text"> ' . esc_html__( '(view scheduling log)', 'revisionary' ) . '</span></a><div id="' . esc_attr( $modal_id ) . '" class="rvy-scheduled-action-modal" title="'
 		. esc_attr__( 'Scheduled Revision Publication', 'revisionary' ) . '" hidden>' . $details . '</div>';
 }
 
 function rvy_scheduled_revisions_modal_ui() {
 	?>
 	<style>
-	.rvy-scheduled-action-details{display:grid;grid-template-columns:max-content 1fr;gap:8px 14px}.rvy-scheduled-action-details dt{font-weight:600}.rvy-scheduled-action-details dd{margin:0;min-width:0;overflow-wrap:anywhere}.rvy-scheduled-action-details ul{margin-top:0}.rvy-scheduled-action-log-entry{margin:0 0 12px;padding:0;font-weight:400}.rvy-scheduled-action-log-entry:last-child{margin-bottom:0}.rvy-scheduled-action-modal{max-width:760px}.rvy-scheduled-action-dialog,.rvy-scheduled-action-dialog .ui-dialog-titlebar,.rvy-scheduled-action-dialog .ui-dialog-content,.rvy-scheduled-action-dialog .rvy-scheduled-action-details,.rvy-scheduled-action-dialog .rvy-scheduled-action-log-entry{background:transparent}
+	.rvy-scheduled-action-details{display:grid;grid-template-columns:max-content 1fr;gap:8px 14px}.rvy-scheduled-action-details dt{font-weight:600}.rvy-scheduled-action-details dd{margin:0;min-width:0;overflow-wrap:anywhere}.rvy-scheduled-action-details ul{margin-top:0}.rvy-scheduled-action-log-entry{margin:0 0 12px;padding:0;font-weight:400}.rvy-scheduled-action-log-entry:last-child{margin-bottom:0}.rvy-scheduled-action-modal{max-width:760px}.rvy-scheduled-action-dialog,.rvy-scheduled-action-dialog .ui-dialog-content{background:#fff}.rvy-scheduled-action-dialog .ui-dialog-titlebar,.rvy-scheduled-action-dialog .rvy-scheduled-action-details,.rvy-scheduled-action-dialog .rvy-scheduled-action-log-entry{background:transparent}
 	</style>
 	<script>
-	jQuery(function($){$(document).on('click','.rvy-publication-modal-open',function(event){event.preventDefault();var id=$(this).data('modal'),$modal=$('#'+id);$modal.removeAttr('hidden').dialog({dialogClass:'rvy-scheduled-action-dialog',modal:true,width:Math.min(760,$(window).width()-40),maxHeight:$(window).height()-60,close:function(){$modal.attr('hidden','hidden').dialog('destroy');}});});});
+	jQuery(function($){$(document).on('click','.rvy-publication-modal-open',function(event){event.preventDefault();var id=$(this).data('modal'),$modal=$('#'+id);$modal.removeAttr('hidden').dialog({dialogClass:'rvy-scheduled-action-dialog',modal:true,width:Math.min(760,$(window).width()-40),maxHeight:$(window).height()-60,close:function(){$modal.attr('hidden','hidden').dialog('destroy');}});});$(document).on('keydown','.rvy-publication-modal-open',function(event){if(' '===event.key){event.preventDefault();$(this).trigger('click');}});});
 	</script>
 	<?php
 }

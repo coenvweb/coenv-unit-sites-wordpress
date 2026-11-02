@@ -1,6 +1,8 @@
 <?php
 namespace PublishPress\Revisions;
 
+\defined('ABSPATH') || exit;
+
 class PlannerContentBoard {
     private $plannerCompat;
 
@@ -17,7 +19,7 @@ class PlannerContentBoard {
                     function($actions, $post_id) {
                         // @todo: support revision trashing
                         if (rvy_in_revision_workflow($post_id)) {
-                            $actions['trash'] = '<a class="submitdelete" href="' . esc_url(get_delete_post_link($post_id, '', true)) . '">' . esc_html__('Delete') . '</a>';
+                            $actions['trash'] = '<a class="submitdelete" href="' . esc_url(get_delete_post_link($post_id, '', true)) . '">' . esc_html__('Delete', 'revisionary') . '</a>';
                         }
 
                         return $actions;

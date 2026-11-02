@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+defined('ABSPATH') || exit; // Exit if accessed directly
 
 // Gutenberg Block Editor support
 //
@@ -117,7 +117,8 @@ class RVY_PostBlockEditUI {
         $do_scheduled_revisions = rvy_get_option('scheduled_revisions');
 
         if (('revision' == $post->post_type) || rvy_in_revision_workflow($post)) {
-            wp_enqueue_script( 'rvy_object_edit', RVY_URLPATH . "/admin/rvy_revision-block-edit{$suffix}.js", array('jquery', 'jquery-form'), PUBLISHPRESS_REVISIONS_VERSION, true );
+            wp_enqueue_script('rvy_editor_save', RVY_URLPATH . '/admin/revision-editor-save.js', ['wp-data', 'wp-api-fetch', 'wp-editor'], PUBLISHPRESS_REVISIONS_VERSION, true);
+            wp_enqueue_script( 'rvy_object_edit', RVY_URLPATH . "/admin/rvy_revision-block-edit{$suffix}.js", array('jquery', 'jquery-form', 'rvy_editor_save'), PUBLISHPRESS_REVISIONS_VERSION, true );
 
             $args = \PublishPress\Revisions\PostEditorWorkflowUI::revisionLinkParams(compact('post', 'do_pending_revisions', 'do_scheduled_revisions'));
 
@@ -127,7 +128,6 @@ class RVY_PostBlockEditUI {
                 add_action('admin_print_footer_scripts', ['RVY_PostBlockEditUI', 'author_ui'], 20);
             }
 
-            $args['disableSubmitUntilSave'] = !defined('ET_BUILDER_PLUGIN_VERSION') && (false === stripos(get_template(), 'divi')) && !defined('REVISIONARY_EDITOR_NO_BUTTON_DISABLE');
 
         } elseif (current_user_can('edit_post', $post->ID)) {
             $status_obj = get_post_status_object($post->post_status);
@@ -209,7 +209,7 @@ class RVY_PostBlockEditUI {
                 if (!$('div.rvy-author-selection').length) {
                     $('div.rvy-submission-div').append(
                         "<br /><div class='rvy-author-selection'>"
-                        + '<label>' + '<?php esc_html_e("Author", 'revisionary');?>&nbsp;</label>'
+                        + '<label for="rvy_post_author">' + '<?php esc_html_e("Author", 'revisionary');?>&nbsp;</label>'
                         + '</div>'
                         + "<div class='rvy-author-selection'>"
                         + "<?php echo $select_html;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"
@@ -221,7 +221,8 @@ class RVY_PostBlockEditUI {
             $(document).on('change', 'div.rvy-author-selection select', function(e) {
                 var data = {'rvy_ajax_field': 'author_select', 'rvy_ajax_value': <?php echo esc_attr($post->ID);?>, 'rvy_selection': $('div.rvy-author-selection select').val(), '_rvynonce': '<?php echo esc_attr(wp_create_nonce('author_select'));?>'};
 
-                $('div.rvy-author-selection select').attr('disabled', 'disabled');
+                // Keep focus on the select while saving (WCAG 2.4.3); announce the result (WCAG 4.1.3)
+                $('div.rvy-author-selection select').attr('aria-busy', 'true');
 
                 $.ajax({
                     url: rvyObjEdit.ajaxurl,
@@ -233,11 +234,19 @@ class RVY_PostBlockEditUI {
             });
 
             function revisionarySelectAuthorDone() {
-                $('div.rvy-author-selection select').removeAttr('disabled');
+                $('div.rvy-author-selection select').removeAttr('aria-busy');
+                rvyAuthorSpeak('<?php echo esc_js(__('Author saved.', 'revisionary'));?>');
             }
 
             function revisionarySelectAuthorError() {
-                $('div.rvy-author-selection select').removeAttr('disabled');
+                $('div.rvy-author-selection select').removeAttr('aria-busy');
+                rvyAuthorSpeak('<?php echo esc_js(__('The author could not be saved.', 'revisionary'));?>');
+            }
+
+            function rvyAuthorSpeak(msg) {
+                if (window.wp && wp.a11y && wp.a11y.speak) {
+                    wp.a11y.speak(msg);
+                }
             }
         });
 		/* ]]> */
